@@ -1,0 +1,12 @@
+### 게시글 작성
+
+POST http://localhost:8080/create
+Content-Type: application/json
+
+{
+}
+
+### 게시글 삭제
+
+DELETE http://localhost:8080/create/1
+Content-Type: application/json

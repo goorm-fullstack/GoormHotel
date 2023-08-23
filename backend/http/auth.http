@@ -1,0 +1,32 @@
+### 회원가입
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "email": "memilman88@gmail.com",
+  "password": "1234",
+  "name": "memilman",
+  "phoneNumber": "01012121212",
+  "address": "제주도",
+  "privacyCheck": true,
+  "birth": "1999-01-01",
+  "gender": "남성"
+}
+
+### 로그인
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "memilman88@gmail.com",
+  "password": "1234"
+}
+
+### 메인 페이지
+GET http://localhost:8080
+
+### 관리자 페이지
+GET http://localhost:8080/admin
+
+### 유저 페이지
+GET http://localhost:8080/user

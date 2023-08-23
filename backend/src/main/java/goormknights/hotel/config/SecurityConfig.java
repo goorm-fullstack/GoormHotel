@@ -5,7 +5,9 @@ import goormknights.hotel.config.filter.EmailPasswordAuthFilter;
 import goormknights.hotel.config.handler.Http401Handler;
 import goormknights.hotel.config.handler.Http403Handler;
 import goormknights.hotel.config.handler.LoginFailHandler;
+import goormknights.hotel.model.Member;
 import goormknights.hotel.repository.MemberRepository;
+import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -39,11 +41,11 @@ public class SecurityConfig {
     private final ObjectMapper objectMapper;
     private final MemberRepository memberRepository;
     // 스프링시큐리티 자체를 아예 무시한다.
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().requestMatchers("/f.ico", "/error")
-                .requestMatchers(toH2Console());
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return web -> web.ignoring().requestMatchers("/**")
+//                .requestMatchers(toH2Console());
+//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -89,32 +91,23 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService(userRepository));
+        provider.setUserDetailsService(userDetailsService(memberRepository));
         provider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(provider);
     }
 
     // 실제 DB에서 유저 정보 가져와 검증
     @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository) {
+    public UserDetailsService userDetailsService(MemberRepository memberRepository) {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                User user = userRepository.findByEmail(username)
+                Member member = memberRepository.findByEmail(username)
                         .orElseThrow(() -> new UsernameNotFoundException(username + "을 찾을 수 없습니다."));
-                return new UserPrincipal(user);
+                return new MemberPrincipal(member);
             }
         };
     }
-
-//        임시적인 유저 정보를 메모리에 넣어주는 용도(auth.http 테스트)
-//        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-//        UserDetails user = User.withUsername("memilman")
-//                .password("1234")
-//                .roles("ADMIN")
-//                .build();
-//        manager.createUser(user);
-//        return manager;
 
     @Bean
     public PasswordEncoder passwordEncoder(){

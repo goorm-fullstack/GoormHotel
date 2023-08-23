@@ -1,5 +1,7 @@
 package goormknights.hotel.service;
 
+import goormknights.hotel.exception.AlreadyExistsEmailException;
+import goormknights.hotel.model.Member;
 import goormknights.hotel.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,17 +16,17 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public void signup(Signup signup) {
-        Optional<User> userOptional = userRepository.findByEmail(signup.getEmail());
-        if (userOptional.isPresent()) {
+        Optional<Member> memberOptional = memberRepository.findByEmail(signup.getEmail());
+        if (memberOptional.isPresent()) {
             throw new AlreadyExistsEmailException();
         }
 
         String encryptedPassword = passwordEncoder.encode(signup.getPassword());
-        var user = User.builder()
+        var member = Member.builder()
                 .name(signup.getName())
                 .email(signup.getEmail())
                 .password(encryptedPassword)
                 .build();
-        userRepository.save(user); // 회원 정보 저장
+        memberRepository.save(member); // 회원 정보 저장
     }
 }

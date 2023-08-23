@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
 
+// 확장한 User는 security userdetails 라이브러리
 public class MemberPrincipal extends User {
 
     private final Integer memberId;
@@ -16,7 +17,7 @@ public class MemberPrincipal extends User {
                 new SimpleGrantedAuthority("READ"))); //권한
         this.memberId = member.getId();
     }
-    public Long getmemberId(){
-        return memberId;
+    public Integer getMemberId(){
+        return memberId; // 추후 요긴하게 사용
     }
 }
