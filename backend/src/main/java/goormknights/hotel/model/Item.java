@@ -10,7 +10,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED) // 상속 관계 매핑 (join)
 @DiscriminatorColumn // Dtype
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,7 +22,7 @@ public abstract class Item {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "image_id")
     private Image thumbnail; // 썸네일이미지
 
@@ -32,7 +32,7 @@ public abstract class Item {
     @Column(nullable = false)
     private Integer price; // 기본 비용
 
-    @Column(nullable = false, name = "priceAdult")
+    @Column(nullable = false)
     private Integer priceAdult; // 어른 추가 비용
 
     @Column(nullable = false)

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class RequestDiningDTO {
 
-    @NotNull
+    @NotBlank
     private String name; // 상품명
 
     @Positive
@@ -23,7 +23,7 @@ public class RequestDiningDTO {
     @PositiveOrZero
     private Integer priceChild; // 어린이 추가 비용
 
-    @NotNull
+    @NotBlank
     private String type; // 상품 타입(ex. 객실, 다이닝)
 
     /**
@@ -31,14 +31,14 @@ public class RequestDiningDTO {
      * 객실: 디럭스, 스위트, 패밀리, 풀 빌라
      * 다이닝: 레스토랑, 룸서비스, 바&라운지(바, 라운지), 베이커리
      */
-    @NotNull
+    @NotBlank
     private String typeDetail;
 
-    @NotNull
+    @NotBlank
     private String useTime; // 이용 시간(ex. 아침, 점심, 저녁)
 
     @Builder(toBuilder = true)
-    public RequestDiningDTO(@NotNull String name, Integer price, Integer priceAdult, Integer priceChild, @NotNull String type, @NotNull String typeDetail, @NotNull String useTime) {
+    public RequestDiningDTO(String name, Integer price, Integer priceAdult, Integer priceChild, String type, String typeDetail, String useTime) {
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;
@@ -48,6 +48,7 @@ public class RequestDiningDTO {
         this.useTime = useTime;
     }
 
+    // RequestDiningDTO 엔티티화
     public Dining toEntity(){
         return Dining.builder()
                 .name(name)

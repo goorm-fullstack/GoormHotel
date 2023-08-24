@@ -1,6 +1,5 @@
 package goormknights.hotel.dto.response;
 
-import goormknights.hotel.model.Image;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

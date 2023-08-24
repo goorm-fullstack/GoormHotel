@@ -27,6 +27,7 @@ public class RequestImageDTO {
         this.filePath = filePath;
     }
 
+    // RequestImageDTO 엔티티화
     public Image toEntity(){
         return Image.builder()
                 .originFileName(originFileName)

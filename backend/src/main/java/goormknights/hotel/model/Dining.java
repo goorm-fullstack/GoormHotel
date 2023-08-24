@@ -20,19 +20,7 @@ public class Dining extends Item {
     @Column(nullable = false)
     private String useTime; // 이용 시간(ex. 아침, 점심, 저녁)
 
-    public Dining updateDining(RequestDiningDTO requestDiningDTO){
-        return this.toBuilder()
-                .priceChild(requestDiningDTO.getPriceChild())
-                .price(requestDiningDTO.getPrice())
-                .priceAdult(requestDiningDTO.getPriceAdult())
-                .name(requestDiningDTO.getName())
-                .type(requestDiningDTO.getType())
-                .useTime(requestDiningDTO.getUseTime())
-                .thumbnail(this.getThumbnail())
-                .typeDetail(requestDiningDTO.getTypeDetail())
-                .build();
-    }
-
+    // 엔티티 수정
     public Dining updateDining(RequestDiningDTO requestDiningDTO, RequestImageDTO requestImageDTO){
         return this.toBuilder()
                 .priceChild(requestDiningDTO.getPriceChild())
@@ -46,6 +34,7 @@ public class Dining extends Item {
                 .build();
     }
 
+    // 클라이언트에게 응답 시 ResponseDiningDTO로 변경
     public ResponseDiningDTO toResponseDiningDTO(){
         return ResponseDiningDTO.builder()
                 .thumbnailPath(this.getThumbnail().getFilePath())

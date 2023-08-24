@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,29 +26,26 @@ public class DiningController {
     private final DiningService diningService;
     private final ImageService imageService;
 
+    // 다이닝 생성
     @PostMapping("/dining")
     public ResponseEntity<Object> uploadDining(@Validated @ModelAttribute RequestDiningDTO requestDiningDTO, @RequestParam MultipartFile img) throws IOException {
 
         RequestImageDTO requestImageDTO = imageService.convertToImageDTO(img);
-        log.info("requestImageDTO={}", requestImageDTO);
 
         diningService.saveDining(requestDiningDTO, requestImageDTO);
         return ResponseEntity.ok().build();
     }
 
+    //다이닝 수정
     @PutMapping("/dining/{diningName}")
     public ResponseEntity<ResponseDiningDTO> updateDining(@PathVariable String diningName, @Validated @ModelAttribute RequestDiningDTO requestDiningDTO, @RequestParam MultipartFile img) throws IOException {
-        RequestImageDTO requestImageDTO = null;
-        if(img != null) requestImageDTO = imageService.convertToImageDTO(img);
-        log.info("requestDiningDTO={}", requestDiningDTO);
-        log.info("requestImageDTO={}", requestImageDTO);
 
-        ResponseDiningDTO responseDiningDTO = diningService.modifyDining(diningName, requestDiningDTO, requestImageDTO).toResponseDiningDTO();
-        log.info("responseDiningDTO={}", responseDiningDTO);
+        ResponseDiningDTO responseDiningDTO = diningService.modifyDining(diningName, requestDiningDTO, img).toResponseDiningDTO();
 
         return ResponseEntity.ok(responseDiningDTO);
     }
 
+    // 다이닝 삭제
     @DeleteMapping("/dining/{diningName}")
     public ResponseEntity<Object> deleteDining(@PathVariable String diningName){
         diningService.deleteByDiningName(diningName);
@@ -54,13 +53,25 @@ public class DiningController {
         return ResponseEntity.ok().build();
     }
 
+    // 다이닝 상품명을 통해 찾기
     @GetMapping("/dining/{diningName}")
     public ResponseEntity<ResponseDiningDTO> findOneDining(@PathVariable String diningName) {
-
         ResponseDiningDTO responseDiningDTO = diningService.findByDiningName(diningName).toResponseDiningDTO();
         log.info("diningName={}", diningName);
-        log.info("responseDiningDTO={}", responseDiningDTO);
 
         return ResponseEntity.ok(responseDiningDTO);
+    }
+
+    // 전체 다이닝 찾기
+    @GetMapping
+    public ResponseEntity<List<ResponseDiningDTO>> findAllDining(){
+        List<Dining> allDining = diningService.findAllDining("dining");
+        List<ResponseDiningDTO> toResponseDTOList = new ArrayList<>();
+
+        for (Dining dining : allDining) {
+            toResponseDTOList.add(dining.toResponseDiningDTO());
+        }
+
+        return ResponseEntity.ok(toResponseDTOList);
     }
 }

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -21,6 +20,7 @@ public class ItemController {
 
     private final ItemService itemService;
 
+    // 전체 상품 찾기
     @GetMapping("/items")
     public ResponseEntity<List<Object>> allItems(){
         List<Item> allItem = itemService.findAllItem();

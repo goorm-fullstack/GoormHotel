@@ -34,6 +34,7 @@ public class Room extends Item{
     @Column(nullable = false)
     private Integer capacity; // 숙박 인원 기준
 
+    // 클라이언트에게 응답 시 ResponseRoomDTO로 변경
     public ResponseRoomDTO toResponseRoomDTO(){
         return ResponseRoomDTO.builder()
                 .priceAdult(this.getPriceAdult())
@@ -51,23 +52,7 @@ public class Room extends Item{
                 .build();
     }
 
-    public Room updateRoom(RequestRoomDTO requestRoomDTO) {
-        return this.toBuilder()
-                .priceChild(requestRoomDTO.getPriceChild())
-                .price(requestRoomDTO.getPrice())
-                .priceAdult(requestRoomDTO.getPriceAdult())
-                .name(requestRoomDTO.getName())
-                .type(requestRoomDTO.getType())
-                .thumbnail(this.getThumbnail())
-                .typeDetail(requestRoomDTO.getTypeDetail())
-                .roomChild(requestRoomDTO.getRoomChild())
-                .roomAdult(requestRoomDTO.getRoomAdult())
-                .spare(requestRoomDTO.getSpare())
-                .bed(requestRoomDTO.getBed())
-                .capacity(requestRoomDTO.getCapacity())
-                .build();
-    }
-
+    // 엔티티 수정
     public Room updateRoom(RequestRoomDTO requestRoomDTO, RequestImageDTO requestImageDTO) {
         return this.toBuilder()
                 .priceChild(requestRoomDTO.getPriceChild())

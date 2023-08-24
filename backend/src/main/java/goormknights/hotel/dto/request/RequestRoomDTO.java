@@ -1,7 +1,7 @@
 package goormknights.hotel.dto.request;
 
 import goormknights.hotel.model.Room;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AccessLevel;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class RequestRoomDTO {
 
-    @NotNull
+    @NotBlank
     private String name; // 상품명
 
     @Positive
@@ -25,7 +25,7 @@ public class RequestRoomDTO {
     @PositiveOrZero
     private Integer priceChild; // 어린이 추가 비용
 
-    @NotNull
+    @NotBlank
     private String type; // 상품 타입(ex. 객실, 다이닝)
 
     /**
@@ -33,10 +33,10 @@ public class RequestRoomDTO {
      * 객실: 디럭스, 스위트, 패밀리, 풀 빌라
      * 다이닝: 레스토랑, 룸서비스, 바&라운지(바, 라운지), 베이커리
      */
-    @NotNull
+    @NotBlank
     private String typeDetail;
 
-    @NotNull
+    @NotBlank
     private String bed; // 침대 타입(ex. 싱글, 더블/트윈, 킹)
 
     @PositiveOrZero
@@ -52,7 +52,7 @@ public class RequestRoomDTO {
     private Integer capacity; // 숙박 인원 기준
 
     @Builder(toBuilder = true)
-    public RequestRoomDTO(@NotNull String name, Integer price, Integer priceAdult, Integer priceChild, @NotNull String type, @NotNull String typeDetail, @NotNull String bed, Integer spare, Integer roomAdult, Integer roomChild, Integer capacity) {
+    public RequestRoomDTO(String name, Integer price, Integer priceAdult, Integer priceChild, String type, String typeDetail, String bed, Integer spare, Integer roomAdult, Integer roomChild, Integer capacity) {
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;
@@ -66,6 +66,7 @@ public class RequestRoomDTO {
         this.capacity = capacity;
     }
 
+    // RequestRoomDTO 엔티티화
     public Room toEntity(){
         return Room.builder()
                 .name(name)
