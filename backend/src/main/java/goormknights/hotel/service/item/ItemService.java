@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -35,17 +37,19 @@ public class ItemService {
         });
 
         int price = item.getPrice();
+        BigDecimal newPrice = new BigDecimal(0);
         log.info("price = {}", price);
 
         if(member.getCouponList().contains(couponRepository.findById(couponId).orElseThrow())) {
             Coupon coupon = couponRepository.findById(couponId).orElseThrow();
-            float discont  = (float) coupon.getDiscountRate() / 100;
-            float calc = (float) (price - (price * discont));
-            price = (int) calc;
-            log.info("apply Coupon price = {}", price);
+            BigDecimal discontRate = new BigDecimal(coupon.getDiscountRate()).divide(BigDecimal.valueOf(100));
+            BigDecimal discont = discontRate.multiply(BigDecimal.valueOf(price));
+            log.info("apply Coupon price = {}", discont);
+            newPrice = new BigDecimal(price).subtract(discont).setScale(0, RoundingMode.FLOOR);
+            log.info("apply Coupon price = {}", newPrice);
             coupon.setIsUsed();
         }
 
-        return "주문 확인 Item : "+item.getName()+" 주문 가격 : "+price;
+        return "주문 확인 Item : "+item.getName()+" 주문 가격 : "+newPrice;
     }
 }

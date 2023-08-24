@@ -18,6 +18,7 @@ public class ChatController {
         return chatService.createRoom(name);
     }
 
+//    @PreAuthorize("hasRole('Admin')")
     @GetMapping
     public List<ChatRoom> findAllRoom() {
         return chatService.findAllRoom();

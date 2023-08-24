@@ -4,9 +4,13 @@ import goormknights.hotel.exception.AlreadyUsedException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Coupon {
     @Id
@@ -21,6 +25,9 @@ public class Coupon {
 
     private char isUsed = 'N';// Y이면 사용한 쿠폰, N이면 사용하지 않은 쿠폰
 
+    private LocalDateTime issueDate;//발행일
+    private int expire;//만료일
+
     // 아마 사용하지는 않을 것 같은 생성자
     public Coupon(String uuid) {
         this.uuid = uuid;
@@ -34,16 +41,13 @@ public class Coupon {
         String grade = member.getGrade();
         switch (grade) {
             case "Bronze":
-                this.discountRate = 3;
-                break;
-            case "Silver":
                 this.discountRate = 5;
                 break;
-            case "Gold":
-                this.discountRate = 7;
-                break;
-            case "VIP":
+            case "Silver":
                 this.discountRate = 10;
+                break;
+            case "Gold":
+                this.discountRate = 15;
                 break;
             default:
                 this.discountRate = 0;

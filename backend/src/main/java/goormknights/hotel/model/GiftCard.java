@@ -1,17 +1,20 @@
 package goormknights.hotel.model;
 
+import goormknights.hotel.dto.GiftCardDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class GiftCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    String uuid;
-    int money;//현재 잔액
+    private String uuid;
+    private int money;//현재 잔액
 
     @ManyToOne
     private Member member;
@@ -23,6 +26,10 @@ public class GiftCard {
         this.money = money;
     }
 
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
     // 사용자가 기프트 카드를 등록한다.
     public void registrationGiftCard(Member member) {
         this.member = member;
@@ -30,14 +37,10 @@ public class GiftCard {
     }
 
     // 사용자가 기프트 카드를 사용하는 경우
-    public int paidByGiftCard(int money) {
-        if(money - this.money > 0) {
-            this.money = 0;
+    public void paidByGiftCard(int money) {
+        System.out.println("call money : "+money);
+        this.money = money;
+        if(this.money <= 0)
             isZeroMoney = 'Y';
-            return money - this.money;
-        }else {
-            this.money =- money;
-            return 0;
-        }
     }
 }
