@@ -50,6 +50,7 @@ const TitleDescription = styled.p`
   font-size: 16px;
   color: #888888;
   margin-bottom: 69px;
+  line-height: 1.3;
 `;
 
 const Dining = styled(Room)`
@@ -103,7 +104,6 @@ const ThirdArticle = styled.article`
   height: 601px;
   width: 100%;
   min-width: 1920px;
-  position: relative;
 `;
 
 const ActivityContainer = styled.div`
@@ -111,18 +111,21 @@ const ActivityContainer = styled.div`
   height: 530px;
   background-color: #F5F5F5;
   float: right;
+  position: relative;
 `;
 
 const ActivityImg = styled.img`
   position: absolute;
   width: 943px;
   height: 530px;
-  left: 0;
+  left: 107px;
   top: -71px;
+  opacity: ${props => (props.active ? 1 : 0)};
+  transition: opacity 0.5s ease-in-out;
 `;
 
 const ActivityInfo = styled.div`
-  margin-left: 55%;
+  margin-left: 60%;
   padding-top: 80px;
 `;
 
@@ -198,8 +201,31 @@ const Mail = styled.div`
 display: flex;
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 5px;
+  margin-top: 71px;
+`;
+
+const RoundButton = styled.button`
+  border: none;
+  border-radius: 50%;
+  background-color: ${props => (props.active ? '#102c57' : '#dddddd')};
+  cursor: pointer;
+  width: 14px;
+  height: 14px;
+`;
+
+const images = [spaImg, spaImg, spaImg];
+
 
 const Home = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleSlide = (index) => {
+    setActiveIndex(index);
+  };
+  
   return (
     <>
       <Header />
@@ -255,15 +281,24 @@ const Home = () => {
       </SecondArticle>
       <ThirdArticle>
         <ActivityContainer>
-          <ActivityImg src={spaImg} />
+          <ActivityImg src={images[activeIndex]} active={true} />
           <ActivityInfo>
             <Activity>부대시설</Activity>
             <ActivityTitle>리트릿 구름 스파</ActivityTitle>
             <ActivityDescription>리트릿 구름 스파는 한국 본연의 철학과 고차원적 감성을 더하여  일상 속 건강한 아름다움을 경험할 수 있는 휴식 공간입니다.</ActivityDescription>
             <DetailBtn>
             <p>자세히보기</p>
-            <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><title/><g data-name="Layer 2" id="Layer_2"><path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z"/></g></DetailSvg>
-          </DetailBtn>
+              <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><title/><g data-name="Layer 2" id="Layer_2"><path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z"/></g></DetailSvg>
+            </DetailBtn>
+            <ButtonContainer>
+              {images.map((_, index) => (
+                <RoundButton
+                  key={index}
+                  active={index === activeIndex}
+                  onClick={() => handleSlide(index)}
+                />
+              ))}
+            </ButtonContainer>
           </ActivityInfo>
         </ActivityContainer>
       </ThirdArticle>
