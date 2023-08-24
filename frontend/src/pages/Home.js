@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import Slide from '../components/Slide';
 import Reservation from '../components/Reservation';
 import spaImg from '../images/main/spa.jpg';
-import KakaoMap from '../components/KakaoMap';
+import KakaoMap from '../utils/KakaoMap';
 import dining01 from '../images/dining/Bakery.jpg';
 import dining02 from '../images/dining/Bar.jpg';
 import dining03 from '../images/dining/Restaurant.jpg';
