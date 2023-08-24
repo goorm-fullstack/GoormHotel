@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ResponseRoomDTO {
 
-    private Image thumbnail; // 썸네일이미지
+    private String thumbnailPath; // 썸네일이미지
     private String name; // 상품명
     private Integer price; // 기본 비용
     private Integer priceAdult; // 어른 추가 비용
@@ -30,8 +30,8 @@ public class ResponseRoomDTO {
     private Integer capacity; // 숙박 인원 기준
 
     @Builder
-    public ResponseRoomDTO(Image thumbnail, String name, Integer price, Integer priceAdult, Integer priceChild, String type, String typeDetail, String bed, Integer spare, Integer roomAdult, Integer roomChild, Integer capacity) {
-        this.thumbnail = thumbnail;
+    public ResponseRoomDTO(String thumbnailPath, String name, Integer price, Integer priceAdult, Integer priceChild, String type, String typeDetail, String bed, Integer spare, Integer roomAdult, Integer roomChild, Integer capacity) {
+        this.thumbnailPath = thumbnailPath;
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;

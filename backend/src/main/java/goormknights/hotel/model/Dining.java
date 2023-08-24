@@ -48,7 +48,7 @@ public class Dining extends Item {
 
     public ResponseDiningDTO toResponseDiningDTO(){
         return ResponseDiningDTO.builder()
-                .thumbnail(this.getThumbnail())
+                .thumbnailPath(this.getThumbnail().getFilePath())
                 .type(this.getType())
                 .useTime(this.getUseTime())
                 .price(this.getPrice())

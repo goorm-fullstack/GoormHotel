@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DiningRepository extends JpaRepository<Dining, Long> {
+
+    Dining findByName(String diningName);
+    void deleteByName(String diningName);
 }

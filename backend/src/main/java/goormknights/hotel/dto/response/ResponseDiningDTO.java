@@ -1,6 +1,5 @@
 package goormknights.hotel.dto.response;
 
-import goormknights.hotel.model.Image;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ResponseDiningDTO {
 
-    private Image thumbnail; // 썸네일이미지
+    private String thumbnailPath; // 썸네일이미지
     private String name; // 상품명
     private Integer price; // 기본 비용
     private Integer priceAdult; // 어른 추가 비용
@@ -26,8 +25,8 @@ public class ResponseDiningDTO {
     private String useTime; // 이용 시간(ex. 아침, 점심, 저녁)
 
     @Builder
-    public ResponseDiningDTO(Image thumbnail, String name, Integer price, Integer priceAdult, Integer priceChild, String type, String typeDetail, String useTime) {
-        this.thumbnail = thumbnail;
+    public ResponseDiningDTO(String thumbnailPath, String name, Integer price, Integer priceAdult, Integer priceChild, String type, String typeDetail, String useTime) {
+        this.thumbnailPath = thumbnailPath;
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;

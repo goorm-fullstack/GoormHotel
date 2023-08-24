@@ -1,6 +1,5 @@
 package goormknights.hotel.dto.request;
 
-import goormknights.hotel.model.Image;
 import goormknights.hotel.model.Room;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -79,6 +78,7 @@ public class RequestRoomDTO {
                 .roomAdult(roomAdult)
                 .roomChild(roomChild)
                 .capacity(capacity)
+                .typeDetail(typeDetail)
                 .build();
     }
 }

@@ -2,6 +2,7 @@ package goormknights.hotel.model;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -10,13 +11,13 @@ import org.hibernate.annotations.Where;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn
+@DiscriminatorColumn // Dtype
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder(toBuilder = true)
 @Where(clause = "DELETED = false")
 @SQLDelete(sql = "UPDATE item SET deleted = true WHERE id = ?")
-public class Item {
+public abstract class Item {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,7 +32,7 @@ public class Item {
     @Column(nullable = false)
     private Integer price; // 기본 비용
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "priceAdult")
     private Integer priceAdult; // 어른 추가 비용
 
     @Column(nullable = false)
@@ -49,5 +50,6 @@ public class Item {
     private String typeDetail;
 
     @Column(nullable = false)
+    @Builder.Default
     private boolean deleted = false; // soft delete 여부 구분
 }

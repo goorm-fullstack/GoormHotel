@@ -1,10 +1,7 @@
 package goormknights.hotel.service;
 
-import goormknights.hotel.dto.request.RequestDiningDTO;
 import goormknights.hotel.dto.request.RequestImageDTO;
 import goormknights.hotel.dto.request.RequestRoomDTO;
-import goormknights.hotel.dto.response.ResponseRoomDTO;
-import goormknights.hotel.model.Dining;
 import goormknights.hotel.model.Room;
 import goormknights.hotel.repository.ItemRepository;
 import goormknights.hotel.repository.RoomRepository;
@@ -21,34 +18,36 @@ import java.util.List;
 public class RoomService {
 
     private final ItemRepository<Room> itemRepository;
+    private final RoomRepository roomRepository;
 
-    public Long saveRoom(RequestRoomDTO requestRoomDTO, RequestImageDTO requestImageDTO){
+    public String saveRoom(RequestRoomDTO requestRoomDTO, RequestImageDTO requestImageDTO){
         Room build = requestRoomDTO.toEntity().toBuilder()
                 .thumbnail(requestImageDTO.toEntity())
                 .build();
-        return itemRepository.save(build).getId();
+        return itemRepository.save(build).getName();
     }
 
-    public Room modifyRoom(Long itemId, RequestRoomDTO requestRoomDTO, @Nullable RequestImageDTO requestImageDTO) throws Throwable {
-        Room originRoom = findById(itemId);
+    public Room modifyRoom(String roomName, RequestRoomDTO requestRoomDTO, @Nullable RequestImageDTO requestImageDTO) {
+        Room originRoom = findByRoomName(roomName);
 
+        Room modifiedRoom;
         if(requestImageDTO != null){
-            return originRoom.updateRoom(requestRoomDTO, requestImageDTO);
+            modifiedRoom = itemRepository.save(originRoom.updateRoom(requestRoomDTO, requestImageDTO));
         }else{
-            return originRoom.updateRoom(requestRoomDTO);
+            modifiedRoom = itemRepository.save(originRoom.updateRoom(requestRoomDTO));
         }
+        return modifiedRoom;
     }
 
-    public void deleteRoom(Long itemId){
-        itemRepository.deleteById(itemId);
+    public void deleteByRoomName(String roomName){
+        roomRepository.deleteByName(roomName);
     }
 
-    public Room findById(Long itemId) throws Throwable {
-        return itemRepository.findById(itemId).orElseThrow(() ->
-                new Exception("해당 room을 찾을 수 없습니다."));
+    public Room findByRoomName(String roomName) {
+        return roomRepository.findByName(roomName);
     }
 
-    public List<Room> findAllDining(){
-        return itemRepository.findAll();
+    public List<Room> findAllRoom(String type){
+        return itemRepository.findAllRoom(type);
     }
 }

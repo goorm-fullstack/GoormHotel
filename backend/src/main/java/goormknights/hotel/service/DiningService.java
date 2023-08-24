@@ -3,6 +3,7 @@ package goormknights.hotel.service;
 import goormknights.hotel.dto.request.RequestDiningDTO;
 import goormknights.hotel.dto.request.RequestImageDTO;
 import goormknights.hotel.model.Dining;
+import goormknights.hotel.repository.DiningRepository;
 import goormknights.hotel.repository.ItemRepository;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
@@ -17,34 +18,36 @@ import java.util.List;
 public class DiningService {
 
     private final ItemRepository<Dining> itemRepository;
+    private final DiningRepository diningRepository;
 
-    public Long saveDining(RequestDiningDTO requestDiningDTO, RequestImageDTO requestImageDTO){
+    public String saveDining(RequestDiningDTO requestDiningDTO, RequestImageDTO requestImageDTO){
         Dining build = requestDiningDTO.toEntity().toBuilder()
                 .thumbnail(requestImageDTO.toEntity())
                 .build();
-        return itemRepository.save(build).getId();
+        return itemRepository.save(build).getName();
     }
 
-    public Dining modifyDining(Long itemId, RequestDiningDTO requestDiningDTO, @Nullable RequestImageDTO requestImageDTO) throws Throwable {
-        Dining originDining = findById(itemId);
+    public Dining modifyDining(String diningName, RequestDiningDTO requestDiningDTO, @Nullable RequestImageDTO requestImageDTO) {
+        Dining originDining = findByDiningName(diningName);
 
+        Dining modifiedDining;
         if(requestImageDTO != null){
-            return originDining.updateDining(requestDiningDTO, requestImageDTO);
-        }else {
-            return originDining.updateDining(requestDiningDTO);
+            modifiedDining = itemRepository.save(originDining.updateDining(requestDiningDTO, requestImageDTO));
+        }else{
+            modifiedDining = itemRepository.save(originDining.updateDining(requestDiningDTO));
         }
+        return modifiedDining;
     }
 
-    public void deleteDining(Long itemId){
-        itemRepository.deleteById(itemId);
+    public void deleteByDiningName(String diningName){
+        diningRepository.deleteByName(diningName);
     }
 
-    public Dining findById(Long itemId) throws Throwable {
-        return itemRepository.findById(itemId).orElseThrow(() ->
-                new Exception("해당 dining을 찾을 수 없습니다."));
+    public Dining findByDiningName(String diningName) {
+        return diningRepository.findByName(diningName);
     }
 
-    public List<Dining> findAllDining(){
-        return itemRepository.findAll();
+    public List<Dining> findAllDining(String type){
+        return itemRepository.findAllDining(type);
     }
 }

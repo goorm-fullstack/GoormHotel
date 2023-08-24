@@ -4,17 +4,14 @@ import goormknights.hotel.dto.request.RequestDiningDTO;
 import goormknights.hotel.dto.request.RequestImageDTO;
 import goormknights.hotel.model.Dining;
 import goormknights.hotel.model.Image;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -24,7 +21,7 @@ class DiningServiceTest {
     private DiningService diningService;
 
     @Test
-    void saveDining() throws Throwable {
+    void saveDining() {
         RequestDiningDTO requestDiningDTO = RequestDiningDTO.builder()
                 .price(100000)
                 .type("dining")
@@ -55,17 +52,17 @@ class DiningServiceTest {
                 .filePath("here2")
                 .build();
 
-        Long itemId = diningService.saveDining(requestDiningDTO, requestImageDTO);
+        String diningName = diningService.saveDining(requestDiningDTO, requestImageDTO);
         diningService.saveDining(requestDiningDTO2, requestImageDTO2);
 
-        Dining createdDining = diningService.findById(itemId);
+        Dining createdDining = diningService.findByDiningName(diningName);
 
         assertThat(createdDining.getName()).isEqualTo("diningService");
         assertThat(createdDining.getThumbnail().getFileName()).isEqualTo("hi");
     }
 
     @Test
-    void updateDiningNoImage() throws Throwable {
+    void updateDiningNoImage() {
         RequestDiningDTO requestDiningDTO = RequestDiningDTO.builder()
                 .price(100000)
                 .type("dining")
@@ -81,9 +78,9 @@ class DiningServiceTest {
                 .filePath("here")
                 .build();
 
-        Long itemId = diningService.saveDining(requestDiningDTO, requestImageDTO);
+        String diningName = diningService.saveDining(requestDiningDTO, requestImageDTO);
 
-        Image thumbnail = diningService.findById(itemId).getThumbnail();
+        Image thumbnail = diningService.findByDiningName(diningName).getThumbnail();
 
         RequestDiningDTO modifyDiningDTO = RequestDiningDTO.builder()
                 .price(200000)
@@ -96,7 +93,9 @@ class DiningServiceTest {
                 .build();
         RequestImageDTO modifyImageDTO = null;
 
-        Dining modifyDining = diningService.modifyDining(itemId, modifyDiningDTO, modifyImageDTO);
+        diningService.modifyDining(diningName, modifyDiningDTO, modifyImageDTO);
+
+        Dining modifyDining = diningService.findByDiningName(diningName);
 
         assertThat(modifyDining.getPrice()).isEqualTo(200000);
         assertThat(modifyDining.getUseTime()).isEqualTo("15 : 00");
@@ -104,7 +103,7 @@ class DiningServiceTest {
     }
 
     @Test
-    void updateDiningWithImage() throws Throwable {
+    void updateDiningWithImage() {
         RequestDiningDTO requestDiningDTO = RequestDiningDTO.builder()
                 .price(100000)
                 .type("dining")
@@ -120,7 +119,7 @@ class DiningServiceTest {
                 .filePath("here")
                 .build();
 
-        Long itemId = diningService.saveDining(requestDiningDTO, requestImageDTO);
+        String diningName = diningService.saveDining(requestDiningDTO, requestImageDTO);
 
         RequestDiningDTO modifyDiningDTO = RequestDiningDTO.builder()
                 .price(200000)
@@ -138,7 +137,9 @@ class DiningServiceTest {
                 .filePath("there")
                 .build();
 
-        Dining modifyDining = diningService.modifyDining(itemId, modifyDiningDTO, modifyImageDTO);
+        diningService.modifyDining(diningName, modifyDiningDTO, modifyImageDTO);
+
+        Dining modifyDining = diningService.findByDiningName(diningName);
 
         assertThat(modifyDining.getPrice()).isEqualTo(200000);
         assertThat(modifyDining.getUseTime()).isEqualTo("15 : 00");
@@ -164,12 +165,64 @@ class DiningServiceTest {
                 .filePath("there")
                 .build();
 
-        Long itemId = diningService.saveDining(modifyDiningDTO, modifyImageDTO);
+        String diningName = diningService.saveDining(modifyDiningDTO, modifyImageDTO);
 
-        diningService.deleteDining(itemId);
+        diningService.deleteByDiningName(diningName);
 
-        List<Dining> allDining = diningService.findAllDining();
+        List<Dining> allDining = diningService.findAllDining("dining");
 
-        assertThat(allDining).hasSize(2);
+        assertThat(allDining).isEmpty();
+    }
+
+    @Test
+    void findByDiningName() {
+
+        RequestDiningDTO modifyDiningDTO = RequestDiningDTO.builder()
+                .price(200000)
+                .type("dining")
+                .name("oh")
+                .useTime("15 : 00")
+                .priceAdult(30000)
+                .priceChild(10000)
+                .typeDetail("detail")
+                .build();
+
+        RequestImageDTO modifyImageDTO = RequestImageDTO.builder()
+                .originFileName("hi")
+                .fileName("hello")
+                .filePath("there")
+                .build();
+
+        String diningName = diningService.saveDining(modifyDiningDTO, modifyImageDTO);
+
+        Dining findDining = diningService.findByDiningName(diningName);
+
+        assertThat(findDining.getName()).isEqualTo("oh");
+    }
+
+    @Test
+    void findAll() {
+
+        RequestDiningDTO modifyDiningDTO = RequestDiningDTO.builder()
+                .price(200000)
+                .type("dining")
+                .name("oh")
+                .useTime("15 : 00")
+                .priceAdult(30000)
+                .priceChild(10000)
+                .typeDetail("detail")
+                .build();
+
+        RequestImageDTO modifyImageDTO = RequestImageDTO.builder()
+                .originFileName("hi")
+                .fileName("hello")
+                .filePath("there")
+                .build();
+
+        diningService.saveDining(modifyDiningDTO, modifyImageDTO);
+
+        List<Dining> allDining = diningService.findAllDining("dining");
+
+        assertThat(allDining).hasSize(1);
     }
 }

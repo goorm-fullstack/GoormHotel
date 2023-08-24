@@ -1,7 +1,6 @@
 package goormknights.hotel.dto.request;
 
 import goormknights.hotel.model.Dining;
-import goormknights.hotel.model.Image;
 import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -1,8 +1,6 @@
 package goormknights.hotel.service;
 
 import goormknights.hotel.dto.request.RequestImageDTO;
-import goormknights.hotel.model.Image;
-import goormknights.hotel.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
