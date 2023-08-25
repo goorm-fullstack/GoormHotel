@@ -18,4 +18,7 @@ public interface ItemRepository<T extends Item> extends JpaRepository<T, Long> {
 
     @Query("select i from Item i" + " where i.type = :type")
     List<Room> findAllRoom(@Param("type") String type);
+
+    @Query("select i from Item i" + " where i.name like %:keyword%")
+    List<Item> findByKeyword(@Param("keyword") String keyword);
 }
