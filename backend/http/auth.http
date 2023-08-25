@@ -3,14 +3,30 @@ POST http://localhost:8080/auth/signup
 Content-Type: application/json
 
 {
-  "email": "memilman88@gmail.com",
+  "email": "yss1902@naver.com",
+  "memberId": "yss19",
   "password": "1234",
-  "name": "memilman",
+  "name": "김영한",
   "phoneNumber": "01012121212",
-  "address": "제주도",
+  "grade": "bronbze",
   "privacyCheck": true,
   "birth": "1999-01-01",
-  "gender": "남성"
+  "gender": "남성",
+  "code": "1X3T76x1"
+}
+
+### 회원수정
+PATCH http://localhost:8080/members/1
+Content-Type: application/json
+
+{
+  "email": "memilman33@gmail.com",
+  "memberId": "yss33",
+  "password": "2365",
+  "name": "김영항",
+  "phoneNumber": "01034343434",
+  "birth": "1965-02-02",
+  "gender": "여성"
 }
 
 ### 로그인
@@ -18,7 +34,7 @@ POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "email": "memilman88@gmail.com",
+  "email": "memilman8856@gmail.com",
   "password": "1234"
 }
 

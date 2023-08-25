@@ -19,11 +19,30 @@ spring:
         max-page-size: 2000
         default-page-size: 20
         one-indexed-parameters: true
+    redis:
+      host: 127.0.0.1
+      port: 6379
   jpa:
     defer-datasource-initialization: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: yss1902
+    password: dazjyhkdjhdyegtg
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
 
 server:
   servlet:
     session:
       cookie:
         max-age: 172800
+
+
+

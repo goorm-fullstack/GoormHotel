@@ -1,13 +1,20 @@
 package goormknights.hotel.controller;
 
 import goormknights.hotel.config.MemberPrincipal;
+import goormknights.hotel.model.MemberEdit;
+import goormknights.hotel.service.AuthService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
 @RestController
 public class MainController {
+
+    private final AuthService authService;
 
     @GetMapping("/")
     public String main(){
@@ -27,4 +34,14 @@ public class MainController {
         return "관리자 페이지 입니다.";
     }
 
+    @GetMapping("/index")
+    public String index(){
+        return "index";
+    }
+
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PatchMapping("/members/{memberId}")
+    public void edit(@PathVariable Integer memberId, @RequestBody @Valid MemberEdit request){
+        authService.edit(memberId, request);
+    }
 }
