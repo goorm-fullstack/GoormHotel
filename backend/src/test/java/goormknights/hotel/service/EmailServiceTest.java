@@ -5,6 +5,7 @@ import goormknights.hotel.model.Member;
 import goormknights.hotel.repository.member.MemberRepository;
 import goormknights.hotel.service.email.EmailService;
 import goormknights.hotel.service.member.MemberService;
+import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ class EmailServiceTest {
     private MemberService memberService;
 
     @Test
-    void mailServiceTest(){
-        emailService.sendSubscribe("9rudrb40@naver.com");
+    void mailServiceTest() throws MessagingException {
+        emailService.sendSubscribe("9rudrb40@naver.com", "newsletter");
     }
 }
