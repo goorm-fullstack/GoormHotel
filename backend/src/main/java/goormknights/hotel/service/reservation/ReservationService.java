@@ -20,6 +20,10 @@ import java.util.NoSuchElementException;
 @Service
 @RequiredArgsConstructor
 @Transactional
+// TODO 쿠폰 + 상품권 로직
+// (기본가+추가금액) - 상품권(상품권 금액) - 쿠폰(상품 기본가의 5%)
+// 상품권은 예약 건당 여러개 사용 가능하지만 쿠폰은 하나만 적용 가능합니다.
+// 상품권과 쿠폰은 동시에 사용할 수 있습니다.
 public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;

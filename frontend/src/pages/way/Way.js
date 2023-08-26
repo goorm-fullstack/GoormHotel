@@ -2,6 +2,8 @@ import React from 'react'
 import Header from '../../components/Header'
 import { styled } from 'styled-components';
 import KakaoMap from '../../utils/KakaoMap';
+import ico_bus from '../../images/icon/ico_bus.png'
+import ico_train from '../../images/icon/ico_train.png'
 
 const FirstArticle = styled.article`
   position : fixed;
@@ -33,24 +35,28 @@ const MapContainer = styled.div`
   align-items : center;
 `;
 
+const Table_DL = styled.dl`
+  display: table;
+  width: 100%;
+`
+
 const TableDL_DD = styled.dd`
   display: table-cell;
-  height: 40px;
+  height: 100px;
   vertical-align: middle;
   border-bottom: 1px solid #ccc;
   text-align: center;
   width : 75%;
-  vertical-align: middle;
 `
 
 const TableDL_DT = styled.dt`
   display: table-cell;
-  height: 40px;
-  vertical-align: middle;
+  height: 40px; 
+  vertical-align: top;
   border-bottom: 1px solid #ccc;
+  border-right : 1px solid #ccc;
   text-align: center;
   width : 25%;
-  vertical-align: middle;
 `
 
 const Way = () => {
@@ -58,7 +64,7 @@ const Way = () => {
     <>
       <Header />
       <FirstArticle>
-
+        
       </FirstArticle>
       <SecondArticle>
           <h1 style={{
@@ -76,25 +82,68 @@ const Way = () => {
           fontSize : "16px",
           marginBottom : "1em",
         }}>대중교통 이용</h2>
-        <hr style={{
-          marginLeft : 0,
-          width : "1200px",
-          borderBottom: "1px solid #aaa",
-          lineHeight: "0.1em",
-        }}/>
         <div style={{
           display : "table",
           width : "1200px"
         }}>
-          <dl style={{
-            display : "table-row",
-            width : "100%"
+          <div style={{
+            borderTop : "1px solid"
           }}>
-            <TableDL_DT>지하철 이용시</TableDL_DT>
-            <TableDL_DD>신분당선, 경강선 판교역 4번 출구 하차 후 도보 30분 이내</TableDL_DD>
-          </dl>
-          <dl>
-            <TableDL_DT>버스 이용시</TableDL_DT>
+          <Table_DL>
+            <TableDL_DT>
+              <div style={{
+                padding : "10px",
+                display : "block",
+                textAlign : "center",
+                margin : "0 auto",
+                width : "80px",
+                height : "80px",
+                borderRadius : "100%",
+                backgroundColor : "gray",
+                display : "flex",
+                justifyContent : "center",
+                alignItems : "center",
+                top : "50%",
+                left : "50%"
+              }}>
+                <img src={ico_train}
+                style={{
+                  height : "40px",
+                  filter: "invert(1)"
+              }}
+              ></img>
+              </div>
+              <p>지하철 이용시</p>
+              </TableDL_DT>
+            <TableDL_DD>
+              신분당선, 경강선 판교역 4번 출구 하차 후 도보 30분 이내
+              </TableDL_DD>
+
+          </Table_DL>
+          <Table_DL>
+          <TableDL_DT>
+          <div style={{
+                display : "block",
+                textAlign : "center",
+                margin : "0 auto",
+                width : "80px",
+                height : "80px",
+                borderRadius : "100%",
+                backgroundColor : "gray",
+                display : "flex",
+                justifyContent : "center",
+                alignItems : "center",
+                top : "50%",
+                left : "50%"
+              }}>
+                <img src={ico_bus}
+                style={{
+                  height : "40px",
+                  filter: "invert(1)"
+              }}></img>
+                </div>
+                <p>버스 이용시</p>
+            </TableDL_DT>
             <TableDL_DD>
               <div style={{
                 width : "100%",
@@ -108,7 +157,8 @@ const Way = () => {
               </ol>
               </div>
             </TableDL_DD>
-          </dl>
+          </Table_DL>
+          </div>
         </div>
       </ThirdArticle>
     </>
