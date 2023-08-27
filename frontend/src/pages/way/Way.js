@@ -17,27 +17,28 @@ const FirstArticle = styled.article`
 const SecondArticle = styled.div`
   display: flex;
   flex-direction: column;
+  width : 100%;
+  justify-content: center;
+  margin-left : 15%;
 `;
 
 const ThirdArticle = styled.div`
   margin-top : 3em;
   display: flex;
   flex-direction: column;
-  align-item : center;
   width : 100%;
   margin-left : 15%;
 `;
 
 const MapContainer = styled.div`
-  display : flex;
-  width : 100%;
-  justify-content: center;
-  align-items : center;
 `;
 
 const Table_DL = styled.dl`
   display: table;
-  width: 100%;
+  width: 1180px;
+  vertical-align: middle;
+  justify-content: center;
+  align-items : center;
 `
 
 const TableDL_DD = styled.dd`
@@ -57,20 +58,52 @@ const TableDL_DT = styled.dt`
   border-right : 1px solid #ccc;
   text-align: center;
   width : 25%;
+  padding : 2em;
+`
+
+const MenuMapList = styled.li`
+  float : left;
+  font-size: 16px;
+  
+  &:not(:last-child) {
+    margin-right: 20px; 
+  }
 `
 
 const Way = () => {
   return (
     <>
-      <Header />
+      <Header/>
+      <div style={{
+        position : "fixed",
+        display : "flex",
+        top : "120px",
+        height : "4em",
+        width : "100%",
+        borderBottom : "1px solid black",
+        alignItems : "center",
+        zIndex : "100",
+        backgroundColor : "#fff"
+        }}>
+        <h2 style={{
+          marginLeft : "3em",
+          fontWeight : "bold"
+        }}>구름 호텔 소개</h2>
+        <ul style={{
+          marginLeft: "120px",
+        }}>
+          <MenuMapList>호텔 소개</MenuMapList>
+          <MenuMapList>오시는 길</MenuMapList>
+        </ul>
+      </div>
       <FirstArticle>
         
       </FirstArticle>
       <SecondArticle>
           <h1 style={{
+            marginTop : "3em",
             fontWeight: 'bold',
             fontSize : "2em",
-            marginLeft : "15%",
             marginBottom : "3em",
           }}>오시는 길</h1>
           <MapContainer>
@@ -80,11 +113,12 @@ const Way = () => {
       <ThirdArticle>
         <h2 style={{
           fontSize : "16px",
-          marginBottom : "1em",
-        }}>대중교통 이용</h2>
+          fontWeight : "500",
+          marginBottom : "2em",
+        }}>대중교통 이용시 오시는 길</h2>
         <div style={{
           display : "table",
-          width : "1200px"
+          width : "1180px"
         }}>
           <div style={{
             borderTop : "1px solid"
@@ -103,8 +137,6 @@ const Way = () => {
                 display : "flex",
                 justifyContent : "center",
                 alignItems : "center",
-                top : "50%",
-                left : "50%"
               }}>
                 <img src={ico_train}
                 style={{
@@ -113,7 +145,9 @@ const Way = () => {
               }}
               ></img>
               </div>
-              <p>지하철 이용시</p>
+              <p style={{
+                paddingTop : "1em"
+              }}>지하철 이용시</p>
               </TableDL_DT>
             <TableDL_DD>
               신분당선, 경강선 판교역 4번 출구 하차 후 도보 30분 이내
@@ -133,8 +167,6 @@ const Way = () => {
                 display : "flex",
                 justifyContent : "center",
                 alignItems : "center",
-                top : "50%",
-                left : "50%"
               }}>
                 <img src={ico_bus}
                 style={{
@@ -142,7 +174,9 @@ const Way = () => {
                   filter: "invert(1)"
               }}></img>
                 </div>
-                <p>버스 이용시</p>
+                <p style={{
+                paddingTop : "1em"
+              }}>버스 이용시</p>
             </TableDL_DT>
             <TableDL_DD>
               <div style={{
