@@ -43,4 +43,8 @@ public class GiftCard {
         if(this.money <= 0)
             isZeroMoney = 'Y';
     }
+
+    public GiftCardDto toDto() {
+        return new GiftCardDto(this);
+    }
 }

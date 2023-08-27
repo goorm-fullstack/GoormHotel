@@ -1,5 +1,6 @@
 package goormknights.hotel.model;
 
+import goormknights.hotel.dto.CouponDto;
 import goormknights.hotel.exception.AlreadyUsedException;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -62,5 +63,9 @@ public class Coupon {
         } else {
             throw new AlreadyUsedException("이미 사용한 쿠폰입니다.");
         }
+    }
+
+    public CouponDto toDto() {
+        return new CouponDto(this);
     }
 }
