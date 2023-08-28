@@ -3,8 +3,6 @@ package goormknights.hotel.model;
 import lombok.*;
 
 import java.util.Date;
-import goormknights.hotel.model.Item;
-import goormknights.hotel.model.Member;
 
 @Getter
 @Builder
