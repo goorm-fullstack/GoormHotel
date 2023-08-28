@@ -1,14 +1,12 @@
 package goormknights.hotel.dto;
 
-import goormknights.hotel.model.Coupon;
-import goormknights.hotel.model.GiftCard;
+import goormknights.hotel.dto.request.RequestCouponDto;
+import goormknights.hotel.dto.request.RequestGiftCardDto;
 import goormknights.hotel.model.Item;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 @Data
@@ -34,7 +32,7 @@ public class ReservationDto {
     }
 
     // 상품 가격 계산을 위한 로직
-    public int calculateDiscountPrice(CouponDto coupon, GiftCardDto giftCard, int useGiftCardMoney) {
+    public int calculateDiscountPrice(RequestCouponDto coupon, RequestGiftCardDto giftCard, int useGiftCardMoney) {
         if(coupon == null && giftCard == null) {//쿠폰, 상품권 사용하지 않음
             System.out.println("call 1");
             return price;

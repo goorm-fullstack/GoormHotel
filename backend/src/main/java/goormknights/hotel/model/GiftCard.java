@@ -1,7 +1,9 @@
 package goormknights.hotel.model;
 
-import goormknights.hotel.dto.GiftCardDto;
+import goormknights.hotel.dto.request.RequestGiftCardDto;
+import goormknights.hotel.dto.response.ResponseGiftCardDto;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,6 +28,21 @@ public class GiftCard {
         this.money = money;
     }
 
+    @Builder
+    public GiftCard(
+            int id,
+            String uuid,
+            int money,
+            Member member,
+            char isZeroMoney
+    ) {
+        this.id = id;
+        this.uuid = uuid;
+        this.money = money;
+        this.member = member;
+        this.isZeroMoney = isZeroMoney;
+    }
+
     public void setMember(Member member) {
         this.member = member;
     }
@@ -44,7 +61,11 @@ public class GiftCard {
             isZeroMoney = 'Y';
     }
 
-    public GiftCardDto toDto() {
-        return new GiftCardDto(this);
+    public ResponseGiftCardDto toResponseDto() {
+        return new ResponseGiftCardDto(this);
+    }
+
+    public RequestGiftCardDto toRequestDto() {
+        return new RequestGiftCardDto(this);
     }
 }

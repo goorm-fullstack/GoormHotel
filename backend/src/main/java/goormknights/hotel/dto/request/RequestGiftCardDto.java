@@ -1,8 +1,7 @@
-package goormknights.hotel.dto;
+package goormknights.hotel.dto.request;
 
 import goormknights.hotel.model.GiftCard;
 import goormknights.hotel.model.Member;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,13 +9,19 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GiftCardDto {
+public class RequestGiftCardDto {
+    private int id;
     private String uuid;
     private int money;//현재 잔액
+    private Member member;
+    private char isZeroMoney;
 
-    public GiftCardDto(GiftCard giftcard) {
+    public RequestGiftCardDto(GiftCard giftcard) {
+        this.id = giftcard.getId();
         this.uuid = giftcard.getUuid();
         this.money = giftcard.getMoney();
+        this.member = giftcard.getMember();
+        this.isZeroMoney = giftcard.getIsZeroMoney();
     }
 
     public int useGiftCard(int price, int useMoney) {
@@ -27,7 +32,25 @@ public class GiftCardDto {
             useMoney = price;
         }
         money = money - useMoney;
-        System.out.println(price - useMoney);
+        isAllUseAmountMoney();
+
         return price - useMoney;
+    }
+
+    // 금액을 다 사용했는지 확인해보자
+    private void isAllUseAmountMoney() {
+        if(money <= 0) {
+            isZeroMoney = 'Y';
+        }
+    }
+
+    public GiftCard toEntity() {
+        return GiftCard.builder()
+                .id(id)
+                .uuid(uuid)
+                .money(money)
+                .member(member)
+                .isZeroMoney(isZeroMoney)
+                .build();
     }
 }

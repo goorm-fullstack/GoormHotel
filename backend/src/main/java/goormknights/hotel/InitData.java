@@ -12,6 +12,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
@@ -56,12 +57,25 @@ public class InitData {
                 .typeDetail("deluxe")
                 .build();
 
-        Coupon coupon = new Coupon(UUID.randomUUID().toString(), member);
-        GiftCard giftCard = new GiftCard(UUID.randomUUID().toString(), 10000);
+        Coupon coupon = Coupon.builder()
+                .uuid(UUID.randomUUID().toString())
+                .discountRate(5)
+                .issueDate(LocalDateTime.now())
+                .member(member)
+                .expire(30)
+                .build();
+
+        GiftCard giftCard = GiftCard.builder()
+                .uuid(UUID.randomUUID().toString())
+                .money(10000)
+                .member(member)
+                .build();
+
         giftCard.registrationGiftCard(member);
         memberRepository.save(member);
         itemRepository.save(room);
         couponRepository.save(coupon);
         giftCardRepository.save(giftCard);
+
     }
 }

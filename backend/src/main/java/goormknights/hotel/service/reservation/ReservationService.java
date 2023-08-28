@@ -1,8 +1,12 @@
 package goormknights.hotel.service.reservation;
 
 import goormknights.hotel.dto.ReservationDto;
+import goormknights.hotel.dto.request.RequestCouponDto;
+import goormknights.hotel.dto.request.RequestGiftCardDto;
 import goormknights.hotel.exception.NotExistMemberException;
 import goormknights.hotel.model.*;
+import goormknights.hotel.repository.coupon.CouponRepository;
+import goormknights.hotel.repository.giftcard.GiftCardRepository;
 import goormknights.hotel.repository.item.ItemRepository;
 import goormknights.hotel.repository.member.MemberRepository;
 import goormknights.hotel.repository.reservation.ReservationRepository;
@@ -23,53 +27,62 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
+    private final CouponRepository couponRepository;
+    private final GiftCardRepository giftCardRepository;
 
     // TODO 쿠폰, 상품권, 일반 예약 로직을 한번에 처리하자~
     public void paidReservation(int memberId, int itemId, Coupon coupon, GiftCard giftCard, int useGiftCardMoney, ReservationDto reservationDto) {
         Member customer = memberRepository.findById(memberId).orElseThrow(()-> new NotExistMemberException("사용자가 없습니다.")
         );
-
         Item buyItem = (Item) itemRepository.findById(itemId).orElseThrow();
 
         if(coupon!=null && giftCard != null) {
+            RequestCouponDto couponDto = coupon.toRequestDto();
+            RequestGiftCardDto giftCardDto = giftCard.toRequestDto();
             Reservation newReserve = new Reservation(
                     reservationDto.getCheckIn(),
                     reservationDto.getCheckOut(),
                     reservationDto.getCount(),
                     reservationDto.getNotice(),
-                    reservationDto.calculateDiscountPrice(coupon.toDto(), giftCard.toDto(), useGiftCardMoney),
+                    reservationDto.calculateDiscountPrice(couponDto, giftCardDto, useGiftCardMoney),
                     reservationDto.getStay(),
                     customer,
                     buyItem
             );
             Reservation save = reservationRepository.save(newReserve);
             customer.getReservationList().add(save);
+            couponRepository.save(couponDto.toEntity());
+            giftCardRepository.save(giftCardDto.toEntity());
             customer.considerGradeLevelUp();
         } else if(coupon != null && giftCard == null) {
+            RequestCouponDto couponDto = coupon.toRequestDto();
             Reservation newReserve = new Reservation(
                     reservationDto.getCheckIn(),
                     reservationDto.getCheckOut(),
                     reservationDto.getCount(),
                     reservationDto.getNotice(),
-                    reservationDto.calculateDiscountPrice(coupon.toDto(), null, 0),
+                    reservationDto.calculateDiscountPrice(couponDto, null, 0),
                     reservationDto.getStay(),
                     customer,
                     buyItem
             );
             Reservation save = reservationRepository.save(newReserve);
+            couponRepository.save(couponDto.toEntity());
             customer.getReservationList().add(save);
             customer.considerGradeLevelUp();
         } else if(coupon == null && giftCard != null) {
+            RequestGiftCardDto giftCardDto = giftCard.toRequestDto();
             Reservation newReserve = new Reservation(
                     reservationDto.getCheckIn(),
                     reservationDto.getCheckOut(),
                     reservationDto.getCount(),
                     reservationDto.getNotice(),
-                    reservationDto.calculateDiscountPrice(null, giftCard.toDto(), useGiftCardMoney),
+                    reservationDto.calculateDiscountPrice(null, giftCardDto, useGiftCardMoney),
                     reservationDto.getStay(),
                     customer,
                     buyItem
             );
+            giftCardRepository.save(giftCardDto.toEntity());
             Reservation save = reservationRepository.save(newReserve);
             customer.getReservationList().add(save);
             customer.considerGradeLevelUp();

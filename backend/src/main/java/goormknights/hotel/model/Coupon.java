@@ -1,8 +1,10 @@
 package goormknights.hotel.model;
 
-import goormknights.hotel.dto.CouponDto;
+import goormknights.hotel.dto.request.RequestCouponDto;
+import goormknights.hotel.dto.response.ResponseCouponDto;
 import goormknights.hotel.exception.AlreadyUsedException;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,6 +37,24 @@ public class Coupon {
         this.discountRate = 10;
     }
 
+    @Builder
+    public Coupon(
+            int id, String uuid,
+            int discountRate,
+            Member member,
+            char isUsed,
+            LocalDateTime issueDate,
+            int expire
+    ) {
+        this.id = id;
+        this.uuid = uuid;
+        this.discountRate = discountRate;
+        this.member = member;
+        this.isUsed = isUsed;
+        this.issueDate = issueDate;
+        this.expire = expire;
+    }
+
     // 만약 사용자가 쿠폰을 등록하는 경우나
     // 사용자에게 쿠폰이 주어지는 경우 사용될 예정입니다
     public Coupon(String uuid, Member member) {
@@ -65,7 +85,11 @@ public class Coupon {
         }
     }
 
-    public CouponDto toDto() {
-        return new CouponDto(this);
+    public RequestCouponDto toRequestDto() {
+        return new RequestCouponDto(this);
+    }
+
+    public ResponseCouponDto toResponseDto() {
+        return new ResponseCouponDto(this);
     }
 }
