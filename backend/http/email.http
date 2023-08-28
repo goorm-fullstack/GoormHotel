@@ -1,0 +1,7 @@
+### 회원가입코드
+POST http://localhost:8080/send-mail/email
+Content-Type: application/json
+
+{
+  "email": "yss1902@naver.com"
+}
