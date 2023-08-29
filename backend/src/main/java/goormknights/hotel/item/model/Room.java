@@ -1,8 +1,8 @@
-package goormknights.hotel.model;
+package goormknights.hotel.item.model;
 
-import goormknights.hotel.dto.request.RequestImageDTO;
-import goormknights.hotel.dto.request.RequestRoomDTO;
-import goormknights.hotel.dto.response.ResponseRoomDTO;
+import goormknights.hotel.item.dto.request.RequestImageDTO;
+import goormknights.hotel.item.dto.request.RequestRoomDTO;
+import goormknights.hotel.item.dto.response.ResponseRoomDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

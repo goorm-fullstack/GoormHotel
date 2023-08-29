@@ -1,11 +1,11 @@
-package goormknights.hotel.controller.api;
+package goormknights.hotel.item.controller;
 
-import goormknights.hotel.dto.request.RequestDiningDTO;
-import goormknights.hotel.dto.request.RequestImageDTO;
-import goormknights.hotel.dto.response.ResponseDiningDTO;
-import goormknights.hotel.model.Dining;
-import goormknights.hotel.service.DiningService;
-import goormknights.hotel.service.ImageService;
+import goormknights.hotel.item.dto.request.RequestDiningDTO;
+import goormknights.hotel.item.dto.request.RequestImageDTO;
+import goormknights.hotel.item.dto.response.ResponseDiningDTO;
+import goormknights.hotel.item.model.Dining;
+import goormknights.hotel.item.service.DiningService;
+import goormknights.hotel.item.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

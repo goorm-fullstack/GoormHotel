@@ -1,4 +1,4 @@
-package goormknights.hotel.model;
+package goormknights.hotel.item.model;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

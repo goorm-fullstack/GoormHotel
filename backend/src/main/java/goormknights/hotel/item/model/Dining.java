@@ -1,8 +1,8 @@
-package goormknights.hotel.model;
+package goormknights.hotel.item.model;
 
-import goormknights.hotel.dto.request.RequestDiningDTO;
-import goormknights.hotel.dto.request.RequestImageDTO;
-import goormknights.hotel.dto.response.ResponseDiningDTO;
+import goormknights.hotel.item.dto.request.RequestDiningDTO;
+import goormknights.hotel.item.dto.request.RequestImageDTO;
+import goormknights.hotel.item.dto.response.ResponseDiningDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

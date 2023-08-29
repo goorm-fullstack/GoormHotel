@@ -1,6 +1,6 @@
-package goormknights.hotel.service;
+package goormknights.hotel.item.service;
 
-import goormknights.hotel.dto.request.RequestImageDTO;
+import goormknights.hotel.item.dto.request.RequestImageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

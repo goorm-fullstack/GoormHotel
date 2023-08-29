@@ -1,6 +1,6 @@
-package goormknights.hotel.dto.request;
+package goormknights.hotel.item.dto.request;
 
-import goormknights.hotel.model.Room;
+import goormknights.hotel.item.model.Room;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;

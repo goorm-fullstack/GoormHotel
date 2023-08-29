@@ -1,8 +1,8 @@
-package goormknights.hotel.repository;
+package goormknights.hotel.item.repository;
 
-import goormknights.hotel.model.Dining;
-import goormknights.hotel.model.Item;
-import goormknights.hotel.model.Room;
+import goormknights.hotel.item.model.Dining;
+import goormknights.hotel.item.model.Item;
+import goormknights.hotel.item.model.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

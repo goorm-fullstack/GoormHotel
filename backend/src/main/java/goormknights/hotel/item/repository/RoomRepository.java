@@ -1,6 +1,6 @@
-package goormknights.hotel.repository;
+package goormknights.hotel.item.repository;
 
-import goormknights.hotel.model.Room;
+import goormknights.hotel.item.model.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

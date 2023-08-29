@@ -1,7 +1,7 @@
-package goormknights.hotel.service;
+package goormknights.hotel.item.service;
 
-import goormknights.hotel.model.Item;
-import goormknights.hotel.repository.ItemRepository;
+import goormknights.hotel.item.model.Item;
+import goormknights.hotel.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

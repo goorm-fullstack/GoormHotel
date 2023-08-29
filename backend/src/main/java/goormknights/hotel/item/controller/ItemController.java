@@ -1,9 +1,9 @@
-package goormknights.hotel.controller.api;
+package goormknights.hotel.item.controller;
 
-import goormknights.hotel.model.Dining;
-import goormknights.hotel.model.Item;
-import goormknights.hotel.model.Room;
-import goormknights.hotel.service.ItemService;
+import goormknights.hotel.item.model.Dining;
+import goormknights.hotel.item.model.Item;
+import goormknights.hotel.item.model.Room;
+import goormknights.hotel.item.service.ItemService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

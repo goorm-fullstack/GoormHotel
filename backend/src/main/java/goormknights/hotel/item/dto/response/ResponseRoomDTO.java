@@ -1,4 +1,4 @@
-package goormknights.hotel.dto.response;
+package goormknights.hotel.item.dto.response;
 
 import lombok.AccessLevel;
 import lombok.Builder;

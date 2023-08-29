@@ -1,10 +1,10 @@
-package goormknights.hotel.service;
+package goormknights.hotel.item.service;
 
-import goormknights.hotel.dto.request.RequestDiningDTO;
-import goormknights.hotel.dto.request.RequestImageDTO;
-import goormknights.hotel.model.Dining;
-import goormknights.hotel.repository.DiningRepository;
-import goormknights.hotel.repository.ItemRepository;
+import goormknights.hotel.item.dto.request.RequestDiningDTO;
+import goormknights.hotel.item.dto.request.RequestImageDTO;
+import goormknights.hotel.item.model.Dining;
+import goormknights.hotel.item.repository.DiningRepository;
+import goormknights.hotel.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
