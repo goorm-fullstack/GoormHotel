@@ -2,8 +2,6 @@ package goormknights.hotel.service;
 
 import goormknights.hotel.dto.request.RequestDiningDTO;
 import goormknights.hotel.dto.request.RequestImageDTO;
-import goormknights.hotel.model.Dining;
-import goormknights.hotel.model.Image;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
