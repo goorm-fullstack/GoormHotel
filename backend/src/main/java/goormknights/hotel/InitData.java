@@ -1,13 +1,13 @@
 package goormknights.hotel;
 
-import goormknights.hotel.model.Coupon;
-import goormknights.hotel.model.GiftCard;
-import goormknights.hotel.model.Member;
-import goormknights.hotel.model.Room;
-import goormknights.hotel.repository.coupon.CouponRepository;
-import goormknights.hotel.repository.giftcard.GiftCardRepository;
-import goormknights.hotel.repository.item.ItemRepository;
-import goormknights.hotel.repository.member.MemberRepository;
+import goormknights.hotel.coupon.model.Coupon;
+import goormknights.hotel.giftcard.model.GiftCard;
+import goormknights.hotel.member.model.Member;
+import goormknights.hotel.item.model.Room;
+import goormknights.hotel.coupon.repository.CouponRepository;
+import goormknights.hotel.giftcard.repository.GiftCardRepository;
+import goormknights.hotel.item.repository.ItemRepository;
+import goormknights.hotel.member.repository.MemberRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
