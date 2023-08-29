@@ -1,4 +1,4 @@
-package goormknights.hotel.model;
+package goormknights.hotel.item.model;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QImage extends EntityPathBase<Image> {
 
-    private static final long serialVersionUID = 228492754L;
+    private static final long serialVersionUID = -752892481L;
 
     public static final QImage image = new QImage("image");
 

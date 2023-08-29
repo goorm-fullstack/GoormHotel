@@ -1,4 +1,4 @@
-package goormknights.hotel.model;
+package goormknights.hotel.global.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultSupertypeSerializer")
 public class QBaseEntity extends EntityPathBase<BaseEntity> {
 
-    private static final long serialVersionUID = 847318013L;
+    private static final long serialVersionUID = -1408022152L;
 
     public static final QBaseEntity baseEntity = new QBaseEntity("baseEntity");
 

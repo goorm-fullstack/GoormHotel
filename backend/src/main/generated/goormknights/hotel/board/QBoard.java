@@ -1,4 +1,4 @@
-package goormknights.hotel.model;
+package goormknights.hotel.board;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QBoard extends EntityPathBase<Board> {
 
-    private static final long serialVersionUID = 222088029L;
+    private static final long serialVersionUID = -1982251686L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
@@ -26,7 +26,7 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final NumberPath<Integer> id = createNumber("id", Integer.class);
 
-    public final QMember member;
+    public final goormknights.hotel.auth.model.QMember member;
 
     public final StringPath name = createString("name");
 
@@ -50,7 +50,7 @@ public class QBoard extends EntityPathBase<Board> {
 
     public QBoard(Class<? extends Board> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.member = inits.isInitialized("member") ? new QMember(forProperty("member")) : null;
+        this.member = inits.isInitialized("member") ? new goormknights.hotel.auth.model.QMember(forProperty("member")) : null;
     }
 
 }

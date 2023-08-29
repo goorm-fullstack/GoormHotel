@@ -1,4 +1,4 @@
-package goormknights.hotel.model;
+package goormknights.hotel.auth.model;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,11 +15,11 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QMember extends EntityPathBase<Member> {
 
-    private static final long serialVersionUID = -1399177981L;
+    private static final long serialVersionUID = -838192575L;
 
     public static final QMember member = new QMember("member1");
 
-    public final QBaseEntity _super = new QBaseEntity(this);
+    public final goormknights.hotel.global.entity.QBaseEntity _super = new goormknights.hotel.global.entity.QBaseEntity(this);
 
     public final DatePath<java.time.LocalDate> birth = createDate("birth", java.time.LocalDate.class);
 
@@ -45,6 +45,8 @@ public class QMember extends EntityPathBase<Member> {
     public final StringPath phoneNumber = createString("phoneNumber");
 
     public final BooleanPath privacyCheck = createBoolean("privacyCheck");
+
+    public final EnumPath<goormknights.hotel.global.entity.Role> role = createEnum("role", goormknights.hotel.global.entity.Role.class);
 
     public final DateTimePath<java.time.LocalDateTime> signupDate = createDateTime("signupDate", java.time.LocalDateTime.class);
 

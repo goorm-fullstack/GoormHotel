@@ -1,4 +1,4 @@
-package goormknights.hotel.model;
+package goormknights.hotel.item.model;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QItem extends EntityPathBase<Item> {
 
-    private static final long serialVersionUID = 284472252L;
+    private static final long serialVersionUID = -578469329L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 

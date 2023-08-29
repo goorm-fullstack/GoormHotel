@@ -1,4 +1,4 @@
-package goormknights.hotel.model;
+package goormknights.hotel.item.model;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -11,22 +11,18 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QRoom is a Querydsl query type for Room
+ * QDining is a Querydsl query type for Dining
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QRoom extends EntityPathBase<Room> {
+public class QDining extends EntityPathBase<Dining> {
 
-    private static final long serialVersionUID = 284735876L;
+    private static final long serialVersionUID = -2011280683L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QRoom room = new QRoom("room");
+    public static final QDining dining = new QDining("dining");
 
     public final QItem _super;
-
-    public final StringPath bed = createString("bed");
-
-    public final NumberPath<Integer> capacity = createNumber("capacity", Integer.class);
 
     //inherited
     public final BooleanPath deleted;
@@ -46,12 +42,6 @@ public class QRoom extends EntityPathBase<Room> {
     //inherited
     public final NumberPath<Integer> priceChild;
 
-    public final NumberPath<Integer> roomAdult = createNumber("roomAdult", Integer.class);
-
-    public final NumberPath<Integer> roomChild = createNumber("roomChild", Integer.class);
-
-    public final NumberPath<Integer> spare = createNumber("spare", Integer.class);
-
     // inherited
     public final QImage thumbnail;
 
@@ -61,23 +51,25 @@ public class QRoom extends EntityPathBase<Room> {
     //inherited
     public final StringPath typeDetail;
 
-    public QRoom(String variable) {
-        this(Room.class, forVariable(variable), INITS);
+    public final StringPath useTime = createString("useTime");
+
+    public QDining(String variable) {
+        this(Dining.class, forVariable(variable), INITS);
     }
 
-    public QRoom(Path<? extends Room> path) {
+    public QDining(Path<? extends Dining> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QRoom(PathMetadata metadata) {
+    public QDining(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QRoom(PathMetadata metadata, PathInits inits) {
-        this(Room.class, metadata, inits);
+    public QDining(PathMetadata metadata, PathInits inits) {
+        this(Dining.class, metadata, inits);
     }
 
-    public QRoom(Class<? extends Room> type, PathMetadata metadata, PathInits inits) {
+    public QDining(Class<? extends Dining> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this._super = new QItem(type, metadata, inits);
         this.deleted = _super.deleted;
