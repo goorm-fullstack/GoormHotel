@@ -1,5 +1,6 @@
 package goormknights.hotel.coupon.dto.request;
 
+import goormknights.hotel.coupon.exception.NotAvailableUseCoupon;
 import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.member.model.Member;
 import lombok.Data;
@@ -37,8 +38,9 @@ public class RequestCouponDto {
             BigDecimal discountPrice = BigDecimal.valueOf(price).multiply(BigDecimal.valueOf(discountRate).divide(BigDecimal.valueOf(100)));
             isUsed = 'Y';
             return discountPrice.intValue();
+        } else {
+            throw new NotAvailableUseCoupon("사용할 수 없는 쿠폰입니다");
         }
-        return price;
     }
 
     private boolean isAvailable() {

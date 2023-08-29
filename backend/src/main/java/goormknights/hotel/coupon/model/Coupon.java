@@ -8,14 +8,12 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
-@Setter
-@NoArgsConstructor
 public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,9 +31,11 @@ public class Coupon {
     private int expire;//만료일
 
     // 아마 사용하지는 않을 것 같은 생성자
-    public Coupon(String uuid) {
-        this.uuid = uuid;
-        this.discountRate = 10;
+    public Coupon() {
+        this.uuid = UUID.randomUUID().toString();
+        this.discountRate = 5;
+        this.issueDate = LocalDateTime.now();
+        this.expire = 30;//30일의 유효기간
     }
 
     @Builder
@@ -61,7 +61,17 @@ public class Coupon {
     public Coupon(String uuid, Member member) {
         this.uuid = uuid;
         String grade = member.getGrade();
-        switch (grade) {
+        setDiscountRate();
+        this.member = member;
+        member.getCouponList().add(this);
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public void setDiscountRate() {
+        switch (member.getGrade()) {
             case "Bronze":
                 this.discountRate = 5;
                 break;
@@ -74,8 +84,6 @@ public class Coupon {
             default:
                 this.discountRate = 0;
         }
-        this.member = member;
-        member.getCouponList().add(this);
     }
 
     public void setIsUsed() {

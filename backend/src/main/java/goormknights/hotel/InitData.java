@@ -56,26 +56,28 @@ public class InitData {
                 .type("room")
                 .typeDetail("deluxe")
                 .build();
-
+        
+        
+        //사용되어선 안되는 쿠폰
         Coupon coupon = Coupon.builder()
                 .uuid(UUID.randomUUID().toString())
                 .discountRate(5)
-                .issueDate(LocalDateTime.now())
+                .issueDate(LocalDateTime.of(2022, 11, 11, 11, 11))
                 .member(member)
                 .expire(30)
                 .build();
 
-        GiftCard giftCard = GiftCard.builder()
-                .uuid(UUID.randomUUID().toString())
-                .money(10000)
-                .member(member)
-                .build();
+//        GiftCard giftCard = GiftCard.builder()
+//                .uuid(UUID.randomUUID().toString())
+//                .money(10000)
+//                .member(member)
+//                .build();
 
-        giftCard.registrationGiftCard(member);
+//        giftCard.registrationGiftCard(member);
         memberRepository.save(member);
         itemRepository.save(room);
         couponRepository.save(coupon);
-        giftCardRepository.save(giftCard);
+//        giftCardRepository.save(giftCard);
 
     }
 }

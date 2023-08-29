@@ -2,9 +2,11 @@ package goormknights.hotel.member.model;
 
 import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.giftcard.model.GiftCard;
+import goormknights.hotel.global.event.EventListener;
 import goormknights.hotel.reservation.model.Reservation;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
@@ -14,6 +16,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(EventListener.class)//내가 만든 이벤트 리스너와 연결
 @AllArgsConstructor
 public class Member {
     @Id
