@@ -1,7 +1,14 @@
 package goormknights.hotel.service;
 
+<<<<<<< HEAD
 import goormknights.hotel.dto.request.RequestImageDTO;
 import goormknights.hotel.dto.request.RequestRoomDTO;
+=======
+import goormknights.hotel.item.dto.request.RequestImageDTO;
+import goormknights.hotel.item.dto.request.RequestRoomDTO;
+import goormknights.hotel.item.model.Room;
+import goormknights.hotel.item.service.RoomService;
+>>>>>>> item
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
