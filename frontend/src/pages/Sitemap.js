@@ -16,6 +16,7 @@ const SiteMap = styled.div`
 const Title = styled.p`
   height: 223px;
   font-size: 36px;
+  font-weight: 500;
   color: rgb(17, 17, 17);
   line-height: 1.2;
 `;
@@ -30,6 +31,7 @@ const Items = styled.div`
 
 const SubTitle = styled.p`
   font-size: 22px;
+  font-weight: 500;
   width: 300px;
   line-height: 1.182;
   padding-bottom: 30px;
@@ -43,6 +45,7 @@ const SubTitle = styled.p`
 
 const List = styled.li`
   font-size: 18px;
+  font-weight: 400;
   color: rgb(102, 102, 102);
   line-height: 1.778;
   &:hover {

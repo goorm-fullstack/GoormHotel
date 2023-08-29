@@ -10,6 +10,7 @@ const FindAccountInput = styled.input`
   height: 64px;
   &::placeholder {
     font-size: 16px;
+    font-weight: 400;
     color: rgb(136, 136, 136);
     line-height: 1.75;
     text-align: left;
@@ -25,6 +26,7 @@ const EmailInput = styled.input`
   height: 64px;
   &::placeholder {
     font-size: 16px;
+    font-weight: 400;
     color: rgb(136, 136, 136);
     line-height: 1.75;
     text-align: left;
@@ -37,6 +39,7 @@ const ButtonTypeButton = styled.button`
   width: 116px;
   height: 64px;
   font-size: 16px;
+  font-weight: 400;
   color: rgb(119, 119, 119);
   border: 1px solid rgb(221, 221, 221);
   background-color: rgb(237, 237, 237);
@@ -55,6 +58,7 @@ const ButtonTypeSubmit = styled.button`
   background-color: rgb(255, 255, 255);
   border: 1px solid rgb(186, 160, 133);
   font-size: 16px;
+  font-weight: 500;
   color: rgb(186, 160, 133);
   line-height: 1.75;
   text-align: center;
@@ -79,6 +83,7 @@ const Container = styled.div`
 
 const Title = styled.p`
   font-size: 36px;
+  font-weight: 500;
   color: rgb(17, 17, 17);
   line-height: 1.2;
   margin-bottom: 100px;
@@ -91,6 +96,10 @@ const ProcessBox = styled.div`
   justify-content: flex-start;
   align-items: baseline;
   gap: 100px;
+  & p {
+    font-size: 16px;
+    font-weight: 500;
+  }
 `;
 
 const IdProcess = styled.div`

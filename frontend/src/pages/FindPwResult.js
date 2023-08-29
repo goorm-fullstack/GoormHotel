@@ -4,12 +4,14 @@ import { styled } from "styled-components";
 
 const Text = styled.p`
   font-size: 16px;
+  font-weight: 400;
   color: rgb(136, 136, 136);
   line-height: 1.75;
 `;
 
 const Title = styled.p`
   font-size: 36px;
+  font-weight: 500;
   color: rgb(17, 17, 17);
   line-height: 1.2;
   text-align: left;
@@ -18,6 +20,7 @@ const Title = styled.p`
 const BoldText = styled.p`
   margin-bottom: 20px;
   font-size: 24px;
+  font-weight: 400;
   color: rgb(186, 160, 133);
   line-height: 1.167;
 `;
@@ -25,6 +28,7 @@ const BoldText = styled.p`
 const InfoText = styled.p`
   margin-bottom: 20px;
   font-size: 16px;
+  font-weight: 400;
   color: rgb(136, 136, 136);
   line-height: 1.75;
 `;
@@ -36,6 +40,7 @@ const FindPwResultInput = styled.input`
   height: 64px;
   &::placeholder {
     font-size: 16px;
+    font-weight: 400;
     color: rgb(136, 136, 136);
     line-height: 1.75;
     text-align: left;
@@ -50,6 +55,7 @@ const FindPwResultButton = styled.button`
   border: 1px solid rgb(186, 160, 133);
   background-color: rgb(255, 255, 255);
   font-size: 16px;
+  font-weight: 500;
   line-height: 1.75;
   text-align: center;
   &:hover {
