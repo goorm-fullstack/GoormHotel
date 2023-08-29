@@ -57,33 +57,33 @@ public class Coupon {
 
     // 만약 사용자가 쿠폰을 등록하는 경우나
     // 사용자에게 쿠폰이 주어지는 경우 사용될 예정입니다
-    public Coupon(String uuid, Member member) {
-        this.uuid = uuid;
-        String grade = member.getGrade();
-        switch (grade) {
-            case "Bronze":
-                this.discountRate = 5;
-                break;
-            case "Silver":
-                this.discountRate = 10;
-                break;
-            case "Gold":
-                this.discountRate = 15;
-                break;
-            default:
-                this.discountRate = 0;
-        }
-        this.member = member;
-        member.getCouponList().add(this);
-    }
+//    public Coupon(String uuid, Member member) {
+//        this.uuid = uuid;
+//        String grade = member.getGrade();
+//        switch (grade) {
+//            case "Bronze":
+//                this.discountRate = 5;
+//                break;
+//            case "Silver":
+//                this.discountRate = 10;
+//                break;
+//            case "Gold":
+//                this.discountRate = 15;
+//                break;
+//            default:
+//                this.discountRate = 0;
+//        }
+//        this.member = member;
+//        member.getCouponList().add(this);
+//    }
 
-    public void setIsUsed() {
-        if(this.isUsed=='N') {
-            this.isUsed = 'Y';
-        } else {
-            throw new AlreadyUsedException("이미 사용한 쿠폰입니다.");
-        }
-    }
+//    public void setIsUsed() {
+//        if(this.isUsed=='N') {
+//            this.isUsed = 'Y';
+//        } else {
+//            throw new AlreadyUsedException("이미 사용한 쿠폰입니다.");
+//        }
+//    }
 
     public RequestCouponDto toRequestDto() {
         return new RequestCouponDto(this);

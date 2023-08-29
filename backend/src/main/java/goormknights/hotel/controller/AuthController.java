@@ -1,6 +1,6 @@
 package goormknights.hotel.controller;
 
-import goormknights.hotel.email.EmailService;
+import goormknights.hotel.email.EmailCodeService;
 import goormknights.hotel.email.EmailVerificationRequest;
 import goormknights.hotel.service.AuthService;
 import goormknights.hotel.service.Signup;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @Controller
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
-    private final EmailService emailService;
+    private final EmailCodeService emailCodeService;
 
     @GetMapping("/auth/login")
     public String login(){

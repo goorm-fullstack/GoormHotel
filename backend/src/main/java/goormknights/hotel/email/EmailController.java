@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class EmailController {
 
-    private final EmailService emailService;
+    private final EmailCodeService emailCodeService;
 
     // 임시 비밀번호 발급
     @PostMapping("/password")
@@ -22,7 +22,7 @@ public class EmailController {
                 .subject("[GoormHotel] 임시 비밀번호 발급")
                 .build();
 
-        emailService.sendMail(emailMessage, "password");
+        emailCodeService.sendMail(emailMessage, "password");
 
         return ResponseEntity.ok().build();
     }
@@ -35,7 +35,7 @@ public class EmailController {
                 .subject("[GoormHotel] 이메일 인증을 위한 인증 코드 발송")
                 .build();
 
-        String code = emailService.sendMail(emailMessage, "email");
+        String code = emailCodeService.sendMail(emailMessage, "email");
 
         EmailResponseDto emailResponseDto = new EmailResponseDto();
         emailResponseDto.setCode(code);
