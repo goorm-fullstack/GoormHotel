@@ -1,24 +1,17 @@
 package goormknights.hotel.email;
 
-import com.samskivert.mustache.Mustache;
-import com.samskivert.mustache.Template;
-import goormknights.hotel.service.AuthService;
-import goormknights.hotel.service.RedisUtil;
+import goormknights.hotel.auth.service.AuthService;
+import goormknights.hotel.auth.service.RedisUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 @Slf4j
