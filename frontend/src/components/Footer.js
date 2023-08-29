@@ -11,7 +11,7 @@ const Container = styled.div`
   flex-direction: column;
   margin-top: 220px;
   height: 100%;
-  min-width: 1600px;
+  min-width: 100%;
 `;
 
 const NewsLetterContainer = styled.div`
@@ -257,7 +257,7 @@ const Footer = () => {
           <div>
             <p>(주)어벤저스 &nbsp;&nbsp;&nbsp;&nbsp;   경기도 성남시 분당구 판교로 242 PDC A동 902호&nbsp;&nbsp; 사업자 등록번호 124-87-39200&nbsp;&nbsp; 통신판매업 신고 번호 제2019-성남분당B-0224호</p>
             <p>대표이사 &nbsp;&nbsp; Tel.031-600-8586&nbsp;&nbsp; E-mail: contact@goorm.io</p>
-            <p>Copyright © 어벤저스(<Name href="https://www.instagram.com/goorm.co/" target="_blank" rel="noopener noreferrer">김경규</Name>, <Name href="https://www.instagram.com/goorm.co/" target="_blank" rel="noopener noreferrer">문소희</Name>, <Name href="https://www.instagram.com/goorm.co/" target="_blank" rel="noopener noreferrer">박지국</Name>, <Name href="https://www.instagram.com/goorm.co/" target="_blank" rel="noopener noreferrer">배진환</Name>, <Name href="https://www.instagram.com/goorm.co/" target="_blank" rel="noopener noreferrer">이동규</Name>, <Name href="https://www.instagram.com/goorm.co/" target="_blank" rel="noopener noreferrer">전민종</Name>). All rights reserved.</p>
+            <p>Copyright © 어벤저스(<Name href="https://github.com/WhiteKIM" target="_blank" rel="noopener noreferrer">김경규</Name>, <Name href="https://github.com/soheetech" target="_blank" rel="noopener noreferrer">문소희</Name>, <Name href="https://github.com/parkjikuk" target="_blank" rel="noopener noreferrer">박지국</Name>, <Name href="https://github.com/JinhwanB" target="_blank" rel="noopener noreferrer">배진환</Name>, <Name href="https://github.com/LEE-Donggyu" target="_blank" rel="noopener noreferrer">이동규</Name>, <Name href="https://github.com/yss1902" target="_blank" rel="noopener noreferrer">전민종</Name>). All rights reserved.</p>
           </div>
         </SecondFooter>
       </FooterContainer>
