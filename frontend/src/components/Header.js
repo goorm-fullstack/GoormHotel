@@ -3,15 +3,21 @@ import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
 import logo from '../images/common/logo.png';
 
+const HeaderContainer = styled.div`
+  position: relative;
+  height: 120px;
+`;
+
 const Container = styled.header`
   width: 100%;
   height: 120px;
-  min-width: 1200px;
-  background-color: rgba(3, 3, 3, 0.8);
+  min-width: 1800px;
+  background-color: ${props => props.$background};
   position: fixed;
   padding: 0 40px;
   color: white;
   z-index: 999;
+  top: 0;
 `;
 
 const TopInfo = styled.div`
@@ -69,9 +75,10 @@ const NavReserveBtn = styled.button`
   }
 `;
 
-const Header = () => {
+const Header = ({ backgroundColor }) => {
   return (
-    <Container>
+    <HeaderContainer>
+      <Container $background={backgroundColor}>
       <TopInfo>
         <TopInfoList>
           <TopInfoItem><HeaderLink to="/">예약확인</HeaderLink></TopInfoItem>
@@ -83,11 +90,11 @@ const Header = () => {
         </TopInfoList>
       </TopInfo>
       <Gnb>
-        <HeaderLink><img src={logo} alt="logo" /></HeaderLink>
+        <HeaderLink to="/"><img src={logo} alt="logo" /></HeaderLink>
         <NavList>
-          <NavItem><HeaderLink to="/">구름호텔 소개</HeaderLink></NavItem>
-          <NavItem><HeaderLink to="/">객실</HeaderLink></NavItem>
-          <NavItem><HeaderLink to="/">다이닝</HeaderLink></NavItem>
+          <NavItem><HeaderLink to="/about">구름호텔 소개</HeaderLink></NavItem>
+          <NavItem><HeaderLink to="/rooms">객실</HeaderLink></NavItem>
+          <NavItem><HeaderLink to="/dining">다이닝</HeaderLink></NavItem>
           <NavItem><HeaderLink to="/">부대시설</HeaderLink></NavItem>
           <NavItem><HeaderLink to="/">스페셜오퍼</HeaderLink></NavItem>
           <NavItem><HeaderLink to="/">고객지원</HeaderLink></NavItem>
@@ -95,6 +102,7 @@ const Header = () => {
         <NavReserveBtn>예약하기</NavReserveBtn>
       </Gnb>
     </Container>
+    </HeaderContainer>
   );
 };
 

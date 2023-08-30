@@ -18,7 +18,6 @@ import Villa from '../images/room/Villa.jpg'
 const diningImages = [dining01, dining02, dining03, dining04];
 
 const FirstArticle = styled.article`
-  position: relative;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -103,7 +102,7 @@ const DiningItem = styled(RoomItem)`
 const ThirdArticle = styled.article`
   height: 601px;
   width: 100%;
-  min-width: 1920px;
+  padding-top: 71px;
 `;
 
 const ActivityContainer = styled.div`
@@ -115,17 +114,16 @@ const ActivityContainer = styled.div`
 `;
 
 const ActivityImg = styled.img`
-  position: absolute;
   width: 943px;
   height: 530px;
-  left: 107px;
-  top: -71px;
-  opacity: ${props => (props.active ? 1 : 0)};
+  margin-left: 107px;
+  margin-top: -71px;
+  opacity: ${props => (props.$isActive ? 1 : 0)};
   transition: opacity 0.5s ease-in-out;
 `;
 
 const ActivityInfo = styled.div`
-  margin-left: 60%;
+  margin-left: 100px;
   padding-top: 80px;
 `;
 
@@ -152,7 +150,7 @@ const ActivityDescription = styled.p`
 const FourthArticle = styled.div`
   width: 1180px;
   height: 780px;
-  margin: 220px auto;
+  margin: 220px auto 0 ;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -210,7 +208,7 @@ const ButtonContainer = styled.div`
 const RoundButton = styled.button`
   border: none;
   border-radius: 50%;
-  background-color: ${props => (props.active ? '#102c57' : '#dddddd')};
+  background-color: ${props => (props.$isActive ? '#102c57' : '#dddddd')};
   cursor: pointer;
   width: 14px;
   height: 14px;
@@ -228,7 +226,7 @@ const Home = () => {
   
   return (
     <>
-      <Header />
+      <Header backgroundColor="rgba(51, 51, 51, 0.8)" />
       <FirstArticle>
         <Slide />
         <Reservation />
@@ -281,7 +279,7 @@ const Home = () => {
       </SecondArticle>
       <ThirdArticle>
         <ActivityContainer>
-          <ActivityImg src={images[activeIndex]} active={true} />
+          <ActivityImg src={images[activeIndex]} $isActive={true} />
           <ActivityInfo>
             <Activity>부대시설</Activity>
             <ActivityTitle>리트릿 구름 스파</ActivityTitle>
@@ -294,7 +292,7 @@ const Home = () => {
               {images.map((_, index) => (
                 <RoundButton
                   key={index}
-                  active={index === activeIndex}
+                  $isActive={index === activeIndex}
                   onClick={() => handleSlide(index)}
                 />
               ))}
