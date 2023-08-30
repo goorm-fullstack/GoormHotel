@@ -190,6 +190,7 @@ const ReservationPage = () => {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [giftCardNumber, setGiftCardNumber] = useState("");
+  // const [userLoggedIn, setUserLoggedIn] = useState(true);
   const userLoggedIn = true;
   const [selectedOption, setSelectedOption] = useState("");
 

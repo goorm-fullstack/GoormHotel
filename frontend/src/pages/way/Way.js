@@ -144,6 +144,7 @@ const Way = () => {
               <TableDLDT>
                 <div
                   style={{
+                    // display : "block",
                     padding: "10px",
                     textAlign: "center",
                     margin: "0 auto",
@@ -158,7 +159,7 @@ const Way = () => {
                 >
                   <img
                     src={ico_train}
-                    alt="hi"
+                    alt="기차"
                     style={{
                       height: "40px",
                       filter: "invert(1)",
@@ -181,6 +182,7 @@ const Way = () => {
               <TableDLDT>
                 <div
                   style={{
+                    // display : "block",
                     textAlign: "center",
                     margin: "0 auto",
                     width: "80px",
@@ -194,7 +196,7 @@ const Way = () => {
                 >
                   <img
                     src={ico_bus}
-                    alt="hi"
+                    alt="버스"
                     style={{
                       height: "40px",
                       filter: "invert(1)",
