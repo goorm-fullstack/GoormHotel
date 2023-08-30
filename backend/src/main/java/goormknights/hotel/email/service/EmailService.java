@@ -5,6 +5,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.MailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -20,20 +23,40 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
 
-    public void sendMail(EmailMessage emailMessage, String message) {
+    // 메일 내용을 직접 입력해서 사용하는 경우에 사용해주세요
+    public void sendMail(String to, String message, String title) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        LocalDateTime dateTime = LocalDateTime.now();
 
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
-            helper.setTo(emailMessage.getTo());
-            helper.setSubject(dateTime.getMonth().getValue()+"월의 소식~");
+            helper.setTo(to);
+            helper.setSubject(title);
             helper.setText(message);
             javaMailSender.send(mimeMessage);
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // JSON을 통해 메일 내용을 오브젝트로 받아와서 사용하는 경우에 사용합니다.
+    public void sendMail(EmailMessage emailMessage){
+        Context context = new Context();
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = null;
+        try {
+            helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setSubject(emailMessage.getTitle());
+            helper.setTo(emailMessage.getTo());
+            context.setVariable("message", emailMessage.getMessage());
+            String html = templateEngine.process("mail", context);
+            helper.setText(html, true);
+            helper.addInline("logo", new ClassPathResource("/static/images/common/logo.png"));
+            helper.addInline("check", new ClassPathResource("/static/images/mail/ico_check.png"));
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+        javaMailSender.send(message);
     }
 
     /**

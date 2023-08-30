@@ -33,7 +33,7 @@ public class InitData {
     @PostConstruct
     void init() {
         Member member = Member.builder()
-                .email("test")
+                .email("9rudrb40@naver.com")
                 .password("test")
                 .name("test")
                 .phoneNumber("test")
