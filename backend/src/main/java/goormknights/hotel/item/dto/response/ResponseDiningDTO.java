@@ -11,9 +11,9 @@ public class ResponseDiningDTO {
 
     private String thumbnailPath; // 썸네일이미지
     private String name; // 상품명
-    private Integer price; // 기본 비용
-    private Integer priceAdult; // 어른 추가 비용
-    private Integer priceChild; // 어린이 추가 비용
+    private int price; // 기본 비용
+    private int priceAdult; // 어른 추가 비용
+    private int priceChild; // 어린이 추가 비용
     private String type; // 상품 타입(ex. 객실, 다이닝)
 
     /**
@@ -25,7 +25,7 @@ public class ResponseDiningDTO {
     private String useTime; // 이용 시간(ex. 아침, 점심, 저녁)
 
     @Builder
-    public ResponseDiningDTO(String thumbnailPath, String name, Integer price, Integer priceAdult, Integer priceChild, String type, String typeDetail, String useTime) {
+    public ResponseDiningDTO(String thumbnailPath, String name, int price, int priceAdult, int priceChild, String type, String typeDetail, String useTime) {
         this.thumbnailPath = thumbnailPath;
         this.name = name;
         this.price = price;
