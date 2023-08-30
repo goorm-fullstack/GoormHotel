@@ -13,7 +13,10 @@ public class ResponseDiningDTO {
     private String name; // 상품명
     private int price; // 기본 비용
     private int priceAdult; // 어른 추가 비용
-    private int priceChild; // 어린이 추가 비용
+    private int priceChildren; // 어린이 추가 비용
+    private int spare; // 잔여 객실 수
+    private int spareAdult; // 최대 숙박 가능 인원 수(어른)
+    private int spareChildren; // 최대 숙박 가능 인원 수(어린이)
     private String type; // 상품 타입(ex. 객실, 다이닝)
 
     /**
@@ -25,12 +28,15 @@ public class ResponseDiningDTO {
     private String useTime; // 이용 시간(ex. 아침, 점심, 저녁)
 
     @Builder
-    public ResponseDiningDTO(String thumbnailPath, String name, int price, int priceAdult, int priceChild, String type, String typeDetail, String useTime) {
+    public ResponseDiningDTO(String thumbnailPath, String name, int price, int priceAdult, int priceChildren, int spare, int spareAdult, int spareChildren, String type, String typeDetail, String useTime) {
         this.thumbnailPath = thumbnailPath;
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;
-        this.priceChild = priceChild;
+        this.priceChildren = priceChildren;
+        this.spare = spare;
+        this.spareAdult = spareAdult;
+        this.spareChildren = spareChildren;
         this.type = type;
         this.typeDetail = typeDetail;
         this.useTime = useTime;

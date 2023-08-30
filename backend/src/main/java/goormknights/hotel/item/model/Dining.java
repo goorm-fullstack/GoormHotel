@@ -23,7 +23,7 @@ public class Dining extends Item {
     // 엔티티 수정
     public Dining updateDining(RequestDiningDTO requestDiningDTO, RequestImageDTO requestImageDTO){
         return this.toBuilder()
-                .priceChild(requestDiningDTO.getPriceChild())
+                .priceChildren(requestDiningDTO.getPriceChildren())
                 .price(requestDiningDTO.getPrice())
                 .priceAdult(requestDiningDTO.getPriceAdult())
                 .name(requestDiningDTO.getName())
@@ -31,6 +31,9 @@ public class Dining extends Item {
                 .useTime(requestDiningDTO.getUseTime())
                 .thumbnail(requestImageDTO.toEntity())
                 .typeDetail(requestDiningDTO.getTypeDetail())
+                .spare(requestDiningDTO.getSpare())
+                .spareAdult(requestDiningDTO.getSpareAdult())
+                .spareChildren(requestDiningDTO.getSpareChildren())
                 .build();
     }
 
@@ -43,8 +46,11 @@ public class Dining extends Item {
                 .price(this.getPrice())
                 .name(this.getName())
                 .priceAdult(this.getPriceAdult())
-                .priceChild(this.getPriceChild())
+                .priceChildren(this.getPriceChildren())
                 .typeDetail(this.getTypeDetail())
+                .spare(this.getSpare())
+                .spareAdult(this.getSpareAdult())
+                .spareChildren(this.getSpareChildren())
                 .build();
     }
 }

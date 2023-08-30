@@ -21,7 +21,7 @@ public class RequestDiningDTO {
     private int priceAdult; // 어른 추가 비용
 
     @PositiveOrZero
-    private int priceChild; // 어린이 추가 비용
+    private int priceChildren; // 어린이 추가 비용
 
     @NotBlank
     private String type; // 상품 타입(ex. 객실, 다이닝)
@@ -37,16 +37,29 @@ public class RequestDiningDTO {
     @NotBlank
     private String useTime; // 이용 시간(ex. 아침, 점심, 저녁)
 
+    @PositiveOrZero
+    private int spare; // 잔여 객실 수
+
+    @PositiveOrZero
+    private int spareAdult; // 최대 숙박 가능 인원 수(어른)
+
+    @PositiveOrZero
+    private int spareChildren; // 최대 숙박 가능 인원 수(어린이)
+
     @Builder(toBuilder = true)
-    public RequestDiningDTO(String name, int price, int priceAdult, int priceChild, String type, String typeDetail, String useTime) {
+    public RequestDiningDTO(String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, String useTime, int spare, int spareAdult, int spareChildren) {
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;
-        this.priceChild = priceChild;
+        this.priceChildren = priceChildren;
         this.type = type;
         this.typeDetail = typeDetail;
         this.useTime = useTime;
+        this.spare = spare;
+        this.spareAdult = spareAdult;
+        this.spareChildren = spareChildren;
     }
+
 
     // RequestDiningDTO 엔티티화
     public Dining toEntity(){
@@ -54,10 +67,13 @@ public class RequestDiningDTO {
                 .name(name)
                 .price(price)
                 .priceAdult(priceAdult)
-                .priceChild(priceChild)
+                .priceChildren(priceChildren)
                 .type(type)
                 .useTime(useTime)
                 .typeDetail(typeDetail)
+                .spare(spare)
+                .spareAdult(spareAdult)
+                .spareChildren(spareChildren)
                 .build();
     }
 }
