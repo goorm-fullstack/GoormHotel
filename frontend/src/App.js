@@ -6,7 +6,7 @@ import Room from "./pages/Room";
 import Dining from "./pages/Dining";
 import { styled } from "styled-components";
 import About from "./pages/About";
-import Map from "./pages/Map";
+// import Map from "./pages/Map";
 import Mypage from "./pages/Mypage";
 import ReservationPage from "./pages/ReservationPage";
 import { useState } from "react";
@@ -87,7 +87,7 @@ function App() {
           <Route path="/rooms" element={<Room />}></Route>
           <Route path="/dining" element={<Dining />}></Route>
           <Route path="/about" element={<About />}></Route>
-          <Route path="/map" element={<Map />}></Route>
+          {/* <Route path="/map" element={<Map />}></Route> */}
           <Route path="/mypage" element={<Mypage />}></Route>
           <Route path="/reservation" element={<ReservationPage />}></Route>
           <Route path="/location" element={<Way />}></Route>
