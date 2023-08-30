@@ -1,7 +1,7 @@
-import React from 'react';
-import item from '../images/item/item1.jpg';
-import { styled } from 'styled-components';
-import { SubTitle } from '../pages/ReservationPage';
+import React from "react";
+import item from "../images/item/item1.jpg";
+import { styled } from "styled-components";
+import { SubTitle } from "../pages/ReservationPage";
 
 const ProductInfo = styled.div`
   display: flex;
@@ -11,14 +11,14 @@ const ProductInfo = styled.div`
 `;
 
 const Info = styled.div`
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   height: 50%;
   padding: 35px 46px 0 40px;
 `;
 
 const InfoTitle = styled.h1`
   font-size: 18px;
-  color: #21201E;
+  color: #21201e;
   margin-bottom: 20px;
   font-weight: bold;
 `;
@@ -51,7 +51,7 @@ const PaymentInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-bottom: 1px solid #DDDDDD;
+  border-bottom: 1px solid #dddddd;
   margin-bottom: 28px;
 `;
 
@@ -63,7 +63,7 @@ const PaymentPrice = styled.div`
 `;
 
 const DiscountPrice = styled.p`
-  color: #BB2525;
+  color: #bb2525;
 `;
 
 const TotalPrice = styled.div`
@@ -72,55 +72,55 @@ const TotalPrice = styled.div`
   justify-content: space-between;
   align-items: center;
   font-size: 14px;
-  color: #21201E;
+  color: #21201e;
   margin-bottom: 15px;
 `;
 
 const Price = styled.p`
   font-size: 22px;
-  color: #95846E;
+  color: #95846e;
 `;
 
 const Product = () => {
   return (
     <>
-    <ProductInfo>
-      <img src={item} />
-      <Info>
-        <InfoTitle>상품명</InfoTitle>
-        <InfoWrapper>
-          <InfoLeft>
-            <p>상품 유형</p>
-            <p>상품 분류</p>
-            <p>기본 가격(1박/2인 기준)</p>
-            <p>어른 추가(1인)</p>
-            <p>어린이 추가(1인)</p>
-          </InfoLeft>
-          <InfoRight>
-            <p>객실</p>
-            <p>디럭스</p>
-            <p>160,000원</p>
-            <p>80,000 원/최대 1인</p>
-            <p>40,000 원/최대 2인</p>
-          </InfoRight>
-        </InfoWrapper>
-      </Info>
-    </ProductInfo>
-    <SubTitle>결제 정보</SubTitle>
-    <PaymentInfo>
-      <PaymentPrice>
-        <p>총액</p>
-        <p>500,000 원</p>
-      </PaymentPrice>
-      <PaymentPrice>
-        <p>할인액</p>
-        <DiscountPrice>-200,000 원</DiscountPrice>
-      </PaymentPrice>
-    </PaymentInfo>
-    <TotalPrice>
-      <p>최종금액(VAT)포함</p>
-      <Price>300,000 원</Price>
-    </TotalPrice>
+      <ProductInfo>
+        <img src={item} />
+        <Info>
+          <InfoTitle>상품명</InfoTitle>
+          <InfoWrapper>
+            <InfoLeft>
+              <p>상품 유형</p>
+              <p>상품 분류</p>
+              <p>기본 가격(1박/2인 기준)</p>
+              <p>어른 추가(1인)</p>
+              <p>어린이 추가(1인)</p>
+            </InfoLeft>
+            <InfoRight>
+              <p>객실</p>
+              <p>디럭스</p>
+              <p>160,000원</p>
+              <p>80,000 원/최대 1인</p>
+              <p>40,000 원/최대 2인</p>
+            </InfoRight>
+          </InfoWrapper>
+        </Info>
+      </ProductInfo>
+      <SubTitle>결제 정보</SubTitle>
+      <PaymentInfo>
+        <PaymentPrice>
+          <p>총액</p>
+          <p>500,000 원</p>
+        </PaymentPrice>
+        <PaymentPrice>
+          <p>할인액</p>
+          <DiscountPrice>-200,000 원</DiscountPrice>
+        </PaymentPrice>
+      </PaymentInfo>
+      <TotalPrice>
+        <p>최종금액(VAT)포함</p>
+        <Price>300,000 원</Price>
+      </TotalPrice>
     </>
   );
 };

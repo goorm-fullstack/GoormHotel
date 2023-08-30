@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import visual03 from '../images/main/visual03.webp';
-import visual02 from '../images/main/visual02.webp';
-import visual01 from '../images/main/visual01.webp';
-import slideBtnImage from '../images/icon/ico_slide_btn.png';
-import { styled } from 'styled-components';
-
+import React, { useState } from "react";
+import visual03 from "../images/main/visual03.webp";
+import visual02 from "../images/main/visual02.webp";
+import visual01 from "../images/main/visual01.webp";
+import slideBtnImage from "../images/icon/ico_slide_btn.png";
+import { styled } from "styled-components";
 
 const images = [visual03, visual02, visual01];
 
@@ -32,9 +31,9 @@ const SlideButton = styled.button`
   top: 45%;
   background-color: rgba(255, 255, 255, 0);
   img {
-    filter: brightness(0) invert(1); 
+    filter: brightness(0) invert(1);
   }
-  ${props => (props.$position === 'right' ? 'right: 40px;' : 'left: 40px;')}
+  ${(props) => (props.$position === "right" ? "right: 40px;" : "left: 40px;")}
 `;
 
 const SlideImageWrapper = styled.div`
@@ -43,7 +42,7 @@ const SlideImageWrapper = styled.div`
   height: 100%;
   top: 0;
   left: 0;
-  opacity: ${props => (props.$isActive ? 1 : 0)};
+  opacity: ${(props) => (props.$isActive ? 1 : 0)};
   transition: opacity 1s ease-in-out;
 `;
 
@@ -59,19 +58,27 @@ const Slide = () => {
   };
 
   return (
-      <>
-        <Container>
+    <>
+      <Container>
         <SlideContent>
           {images.map((image, index) => (
             <SlideImageWrapper key={index} $isActive={index === currentIndex}>
               <MainImage src={image} alt={`Image ${index}`} />
             </SlideImageWrapper>
           ))}
-          </SlideContent>
-        </Container>
-        <SlideButton onClick={goToPreviousSlide} $position="left"><img src={slideBtnImage} alt="slideBtn"/></SlideButton>
-        <SlideButton onClick={goToNextSlide} $position="right"><img src={slideBtnImage} alt="slideBtn"  style={{ transform: 'scaleX(-1)' }}/></SlideButton>
-      </>
+        </SlideContent>
+      </Container>
+      <SlideButton onClick={goToPreviousSlide} $position="left">
+        <img src={slideBtnImage} alt="slideBtn" />
+      </SlideButton>
+      <SlideButton onClick={goToNextSlide} $position="right">
+        <img
+          src={slideBtnImage}
+          alt="slideBtn"
+          style={{ transform: "scaleX(-1)" }}
+        />
+      </SlideButton>
+    </>
   );
 };
 
