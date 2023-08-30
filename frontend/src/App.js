@@ -1,24 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import Footer from "./components/Footer";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Sitemap from "./pages/Sitemap";
+import FindAccount from "./pages/FindAccount";
+import FindIdResult from "./pages/FindIdResult";
+import FindPwResult from "./pages/FindPwResult";
+import Membership from "./pages/Membership";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/sitemap" element={<Sitemap />}></Route>
+        <Route path="/findAccount" element={<FindAccount />}></Route>
+        <Route path="/findIdResult" element={<FindIdResult />}></Route>
+        <Route path="/findPwResult" element={<FindPwResult />}></Route>
+        <Route path="/membership" element={<Membership />}></Route>
+      </Routes>
+      <Footer />
+    </BrowserRouter>
   );
 }
 
