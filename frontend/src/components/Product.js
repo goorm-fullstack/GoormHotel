@@ -85,7 +85,7 @@ const Product = () => {
   return (
     <>
       <ProductInfo>
-        <img src={item} />
+        <img src={item} alt="hi" />
         <Info>
           <InfoTitle>상품명</InfoTitle>
           <InfoWrapper>

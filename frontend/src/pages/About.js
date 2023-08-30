@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import diningImg from "../images/about/dining.jpg";
 import facilitiesImg from "../images/about/facilities.jpg";
 import membershipImg from "../images/about/membership.jpg";
@@ -6,7 +6,7 @@ import roomImg from "../images/about/room.jpg";
 import Header from "../components/Header";
 import { styled } from "styled-components";
 import { Link, NavLink } from "react-router-dom";
-import Map from "./Map";
+// import Map from "./Map";
 import { DetailBtn, DetailSvg } from "./Home";
 
 const AboutHeader = styled.div`

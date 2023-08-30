@@ -19,6 +19,7 @@ import FindAccount from "./pages/FindAccount";
 import FindIdResult from "./pages/FindIdResult";
 import FindPwResult from "./pages/FindPwResult";
 import Membership from "./pages/Membership";
+import KakaoMap from "./utils/KakaoMap";
 
 const AppContainer = styled.div`
   width: 100%;
@@ -87,7 +88,7 @@ function App() {
           <Route path="/rooms" element={<Room />}></Route>
           <Route path="/dining" element={<Dining />}></Route>
           <Route path="/about" element={<About />}></Route>
-          {/* <Route path="/map" element={<Map />}></Route> */}
+          <Route path="/map" element={<KakaoMap />}></Route>
           <Route path="/mypage" element={<Mypage />}></Route>
           <Route path="/reservation" element={<ReservationPage />}></Route>
           <Route path="/location" element={<Way />}></Route>
