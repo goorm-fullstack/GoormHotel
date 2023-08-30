@@ -11,6 +11,9 @@ import Mypage from './pages/Mypage';
 import ReservationPage from './pages/ReservationPage';
 import { useState } from 'react';
 import ChatModal from './components/ChatModal';
+import ReservationComplete from './pages/ReservationComplete';
+import ReservationCheck from './pages/ReservationCheck';
+import ReservationItem from './pages/ReservationItem';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -82,6 +85,9 @@ function App() {
         <Route path="/map" element={<Map />}></Route>
         <Route path="/mypage" element={<Mypage />}></Route>
         <Route path="/reservation" element={<ReservationPage />}></Route>
+        <Route path="/reservationComplete" element={<ReservationComplete  title="예약 확인" />}></Route>
+        <Route path="/reservationCheck" element={<ReservationCheck />}></Route>
+        <Route path="/reservationItem" element={<ReservationItem />}></Route>
       </Routes>
       </AppContainer>
       <FloatingButtons>
