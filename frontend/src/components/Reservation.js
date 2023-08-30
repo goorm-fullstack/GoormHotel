@@ -113,7 +113,7 @@ const CalendarWrapper = styled.div`
 
 const CheckOutCalendarWrapper = styled(CalendarWrapper)``;
 
-const StyledCalendar = styled(Calendar)`
+export const StyledCalendar = styled(Calendar)`
   border-radius: 10px;
   border: 1px solid #c8c8c8;
 
