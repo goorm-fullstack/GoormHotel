@@ -9,7 +9,7 @@ import About from './pages/About';
 import Map from './pages/Map';
 import Mypage from './pages/Mypage';
 import ReservationPage from './pages/ReservationPage';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import ChatModal from './components/ChatModal';
 
 const AppContainer = styled.div`
