@@ -3,15 +3,32 @@ import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
 import logo from '../images/common/logo.png';
 
+<<<<<<< HEAD
 const Container = styled.header`
   width: 100%;
   height: 120px;
   min-width: 1200px;
   background-color: rgba(3, 3, 3, 0.8);
+=======
+const HeaderContainer = styled.div`
+  position: relative;
+  height: 120px;
+`;
+
+const Container = styled.header`
+  width: 100%;
+  height: 120px;
+  min-width: 1800px;
+  background-color: ${props => props.$background};
+>>>>>>> cfd1984fcb24022488b808dd1cf60371878be67d
   position: fixed;
   padding: 0 40px;
   color: white;
   z-index: 999;
+<<<<<<< HEAD
+=======
+  top: 0;
+>>>>>>> cfd1984fcb24022488b808dd1cf60371878be67d
 `;
 
 const TopInfo = styled.div`
@@ -69,9 +86,16 @@ const NavReserveBtn = styled.button`
   }
 `;
 
+<<<<<<< HEAD
 const Header = () => {
   return (
     <Container>
+=======
+const Header = ({ backgroundColor }) => {
+  return (
+    <HeaderContainer>
+      <Container $background={backgroundColor}>
+>>>>>>> cfd1984fcb24022488b808dd1cf60371878be67d
       <TopInfo>
         <TopInfoList>
           <TopInfoItem><HeaderLink to="/">예약확인</HeaderLink></TopInfoItem>
@@ -83,11 +107,19 @@ const Header = () => {
         </TopInfoList>
       </TopInfo>
       <Gnb>
+<<<<<<< HEAD
         <HeaderLink><img src={logo} alt="logo" /></HeaderLink>
         <NavList>
           <NavItem><HeaderLink to="/">구름호텔 소개</HeaderLink></NavItem>
           <NavItem><HeaderLink to="/">객실</HeaderLink></NavItem>
           <NavItem><HeaderLink to="/">다이닝</HeaderLink></NavItem>
+=======
+        <HeaderLink to="/"><img src={logo} alt="logo" /></HeaderLink>
+        <NavList>
+          <NavItem><HeaderLink to="/about">구름호텔 소개</HeaderLink></NavItem>
+          <NavItem><HeaderLink to="/rooms">객실</HeaderLink></NavItem>
+          <NavItem><HeaderLink to="/dining">다이닝</HeaderLink></NavItem>
+>>>>>>> cfd1984fcb24022488b808dd1cf60371878be67d
           <NavItem><HeaderLink to="/">부대시설</HeaderLink></NavItem>
           <NavItem><HeaderLink to="/">스페셜오퍼</HeaderLink></NavItem>
           <NavItem><HeaderLink to="/">고객지원</HeaderLink></NavItem>
@@ -95,6 +127,10 @@ const Header = () => {
         <NavReserveBtn>예약하기</NavReserveBtn>
       </Gnb>
     </Container>
+<<<<<<< HEAD
+=======
+    </HeaderContainer>
+>>>>>>> cfd1984fcb24022488b808dd1cf60371878be67d
   );
 };
 

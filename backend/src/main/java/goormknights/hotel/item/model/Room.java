@@ -1,5 +1,8 @@
 package goormknights.hotel.item.model;
 
+import goormknights.hotel.item.dto.request.RequestImageDTO;
+import goormknights.hotel.item.dto.request.RequestRoomDTO;
+import goormknights.hotel.item.dto.response.ResponseRoomDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,4 +33,40 @@ public class Room extends Item{
 
     @Column(nullable = false)
     private Integer capacity; // 숙박 인원 기준
+
+    // 클라이언트에게 응답 시 ResponseRoomDTO로 변경
+    public ResponseRoomDTO toResponseRoomDTO(){
+        return ResponseRoomDTO.builder()
+                .priceAdult(this.getPriceAdult())
+                .thumbnailPath(this.getThumbnail().getFilePath())
+                .roomChild(this.getRoomChild())
+                .roomAdult(this.getRoomAdult())
+                .type(this.getType())
+                .spare(this.getSpare())
+                .name(this.getName())
+                .bed(this.getBed())
+                .capacity(this.getCapacity())
+                .price(this.getPrice())
+                .priceChild(this.getPriceChild())
+                .typeDetail(this.getTypeDetail())
+                .build();
+    }
+
+    // 엔티티 수정
+    public Room updateRoom(RequestRoomDTO requestRoomDTO, RequestImageDTO requestImageDTO) {
+        return this.toBuilder()
+                .priceChild(requestRoomDTO.getPriceChild())
+                .price(requestRoomDTO.getPrice())
+                .priceAdult(requestRoomDTO.getPriceAdult())
+                .name(requestRoomDTO.getName())
+                .type(requestRoomDTO.getType())
+                .thumbnail(requestImageDTO.toEntity())
+                .typeDetail(requestRoomDTO.getTypeDetail())
+                .roomChild(requestRoomDTO.getRoomChild())
+                .roomAdult(requestRoomDTO.getRoomAdult())
+                .spare(requestRoomDTO.getSpare())
+                .bed(requestRoomDTO.getBed())
+                .capacity(requestRoomDTO.getCapacity())
+                .build();
+    }
 }

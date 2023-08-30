@@ -22,4 +22,13 @@ public class ItemService {
     public List<Item> findAllItem(){
         return itemRepository.findAll();
     }
+
+    /**
+     * 상품 검색
+     * @param keyword - 클라이언트가 검색한 단어
+     * @return 검색한 단어가 포함된 상품명으로 아이템 조회
+     */
+    public List<Item> findByKeyword(String keyword){
+        return itemRepository.findByKeyword(keyword);
+    }
 }

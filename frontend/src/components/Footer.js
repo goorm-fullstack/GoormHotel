@@ -139,30 +139,46 @@ const StyledText = styled.span`
   margin: 0 80px;
 `;
 
-
 const Footer = () => {
   const [email, setEmail] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
   };
 
   return (
     <Container>
       <NewsLetterContainer>
         <NewsLetterWrapper>
-        <Title>E-NEWS LETTER</Title>
-        <div>
-          <EmailForm onSubmit={handleSubmit}>
-            <EmailInput placeholder="이메일을 입력해주세요. (example@email.com)" type="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
-            <SubscribeBtn type="submit"><DetailBtnTitle>구독 신청</DetailBtnTitle><DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><title/><g data-name="Layer 2" id="Layer_2"><path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z"/></g></DetailSvg></SubscribeBtn>
-          </EmailForm>
-          <Terms>
-            <TermsDescription>뉴스레터 발송을 위한 개인 정보 수집 및 이용에 동의합니다.</TermsDescription>
-            <TermsLink to="/terms">약관 상세보기</TermsLink>
-          </Terms>
-        </div>
+          <Title>E-NEWS LETTER</Title>
+          <div>
+            <EmailForm onSubmit={handleSubmit}>
+              <EmailInput
+                placeholder="이메일을 입력해주세요. (example@email.com)"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <SubscribeBtn type="submit">
+                <DetailBtnTitle>구독 신청</DetailBtnTitle>
+                <DetailSvg
+                  viewBox="0 0 32 32"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <title />
+                  <g data-name="Layer 2" id="Layer_2">
+                    <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
+                  </g>
+                </DetailSvg>
+              </SubscribeBtn>
+            </EmailForm>
+            <Terms>
+              <TermsDescription>
+                뉴스레터 발송을 위한 개인 정보 수집 및 이용에 동의합니다.
+              </TermsDescription>
+              <TermsLink to="/terms">약관 상세보기</TermsLink>
+            </Terms>
+          </div>
         </NewsLetterWrapper>
       </NewsLetterContainer>
       <FooterContainer>
