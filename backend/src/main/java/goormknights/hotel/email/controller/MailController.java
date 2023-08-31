@@ -1,5 +1,6 @@
 package goormknights.hotel.email.controller;
 
+import goormknights.hotel.email.model.EmailMessage;
 import goormknights.hotel.global.dto.ResponseEntity;
 import goormknights.hotel.email.service.EmailService;
 import jakarta.mail.MessagingException;
@@ -12,10 +13,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/mail")
 public class MailController {
     private final EmailService emailService;
-    
+
     @PostMapping("/subscribe")
     public ResponseEntity<String> sendSubscribeEmail(@RequestParam String email) throws MessagingException {
         emailService.sendSubscribe(email, "newsletter");
+        return new ResponseEntity<>(HttpStatus.OK.value(), "메일 전송이 완료되었습니다.");
+    }
+
+    @PostMapping("/send")
+    public ResponseEntity<String> sendManagerEmail(@RequestBody EmailMessage message) throws MessagingException {
+        emailService.sendMail(message);
         return new ResponseEntity<>(HttpStatus.OK.value(), "메일 전송이 완료되었습니다.");
     }
 

@@ -43,19 +43,19 @@ public class InitData {
                 .authority("ROLE_MEMBER")
                 .build();
 
-        Room room = Room.builder()
-                .bed("double")
-                .roomAdult(2)
-                .roomChild(2)
-                .capacity(6)
-                .spare(2)
-                .name("test")
-                .price(10000)
-                .priceAdult(2000)
-                .priceChild(1000)
-                .type("room")
-                .typeDetail("deluxe")
-                .build();
+//        Room room = Room.builder()
+//                .bed("double")
+//                .spareAdult(2)
+//                .spareChildren(2)
+//                .capacity(6)
+//                .spare(2)
+//                .name("test")
+//                .price(10000)
+//                .priceAdult(2000)
+//                .priceChildren(1000)
+//                .type("room")
+//                .typeDetail("deluxe")
+//                .build();
         
         
         //사용되어선 안되는 쿠폰
@@ -75,7 +75,7 @@ public class InitData {
 
 //        giftCard.registrationGiftCard(member);
         memberRepository.save(member);
-        itemRepository.save(room);
+//        itemRepository.save(room);
         couponRepository.save(coupon);
 //        giftCardRepository.save(giftCard);
 
