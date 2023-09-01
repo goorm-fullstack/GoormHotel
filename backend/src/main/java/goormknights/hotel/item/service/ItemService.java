@@ -1,11 +1,14 @@
 package goormknights.hotel.item.service;
 
+import goormknights.hotel.item.model.Dining;
 import goormknights.hotel.item.model.Item;
+import goormknights.hotel.item.model.Room;
 import goormknights.hotel.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +26,14 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
+    public List<Item> findAllByType(String type){
+        return itemRepository.findAllByType(type);
+    }
+
+    public List<Item> findAllByTypeDetail(String typeDetail){
+        return itemRepository.findAllByTypeDetail(typeDetail);
+    }
+
     /**
      * 상품 검색
      * @param keyword - 클라이언트가 검색한 단어
@@ -30,5 +41,35 @@ public class ItemService {
      */
     public List<Item> findByKeyword(String keyword){
         return itemRepository.findByKeyword(keyword);
+    }
+
+    public List<Object> getResponseItem(List<Item> allItem) {
+        List<Object> responseItems = new ArrayList<>();
+
+        for (Item item : allItem) {
+            if(item instanceof Dining) {
+                responseItems.add(((Dining) item).toResponseDiningDto());
+            }
+
+            if(item instanceof Room) {
+                responseItems.add(((Room) item).toResponseRoomDto());
+            }
+        }
+        return responseItems;
+    }
+
+    public List<Object> getResponseItem(List<Item> allItem, String typeDetail) {
+        List<Object> responseItems = new ArrayList<>();
+
+        for (Item item : allItem) {
+            if(item.getTypeDetail().equals(typeDetail) && item instanceof Dining){
+                responseItems.add(((Dining) item).toResponseDiningDto());
+            }
+
+            if(item.getTypeDetail().equals(typeDetail) && item instanceof Room){
+                responseItems.add(((Room) item).toResponseRoomDto());
+                }
+        }
+        return responseItems;
     }
 }

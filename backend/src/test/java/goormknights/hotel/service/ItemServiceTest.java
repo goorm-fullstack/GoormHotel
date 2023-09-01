@@ -1,8 +1,8 @@
 package goormknights.hotel.service;
 
-import goormknights.hotel.item.dto.request.RequestDiningDTO;
-import goormknights.hotel.item.dto.request.RequestImageDTO;
-import goormknights.hotel.item.dto.request.RequestRoomDTO;
+import goormknights.hotel.item.dto.request.RequestDiningDto;
+import goormknights.hotel.item.dto.request.RequestImageDto;
+import goormknights.hotel.item.dto.request.RequestRoomDto;
 import goormknights.hotel.item.model.Item;
 import goormknights.hotel.item.service.DiningService;
 import goormknights.hotel.item.service.ItemService;
@@ -31,7 +31,7 @@ class ItemServiceTest {
     @Test
     void findAllItem() {
 
-        RequestDiningDTO requestDiningDTO = RequestDiningDTO.builder()
+        RequestDiningDto requestDiningDTO = RequestDiningDto.builder()
                 .price(100000)
                 .type("dining")
                 .name("diningService")
@@ -40,7 +40,7 @@ class ItemServiceTest {
                 .priceChild(10000)
                 .typeDetail("detail")
                 .build();
-        RequestImageDTO requestImageDTO = RequestImageDTO.builder()
+        RequestImageDto requestImageDTO = RequestImageDto.builder()
                 .originFileName("hello")
                 .fileName("hi")
                 .filePath("here")
@@ -48,7 +48,7 @@ class ItemServiceTest {
 
         diningService.saveDining(requestDiningDTO, requestImageDTO);
 
-        RequestRoomDTO buildRoom = RequestRoomDTO.builder()
+        RequestRoomDto buildRoom = RequestRoomDto.builder()
                 .bed("single")
                 .roomChild(3)
                 .roomAdult(5)
@@ -61,13 +61,13 @@ class ItemServiceTest {
                 .priceAdult(50000)
                 .capacity(10)
                 .build();
-        RequestImageDTO requestImageDTO2 = RequestImageDTO.builder()
+        RequestImageDto requestImageDto2 = RequestImageDto.builder()
                 .originFileName("hello")
                 .fileName("hi")
                 .filePath("here")
                 .build();
 
-        roomService.saveRoom(buildRoom, requestImageDTO2);
+        roomService.saveRoom(buildRoom, requestImageDto2);
 
         List<Item> allItem = itemService.findAllItem();
 

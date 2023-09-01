@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,9 +27,39 @@ public class ItemController {
     @GetMapping("/items")
     public ResponseEntity<List<Object>> allItems(){
         List<Item> allItem = itemService.findAllItem();
-        List<Object> responseItem = getResponseItem(allItem);
+        List<Object> responseItem = itemService.getResponseItem(allItem);
 
         return ResponseEntity.ok(responseItem);
+    }
+
+    @GetMapping("/specialOffer")
+    public ResponseEntity<List<Object>> categoryItems(@RequestParam(required = false) String type, @RequestParam(required = false) String typeDetail){
+        List<Object> responseItems;
+
+        log.info("type={}", type);
+        log.info("typeDetail={}", typeDetail);
+
+        if(type != null && typeDetail != null){
+            List<Item> allByType = itemService.findAllByType(type);
+            responseItems = itemService.getResponseItem(allByType, typeDetail);
+        }
+
+        else if(type != null && typeDetail == null){
+            List<Item> allByType = itemService.findAllByType(type);
+            responseItems = itemService.getResponseItem(allByType);
+        }
+
+        else if(type == null && typeDetail != null){
+            List<Item> allByTypeDetail = itemService.findAllByTypeDetail(typeDetail);
+            responseItems = itemService.getResponseItem(allByTypeDetail);
+        }
+
+        else{
+            List<Item> allItems = itemService.findAllItem();
+            responseItems = itemService.getResponseItem(allItems);
+        }
+
+        return ResponseEntity.ok(responseItems);
     }
 
     /**
@@ -40,26 +71,8 @@ public class ItemController {
     public ResponseEntity<List<Object>> findItems(@RequestParam String keyword){
         log.info(keyword);
         List<Item> searchResult = itemService.findByKeyword(keyword);
-        List<Object> responseItem = getResponseItem(searchResult);
+        List<Object> responseItem = itemService.getResponseItem(searchResult);
 
         return ResponseEntity.ok(responseItem);
-    }
-
-    @NotNull
-    private static List<Object> getResponseItem(List<Item> allItem) {
-        List<Object> responseItem = new ArrayList<>();
-
-        for (Item item : allItem) {
-            if(item instanceof Dining) {
-                responseItem.add(((Dining) item).toResponseDiningDTO());
-                log.info("responseDining={}", item);
-            }
-
-            if(item instanceof Room) {
-                responseItem.add(((Room) item).toResponseRoomDTO());
-                log.info("responseRoom={}", item);
-            }
-        }
-        return responseItem;
     }
 }

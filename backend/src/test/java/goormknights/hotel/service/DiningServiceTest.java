@@ -1,7 +1,7 @@
 package goormknights.hotel.service;
 
-import goormknights.hotel.item.dto.request.RequestDiningDTO;
-import goormknights.hotel.item.dto.request.RequestImageDTO;
+import goormknights.hotel.item.dto.request.RequestDiningDto;
+import goormknights.hotel.item.dto.request.RequestImageDto;
 import goormknights.hotel.item.model.Dining;
 import goormknights.hotel.item.service.DiningService;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ class DiningServiceTest {
 
     @Test
     void saveDining() {
-        RequestDiningDTO requestDiningDTO = RequestDiningDTO.builder()
+        RequestDiningDto requestDiningDTO = RequestDiningDto.builder()
                 .price(100000)
                 .type("dining")
                 .name("diningService")
@@ -31,13 +31,13 @@ class DiningServiceTest {
                 .priceChild(10000)
                 .typeDetail("detail")
                 .build();
-        RequestImageDTO requestImageDTO = RequestImageDTO.builder()
+        RequestImageDto requestImageDTO = RequestImageDto.builder()
                 .originFileName("hello")
                 .fileName("hi")
                 .filePath("here")
                 .build();
 
-        RequestDiningDTO requestDiningDTO2 = RequestDiningDTO.builder()
+        RequestDiningDto requestDiningDto2 = RequestDiningDto.builder()
                 .price(200000)
                 .type("dining2")
                 .name("diningService2")
@@ -46,14 +46,14 @@ class DiningServiceTest {
                 .priceChild(100002)
                 .typeDetail("detail2")
                 .build();
-        RequestImageDTO requestImageDTO2 = RequestImageDTO.builder()
+        RequestImageDto requestImageDto2 = RequestImageDto.builder()
                 .originFileName("hello2")
                 .fileName("hi2")
                 .filePath("here2")
                 .build();
 
         String diningName = diningService.saveDining(requestDiningDTO, requestImageDTO);
-        diningService.saveDining(requestDiningDTO2, requestImageDTO2);
+        diningService.saveDining(requestDiningDto2, requestImageDto2);
 
         Dining createdDining = diningService.findByDiningName(diningName);
 
@@ -64,7 +64,7 @@ class DiningServiceTest {
     @Test
     void deleteDining() {
 
-        RequestDiningDTO modifyDiningDTO = RequestDiningDTO.builder()
+        RequestDiningDto modifyDiningDTO = RequestDiningDto.builder()
                 .price(200000)
                 .type("dining")
                 .name("diningService")
@@ -74,7 +74,7 @@ class DiningServiceTest {
                 .typeDetail("detail")
                 .build();
 
-        RequestImageDTO modifyImageDTO = RequestImageDTO.builder()
+        RequestImageDto modifyImageDTO = RequestImageDto.builder()
                 .originFileName("hi")
                 .fileName("hello")
                 .filePath("there")
@@ -92,7 +92,7 @@ class DiningServiceTest {
     @Test
     void findByDiningName() {
 
-        RequestDiningDTO modifyDiningDTO = RequestDiningDTO.builder()
+        RequestDiningDto modifyDiningDTO = RequestDiningDto.builder()
                 .price(200000)
                 .type("dining")
                 .name("oh")
@@ -102,7 +102,7 @@ class DiningServiceTest {
                 .typeDetail("detail")
                 .build();
 
-        RequestImageDTO modifyImageDTO = RequestImageDTO.builder()
+        RequestImageDto modifyImageDTO = RequestImageDto.builder()
                 .originFileName("hi")
                 .fileName("hello")
                 .filePath("there")
@@ -118,7 +118,7 @@ class DiningServiceTest {
     @Test
     void findAll() {
 
-        RequestDiningDTO modifyDiningDTO = RequestDiningDTO.builder()
+        RequestDiningDto modifyDiningDTO = RequestDiningDto.builder()
                 .price(200000)
                 .type("dining")
                 .name("oh")
@@ -128,7 +128,7 @@ class DiningServiceTest {
                 .typeDetail("detail")
                 .build();
 
-        RequestImageDTO modifyImageDTO = RequestImageDTO.builder()
+        RequestImageDto modifyImageDTO = RequestImageDto.builder()
                 .originFileName("hi")
                 .fileName("hello")
                 .filePath("there")

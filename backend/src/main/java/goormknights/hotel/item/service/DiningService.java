@@ -1,7 +1,8 @@
 package goormknights.hotel.item.service;
 
-import goormknights.hotel.item.dto.request.RequestDiningDTO;
-import goormknights.hotel.item.dto.request.RequestImageDTO;
+import goormknights.hotel.item.dto.request.RequestDiningDto;
+import goormknights.hotel.item.dto.request.RequestImageDto;
+import goormknights.hotel.item.exception.NotExistItemException;
 import goormknights.hotel.item.model.Dining;
 import goormknights.hotel.item.repository.DiningRepository;
 import goormknights.hotel.item.repository.ItemRepository;
@@ -31,7 +32,7 @@ public class DiningService {
      * @param requestImageDTO - 이미지 정보
      * @return diningName - 다이닝 상품명
      */
-    public String saveDining(RequestDiningDTO requestDiningDTO, RequestImageDTO requestImageDTO){
+    public String saveDining(RequestDiningDto requestDiningDTO, RequestImageDto requestImageDTO){
         Dining build = requestDiningDTO.toEntity().toBuilder()
                 .thumbnail(requestImageDTO.toEntity())
                 .build();
@@ -41,25 +42,25 @@ public class DiningService {
     /**
      * 다이닝 수정
      * @param diningName - 다이닝 상품명
-     * @param requestDiningDTO - 다이닝 수정 정보
+     * @param requestDiningDto - 다이닝 수정 정보
      * @param img - 다이닝 이미지 수정 정보
      * @return dining - 수정 후 DB에 저장된 다이닝 엔티티
      */
-    public Dining modifyDining(String diningName, RequestDiningDTO requestDiningDTO, MultipartFile img) throws IOException {
+    public Dining modifyDining(String diningName, RequestDiningDto requestDiningDto, MultipartFile img) throws IOException {
         Dining originDining = findByDiningName(diningName);
 
-        RequestImageDTO requestImageDTO;
+        RequestImageDto requestImageDto;
         if(!Objects.requireNonNull(img.getOriginalFilename()).equals("")) {
-            requestImageDTO = imageService.convertToImageDTO(img);
+            requestImageDto = imageService.convertToImageDto(img);
         } else {
-            requestImageDTO = RequestImageDTO.builder()
+            requestImageDto = RequestImageDto.builder()
                     .originFileName(originDining.getThumbnail().getOriginFileName())
                     .fileName(originDining.getThumbnail().getFileName())
                     .filePath(originDining.getThumbnail().getFilePath())
                     .build();
         }
 
-        return itemRepository.save(originDining.updateDining(requestDiningDTO, requestImageDTO));
+        return itemRepository.save(originDining.updateDining(requestDiningDto, requestImageDto));
     }
 
     /**
@@ -76,7 +77,7 @@ public class DiningService {
      * @return dining - 다이닝 상품명에 해당하는 다이닝 엔티티
      */
     public Dining findByDiningName(String diningName) {
-        return diningRepository.findByName(diningName);
+        return diningRepository.findByName(diningName).orElseThrow(() -> new NotExistItemException("등록된 상품이 아닙니다."));
     }
 
     /**

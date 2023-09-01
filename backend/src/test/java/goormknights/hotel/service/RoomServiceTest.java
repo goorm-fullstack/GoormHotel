@@ -1,7 +1,7 @@
 package goormknights.hotel.service;
 
-import goormknights.hotel.item.dto.request.RequestImageDTO;
-import goormknights.hotel.item.dto.request.RequestRoomDTO;
+import goormknights.hotel.item.dto.request.RequestImageDto;
+import goormknights.hotel.item.dto.request.RequestRoomDto;
 import goormknights.hotel.item.model.Room;
 import goormknights.hotel.item.service.RoomService;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class RoomServiceTest {
     @Test
     void saveRoom() {
 
-        RequestRoomDTO buildRoom = RequestRoomDTO.builder()
+        RequestRoomDto buildRoom = RequestRoomDto.builder()
                 .bed("single")
                 .roomChild(3)
                 .roomAdult(5)
@@ -36,13 +36,13 @@ class RoomServiceTest {
                 .priceAdult(50000)
                 .capacity(10)
                 .build();
-        RequestImageDTO requestImageDTO = RequestImageDTO.builder()
+        RequestImageDto requestImageDTO = RequestImageDto.builder()
                 .originFileName("hello")
                 .fileName("hi")
                 .filePath("here")
                 .build();
 
-        RequestRoomDTO buildRoom2 = RequestRoomDTO.builder()
+        RequestRoomDto buildRoom2 = RequestRoomDto.builder()
                 .bed("single2")
                 .roomChild(3)
                 .roomAdult(5)
@@ -55,14 +55,14 @@ class RoomServiceTest {
                 .priceAdult(50000)
                 .capacity(10)
                 .build();
-        RequestImageDTO requestImageDTO2 = RequestImageDTO.builder()
+        RequestImageDto requestImageDto2 = RequestImageDto.builder()
                 .originFileName("hello2")
                 .fileName("hi2")
                 .filePath("here2")
                 .build();
 
         String roomName = roomService.saveRoom(buildRoom, requestImageDTO);
-        roomService.saveRoom(buildRoom2, requestImageDTO2);
+        roomService.saveRoom(buildRoom2, requestImageDto2);
 
         Room createdRoom = roomService.findByRoomName(roomName);
 
@@ -73,7 +73,7 @@ class RoomServiceTest {
     @Test
     void deleteRoom() {
 
-        RequestRoomDTO buildRoom = RequestRoomDTO.builder()
+        RequestRoomDto buildRoom = RequestRoomDto.builder()
                 .bed("single")
                 .roomChild(3)
                 .roomAdult(5)
@@ -86,7 +86,7 @@ class RoomServiceTest {
                 .priceAdult(50000)
                 .capacity(10)
                 .build();
-        RequestImageDTO requestImageDTO = RequestImageDTO.builder()
+        RequestImageDto requestImageDTO = RequestImageDto.builder()
                 .originFileName("hello")
                 .fileName("hi")
                 .filePath("here")
@@ -104,7 +104,7 @@ class RoomServiceTest {
     @Test
     void findById() {
 
-        RequestRoomDTO buildRoom = RequestRoomDTO.builder()
+        RequestRoomDto buildRoom = RequestRoomDto.builder()
                 .bed("single")
                 .roomChild(3)
                 .roomAdult(5)
@@ -117,7 +117,7 @@ class RoomServiceTest {
                 .priceAdult(50000)
                 .capacity(10)
                 .build();
-        RequestImageDTO requestImageDTO = RequestImageDTO.builder()
+        RequestImageDto requestImageDTO = RequestImageDto.builder()
                 .originFileName("hello")
                 .fileName("hi")
                 .filePath("here")
@@ -133,7 +133,7 @@ class RoomServiceTest {
     @Test
     void findAllDining() {
 
-        RequestRoomDTO buildRoom = RequestRoomDTO.builder()
+        RequestRoomDto buildRoom = RequestRoomDto.builder()
                 .bed("single")
                 .roomChild(3)
                 .roomAdult(5)
@@ -146,7 +146,7 @@ class RoomServiceTest {
                 .priceAdult(50000)
                 .capacity(10)
                 .build();
-        RequestImageDTO requestImageDTO = RequestImageDTO.builder()
+        RequestImageDto requestImageDTO = RequestImageDto.builder()
                 .originFileName("hello")
                 .fileName("hi")
                 .filePath("here")
