@@ -3,8 +3,13 @@ package goormknights.hotel.giftcard.service;
 import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.giftcard.dto.request.RequestGiftCardDto;
 import goormknights.hotel.giftcard.dto.response.ResponseGiftCardDto;
+import goormknights.hotel.giftcard.exception.AlreadyUsedException;
+import goormknights.hotel.giftcard.exception.NotAvailableException;
 import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.giftcard.repository.GiftCardRepository;
+import goormknights.hotel.member.exception.NotExistMemberException;
+import goormknights.hotel.member.model.Member;
+import goormknights.hotel.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +23,7 @@ import java.util.stream.Stream;
 @Transactional
 public class GiftCardService {
     private final GiftCardRepository giftCardRepository;
+    private final MemberRepository memberRepository;
 
     public void createGiftCard(RequestGiftCardDto giftCardDto) {
         giftCardRepository.save(giftCardDto.toEntity());
@@ -56,5 +62,21 @@ public class GiftCardService {
         String uuid = UUID.randomUUID().toString();
         uuid = uuid.replaceAll("-","");
         return uuid.substring(0, 16);
+    }
+
+    public void registering(int memberId, String uuid) {
+        Member registor = memberRepository.findById(memberId).orElseThrow(() -> {
+            throw new NotExistMemberException("존재하지 않는 사용자입니다.");
+        });
+
+        GiftCard giftCard = giftCardRepository.findByUuid(uuid).orElseThrow(() -> {
+            throw new NotAvailableException("사용할 수 없는 상품권입니다.");
+        });
+
+        if(giftCard.getMember()!= null) {
+            throw new AlreadyUsedException("이미 등록된 상품권입니다.");
+        }
+
+        giftCard.registrationGiftCard(registor);
     }
 }

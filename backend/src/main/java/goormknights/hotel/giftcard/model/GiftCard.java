@@ -23,6 +23,7 @@ public class GiftCard {
     private Member member;
 
     private char isZeroMoney = 'N';//만약 잔액이 0라면 사용불가능하도록 표시하자
+    private String title;//상품권 이름
 
     public GiftCard(String uuid, int money) {
         this.uuid = uuid;
@@ -42,6 +43,7 @@ public class GiftCard {
         this.money = money;
         this.member = member;
         this.isZeroMoney = isZeroMoney;
+        this.title = money+"원권 상품권";
     }
 
     public void setMember(Member member) {

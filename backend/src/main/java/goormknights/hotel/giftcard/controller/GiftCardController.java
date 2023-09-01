@@ -27,4 +27,11 @@ public class GiftCardController {
         giftCardService.issuedGiftCard(amount, money);
         return new ResponseEntity<String>(HttpStatus.OK.value(), "상품권 발행이 완료되었습니다.");
     }
+
+    // 사용자가 상품권을 등록하는 요청
+    @PostMapping("/register")
+    public ResponseEntity<String> registerationGiftCard(@RequestParam int memberId, @RequestParam String uuid) {
+        giftCardService.registering(memberId, uuid);
+        return new ResponseEntity<>(HttpStatus.OK.value(), "상품권 등록이 완료되었습니다.");
+    }
 }
