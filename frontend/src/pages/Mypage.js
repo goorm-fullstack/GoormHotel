@@ -1,5 +1,4 @@
 import React from 'react';
-import { Container } from './Room';
 import { styled } from 'styled-components';
 import Header from '../components/Header';
 

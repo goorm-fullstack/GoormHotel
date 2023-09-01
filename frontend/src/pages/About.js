@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import diningImg from '../images/about/dining.jpg';
 import facilitiesImg from '../images/about/facilities.jpg';
 import membershipImg from '../images/about/membership.jpg';
@@ -6,7 +6,6 @@ import roomImg from '../images/about/room.jpg';
 import Header from '../components/Header';
 import { styled } from 'styled-components';
 import { Link, NavLink } from 'react-router-dom';
-import Map from './Map';
 import { DetailBtn, DetailSvg } from './Home';
 
 const AboutHeader = styled.div`
@@ -129,8 +128,8 @@ const About = () => {
       <AboutHeader>
         <AboutHeaderTitle>구름호텔 소개</AboutHeaderTitle>
         <LinkWrapper>
-          <AboutLink to="/about" activeClassName="active" >호텔소개</AboutLink>
-          <AboutLink to="/map" activeClassName="active" >오시는길</AboutLink>
+          <AboutLink to="/about" $activeClassName="active" >호텔소개</AboutLink>
+          <AboutLink to="/map" $activeClassName="active" >오시는길</AboutLink>
         </LinkWrapper>
       </AboutHeader>
       <Title>호텔소개</Title>

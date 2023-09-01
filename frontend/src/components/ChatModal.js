@@ -76,8 +76,8 @@ const ChatMessage = styled.div`
   border-radius: 10px;
   padding: 10px;
   margin-right: 50px;
-  align-self: ${({ isUser }) => (isUser ? 'flex-end' : 'flex-start')};
-  background-color: ${({ isUser }) => (isUser ? '#EBECF5' : '#EBEBEB')};
+  align-self: ${({ $isUser }) => ($isUser ? 'flex-end' : 'flex-start')};
+  background-color: ${({ $isUser }) => ($isUser ? '#EBECF5' : '#EBEBEB')};
   margin-bottom: 20px;
 `;
 
@@ -103,7 +103,7 @@ const AdminProfileIcon = styled.div`
 
 const ChatMessageWrapper = styled.div`
   display: flex;
-  align-self: ${({ isUser }) => (isUser ? 'flex-end' : 'flex-start')};
+  align-self: ${({ $isUser }) => ($isUser ? 'flex-end' : 'flex-start')};
 `;
 
 const ChatModal = ({ closeChat }) => {
@@ -136,9 +136,9 @@ const ChatModal = ({ closeChat }) => {
         </ChatHeader>
         <ChatContainer ref={chatContainerRef}>
           {chatData.map((chat, index) => (
-            <ChatMessageWrapper isUser={chat.isUser}>
+            <ChatMessageWrapper $isUser={chat.isUser}>
             {!chat.isUser && <AdminProfileIcon><svg fill='white' viewBox="0 0 24 24" width="20px" height="20px" xmlns="http://www.w3.org/2000/svg"><g><path d="M0 0h24v24H0z" fill="none"/><path d="M4 12h3a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7C2 6.477 6.477 2 12 2s10 4.477 10 10v7a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h3a8 8 0 1 0-16 0z"/></g></svg></AdminProfileIcon>}
-            <ChatMessage key={index} isUser={chat.isUser}>
+            <ChatMessage key={index} $isUser={chat.isUser}>
               <div>{chat.message}</div>
             </ChatMessage>
             </ChatMessageWrapper>

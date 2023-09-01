@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
-import visual01 from '../images/main/visual01.webp';
 import { styled } from 'styled-components';
 import Slide from '../components/Slide';
 import Reservation from '../components/Reservation';
@@ -13,7 +12,6 @@ import dining04 from '../images/dining/RoomService.jpg';
 import Deluxe from '../images/room/Deluxe.jpg'
 import Family from '../images/room/Family.jpg'
 import Suite from '../images/room/Suite.jpg'
-import Villa from '../images/room/Villa.jpg'
 
 const diningImages = [dining01, dining02, dining03, dining04];
 

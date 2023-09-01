@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import { styled } from 'styled-components';
 import moment from "moment";
-import Calendar from 'react-calendar';
 import { StyledCalendar } from '../components/Reservation';
 import Product from '../components/Product';
 
@@ -191,7 +190,8 @@ const ReservationPage = () => {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [giftCardNumber, setGiftCardNumber] = useState("");
-  const [userLoggedIn, setUserLoggedIn] = useState(true);
+  // const [userLoggedIn, setUserLoggedIn] = useState(true);
+  const userLoggedIn = true;
   const [selectedOption, setSelectedOption] = useState("");
 
   const roomOptions = [1, 2, 3, 4];
