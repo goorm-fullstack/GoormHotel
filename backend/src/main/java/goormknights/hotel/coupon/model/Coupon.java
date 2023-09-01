@@ -21,6 +21,7 @@ public class Coupon {
 
     private String uuid;
     private int discountRate;
+    private String name;
 
     @ManyToOne
     private Member member;
@@ -68,6 +69,10 @@ public class Coupon {
 
     public void setMember(Member member) {
         this.member = member;
+    }
+
+    public void nameStrategy() {
+        this.name = member.getGrade()+" 쿠폰";
     }
 
     public void setDiscountRate() {

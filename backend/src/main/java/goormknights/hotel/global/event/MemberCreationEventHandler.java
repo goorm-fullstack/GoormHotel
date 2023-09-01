@@ -26,6 +26,7 @@ public class MemberCreationEventHandler implements ApplicationListener<MemberCre
         Coupon saveCoupon = couponRepository.save(coupon);
         member.getCouponList().add(saveCoupon);
         coupon.setMember(member);
+        coupon.nameStrategy();
         coupon.setDiscountRate();
         emailService.sendMail(new EmailMessage(member.getEmail(), "가입을 환영합니다.~", " 가입 환영 메일"));
     }

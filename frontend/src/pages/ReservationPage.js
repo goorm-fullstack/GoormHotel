@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import Header from '../components/Header';
-import { styled } from 'styled-components';
+import React, { useState, useEffect } from "react";
+import Header from "../components/Header";
+import { styled } from "styled-components";
 import moment from "moment";
-import Calendar from 'react-calendar';
-import { StyledCalendar } from '../components/Reservation';
-import Product from '../components/Product';
+// import Calendar from 'react-calendar';
+import { StyledCalendar } from "../components/Reservation";
+import Product from "../components/Product";
 
 export const Container = styled.div`
   width: 1182px;
@@ -47,8 +47,7 @@ const ReservationInfoDate = styled.div`
   margin-bottom: 19px;
 `;
 
-const CheckIn = styled.div`
-`;
+const CheckIn = styled.div``;
 
 const CheckTitle = styled.p`
   font-size: 14px;
@@ -56,15 +55,15 @@ const CheckTitle = styled.p`
 `;
 
 const CheckBtn = styled.button`
-    width: 380px;
-    height: 60px;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 20px;
-    align-items: center;
-    font-size: 18px;
-    border: 1px solid #ddd;
-    background-color: #fff;
+  width: 380px;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  align-items: center;
+  font-size: 18px;
+  border: 1px solid #ddd;
+  background-color: #fff;
 `;
 
 const CheckOut = styled(CheckIn)`
@@ -98,7 +97,7 @@ const Select = styled.select`
   font-size: 20px;
   text-align: center;
   outline: none;
-  border: 1px solid #DDDDDD;
+  border: 1px solid #dddddd;
 `;
 
 const SelectWrapper = styled.div`
@@ -142,7 +141,7 @@ const CouponInput = styled.input`
 
 const CouponBtn = styled.button`
   width: 180px;
-  background-color: #DDDDDD;
+  background-color: #dddddd;
   color: #777777;
 `;
 
@@ -156,7 +155,7 @@ const CouponInfoWrapper = styled.div`
   font-size: 16px;
   justify-content: space-between;
   padding: 11px 0;
-  border-bottom: ${({$isFirst }) => ($isFirst ? 'none' : '1px solid #DDDDDD')};
+  border-bottom: ${({ $isFirst }) => ($isFirst ? "none" : "1px solid #DDDDDD")};
 `;
 
 const CouponName = styled.p`
@@ -174,8 +173,8 @@ const CouponSelect = styled.select`
 `;
 
 const PaymentBtn = styled.button`
-  background-color: #95846E;
-  color: #FFFFFF;
+  background-color: #95846e;
+  color: #ffffff;
   height: 60px;
   width: 100%;
 `;
@@ -191,15 +190,22 @@ const ReservationPage = () => {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [giftCardNumber, setGiftCardNumber] = useState("");
-  const [userLoggedIn, setUserLoggedIn] = useState(true);
+  // const [userLoggedIn, setUserLoggedIn] = useState(true);
+  const userLoggedIn = true;
   const [selectedOption, setSelectedOption] = useState("");
 
   const roomOptions = [1, 2, 3, 4];
   const adultOptions = [1, 2, 3, 4];
-  const childrenOptions = [0, 1, 2, 3]; 
+  const childrenOptions = [0, 1, 2, 3];
   const coupons = [
-    { name: '추석 맞이 특가 이벤트: 객실 금액 100,000원 할인 상품권', price: '-100,000 원' },
-    { name: '추석 맞이 특가 이벤트: 전 상품 금액 50,000원 할인 상품권', price: '-50,000 원' },
+    {
+      name: "추석 맞이 특가 이벤트: 객실 금액 100,000원 할인 상품권",
+      price: "-100,000 원",
+    },
+    {
+      name: "추석 맞이 특가 이벤트: 전 상품 금액 50,000원 할인 상품권",
+      price: "-50,000 원",
+    },
   ];
 
   useEffect(() => {
@@ -247,7 +253,7 @@ const ReservationPage = () => {
   };
 
   const isDateDisabled = (date) => {
-    return moment(date).isBefore(moment(), 'day');
+    return moment(date).isBefore(moment(), "day");
   };
 
   const handleCouponNumber = (event) => {
@@ -256,7 +262,7 @@ const ReservationPage = () => {
 
   const handleChange = (event) => {
     setSelectedOption(event.target.value);
-    console.log('Selected option:', event.target.value);
+    console.log("Selected option:", event.target.value);
   };
 
   return (
@@ -273,11 +279,86 @@ const ReservationPage = () => {
                   <CheckTitle>체크인</CheckTitle>
                   <CheckBtn onClick={handleCheckInToggle}>
                     <p>{checkInDate}</p>
-                    <svg  viewBox="0 0 32 32" width="18" height="18" ><g xmlns="http://www.w3.org/2000/svg" id="calendar_1_"><path fill="#333332" d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z" /><rect fill="#333332" x="7" y="12" width="4" height="3" /><rect fill="#333332" x="7" y="17" width="4" height="3" /><rect fill="#333332" x="7" y="22" width="4" height="3" /><rect fill="#333332" x="14" y="22" width="4" height="3" /><rect fill="#333332" x="14" y="17" width="4" height="3" /><rect fill="#333332" x="14" y="12" width="4" height="3" /><rect fill="#333332" x="21" y="22" width="4" height="3" /><rect fill="#333332" x="21" y="17" width="4" height="3" /><rect fill="#333332" x="21" y="12" width="4" height="3" /></g></svg>
+                    <svg viewBox="0 0 32 32" width="18" height="18">
+                      <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
+                        <path
+                          fill="#333332"
+                          d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="7"
+                          y="12"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="7"
+                          y="17"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="7"
+                          y="22"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="14"
+                          y="22"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="14"
+                          y="17"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="14"
+                          y="12"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="21"
+                          y="22"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="21"
+                          y="17"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="21"
+                          y="12"
+                          width="4"
+                          height="3"
+                        />
+                      </g>
+                    </svg>
                   </CheckBtn>
-                  <CalendarContainer>              
+                  <CalendarContainer>
                     <CalendarWrapper open={checkInOpen}>
-                      <StyledCalendar tileDisabled={({ date }) => isDateDisabled(date)} onChange={handleCheckInDateChange} value={checkInValue} formatDay={(locale, date) => moment(date).format("DD")}></StyledCalendar>
+                      <StyledCalendar
+                        tileDisabled={({ date }) => isDateDisabled(date)}
+                        onChange={handleCheckInDateChange}
+                        value={checkInValue}
+                        formatDay={(locale, date) => moment(date).format("DD")}
+                      ></StyledCalendar>
                     </CalendarWrapper>
                   </CalendarContainer>
                 </CheckIn>
@@ -285,38 +366,128 @@ const ReservationPage = () => {
                   <CheckTitle>체크아웃</CheckTitle>
                   <CheckBtn onClick={handleCheckOutToggle}>
                     <p>{checkOutDate}</p>
-                    <svg  viewBox="0 0 32 32" width="18" height="18" ><g xmlns="http://www.w3.org/2000/svg" id="calendar_1_"><path fill="#333332" d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z" /><rect fill="#333332" x="7" y="12" width="4" height="3" /><rect fill="#333332" x="7" y="17" width="4" height="3" /><rect fill="#333332" x="7" y="22" width="4" height="3" /><rect fill="#333332" x="14" y="22" width="4" height="3" /><rect fill="#333332" x="14" y="17" width="4" height="3" /><rect fill="#333332" x="14" y="12" width="4" height="3" /><rect fill="#333332" x="21" y="22" width="4" height="3" /><rect fill="#333332" x="21" y="17" width="4" height="3" /><rect fill="#333332" x="21" y="12" width="4" height="3" /></g></svg>
+                    <svg viewBox="0 0 32 32" width="18" height="18">
+                      <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
+                        <path
+                          fill="#333332"
+                          d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="7"
+                          y="12"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="7"
+                          y="17"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="7"
+                          y="22"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="14"
+                          y="22"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="14"
+                          y="17"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="14"
+                          y="12"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="21"
+                          y="22"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="21"
+                          y="17"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          fill="#333332"
+                          x="21"
+                          y="12"
+                          width="4"
+                          height="3"
+                        />
+                      </g>
+                    </svg>
                   </CheckBtn>
-                  <CalendarContainer>              
+                  <CalendarContainer>
                     <CalendarWrapper open={checkOutOpen}>
-                      <StyledCalendar tileDisabled={({ date }) => isDateDisabled(date)} onChange={handleCheckOutDateChange} value={checkOutValue} formatDay={(locale, date) => moment(date).format("DD")}></StyledCalendar>
+                      <StyledCalendar
+                        tileDisabled={({ date }) => isDateDisabled(date)}
+                        onChange={handleCheckOutDateChange}
+                        value={checkOutValue}
+                        formatDay={(locale, date) => moment(date).format("DD")}
+                      ></StyledCalendar>
                     </CalendarWrapper>
                   </CalendarContainer>
                 </CheckOut>
               </ReservationInfoDate>
               <SelectContainer>
                 <SelectWrapper>
-                <SelectLabel>상품수량</SelectLabel>
-                <Select value={rooms} onChange={e => setRooms(parseInt(e.target.value))}>
-                {roomOptions.map(option => (
-                  <option key={option} value={option}>{option}</option>
-                ))}
-                </Select>
+                  <SelectLabel>상품수량</SelectLabel>
+                  <Select
+                    value={rooms}
+                    onChange={(e) => setRooms(parseInt(e.target.value))}
+                  >
+                    {roomOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </Select>
                 </SelectWrapper>
                 <SelectWrapper>
                   <SelectLabel>어른</SelectLabel>
-                  <Select value={adults} onChange={e => setAdults(parseInt(e.target.value))}>
-                    {adultOptions.map(option => (
-                      <option key={option} value={option}>{option} 명</option>
+                  <Select
+                    value={adults}
+                    onChange={(e) => setAdults(parseInt(e.target.value))}
+                  >
+                    {adultOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option} 명
+                      </option>
                     ))}
                   </Select>
                 </SelectWrapper>
                 <SelectWrapper>
                   <SelectLabel>어린이</SelectLabel>
-                  <Select value={children} onChange={e => setChildren(parseInt(e.target.value))}>
-                  {childrenOptions.map(option => (
-                            <option key={option} value={option}>{option} 명</option>
-                          ))}
+                  <Select
+                    value={children}
+                    onChange={(e) => setChildren(parseInt(e.target.value))}
+                  >
+                    {childrenOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option} 명
+                      </option>
+                    ))}
                   </Select>
                 </SelectWrapper>
               </SelectContainer>
@@ -335,27 +506,45 @@ const ReservationPage = () => {
             <Section>
               <SubTitle>상품권 등록</SubTitle>
               <CouponForm>
-                <CouponInput type="text" placeholder="상품권 번호 입력" value={giftCardNumber} onChange={handleCouponNumber}/>
+                <CouponInput
+                  type="text"
+                  placeholder="상품권 번호 입력"
+                  value={giftCardNumber}
+                  onChange={handleCouponNumber}
+                />
                 <CouponBtn type="submit">상품권 등록하기</CouponBtn>
               </CouponForm>
               <CouponInfo>
-              {coupons.map((coupon, index) => (
-                <CouponInfoWrapper key={index} $isFirst={index === coupons.length - 1}>
-                  <CouponName>{coupon.name}</CouponName>
-                  <CouponPrice>{coupon.price}</CouponPrice>
-                </CouponInfoWrapper>
-              ))}
+                {coupons.map((coupon, index) => (
+                  <CouponInfoWrapper
+                    key={index}
+                    $isFirst={index === coupons.length - 1}
+                  >
+                    <CouponName>{coupon.name}</CouponName>
+                    <CouponPrice>{coupon.price}</CouponPrice>
+                  </CouponInfoWrapper>
+                ))}
               </CouponInfo>
             </Section>
 
             <Section>
               <SubTitle>쿠폰 적용</SubTitle>
-              <CouponSelect value={selectedOption} onChange={handleChange} disabled={!userLoggedIn}>
+              <CouponSelect
+                value={selectedOption}
+                onChange={handleChange}
+                disabled={!userLoggedIn}
+              >
                 {userLoggedIn ? (
                   <>
-                    <option value="" >쿠폰 선택</option>
-                    <option value="coupon1"> [Bronze 등급 혜택] 객실 5% 할인 쿠폰</option>
-                    <option value="coupon2"> [Silver 등급 혜택] 객실 10% 할인 쿠폰</option>
+                    <option value="">쿠폰 선택</option>
+                    <option value="coupon1">
+                      {" "}
+                      [Bronze 등급 혜택] 객실 5% 할인 쿠폰
+                    </option>
+                    <option value="coupon2">
+                      {" "}
+                      [Silver 등급 혜택] 객실 10% 할인 쿠폰
+                    </option>
                   </>
                 ) : (
                   <option disabled>로그인이 필요한 서비스입니다.</option>
