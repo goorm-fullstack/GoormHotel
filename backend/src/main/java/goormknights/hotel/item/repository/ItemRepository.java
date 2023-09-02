@@ -1,4 +1,5 @@
 package goormknights.hotel.item.repository;
+
 import goormknights.hotel.item.model.Dining;
 import goormknights.hotel.item.model.Item;
 import goormknights.hotel.item.model.Room;
@@ -20,4 +21,5 @@ public interface ItemRepository<T extends Item> extends JpaRepository<T, Long> {
 
     @Query("select i from Item i" + " where i.name like %:keyword%")
     List<Item> findByKeyword(@Param("keyword") String keyword);
+
 }

@@ -1,5 +1,6 @@
 package goormknights.hotel.giftcard.model;
 
+import goormknights.hotel.reservation.model.Reservation;
 import goormknights.hotel.giftcard.dto.request.RequestGiftCardDto;
 import goormknights.hotel.giftcard.dto.response.ResponseGiftCardDto;
 import goormknights.hotel.member.model.Member;
@@ -7,10 +8,13 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class GiftCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +27,9 @@ public class GiftCard {
     private Member member;
 
     private char isZeroMoney = 'N';//만약 잔액이 0라면 사용불가능하도록 표시하자
+
+    @ManyToOne
+    private Reservation reservation;    // 사용된 예약 건
 
     public GiftCard(String uuid, int money) {
         this.uuid = uuid;
