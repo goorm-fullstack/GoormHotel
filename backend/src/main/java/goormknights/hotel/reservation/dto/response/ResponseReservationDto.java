@@ -1,6 +1,6 @@
 package goormknights.hotel.reservation.dto.response;
 
-import goormknights.hotel.auth.model.Member;
+import goormknights.hotel.member.model.Member;
 import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.item.model.Item;
@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -22,8 +21,8 @@ public class ResponseReservationDto {
     private long id;                    // 인덱스 번호(PK)
     private String reservationNumber;   // 예약 번호: 날짜 + 랜덤 숫자 조합
     private LocalDateTime orderDate;    // 예약 시점 정보: 예약한 날짜, 시간 정보
-    private Date checkIn;               // 체크인 날짜
-    private Date checkOut;              // 체크아웃 날짜
+    private LocalDateTime checkIn;               // 체크인 날짜
+    private LocalDateTime checkOut;              // 체크아웃 날짜
     private int count;                  // 상품 수량
     private int adult;                  // 어른 수
     private int children;               // 어린이 수

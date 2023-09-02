@@ -1,6 +1,6 @@
 package goormknights.hotel.reservation.model;
 
-import goormknights.hotel.auth.model.Member;
+import goormknights.hotel.member.model.Member;
 import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.item.model.Item;
@@ -10,7 +10,6 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -32,10 +31,10 @@ public class Reservation {
     private LocalDateTime orderDate;    // 예약 시점 정보: 예약한 날짜, 시간 정보
 
     @Future
-    private Date checkIn;               // 체크인 날짜
+    private LocalDateTime checkIn;               // 체크인 날짜
 
     @Future
-    private Date checkOut;              // 체크아웃 날짜
+    private LocalDateTime checkOut;              // 체크아웃 날짜
 
     @Positive
     @Max(10)
@@ -49,7 +48,7 @@ public class Reservation {
     @Max(10)
     private int children;               // 어린이 수
 
-    @OneToOne
+    @ManyToOne
     private Member member;              // 예약자 정보: 예약자명, 회원 유형(회원/비회원), 회원인 경우 ID, 연락처, 이메일
     private String notice;              // 고객 요청사항
 

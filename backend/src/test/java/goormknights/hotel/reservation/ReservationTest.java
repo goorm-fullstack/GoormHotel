@@ -1,9 +1,8 @@
 package goormknights.hotel.reservation;
 
-import goormknights.hotel.auth.model.Member;
-import goormknights.hotel.auth.repository.MemberRepository;
-import goormknights.hotel.item.model.Item;
-import goormknights.hotel.item.repository.ItemRepository;
+import goormknights.hotel.item.service.RoomService;
+import goormknights.hotel.member.model.Member;
+import goormknights.hotel.member.repository.MemberRepository;
 import goormknights.hotel.reservation.dto.request.RequestReservationDto;
 import goormknights.hotel.reservation.service.ReservationService;
 import org.junit.jupiter.api.Test;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.time.LocalDateTime;
@@ -27,11 +25,10 @@ public class ReservationTest {
     private MemberRepository memberRepository;
 
     @Autowired
-    private ItemRepository itemRepository;
+    private RoomService roomService;
 
     private LocalDateTime now = LocalDateTime.now();
     private LocalDateTime future = now.plusDays(3);
-    private Date futureDate = Timestamp.valueOf(future);
 
     /**
      * 예약 기능 테스트
@@ -50,27 +47,15 @@ public class ReservationTest {
 
         memberRepository.save(member);
 
-        Item item = Item.builder()
-                .id(null)
-                .name("테스트 상품")
-                .price(15000)
-                .priceAdult(10000)
-                .priceChildren(5000)
-                .type("room")
-                .typeDetail("d")
-                .spare(5)
-                .spareAdult(1)
-                .spareChildren(2)
-                .build();
 
-        itemRepository.save(item);
+        roomService.save(item);
 
         RequestReservationDto reservation = RequestReservationDto.builder()
                 .id(7)
                 .reservationNumber("2023090200000000")
                 .orderDate(now)
-                .checkIn(futureDate)
-                .checkOut(futureDate)
+                .checkIn(future)
+                .checkOut(future)
                 .count(1)
                 .adult(1)
                 .children(0)

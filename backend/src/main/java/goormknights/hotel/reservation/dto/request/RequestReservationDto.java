@@ -1,19 +1,15 @@
 package goormknights.hotel.reservation.dto.request;
 
-import goormknights.hotel.auth.model.Member;
+import goormknights.hotel.member.model.Member;
 import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.item.model.Item;
 import goormknights.hotel.reservation.model.Reservation;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -32,10 +28,10 @@ public class RequestReservationDto {
     private LocalDateTime orderDate = LocalDateTime.now();    // 예약 시점(현재) 정보: 예약한 날짜, 시간 정보
 
     @Future
-    private Date checkIn;               // 체크인 날짜: user 입력 사항
+    private LocalDateTime checkIn;               // 체크인 날짜: user 입력 사항
 
     @Future
-    private Date checkOut;              // 체크아웃 날짜: user 입력 사항
+    private LocalDateTime checkOut;              // 체크아웃 날짜: user 입력 사항
 
     @Positive
     @Max(10)
@@ -49,7 +45,7 @@ public class RequestReservationDto {
     @Max(10)
     private int children;               // 어린이 수: user 입력 사항
 
-    @OneToOne
+    @ManyToOne
     private Member member;              // 예약자 정보: user 입력 사항(예약자명, 회원 유형(회원/비회원), 회원인 경우 ID, 연락처, 이메일)
     private String notice;              // 고객 요청사항: user 입력 사항
 
