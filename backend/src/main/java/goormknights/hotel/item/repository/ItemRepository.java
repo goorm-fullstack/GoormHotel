@@ -1,5 +1,4 @@
 package goormknights.hotel.item.repository;
-
 import goormknights.hotel.item.model.Dining;
 import goormknights.hotel.item.model.Item;
 import goormknights.hotel.item.model.Room;
