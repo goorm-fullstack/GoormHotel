@@ -1,7 +1,7 @@
 package goormknights.hotel.item.controller;
 
 import goormknights.hotel.item.dto.request.RequestDiningDTO;
-import goormknights.hotel.item.dto.request.RequestImageDTO;
+import goormknights.hotel.item.dto.request.RequestImageDto;
 import goormknights.hotel.item.dto.response.ResponseDiningDTO;
 import goormknights.hotel.item.model.Dining;
 import goormknights.hotel.item.service.DiningService;
@@ -30,7 +30,7 @@ public class DiningController {
     @PostMapping("/dining")
     public ResponseEntity<Object> uploadDining(@Validated @ModelAttribute RequestDiningDTO requestDiningDTO, @RequestParam MultipartFile img) throws IOException {
 
-        RequestImageDTO requestImageDTO = imageService.convertToImageDTO(img);
+        RequestImageDto requestImageDTO = imageService.convertToImageDTO(img);
 
         diningService.saveDining(requestDiningDTO, requestImageDTO);
         return ResponseEntity.ok().build();

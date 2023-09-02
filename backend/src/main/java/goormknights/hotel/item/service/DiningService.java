@@ -1,7 +1,7 @@
 package goormknights.hotel.item.service;
 
 import goormknights.hotel.item.dto.request.RequestDiningDTO;
-import goormknights.hotel.item.dto.request.RequestImageDTO;
+import goormknights.hotel.item.dto.request.RequestImageDto;
 import goormknights.hotel.item.model.Dining;
 import goormknights.hotel.item.repository.DiningRepository;
 import goormknights.hotel.item.repository.ItemRepository;
@@ -31,7 +31,7 @@ public class DiningService {
      * @param requestImageDTO - 이미지 정보
      * @return diningName - 다이닝 상품명
      */
-    public String saveDining(RequestDiningDTO requestDiningDTO, RequestImageDTO requestImageDTO){
+    public String saveDining(RequestDiningDTO requestDiningDTO, RequestImageDto requestImageDTO){
         Dining build = requestDiningDTO.toEntity().toBuilder()
                 .thumbnail(requestImageDTO.toEntity())
                 .build();
@@ -48,11 +48,11 @@ public class DiningService {
     public Dining modifyDining(String diningName, RequestDiningDTO requestDiningDTO, MultipartFile img) throws IOException {
         Dining originDining = findByDiningName(diningName);
 
-        RequestImageDTO requestImageDTO;
+        RequestImageDto requestImageDTO;
         if(!Objects.requireNonNull(img.getOriginalFilename()).equals("")) {
             requestImageDTO = imageService.convertToImageDTO(img);
         } else {
-            requestImageDTO = RequestImageDTO.builder()
+            requestImageDTO = RequestImageDto.builder()
                     .originFileName(originDining.getThumbnail().getOriginFileName())
                     .fileName(originDining.getThumbnail().getFileName())
                     .filePath(originDining.getThumbnail().getFilePath())

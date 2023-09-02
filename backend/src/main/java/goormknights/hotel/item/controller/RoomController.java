@@ -1,7 +1,7 @@
 package goormknights.hotel.item.controller;
 
-import goormknights.hotel.item.dto.request.RequestImageDTO;
-import goormknights.hotel.item.dto.request.RequestRoomDTO;
+import goormknights.hotel.item.dto.request.RequestImageDto;
+import goormknights.hotel.item.dto.request.RequestRoomDto;
 import goormknights.hotel.item.dto.response.ResponseRoomDTO;
 import goormknights.hotel.item.model.Room;
 import goormknights.hotel.item.service.ImageService;
@@ -28,9 +28,9 @@ public class RoomController {
 
     // 객실 생성
     @PostMapping("/room")
-    public ResponseEntity<Object> uploadRoom(@Validated @ModelAttribute RequestRoomDTO requestRoomDTO, @RequestParam MultipartFile img) throws IOException {
+    public ResponseEntity<Object> uploadRoom(@Validated @ModelAttribute RequestRoomDto requestRoomDTO, @RequestParam MultipartFile img) throws IOException {
 
-        RequestImageDTO requestImageDTO = imageService.convertToImageDTO(img);
+        RequestImageDto requestImageDTO = imageService.convertToImageDTO(img);
 
         roomService.saveRoom(requestRoomDTO, requestImageDTO);
         return ResponseEntity.ok().build();
@@ -38,7 +38,7 @@ public class RoomController {
 
     // 객실 수정
     @PutMapping("/room/{roomName}")
-    public ResponseEntity<ResponseRoomDTO> updateRoom(@PathVariable String roomName, @Validated @ModelAttribute RequestRoomDTO requestRoomDTO, @RequestParam MultipartFile img) throws IOException {
+    public ResponseEntity<ResponseRoomDTO> updateRoom(@PathVariable String roomName, @Validated @ModelAttribute RequestRoomDto requestRoomDTO, @RequestParam MultipartFile img) throws IOException {
 
         ResponseRoomDTO responseRoomDTO = roomService.modifyRoom(roomName, requestRoomDTO, img).toResponseRoomDTO();
 

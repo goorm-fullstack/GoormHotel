@@ -1,7 +1,7 @@
 package goormknights.hotel.item.service;
 
-import goormknights.hotel.item.dto.request.RequestImageDTO;
-import goormknights.hotel.item.dto.request.RequestRoomDTO;
+import goormknights.hotel.item.dto.request.RequestImageDto;
+import goormknights.hotel.item.dto.request.RequestRoomDto;
 import goormknights.hotel.item.model.Room;
 import goormknights.hotel.item.repository.ItemRepository;
 import goormknights.hotel.item.repository.RoomRepository;
@@ -29,7 +29,7 @@ public class RoomService {
      * @param requestImageDTO - 객실 이미지 정보
      * @return 객실 상품명
      */
-    public String saveRoom(RequestRoomDTO requestRoomDTO, RequestImageDTO requestImageDTO){
+    public String saveRoom(RequestRoomDto requestRoomDTO, RequestImageDto requestImageDTO){
         Room build = requestRoomDTO.toEntity().toBuilder()
                 .thumbnail(requestImageDTO.toEntity())
                 .build();
@@ -43,14 +43,14 @@ public class RoomService {
      * @param img - 수정된 이미지 정보
      * @return 수정 후 DB에 저장된 객실 엔티티
      */
-    public Room modifyRoom(String roomName, RequestRoomDTO requestRoomDTO, MultipartFile img) throws IOException {
+    public Room modifyRoom(String roomName, RequestRoomDto requestRoomDTO, MultipartFile img) throws IOException {
         Room originRoom = findByRoomName(roomName);
 
-        RequestImageDTO requestImageDTO;
+        RequestImageDto requestImageDTO;
         if(!Objects.requireNonNull(img.getOriginalFilename()).equals("")) {
             requestImageDTO = imageService.convertToImageDTO(img);
         } else {
-            requestImageDTO = RequestImageDTO.builder()
+            requestImageDTO = RequestImageDto.builder()
                     .originFileName(originRoom.getThumbnail().getOriginFileName())
                     .fileName(originRoom.getThumbnail().getFileName())
                     .filePath(originRoom.getThumbnail().getFilePath())

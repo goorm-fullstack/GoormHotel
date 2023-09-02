@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class RequestRoomDTO {
+public class RequestRoomDto {
 
     @NotBlank
     private String name; // 상품명
@@ -52,7 +52,7 @@ public class RequestRoomDTO {
     private int capacity; // 숙박 인원 기준
 
     @Builder(toBuilder = true)
-    public RequestRoomDTO(String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, String bed, int spare, int spareAdult, int spareChildren, int capacity) {
+    public RequestRoomDto(String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, String bed, int spare, int spareAdult, int spareChildren, int capacity) {
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;

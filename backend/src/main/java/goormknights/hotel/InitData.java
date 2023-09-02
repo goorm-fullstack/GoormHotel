@@ -40,7 +40,8 @@ public class InitData {
                 .address("test")
                 .privacyCheck(true)
                 .grade("Silver")
-                .authority("ROLE_MEMBER")
+                .auth("ROLE_MEMBER")
+                .memberId("test")
                 .build();
 
 //        Room room = Room.builder()
@@ -58,7 +59,7 @@ public class InitData {
 //                .build();
         
         
-        //사용되어선 안되는 쿠폰
+//        사용되어선 안되는 쿠폰
         Coupon coupon = Coupon.builder()
                 .uuid(UUID.randomUUID().toString())
                 .discountRate(5)

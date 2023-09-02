@@ -1,7 +1,7 @@
 package goormknights.hotel.item.model;
 
 import goormknights.hotel.item.dto.request.RequestDiningDTO;
-import goormknights.hotel.item.dto.request.RequestImageDTO;
+import goormknights.hotel.item.dto.request.RequestImageDto;
 import goormknights.hotel.item.dto.response.ResponseDiningDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,7 +21,7 @@ public class Dining extends Item {
     private String useTime; // 이용 시간(ex. 아침, 점심, 저녁)
 
     // 엔티티 수정
-    public Dining updateDining(RequestDiningDTO requestDiningDTO, RequestImageDTO requestImageDTO){
+    public Dining updateDining(RequestDiningDTO requestDiningDTO, RequestImageDto requestImageDTO){
         return this.toBuilder()
                 .priceChildren(requestDiningDTO.getPriceChildren())
                 .price(requestDiningDTO.getPrice())

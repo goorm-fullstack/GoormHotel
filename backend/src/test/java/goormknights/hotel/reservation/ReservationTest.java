@@ -1,6 +1,9 @@
 package goormknights.hotel.reservation;
 
+import goormknights.hotel.item.dto.request.RequestImageDto;
+import goormknights.hotel.item.model.Room;
 import goormknights.hotel.item.service.RoomService;
+import goormknights.hotel.item.dto.request.RequestRoomDto;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.repository.MemberRepository;
 import goormknights.hotel.reservation.dto.request.RequestReservationDto;
@@ -36,19 +39,50 @@ public class ReservationTest {
     @Test
     public void reservationTest() {
 
+        RequestRoomDto buildRoom = RequestRoomDto.builder()
+                .bed("single")
+                .spareChildren(3)
+                .spareAdult(5)
+                .priceChildren(10000)
+                .spare(3)
+                .type("room")
+                .price(1350000)
+                .name("grand Room")
+                .typeDetail("VIPRoom")
+                .priceAdult(50000)
+                .capacity(10)
+                .build();
+        RequestImageDto requestImageDTO = RequestImageDto.builder()
+                .originFileName("hello")
+                .fileName("hi")
+                .filePath("here")
+                .build();
+
+
+        roomService.saveRoom(buildRoom, requestImageDTO);
+        Room findRoom = roomService.findByRoomName(buildRoom.getName());
+
         Member member = Member.builder()
                 .id(null)
                 .memberId("test")
+                .password("password")
                 .name("테스트")
                 .auth("member")
                 .phoneNumber("01012341234")
                 .email("test@test.com")
+                .address("주소")
+                .privacyCheck(true)
+                .gender("Gold")
+                .couponList(null)
+                .reservationList(null)
+                .giftCardList(null)
+                .gender("")
+                .birth(null)
                 .build();
 
         memberRepository.save(member);
 
 
-        roomService.save(item);
 
         RequestReservationDto reservation = RequestReservationDto.builder()
                 .id(7)
@@ -61,7 +95,7 @@ public class ReservationTest {
                 .children(0)
                 .member(member)
                 .notice("없음")
-                .item(item)
+                .item(findRoom)
                 .stay(1)
                 .coupon(null)
                 .giftCard(null)

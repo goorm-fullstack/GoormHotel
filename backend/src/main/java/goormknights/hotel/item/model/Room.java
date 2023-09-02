@@ -1,7 +1,7 @@
 package goormknights.hotel.item.model;
 
-import goormknights.hotel.item.dto.request.RequestImageDTO;
-import goormknights.hotel.item.dto.request.RequestRoomDTO;
+import goormknights.hotel.item.dto.request.RequestImageDto;
+import goormknights.hotel.item.dto.request.RequestRoomDto;
 import goormknights.hotel.item.dto.response.ResponseRoomDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -44,7 +44,7 @@ public class Room extends Item{
     }
 
     // 엔티티 수정
-    public Room updateRoom(RequestRoomDTO requestRoomDTO, RequestImageDTO requestImageDTO) {
+    public Room updateRoom(RequestRoomDto requestRoomDTO, RequestImageDto requestImageDTO) {
         return this.toBuilder()
                 .priceChildren(requestRoomDTO.getPriceChildren())
                 .price(requestRoomDTO.getPrice())
