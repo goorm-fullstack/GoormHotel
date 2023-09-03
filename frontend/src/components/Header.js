@@ -1,7 +1,7 @@
-import React from 'react';
-import { styled } from 'styled-components';
-import { Link } from 'react-router-dom';
-import logo from '../images/common/logo.png';
+import React from "react";
+import { styled } from "styled-components";
+import { Link } from "react-router-dom";
+import logo from "../images/common/logo.png";
 
 const HeaderContainer = styled.div`
   position: relative;
@@ -12,7 +12,7 @@ const Container = styled.header`
   width: 100%;
   height: 120px;
   min-width: 1800px;
-  background-color: ${props => props.$background};
+  background-color: ${(props) => props.$background};
   position: fixed;
   padding: 0 40px;
   color: white;
@@ -21,7 +21,7 @@ const Container = styled.header`
 `;
 
 const TopInfo = styled.div`
-  padding:20px 0;
+  padding: 20px 0;
   overflow: hidden;
 `;
 
@@ -53,13 +53,13 @@ const NavList = styled.ul`
 
 const NavItem = styled.li`
   font-size: 16px;
-  
+
   &:not(:last-child) {
-    margin-right: 40px; 
+    margin-right: 40px;
   }
 
   &:hover {
-    color: #BAA085;
+    color: #baa085;
   }
 `;
 
@@ -70,8 +70,8 @@ const NavReserveBtn = styled.button`
   color: white;
   background-color: rgba(69, 69, 69, 0.01);
   &:hover {
-    color: #BAA085;
-    border-color: #BAA085;
+    color: #baa085;
+    border-color: #baa085;
   }
 `;
 
@@ -79,32 +79,57 @@ const Header = ({ backgroundColor }) => {
   return (
     <HeaderContainer>
       <Container $background={backgroundColor}>
-      <TopInfo>
-        <TopInfoList>
-          <TopInfoItem><HeaderLink to="/">예약확인</HeaderLink></TopInfoItem>
-          <TopInfoItem><HeaderLink to="/">로그인</HeaderLink></TopInfoItem>
-          <TopInfoItem><HeaderLink to="/">회원가입</HeaderLink></TopInfoItem>
-          <TopInfoItem><HeaderLink to="/">멤버십</HeaderLink></TopInfoItem>
-          <TopInfoItem><HeaderLink to="/">오시는길</HeaderLink></TopInfoItem>
-          <TopInfoItem><HeaderLink to="/">사이트맵</HeaderLink></TopInfoItem>
-        </TopInfoList>
-      </TopInfo>
-      <Gnb>
-        <HeaderLink to="/"><img src={logo} alt="logo" /></HeaderLink>
-        <NavList>
-          <NavItem><HeaderLink to="/about">구름호텔 소개</HeaderLink></NavItem>
-          <NavItem><HeaderLink to="/rooms">객실</HeaderLink></NavItem>
-          <NavItem><HeaderLink to="/dining">다이닝</HeaderLink></NavItem>
-          <NavItem><HeaderLink to="/">부대시설</HeaderLink></NavItem>
-          <NavItem><HeaderLink to="/">스페셜오퍼</HeaderLink></NavItem>
-          <NavItem><HeaderLink to="/">고객지원</HeaderLink></NavItem>
-        </NavList>
-        <NavReserveBtn>예약하기</NavReserveBtn>
-      </Gnb>
-    </Container>
+        <TopInfo>
+          <TopInfoList>
+            <TopInfoItem>
+              <HeaderLink to="/">예약확인</HeaderLink>
+            </TopInfoItem>
+            <TopInfoItem>
+              <HeaderLink to="/">로그인</HeaderLink>
+            </TopInfoItem>
+            <TopInfoItem>
+              <HeaderLink to="/">회원가입</HeaderLink>
+            </TopInfoItem>
+            <TopInfoItem>
+              <HeaderLink to="/">멤버십</HeaderLink>
+            </TopInfoItem>
+            <TopInfoItem>
+              <HeaderLink to="/">오시는길</HeaderLink>
+            </TopInfoItem>
+            <TopInfoItem>
+              <HeaderLink to="/">사이트맵</HeaderLink>
+            </TopInfoItem>
+          </TopInfoList>
+        </TopInfo>
+        <Gnb>
+          <HeaderLink to="/">
+            <img src={logo} alt="logo" />
+          </HeaderLink>
+          <NavList>
+            <NavItem>
+              <HeaderLink to="/about">구름호텔 소개</HeaderLink>
+            </NavItem>
+            <NavItem>
+              <HeaderLink to="/rooms">객실</HeaderLink>
+            </NavItem>
+            <NavItem>
+              <HeaderLink to="/dining">다이닝</HeaderLink>
+            </NavItem>
+            <NavItem>
+              <HeaderLink to="/">부대시설</HeaderLink>
+            </NavItem>
+            <NavItem>
+              <HeaderLink to="/">스페셜오퍼</HeaderLink>
+            </NavItem>
+            <NavItem>
+              <HeaderLink to="/">고객지원</HeaderLink>
+            </NavItem>
+          </NavList>
+          <NavReserveBtn>예약하기</NavReserveBtn>
+        </Gnb>
+      </Container>
     </HeaderContainer>
   );
 };
-
 
 export default Header;

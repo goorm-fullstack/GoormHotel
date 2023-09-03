@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import { styled } from "styled-components";
 import { DetailBtn, DetailSvg } from "../pages/Home";
 import { Link } from "react-router-dom";
+import instagramImg from "../images/common/social_instagram.png";
+import youtubeImg from "../images/common/social_youtube.png";
+import owlImg from "../images/common/social_owl.png";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 220px;
   height: 100%;
+  min-width: 100%;
 `;
 
 const NewsLetterContainer = styled.div`
@@ -48,6 +52,7 @@ const EmailInput = styled.input`
   margin-right: 21px;
   margin-bottom: 10px;
   padding-left: 24px;
+  outline: none;
 `;
 
 const SubscribeBtn = styled(DetailBtn)`
@@ -78,7 +83,6 @@ const TermsLink = styled(Link)`
 
 const FirstFooter = styled.div`
   display: flex;
-  flex-direction: column;
   padding: 60px 0 60px 370px;
   border-bottom: 1px solid #2c2b29;
 `;
@@ -139,6 +143,56 @@ const StyledText = styled.span`
   margin: 0 80px;
 `;
 
+const SocialWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const SocialTitle = styled.h1`
+  font-size: 14px;
+  font-weight: bold;
+  color: #baa085;
+  margin-bottom: 24px;
+`;
+
+const FirstFooterLeft = styled.div`
+  flex: 1;
+`;
+
+const FirstFooterWrapper = styled.div`
+  width: 958px;
+  display: flex;
+`;
+
+const SocialIcon = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const SocialLink = styled.a`
+  display: inline-block;
+  cursor: pointer;
+
+  &:not(:last-child) {
+    margin-right: 24px;
+  }
+`;
+
+const IconImage = styled.img`
+  max-width: 100%;
+  height: auto;
+`;
+
+const Name = styled.a`
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 const Footer = () => {
   const [email, setEmail] = useState("");
 
@@ -183,19 +237,49 @@ const Footer = () => {
       </NewsLetterContainer>
       <FooterContainer>
         <FirstFooter>
-          <FooterTitle>CUSTOMER CENTER</FooterTitle>
-          <PhoneNumber>
-            <RoomNumber>
-              객실예약<Tell>031-0000-0000</Tell>
-            </RoomNumber>
-            <InquiryNumber>
-              문의하기<Tell>031-0000-0000</Tell>
-            </InquiryNumber>
-          </PhoneNumber>
-          <FaxEmail>
-            <Fax>FAX&nbsp; 000-0000-0000</Fax>
-            <Email>이메일&nbsp; help@goorm@goorm.com</Email>
-          </FaxEmail>
+          <FirstFooterWrapper>
+            <FirstFooterLeft>
+              <FooterTitle>CUSTOMER CENTER</FooterTitle>
+              <PhoneNumber>
+                <RoomNumber>
+                  객실예약<Tell>031-600-8586</Tell>
+                </RoomNumber>
+                <InquiryNumber>
+                  문의하기<Tell>031-600-8586</Tell>
+                </InquiryNumber>
+              </PhoneNumber>
+              <FaxEmail>
+                <Fax>FAX&nbsp; 000-0000-0000</Fax>
+                <Email>이메일&nbsp; contact@goorm.io</Email>
+              </FaxEmail>
+            </FirstFooterLeft>
+            <SocialWrapper>
+              <SocialTitle>SOCIAL</SocialTitle>
+              <SocialIcon>
+                <SocialLink
+                  href="https://www.instagram.com/goorm.co/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <IconImage src={instagramImg} alt="instagram" />
+                </SocialLink>
+                <SocialLink
+                  href="https://www.youtube.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <IconImage src={youtubeImg} alt="youtube" />
+                </SocialLink>
+                <SocialLink
+                  href="https://www.tripadvisor.co.kr/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <IconImage src={owlImg} alt="owl" />
+                </SocialLink>
+              </SocialIcon>
+            </SocialWrapper>
+          </FirstFooterWrapper>
         </FirstFooter>
         <SecondFooter>
           <div>
@@ -210,17 +294,65 @@ const Footer = () => {
           </StyledText>
           <div>
             <p>
-              (주)구름기사단&nbsp;&nbsp;&nbsp;&nbsp; 인천광역시 중구
-              영종해안남로 321번길 186&nbsp;&nbsp; 사업자 등록번호
-              121-86-18441&nbsp;&nbsp; 통신판매번호 제 2017-인천중구-0027호
+              (주)어벤저스 &nbsp;&nbsp;&nbsp;&nbsp; 경기도 성남시 분당구 판교로
+              242 PDC A동 902호&nbsp;&nbsp; 사업자 등록번호
+              124-87-39200&nbsp;&nbsp; 통신판매업 신고 번호
+              제2019-성남분당B-0224호
             </p>
             <p>
-              대표이사:구름기사단&nbsp; Tel.1833-8855&nbsp;
-              E-mail:p-city@paradian.com
+              대표이사 &nbsp;&nbsp; Tel.031-600-8586&nbsp;&nbsp; E-mail:
+              contact@goorm.io
             </p>
             <p>
-              Copyright © 어벤저스(김경규, 문소희, 박지국, 배진환, 이동규,
-              전민종). All rights reserved.
+              Copyright © 어벤저스(
+              <Name
+                href="https://github.com/WhiteKIM"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                김경규
+              </Name>
+              ,{" "}
+              <Name
+                href="https://github.com/soheetech"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                문소희
+              </Name>
+              ,{" "}
+              <Name
+                href="https://github.com/parkjikuk"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                박지국
+              </Name>
+              ,{" "}
+              <Name
+                href="https://github.com/JinhwanB"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                배진환
+              </Name>
+              ,{" "}
+              <Name
+                href="https://github.com/LEE-Donggyu"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                이동규
+              </Name>
+              ,{" "}
+              <Name
+                href="https://github.com/yss1902"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                전민종
+              </Name>
+              ). All rights reserved.
             </p>
           </div>
         </SecondFooter>
