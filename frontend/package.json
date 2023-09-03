@@ -6,6 +6,10 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+<<<<<<< Updated upstream
+=======
+    "axios": "^1.5.0",
+>>>>>>> Stashed changes
     "dotenv": "^16.3.1",
     "moment": "^2.29.4",
     "react": "^18.2.0",
