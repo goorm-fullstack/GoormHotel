@@ -43,6 +43,26 @@ public class ItemService {
         return itemRepository.findByKeyword(keyword);
     }
 
+    /**
+     * 스페셜 오퍼에서 사용할 검색 기능
+     * @param allItem - 타입에 따라 분류된 아이템 리스트
+     * @param keyword - 클라이언트가 검색한 단어
+     * @return 타입에 따라 분류된 아이템 리스트에서 검색한 단어가 포함되는 아이템 조회
+     */
+    public List<Item> findByKeyword(List<Object> allItem, String keyword){
+        List<Item> result = new ArrayList<>();
+
+        List<Item> byKeyword = itemRepository.findByKeyword(keyword);
+
+        for (Item item : byKeyword) {
+            if(allItem.contains(item)){
+                result.add(item);
+            }
+        }
+
+        return result;
+    }
+
     public List<Object> getResponseItem(List<Item> allItem) {
         List<Object> responseItems = new ArrayList<>();
 
