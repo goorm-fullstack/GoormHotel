@@ -114,10 +114,6 @@ const ChatModal = ({ closeChat }) => {
   ]);
   const [newChat, setNewChat] = useState('');
   const chatContainerRef = useRef(null);
-<<<<<<< Updated upstream
-
-  useEffect(() => {
-=======
   const [roomId, setRoomId] = useState("");
   const [socketConnected, setSocketConnected] = useState(false);
   const webSocketURL = "ws://127.0.0.1:8080/ws/chat";
@@ -167,17 +163,11 @@ const ChatModal = ({ closeChat }) => {
     setRoomId(request);
   } 
   useEffect(() => {
->>>>>>> Stashed changes
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [chatData]);
-<<<<<<< Updated upstream
 
-  const handleInputKeyPress = (e) => {
-    if (e.key === 'Enter' && newChat.trim() !== '') {
-      setChatData([...chatData, { message: newChat, isUser: true }]);
-=======
   const handleInputKeyPress = (e) => {
     if (e.key === 'Enter' && newChat.trim() !== '' && socketConnected) {
       setChatData([...chatData, { message: newChat, isUser: true }]);
@@ -189,13 +179,10 @@ const ChatModal = ({ closeChat }) => {
           message : newChat
         })
       )
->>>>>>> Stashed changes
       setNewChat('');
     }
   };
 
-<<<<<<< Updated upstream
-=======
   // WebSocket 관련 부분
   const [socketConnecte, SetSocketConnected] = useState(false);
   const [sendMsg, setSendMsg] = useState(false);
@@ -203,9 +190,6 @@ const ChatModal = ({ closeChat }) => {
   // 데이터를 받으면 무조건 관리자 메시지
   // 내가 데이터를 넘기면 무조건 유저
 
-  
-
->>>>>>> Stashed changes
   return (
     <ChatWindow>
       <ChatWrapper>
@@ -234,5 +218,6 @@ const ChatModal = ({ closeChat }) => {
       </ChatWindow>
   );
 };
+
 
 export default ChatModal;
