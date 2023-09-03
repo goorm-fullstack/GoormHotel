@@ -64,7 +64,7 @@ public class GiftCardService {
         return uuid.substring(0, 16);
     }
 
-    public void registering(int memberId, String uuid) {
+    public void registering(long memberId, String uuid) {
         Member registor = memberRepository.findById(memberId).orElseThrow(() -> {
             throw new NotExistMemberException("존재하지 않는 사용자입니다.");
         });
