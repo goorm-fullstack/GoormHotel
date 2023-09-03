@@ -1,31 +1,57 @@
 import React from 'react'
 import Header from '../../components/Header'
 import { styled } from 'styled-components';
+import { NavLink } from "react-router-dom";
 
-const FirstArticle = styled.article`
-  position : fixed;
-  position: relative;
-  height: 20vh;
+const AboutHeader = styled.div`
+  height: 70px;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  border-bottom: 1px solid #dddddd;
+  position: fixed;
+  width: 100%;
+  background-color: white;
+  z-index: 10;
 `;
 
-const SecondArticle = styled.div`
-  display: flex;
-  flex-direction: column;
-  width : 100%;
-  justify-content: center;
-  margin:0 auto; 
+const AboutHeaderTitle = styled.h1`
+  margin-left: 70px;
+  font-size: 18px;
+  font-weight: bold;
 `;
-const MenuMapList = styled.li`
-  float : left;
-  font-size: 16px;
-  
-  &:not(:last-child) {
-    margin-right: 20px; 
+
+const LinkWrapper = styled.div`
+  float: left;
+  margin-left: 107px;
+
+  & > a:not(:last-child) {
+    margin-right: 40px;
   }
-`
+`;
+
+const AboutLink = styled(NavLink)`
+  font-size: 14px;
+  color: #888888;
+
+  &.active {
+    color: #baa085;
+  }
+`;
+
+const Section = styled.div`
+  display: flex;
+  margin-bottom: 240px;
+  justify-content: center;
+  align-items : center;
+  max-width: 1920px;
+`;
+
+const Title = styled.h1`
+  color: #111111;
+  font-weight: bold;
+  font-size: 36px;
+  margin: 160px 0 80px 450px;
+`;
 
 const OuterDiv = styled.div`
   background-color: rgba(223, 224, 222, 0.25);
@@ -47,42 +73,20 @@ const InnerDiv = styled.div`
 const Agreement = () => {
   return (
     <>
-      <Header/>
-      <div style={{
-        position : "fixed",
-        display : "flex",
-        top : "120px",
-        height : "4em",
-        width : "100%",
-        borderBottom : "1px solid black",
-        alignItems : "center",
-        zIndex : "100",
-        backgroundColor : "#fff"
-        }}>
-        <h2 style={{
-          marginLeft : "3em",
-          fontWeight : "bold"
-        }}>약관 안내</h2>
-        <ul style={{
-          marginLeft: "120px",
-        }}>
-          <MenuMapList style={{color:"orange"}}>이용약관</MenuMapList>
-          <MenuMapList>개인정보처리방침</MenuMapList>
-        </ul>
-      </div>
-      <FirstArticle>
-        
-      </FirstArticle>
-      <SecondArticle style={{
-        top : "50%"
-      }}>
-        <h1 style={{
-            marginTop : "3em",
-            fontWeight: 'bold',
-            fontSize : "2em",
-            marginLeft : "17%",
-            marginBottom : "2em",
-          }}>이용 약관</h1>
+    <Header backgroundColor="#21201E"/>
+      <AboutHeader>
+        <AboutHeaderTitle>구름호텔 소개</AboutHeaderTitle>
+        <LinkWrapper>
+          <AboutLink to="/agreement" activeClassName="active">
+          이용약관
+          </AboutLink>
+          <AboutLink to="/privacy" activeClassName="active">
+          개인정보처리방침
+          </AboutLink>
+        </LinkWrapper>
+      </AboutHeader>
+      <Title>이용 약관</Title>
+      <Section>
           <OuterDiv>
             <InnerDiv>
               <p style={{padding : "1em"}}>
@@ -328,7 +332,7 @@ const Agreement = () => {
               </p>
             </InnerDiv>
           </OuterDiv>
-      </SecondArticle>
+      </Section>
     </>
   )
 }

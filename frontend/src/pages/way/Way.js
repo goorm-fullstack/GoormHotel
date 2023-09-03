@@ -1,9 +1,52 @@
 import React from "react";
 import Header from "../../components/Header";
 import { styled } from "styled-components";
+import { NavLink } from "react-router-dom";
 import KakaoMap from "../../utils/KakaoMap";
 import ico_bus from "../../images/icon/ico_bus.png";
 import ico_train from "../../images/icon/ico_train.png";
+
+const AboutHeader = styled.div`
+  height: 70px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #dddddd;
+  position: fixed;
+  width: 100%;
+  background-color: white;
+  z-index: 10;
+`;
+
+const AboutHeaderTitle = styled.h1`
+  margin-left: 70px;
+  font-size: 18px;
+  font-weight: bold;
+`;
+
+const LinkWrapper = styled.div`
+  float: left;
+  margin-left: 107px;
+
+  & > a:not(:last-child) {
+    margin-right: 40px;
+  }
+`;
+
+const AboutLink = styled(NavLink)`
+  font-size: 14px;
+  color: #888888;
+
+  &.active {
+    color: #baa085;
+  }
+`;
+
+const Title = styled.h1`
+  color: #111111;
+  font-weight: bold;
+  font-size: 36px;
+  margin: 160px 0 160px 370px;
+`;
 
 const FirstArticle = styled.article`
   position: fixed;
@@ -60,54 +103,25 @@ const TableDLDT = styled.dt`
   padding: 2em;
 `;
 
-const MenuMapList = styled.li`
-  float: left;
-  font-size: 16px;
-
-  &:not(:last-child) {
-    margin-right: 20px;
-  }
-`;
-
 const Way = () => {
   return (
     <>
-      <Header />
-      <div
-        style={{
-          position: "fixed",
-          display: "flex",
-          top: "120px",
-          height: "4em",
-          width: "100%",
-          borderBottom: "1px solid black",
-          alignItems: "center",
-          zIndex: "100",
-          backgroundColor: "#fff",
-        }}
-      >
-        <h2
-          style={{
-            marginLeft: "3em",
-            fontWeight: "bold",
-          }}
-        >
-          구름 호텔 소개
-        </h2>
-        <ul
-          style={{
-            marginLeft: "120px",
-          }}
-        >
-          <MenuMapList>호텔 소개</MenuMapList>
-          <MenuMapList>오시는 길</MenuMapList>
-        </ul>
-      </div>
+      <Header backgroundColor="#21201E"/>
+      <AboutHeader>
+        <AboutHeaderTitle>구름호텔 소개</AboutHeaderTitle>
+        <LinkWrapper>
+          <AboutLink to="/about" activeClassName="active">
+            호텔소개
+          </AboutLink>
+          <AboutLink to="/location" activeClassName="active">
+            오시는길
+          </AboutLink>
+        </LinkWrapper>
+      </AboutHeader>
       <FirstArticle></FirstArticle>
       <SecondArticle>
         <h1
           style={{
-            marginTop: "3em",
             fontWeight: "bold",
             fontSize: "2em",
             marginBottom: "3em",

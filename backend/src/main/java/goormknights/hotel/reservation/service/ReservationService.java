@@ -1,107 +1,114 @@
 package goormknights.hotel.reservation.service;
 
-import goormknights.hotel.coupon.model.Coupon;
-import goormknights.hotel.giftcard.model.GiftCard;
-import goormknights.hotel.item.model.Item;
-import goormknights.hotel.member.model.Member;
-import goormknights.hotel.reservation.dto.ReservationDto;
-import goormknights.hotel.coupon.dto.request.RequestCouponDto;
-import goormknights.hotel.giftcard.dto.request.RequestGiftCardDto;
-import goormknights.hotel.member.exception.NotExistMemberException;
 import goormknights.hotel.coupon.repository.CouponRepository;
 import goormknights.hotel.giftcard.repository.GiftCardRepository;
 import goormknights.hotel.item.repository.ItemRepository;
 import goormknights.hotel.member.repository.MemberRepository;
+import goormknights.hotel.reservation.dto.request.RequestReservationDto;
 import goormknights.hotel.reservation.model.Reservation;
 import goormknights.hotel.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
 @Service
-@RequiredArgsConstructor
 @Transactional
-// TODO 쿠폰 + 상품권 로직
-// (기본가+추가금액) - 상품권(상품권 금액) - 쿠폰(상품 기본가의 5%)
-// 상품권은 예약 건당 여러개 사용 가능하지만 쿠폰은 하나만 적용 가능합니다.
-// 상품권과 쿠폰은 동시에 사용할 수 있습니다.
+@RequiredArgsConstructor
+@Slf4j
 public class ReservationService {
+
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
     private final CouponRepository couponRepository;
     private final GiftCardRepository giftCardRepository;
+    private static String reservationNumber;
 
-    // TODO 쿠폰, 상품권, 일반 예약 로직을 한번에 처리하자~
-    public void paidReservation(int memberId, int itemId, Coupon coupon, GiftCard giftCard, int useGiftCardMoney, ReservationDto reservationDto) {
-        Member customer = memberRepository.findById(memberId).orElseThrow(()-> new NotExistMemberException("사용자가 없습니다.")
-        );
-        Item buyItem = (Item) itemRepository.findById(itemId).orElseThrow();
+    /**
+     * 예약 정보 저장
+     * @param reservationDto - user가 입력한 정보
+     */
+    public void saveReservation(RequestReservationDto reservationDto) {
+        reservationDto.setReservationNumber(makeReservationNumber());
+        reservationRepository.save(reservationDto.toEntity());
+    }
 
-        if(coupon!=null && giftCard != null) {
-            RequestCouponDto couponDto = coupon.toRequestDto();
-            RequestGiftCardDto giftCardDto = giftCard.toRequestDto();
-            Reservation newReserve = new Reservation(
-                    reservationDto.getCheckIn(),
-                    reservationDto.getCheckOut(),
-                    reservationDto.getCount(),
-                    reservationDto.getNotice(),
-                    reservationDto.calculateDiscountPrice(couponDto, giftCardDto, useGiftCardMoney),
-                    reservationDto.getStay(),
-                    customer,
-                    buyItem
-            );
-            Reservation save = reservationRepository.save(newReserve);
-            customer.getReservationList().add(save);
-            couponRepository.save(couponDto.toEntity());
-            giftCardRepository.save(giftCardDto.toEntity());
-            customer.considerGradeLevelUp();
-        } else if(coupon != null && giftCard == null) {
-            RequestCouponDto couponDto = coupon.toRequestDto();
-            Reservation newReserve = new Reservation(
-                    reservationDto.getCheckIn(),
-                    reservationDto.getCheckOut(),
-                    reservationDto.getCount(),
-                    reservationDto.getNotice(),
-                    reservationDto.calculateDiscountPrice(couponDto, null, 0),
-                    reservationDto.getStay(),
-                    customer,
-                    buyItem
-            );
-            Reservation save = reservationRepository.save(newReserve);
-            couponRepository.save(couponDto.toEntity());
-            customer.getReservationList().add(save);
-            customer.considerGradeLevelUp();
-        } else if(coupon == null && giftCard != null) {
-            RequestGiftCardDto giftCardDto = giftCard.toRequestDto();
-            Reservation newReserve = new Reservation(
-                    reservationDto.getCheckIn(),
-                    reservationDto.getCheckOut(),
-                    reservationDto.getCount(),
-                    reservationDto.getNotice(),
-                    reservationDto.calculateDiscountPrice(null, giftCardDto, useGiftCardMoney),
-                    reservationDto.getStay(),
-                    customer,
-                    buyItem
-            );
-            giftCardRepository.save(giftCardDto.toEntity());
-            Reservation save = reservationRepository.save(newReserve);
-            customer.getReservationList().add(save);
-            customer.considerGradeLevelUp();
-        } else {
-            Reservation newReserve = new Reservation(
-                    reservationDto.getCheckIn(),
-                    reservationDto.getCheckOut(),
-                    reservationDto.getCount(),
-                    reservationDto.getNotice(),
-                    reservationDto.calculateDiscountPrice(null, null, 0),
-                    reservationDto.getStay(),
-                    customer,
-                    buyItem
-            );
-            Reservation save = reservationRepository.save(newReserve);
-            customer.getReservationList().add(save);
-            customer.considerGradeLevelUp();
+    /**
+     * 예약 번호 생성
+     * @return reservationNumber - 예약 번호: 예약 날짜(yyyyMMdd)+랜덤 문자 8자리
+     */
+    public String makeReservationNumber() {
+        Date now = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        int randomNumber = (int)(Math.random() * 89999999) + 10000000;
+        reservationNumber = format.format(now) + randomNumber;
+        log.info("예약번호" + reservationNumber);
+        return reservationNumber;
+    }
+
+    /**
+     * 관리자 -> 예약 정보 수정: 예약 상태
+     * @param reservationDto - 관리자가 수정한 정보
+     */
+    public void updateReservationState(RequestReservationDto reservationDto) {
+        Reservation reservation = reservationRepository.findById(reservationDto.getId()).orElse(null);
+        if (reservation != null) {
+            reservation.setState(reservationDto.getState()); // 예약 상태 업데이트
+            reservationRepository.save(reservation);
         }
     }
+
+    /**
+     * 관리자 -> 예약 정보 수정: 요청사항
+     * @param reservationDto - 관리자가 수정한 정보
+     */
+    public void updateReservationNotice(RequestReservationDto reservationDto){
+        Reservation reservation = reservationRepository.findById(reservationDto.getId()).orElse(null);
+        if (reservation != null) {
+            reservation.setNotice(reservationDto.getNotice()); // 요청사항 업데이트
+            reservationRepository.save(reservation);
+        }
+    }
+
+    /**
+     * 전체 예약 조회
+     * @return 전체 예약 결과 반환
+     */
+    public List<Reservation> getAllReservation() {
+        return reservationRepository.findAll();
+    }
+
+    /**
+     * 예약 번호로 예약 조회
+     * @param reservationNumber - 예약번호
+     * @return 입력한 예약 번호에 해당하는 예약 건 하나 반환
+     */
+    public Optional<Reservation> getReservationByNumber(String reservationNumber){
+        return reservationRepository.findByReservationNumber(reservationNumber);
+    }
+
+    /**
+     * memberId로 예약 조회
+     * @param memberId - 회원 ID
+     * @return 해당 member가 예약한 예약 건 모두 반환
+     */
+    public Optional<Reservation> getReservationByMemberId(String memberId){
+        return reservationRepository.findByMemberId(memberId);
+    }
+
+    /**
+     * ID(PK) 값으로 예약 조회
+     * @param id - 인덱스 번호(PK)
+     * @return 해당 id 값과 일치하는 예약 건 반환
+     */
+    public Optional<Reservation> getReservationById(Long id) {
+        return reservationRepository.findById(id);
+    }
+
 }
