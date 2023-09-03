@@ -3,8 +3,12 @@ package goormknights.hotel.item.model;
 import goormknights.hotel.item.dto.request.RequestDiningDto;
 import goormknights.hotel.item.dto.request.RequestImageDto;
 import goormknights.hotel.item.dto.response.ResponseDiningDto;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -37,7 +41,7 @@ public class Dining extends Item {
                 .build();
     }
 
-    // 클라이언트에게 응답 시 ResponseDiningDTO로 변경
+    // 클라이언트에게 응답 시 ResponseDiningDto로 변경
     public ResponseDiningDto toResponseDiningDto(){
         return ResponseDiningDto.builder()
                 .thumbnailPath(this.getThumbnail().getFilePath())

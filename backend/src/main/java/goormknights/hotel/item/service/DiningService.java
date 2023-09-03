@@ -28,13 +28,13 @@ public class DiningService {
 
     /**
      * 다이닝 DB에 저장
-     * @param requestDiningDTO - 다이닝 정보
-     * @param requestImageDTO - 이미지 정보
+     * @param requestDiningDto - 다이닝 정보
+     * @param requestImageDto - 이미지 정보
      * @return diningName - 다이닝 상품명
      */
-    public String saveDining(RequestDiningDto requestDiningDTO, RequestImageDto requestImageDTO){
-        Dining build = requestDiningDTO.toEntity().toBuilder()
-                .thumbnail(requestImageDTO.toEntity())
+    public String saveDining(RequestDiningDto requestDiningDto, RequestImageDto requestImageDto){
+        Dining build = requestDiningDto.toEntity().toBuilder()
+                .thumbnail(requestImageDto.toEntity())
                 .build();
         return itemRepository.save(build).getName();
     }

@@ -3,7 +3,9 @@ package goormknights.hotel.item.model;
 import goormknights.hotel.item.dto.request.RequestImageDto;
 import goormknights.hotel.item.dto.request.RequestRoomDto;
 import goormknights.hotel.item.dto.response.ResponseRoomDto;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +27,7 @@ public class Room extends Item{
     @Column(nullable = false)
     private int capacity; // 숙박 인원 기준
 
-    // 클라이언트에게 응답 시 ResponseRoomDTO로 변경
+    // 클라이언트에게 응답 시 ResponseRoomDto로 변경
     public ResponseRoomDto toResponseRoomDto(){
         return ResponseRoomDto.builder()
                 .priceAdult(this.getPriceAdult())

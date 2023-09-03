@@ -26,13 +26,13 @@ public class RoomService {
 
     /**
      * 객실 DB에 저장
-     * @param requestRoomDTO - 객실 정보
-     * @param requestImageDTO - 객실 이미지 정보
+     * @param requestRoomDto - 객실 정보
+     * @param requestImageDto - 객실 이미지 정보
      * @return 객실 상품명
      */
-    public String saveRoom(RequestRoomDto requestRoomDTO, RequestImageDto requestImageDTO){
-        Room build = requestRoomDTO.toEntity().toBuilder()
-                .thumbnail(requestImageDTO.toEntity())
+    public String saveRoom(RequestRoomDto requestRoomDto, RequestImageDto requestImageDto){
+        Room build = requestRoomDto.toEntity().toBuilder()
+                .thumbnail(requestImageDto.toEntity())
                 .build();
         return itemRepository.save(build).getName();
     }
@@ -40,25 +40,25 @@ public class RoomService {
     /**
      * 객실 수정
      * @param roomName - 객실 상품명
-     * @param requestRoomDTO - 수정된 객실 정보
+     * @param requestRoomDto - 수정된 객실 정보
      * @param img - 수정된 이미지 정보
      * @return 수정 후 DB에 저장된 객실 엔티티
      */
-    public Room modifyRoom(String roomName, RequestRoomDto requestRoomDTO, MultipartFile img) throws IOException {
+    public Room modifyRoom(String roomName, RequestRoomDto requestRoomDto, MultipartFile img) throws IOException {
         Room originRoom = findByRoomName(roomName);
 
-        RequestImageDto requestImageDTO;
+        RequestImageDto requestImageDto;
         if(!Objects.requireNonNull(img.getOriginalFilename()).equals("")) {
-            requestImageDTO = imageService.convertToImageDto(img);
+            requestImageDto = imageService.convertToImageDto(img);
         } else {
-            requestImageDTO = RequestImageDto.builder()
+            requestImageDto = RequestImageDto.builder()
                     .originFileName(originRoom.getThumbnail().getOriginFileName())
                     .fileName(originRoom.getThumbnail().getFileName())
                     .filePath(originRoom.getThumbnail().getFilePath())
                     .build();
         }
 
-        return itemRepository.save(originRoom.updateRoom(requestRoomDTO, requestImageDTO));
+        return itemRepository.save(originRoom.updateRoom(requestRoomDto, requestImageDto));
     }
 
     /**

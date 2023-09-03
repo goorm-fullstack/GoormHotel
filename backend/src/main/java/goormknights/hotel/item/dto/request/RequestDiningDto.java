@@ -1,7 +1,9 @@
 package goormknights.hotel.item.dto.request;
 
 import goormknights.hotel.item.model.Dining;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -61,7 +63,7 @@ public class RequestDiningDto {
     }
 
 
-    // RequestDiningDTO 엔티티화
+    // RequestDiningDto 엔티티화
     public Dining toEntity(){
         return Dining.builder()
                 .name(name)
