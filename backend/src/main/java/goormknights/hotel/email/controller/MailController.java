@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/mail")
 public class MailController {
     private final EmailService emailService;
-    
+
     @PostMapping("/subscribe")
     public ResponseEntity<String> sendSubscribeEmail(@RequestParam String email) throws MessagingException {
         emailService.sendSubscribe(email, "newsletter");

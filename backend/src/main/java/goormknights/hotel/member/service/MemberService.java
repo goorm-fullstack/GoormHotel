@@ -23,7 +23,7 @@ public class MemberService {
     // 상품권 등록
     public void registrationGiftCard(int memberId, String code) {
         GiftCard giftCard = giftCardRepository.findByUuid(code).orElseThrow(() -> new NoSuchElementException("존재하지 않는 상품권입니다"));
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotExistMemberException("존재하지 않는 사용자입니다"));
-        member.getGiftCardList().add(giftCard);
+//        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotExistMemberException("존재하지 않는 사용자입니다"));
+//        member.getGiftCardList().add(giftCard);
     }
 }

@@ -30,42 +30,42 @@ public class InitData {
     @Autowired
     private GiftCardRepository giftCardRepository;
 
-    @PostConstruct
-    void init() {
-        Member member = Member.builder()
-                .email("9rudrb40@naver.com")
-                .password("test")
-                .name("test")
-                .phoneNumber("test")
-                .address("test")
-                .privacyCheck(true)
-                .grade("Silver")
-                .authority("ROLE_MEMBER")
-                .build();
+    // @PostConstruct
+    // void init() {
+    //     Member member = Member.builder()
+    //             .email("test")
+    //             .password("test")
+    //             .name("test")
+    //             .phoneNumber("test")
+    //             .address("test")
+    //             .privacyCheck(true)
+    //             .grade("Silver")
+    //             .authority("ROLE_MEMBER")
+    //             .build();
 
-        Room room = Room.builder()
-                .bed("double")
-                .roomAdult(2)
-                .roomChild(2)
-                .capacity(6)
-                .spare(2)
-                .name("test")
-                .price(10000)
-                .priceAdult(2000)
-                .priceChild(1000)
-                .type("room")
-                .typeDetail("deluxe")
-                .build();
+//        Room room = Room.builder()
+//                .bed("double")
+//                .spareAdult(2)
+//                .spareChildren(2)
+//                .capacity(6)
+//                .spare(2)
+//                .name("test")
+//                .price(10000)
+//                .priceAdult(2000)
+//                .priceChildren(1000)
+//                .type("room")
+//                .typeDetail("deluxe")
+//                .build();
         
         
-        //사용되어선 안되는 쿠폰
-        Coupon coupon = Coupon.builder()
-                .uuid(UUID.randomUUID().toString())
-                .discountRate(5)
-                .issueDate(LocalDateTime.of(2022, 11, 11, 11, 11))
-                .member(member)
-                .expire(30)
-                .build();
+//        사용되어선 안되는 쿠폰
+//        Coupon coupon = Coupon.builder()
+//                .uuid(UUID.randomUUID().toString())
+//                .discountRate(5)
+//                .issueDate(LocalDateTime.of(2022, 11, 11, 11, 11))
+//                .member(member)
+//                .expire(30)
+//                .build();
 
 //        GiftCard giftCard = GiftCard.builder()
 //                .uuid(UUID.randomUUID().toString())
@@ -74,9 +74,9 @@ public class InitData {
 //                .build();
 
 //        giftCard.registrationGiftCard(member);
-        memberRepository.save(member);
-        itemRepository.save(room);
-        couponRepository.save(coupon);
+//        memberRepository.save(member);
+//        itemRepository.save(room);
+//        couponRepository.save(coupon);
 //        giftCardRepository.save(giftCard);
 
     }

@@ -18,11 +18,16 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(EventListener.class)//내가 만든 이벤트 리스너와 연결
 @AllArgsConstructor
+@Builder
 public class Member {
+
+    // 예약에 넘겨야 하는 정보 : 예약자명, 회원 유형(회원/비회원), 회원인 경우 ID, 연락처, 이메일
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
+    private String memberId;        // 회원 아이디
     private String email;
     private String password;
     private String name;
@@ -30,8 +35,10 @@ public class Member {
     private String address;
     private boolean privacyCheck;
 
-    private String grade;//Bronze, Silver, Gold
-    private String authority;//ROLE_ANONYMOUS, ROLE_MEMBER,ROLE_ADMIN
+    private String grade;           // Bronze, Silver, Gold
+    private String auth;            // ROLE_ANONYMOUS, ROLE_MEMBER,ROLE_ADMIN
+    // 정확하게 기억나지 않는데 병합 전 authority처럼 전체 단어 사용했다가 예약어랑 겹쳐서 오류 발생
+    // -> auth로 변수명 변경하여 해결한 적이 있어 변경해둡니다. - 문소희
 
     @OneToMany(mappedBy = "member")
     private List<Coupon> couponList = new ArrayList<>();
@@ -55,7 +62,7 @@ public class Member {
                   String address,
                   boolean privacyCheck,
                   String grade,
-                  String authority
+                  String auth
     ) {
         this.address = address;
         this.name = name;
@@ -64,7 +71,7 @@ public class Member {
         this.phoneNumber = phoneNumber;
         this.privacyCheck = privacyCheck;
         this.grade = grade;
-        this.authority = authority;
+        this.auth = auth;
     }
 
 
