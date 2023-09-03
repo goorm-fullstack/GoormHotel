@@ -1,6 +1,7 @@
 package goormknights.hotel.global.event;
 
 import goormknights.hotel.coupon.model.Coupon;
+import goormknights.hotel.email.model.EmailMessage;
 import goormknights.hotel.member.model.Member;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
@@ -21,4 +22,5 @@ public class MemberCreateEvent extends ApplicationEvent {
     public Member getMember() {
         return member;
     }
+
 }

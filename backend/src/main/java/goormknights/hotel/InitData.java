@@ -30,19 +30,18 @@ public class InitData {
     @Autowired
     private GiftCardRepository giftCardRepository;
 
-    @PostConstruct
-    void init() {
-//        Member member = Member.builder()
-//                .email("test")
-//                .password("test")
-//                .name("test")
-//                .phoneNumber("test")
-//                .address("test")
-//                .privacyCheck(true)
-//                .grade("Silver")
-//                .auth("ROLE_MEMBER")
-//                .memberId("test")
-//                .build();
+    // @PostConstruct
+    // void init() {
+    //     Member member = Member.builder()
+    //             .email("test")
+    //             .password("test")
+    //             .name("test")
+    //             .phoneNumber("test")
+    //             .address("test")
+    //             .privacyCheck(true)
+    //             .grade("Silver")
+    //             .authority("ROLE_MEMBER")
+    //             .build();
 
 //        Room room = Room.builder()
 //                .bed("double")

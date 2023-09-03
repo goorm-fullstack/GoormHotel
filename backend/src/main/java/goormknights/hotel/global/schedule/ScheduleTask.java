@@ -29,6 +29,7 @@ public class ScheduleTask {
             Coupon coupon = new Coupon();
             coupon.setMember(member);
             coupon.setDiscountRate();
+            coupon.nameStrategy();
             member.getCouponList().add(coupon);
             couponRepository.save(coupon);
         }
