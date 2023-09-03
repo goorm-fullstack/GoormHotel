@@ -1,10 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import closeImg from '../images/icon/ico_close.png';
-<<<<<<< Updated upstream
-=======
 import getChatRoomInfo from '../utils/chat/client';
->>>>>>> Stashed changes
 
 const ChatWindow = styled.div`
   position: fixed;
