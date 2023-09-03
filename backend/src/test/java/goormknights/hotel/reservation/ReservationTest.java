@@ -1,5 +1,6 @@
 package goormknights.hotel.reservation;
 
+import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.item.dto.request.RequestImageDto;
 import goormknights.hotel.item.model.Room;
 import goormknights.hotel.item.service.RoomService;
@@ -14,8 +15,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @SpringBootTest
 @Transactional
@@ -52,15 +55,28 @@ public class ReservationTest {
                 .priceAdult(50000)
                 .capacity(10)
                 .build();
+
         RequestImageDto requestImageDTO = RequestImageDto.builder()
                 .originFileName("hello")
                 .fileName("hi")
                 .filePath("here")
                 .build();
 
-
         roomService.saveRoom(buildRoom, requestImageDTO);
         Room findRoom = roomService.findByRoomName(buildRoom.getName());
+
+        Coupon coupon = Coupon.builder()
+                .id(1)
+                .uuid("132123123131")
+                .discountRate(3)
+                .member(null)
+                .isUsed('N')
+                .issueDate(now)
+                .expire(30)
+                .build();
+
+        List<Coupon> couponList = new ArrayList<>();
+        couponList.add(coupon);
 
         Member member = Member.builder()
                 .id(null)
@@ -72,8 +88,8 @@ public class ReservationTest {
                 .email("test@test.com")
                 .address("주소")
                 .privacyCheck(true)
-                .gender("Gold")
-                .couponList(null)
+                .grade("Gold")
+                .couponList(couponList)
                 .reservationList(null)
                 .giftCardList(null)
                 .gender("")
@@ -82,12 +98,9 @@ public class ReservationTest {
 
         memberRepository.save(member);
 
-
-
         RequestReservationDto reservation = RequestReservationDto.builder()
-                .id(7)
+                .id(null)
                 .reservationNumber("2023090200000000")
-                .orderDate(now)
                 .checkIn(future)
                 .checkOut(future)
                 .count(1)
@@ -102,11 +115,11 @@ public class ReservationTest {
                 .sumPrice(165000)
                 .discountPrice(-150000)
                 .totalPrice(15000)
-                .state("예약")
                 .build();
 
         reservationService.saveReservation(reservation); // 예약 저장
         reservationService.getAllReservation(); // 전체 예약 목록 조회, 여기까지 테스트 완료(2023-09-02)
+        System.out.println();
 
     }
 

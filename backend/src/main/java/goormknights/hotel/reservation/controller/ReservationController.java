@@ -22,13 +22,13 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     /**
-     * 새로운 예약 건 저장
+     * 새로운 예약 건 저장: 테스트 완료
      * @param reservationDto - user가 입력한 정보
      * @return ResponseEntity
      */
     @PostMapping("/save")
     public ResponseEntity<Object> saveReservation(
-            @Validated @ModelAttribute RequestReservationDto reservationDto
+            @Validated @RequestBody RequestReservationDto reservationDto
     ) {
         reservationService.saveReservation(reservationDto);
         return ResponseEntity.ok().build();
@@ -36,12 +36,13 @@ public class ReservationController {
 
     /**
      * 예약 정보 업데이트: 예약 상태
+     * 처리방법 고민중
      * @param reservationDto - 관리자가 수정한 예약 상태 내용
      * @return responseReservationDto
      */
     @PostMapping("/update/state")
     public ResponseEntity<ResponseReservationDto> updateReservationState(
-            @Validated @ModelAttribute RequestReservationDto reservationDto
+            @Validated @RequestBody RequestReservationDto reservationDto
     ){
         reservationService.updateReservationState(reservationDto);
         ResponseReservationDto responseReservationDto
@@ -52,12 +53,13 @@ public class ReservationController {
 
     /**
      * 예약 정보 업데이트: 요청사항
+     * 처리방법 고민중
      * @param reservationDto - 관리자가 수정한 요청사항 내용
      * @return responseReservationDto
      */
     @PostMapping("/update/notice")
     public ResponseEntity<ResponseReservationDto> updateReservationNotice(
-            @Validated @ModelAttribute RequestReservationDto reservationDto
+            @Validated @RequestBody RequestReservationDto reservationDto
     ){
         reservationService.updateReservationNotice(reservationDto);
         ResponseReservationDto responseReservationDto
@@ -68,6 +70,7 @@ public class ReservationController {
 
     /**
      * 회원 memberId를 이용해 예약 건 조회
+     * 작업중 - 테스트 필요
      * @param memberId - 회원 아이디
      * @return 해당 memberId를 가진 회원이 예약했던 내역
      */
@@ -81,6 +84,7 @@ public class ReservationController {
 
     /**
      * 예약 번호를 이용해 예약 건 조회
+     * 작업중 - 테스트 필요
      * @param reservationNumber - 예약 번호
      * @return 해당 예약 번호를 가진 예약 내역
      */
@@ -93,7 +97,7 @@ public class ReservationController {
     }
 
     /**
-     * 전체 예약 조회
+     * 전체 예약 조회: 테스트 완료
      * @return 전체 예약 내역
      */
     @GetMapping

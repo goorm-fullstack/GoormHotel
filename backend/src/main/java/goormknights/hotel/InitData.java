@@ -32,17 +32,17 @@ public class InitData {
 
     @PostConstruct
     void init() {
-        Member member = Member.builder()
-                .email("test")
-                .password("test")
-                .name("test")
-                .phoneNumber("test")
-                .address("test")
-                .privacyCheck(true)
-                .grade("Silver")
-                .auth("ROLE_MEMBER")
-                .memberId("test")
-                .build();
+//        Member member = Member.builder()
+//                .email("test")
+//                .password("test")
+//                .name("test")
+//                .phoneNumber("test")
+//                .address("test")
+//                .privacyCheck(true)
+//                .grade("Silver")
+//                .auth("ROLE_MEMBER")
+//                .memberId("test")
+//                .build();
 
 //        Room room = Room.builder()
 //                .bed("double")
@@ -60,13 +60,13 @@ public class InitData {
         
         
 //        사용되어선 안되는 쿠폰
-        Coupon coupon = Coupon.builder()
-                .uuid(UUID.randomUUID().toString())
-                .discountRate(5)
-                .issueDate(LocalDateTime.of(2022, 11, 11, 11, 11))
-                .member(member)
-                .expire(30)
-                .build();
+//        Coupon coupon = Coupon.builder()
+//                .uuid(UUID.randomUUID().toString())
+//                .discountRate(5)
+//                .issueDate(LocalDateTime.of(2022, 11, 11, 11, 11))
+//                .member(member)
+//                .expire(30)
+//                .build();
 
 //        GiftCard giftCard = GiftCard.builder()
 //                .uuid(UUID.randomUUID().toString())
@@ -75,9 +75,9 @@ public class InitData {
 //                .build();
 
 //        giftCard.registrationGiftCard(member);
-        memberRepository.save(member);
+//        memberRepository.save(member);
 //        itemRepository.save(room);
-        couponRepository.save(coupon);
+//        couponRepository.save(coupon);
 //        giftCardRepository.save(giftCard);
 
     }
