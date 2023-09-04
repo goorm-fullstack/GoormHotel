@@ -52,7 +52,7 @@ const Title = styled.h1`
 
 const IntroWrapper = styled.div`
   height: 400px;
-  background-color: #F5F5F5;
+  background-color: ${props => props.theme.colors.lightGray};;
   position: relative;
   min-width: 990px;
 `;
@@ -124,8 +124,8 @@ const MerbershipImg = styled.img`
 const About = () => {
   return (
     <>
-      <Header backgroundColor="#21201E" />
-      <AboutHeader>
+      <Header />
+      <AboutHeader> 
         <AboutHeaderTitle>구름호텔 소개</AboutHeaderTitle>
         <LinkWrapper>
           <AboutLink to="/about" $activeClassName="active" >호텔소개</AboutLink>

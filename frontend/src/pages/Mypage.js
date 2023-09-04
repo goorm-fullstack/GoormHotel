@@ -1,19 +1,14 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import Header from '../components/Header';
+import { commonContainerStyle, commonTitleStyle } from '../components/common/commonStyles';
 
-const MypageContainer = styled.div`
-  display: flex;
-  width: 1181px;
-  margin: 0 auto;
-  flex-direction: column;
+const Container = styled.div`
+  ${commonContainerStyle}
 `;
 
-const Title = styled.h1`
-  font-size: 36px;
-  font-weight: bold;
-  color: #111111;
-  margin: 160px 0 94px 0;
+const Title = styled.div`
+  ${commonTitleStyle}
 `;
 
 const Contents = styled.div`
@@ -91,7 +86,7 @@ const EditButton = styled.button`
 
 const Coupon = styled.div`
   width: 510px;
-  background-color: #F5F5F5;
+  background-color: ${props => props.theme.colors.lightGray};;
   height: 200px;
   position: relative;
   display: flex;
@@ -142,7 +137,7 @@ const CouponTitle = styled.p`
 
 const CouponName = styled.p`
   font-size: 24px;
-  color: #21201E;
+  color: ${props => props.theme.colors.charcoal};
   margin-bottom: 12px;
 `;
 
@@ -166,9 +161,9 @@ const GuideText = styled.div`
 
 const Mypage = () => {
   return (
-    <div>
+    <>
       <Header backgroundColor="#21201E" />
-      <MypageContainer>
+      <Container>
         <Title>마이페이지</Title>
         <Contents>
           <EditWrapper>
@@ -211,8 +206,8 @@ const Mypage = () => {
             </GuideText>
           </CouponWrapper>
         </Contents>
-      </MypageContainer>
-    </div>
+      </Container>
+    </>
   );
 };
 

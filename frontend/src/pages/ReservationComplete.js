@@ -1,8 +1,21 @@
 import React from 'react';
 import Header from '../components/Header';
-import { Container, Title, SubTitle, Section, Left, Right, Wrapper } from './ReservationPage';
+import { Section, Left, Right, Wrapper } from './ReservationPage';
 import { styled } from 'styled-components';
 import Product from '../components/Product';
+import { commonContainerStyle, commonTitleStyle, commonSubTitleStyle } from '../components/common/commonStyles';
+
+const Container = styled.div`
+  ${commonContainerStyle}
+`;
+
+const Title = styled.h1`
+  ${commonTitleStyle}
+`;
+
+const SubTitle = styled.h2`
+  ${commonSubTitleStyle}
+`;
 
 const ReserveInfo = styled.div`
   display: flex;
@@ -23,7 +36,7 @@ const InfoTitle = styled.p`
   font-size: 14px;
   color: #111111;
   padding: 28px 0 19px 19px;
-  background-color: #F5F5F5;
+  background-color: ${props => props.theme.colors.lightGray};;
   width: 120px;
   height: 100%;
 `;
@@ -57,7 +70,7 @@ const Coupon = styled.div`
 const ReservationComplete = ({ title }) => {
   return (
     <>
-      <Header backgroundColor="#21201E" />
+      <Header />
       <Container>
         <Title>{title}</Title>
         <Wrapper>

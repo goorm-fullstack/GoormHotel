@@ -1,8 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Header from '../components/Header';
-import { Container, Title, SubTitle, Left, Right, Wrapper } from './ReservationPage';
+import { Left, Right, Wrapper } from './ReservationPage';
 import { styled } from 'styled-components';
 import item from '../images/item/item1.jpg';
+import { commonContainerStyle, commonTitleStyle, commonSubTitleStyle } from '../components/common/commonStyles';
+
+const Container = styled.div`
+  ${commonContainerStyle}
+`;
+
+const Title = styled.h1`
+  ${commonTitleStyle}
+`;
+
+const SubTitle = styled.h2`
+  ${commonSubTitleStyle}
+`;
 
 const SelectWrapper = styled.div`
   display: flex;
@@ -45,7 +58,7 @@ const RoomItemInfo = styled.div`
 const RoomItemTitle = styled.h1`
   font-size: 18px;
   font-weight: bold;
-  color: #21201E;
+  color: ${props => props.theme.colors.charcoal};
   margin-bottom: 25px;
 `;
 
@@ -86,7 +99,7 @@ const InfoBtn = styled.button`
 `;
 
 const NoItem = styled.div`
-  background-color: #F5F5F5;
+  background-color: ${props => props.theme.colors.lightGray};;
   width: 100%;
   height: 465px;
   border: 1px solid #DDDDDD;
@@ -94,14 +107,15 @@ const NoItem = styled.div`
 
 
 const ReservationItem = () => {
-  const [selectedItem, setSelectedItem] = useState(true);
+  // const [selectedItem, setSelectedItem] = useState(true);
+  const selectedItem = true;
 
   const productTypes = ['객실', '다이닝'];
   const productCategories = ['디럭스', '패밀리', '스위트', '풀 빌라'];
 
   return (
     <div>
-      <Header backgroundColor="#21201E" />
+      <Header />
       <Container>
         <Title>예약하기</Title>
         <Wrapper>

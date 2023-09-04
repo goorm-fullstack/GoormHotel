@@ -14,10 +14,11 @@ import ChatModal from './components/ChatModal';
 import ReservationComplete from './pages/ReservationComplete';
 import ReservationCheck from './pages/ReservationCheck';
 import ReservationItem from './pages/ReservationItem';
+import ReservationList from './pages/ReservationList';
 
 const AppContainer = styled.div`
   width: 100%;
-  min-width: 100%;
+  min-width: 1200px;
   min-height: 100vh;
 `;
 
@@ -35,8 +36,8 @@ const ChatButton = styled.button`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  color: #F5F5F5;
-  box-shadow: 0px 0px 10px rgba(128, 128, 128, 0.15);
+  background-color: ${props => props.theme.colors.lightGray};
+  box-shadow: 0 5px 10px rgba(0, 0, 1, 0.15);
   margin-bottom: 10px; 
 
   svg {
@@ -49,7 +50,8 @@ const ScrollToTopButton = styled.button`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #21201E;
+  background-color: ${props => props.theme.colors.charcoal};
+
 
   svg {
     fill: white;
@@ -78,16 +80,15 @@ function App() {
     <AppContainer>
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/terms" element={<Terms />}></Route>
         <Route path="/rooms" element={<Room />}></Route>
         <Route path="/dining" element={<Dining />}></Route>
         <Route path="/about" element={<About />}></Route>
-        <Route path="/map" element={<Map />}></Route>
         <Route path="/mypage" element={<Mypage />}></Route>
         <Route path="/reservation" element={<ReservationPage />}></Route>
         <Route path="/reservationComplete" element={<ReservationComplete  title="예약 확인" />}></Route>
         <Route path="/reservationCheck" element={<ReservationCheck />}></Route>
         <Route path="/reservationItem" element={<ReservationItem />}></Route>
+        <Route path="/reservationList" element={<ReservationList />}></Route>
       </Routes>
       </AppContainer>
       <FloatingButtons>

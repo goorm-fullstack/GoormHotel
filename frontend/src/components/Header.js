@@ -6,13 +6,13 @@ import logo from '../images/common/logo.png';
 const HeaderContainer = styled.div`
   position: relative;
   height: 120px;
+  overflow-x: scroll;
 `;
 
 const Container = styled.header`
   width: 100%;
   height: 120px;
-  min-width: 1800px;
-  background-color: ${props => props.$background};
+  background-color: ${props => props.$background || props.theme.colors.charcoal};
   position: fixed;
   padding: 0 40px;
   color: white;
@@ -21,7 +21,7 @@ const Container = styled.header`
 `;
 
 const TopInfo = styled.div`
-  padding:20px 0;
+  padding: 20px 0;
   overflow: hidden;
 `;
 
@@ -49,10 +49,12 @@ const NavList = styled.ul`
   display: flex;
   flex: 1;
   margin-left: 45px;
+  min-width: 600px;
 `;
 
 const NavItem = styled.li`
   font-size: 16px;
+  white-space: nowrap;
   
   &:not(:last-child) {
     margin-right: 40px; 
@@ -69,16 +71,22 @@ const NavReserveBtn = styled.button`
   border: 1px solid white;
   color: white;
   background-color: rgba(69, 69, 69, 0.01);
+  white-space: nowrap;
+
   &:hover {
     color: #BAA085;
     border-color: #BAA085;
   }
 `;
 
+const LogoImg = styled.img`
+  min-width: 190px;
+`;
+
 const Header = ({ backgroundColor }) => {
   return (
     <HeaderContainer>
-      <Container $background={backgroundColor}>
+      <Container  $background={backgroundColor}>
       <TopInfo>
         <TopInfoList>
           <TopInfoItem><HeaderLink to="/">예약확인</HeaderLink></TopInfoItem>
@@ -90,7 +98,7 @@ const Header = ({ backgroundColor }) => {
         </TopInfoList>
       </TopInfo>
       <Gnb>
-        <HeaderLink to="/"><img src={logo} alt="logo" /></HeaderLink>
+        <HeaderLink to="/"><LogoImg src={logo} alt="logo" /></HeaderLink>
         <NavList>
           <NavItem><HeaderLink to="/about">구름호텔 소개</HeaderLink></NavItem>
           <NavItem><HeaderLink to="/rooms">객실</HeaderLink></NavItem>

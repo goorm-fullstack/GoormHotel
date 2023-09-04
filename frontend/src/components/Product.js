@@ -1,7 +1,11 @@
 import React from 'react';
 import item from '../images/item/item1.jpg';
 import { styled } from 'styled-components';
-import { SubTitle } from '../pages/ReservationPage';
+import {commonSubTitleStyle } from '../components/common/commonStyles';
+
+const SubTitle = styled.h2`
+  ${commonSubTitleStyle}
+`;
 
 const ProductInfo = styled.div`
   display: flex;
@@ -11,14 +15,14 @@ const ProductInfo = styled.div`
 `;
 
 const Info = styled.div`
-  background-color: #F5F5F5;
+  background-color: ${props => props.theme.colors.lightGray};
   height: 50%;
   padding: 35px 46px 0 40px;
 `;
 
 const InfoTitle = styled.h1`
   font-size: 18px;
-  color: #21201E;
+  color: ${props => props.theme.colors.charcoal};
   margin-bottom: 20px;
   font-weight: bold;
 `;
@@ -72,7 +76,7 @@ const TotalPrice = styled.div`
   justify-content: space-between;
   align-items: center;
   font-size: 14px;
-  color: #21201E;
+  color: ${props => props.theme.colors.charcoal};
   margin-bottom: 15px;
 `;
 
@@ -85,7 +89,7 @@ const Product = () => {
   return (
     <>
     <ProductInfo>
-      <img src={item} />
+      <img src={item} alt="itemImg" />
       <Info>
         <InfoTitle>상품명</InfoTitle>
         <InfoWrapper>

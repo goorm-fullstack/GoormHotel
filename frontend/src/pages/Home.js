@@ -106,7 +106,7 @@ const ThirdArticle = styled.article`
 const ActivityContainer = styled.div`
   width: 100%;
   height: 530px;
-  background-color: #F5F5F5;
+  background-color: ${props => props.theme.colors.lightGray};
   float: right;
   position: relative;
   display: flex;
