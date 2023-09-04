@@ -88,43 +88,43 @@ const Price = styled.p`
 const Product = () => {
   return (
     <>
-    <ProductInfo>
-      <img src={item} alt="itemImg" />
-      <Info>
-        <InfoTitle>상품명</InfoTitle>
-        <InfoWrapper>
-          <InfoLeft>
-            <p>상품 유형</p>
-            <p>상품 분류</p>
-            <p>기본 가격(1박/2인 기준)</p>
-            <p>어른 추가(1인)</p>
-            <p>어린이 추가(1인)</p>
-          </InfoLeft>
-          <InfoRight>
-            <p>객실</p>
-            <p>디럭스</p>
-            <p>160,000원</p>
-            <p>80,000 원/최대 1인</p>
-            <p>40,000 원/최대 2인</p>
-          </InfoRight>
-        </InfoWrapper>
-      </Info>
-    </ProductInfo>
-    <SubTitle>결제 정보</SubTitle>
-    <PaymentInfo>
-      <PaymentPrice>
-        <p>총액</p>
-        <p>500,000 원</p>
-      </PaymentPrice>
-      <PaymentPrice>
-        <p>할인액</p>
-        <DiscountPrice>-200,000 원</DiscountPrice>
-      </PaymentPrice>
-    </PaymentInfo>
-    <TotalPrice>
-      <p>최종금액(VAT)포함</p>
-      <Price>300,000 원</Price>
-    </TotalPrice>
+      <ProductInfo>
+        <img src={item} alt="상품" />
+        <Info>
+          <InfoTitle>상품명</InfoTitle>
+          <InfoWrapper>
+            <InfoLeft>
+              <p>상품 유형</p>
+              <p>상품 분류</p>
+              <p>기본 가격(1박/2인 기준)</p>
+              <p>어른 추가(1인)</p>
+              <p>어린이 추가(1인)</p>
+            </InfoLeft>
+            <InfoRight>
+              <p>객실</p>
+              <p>디럭스</p>
+              <p>160,000원</p>
+              <p>80,000 원/최대 1인</p>
+              <p>40,000 원/최대 2인</p>
+            </InfoRight>
+          </InfoWrapper>
+        </Info>
+      </ProductInfo>
+      <SubTitle>결제 정보</SubTitle>
+      <PaymentInfo>
+        <PaymentPrice>
+          <p>총액</p>
+          <p>500,000 원</p>
+        </PaymentPrice>
+        <PaymentPrice>
+          <p>할인액</p>
+          <DiscountPrice>-200,000 원</DiscountPrice>
+        </PaymentPrice>
+      </PaymentInfo>
+      <TotalPrice>
+        <p>최종금액(VAT)포함</p>
+        <Price>300,000 원</Price>
+      </TotalPrice>
     </>
   );
 };

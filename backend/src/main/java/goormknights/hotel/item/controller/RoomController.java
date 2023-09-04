@@ -1,8 +1,7 @@
 package goormknights.hotel.item.controller;
 
-import goormknights.hotel.item.dto.request.RequestImageDTO;
-import goormknights.hotel.item.dto.request.RequestRoomDTO;
-import goormknights.hotel.item.dto.response.ResponseRoomDTO;
+import goormknights.hotel.item.dto.request.RequestRoomDto;
+import goormknights.hotel.item.dto.response.ResponseRoomDto;
 import goormknights.hotel.item.model.Room;
 import goormknights.hotel.item.service.ImageService;
 import goormknights.hotel.item.service.RoomService;
@@ -28,21 +27,21 @@ public class RoomController {
 
     // 객실 생성
     @PostMapping("/room")
-    public ResponseEntity<Object> uploadRoom(@Validated @ModelAttribute RequestRoomDTO requestRoomDTO, @RequestParam MultipartFile img) throws IOException {
+    public ResponseEntity<Object> uploadRoom(@Validated @ModelAttribute RequestRoomDto requestRoomDto, @RequestParam MultipartFile img) throws IOException {
 
-        RequestImageDTO requestImageDTO = imageService.convertToImageDTO(img);
+        goormknights.hotel.item.Dto.request.RequestImageDto requestImageDto = imageService.convertToImageDto(img);
 
-        roomService.saveRoom(requestRoomDTO, requestImageDTO);
+        roomService.saveRoom(requestRoomDto, requestImageDto);
         return ResponseEntity.ok().build();
     }
 
     // 객실 수정
     @PutMapping("/room/{roomName}")
-    public ResponseEntity<ResponseRoomDTO> updateRoom(@PathVariable String roomName, @Validated @ModelAttribute RequestRoomDTO requestRoomDTO, @RequestParam MultipartFile img) throws IOException {
+    public ResponseEntity<ResponseRoomDto> updateRoom(@PathVariable String roomName, @Validated @ModelAttribute RequestRoomDto requestRoomDto, @RequestParam MultipartFile img) throws IOException {
 
-        ResponseRoomDTO responseRoomDTO = roomService.modifyRoom(roomName, requestRoomDTO, img).toResponseRoomDTO();
+        ResponseRoomDto responseRoomDto = roomService.modifyRoom(roomName, requestRoomDto, img).toResponseRoomDto();
 
-        return ResponseEntity.ok(responseRoomDTO);
+        return ResponseEntity.ok(responseRoomDto);
     }
 
     //객실 삭제
@@ -55,23 +54,23 @@ public class RoomController {
 
     // 객실명을 통해 찾기
     @GetMapping("/room/{roomName}")
-    public ResponseEntity<ResponseRoomDTO> findOneRoom(@PathVariable String roomName) {
-        ResponseRoomDTO responseRoomDTO = roomService.findByRoomName(roomName).toResponseRoomDTO();
+    public ResponseEntity<ResponseRoomDto> findOneRoom(@PathVariable String roomName) {
+        ResponseRoomDto responseRoomDto = roomService.findByRoomName(roomName).toResponseRoomDto();
         log.info("roomName={}", roomName);
 
-        return ResponseEntity.ok(responseRoomDTO);
+        return ResponseEntity.ok(responseRoomDto);
     }
 
     // 전체 객실 찾기
     @GetMapping
-    public ResponseEntity<List<ResponseRoomDTO>> findAllRoom(){
+    public ResponseEntity<List<ResponseRoomDto>> findAllRoom(){
         List<Room> allRoom = roomService.findAllRoom("room");
-        List<ResponseRoomDTO> toResponseDTOList = new ArrayList<>();
+        List<ResponseRoomDto> toResponseDtoList = new ArrayList<>();
 
         for (Room room : allRoom) {
-            toResponseDTOList.add(room.toResponseRoomDTO());
+            toResponseDtoList.add(room.toResponseRoomDto());
         }
 
-        return ResponseEntity.ok(toResponseDTOList);
+        return ResponseEntity.ok(toResponseDtoList);
     }
 }

@@ -1,4 +1,4 @@
-package goormknights.hotel.global.config;
+package goormknights.hotel.chat.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

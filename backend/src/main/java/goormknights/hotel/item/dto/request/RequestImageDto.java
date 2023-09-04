@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class RequestImageDTO {
+public class RequestImageDto {
 
     @NotBlank
     private String originFileName; // 원래 파일 명
@@ -21,13 +21,13 @@ public class RequestImageDTO {
     private String filePath; // 서버의 이미지 경로
 
     @Builder(toBuilder = true)
-    public RequestImageDTO(String originFileName, String fileName, String filePath) {
+    public RequestImageDto(String originFileName, String fileName, String filePath) {
         this.originFileName = originFileName;
         this.fileName = fileName;
         this.filePath = filePath;
     }
 
-    // RequestImageDTO 엔티티화
+    // RequestImageDto 엔티티화
     public Image toEntity(){
         return Image.builder()
                 .originFileName(originFileName)

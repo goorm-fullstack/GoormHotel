@@ -7,13 +7,13 @@ import goormknights.hotel.member.model.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Getter
+@Builder
 public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +21,7 @@ public class Coupon {
 
     private String uuid;
     private int discountRate;
+    private String name;
 
     @ManyToOne
     private Member member;
@@ -68,6 +69,10 @@ public class Coupon {
 
     public void setMember(Member member) {
         this.member = member;
+    }
+
+    public void nameStrategy() {
+        this.name = member.getGrade()+" 쿠폰";
     }
 
     public void setDiscountRate() {

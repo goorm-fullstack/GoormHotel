@@ -75,19 +75,29 @@ function App() {
 
   return (
     <BrowserRouter>
-    <AppContainer>
-      <Routes>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="/rooms" element={<Room />}></Route>
-        <Route path="/dining" element={<Dining />}></Route>
-        <Route path="/about" element={<About />}></Route>
-        <Route path="/mypage" element={<Mypage />}></Route>
-        <Route path="/reservation" element={<ReservationPage />}></Route>
-        <Route path="/reservationComplete" element={<ReservationComplete  title="예약 확인" />}></Route>
-        <Route path="/reservationCheck" element={<ReservationCheck />}></Route>
-        <Route path="/reservationItem" element={<ReservationItem />}></Route>
-        <Route path="/reservationList" element={<ReservationList />}></Route>
-      </Routes>
+      <AppContainer>
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/terms" element={<Terms />}></Route>
+          <Route path="/rooms" element={<Room />}></Route>
+          <Route path="/dining" element={<Dining />}></Route>
+          <Route path="/about" element={<About />}></Route>
+          <Route path="/map" element={<KakaoMap />}></Route>
+          <Route path="/mypage" element={<Mypage />}></Route>
+          <Route path="/reservation" element={<ReservationPage />}></Route>
+          <Route path="/location" element={<Way />}></Route>
+          <Route path="/agreement" element={<Agreement />}></Route>
+          <Route path="/privacy" element={<Privacy />}></Route>
+          <Route path="/sitemap" element={<Sitemap />}></Route>
+          <Route path="/findAccount" element={<FindAccount />}></Route>
+          <Route path="/findIdResult" element={<FindIdResult />}></Route>
+          <Route path="/findPwResult" element={<FindPwResult />}></Route>
+          <Route path="/membership" element={<Membership />}></Route>
+          <Route path="/reservationComplete" element={<ReservationComplete  title="예약 확인" />}></Route>
+          <Route path="/reservationCheck" element={<ReservationCheck />}></Route>
+          <Route path="/reservationItem" element={<ReservationItem />}></Route>
+          <Route path="/reservationList" element={<ReservationList />}></Route>
+        </Routes>
       </AppContainer>
       <FloatingButtons>
         <ChatButton onClick={openChat}>

@@ -1,10 +1,14 @@
 package goormknights.hotel.item.model;
 
-import goormknights.hotel.item.dto.request.RequestDiningDTO;
-import goormknights.hotel.item.dto.request.RequestImageDTO;
-import goormknights.hotel.item.dto.response.ResponseDiningDTO;
-import jakarta.persistence.*;
-import lombok.*;
+import goormknights.hotel.item.dto.request.RequestDiningDto;
+import goormknights.hotel.item.dto.request.RequestImageDto;
+import goormknights.hotel.item.dto.response.ResponseDiningDto;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -21,30 +25,36 @@ public class Dining extends Item {
     private String useTime; // 이용 시간(ex. 아침, 점심, 저녁)
 
     // 엔티티 수정
-    public Dining updateDining(RequestDiningDTO requestDiningDTO, RequestImageDTO requestImageDTO){
+    public Dining updateDining(RequestDiningDto requestDiningDto, RequestImageDto requestImageDto){
         return this.toBuilder()
-                .priceChild(requestDiningDTO.getPriceChild())
-                .price(requestDiningDTO.getPrice())
-                .priceAdult(requestDiningDTO.getPriceAdult())
-                .name(requestDiningDTO.getName())
-                .type(requestDiningDTO.getType())
-                .useTime(requestDiningDTO.getUseTime())
-                .thumbnail(requestImageDTO.toEntity())
-                .typeDetail(requestDiningDTO.getTypeDetail())
+                .priceChildren(requestDiningDto.getPriceChildren())
+                .price(requestDiningDto.getPrice())
+                .priceAdult(requestDiningDto.getPriceAdult())
+                .name(requestDiningDto.getName())
+                .type(requestDiningDto.getType())
+                .useTime(requestDiningDto.getUseTime())
+                .thumbnail(requestImageDto.toEntity())
+                .typeDetail(requestDiningDto.getTypeDetail())
+                .spare(requestDiningDto.getSpare())
+                .spareAdult(requestDiningDto.getSpareAdult())
+                .spareChildren(requestDiningDto.getSpareChildren())
                 .build();
     }
 
-    // 클라이언트에게 응답 시 ResponseDiningDTO로 변경
-    public ResponseDiningDTO toResponseDiningDTO(){
-        return ResponseDiningDTO.builder()
+    // 클라이언트에게 응답 시 ResponseDiningDto로 변경
+    public ResponseDiningDto toResponseDiningDto(){
+        return ResponseDiningDto.builder()
                 .thumbnailPath(this.getThumbnail().getFilePath())
                 .type(this.getType())
                 .useTime(this.getUseTime())
                 .price(this.getPrice())
                 .name(this.getName())
                 .priceAdult(this.getPriceAdult())
-                .priceChild(this.getPriceChild())
+                .priceChildren(this.getPriceChildren())
                 .typeDetail(this.getTypeDetail())
+                .spare(this.getSpare())
+                .spareAdult(this.getSpareAdult())
+                .spareChildren(this.getSpareChildren())
                 .build();
     }
 }

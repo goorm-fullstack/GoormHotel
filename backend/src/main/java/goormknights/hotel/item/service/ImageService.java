@@ -1,6 +1,6 @@
 package goormknights.hotel.item.service;
 
-import goormknights.hotel.item.dto.request.RequestImageDTO;
+import goormknights.hotel.item.dto.request.RequestImageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +16,8 @@ import java.time.temporal.ChronoField;
 @RequiredArgsConstructor
 public class ImageService {
 
-//  MultipartFile타입의 데이터를 RequestImageDTO로 변환
-    public RequestImageDTO convertToImageDTO(MultipartFile img) throws IOException {
+//  MultipartFile타입의 데이터를 RequestImageDto로 변환
+    public RequestImageDto convertToImageDto(MultipartFile img) throws IOException {
         LocalDateTime now = LocalDateTime.now();
         int year = now.getYear();
         int month = now.getMonthValue();
@@ -38,7 +38,7 @@ public class ImageService {
         file = new File(absolutePath + path + "\\" + newFileName + fileExtension);
         img.transferTo(file);
 
-        return RequestImageDTO.builder()
+        return RequestImageDto.builder()
                 .originFileName(img.getOriginalFilename())
                 .fileName(newFileName + fileExtension)
                 .filePath(path)

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class RequestRoomDTO {
+public class RequestRoomDto {
 
     @NotBlank
     private String name; // 상품명
@@ -20,10 +20,10 @@ public class RequestRoomDTO {
     private Integer price; // 기본 비용
 
     @Positive
-    private Integer priceAdult; // 어른 추가 비용
+    private int priceAdult; // 어른 추가 비용
 
     @PositiveOrZero
-    private Integer priceChild; // 어린이 추가 비용
+    private int priceChildren; // 어린이 추가 비용
 
     @NotBlank
     private String type; // 상품 타입(ex. 객실, 다이닝)
@@ -40,44 +40,44 @@ public class RequestRoomDTO {
     private String bed; // 침대 타입(ex. 싱글, 더블/트윈, 킹)
 
     @PositiveOrZero
-    private Integer spare; // 잔여 객실 수
+    private int spare; // 잔여 객실 수
 
     @Positive
-    private Integer roomAdult; // 최대 숙박 가능 인원 수(어른)
+    private int spareAdult; // 최대 숙박 가능 인원 수(어른)
 
     @Positive
-    private Integer roomChild; // 최대 숙박 가능 인원 수(어린이)
+    private int spareChildren; // 최대 숙박 가능 인원 수(어린이)
 
     @Positive
-    private Integer capacity; // 숙박 인원 기준
+    private int capacity; // 숙박 인원 기준
 
     @Builder(toBuilder = true)
-    public RequestRoomDTO(String name, Integer price, Integer priceAdult, Integer priceChild, String type, String typeDetail, String bed, Integer spare, Integer roomAdult, Integer roomChild, Integer capacity) {
+    public RequestRoomDto(String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, String bed, int spare, int spareAdult, int spareChildren, int capacity) {
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;
-        this.priceChild = priceChild;
+        this.priceChildren = priceChildren;
         this.type = type;
         this.typeDetail = typeDetail;
         this.bed = bed;
         this.spare = spare;
-        this.roomAdult = roomAdult;
-        this.roomChild = roomChild;
+        this.spareAdult = spareAdult;
+        this.spareChildren = spareChildren;
         this.capacity = capacity;
     }
 
-    // RequestRoomDTO 엔티티화
+    // RequestRoomDto 엔티티화
     public Room toEntity(){
         return Room.builder()
                 .name(name)
                 .price(price)
                 .priceAdult(priceAdult)
-                .priceChild(priceChild)
+                .priceChildren(priceChildren)
                 .type(type)
                 .bed(bed)
                 .spare(spare)
-                .roomAdult(roomAdult)
-                .roomChild(roomChild)
+                .spareAdult(spareAdult)
+                .spareChildren(spareChildren)
                 .capacity(capacity)
                 .typeDetail(typeDetail)
                 .build();

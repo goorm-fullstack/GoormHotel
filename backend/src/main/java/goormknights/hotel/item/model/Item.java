@@ -1,10 +1,7 @@
 package goormknights.hotel.item.model;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -30,13 +27,22 @@ public abstract class Item {
     private String name; // 상품명
 
     @Column(nullable = false)
-    private Integer price; // 기본 비용
+    private int price; // 기본 비용
 
     @Column(nullable = false)
-    private Integer priceAdult; // 어른 추가 비용
+    private int priceAdult; // 어른 추가 비용
 
     @Column(nullable = false)
-    private Integer priceChild; // 어린이 추가 비용
+    private int priceChildren; // 어린이 추가 비용
+
+    @Column(nullable = false)
+    private int spare; // 잔여 객실 수
+
+    @Column(nullable = false)
+    private int spareAdult; // 최대 숙박 가능 인원 수(어른)
+
+    @Column(nullable = false)
+    private int spareChildren; // 최대 숙박 가능 인원 수(어린이)
 
     @Column(nullable = false)
     private String type; // 상품 타입(ex. 객실, 다이닝)
