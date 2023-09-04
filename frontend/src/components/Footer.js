@@ -16,14 +16,14 @@ const Container = styled.div`
 
 const NewsLetterContainer = styled.div`
   height: 200px;
-  background-color: #f5f5f5;
+  background-color: ${props => props.theme.colors.lightGray};
   padding: 60px 0;
 `;
 
 const FooterContainer = styled.div`
   min-width: 100%;
   height: 100%;
-  background-color: #21201e;
+  background-color: ${props => props.theme.colors.charcoal};
 `;
 
 const NewsLetterWrapper = styled.div`

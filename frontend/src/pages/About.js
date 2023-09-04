@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import diningImg from '../images/about/dining.jpg';
 import facilitiesImg from '../images/about/facilities.jpg';
 import membershipImg from '../images/about/membership.jpg';
@@ -6,7 +6,6 @@ import roomImg from '../images/about/room.jpg';
 import Header from '../components/Header';
 import { styled } from 'styled-components';
 import { Link, NavLink } from 'react-router-dom';
-import Map from './Map';
 import { DetailBtn, DetailSvg } from './Home';
 
 const AboutHeader = styled.div`
@@ -53,7 +52,7 @@ const Title = styled.h1`
 
 const IntroWrapper = styled.div`
   height: 400px;
-  background-color: #F5F5F5;
+  background-color: ${props => props.theme.colors.lightGray};;
   position: relative;
   min-width: 990px;
 `;
@@ -125,12 +124,12 @@ const MerbershipImg = styled.img`
 const About = () => {
   return (
     <>
-      <Header backgroundColor="#21201E" />
-      <AboutHeader>
+      <Header />
+      <AboutHeader> 
         <AboutHeaderTitle>구름호텔 소개</AboutHeaderTitle>
         <LinkWrapper>
-          <AboutLink to="/about" activeClassName="active" >호텔소개</AboutLink>
-          <AboutLink to="/map" activeClassName="active" >오시는길</AboutLink>
+          <AboutLink to="/about" $activeClassName="active" >호텔소개</AboutLink>
+          <AboutLink to="/map" $activeClassName="active" >오시는길</AboutLink>
         </LinkWrapper>
       </AboutHeader>
       <Title>호텔소개</Title>

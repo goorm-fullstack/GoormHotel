@@ -2,20 +2,20 @@ import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import { styled } from 'styled-components';
 import moment from "moment";
-import Calendar from 'react-calendar';
 import { StyledCalendar } from '../components/Reservation';
 import Product from '../components/Product';
+import { commonContainerStyle, commonTitleStyle, commonSubTitleStyle } from '../components/common/commonStyles';
 
-export const Container = styled.div`
-  width: 1182px;
-  margin: 0 auto;
-  margin-top: 160px;
+const Container = styled.div`
+  ${commonContainerStyle}
 `;
 
-export const Title = styled.h1`
-  margin-bottom: 94px;
-  font-size: 36px;
-  font-weight: bold;
+const Title = styled.h1`
+  ${commonTitleStyle}
+`;
+
+const SubTitle = styled.h2`
+  ${commonSubTitleStyle}
 `;
 
 export const Wrapper = styled.div`
@@ -36,11 +36,6 @@ export const Section = styled.div`
   margin-bottom: 53px;
 `;
 
-export const SubTitle = styled.h2`
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 34px;
-`;
 
 const ReservationInfoDate = styled.div`
   display: flex;
@@ -191,7 +186,8 @@ const ReservationPage = () => {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [giftCardNumber, setGiftCardNumber] = useState("");
-  const [userLoggedIn, setUserLoggedIn] = useState(true);
+  // const [userLoggedIn, setUserLoggedIn] = useState(true);
+  const userLoggedIn = true;
   const [selectedOption, setSelectedOption] = useState("");
 
   const roomOptions = [1, 2, 3, 4];
@@ -261,7 +257,7 @@ const ReservationPage = () => {
 
   return (
     <div>
-      <Header backgroundColor="#21201E" />
+      <Header />
       <Container>
         <Title>예약하기</Title>
         <Wrapper>

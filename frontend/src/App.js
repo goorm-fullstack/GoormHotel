@@ -1,28 +1,22 @@
-import Footer from "./components/Footer";
-import Home from "./pages/Home";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Terms from "./pages/Terms";
-import Room from "./pages/Room";
-import Dining from "./pages/Dining";
-import { styled } from "styled-components";
-import About from "./pages/About";
-import Map from "./pages/Map";
-import Mypage from "./pages/Mypage";
-import ReservationPage from "./pages/ReservationPage";
-import { useState } from "react";
-import ChatModal from "./components/ChatModal";
-import Way from "./pages/way/Way";
-import Agreement from "./pages/register/Agreement";
-import Privacy from "./pages/register/Privacy";
-import Sitemap from "./pages/Sitemap";
-import FindAccount from "./pages/FindAccount";
-import FindIdResult from "./pages/FindIdResult";
-import FindPwResult from "./pages/FindPwResult";
-import Membership from "./pages/Membership";
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import { BrowserRouter,Route, Routes } from 'react-router-dom';
+import Room from './pages/Room';
+import Dining from './pages/Dining';
+import { styled } from 'styled-components';
+import About from './pages/About';
+import Mypage from './pages/Mypage';
+import ReservationPage from './pages/ReservationPage';
+import { useState } from 'react';
+import ChatModal from './components/ChatModal';
+import ReservationComplete from './pages/ReservationComplete';
+import ReservationCheck from './pages/ReservationCheck';
+import ReservationItem from './pages/ReservationItem';
+import ReservationList from './pages/ReservationList';
 
 const AppContainer = styled.div`
   width: 100%;
-  min-width: 100%;
+  min-width: 1200px;
   min-height: 100vh;
 `;
 
@@ -40,9 +34,9 @@ const ChatButton = styled.button`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  color: #f5f5f5;
-  box-shadow: 0px 0px 10px rgba(128, 128, 128, 0.15);
-  margin-bottom: 10px;
+  background-color: ${props => props.theme.colors.lightGray};
+  box-shadow: 0 5px 10px rgba(0, 0, 1, 0.15);
+  margin-bottom: 10px; 
 
   svg {
     width: 22px;
@@ -54,7 +48,8 @@ const ScrollToTopButton = styled.button`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #21201e;
+  background-color: ${props => props.theme.colors.charcoal};
+
 
   svg {
     fill: white;
@@ -80,25 +75,19 @@ function App() {
 
   return (
     <BrowserRouter>
-      <AppContainer>
-        <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/terms" element={<Terms />}></Route>
-          <Route path="/rooms" element={<Room />}></Route>
-          <Route path="/dining" element={<Dining />}></Route>
-          <Route path="/about" element={<About />}></Route>
-          <Route path="/map" element={<Map />}></Route>
-          <Route path="/mypage" element={<Mypage />}></Route>
-          <Route path="/reservation" element={<ReservationPage />}></Route>
-          <Route path="/location" element={<Way />}></Route>
-          <Route path="/agreement" element={<Agreement />}></Route>
-          <Route path="/privacy" element={<Privacy />}></Route>
-          <Route path="/sitemap" element={<Sitemap />}></Route>
-          <Route path="/findAccount" element={<FindAccount />}></Route>
-          <Route path="/findIdResult" element={<FindIdResult />}></Route>
-          <Route path="/findPwResult" element={<FindPwResult />}></Route>
-          <Route path="/membership" element={<Membership />}></Route>
-        </Routes>
+    <AppContainer>
+      <Routes>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/rooms" element={<Room />}></Route>
+        <Route path="/dining" element={<Dining />}></Route>
+        <Route path="/about" element={<About />}></Route>
+        <Route path="/mypage" element={<Mypage />}></Route>
+        <Route path="/reservation" element={<ReservationPage />}></Route>
+        <Route path="/reservationComplete" element={<ReservationComplete  title="예약 확인" />}></Route>
+        <Route path="/reservationCheck" element={<ReservationCheck />}></Route>
+        <Route path="/reservationItem" element={<ReservationItem />}></Route>
+        <Route path="/reservationList" element={<ReservationList />}></Route>
+      </Routes>
       </AppContainer>
       <FloatingButtons>
         <ChatButton onClick={openChat}>

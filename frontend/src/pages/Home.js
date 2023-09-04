@@ -1,19 +1,17 @@
-import React, { useState } from "react";
-import Header from "../components/Header";
-import visual01 from "../images/main/visual01.webp";
-import { styled } from "styled-components";
-import Slide from "../components/Slide";
-import Reservation from "../components/Reservation";
-import spaImg from "../images/main/spa.jpg";
-import KakaoMap from "../utils/KakaoMap";
-import dining01 from "../images/dining/Bakery.jpg";
-import dining02 from "../images/dining/Bar.jpg";
-import dining03 from "../images/dining/Restaurant.jpg";
-import dining04 from "../images/dining/RoomService.jpg";
-import Deluxe from "../images/room/Deluxe.jpg";
-import Family from "../images/room/Family.jpg";
-import Suite from "../images/room/Suite.jpg";
-import Villa from "../images/room/Villa.jpg";
+import React, { useState } from 'react';
+import Header from '../components/Header';
+import { styled } from 'styled-components';
+import Slide from '../components/Slide';
+import Reservation from '../components/Reservation';
+import spaImg from '../images/main/spa.jpg';
+import KakaoMap from '../utils/KakaoMap';
+import dining01 from '../images/dining/Bakery.jpg';
+import dining02 from '../images/dining/Bar.jpg';
+import dining03 from '../images/dining/Restaurant.jpg';
+import dining04 from '../images/dining/RoomService.jpg';
+import Deluxe from '../images/room/Deluxe.jpg'
+import Family from '../images/room/Family.jpg'
+import Suite from '../images/room/Suite.jpg'
 
 const diningImages = [dining01, dining02, dining03, dining04];
 
@@ -108,7 +106,7 @@ const ThirdArticle = styled.article`
 const ActivityContainer = styled.div`
   width: 100%;
   height: 530px;
-  background-color: #f5f5f5;
+  background-color: ${props => props.theme.colors.lightGray};
   float: right;
   position: relative;
   display: flex;
