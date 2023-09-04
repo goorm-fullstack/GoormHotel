@@ -106,14 +106,14 @@ const TableDLDT = styled.dt`
 const Way = () => {
   return (
     <>
-      <Header backgroundColor="#21201E"/>
+      <Header />
       <AboutHeader>
         <AboutHeaderTitle>구름호텔 소개</AboutHeaderTitle>
         <LinkWrapper>
-          <AboutLink to="/about" activeClassName="active">
+          <AboutLink to="/about" $activeClassName="active">
             호텔소개
           </AboutLink>
-          <AboutLink to="/location" activeClassName="active">
+          <AboutLink to="/location" $activeClassName="active">
             오시는길
           </AboutLink>
         </LinkWrapper>

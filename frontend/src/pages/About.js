@@ -131,7 +131,7 @@ const About = () => {
           <AboutLink to="/about" activeClassName="active">
             호텔소개
           </AboutLink>
-          <AboutLink to="/map" activeClassName="active">
+          <AboutLink to="/location" activeClassName="active">
             오시는길
           </AboutLink>
         </LinkWrapper>
