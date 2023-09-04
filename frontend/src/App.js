@@ -21,6 +21,7 @@ import FindPwResult from './pages/FindPwResult';
 import Membership from './pages/Membership';
 import Way from './pages/way/Way';
 import Privacy from './pages/register/Privacy';
+import ScrollToTop from './components/ScrollTop';
 
 
 const AppContainer = styled.div`
@@ -84,6 +85,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <AppContainer>
         <Routes>
           <Route path="/" element={<Home />}></Route>

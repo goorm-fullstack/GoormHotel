@@ -71,6 +71,8 @@ a {
 
 a, button {
 	transition: .2s all ease-in-out;
+	text-decoration: none;
+	color: inherit;
 }
 
 input {

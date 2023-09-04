@@ -12,6 +12,7 @@ import dining04 from '../images/dining/RoomService.jpg';
 import Deluxe from '../images/room/Deluxe.jpg'
 import Family from '../images/room/Family.jpg'
 import Suite from '../images/room/Suite.jpg'
+import { Link } from 'react-router-dom';
 
 const diningImages = [dining01, dining02, dining03, dining04];
 
@@ -75,7 +76,7 @@ const PackageName = styled.h1`
   font-weight: bold;
 `;
 
-export const DetailBtn = styled.button`
+export const DetailBtn = styled(Link)`
   font-size: 15px;
   padding: 15px 20px;
   background-color: #95846e;
@@ -261,7 +262,7 @@ const Home = () => {
               </TitleDescription>
             </RoomItem>
           </ImgList>
-          <DetailBtn>
+          <DetailBtn to="/rooms">
             <p>자세히보기</p>
             <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
               <title />
@@ -288,7 +289,7 @@ const Home = () => {
               </DiningItem>
             ))}
           </ImgList>
-          <DetailBtn>
+          <DetailBtn to="/dining">
             <p>자세히보기</p>
             <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
               <title />
@@ -358,7 +359,7 @@ const Home = () => {
             <p>contact@goorm.io</p>
           </Mail>
         </Contact>
-        <DetailBtn>
+        <DetailBtn to="/location">
           <p>자세히보기</p>
           <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
             <title />

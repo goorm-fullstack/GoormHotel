@@ -5,6 +5,11 @@ import { NavLink } from "react-router-dom";
 import KakaoMap from "../../utils/KakaoMap";
 import ico_bus from "../../images/icon/ico_bus.png";
 import ico_train from "../../images/icon/ico_train.png";
+import { commonContainerStyle} from '../../components/common/commonStyles';
+
+const Container = styled.div`
+  ${commonContainerStyle}
+`;
 
 const AboutHeader = styled.div`
   height: 70px;
@@ -51,7 +56,6 @@ const Title = styled.h1`
 const FirstArticle = styled.article`
   position: fixed;
   position: relative;
-  height: 20vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -62,7 +66,6 @@ const SecondArticle = styled.div`
   flex-direction: column;
   width: 100%;
   justify-content: center;
-  margin-left: 15%;
 `;
 
 const ThirdArticle = styled.div`
@@ -70,7 +73,6 @@ const ThirdArticle = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-left: 15%;
 `;
 
 const MapContainer = styled.div``;
@@ -118,6 +120,7 @@ const Way = () => {
           </AboutLink>
         </LinkWrapper>
       </AboutHeader>
+      <Container>
       <FirstArticle></FirstArticle>
       <SecondArticle>
         <h1
@@ -244,6 +247,7 @@ const Way = () => {
           </div>
         </div>
       </ThirdArticle>
+      </Container>
     </>
   );
 };

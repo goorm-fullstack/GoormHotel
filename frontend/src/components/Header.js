@@ -65,7 +65,7 @@ const NavItem = styled.li`
   }
 `;
 
-const NavReserveBtn = styled.button`
+const NavReserveBtn = styled(Link)`
   padding: 12px 27px;
   background-color: #454545;
   border: 1px solid white;
@@ -86,28 +86,52 @@ const LogoImg = styled.img`
 const Header = ({ backgroundColor }) => {
   return (
     <HeaderContainer>
-      <Container  $background={backgroundColor}>
+      <Container $background={backgroundColor}>
       <TopInfo>
         <TopInfoList>
-          <TopInfoItem><HeaderLink to="/">예약확인</HeaderLink></TopInfoItem>
-          <TopInfoItem><HeaderLink to="/">로그인</HeaderLink></TopInfoItem>
-          <TopInfoItem><HeaderLink to="/">회원가입</HeaderLink></TopInfoItem>
-          <TopInfoItem><HeaderLink to="/">멤버십</HeaderLink></TopInfoItem>
-          <TopInfoItem><HeaderLink to="/">오시는길</HeaderLink></TopInfoItem>
-          <TopInfoItem><HeaderLink to="/">사이트맵</HeaderLink></TopInfoItem>
+          <TopInfoItem>
+            <HeaderLink to="/">예약확인</HeaderLink>
+          </TopInfoItem>
+          <TopInfoItem>
+            <HeaderLink to="/">로그인</HeaderLink>
+          </TopInfoItem>
+          <TopInfoItem>
+            <HeaderLink to="/">회원가입</HeaderLink>
+          </TopInfoItem>
+          <TopInfoItem>
+            <HeaderLink to="/membership">멤버십</HeaderLink>
+          </TopInfoItem>
+          <TopInfoItem>
+            <HeaderLink to="/location">오시는길</HeaderLink>
+          </TopInfoItem>
+          <TopInfoItem>
+            <HeaderLink to="/sitemap">사이트맵</HeaderLink>
+          </TopInfoItem>
         </TopInfoList>
       </TopInfo>
       <Gnb>
         <HeaderLink to="/"><LogoImg src={logo} alt="logo" /></HeaderLink>
         <NavList>
-          <NavItem><HeaderLink to="/about">구름호텔 소개</HeaderLink></NavItem>
-          <NavItem><HeaderLink to="/rooms">객실</HeaderLink></NavItem>
-          <NavItem><HeaderLink to="/dining">다이닝</HeaderLink></NavItem>
-          <NavItem><HeaderLink to="/">부대시설</HeaderLink></NavItem>
-          <NavItem><HeaderLink to="/">스페셜오퍼</HeaderLink></NavItem>
-          <NavItem><HeaderLink to="/">고객지원</HeaderLink></NavItem>
+          <NavItem>
+            <HeaderLink to="/about">구름호텔 소개</HeaderLink>
+          </NavItem>
+          <NavItem>
+            <HeaderLink to="/rooms">객실</HeaderLink>
+          </NavItem>
+          <NavItem>
+            <HeaderLink to="/dining">다이닝</HeaderLink>
+          </NavItem>
+          <NavItem>
+            <HeaderLink to="/">부대시설</HeaderLink>
+          </NavItem>
+          <NavItem>
+            <HeaderLink to="/">스페셜오퍼</HeaderLink>
+          </NavItem>
+          <NavItem>
+            <HeaderLink to="/">고객지원</HeaderLink>
+          </NavItem>
         </NavList>
-        <NavReserveBtn>예약하기</NavReserveBtn>
+        <NavReserveBtn to="/reservation">예약하기</NavReserveBtn>
       </Gnb>
     </Container>
     </HeaderContainer>

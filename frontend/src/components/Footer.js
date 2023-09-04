@@ -134,8 +134,8 @@ const SecondFooter = styled.div`
   padding: 60px 370px;
 
   p {
-    margin-bottom: 15px;
-    white-space: nowrap;
+  margin-bottom: 15px;
+  white-space: nowrap;
   }
 `;
 
@@ -189,7 +189,7 @@ const Name = styled.a`
   text-decoration: none;
 
   &:hover {
-    text-decoration: underline;
+    color: ${props => props.theme.colors.brown};
   }
 `;
 
@@ -230,7 +230,7 @@ const Footer = () => {
               <TermsDescription>
                 뉴스레터 발송을 위한 개인 정보 수집 및 이용에 동의합니다.
               </TermsDescription>
-              <TermsLink to="/terms">약관 상세보기</TermsLink>
+              <TermsLink to="/agreement">약관 상세보기</TermsLink>
             </Terms>
           </div>
         </NewsLetterWrapper>
@@ -242,15 +242,17 @@ const Footer = () => {
               <FooterTitle>CUSTOMER CENTER</FooterTitle>
               <PhoneNumber>
                 <RoomNumber>
-                  객실예약<Tell>031-600-8586</Tell>
+                  객실예약
+                  <Tell><a href="tel:031-600-8586">031-600-8586</a></Tell>
                 </RoomNumber>
                 <InquiryNumber>
-                  문의하기<Tell>031-600-8586</Tell>
+                  문의하기
+                  <Tell><a href="tel:031-600-8586">031-600-8586</a></Tell>
                 </InquiryNumber>
               </PhoneNumber>
               <FaxEmail>
                 <Fax>FAX&nbsp; 000-0000-0000</Fax>
-                <Email>이메일&nbsp; contact@goorm.io</Email>
+                <Email>이메일&nbsp; <a href="mailto:contact@goorm.io">contact@goorm.io</a></Email>
               </FaxEmail>
             </FirstFooterLeft>
             <SocialWrapper>
@@ -264,7 +266,7 @@ const Footer = () => {
                   <IconImage src={instagramImg} alt="instagram" />
                 </SocialLink>
                 <SocialLink
-                  href="https://www.youtube.com/"
+                  href="https://www.youtube.com/@goorm"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -283,14 +285,14 @@ const Footer = () => {
         </FirstFooter>
         <SecondFooter>
           <div>
-            <p>호텔소개</p>
-            <p>오시는길</p>
-            <p>문의하기</p>
+            <p><Link to="/about">호텔소개</Link></p>
+            <p><Link to="/location">오시는길</Link></p>
+            <p><Link to="/">문의하기</Link></p>
           </div>
           <StyledText>
-            <p>이용약관</p>
-            <p>개인정보처리방침</p>
-            <p>사이트맵</p>
+            <p><Link to="/agreement">이용약관</Link></p>
+            <p><Link to="/privacy">개인정보처리방침</Link></p>
+            <p><Link to="/sitemap">사이트맵</Link></p>
           </StyledText>
           <div>
             <p>
@@ -300,8 +302,56 @@ const Footer = () => {
               제2019-성남분당B-0224호
             </p>
             <p>
-              대표이사 &nbsp;&nbsp; Tel.031-600-8586&nbsp;&nbsp; E-mail:
-              contact@goorm.io
+              대표이사
+              {" "}
+              <Name
+                href="https://github.com/WhiteKIM"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                김경규
+              </Name>
+              ,{" "}
+              <Name
+                href="https://github.com/soheetech"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                문소희
+              </Name>
+              ,{" "}
+              <Name
+                href="https://github.com/parkjikuk"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                박지국
+              </Name>
+              ,{" "}
+              <Name
+                href="https://github.com/JinhwanB"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                배진환
+              </Name>
+              ,{" "}
+              <Name
+                href="https://github.com/LEE-Donggyu"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                이동규
+              </Name>
+              ,{" "}
+              <Name
+                href="https://github.com/yss1902"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                전민종
+              </Name>
+              &nbsp;&nbsp; <a href="tel:031-600-8586">031-600-8586</a> &nbsp;&nbsp; <a href="mailto:contact@goorm.io">contact@goorm.io</a>
             </p>
             <p>
               Copyright © 어벤저스(

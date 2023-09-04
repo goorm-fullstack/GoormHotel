@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import closeImg from '../images/icon/ico_close.png';
-import getChatRoomInfo from '../utils/chat/client';
 
 const ChatWindow = styled.div`
   position: fixed;
@@ -114,54 +113,7 @@ const ChatModal = ({ closeChat }) => {
   ]);
   const [newChat, setNewChat] = useState('');
   const chatContainerRef = useRef(null);
-  const [roomId, setRoomId] = useState("");
-  const [socketConnected, setSocketConnected] = useState(false);
-  const webSocketURL = "ws://127.0.0.1:8080/ws/chat";
-  let ws = useRef(null);
-  useEffect(() => {
-    getRoomId();
-    if(!ws.current) {
-      ws.current = new WebSocket(webSocketURL);
-      ws.current.onopen = () => {
-        setSocketConnected(true);
-        if(socketConnected) {
-          ws.current.send({
-            type : "ENTER",
-            roomId : roomId,
-            sender : "test",
-            message : "ENTER"
-          })
-        }
-      };
-      ws.current.onclose = (error) => {
-        console.log("disconnect from " + webSocketURL);
-        console.log(error);
-      };
-      ws.current.onerror = (error) => {
-        console.log("connection error " + webSocketURL);
-        console.log(error);
-      };
-    }
-    ws.current.onmessage = (event) => {
-      console.log("got message", event.data);
-    };
-    return () => {
-      console.log("clean up");
-      ws.current.close();
-    };
-  },[]);
 
-  useEffect(() => {
-    if(socketConnecte) {
-      
-    }
-  }, [socketConnected])
-
-  
-  const getRoomId = async () => {
-    const request = await getChatRoomInfo("tester");
-    setRoomId(request);
-  } 
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -169,26 +121,11 @@ const ChatModal = ({ closeChat }) => {
   }, [chatData]);
 
   const handleInputKeyPress = (e) => {
-    if (e.key === 'Enter' && newChat.trim() !== '' && socketConnected) {
+    if (e.key === 'Enter' && newChat.trim() !== '') {
       setChatData([...chatData, { message: newChat, isUser: true }]);
-      ws.current.send(
-        JSON.stringify({
-          type : "TALK",
-          roomId : roomId,
-          sender : "test",
-          message : newChat
-        })
-      )
       setNewChat('');
     }
   };
-
-  // WebSocket 관련 부분
-  const [socketConnecte, SetSocketConnected] = useState(false);
-  const [sendMsg, setSendMsg] = useState(false);
-  const [items, setItems] = useState([]);
-  // 데이터를 받으면 무조건 관리자 메시지
-  // 내가 데이터를 넘기면 무조건 유저
 
   return (
     <ChatWindow>
@@ -218,6 +155,5 @@ const ChatModal = ({ closeChat }) => {
       </ChatWindow>
   );
 };
-
 
 export default ChatModal;
