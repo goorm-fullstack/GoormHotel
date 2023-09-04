@@ -159,13 +159,13 @@ const ChatModal = ({ closeChat }) => {
               const chatRoomID = parsedMessage.roomId;
               if(chatRoomID == prevRoomId) {
                 console.log("call");
-              }
-              // 메시지를 처리하는 로직을 여기에 추가
-              // 이전 채팅 데이터를 복사한 후 새 메시지를 추가
-              setChatData((prevChatData) => [
+                // 메시지를 처리하는 로직을 여기에 추가
+                // 이전 채팅 데이터를 복사한 후 새 메시지를 추가
+                setChatData((prevChatData) => [
                   ...prevChatData,
                   { message: chatContent, isUser: false },
-              ]);
+                ]);
+              }
             };
           }
           return room; // 새로운 상태 반환
