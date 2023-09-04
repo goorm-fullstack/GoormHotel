@@ -13,6 +13,15 @@ import ReservationComplete from './pages/ReservationComplete';
 import ReservationCheck from './pages/ReservationCheck';
 import ReservationItem from './pages/ReservationItem';
 import ReservationList from './pages/ReservationList';
+import Agreement from './pages/register/Agreement';
+import Sitemap from './pages/Sitemap';
+import FindAccount from './pages/FindAccount';
+import FindIdResult from './pages/FindIdResult';
+import FindPwResult from './pages/FindPwResult';
+import Membership from './pages/Membership';
+import Way from './pages/way/Way';
+import Privacy from './pages/register/Privacy';
+
 
 const AppContainer = styled.div`
   width: 100%;
@@ -78,11 +87,9 @@ function App() {
       <AppContainer>
         <Routes>
           <Route path="/" element={<Home />}></Route>
-          <Route path="/terms" element={<Terms />}></Route>
           <Route path="/rooms" element={<Room />}></Route>
           <Route path="/dining" element={<Dining />}></Route>
           <Route path="/about" element={<About />}></Route>
-          <Route path="/map" element={<KakaoMap />}></Route>
           <Route path="/mypage" element={<Mypage />}></Route>
           <Route path="/reservation" element={<ReservationPage />}></Route>
           <Route path="/location" element={<Way />}></Route>
