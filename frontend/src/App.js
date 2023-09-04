@@ -1,12 +1,10 @@
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import { BrowserRouter,Route, Routes } from 'react-router-dom';
-import Terms from './pages/Terms';
 import Room from './pages/Room';
 import Dining from './pages/Dining';
 import { styled } from 'styled-components';
 import About from './pages/About';
-import Map from './pages/Map';
 import Mypage from './pages/Mypage';
 import ReservationPage from './pages/ReservationPage';
 import { useState } from 'react';
