@@ -1,6 +1,5 @@
 package goormknights.hotel.giftcard.service;
 
-import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.giftcard.dto.request.RequestGiftCardDto;
 import goormknights.hotel.giftcard.dto.response.ResponseGiftCardDto;
 import goormknights.hotel.giftcard.exception.AlreadyUsedException;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -64,7 +62,7 @@ public class GiftCardService {
         return uuid.substring(0, 16);
     }
 
-    public void registering(int memberId, String uuid) {
+    public void registering(long memberId, String uuid) {
         Member registor = memberRepository.findById(memberId).orElseThrow(() -> {
             throw new NotExistMemberException("존재하지 않는 사용자입니다.");
         });
