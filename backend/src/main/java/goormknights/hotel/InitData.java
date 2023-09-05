@@ -1,18 +1,12 @@
 package goormknights.hotel;
 
-import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.coupon.repository.CouponRepository;
-import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.giftcard.repository.GiftCardRepository;
 import goormknights.hotel.item.repository.ItemRepository;
-import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.repository.MemberRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Component
 public class InitData {
@@ -31,16 +25,16 @@ public class InitData {
 
      @PostConstruct
      void init() {
-         Member member = Member.builder()
-                 .email("test")
-                 .password("test")
-                 .name("test")
-                 .phoneNumber("test")
-                 .address("test")
-                 .privacyCheck(true)
-                 .grade("Silver")
-                 .auth("ROLE_MEMBER")
-                 .build();
+//         Member member = Member.builder()
+//                 .email("test")
+//                 .password("test")
+//                 .name("test")
+//                 .phoneNumber("test")
+//                 .address("test")
+//                 .privacyCheck(true)
+//                 .grade("Silver")
+//                 .auth("ROLE_MEMBER")
+//                 .build();
 
 //        Room room = Room.builder()
 //                .bed("double")
@@ -58,25 +52,25 @@ public class InitData {
         
         
 //        사용되어선 안되는 쿠폰
-        Coupon coupon = Coupon.builder()
-                .uuid(UUID.randomUUID().toString())
-                .discountRate(5)
-                .issueDate(LocalDateTime.of(2022, 11, 11, 11, 11))
-                .member(member)
-                .expire(30)
-                .build();
+//        Coupon coupon = Coupon.builder()
+//                .uuid(UUID.randomUUID().toString())
+//                .discountRate(5)
+//                .issueDate(LocalDateTime.of(2022, 11, 11, 11, 11))
+//                .member(member)
+//                .expire(30)
+//                .build();
 
-        GiftCard giftCard = GiftCard.builder()
-                .uuid(UUID.randomUUID().toString())
-                .money(10000)
-                .member(member)
-                .build();
+//        GiftCard giftCard = GiftCard.builder()
+//                .uuid(UUID.randomUUID().toString())
+//                .money(10000)
+//                .member(member)
+//                .build();
 
-        giftCard.registrationGiftCard(member);
+//        giftCard.registrationGiftCard(member);
 //        memberRepository.save(member);
 //        itemRepository.save(room);
-        couponRepository.save(coupon);
-        giftCardRepository.save(giftCard);
+//        couponRepository.save(coupon);
+//        giftCardRepository.save(giftCard);
 
     }
 }
