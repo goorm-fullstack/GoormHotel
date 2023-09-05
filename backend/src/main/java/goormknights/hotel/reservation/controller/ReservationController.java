@@ -1,5 +1,7 @@
 package goormknights.hotel.reservation.controller;
 
+import goormknights.hotel.member.model.Member;
+import goormknights.hotel.member.repository.MemberRepository;
 import goormknights.hotel.reservation.dto.request.RequestReservationDto;
 import goormknights.hotel.reservation.dto.response.ResponseReservationDto;
 import goormknights.hotel.reservation.service.ReservationService;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ import java.util.List;
 public class ReservationController {
 
     private final ReservationService reservationService;
+    private final MemberRepository memberRepository;//테스트용으로 사용
 
     /**
      * 새로운 예약 건 저장: 테스트 완료
@@ -28,8 +32,11 @@ public class ReservationController {
      */
     @PostMapping("/save")
     public ResponseEntity<Object> saveReservation(
-            @Validated @RequestBody RequestReservationDto reservationDto
+            @Validated @RequestBody RequestReservationDto reservationDto,
+            @RequestParam long memberId
     ) {
+        Member findMember = memberRepository.findById(memberId).orElse(null);
+        reservationDto.setMember(findMember);
         reservationService.saveReservation(reservationDto);
         return ResponseEntity.ok().build();
     }

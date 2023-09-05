@@ -3,10 +3,7 @@ package goormknights.hotel.member.controller;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,5 +13,10 @@ public class MemberTestController {
     @PostMapping
     public void join(@RequestBody Member member) {
         memberService.save(member);
+    }
+
+    @GetMapping
+    public Member find(@RequestParam Long id) {
+        return memberService.findById(id);
     }
 }

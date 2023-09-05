@@ -1,12 +1,12 @@
 package goormknights.hotel.member.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.giftcard.model.GiftCard;
-import goormknights.hotel.global.event.EventListener;
+import goormknights.hotel.global.event.MemberEventListener;
 import goormknights.hotel.reservation.model.Reservation;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(EventListener.class)//내가 만든 이벤트 리스너와 연결
+@EntityListeners(MemberEventListener.class)//내가 만든 이벤트 리스너와 연결
 @AllArgsConstructor
 @Builder
 public class Member {
@@ -41,12 +41,15 @@ public class Member {
     // -> auth로 변수명 변경하여 해결한 적이 있어 변경해둡니다. - 문소희
 
     @OneToMany(mappedBy = "member")
+    @JsonIgnore
     private List<Coupon> couponList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
+    @JsonIgnore
     private List<Reservation> reservationList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
+    @JsonIgnore
     private List<GiftCard> giftCardList =  new ArrayList<>();
 
     @Nullable
@@ -75,19 +78,19 @@ public class Member {
     }
 
 
-    public void considerGradeLevelUp() {
-        LocalDateTime now = LocalDateTime.now();
+    public int getReservationCountByYear() {
+        LocalDateTime now = LocalDateTime.now().plusHours(1);
         LocalDateTime before = LocalDateTime.of(now.getYear()-1, now.getMonth(), now.getDayOfMonth(), now.getHour(), now.getMinute());
         int count = 0;
         for(Reservation reservation : reservationList) {
-            if(reservation.getCheckIn().isAfter(before) && reservation.getCheckIn().isBefore(now)) {
+            if(reservation.getOrderDate().isAfter(before) && reservation.getOrderDate().isBefore(now)) {
                 count+=1;
             }
         }
+        return count;
+    }
 
-        if(count >=  10 && grade.equals("Bronze"))
-            grade = "Silver";
-        else if(count >= 50 && !grade.equals("Gold"))
-            grade = "Gold";
+    public void setGrade(String grade) {
+        this.grade = grade;
     }
 }

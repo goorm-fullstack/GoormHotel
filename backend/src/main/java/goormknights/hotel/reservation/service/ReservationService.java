@@ -36,7 +36,8 @@ public class ReservationService {
      */
     public void saveReservation(RequestReservationDto reservationDto) {
         reservationDto.setReservationNumber(makeReservationNumber());
-        reservationRepository.save(reservationDto.toEntity());
+        Reservation saveReservation = reservationRepository.save(reservationDto.toEntity());
+        saveReservation.getMember().getReservationList().add(saveReservation);
     }
 
     /**
