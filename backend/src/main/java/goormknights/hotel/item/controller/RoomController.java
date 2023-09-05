@@ -1,5 +1,6 @@
 package goormknights.hotel.item.controller;
 
+import goormknights.hotel.item.dto.request.RequestImageDto;
 import goormknights.hotel.item.dto.request.RequestRoomDto;
 import goormknights.hotel.item.dto.response.ResponseRoomDto;
 import goormknights.hotel.item.model.Room;
@@ -29,7 +30,7 @@ public class RoomController {
     @PostMapping("/room")
     public ResponseEntity<Object> uploadRoom(@Validated @ModelAttribute RequestRoomDto requestRoomDto, @RequestParam MultipartFile img) throws IOException {
 
-        goormknights.hotel.item.Dto.request.RequestImageDto requestImageDto = imageService.convertToImageDto(img);
+        RequestImageDto requestImageDto = imageService.convertToImageDto(img);
 
         roomService.saveRoom(requestRoomDto, requestImageDto);
         return ResponseEntity.ok().build();
