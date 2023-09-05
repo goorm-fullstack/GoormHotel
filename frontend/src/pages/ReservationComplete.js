@@ -67,6 +67,13 @@ const Coupon = styled.div`
   border-bottom: 1px solid #DDDDDD;
 `;
 
+const Payment = styled.div`
+  display: flex;
+  justify-content: space-between;
+  color: #21201E;
+  font-size: 14px;
+`;
+
 const ReservationComplete = ({ title }) => {
   return (
     <>
@@ -161,6 +168,10 @@ const ReservationComplete = ({ title }) => {
           <Right>
               <SubTitle>상품 개요</SubTitle>
               <Product />
+              <Payment>
+                <p>결제수단</p>
+                <p>신용카드</p>
+              </Payment>
           </Right>
         </Wrapper>
       </Container>

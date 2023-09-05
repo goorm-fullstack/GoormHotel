@@ -46,8 +46,7 @@ const ButtonTypeButton = styled.button`
   line-height: 1.75;
   text-align: center;
   &:hover {
-    background-color: rgb(149, 132, 110);
-    color: rgb(255, 255, 255);
+    background-color: #dedede;
   }
 `;
 

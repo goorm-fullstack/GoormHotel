@@ -124,6 +124,7 @@ const GradeIcon = styled.svg`
 
 const CounponInfo = styled.div`
   display: flex;
+  justify-content: center;
   width: 202px;
   flex-direction: column;
   margin: 50px 67px 50px 0;

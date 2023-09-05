@@ -20,17 +20,17 @@ const AboutHeader = styled.div`
   width: 100%;
   background-color: white;
   z-index: 10;
+  padding-left: 40px;
 `;
 
 const AboutHeaderTitle = styled.h1`
-  margin-left: 70px;
   font-size: 18px;
   font-weight: bold;
 `;
 
 const LinkWrapper = styled.div`
   float: left;
-  margin-left: 107px;
+  margin-left: 130px;
 
   & > a:not(:last-child) {
     margin-right: 40px;
@@ -41,16 +41,13 @@ const AboutLink = styled(NavLink)`
   font-size: 14px;
   color: #888888;
 
+  &:hover {
+    color: #baa085;
+  }
+
   &.active {
     color: #baa085;
   }
-`;
-
-const Title = styled.h1`
-  color: #111111;
-  font-weight: bold;
-  font-size: 36px;
-  margin: 160px 0 160px 370px;
 `;
 
 const FirstArticle = styled.article`

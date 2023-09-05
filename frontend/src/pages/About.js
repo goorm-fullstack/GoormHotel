@@ -17,17 +17,17 @@ const AboutHeader = styled.div`
   width: 100%;
   background-color: white;
   z-index: 10;
+  padding-left: 40px;
 `;
 
 const AboutHeaderTitle = styled.h1`
-  margin-left: 70px;
   font-size: 18px;
   font-weight: bold;
 `;
 
 const LinkWrapper = styled.div`
   float: left;
-  margin-left: 107px;
+  margin-left: 130px;
 
   & > a:not(:last-child) {
     margin-right: 40px;
@@ -37,6 +37,10 @@ const LinkWrapper = styled.div`
 const AboutLink = styled(NavLink)`
   font-size: 14px;
   color: #888888;
+
+  &:hover {
+    color: #baa085;
+  }
 
   &.active {
     color: #baa085;
@@ -150,7 +154,7 @@ const About = () => {
             <br /> 다양한 객실에서 격이 다른 휴식과 여유를 경험해 보세요
           </IntroDescription>
           <Link to="/rooms">
-            <DetailBtn>
+            <DetailBtn to="/rooms">
               <p>자세히보기</p>
               <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                 <title />
@@ -170,7 +174,7 @@ const About = () => {
             <br /> 호텔 다이닝을 만나보세요.
           </DiningDescription>
           <Link to="/dining">
-            <DetailBtn>
+            <DetailBtn to="/dining" >
               <p>자세히보기</p>
               <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                 <title />
@@ -195,7 +199,7 @@ const About = () => {
             자연이 주는 낭만 속의 이국적인 수영장과 다채로운 액티비티를 즐길 수
             있는 엔터테인먼트 공간까지, 도심 속에서 여유로운 시간을 느껴보세요
           </IntroDescription>
-          <DetailBtn>
+          <DetailBtn to="/facilities">
             <p>자세히보기</p>
             <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
               <title />

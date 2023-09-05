@@ -33,6 +33,11 @@ const TopInfoList = styled.ul`
 const TopInfoItem = styled.li`
   font-size: 12px;
   margin-left: 12px;
+  color: rgba(255,255,255,0.7);
+
+  &:hover {
+    color: white;
+  }
 `;
 
 const HeaderLink = styled(Link)`
@@ -70,12 +75,11 @@ const NavReserveBtn = styled(Link)`
   background-color: #454545;
   border: 1px solid white;
   color: white;
-  background-color: rgba(69, 69, 69, 0.01);
+  background-color: #95846E;
   white-space: nowrap;
 
   &:hover {
-    color: #baa085;
-    border-color: #baa085;
+    background-color: #8A7057;
   }
 `;
 
@@ -122,13 +126,13 @@ const Header = ({ backgroundColor }) => {
             <HeaderLink to="/dining">다이닝</HeaderLink>
           </NavItem>
           <NavItem>
-            <HeaderLink to="/">부대시설</HeaderLink>
+            <HeaderLink to="/facilities">부대시설</HeaderLink>
           </NavItem>
           <NavItem>
-            <HeaderLink to="/">스페셜오퍼</HeaderLink>
+            <HeaderLink to="/specialOffer">스페셜오퍼</HeaderLink>
           </NavItem>
           <NavItem>
-            <HeaderLink to="/">고객지원</HeaderLink>
+            <HeaderLink to="/customerSupport">고객지원</HeaderLink>
           </NavItem>
         </NavList>
         <NavReserveBtn to="/reservation">예약하기</NavReserveBtn>

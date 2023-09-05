@@ -49,18 +49,17 @@ const FindPwResultInput = styled.input`
 `;
 
 const FindPwResultButton = styled.button`
-  color: rgb(186, 160, 133);
+  color: #FFFFFF;
   width: 510px;
   height: 60px;
   border: 1px solid rgb(186, 160, 133);
-  background-color: rgb(255, 255, 255);
+  background-color: ${props => props.theme.colors.brown};
   font-size: 16px;
   font-weight: 500;
   line-height: 1.75;
   text-align: center;
   &:hover {
-    background-color: rgb(149, 132, 110);
-    color: rgb(255, 255, 255);
+    background-color: #8a7057;
   }
 `;
 

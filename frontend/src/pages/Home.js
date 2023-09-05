@@ -26,7 +26,7 @@ const FirstArticle = styled.article`
 const SecondArticle = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 222px 0;
+  margin: 102px 0;
 `;
 
 const Room = styled.div`
@@ -52,7 +52,7 @@ const TitleDescription = styled.p`
 `;
 
 const Dining = styled(Room)`
-  margin-top: 150px;
+  margin-top: 170px;
 `;
 
 const ImgList = styled.ul`
@@ -80,11 +80,16 @@ export const DetailBtn = styled(Link)`
   font-size: 15px;
   padding: 15px 20px;
   background-color: #95846e;
+  width: 160px;
   color: white;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  &:hover {
+    background-color: #8A7057;
+  }
 `;
 
 export const DetailSvg = styled.svg`
@@ -101,7 +106,7 @@ const DiningItem = styled(RoomItem)`
 const ThirdArticle = styled.article`
   height: 601px;
   width: 100%;
-  padding-top: 71px;
+  margin-top: 293px;
 `;
 
 const ActivityContainer = styled.div`
@@ -120,11 +125,13 @@ const ActivityImg = styled.img`
   margin-top: -71px;
   opacity: ${(props) => (props.$isActive ? 1 : 0)};
   transition: opacity 0.5s ease-in-out;
+  position: absolute;
 `;
 
 const ActivityInfo = styled.div`
   margin-left: 100px;
   padding-top: 80px;
+  margin-left: 1150px;
 `;
 
 const Activity = styled.p`
@@ -150,7 +157,7 @@ const ActivityDescription = styled.p`
 const FourthArticle = styled.div`
   width: 1180px;
   height: 780px;
-  margin: 220px auto 0;
+  margin: 150px auto 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -347,7 +354,7 @@ const Home = () => {
               <path d="M0 0h48v48H0z" fill="none" />
               <path d="M13.25 21.59c2.88 5.66 7.51 10.29 13.18 13.17l4.4-4.41c.55-.55 1.34-.71 2.03-.49C35.1 30.6 37.51 31 40 31c1.11 0 2 .89 2 2v7c0 1.11-.89 2-2 2C21.22 42 6 26.78 6 8c0-1.11.9-2 2-2h7c1.11 0 2 .89 2 2 0 2.49.4 4.9 1.14 7.14.22.69.06 1.48-.49 2.03l-4.4 4.42z" />
             </ContactSvg>
-            <p>031-600-8586</p>
+            <a href="tel:031-600-8586">031-600-8586</a>
           </PhoneNumber>
           <Mail>
             <ContactSvg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
@@ -356,7 +363,7 @@ const Home = () => {
                 <path d="M45,7H3a3,3,0,0,0-3,3V38a3,3,0,0,0,3,3H45a3,3,0,0,0,3-3V10A3,3,0,0,0,45,7Zm-.64,2L24,24.74,3.64,9ZM2,37.59V10.26L17.41,22.17ZM3.41,39,19,23.41l4.38,3.39a1,1,0,0,0,1.22,0L29,23.41,44.59,39ZM46,37.59,30.59,22.17,46,10.26Z" />
               </g>
             </ContactSvg>
-            <p>contact@goorm.io</p>
+            <a href="mailto:contact@goorm.io">contact@goorm.io</a>
           </Mail>
         </Contact>
         <DetailBtn to="/location">

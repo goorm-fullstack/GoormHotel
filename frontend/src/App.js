@@ -22,6 +22,9 @@ import Membership from './pages/Membership';
 import Way from './pages/way/Way';
 import Privacy from './pages/register/Privacy';
 import ScrollToTop from './components/ScrollTop';
+import Facilities from './pages/Facilities';
+import SpecialOffer from './pages/SpecialOffer';
+import CustomerSupport from './pages/CustomerSupport';
 
 
 const AppContainer = styled.div`
@@ -38,15 +41,21 @@ const FloatingButtons = styled.div`
   z-index: 1;
   display: flex;
   flex-direction: column;
+  padding: 3px;
 `;
 
 const ChatButton = styled.button`
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  background-color: ${props => props.theme.colors.lightGray};
-  box-shadow: 0 5px 10px rgba(0, 0, 1, 0.15);
-  margin-bottom: 10px; 
+  background-color: #fff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+  transition: transform 0.2s; 
+
+  &:hover {
+    transform: scale(1.1);
+  }
 
   svg {
     width: 22px;
@@ -55,11 +64,14 @@ const ChatButton = styled.button`
 `;
 
 const ScrollToTopButton = styled.button`
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background-color: ${props => props.theme.colors.charcoal};
 
+  &:hover {
+    transform: scale(1.1);
+  }
 
   svg {
     fill: white;
@@ -106,6 +118,9 @@ function App() {
           <Route path="/reservationCheck" element={<ReservationCheck />}></Route>
           <Route path="/reservationItem" element={<ReservationItem />}></Route>
           <Route path="/reservationList" element={<ReservationList />}></Route>
+          <Route path="/facilities" element={<Facilities />}></Route>
+          <Route path="/specialOffer" element={<SpecialOffer />}></Route>
+          <Route path="/customerSupport" element={<CustomerSupport />}></Route>
         </Routes>
       </AppContainer>
       <FloatingButtons>

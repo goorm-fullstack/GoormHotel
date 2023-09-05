@@ -11,29 +11,31 @@ const Container = styled.div`
   flex-direction: column;
   margin-top: 220px;
   height: 100%;
-  min-width: 100%;
 `;
 
 const NewsLetterContainer = styled.div`
+  width: 100%;
+  min-width: 1800px;
   height: 200px;
   background-color: ${props => props.theme.colors.lightGray};
   padding: 60px 0;
 `;
 
 const FooterContainer = styled.div`
-  min-width: 100%;
+  width: 100%;
+  min-width: 1800px;
+  padding-left: 370px;
   height: 100%;
   background-color: ${props => props.theme.colors.charcoal};
 `;
 
 const NewsLetterWrapper = styled.div`
-  width: 1220px;
-  margin: 0 auto;
   display: flex;
-  justify-content: center;
+  padding-left: 370px;
 `;
 
 const Title = styled.h1`
+  min-width: 200px;
   font-size: 24px;
   color: #baa085;
   margin-right: 38px;
@@ -57,6 +59,10 @@ const EmailInput = styled.input`
 
 const SubscribeBtn = styled(DetailBtn)`
   height: 50px;
+
+  &:hover {
+    background-color: #8A7057;
+  }
 `;
 
 const DetailBtnTitle = styled.p`
@@ -83,8 +89,9 @@ const TermsLink = styled(Link)`
 
 const FirstFooter = styled.div`
   display: flex;
-  padding: 60px 0 60px 370px;
+  padding: 60px 0 60px 0;
   border-bottom: 1px solid #2c2b29;
+
 `;
 
 const FooterTitle = styled.h1`
@@ -99,16 +106,22 @@ const PhoneNumber = styled.div`
   font-size: 13px;
   color: white;
   margin-bottom: 16px;
+  color: rgba(255,255,255,0.7);
 `;
 
 const Tell = styled.div`
   font-size: 18px;
   margin-left: 10px;
+
+  &:hover{
+    color: #FFFFFF;
+  }
 `;
 
 const RoomNumber = styled.div`
   display: flex;
   align-items: center;
+  
 `;
 
 const InquiryNumber = styled(RoomNumber)`
@@ -128,14 +141,21 @@ const Email = styled.div``;
 
 const SecondFooter = styled.div`
   display: flex;
+  padding-left: 370px;
   width: 100%;
   font-size: 13px;
   color: #888888;
-  padding: 60px 370px;
+  padding: 60px 0;
 
   p {
   margin-bottom: 15px;
   white-space: nowrap;
+  }
+`;
+
+const SiteLink = styled.p`
+  &:hover {
+    color: #FFF;
   }
 `;
 
@@ -189,8 +209,18 @@ const Name = styled.a`
   text-decoration: none;
 
   &:hover {
-    color: ${props => props.theme.colors.brown};
+    color: white;
   }
+`;
+
+const FooterTextWrapper = styled.div`
+  margin-bottom: 15px;
+  white-space: nowrap;
+`;
+
+const TextStyle = styled.p`
+  margin-right: 20px;
+  display: inline;
 `;
 
 const Footer = () => {
@@ -242,11 +272,11 @@ const Footer = () => {
               <FooterTitle>CUSTOMER CENTER</FooterTitle>
               <PhoneNumber>
                 <RoomNumber>
-                  객실예약
+                  <p>객실예약</p>
                   <Tell><a href="tel:031-600-8586">031-600-8586</a></Tell>
                 </RoomNumber>
                 <InquiryNumber>
-                  문의하기
+                  <p>문의하기</p>
                   <Tell><a href="tel:031-600-8586">031-600-8586</a></Tell>
                 </InquiryNumber>
               </PhoneNumber>
@@ -285,24 +315,24 @@ const Footer = () => {
         </FirstFooter>
         <SecondFooter>
           <div>
-            <p><Link to="/about">호텔소개</Link></p>
-            <p><Link to="/location">오시는길</Link></p>
-            <p><Link to="/">문의하기</Link></p>
+            <SiteLink><Link to="/about">호텔소개</Link></SiteLink>
+            <SiteLink><Link to="/location">오시는길</Link></SiteLink>
+            <SiteLink><Link to="/">문의하기</Link></SiteLink>
           </div>
           <StyledText>
-            <p><Link to="/agreement">이용약관</Link></p>
-            <p><Link to="/privacy">개인정보처리방침</Link></p>
-            <p><Link to="/sitemap">사이트맵</Link></p>
+            <SiteLink><Link to="/agreement">이용약관</Link></SiteLink>
+            <SiteLink><Link to="/privacy">개인정보처리방침</Link></SiteLink>
+            <SiteLink><Link to="/sitemap">사이트맵</Link></SiteLink>
           </StyledText>
           <div>
+            <FooterTextWrapper>
+              <TextStyle>(주)어벤저스</TextStyle>
+              <TextStyle>경기도 성남시 분당구 판교로 242 PDC A동 902호</TextStyle>
+              <TextStyle>사업자 등록번호 124-87-39200</TextStyle>
+              통신판매업 신고 번호 제2019-성남분당B-0224호
+            </FooterTextWrapper>
             <p>
-              (주)어벤저스 &nbsp;&nbsp;&nbsp;&nbsp; 경기도 성남시 분당구 판교로
-              242 PDC A동 902호&nbsp;&nbsp; 사업자 등록번호
-              124-87-39200&nbsp;&nbsp; 통신판매업 신고 번호
-              제2019-성남분당B-0224호
-            </p>
-            <p>
-              대표이사
+              대표이사 :
               {" "}
               <Name
                 href="https://github.com/WhiteKIM"
@@ -349,12 +379,13 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                전민종
+                <TextStyle>전민종</TextStyle>
               </Name>
-              &nbsp;&nbsp; <a href="tel:031-600-8586">031-600-8586</a> &nbsp;&nbsp; <a href="mailto:contact@goorm.io">contact@goorm.io</a>
+              <TextStyle><a href="tel:031-600-8586">Tel.031-600-8586</a></TextStyle>
+              <a href="mailto:contact@goorm.io">Email: contact@goorm.io</a>
             </p>
             <p>
-              Copyright © 어벤저스(
+              Copyright &copy; 어벤저스(
               <Name
                 href="https://github.com/WhiteKIM"
                 target="_blank"

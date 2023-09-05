@@ -12,18 +12,19 @@ const ProductInfo = styled.div`
   flex-direction: column;
   height: 467px;
   margin-bottom: 52px;
+  border: 1px solid #DDDDDD;
 `;
 
 const Info = styled.div`
   background-color: ${props => props.theme.colors.lightGray};
-  height: 50%;
+  height: 100%;
   padding: 35px 46px 0 40px;
 `;
 
 const InfoTitle = styled.h1`
   font-size: 18px;
   color: ${props => props.theme.colors.charcoal};
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   font-weight: bold;
 `;
 
@@ -81,8 +82,14 @@ const TotalPrice = styled.div`
 `;
 
 const Price = styled.p`
-  font-size: 22px;
+  font-size: 16px;
   color: #95846e;
+
+  div {
+    font-size: 22px;
+    display: inline;
+    font-weight: 500;
+  }
 `;
 
 const Product = () => {
@@ -123,7 +130,7 @@ const Product = () => {
       </PaymentInfo>
       <TotalPrice>
         <p>최종금액(VAT)포함</p>
-        <Price>300,000 원</Price>
+        <Price><div>300,000</div> 원</Price>
       </TotalPrice>
     </>
   );
