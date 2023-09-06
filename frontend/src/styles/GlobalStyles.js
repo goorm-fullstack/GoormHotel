@@ -71,6 +71,8 @@ a {
 
 a, button {
 	transition: .2s all ease-in-out;
+	text-decoration: none;
+	color: inherit;
 }
 
 input {
@@ -78,6 +80,25 @@ input {
 	padding: 0 8px;
 	font-size: 16px;
 	font: inherit;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  padding: 10px;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23444444" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right center; 
+  padding-right: 30px; 
+  cursor: pointer;
+}
+
+@media (max-width: 1260px) {
+  body {
+    overflow-x: hidden;
+  }
 }
 `;
 

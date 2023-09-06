@@ -1,7 +1,9 @@
 package goormknights.hotel.item.dto.request;
 
 import goormknights.hotel.item.model.Dining;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class RequestDiningDTO {
+public class RequestDiningDto {
 
     @NotBlank
     private String name; // 상품명
@@ -47,7 +49,7 @@ public class RequestDiningDTO {
     private int spareChildren; // 최대 숙박 가능 인원 수(어린이)
 
     @Builder(toBuilder = true)
-    public RequestDiningDTO(String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, String useTime, int spare, int spareAdult, int spareChildren) {
+    public RequestDiningDto(String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, String useTime, int spare, int spareAdult, int spareChildren) {
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;
@@ -61,7 +63,7 @@ public class RequestDiningDTO {
     }
 
 
-    // RequestDiningDTO 엔티티화
+    // RequestDiningDto 엔티티화
     public Dining toEntity(){
         return Dining.builder()
                 .name(name)

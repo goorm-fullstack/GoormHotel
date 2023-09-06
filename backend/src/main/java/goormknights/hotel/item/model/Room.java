@@ -2,8 +2,10 @@ package goormknights.hotel.item.model;
 
 import goormknights.hotel.item.dto.request.RequestImageDto;
 import goormknights.hotel.item.dto.request.RequestRoomDto;
-import goormknights.hotel.item.dto.response.ResponseRoomDTO;
-import jakarta.persistence.*;
+import goormknights.hotel.item.dto.response.ResponseRoomDto;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,9 +27,9 @@ public class Room extends Item{
     @Column(nullable = false)
     private int capacity; // 숙박 인원 기준
 
-    // 클라이언트에게 응답 시 ResponseRoomDTO로 변경
-    public ResponseRoomDTO toResponseRoomDTO(){
-        return ResponseRoomDTO.builder()
+    // 클라이언트에게 응답 시 ResponseRoomDto로 변경
+    public ResponseRoomDto toResponseRoomDto(){
+        return ResponseRoomDto.builder()
                 .priceAdult(this.getPriceAdult())
                 .thumbnailPath(this.getThumbnail().getFilePath())
                 .spareChildren(this.getSpareChildren())
@@ -44,20 +46,20 @@ public class Room extends Item{
     }
 
     // 엔티티 수정
-    public Room updateRoom(RequestRoomDto requestRoomDTO, RequestImageDto requestImageDTO) {
+    public Room updateRoom(RequestRoomDto requestRoomDto, RequestImageDto requestImageDto) {
         return this.toBuilder()
-                .priceChildren(requestRoomDTO.getPriceChildren())
-                .price(requestRoomDTO.getPrice())
-                .priceAdult(requestRoomDTO.getPriceAdult())
-                .name(requestRoomDTO.getName())
-                .type(requestRoomDTO.getType())
-                .thumbnail(requestImageDTO.toEntity())
-                .typeDetail(requestRoomDTO.getTypeDetail())
-                .spareChildren(requestRoomDTO.getSpareChildren())
-                .spareAdult(requestRoomDTO.getSpareAdult())
-                .spare(requestRoomDTO.getSpare())
-                .bed(requestRoomDTO.getBed())
-                .capacity(requestRoomDTO.getCapacity())
+                .priceChildren(requestRoomDto.getPriceChildren())
+                .price(requestRoomDto.getPrice())
+                .priceAdult(requestRoomDto.getPriceAdult())
+                .name(requestRoomDto.getName())
+                .type(requestRoomDto.getType())
+                .thumbnail(requestImageDto.toEntity())
+                .typeDetail(requestRoomDto.getTypeDetail())
+                .spareChildren(requestRoomDto.getSpareChildren())
+                .spareAdult(requestRoomDto.getSpareAdult())
+                .spare(requestRoomDto.getSpare())
+                .bed(requestRoomDto.getBed())
+                .capacity(requestRoomDto.getCapacity())
                 .build();
     }
 }

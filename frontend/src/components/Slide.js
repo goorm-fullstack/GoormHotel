@@ -46,6 +46,17 @@ const SlideImageWrapper = styled.div`
   transition: opacity 1s ease-in-out;
 `;
 
+const Text = styled.div`
+  position: absolute;
+  top: 50%;
+  font-family: "Marcellus", serif;
+  font-size: 35px;
+  text-align: center;
+  color: #FFF;
+  
+  margin-bottom: 10px;
+`;
+
 const Slide = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -68,6 +79,7 @@ const Slide = () => {
           ))}
         </SlideContent>
       </Container>
+      <Text>구름호텔에 오신 것을 환영합니다</Text>
       <SlideButton onClick={goToPreviousSlide} $position="left">
         <img src={slideBtnImage} alt="slideBtn" />
       </SlideButton>

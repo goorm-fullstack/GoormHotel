@@ -16,8 +16,8 @@ import java.time.temporal.ChronoField;
 @RequiredArgsConstructor
 public class ImageService {
 
-//  MultipartFile타입의 데이터를 RequestImageDTO로 변환
-    public RequestImageDto convertToImageDTO(MultipartFile img) throws IOException {
+//  MultipartFile타입의 데이터를 RequestImageDto로 변환
+    public RequestImageDto convertToImageDto(MultipartFile img) throws IOException {
         LocalDateTime now = LocalDateTime.now();
         int year = now.getYear();
         int month = now.getMonthValue();

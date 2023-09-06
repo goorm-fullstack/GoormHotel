@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import closeImg from '../images/icon/ico_close.png';
-import getChatRoomInfo from '../utils/chat/client';
 
 const ChatWindow = styled.div`
   position: fixed;
@@ -15,12 +14,11 @@ const ChatWindow = styled.div`
 
 const ChatHeader = styled.div`
   background-color: #102C57;
-  height: 81px;
+  height: 60px;
   color: #FFFFFF;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
   border-radius: 5px 5px 0 0;
   margin-bottom: 40px;
 `;
@@ -42,21 +40,18 @@ const CloseImg = styled.img`
 const ChatInput = styled.input`
   padding: 8px;
   border: 1px solid #ccc;
-  width: 100%;
-  bottom: 0;
   outline: none;
-  position: absolute;
+  flex: 1;
 `;
 
 const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  width: 370px;
   min-height: 60%;
   max-height: 250px;
-  position: absolute;
   right: 0;
+  padding: 0 20px;
 
   &::-webkit-scrollbar {
     width: 5px;
@@ -73,18 +68,17 @@ const ChatContainer = styled.div`
 `;
 
 const ChatMessage = styled.div`
-  max-width: 270px;
+  max-width: 200px;
   border-radius: 10px;
-  padding: 10px;
-  margin-right: 50px;
-  align-self: ${({ isUser }) => (isUser ? 'flex-end' : 'flex-start')};
-  background-color: ${({ isUser }) => (isUser ? '#EBECF5' : '#EBEBEB')};
+  padding: 13px;
+  align-self: ${({ $isUser }) => ($isUser ? 'flex-end' : 'flex-start')};
+  background-color: ${({ $isUser }) => ($isUser ? '#EBECF5' : '#EBEBEB')};
   margin-bottom: 20px;
 `;
 
 const ChatWrapper = styled.div`
   position: relative;
-  width: 427px;
+  width: 300px;
   height: 430px;
   background-color: white;
   max-height: 430px;
@@ -95,7 +89,7 @@ const AdminProfileIcon = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #21201E;
+  background-color: ${props => props.theme.colors.charcoal};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -104,7 +98,19 @@ const AdminProfileIcon = styled.div`
 
 const ChatMessageWrapper = styled.div`
   display: flex;
-  align-self: ${({ isUser }) => (isUser ? 'flex-end' : 'flex-start')};
+  align-self: ${({ $isUser }) => ($isUser ? 'flex-end' : 'flex-start')};
+`;
+
+const ChatForm = styled.form`
+  display: flex;
+  bottom: 0;
+  position: absolute;
+  height: 70px;
+  width: 100%;
+`;
+
+const ChatBtn = styled.button`
+  width: 100px;
 `;
 
 const ChatModal = ({ closeChat }) => {
@@ -118,80 +124,50 @@ const ChatModal = ({ closeChat }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const webSocketURL = "ws://127.0.0.1:8080/ws/chat";
   let ws = useRef(null);
+  useEffect(() => {
+    getRoomId();
+    if(!ws.current) {
+      ws.current = new WebSocket(webSocketURL);
+      ws.current.onopen = () => {
+        setSocketConnected(true);
+        if(socketConnected) {
+          ws.current.send({
+            type : "ENTER",
+            roomId : roomId,
+            sender : "test",
+            message : "ENTER"
+          })
+        }
+      };
+      ws.current.onclose = (error) => {
+        console.log("disconnect from " + webSocketURL);
+        console.log(error);
+      };
+      ws.current.onerror = (error) => {
+        console.log("connection error " + webSocketURL);
+        console.log(error);
+      };
+    }
+    ws.current.onmessage = (event) => {
+      console.log("got message", event.data);
+    };
+    return () => {
+      console.log("clean up");
+      ws.current.close();
+    };
+  },[]);
 
   useEffect(() => {
-    const initializeWebSocket = async () => {
-      try {
-        const room = await getRoomId("tester");
-        setRoomId((prevRoomId) => {
-          // 이전 상태(prevRoomId)를 이용하여 새로운 상태를 반환
-          if (!ws.current) {
-            ws.current = new WebSocket(webSocketURL);
-            ws.current.onopen = () => {
-              setSocketConnected(true);
-              console.log(prevRoomId); // 이전 상태를 사용할 수 있음
-              console.log("WebSocket connected");
-  
-              // WebSocket 연결이 성공하면 ENTER 메시지 전송
-              ws.current.send(
-                JSON.stringify({
-                  type: "ENTER",
-                  roomId: prevRoomId, // 이전 상태를 사용
-                  sender: "test",
-                  message: "입장",
-                })
-              );
-            };
-            ws.current.onclose = (error) => {
-              console.log("disconnect from " + webSocketURL);
-              console.log(error);
-            };
-            ws.current.onerror = (error) => {
-              console.log("connection error " + webSocketURL);
-              console.log(error);
-            };
-  
-            // 메시지 핸들러 설정
-            ws.current.onmessage = (event) => {
-              const message = event.data;
-              const parsedMessage = JSON.parse(message);
-              const chatContent = parsedMessage.message;
-              const chatRoomID = parsedMessage.roomId;
-              if(chatRoomID == prevRoomId) {
-                console.log("call");
-                // 메시지를 처리하는 로직을 여기에 추가
-                // 이전 채팅 데이터를 복사한 후 새 메시지를 추가
-                setChatData((prevChatData) => [
-                  ...prevChatData,
-                  { message: chatContent, isUser: false },
-                ]);
-              }
-            };
-          }
-          return room; // 새로운 상태 반환
-        });
-      } catch (error) {
-        console.error("Error fetching roomId:", error);
-      }
-    };
-  
-    initializeWebSocket();
-  
-    // 컴포넌트 언마운트 시 WebSocket 연결 닫기
-    return () => {
-      console.log("Cleaning up WebSocket");
-      if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-        ws.current.close();
-      }
-      setSocketConnected(false);
-    };
-  }, []);
+    if(socketConnecte) {
+      
+    }
+  }, [socketConnected])
 
+  
   const getRoomId = async () => {
     const request = await getChatRoomInfo("tester");
     setRoomId(request);
   } 
-
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -200,16 +176,8 @@ const ChatModal = ({ closeChat }) => {
 
   
   const handleInputKeyPress = (e) => {
-    if (e.key === 'Enter' && newChat.trim() !== '' && socketConnected) {
+    if (e.key === 'Enter' && newChat.trim() !== '') {
       setChatData([...chatData, { message: newChat, isUser: true }]);
-      ws.current.send(
-        JSON.stringify({
-          type : "TALK",
-          roomId : roomId,
-          sender : "test",
-          message : newChat
-        })
-      )
       setNewChat('');
     }
   };
@@ -221,8 +189,6 @@ const ChatModal = ({ closeChat }) => {
   // 데이터를 받으면 무조건 관리자 메시지
   // 내가 데이터를 넘기면 무조건 유저
 
-  
-
   return (
     <ChatWindow>
       <ChatWrapper>
@@ -232,21 +198,24 @@ const ChatModal = ({ closeChat }) => {
         </ChatHeader>
         <ChatContainer ref={chatContainerRef}>
           {chatData.map((chat, index) => (
-            <ChatMessageWrapper isUser={chat.isUser}>
-            {!chat.isUser && <AdminProfileIcon><svg fill='white' viewBox="0 0 24 24" width="20px" height="20px" xmlns="http://www.w3.org/2000/svg"><g><path d="M0 0h24v24H0z" fill="none"/><path d="M4 12h3a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7C2 6.477 6.477 2 12 2s10 4.477 10 10v7a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h3a8 8 0 1 0-16 0z"/></g></svg></AdminProfileIcon>}
-            <ChatMessage key={index} isUser={chat.isUser}>
-              <div>{chat.message}</div>
-            </ChatMessage>
+            <ChatMessageWrapper $isUser={chat.isUser}>
+              {!chat.isUser && <AdminProfileIcon><svg fill='white' viewBox="0 0 24 24" width="20px" height="20px" xmlns="http://www.w3.org/2000/svg"><g><path d="M0 0h24v24H0z" fill="none"/><path d="M4 12h3a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7C2 6.477 6.477 2 12 2s10 4.477 10 10v7a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h3a8 8 0 1 0-16 0z"/></g></svg></AdminProfileIcon>}
+              <ChatMessage key={index} $isUser={chat.isUser}>
+                <div>{chat.message}</div>
+              </ChatMessage>
             </ChatMessageWrapper>
           ))}
         </ChatContainer>
-        <ChatInput
-          type="text"
-          placeholder="메세지입력"
-          value={newChat}
-          onChange={(e) => setNewChat(e.target.value)}
-          onKeyDown={handleInputKeyPress}
-        />
+        <ChatForm onSubmit={handleFormSubmit}>
+          <ChatInput
+            type="text"
+            placeholder="메세지입력"
+            value={newChat}
+            onChange={(e) => setNewChat(e.target.value)}
+            onKeyDown={handleInputKeyPress}
+          />
+          <ChatBtn type="submit">전송</ChatBtn>
+        </ChatForm>
         </ChatWrapper>
       </ChatWindow>
   );

@@ -1,29 +1,22 @@
 import React from 'react';
 import Header from '../components/Header';
 import { styled } from 'styled-components';
-import Deluxe from '../images/room/Deluxe.jpg'
-import Family from '../images/room/Family.jpg'
-import Suite from '../images/room/Suite.jpg'
-import Villa from '../images/room/Villa.jpg'
+import Deluxe from '../images/room/Deluxe.jpg';
+import Family from '../images/room/Family.jpg';
+import Suite from '../images/room/Suite.jpg';
+import Villa from '../images/room/Villa.jpg';
+import { commonContainerStyle, commonTitleStyle } from '../components/common/commonStyles';
 
 export const Container = styled.div`
-  width: 100%;
-  min-height: 100vh;
+  ${commonContainerStyle}
 `;
 
-export const Wrapper = styled.div`
-  width: 1182px;
-  margin: 0 auto;
-`
-
 export const Title = styled.h1`
-  font-size: 36px;
-  font-weight: bold;
-  margin-top: 160px;
+  ${commonTitleStyle}
   margin-bottom: 40px;
 `;
 
-export const SubTitle = styled.p`
+export const TitleDescription = styled.p`
   font-size: 18px;
   color: #888888;
   margin-bottom: 78px;
@@ -54,7 +47,7 @@ export const Info = styled.div`
 export const Name = styled.h1`
   font-size: 28px;
   font-weight: bold;
-  color: #21201E;
+  color: ${props => props.theme.colors.charcoal};
   margin-bottom: 24px;
 `;
 
@@ -93,11 +86,10 @@ export const Location = styled.p`
 const Room = () => {
   return (
     <>
-      <Header backgroundColor="#21201E" />
+      <Header />
       <Container>
-        <Wrapper>
         <Title>객실</Title>
-        <SubTitle>환상적인 서울 도심의 파노라믹뷰와 모던한 인테리어의 객실은 최상의 휴식을 제공합니다.</SubTitle>
+        <TitleDescription>환상적인 서울 도심의 파노라믹뷰와 모던한 인테리어의 객실은 최상의 휴식을 제공합니다.</TitleDescription>
           <Item>
             <List>
               <Img src={Deluxe}></Img>
@@ -180,7 +172,6 @@ const Room = () => {
               </Info>
             </List>
           </Item>
-        </Wrapper>
       </Container>
     </>
   );

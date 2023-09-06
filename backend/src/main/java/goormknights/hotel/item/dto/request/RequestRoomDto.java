@@ -66,7 +66,7 @@ public class RequestRoomDto {
         this.capacity = capacity;
     }
 
-    // RequestRoomDTO 엔티티화
+    // RequestRoomDto 엔티티화
     public Room toEntity(){
         return Room.builder()
                 .name(name)

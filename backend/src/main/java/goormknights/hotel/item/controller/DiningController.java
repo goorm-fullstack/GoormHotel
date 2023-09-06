@@ -1,8 +1,8 @@
 package goormknights.hotel.item.controller;
 
-import goormknights.hotel.item.dto.request.RequestDiningDTO;
+import goormknights.hotel.item.dto.request.RequestDiningDto;
 import goormknights.hotel.item.dto.request.RequestImageDto;
-import goormknights.hotel.item.dto.response.ResponseDiningDTO;
+import goormknights.hotel.item.dto.response.ResponseDiningDto;
 import goormknights.hotel.item.model.Dining;
 import goormknights.hotel.item.service.DiningService;
 import goormknights.hotel.item.service.ImageService;
@@ -28,21 +28,21 @@ public class DiningController {
 
     // 다이닝 생성
     @PostMapping("/dining")
-    public ResponseEntity<Object> uploadDining(@Validated @ModelAttribute RequestDiningDTO requestDiningDTO, @RequestParam MultipartFile img) throws IOException {
+    public ResponseEntity<Object> uploadDining(@Validated @ModelAttribute RequestDiningDto requestDiningDto, @RequestParam MultipartFile img) throws IOException {
 
-        RequestImageDto requestImageDTO = imageService.convertToImageDTO(img);
+        RequestImageDto requestImageDto = imageService.convertToImageDto(img);
 
-        diningService.saveDining(requestDiningDTO, requestImageDTO);
+        diningService.saveDining(requestDiningDto, requestImageDto);
         return ResponseEntity.ok().build();
     }
 
     //다이닝 수정
     @PutMapping("/dining/{diningName}")
-    public ResponseEntity<ResponseDiningDTO> updateDining(@PathVariable String diningName, @Validated @ModelAttribute RequestDiningDTO requestDiningDTO, @RequestParam MultipartFile img) throws IOException {
+    public ResponseEntity<ResponseDiningDto> updateDining(@PathVariable String diningName, @Validated @ModelAttribute RequestDiningDto requestDiningDto, @RequestParam MultipartFile img) throws IOException {
 
-        ResponseDiningDTO responseDiningDTO = diningService.modifyDining(diningName, requestDiningDTO, img).toResponseDiningDTO();
+        ResponseDiningDto responseDiningDto = diningService.modifyDining(diningName, requestDiningDto, img).toResponseDiningDto();
 
-        return ResponseEntity.ok(responseDiningDTO);
+        return ResponseEntity.ok(responseDiningDto);
     }
 
     // 다이닝 삭제
@@ -55,23 +55,23 @@ public class DiningController {
 
     // 다이닝 상품명을 통해 찾기
     @GetMapping("/dining/{diningName}")
-    public ResponseEntity<ResponseDiningDTO> findOneDining(@PathVariable String diningName) {
-        ResponseDiningDTO responseDiningDTO = diningService.findByDiningName(diningName).toResponseDiningDTO();
+    public ResponseEntity<ResponseDiningDto> findOneDining(@PathVariable String diningName) {
+        ResponseDiningDto responseDiningDto = diningService.findByDiningName(diningName).toResponseDiningDto();
         log.info("diningName={}", diningName);
 
-        return ResponseEntity.ok(responseDiningDTO);
+        return ResponseEntity.ok(responseDiningDto);
     }
 
     // 전체 다이닝 찾기
     @GetMapping
-    public ResponseEntity<List<ResponseDiningDTO>> findAllDining(){
+    public ResponseEntity<List<ResponseDiningDto>> findAllDining(){
         List<Dining> allDining = diningService.findAllDining("dining");
-        List<ResponseDiningDTO> toResponseDTOList = new ArrayList<>();
+        List<ResponseDiningDto> toResponseDtoList = new ArrayList<>();
 
         for (Dining dining : allDining) {
-            toResponseDTOList.add(dining.toResponseDiningDTO());
+            toResponseDtoList.add(dining.toResponseDiningDto());
         }
 
-        return ResponseEntity.ok(toResponseDTOList);
+        return ResponseEntity.ok(toResponseDtoList);
     }
 }

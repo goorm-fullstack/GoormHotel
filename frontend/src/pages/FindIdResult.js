@@ -57,27 +57,33 @@ const Buttons = styled.div`
   gap: 1rem;
 `;
 
-const FindIdResultButton = styled.button`
+const LoginButton = styled.button`
   display: inline-block;
-  color: rgb(186, 160, 133);
+  color: ${props => props.color};
   width: 284px;
   height: 64px;
   border: 1px solid rgb(186, 160, 133);
-  background-color: rgb(255, 255, 255);
+  background-color: ${props => props.backgroundColor};
   font-size: 16px;
   font-weight: 500;
   line-height: 1.75;
   text-align: center;
   &:hover {
-    background-color: rgb(149, 132, 110);
-    color: rgb(255, 255, 255);
+    background-color: #8a7057;
+  }
+`;
+
+const FindIdResultButton = styled(LoginButton)`
+  &:hover {
+    background-color: #95846E;
+    color: #FFFFFF;
   }
 `;
 
 const FindIdResult = () => {
   return (
     <>
-      <Header backgroundColor="rgba(51, 51, 51, 0.8)" />
+      <Header />
       <ResultBox>
         <Title>아이디 찾기</Title>
         <ResultIdBox>
@@ -87,8 +93,8 @@ const FindIdResult = () => {
             비밀번호를 잊으신 경우 비밀번호 찾기를 이용해주세요.
           </PwResultInfo>
           <Buttons>
-            <FindIdResultButton>로그인</FindIdResultButton>
-            <FindIdResultButton>비밀번호 찾기</FindIdResultButton>
+            <LoginButton backgroundColor="#95846E" color="#FFFFFF">로그인</LoginButton>
+            <FindIdResultButton backgroundColor="#FFFFFF" color="#95846E">비밀번호 찾기</FindIdResultButton>
           </Buttons>
         </ResultIdBox>
       </ResultBox>

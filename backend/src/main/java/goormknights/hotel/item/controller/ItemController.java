@@ -1,10 +1,7 @@
 package goormknights.hotel.item.controller;
 
-import goormknights.hotel.item.model.Dining;
 import goormknights.hotel.item.model.Item;
-import goormknights.hotel.item.model.Room;
 import goormknights.hotel.item.service.ItemService;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,9 +22,49 @@ public class ItemController {
     @GetMapping("/items")
     public ResponseEntity<List<Object>> allItems(){
         List<Item> allItem = itemService.findAllItem();
-        List<Object> responseItem = getResponseItem(allItem);
+        List<Object> responseItem = itemService.getResponseItem(allItem);
 
         return ResponseEntity.ok(responseItem);
+    }
+
+    /**
+     * 스페셜오퍼 카테고리화와 검색기능
+     * @param type - 1차 카테고리
+     * @param typeDetail - 2차 카테고리
+     * @param keyword - 검색 키워드
+     * @return 각 파라미터가 들어있을 때 그것에 해당하는 리스트를 가져온다.
+     */
+    @GetMapping("/specialOffer")
+    public ResponseEntity<List<Object>> categoryItems(@RequestParam(required = false) String type, @RequestParam(required = false) String typeDetail, @RequestParam(required = false) String keyword){
+        List<Item> allItems;
+        List<Object> responseItems;
+
+        log.info("type={}", type);
+        log.info("typeDetail={}", typeDetail);
+
+        if(type != null && typeDetail != null){
+            allItems = itemService.findAllByType(type);
+            responseItems = itemService.getResponseItem(allItems, typeDetail);
+        }
+        else if(type != null && typeDetail == null){
+            allItems = itemService.findAllByType(type);
+            responseItems = itemService.getResponseItem(allItems);
+        }
+        else if(type == null && typeDetail != null){
+            allItems = itemService.findAllByTypeDetail(typeDetail);
+            responseItems = itemService.getResponseItem(allItems);
+        }
+        else{
+            allItems = itemService.findAllItem();
+            responseItems = itemService.getResponseItem(allItems);
+        }
+
+        if(keyword != null){
+            List<Item> byKeyword = itemService.findByKeyword(responseItems, keyword);
+            responseItems = itemService.getResponseItem(byKeyword);
+        }
+
+        return ResponseEntity.ok(responseItems);
     }
 
     /**
@@ -40,26 +76,8 @@ public class ItemController {
     public ResponseEntity<List<Object>> findItems(@RequestParam String keyword){
         log.info(keyword);
         List<Item> searchResult = itemService.findByKeyword(keyword);
-        List<Object> responseItem = getResponseItem(searchResult);
+        List<Object> responseItem = itemService.getResponseItem(searchResult);
 
         return ResponseEntity.ok(responseItem);
-    }
-
-    @NotNull
-    private static List<Object> getResponseItem(List<Item> allItem) {
-        List<Object> responseItem = new ArrayList<>();
-
-        for (Item item : allItem) {
-            if(item instanceof Dining) {
-                responseItem.add(((Dining) item).toResponseDiningDTO());
-                log.info("responseDining={}", item);
-            }
-
-            if(item instanceof Room) {
-                responseItem.add(((Room) item).toResponseRoomDTO());
-                log.info("responseRoom={}", item);
-            }
-        }
-        return responseItem;
     }
 }
