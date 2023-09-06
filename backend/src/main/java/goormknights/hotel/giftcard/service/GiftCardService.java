@@ -62,6 +62,12 @@ public class GiftCardService {
         return uuid.substring(0, 16);
     }
 
+    /**
+     *
+     * @param memberId - 사용자 PK
+     * @param uuid - 싱품권 번호
+     * 사용자가 상품권 번호를 입력해서 상품권을 등록하는 로직입니다.
+     */
     public void registering(long memberId, String uuid) {
         Member registor = memberRepository.findById(memberId).orElseThrow(() -> {
             throw new NotExistMemberException("존재하지 않는 사용자입니다.");
@@ -76,5 +82,6 @@ public class GiftCardService {
         }
 
         giftCard.registrationGiftCard(registor);
+        registor.getGiftCardList().add(giftCard);
     }
 }

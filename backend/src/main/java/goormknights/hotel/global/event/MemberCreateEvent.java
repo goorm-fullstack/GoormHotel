@@ -1,15 +1,13 @@
 package goormknights.hotel.global.event;
 
 import goormknights.hotel.coupon.model.Coupon;
-import goormknights.hotel.email.model.EmailMessage;
 import goormknights.hotel.member.model.Member;
-import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 public class MemberCreateEvent extends ApplicationEvent {
     private final Member member;
     private final Coupon coupon;
-    public MemberCreateEvent(EventListener eventListener, Member member, Coupon coupon) {
+    public MemberCreateEvent(MemberEventListener eventListener, Member member, Coupon coupon) {
         super(eventListener);
         this.member = member;
         this.coupon = coupon;

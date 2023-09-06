@@ -31,9 +31,8 @@ public class ChatRoom {
     // 메시지를 입력하는 로직
     // 만약 입장하는 경우엔 기본적인 알림 메시지를 전송
     public void handlerActions(WebSocketSession session, ChatMessage chatMessage, ChatService chatService) {
-        if(chatMessage.getType().equals(ChatMessage.MessageType.ENTER)) {
+        if(chatMessage.getType().equals(ChatMessage.MessageType.ENTER)) {//처음에 메시지를 보내면 타입을 ENTER로 보내고, ENTER타입이라면 세션을 소켓을 접속
             sessions.add(session);
-            sendMessage(chatMessage, chatService);
             if(!chatMessage.getSender().equals("admin"))
                 chatMessage.setMessage("관리자와 연결 중입니다. 잠시만 기다려주세요");
             sendMessage(chatMessage, chatService);

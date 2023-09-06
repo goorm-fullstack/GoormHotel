@@ -1,12 +1,13 @@
 package goormknights.hotel.reservation.model;
 
+import goormknights.hotel.global.event.MemberEventListener;
+import goormknights.hotel.global.event.ReservationEventListener;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.item.model.Item;
 import goormknights.hotel.reservation.dto.response.ResponseReservationDto;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import java.util.List;
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(ReservationEventListener.class)//내가 만든 이벤트 리스너와 연결
 @AllArgsConstructor
 public class Reservation {
 

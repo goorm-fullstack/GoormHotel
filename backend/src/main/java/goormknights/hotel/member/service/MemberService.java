@@ -20,6 +20,10 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+    public Member findById(Long id) {
+        return memberRepository.findById(id).orElseThrow();
+    }
+
     // 상품권 등록
     public void registrationGiftCard(int memberId, String code) {
         GiftCard giftCard = giftCardRepository.findByUuid(code).orElseThrow(() -> new NoSuchElementException("존재하지 않는 상품권입니다"));
