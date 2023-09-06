@@ -73,7 +73,6 @@ const NavItem = styled.li`
 const NavReserveBtn = styled(Link)`
   padding: 12px 27px;
   background-color: #454545;
-  border: 1px solid white;
   color: white;
   background-color: #95846E;
   white-space: nowrap;

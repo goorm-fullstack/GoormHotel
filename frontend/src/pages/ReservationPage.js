@@ -148,6 +148,7 @@ const CouponBtn = styled.button`
 const CouponInfo = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
 `;
 
 const CouponInfoWrapper = styled.div`
@@ -162,7 +163,11 @@ const CouponName = styled.p`
   color: #666666;
 `;
 
-const CouponPrice = styled.p``;
+const CouponPrice = styled.p`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const CouponSelect = styled.select`
   width: 100%;
@@ -185,9 +190,18 @@ const PaymentBtn = styled.button`
 `;
 
 const RemoveButton = styled.button`
-  background-color: transparent;
+  background-color: #bdbdbd;
   cursor: pointer;
-  margin-left: 10px;
+  margin-left: 12px;
+  color: #fff;
+  border-radius: 100%;
+  padding: 4px;
+  text-align: center;
+  font-size: 11px;
+
+  &:hover {
+    background-color: #21201e;
+  }
 `;
 
 const ReservationPage = () => {
@@ -521,7 +535,7 @@ const ReservationPage = () => {
                     <CouponPrice>
                       {coupon.price}
                       <RemoveButton onClick={() => handleRemoveCoupon(index)}>
-                        x
+                        ×
                       </RemoveButton>
                     </CouponPrice>
                   </CouponInfoWrapper>
@@ -549,7 +563,7 @@ const ReservationPage = () => {
                     </option>
                   </>
                 ) : (
-                  <option disabled>로그인이 필요한 서비스입니다.</option>
+                  <option disabled selected>로그인이 필요한 서비스입니다.</option>
                 )}
               </CouponSelect>
             </Section>

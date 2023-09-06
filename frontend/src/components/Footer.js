@@ -7,31 +7,36 @@ import youtubeImg from "../images/common/social_youtube.png";
 import owlImg from "../images/common/social_owl.png";
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
   margin-top: 220px;
+  width: 100%;
   height: 100%;
+  min-width: 1260px;
 `;
 
 const NewsLetterContainer = styled.div`
-  width: 100%;
-  min-width: 1800px;
   height: 200px;
   background-color: ${props => props.theme.colors.lightGray};
   padding: 60px 0;
+  width: 100%;
 `;
 
 const FooterContainer = styled.div`
   width: 100%;
-  min-width: 1800px;
-  padding-left: 370px;
+  padding-left: 20%;
   height: 100%;
   background-color: ${props => props.theme.colors.charcoal};
+  @media (max-width: 1260px) {
+    padding-left: 5%; 
+  }
 `;
 
 const NewsLetterWrapper = styled.div`
   display: flex;
-  padding-left: 370px;
+  padding-left: 20%;
+  width: 100%;
+  @media (max-width: 1260px) {
+    padding-left: 5%; 
+  }
 `;
 
 const Title = styled.h1`
@@ -55,10 +60,15 @@ const EmailInput = styled.input`
   margin-bottom: 10px;
   padding-left: 24px;
   outline: none;
+
+  @media (max-width: 1260px) {
+    width: 400px; /* 화면이 1260px 미만일 때 너비를 100%로 설정 */
+  }
 `;
 
 const SubscribeBtn = styled(DetailBtn)`
   height: 50px;
+  min-width: 160px;
 
   &:hover {
     background-color: #8A7057;
@@ -201,6 +211,10 @@ const SocialLink = styled.a`
 const IconImage = styled.img`
   max-width: 100%;
   height: auto;
+
+  &:hover {
+    filter: brightness(70%);
+  }
 `;
 
 const Name = styled.a`
@@ -381,8 +395,8 @@ const Footer = () => {
               >
                 <TextStyle>전민종</TextStyle>
               </Name>
-              <TextStyle><a href="tel:031-600-8586">Tel.031-600-8586</a></TextStyle>
-              <a href="mailto:contact@goorm.io">Email: contact@goorm.io</a>
+              <TextStyle><a href="tel:031-600-8586">Tel : 031-600-8586</a></TextStyle>
+              <a href="mailto:contact@goorm.io">Email : contact@goorm.io</a>
             </p>
             <p>
               Copyright &copy; 어벤저스(

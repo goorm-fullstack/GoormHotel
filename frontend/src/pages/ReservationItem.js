@@ -35,6 +35,8 @@ const StyledSelect = styled.select`
   height: 60px;
   font-size: 18px;
   padding-left: 20px;
+  border: 1px solid #DDDDDD;
+  outline: none;
 `;
 
 const RoomItemWrapper = styled.div`
@@ -88,6 +90,18 @@ const ReservationBtn = styled.button`
   color: #666666;
   height: 50px;
   width: 100%;
+
+  &:hover {
+    color: ${props => props.theme.colors.brown};
+    border-color: ${props => props.theme.colors.brown};
+  }
+`;
+
+const ReservationDeleteBtn = styled(ReservationBtn)`
+  &:hover {
+    color: red;
+    border-color: red;
+  }
 `;
 
 const InfoBtn = styled.button`
@@ -96,6 +110,10 @@ const InfoBtn = styled.button`
   height: 60px;
   width: 100%;
   margin-top: 60px;
+
+  &:hover {
+    background-color: #8A7057;
+  }
 `;
 
 const NoItem = styled.div`
@@ -240,7 +258,7 @@ const ReservationItem = () => {
                       <p>40,000 원/최대 2인</p>
                     </DetailInfo>
                   </DetailWrapper>
-                  <ReservationBtn>삭제</ReservationBtn>
+                  <ReservationDeleteBtn>삭제</ReservationDeleteBtn>
                 </RoomItemInfo>
               </RoomItem>
               <InfoBtn>예약 정보 입력하기</InfoBtn>

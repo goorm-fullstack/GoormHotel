@@ -14,12 +14,11 @@ const ChatWindow = styled.div`
 
 const ChatHeader = styled.div`
   background-color: #102C57;
-  height: 81px;
+  height: 60px;
   color: #FFFFFF;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
   border-radius: 5px 5px 0 0;
   margin-bottom: 40px;
 `;
@@ -41,21 +40,18 @@ const CloseImg = styled.img`
 const ChatInput = styled.input`
   padding: 8px;
   border: 1px solid #ccc;
-  width: 100%;
-  bottom: 0;
   outline: none;
-  position: absolute;
+  flex: 1;
 `;
 
 const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  width: 370px;
   min-height: 60%;
   max-height: 250px;
-  position: absolute;
   right: 0;
+  padding: 0 20px;
 
   &::-webkit-scrollbar {
     width: 5px;
@@ -72,10 +68,9 @@ const ChatContainer = styled.div`
 `;
 
 const ChatMessage = styled.div`
-  max-width: 270px;
+  max-width: 200px;
   border-radius: 10px;
-  padding: 10px;
-  margin-right: 50px;
+  padding: 13px;
   align-self: ${({ $isUser }) => ($isUser ? 'flex-end' : 'flex-start')};
   background-color: ${({ $isUser }) => ($isUser ? '#EBECF5' : '#EBEBEB')};
   margin-bottom: 20px;
@@ -83,7 +78,7 @@ const ChatMessage = styled.div`
 
 const ChatWrapper = styled.div`
   position: relative;
-  width: 427px;
+  width: 300px;
   height: 430px;
   background-color: white;
   max-height: 430px;
@@ -104,6 +99,18 @@ const AdminProfileIcon = styled.div`
 const ChatMessageWrapper = styled.div`
   display: flex;
   align-self: ${({ $isUser }) => ($isUser ? 'flex-end' : 'flex-start')};
+`;
+
+const ChatForm = styled.form`
+  display: flex;
+  bottom: 0;
+  position: absolute;
+  height: 70px;
+  width: 100%;
+`;
+
+const ChatBtn = styled.button`
+  width: 100px;
 `;
 
 const ChatModal = ({ closeChat }) => {
@@ -127,6 +134,15 @@ const ChatModal = ({ closeChat }) => {
     }
   };
 
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    if (newChat.trim() !== '') {
+      setChatData([...chatData, { message: newChat, isUser: true }]);
+      setNewChat('');
+    }
+  };
+
   return (
     <ChatWindow>
       <ChatWrapper>
@@ -137,20 +153,23 @@ const ChatModal = ({ closeChat }) => {
         <ChatContainer ref={chatContainerRef}>
           {chatData.map((chat, index) => (
             <ChatMessageWrapper $isUser={chat.isUser}>
-            {!chat.isUser && <AdminProfileIcon><svg fill='white' viewBox="0 0 24 24" width="20px" height="20px" xmlns="http://www.w3.org/2000/svg"><g><path d="M0 0h24v24H0z" fill="none"/><path d="M4 12h3a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7C2 6.477 6.477 2 12 2s10 4.477 10 10v7a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h3a8 8 0 1 0-16 0z"/></g></svg></AdminProfileIcon>}
-            <ChatMessage key={index} $isUser={chat.isUser}>
-              <div>{chat.message}</div>
-            </ChatMessage>
+              {!chat.isUser && <AdminProfileIcon><svg fill='white' viewBox="0 0 24 24" width="20px" height="20px" xmlns="http://www.w3.org/2000/svg"><g><path d="M0 0h24v24H0z" fill="none"/><path d="M4 12h3a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7C2 6.477 6.477 2 12 2s10 4.477 10 10v7a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h3a8 8 0 1 0-16 0z"/></g></svg></AdminProfileIcon>}
+              <ChatMessage key={index} $isUser={chat.isUser}>
+                <div>{chat.message}</div>
+              </ChatMessage>
             </ChatMessageWrapper>
           ))}
         </ChatContainer>
-        <ChatInput
-          type="text"
-          placeholder="메세지입력"
-          value={newChat}
-          onChange={(e) => setNewChat(e.target.value)}
-          onKeyDown={handleInputKeyPress}
-        />
+        <ChatForm onSubmit={handleFormSubmit}>
+          <ChatInput
+            type="text"
+            placeholder="메세지입력"
+            value={newChat}
+            onChange={(e) => setNewChat(e.target.value)}
+            onKeyDown={handleInputKeyPress}
+          />
+          <ChatBtn type="submit">전송</ChatBtn>
+        </ChatForm>
         </ChatWrapper>
       </ChatWindow>
   );

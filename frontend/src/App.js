@@ -37,7 +37,7 @@ const FloatingButtons = styled.div`
   position: sticky;
   bottom: 70px;
   float: right;
-  right: 100px;
+  right: 60px;
   z-index: 1;
   display: flex;
   flex-direction: column;
@@ -50,7 +50,7 @@ const ChatButton = styled.button`
   border-radius: 50%;
   background-color: #fff;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   transition: transform 0.2s; 
 
   &:hover {

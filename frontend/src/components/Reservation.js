@@ -101,7 +101,7 @@ const ReservationButton = styled(Link)`
   text-align: center;
 
   &:hover {
-    background-color: #092145;
+    background-color: #041137;
   }
 `;
 

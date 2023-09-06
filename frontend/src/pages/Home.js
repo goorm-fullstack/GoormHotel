@@ -15,6 +15,7 @@ import Suite from '../images/room/Suite.jpg'
 import { Link } from 'react-router-dom';
 
 const diningImages = [dining01, dining02, dining03, dining04];
+const images = [spaImg, dining01, Deluxe];
 
 const FirstArticle = styled.article`
   height: 100vh;
@@ -45,10 +46,10 @@ const PackageTitle = styled.h1`
 `;
 
 const TitleDescription = styled.p`
-  font-size: 16px;
+  font-size: 15px;
   color: #888888;
   margin-bottom: 69px;
-  line-height: 1.3;
+  line-height: 1.5;
 `;
 
 const Dining = styled(Room)`
@@ -118,14 +119,23 @@ const ActivityContainer = styled.div`
   display: flex;
 `;
 
-const ActivityImg = styled.img`
+const ImageSlider = styled.div`
   width: 943px;
   height: 530px;
+  overflow: hidden;
   margin-left: 107px;
   margin-top: -71px;
-  opacity: ${(props) => (props.$isActive ? 1 : 0)};
-  transition: opacity 0.5s ease-in-out;
   position: absolute;
+`;
+
+const ImageContainer = styled.div`
+  display: flex; /* 이미지를 가로로 나열 */
+  transition: transform 0.5s ease-in-out; /* 슬라이딩 애니메이션 */
+`;
+
+const Image = styled.img`
+  width: 943px; /* 이미지 너비 */
+  height: 530px; /* 이미지 높이 */
 `;
 
 const ActivityInfo = styled.div`
@@ -221,13 +231,15 @@ const RoundButton = styled.button`
   height: 14px;
 `;
 
-const images = [spaImg, spaImg, spaImg];
-
 const Home = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleSlide = (index) => {
     setActiveIndex(index);
+  };
+
+  const sliderStyle = {
+    transform: `translateX(-${activeIndex * 943}px)`, // 이미지 너비만큼 이동
   };
 
   return (
@@ -246,7 +258,7 @@ const Home = () => {
           <ImgList>
             <RoomItem>
               <RoomImg src={Deluxe} alt="객실" />
-              <PackageName>글래드 스튜디오</PackageName>
+              <PackageName>디럭스</PackageName>
               <TitleDescription>
                 Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한
                 사람과 함께한 특별한 순간을 남겨보세요!
@@ -254,7 +266,7 @@ const Home = () => {
             </RoomItem>
             <RoomItem>
               <RoomImg src={Family} alt="객실" />
-              <PackageName>글래드 스튜디오</PackageName>
+              <PackageName>스위트</PackageName>
               <TitleDescription>
                 Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한
                 사람과 함께한 특별한 순간을 남겨보세요!
@@ -262,7 +274,7 @@ const Home = () => {
             </RoomItem>
             <RoomItem>
               <RoomImg src={Suite} alt="객실" />
-              <PackageName>글래드 스튜디오</PackageName>
+              <PackageName>패밀리</PackageName>
               <TitleDescription>
                 Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한
                 사람과 함께한 특별한 순간을 남겨보세요!
@@ -285,16 +297,38 @@ const Home = () => {
             특별한 상품과 혜택을 지금 만나보세요.
           </TitleDescription>
           <ImgList>
-            {diningImages.map((image, index) => (
-              <DiningItem key={index}>
-                <RoomImg src={image} alt={`다이닝 ${index + 1}`} />
-                <PackageName>글래드 스튜디오</PackageName>
+              <DiningItem >
+                <RoomImg src={diningImages[0]} alt={`다이닝 ${diningImages[0]}`} />
+                <PackageName>베이커리</PackageName>
                 <TitleDescription>
                   Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한
                   사람과 함께한 특별한 순간을 남겨보세요!
                 </TitleDescription>
               </DiningItem>
-            ))}
+              <DiningItem >
+                <RoomImg src={diningImages[1]} alt={`다이닝 ${diningImages[1]}`} />
+                <PackageName>바&라운지</PackageName>
+                <TitleDescription>
+                  Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한
+                  사람과 함께한 특별한 순간을 남겨보세요!
+                </TitleDescription>
+              </DiningItem>
+              <DiningItem >
+                <RoomImg src={diningImages[2]} alt={`다이닝 ${diningImages[2]}`} />
+                <PackageName>레스토랑</PackageName>
+                <TitleDescription>
+                  Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한
+                  사람과 함께한 특별한 순간을 남겨보세요!
+                </TitleDescription>
+              </DiningItem>
+              <DiningItem >
+                <RoomImg src={diningImages[3]} alt={`다이닝 ${diningImages[3]}`} />
+                <PackageName>룸 서비스</PackageName>
+                <TitleDescription>
+                  Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한
+                  사람과 함께한 특별한 순간을 남겨보세요!
+                </TitleDescription>
+              </DiningItem>
           </ImgList>
           <DetailBtn to="/dining">
             <p>자세히보기</p>
@@ -309,7 +343,13 @@ const Home = () => {
       </SecondArticle>
       <ThirdArticle>
         <ActivityContainer>
-          <ActivityImg src={images[activeIndex]} $isActive={true} />
+          <ImageSlider>
+            <ImageContainer style={sliderStyle}>
+              {images.map((image, index) => (
+                <Image key={index} src={image} alt={`Image ${index}`} />
+              ))}
+            </ImageContainer>
+          </ImageSlider>
           <ActivityInfo>
             <Activity>부대시설</Activity>
             <ActivityTitle>리트릿 구름 스파</ActivityTitle>

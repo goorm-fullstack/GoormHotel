@@ -94,6 +94,12 @@ select {
   padding-right: 30px; 
   cursor: pointer;
 }
+
+@media (max-width: 1260px) {
+  body {
+    overflow-x: hidden;
+  }
+}
 `;
 
 export default GlobalStyle;

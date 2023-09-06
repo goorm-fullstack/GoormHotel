@@ -88,7 +88,7 @@ const Price = styled.p`
   div {
     font-size: 22px;
     display: inline;
-    font-weight: 500;
+    font-weight: bold;
   }
 `;
 
