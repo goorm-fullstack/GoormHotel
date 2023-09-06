@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import closeImg from '../images/icon/ico_close.png';
+import getChatRoomInfo from '../utils/chat/client';
 
 const ChatWindow = styled.div`
   position: fixed;
@@ -125,49 +126,78 @@ const ChatModal = ({ closeChat }) => {
   const webSocketURL = "ws://127.0.0.1:8080/ws/chat";
   let ws = useRef(null);
   useEffect(() => {
-    getRoomId();
-    if(!ws.current) {
-      ws.current = new WebSocket(webSocketURL);
-      ws.current.onopen = () => {
-        setSocketConnected(true);
-        if(socketConnected) {
-          ws.current.send({
-            type : "ENTER",
-            roomId : roomId,
-            sender : "test",
-            message : "ENTER"
-          })
-        }
-      };
-      ws.current.onclose = (error) => {
-        console.log("disconnect from " + webSocketURL);
-        console.log(error);
-      };
-      ws.current.onerror = (error) => {
-        console.log("connection error " + webSocketURL);
-        console.log(error);
-      };
-    }
-    ws.current.onmessage = (event) => {
-      console.log("got message", event.data);
-    };
-    return () => {
-      console.log("clean up");
-      ws.current.close();
-    };
-  },[]);
-
-  useEffect(() => {
-    if(socketConnecte) {
-      
-    }
-  }, [socketConnected])
-
+    const initializeWebSocket = async () => {
+      try {
+        const room = await getRoomId("tester");
+        setRoomId((prevRoomId) => {
+          // 이전 상태(prevRoomId)를 이용하여 새로운 상태를 반환
+          if (!ws.current) {
+            ws.current = new WebSocket(webSocketURL);
+            ws.current.onopen = () => {
+              setSocketConnected(true);
+              console.log(prevRoomId); // 이전 상태를 사용할 수 있음
+              console.log("WebSocket connected");
   
+              // WebSocket 연결이 성공하면 ENTER 메시지 전송
+              ws.current.send(
+                JSON.stringify({
+                  type: "ENTER",
+                  roomId: prevRoomId, // 이전 상태를 사용
+                  sender: "test",
+                  message: "입장",
+                })
+              );
+            };
+            ws.current.onclose = (error) => {
+              console.log("disconnect from " + webSocketURL);
+              console.log(error);
+            };
+            ws.current.onerror = (error) => {
+              console.log("connection error " + webSocketURL);
+              console.log(error);
+            };
+  
+            // 메시지 핸들러 설정
+            ws.current.onmessage = (event) => {
+              const message = event.data;
+              const parsedMessage = JSON.parse(message);
+              const chatContent = parsedMessage.message;
+              const chatRoomID = parsedMessage.roomId;
+              if(chatRoomID == prevRoomId) {
+                console.log("call");
+                // 메시지를 처리하는 로직을 여기에 추가
+                // 이전 채팅 데이터를 복사한 후 새 메시지를 추가
+                setChatData((prevChatData) => [
+                  ...prevChatData,
+                  { message: chatContent, isUser: false },
+                ]);
+              }
+            };
+          }
+          return room; // 새로운 상태 반환
+        });
+      } catch (error) {
+        console.error("Error fetching roomId:", error);
+      }
+    };
+  
+    initializeWebSocket();
+  
+    // 컴포넌트 언마운트 시 WebSocket 연결 닫기
+    return () => {
+      console.log("Cleaning up WebSocket");
+      if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+        ws.current.close();
+      }
+      setSocketConnected(false);
+    };
+  }, []);
+
   const getRoomId = async () => {
     const request = await getChatRoomInfo("tester");
     setRoomId(request);
   } 
+
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -176,7 +206,24 @@ const ChatModal = ({ closeChat }) => {
 
   
   const handleInputKeyPress = (e) => {
-    if (e.key === 'Enter' && newChat.trim() !== '') {
+    if (e.key === 'Enter' && newChat.trim() !== '' && socketConnected) {
+      setChatData([...chatData, { message: newChat, isUser: true }]);
+      ws.current.send(
+        JSON.stringify({
+          type : "TALK",
+          roomId : roomId,
+          sender : "test",
+          message : newChat
+        })
+      )
+      setNewChat('');
+    }
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    if (newChat.trim() !== '') {
       setChatData([...chatData, { message: newChat, isUser: true }]);
       setNewChat('');
     }
