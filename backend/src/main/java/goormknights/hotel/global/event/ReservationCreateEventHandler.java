@@ -24,7 +24,7 @@ public class ReservationCreateEventHandler implements ApplicationListener<Reserv
 
         int reservationCountByYear = member.getReservationCountByYear();
 
-        if(reservationCountByYear >= 1 && member.getGrade().equals("Bronze")) {
+        if(reservationCountByYear >= 10 && member.getGrade().equals("Bronze")) {
             member.setGrade("Silver");
             Coupon coupon = new Coupon();
             coupon.setMember(member);
@@ -32,7 +32,7 @@ public class ReservationCreateEventHandler implements ApplicationListener<Reserv
             Coupon save = couponRepository.save(coupon);
             member.getCouponList().add(save);
             memberRepository.save(member);
-        } else if(reservationCountByYear >= 1 && member.getGrade().equals("Silver")) {
+        } else if(reservationCountByYear >= 50 && member.getGrade().equals("Silver")) {
             member.setGrade("Gold");
             Coupon coupon = new Coupon();
             coupon.setMember(member);
