@@ -5,10 +5,10 @@ import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.global.entity.BaseEntity;
 import goormknights.hotel.global.event.MemberEventListener;
+import goormknights.hotel.member.exception.InvalidMemberException;
 import goormknights.hotel.reservation.model.Reservation;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -54,8 +54,9 @@ public class Member extends BaseEntity {
     // 정확하게 기억나지 않는데 병합 전 authority처럼 전체 단어 사용했다가 예약어랑 겹쳐서 오류 발생
     // -> auth로 변수명 변경하여 해결한 적이 있어 변경해둡니다. - 문소희
 
-    @ManyToOne
-    private Role role;
+    // Role 관련은 경규님과 피드백 후 주석 해제 하겠습니다 - 전민종
+//    @ManyToOne
+//    private Role role;
 
     @OneToMany(mappedBy = "member")
     @JsonIgnore
@@ -110,7 +111,6 @@ public class Member extends BaseEntity {
         }
     }
 
-
     public int getReservationCountByYear() {
         LocalDateTime now = LocalDateTime.now().plusHours(1);
         LocalDateTime before = LocalDateTime.of(now.getYear()-1, now.getMonth(), now.getDayOfMonth(), now.getHour(), now.getMinute());
@@ -122,8 +122,8 @@ public class Member extends BaseEntity {
         }
         return count;
     }
-
     public void setGrade(String grade) {
         this.grade = grade;
     }
+
 }
