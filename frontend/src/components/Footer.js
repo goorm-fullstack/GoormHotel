@@ -22,21 +22,14 @@ const NewsLetterContainer = styled.div`
 
 const FooterContainer = styled.div`
   width: 100%;
-  padding-left: 20%;
   height: 100%;
   background-color: ${props => props.theme.colors.charcoal};
-  @media (max-width: 1260px) {
-    padding-left: 5%; 
-  }
 `;
 
 const NewsLetterWrapper = styled.div`
   display: flex;
-  padding-left: 20%;
-  width: 100%;
-  @media (max-width: 1260px) {
-    padding-left: 5%; 
-  }
+  margin: 0 auto;
+  width: 1220px;
 `;
 
 const Title = styled.h1`
@@ -60,10 +53,6 @@ const EmailInput = styled.input`
   margin-bottom: 10px;
   padding-left: 24px;
   outline: none;
-
-  @media (max-width: 1260px) {
-    width: 400px; /* 화면이 1260px 미만일 때 너비를 100%로 설정 */
-  }
 `;
 
 const SubscribeBtn = styled(DetailBtn)`
@@ -101,7 +90,8 @@ const FirstFooter = styled.div`
   display: flex;
   padding: 60px 0 60px 0;
   border-bottom: 1px solid #2c2b29;
-
+  width: 1220px;
+  margin: 0 auto;
 `;
 
 const FooterTitle = styled.h1`
@@ -151,8 +141,8 @@ const Email = styled.div``;
 
 const SecondFooter = styled.div`
   display: flex;
-  padding-left: 370px;
-  width: 100%;
+  width: 1220px;
+  margin: 0 auto;
   font-size: 13px;
   color: #888888;
   padding: 60px 0;
@@ -190,7 +180,7 @@ const FirstFooterLeft = styled.div`
 `;
 
 const FirstFooterWrapper = styled.div`
-  width: 958px;
+  width: 959px;
   display: flex;
 `;
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Header from '../components/Header';
 import { styled } from 'styled-components';
 import Slide from '../components/Slide';
@@ -13,11 +13,13 @@ import Deluxe from '../images/room/Deluxe.jpg'
 import Family from '../images/room/Family.jpg'
 import Suite from '../images/room/Suite.jpg'
 import { Link } from 'react-router-dom';
+import slideBtn from '../images/icon/ico_slide_btn.png';
 
 const diningImages = [dining01, dining02, dining03, dining04];
 const images = [spaImg, dining01, Deluxe];
 
 const FirstArticle = styled.article`
+  width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -40,9 +42,14 @@ const Room = styled.div`
 `;
 
 const PackageTitle = styled.h1`
-  font-size: 24px;
+  font-family: "Marcellus", serif;
+  font-size: 30px;
   margin-bottom: 12px;
-  font-weight: bold;
+  letter-spacing: 2px;
+
+  span {
+    color: #95846E;
+  }
 `;
 
 const TitleDescription = styled.p`
@@ -105,43 +112,42 @@ const DiningItem = styled(RoomItem)`
 `;
 
 const ThirdArticle = styled.article`
-  height: 601px;
+  height: 530px;
   width: 100%;
+  min-width: 1260px;
   margin-top: 293px;
+  background-color: ${props => props.theme.colors.lightGray};
 `;
 
 const ActivityContainer = styled.div`
-  width: 100%;
   height: 530px;
-  background-color: ${props => props.theme.colors.lightGray};
-  float: right;
-  position: relative;
   display: flex;
+  bottom: 70px;
 `;
 
 const ImageSlider = styled.div`
-  width: 943px;
-  height: 530px;
+  width: 50%;
+  height: 100%;
   overflow: hidden;
-  margin-left: 107px;
-  margin-top: -71px;
-  position: absolute;
+  position: relative;
 `;
 
 const ImageContainer = styled.div`
-  display: flex; /* 이미지를 가로로 나열 */
-  transition: transform 0.5s ease-in-out; /* 슬라이딩 애니메이션 */
+  height: 100%;
+  display: flex; 
+  transition: transform 0.5s ease-in-out;
 `;
 
 const Image = styled.img`
-  width: 943px; /* 이미지 너비 */
-  height: 530px; /* 이미지 높이 */
+  height: auto;
+  object-fit: cover;
 `;
 
 const ActivityInfo = styled.div`
-  margin-left: 100px;
-  padding-top: 80px;
-  margin-left: 1150px;
+  width: 50%;
+  margin-top: 108px;
+  float: right;
+  margin-left: 99px;
 `;
 
 const Activity = styled.p`
@@ -151,16 +157,20 @@ const Activity = styled.p`
 `;
 
 const ActivityTitle = styled.h1`
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 35px;
   margin-bottom: 15.5px;
+  font-family: "Marcellus", serif;
+
+  span {
+    color: #95846E;
+  }
 `;
 
 const ActivityDescription = styled.p`
   width: 393px;
   font-size: 15px;
   color: #888888;
-  margin-bottom: 43.5px;
+  margin-bottom: 83px;
   line-height: 1.5;
 `;
 
@@ -175,9 +185,10 @@ const FourthArticle = styled.div`
 `;
 
 const MapTitle = styled.h1`
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 36px;
   margin-bottom: 15px;
+  color: #95846E;
+  font-family: "Marcellus", serif;
 `;
 
 const MapSubTitle = styled.p`
@@ -217,29 +228,50 @@ const Mail = styled.div`
 `;
 
 const ButtonContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
   display: flex;
-  gap: 5px;
-  margin-top: 71px;
 `;
 
-const RoundButton = styled.button`
-  border: none;
-  border-radius: 50%;
-  background-color: ${(props) => (props.$isActive ? "#102c57" : "#dddddd")};
-  cursor: pointer;
-  width: 14px;
-  height: 14px;
+const PrevButton = styled.button`
+  width: 65px;
+  height: 65px;
+  background-color: #21201E;
+  color: #fff;
+
+  img {
+    filter: brightness(0) invert(1);
+    width: 24px;
+    height: 24px;
+  }
 `;
+
+const NextButton = styled(PrevButton)`
+  background-color: #FFFFFF;
+  transform: scaleX(-1);
+
+  img {
+    filter: brightness(0);
+  }
+`;
+
 
 const Home = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const handleSlide = (index) => {
-    setActiveIndex(index);
+  const handleNext = () => {
+    setActiveIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
 
+  const handlePrev = () => {
+    setActiveIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+  };
+
+  const sliderRef = useRef(null);
+
   const sliderStyle = {
-    transform: `translateX(-${activeIndex * 943}px)`, // 이미지 너비만큼 이동
+    transform: `translateX(-${activeIndex * sliderRef.current?.offsetWidth}px)`,
   };
 
   return (
@@ -251,7 +283,9 @@ const Home = () => {
       </FirstArticle>
       <SecondArticle>
         <Room>
-          <PackageTitle>객실 패키지</PackageTitle>
+          <PackageTitle>
+            <span>ROOMS</span> & SUITES
+          </PackageTitle>
           <TitleDescription>
             특별한 상품과 혜택을 지금 만나보세요.
           </TitleDescription>
@@ -292,7 +326,9 @@ const Home = () => {
           </DetailBtn>
         </Room>
         <Dining>
-          <PackageTitle>다이닝 프로모션</PackageTitle>
+          <PackageTitle>
+            <span>DINING</span> PROMOTION
+          </PackageTitle>
           <TitleDescription>
             특별한 상품과 혜택을 지금 만나보세요.
           </TitleDescription>
@@ -344,15 +380,23 @@ const Home = () => {
       <ThirdArticle>
         <ActivityContainer>
           <ImageSlider>
-            <ImageContainer style={sliderStyle}>
+            <ImageContainer style={sliderStyle} ref={sliderRef}>
               {images.map((image, index) => (
                 <Image key={index} src={image} alt={`Image ${index}`} />
               ))}
             </ImageContainer>
+            <ButtonContainer>
+            <PrevButton onClick={handlePrev}>
+              <img src={slideBtn} alt="slideBtn" />
+            </PrevButton>
+            <NextButton onClick={handleNext}>
+              <img src={slideBtn} alt="slideBtn" />
+            </NextButton>
+            </ButtonContainer>
           </ImageSlider>
           <ActivityInfo>
             <Activity>부대시설</Activity>
-            <ActivityTitle>리트릿 구름 스파</ActivityTitle>
+            <ActivityTitle><span>Retreat</span> Goorm Spa</ActivityTitle>
             <ActivityDescription>
               리트릿 구름 스파는 한국 본연의 철학과 고차원적 감성을 더하여 일상
               속 건강한 아름다움을 경험할 수 있는 휴식 공간입니다.
@@ -366,20 +410,11 @@ const Home = () => {
                 </g>
               </DetailSvg>
             </DetailBtn>
-            <ButtonContainer>
-              {images.map((_, index) => (
-                <RoundButton
-                  key={index}
-                  $isActive={index === activeIndex}
-                  onClick={() => handleSlide(index)}
-                />
-              ))}
-            </ButtonContainer>
           </ActivityInfo>
         </ActivityContainer>
       </ThirdArticle>
       <FourthArticle>
-        <MapTitle>오시는 길</MapTitle>
+        <MapTitle>LOCATION</MapTitle>
         <MapSubTitle>구름 호텔로 오시는 방법을 안내해드립니다.</MapSubTitle>
         <KakaoMap width="1180px" height="480px" />
         <MapAddress>경기도 성남시 분당구 판교로 242 PDC A동 902호</MapAddress>

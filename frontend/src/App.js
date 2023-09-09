@@ -29,7 +29,6 @@ import CustomerSupport from './pages/CustomerSupport';
 
 const AppContainer = styled.div`
   width: 100%;
-  min-width: 1200px;
   min-height: 100vh;
 `;
 

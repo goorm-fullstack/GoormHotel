@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import logo from "../images/common/logo.png";
 
 const HeaderContainer = styled.div`
+  width: 100%;
   position: relative;
   height: 120px;
   overflow-x: scroll;
