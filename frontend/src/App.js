@@ -25,6 +25,8 @@ import ScrollToTop from './components/ScrollTop';
 import Facilities from './pages/Facilities';
 import SpecialOffer from './pages/SpecialOffer';
 import CustomerSupport from './pages/CustomerSupport';
+import Reservation from './pages/admin/reservation/reservation';
+import ReservationDetail from './pages/admin/reservation/reservationDetail';
 
 
 const AppContainer = styled.div`
@@ -121,6 +123,8 @@ function App() {
           <Route path="/facilities" element={<Facilities />}></Route>
           <Route path="/specialOffer" element={<SpecialOffer />}></Route>
           <Route path="/customerSupport" element={<CustomerSupport />}></Route>
+          <Route path="/admin/reservation" element={<Reservation />}></Route>
+          <Route path="/admin/reservation/detail" element={<ReservationDetail />}></Route>
         </Routes>
       </AppContainer>
       <FloatingButtons>
