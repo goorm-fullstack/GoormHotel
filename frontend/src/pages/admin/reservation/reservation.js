@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from "styled-components";
 import { commonContainerStyle} from '../../../components/common/commonStyles';
 import AdminHeader from "../../../components/admin/AdminHeader";
@@ -39,33 +39,57 @@ const TableHeaderInfo = styled.div`
   width: 1180px;
   padding-bottom : 1em;
   justify-content : space-between;
-`
-
-const TableDL = styled.dl`
-  display: table;
-  display: flex;
-  flex-direction : column;
-  width : 20%;
 `;
 
-const TableDLDD = styled.dd`
-  display: table-cell;
-  vertical-align: middle;
-  border-bottom: 1px solid #ccc;
-  text-align: center;
-  padding : 2em;
-`;
-
-const TableDLDT = styled.dt`
-  display: table-cell;
-  border-bottom: 1px solid #ccc;
-  border-right: 1px solid #ccc;
+const TableHead = styled.th`
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd;
   text-align: center;
   padding: 2em;
-  background-color : gray;
+  background-color : #ddd;
 `;
 
+const TableDataRow = styled.tr`
+  &:nth-child(even) {
+    background-color: ${props => props.theme.colors.lightGray};
+  }
+`;
+
+const TableDataCell = styled.td`
+  padding: 10px;
+  border: 1px solid #DDDDDD;
+  text-align : center;
+  padding: 1em;
+`;
+
+
 const Reservation = () => {
+  const [reservationList, setReservationList] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  useEffect(() =>{
+    const reservations = [
+      {
+        reservationNumber: '2023082555672148',
+        reservationDate: '2023-09-10',
+        customerName: 'Test1',
+        paymentAmount: '500,000 원',
+        checkInDate: '2023-09-15',
+        checkOutDate: '2023-09-20',
+      },
+      {
+        reservationNumber: '2023082555672149',
+        reservationDate: '2023-09-12',
+        customerName: 'Test2',
+        paymentAmount: '300,000 원',
+        checkInDate: '2023-09-17',
+        checkOutDate: '2023-09-22',
+      },
+    ];
+
+    setReservationList(reservations);
+    setTotalCount(reservations.length)
+  })
+
   return (
     <>
       <AdminHeader />
@@ -99,7 +123,7 @@ const Reservation = () => {
           <span
             style={{
             }}
-          >전체 0건</span>
+          >전체 {totalCount}건</span>
           <div>
           <button 
             style={{
@@ -120,60 +144,30 @@ const Reservation = () => {
           }}>예약취소</button>
           </div>
         </TableHeaderInfo>
-          <div style={{
-            display:"flex",
-            width : "1180px",
-            flexDirection : "row",
+          <table style={{
+            width:"1180px"
           }}>
-          <TableDL>
-            <TableDLDT>
-              No.
-            </TableDLDT>
-            <TableDLDD>
-              1
-            </TableDLDD>
-          </TableDL>
-          <TableDL>
-            <TableDLDT>
-              예약 번호
-            </TableDLDT>
-            <TableDLDD>
-                2
-            </TableDLDD>
-          </TableDL>
-          <TableDL>
-            <TableDLDT>
-              예약자명(회원 ID)
-            </TableDLDT>
-            <TableDLDD>
-                3
-            </TableDLDD>
-          </TableDL>
-          <TableDL>
-            <TableDLDT>
-              체크인
-            </TableDLDT>
-            <TableDLDD>
-              4
-            </TableDLDD>
-          </TableDL>
-          <TableDL>
-            <TableDLDT>
-              체크아웃
-            </TableDLDT>
-            <TableDLDD>
-                5
-            </TableDLDD>
-          </TableDL>
-          <TableDL>
-            <TableDLDT>
-              예약 상태
-            </TableDLDT>
-            <TableDLDD>
-                6
-            </TableDLDD>
-          </TableDL>
-          </div>
+            <thead>
+              <TableHead>No.</TableHead>
+              <TableHead>예약 번호</TableHead>
+              <TableHead>예약자명(회원 ID)</TableHead>
+              <TableHead>체크인</TableHead>
+              <TableHead>체크아웃</TableHead>
+              <TableHead>예약일</TableHead>
+            </thead>
+            <tbody>
+              {reservationList.map((reservation, index) => (
+                <TableDataRow key={index}>
+                  <TableDataCell>{index + 1}</TableDataCell>
+                  <TableDataCell>{reservation.reservationNumber}</TableDataCell>
+                  <TableDataCell>{reservation.customerName}</TableDataCell>
+                  <TableDataCell>{reservation.checkInDate}</TableDataCell>
+                  <TableDataCell>{reservation.checkOutDate}</TableDataCell>
+                  <TableDataCell>{reservation.reservationDate}</TableDataCell>
+              </TableDataRow>
+              ))}
+            </tbody>
+          </table>
       </ThirdArticle>
       </Container>
     </>

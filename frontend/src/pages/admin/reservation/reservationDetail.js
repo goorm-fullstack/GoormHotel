@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { commonContainerStyle} from '../../../components/common/commonStyles';
 import AdminHeader from "../../../components/admin/AdminHeader";
 import { Left } from "../../ReservationPage";
+import Calendar from "react-calendar";
+import 'react-calendar/dist/Calendar.css'; // css import
+import moment from "moment";
 
 const Container = styled.div`
   ${commonContainerStyle}
@@ -47,28 +50,123 @@ const TableDL = styled.dl`
   display: flex;
   flex-direction : row;
   width : 100%;
-  border : 1px solid;
+  border : 1px solid #ddd;
 `;
 
 const TableDLDD = styled.dd`
   display: table-cell;
   vertical-align: middle;
-  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
   text-align: center;
   padding : 1em;
 `;
 
 const TableDLDT = styled.dt`
   display: table-cell;
-  border-bottom: 1px solid #ccc;
-  border-right: 1px solid #ccc;
   text-align: center;
-  background-color : gray;
+  background-color : #ddd;
   width : 200px;
   padding : 1em;
 `;
 
+const CalendarContainer = styled.div`
+  position: relative;
+`;
+
+const CalendarWrapper = styled.div`
+  z-index: 10;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: ${(props) => (props.open ? "block" : "none")};
+`;
+
+const CheckOutCalendarWrapper = styled(CalendarWrapper)``;
+
+export const StyledCalendar = styled(Calendar)`
+  border-radius: 10px;
+  border: 1px solid #c8c8c8;
+
+  .react-calendar__navigation__label > span {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  
+  .react-calendar__month-view__days__day--weekend {
+    color: black;
+  }
+  .react-calendar__tile:enabled:hover,
+  .react-calendar__tile:enabled:focus {
+    background: #102C57;
+    color: white;
+  }
+  
+  .react-calendar__tile--now {
+    // 오늘 날짜 하이라이트 커스텀
+    background: white;
+    color: #102C57;
+  }
+  .react-calendar__tile--active {
+    background: #102C57;
+    color: white;
+  }
+`;
+
+const UserInfo = styled.p`
+  width: 250px;
+  height: 45px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  align-items: center;
+  font-size: 18px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+`
+
 const ReservationDetail = () => {
+  const [reservationDate, setReservationDate] = useState("");//예약번호
+  const [checkInDate, setCheckInDate] = useState("");//예약일
+  const [checkOutDate, setCheckOutDate] = useState("");//체크인
+  const [reservationCode, setReservationCode] = useState("");//체크 아웃
+  const [reservationItem, setReservationItem] = useState("");//에약 상품
+  const[customerName, setCustomerName] = useState("");//예약자명
+  const[phoneNumber, setPhoneNumber] = useState("");//연락처
+  const[emailAddress, setEmailAddress] = useState("");//이메일
+  const[customerRequest, setCustomerRequest] = useState("");//요청 사항
+  const[applyCoupon, setApplyCoupon] = useState("");//적용 쿠폰
+  const[applyGiftCard, setApplyGiftCard] = useState("");//적용 상품권
+  const[totalPrice, setTotalPrice] = useState("");//결제 금액
+
+  useEffect(()=>{
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate()+1);
+    
+    const formattedToday = formatDate(today);
+    const formattedTomorrow = formatDate(tomorrow);
+    const formattedReservationDate = formatDate(tomorrow);
+
+    setCheckInDate(formattedToday);
+    setCheckOutDate(formattedTomorrow);
+    setReservationDate(formattedReservationDate);
+  });
+
+  const formatAndSetDate = (date) => {
+    const formattedDate = moment(date).format("YYYY.MM.DD");
+    const dayOfWeek = moment(date).format("dd");
+    return `${formattedDate} (${dayOfWeek})`;
+  };
+
+  const formatDate = (date) => {
+    const formattedDate = moment(date).format("YYYY.MM.DD");
+    return `${formattedDate}`;
+  };
+
+
+  const isDateDisabled = (date) => {
+    return moment(date).isBefore(moment(), "day");
+  };
   return (
     <>
       <AdminHeader />
@@ -114,7 +212,7 @@ const ReservationDetail = () => {
               예약 번호
             </TableDLDT>
             <TableDLDD>
-              1
+              <p>020221611653456465</p>
             </TableDLDD>
           </TableDL>
           <TableDL>
@@ -122,7 +220,7 @@ const ReservationDetail = () => {
               에약일
             </TableDLDT>
             <TableDLDD>
-                2
+                <p>{reservationDate}</p>
             </TableDLDD>
           </TableDL>
           <TableDL>
@@ -130,7 +228,89 @@ const ReservationDetail = () => {
               체크인
             </TableDLDT>
             <TableDLDD>
-                3
+            <div>
+            <button style={{
+              width: "250px",
+              height: "45px",
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "0 20px",
+              alignItems: "center",
+              fontSize: "18px",
+              border: "1px solid #ddd",
+              backgroundColor: "#fff",
+            }}><p>{checkInDate}</p>
+            <svg viewBox="0 0 32 32" width="18" height="18" style={{fill : "#102C57"}}>
+                      <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
+                        <path
+                          d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z"
+                        />
+                        <rect
+                          x="7"
+                          y="12"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          x="7"
+                          y="17"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          x="7"
+                          y="22"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          x="14"
+                          y="22"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          x="14"
+                          y="17"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          x="14"
+                          y="12"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          x="21"
+                          y="22"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          x="21"
+                          y="17"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          x="21"
+                          y="12"
+                          width="4"
+                          height="3"
+                        />
+                      </g>
+                    </svg>
+            </button>
+                    <CalendarContainer>
+                    <CalendarWrapper>
+                    <StyledCalendar
+                        value={checkInDate}
+                        formatDay={(locale, date) => moment(date).format("DD")}
+                      ></StyledCalendar>
+                    </CalendarWrapper>
+                  </CalendarContainer>
+            </div>
             </TableDLDD>
           </TableDL>
           <TableDL>
@@ -138,7 +318,89 @@ const ReservationDetail = () => {
               체크아웃
             </TableDLDT>
             <TableDLDD>
-              4
+            <div>
+            <button style={{
+              width: "250px",
+              height: "45px",
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "0 20px",
+              alignItems: "center",
+              fontSize: "18px",
+              border: "1px solid #ddd",
+              backgroundColor: "#fff",
+            }}><p>{checkInDate}</p>
+            <svg viewBox="0 0 32 32" width="18" height="18" style={{fill : "#102C57"}}>
+                      <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
+                        <path
+                          d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z"
+                        />
+                        <rect
+                          x="7"
+                          y="12"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          x="7"
+                          y="17"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          x="7"
+                          y="22"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          x="14"
+                          y="22"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          x="14"
+                          y="17"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          x="14"
+                          y="12"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          x="21"
+                          y="22"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          x="21"
+                          y="17"
+                          width="4"
+                          height="3"
+                        />
+                        <rect
+                          x="21"
+                          y="12"
+                          width="4"
+                          height="3"
+                        />
+                      </g>
+                    </svg>
+                    </button>
+            </div>
+              <CalendarContainer>
+                <CalendarWrapper>
+                  <StyledCalendar
+                    value={checkOutDate}
+                    formatDay={(locale, date) => moment(date).format("DD")}
+                  ></StyledCalendar>
+                </CalendarWrapper>
+              </CalendarContainer>
             </TableDLDD>
           </TableDL>
           <TableDL>
@@ -146,7 +408,8 @@ const ReservationDetail = () => {
               예약 상품
             </TableDLDT>
             <TableDLDD>
-                5
+                <span style={{textDecoration : "underline"}}>{"[스페셜 오퍼] 상품명"}</span>
+                <span>{"(스페셜 오퍼] 상품명)"}</span>
             </TableDLDD>
           </TableDL>
           <TableDL>
@@ -154,7 +417,7 @@ const ReservationDetail = () => {
               예약자 명
             </TableDLDT>
             <TableDLDD>
-                6
+            <UserInfo>{"Hello"}</UserInfo>
             </TableDLDD>
           </TableDL>
           <TableDL>
@@ -162,7 +425,7 @@ const ReservationDetail = () => {
                연락처
             </TableDLDT>
             <TableDLDD>
-                7
+            <UserInfo>{"Hello"}</UserInfo>
             </TableDLDD>
           </TableDL>
           <TableDL>
@@ -170,7 +433,7 @@ const ReservationDetail = () => {
               이메일
             </TableDLDT>
             <TableDLDD>
-                8
+            <UserInfo>{"Hello"}</UserInfo>
             </TableDLDD>
           </TableDL>
           <TableDL>
@@ -178,7 +441,7 @@ const ReservationDetail = () => {
               요청사항
             </TableDLDT>
             <TableDLDD>
-                9
+            <UserInfo>{"Hello"}</UserInfo>
             </TableDLDD>
           </TableDL>
           <TableDL>
@@ -186,7 +449,7 @@ const ReservationDetail = () => {
               적용 쿠폰
             </TableDLDT>
             <TableDLDD>
-                10
+            <p>{}</p>
             </TableDLDD>
           </TableDL>
           <TableDL>
@@ -194,7 +457,7 @@ const ReservationDetail = () => {
               적용 상품권
             </TableDLDT>
             <TableDLDD>
-                11
+            <p>{}</p>
             </TableDLDD>
           </TableDL>
           <TableDL>
@@ -202,7 +465,7 @@ const ReservationDetail = () => {
               결제 금액
             </TableDLDT>
             <TableDLDD>
-                12
+            <p>{}</p>
             </TableDLDD>
           </TableDL>
           <div style={{
