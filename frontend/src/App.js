@@ -1,6 +1,6 @@
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import { BrowserRouter,Route, Routes } from 'react-router-dom';
+import { BrowserRouter,Route, Routes, useLocation } from 'react-router-dom';
 import Room from './pages/Room';
 import Dining from './pages/Dining';
 import { styled } from 'styled-components';
