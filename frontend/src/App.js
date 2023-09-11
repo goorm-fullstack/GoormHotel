@@ -29,7 +29,7 @@ import CustomerSupport from './pages/CustomerSupport';
 
 const AppContainer = styled.div`
   width: 100%;
-  min-height: 100vh;
+  min-height: 60vh;
 `;
 
 const FloatingButtons = styled.div`

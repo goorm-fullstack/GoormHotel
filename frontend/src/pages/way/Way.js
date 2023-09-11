@@ -21,6 +21,7 @@ const AboutHeader = styled.div`
   background-color: white;
   z-index: 10;
   padding-left: 40px;
+  top: 120px;
 `;
 
 const AboutHeaderTitle = styled.h1`

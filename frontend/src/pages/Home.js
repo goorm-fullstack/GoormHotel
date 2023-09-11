@@ -24,19 +24,18 @@ const FirstArticle = styled.article`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 `;
 
 const SecondArticle = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 102px 0;
+  margin-top: 256px;
 `;
 
 const Room = styled.div`
   width: 1180px;
   margin: 0 auto;
-  height: 563px;
-  display: flex;
   flex-direction: column;
   align-items: center;
 `;
@@ -46,6 +45,8 @@ const PackageTitle = styled.h1`
   font-size: 30px;
   margin-bottom: 12px;
   letter-spacing: 2px;
+  width: 100%;
+  text-align: center;
 
   span {
     color: #95846E;
@@ -55,7 +56,14 @@ const PackageTitle = styled.h1`
 const TitleDescription = styled.p`
   font-size: 15px;
   color: #888888;
-  margin-bottom: 69px;
+  line-height: 1.5;
+  text-align: center;
+  margin-bottom: 65px;
+`;
+
+const RoomDescription = styled.p`
+  font-size: 15px;
+  color: #888888;
   line-height: 1.5;
 `;
 
@@ -68,11 +76,11 @@ const ImgList = styled.ul`
   width: 100%;
   height: 100%;
   justify-content: space-between;
+  margin-bottom: 75px;
 `;
 
 const RoomItem = styled.li`
   width: 380px;
-  height: 240px;
 `;
 
 const RoomImg = styled.img``;
@@ -84,10 +92,12 @@ const PackageName = styled.h1`
   font-weight: bold;
 `;
 
+
 export const DetailBtn = styled(Link)`
   font-size: 15px;
   padding: 15px 20px;
   background-color: #95846e;
+  margin: 0 auto;
   width: 160px;
   color: white;
   height: 40px;
@@ -98,6 +108,10 @@ export const DetailBtn = styled(Link)`
   &:hover {
     background-color: #8A7057;
   }
+`;
+
+const FacilitiesDetailBtn = styled(DetailBtn)`
+  margin: 0;
 `;
 
 export const DetailSvg = styled.svg`
@@ -115,7 +129,7 @@ const ThirdArticle = styled.article`
   height: 530px;
   width: 100%;
   min-width: 1260px;
-  margin-top: 293px;
+  margin-top: 193px;
   background-color: ${props => props.theme.colors.lightGray};
 `;
 
@@ -158,7 +172,7 @@ const Activity = styled.p`
 
 const ActivityTitle = styled.h1`
   font-size: 35px;
-  margin-bottom: 15.5px;
+  margin-bottom: 26px;
   font-family: "Marcellus", serif;
 
   span {
@@ -171,7 +185,7 @@ const ActivityDescription = styled.p`
   font-size: 15px;
   color: #888888;
   margin-bottom: 83px;
-  line-height: 1.5;
+  line-height: 1.6;
 `;
 
 const FourthArticle = styled.div`
@@ -231,7 +245,6 @@ const ButtonContainer = styled.div`
   position: absolute;
   bottom: 0;
   right: 0;
-  display: flex;
 `;
 
 const PrevButton = styled.button`
@@ -239,6 +252,10 @@ const PrevButton = styled.button`
   height: 65px;
   background-color: #21201E;
   color: #fff;
+
+  &:hover {
+    opacity: 0.7;
+  }
 
   img {
     filter: brightness(0) invert(1);
@@ -293,37 +310,37 @@ const Home = () => {
             <RoomItem>
               <RoomImg src={Deluxe} alt="객실" />
               <PackageName>디럭스</PackageName>
-              <TitleDescription>
+              <RoomDescription>
                 Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한
                 사람과 함께한 특별한 순간을 남겨보세요!
-              </TitleDescription>
+              </RoomDescription>
             </RoomItem>
             <RoomItem>
               <RoomImg src={Family} alt="객실" />
               <PackageName>스위트</PackageName>
-              <TitleDescription>
+              <RoomDescription>
                 Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한
                 사람과 함께한 특별한 순간을 남겨보세요!
-              </TitleDescription>
+              </RoomDescription>
             </RoomItem>
             <RoomItem>
               <RoomImg src={Suite} alt="객실" />
               <PackageName>패밀리</PackageName>
-              <TitleDescription>
+              <RoomDescription>
                 Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한
                 사람과 함께한 특별한 순간을 남겨보세요!
-              </TitleDescription>
+              </RoomDescription>
             </RoomItem>
           </ImgList>
-          <DetailBtn to="/rooms">
-            <p>자세히보기</p>
-            <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-              <title />
-              <g data-name="Layer 2" id="Layer_2">
-                <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
-              </g>
-            </DetailSvg>
-          </DetailBtn>
+            <DetailBtn to="/rooms">
+              <p>자세히보기</p>
+              <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <title />
+                <g data-name="Layer 2" id="Layer_2">
+                  <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
+                </g>
+              </DetailSvg>
+            </DetailBtn>
         </Room>
         <Dining>
           <PackageTitle>
@@ -336,45 +353,45 @@ const Home = () => {
               <DiningItem >
                 <RoomImg src={diningImages[0]} alt={`다이닝 ${diningImages[0]}`} />
                 <PackageName>베이커리</PackageName>
-                <TitleDescription>
+                <RoomDescription>
                   Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한
                   사람과 함께한 특별한 순간을 남겨보세요!
-                </TitleDescription>
+                </RoomDescription>
               </DiningItem>
               <DiningItem >
                 <RoomImg src={diningImages[1]} alt={`다이닝 ${diningImages[1]}`} />
                 <PackageName>바&라운지</PackageName>
-                <TitleDescription>
+                <RoomDescription>
                   Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한
                   사람과 함께한 특별한 순간을 남겨보세요!
-                </TitleDescription>
+                </RoomDescription>
               </DiningItem>
               <DiningItem >
                 <RoomImg src={diningImages[2]} alt={`다이닝 ${diningImages[2]}`} />
                 <PackageName>레스토랑</PackageName>
-                <TitleDescription>
+                <RoomDescription>
                   Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한
                   사람과 함께한 특별한 순간을 남겨보세요!
-                </TitleDescription>
+                </RoomDescription>
               </DiningItem>
               <DiningItem >
                 <RoomImg src={diningImages[3]} alt={`다이닝 ${diningImages[3]}`} />
                 <PackageName>룸 서비스</PackageName>
-                <TitleDescription>
+                <RoomDescription>
                   Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한
                   사람과 함께한 특별한 순간을 남겨보세요!
-                </TitleDescription>
+                </RoomDescription>
               </DiningItem>
           </ImgList>
-          <DetailBtn to="/dining">
-            <p>자세히보기</p>
-            <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-              <title />
-              <g data-name="Layer 2" id="Layer_2">
-                <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
-              </g>
-            </DetailSvg>
-          </DetailBtn>
+            <DetailBtn to="/rooms">
+              <p>자세히보기</p>
+              <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <title />
+                <g data-name="Layer 2" id="Layer_2">
+                  <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
+                </g>
+              </DetailSvg>
+            </DetailBtn>
         </Dining>
       </SecondArticle>
       <ThirdArticle>
@@ -386,12 +403,12 @@ const Home = () => {
               ))}
             </ImageContainer>
             <ButtonContainer>
-            <PrevButton onClick={handlePrev}>
-              <img src={slideBtn} alt="slideBtn" />
-            </PrevButton>
-            <NextButton onClick={handleNext}>
-              <img src={slideBtn} alt="slideBtn" />
-            </NextButton>
+              <PrevButton onClick={handlePrev}>
+                <img src={slideBtn} alt="slideBtn" />
+              </PrevButton>
+              <NextButton onClick={handleNext}>
+                <img src={slideBtn} alt="slideBtn" />
+              </NextButton>
             </ButtonContainer>
           </ImageSlider>
           <ActivityInfo>
@@ -401,7 +418,7 @@ const Home = () => {
               리트릿 구름 스파는 한국 본연의 철학과 고차원적 감성을 더하여 일상
               속 건강한 아름다움을 경험할 수 있는 휴식 공간입니다.
             </ActivityDescription>
-            <DetailBtn>
+            <FacilitiesDetailBtn to="/">
               <p>자세히보기</p>
               <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                 <title />
@@ -409,7 +426,7 @@ const Home = () => {
                   <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
                 </g>
               </DetailSvg>
-            </DetailBtn>
+            </FacilitiesDetailBtn>
           </ActivityInfo>
         </ActivityContainer>
       </ThirdArticle>

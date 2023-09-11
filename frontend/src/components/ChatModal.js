@@ -106,7 +106,7 @@ const ChatForm = styled.form`
   display: flex;
   bottom: 0;
   position: absolute;
-  height: 70px;
+  height: 40px;
   width: 100%;
 `;
 

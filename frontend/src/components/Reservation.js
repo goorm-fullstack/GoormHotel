@@ -14,7 +14,8 @@ const ReserveContainer = styled.div`
   padding: 43px 40px;
   display: flex;
   z-index: 1;
-  margin-top: 740px;
+  position: absolute;
+  bottom: -82px;
 `;
 
 const ReserveDate = styled.div`

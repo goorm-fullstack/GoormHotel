@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "../components/Header";
 import { styled } from "styled-components";
+import { commonContainerStyle } from '../components/common/commonStyles';
 
 const FindAccountInput = styled.input`
   display: inline-block;
@@ -40,13 +41,13 @@ const ButtonTypeButton = styled.button`
   height: 64px;
   font-size: 16px;
   font-weight: 400;
-  color: rgb(119, 119, 119);
+  color: #FFFFFF;
   border: 1px solid rgb(221, 221, 221);
-  background-color: rgb(237, 237, 237);
+  background-color: #21201E;
   line-height: 1.75;
   text-align: center;
   &:hover {
-    background-color: #dedede;
+    opacity: 0.8;
   }
 `;
 
@@ -54,16 +55,15 @@ const ButtonTypeSubmit = styled.button`
   display: inline-block;
   width: 510px;
   height: 64px;
-  background-color: rgb(255, 255, 255);
+  background-color: #95846e;
   border: 1px solid rgb(186, 160, 133);
   font-size: 16px;
   font-weight: 500;
-  color: rgb(186, 160, 133);
+  color: #FFFFFF;
   line-height: 1.75;
   text-align: center;
   &:hover {
-    background-color: rgb(149, 132, 110);
-    color: rgb(255, 255, 255);
+    background-color: #8A7058;
   }
 `;
 
@@ -74,10 +74,7 @@ const FindAccountForm = styled.form`
 `;
 
 const Container = styled.div`
-  width: 1180px;
-  height: 760px;
-  margin: 0 auto;
-  margin-top: 160px;
+  ${commonContainerStyle}
 `;
 
 const Title = styled.p`
@@ -124,7 +121,7 @@ const Auth = styled.div`
 const FindAccount = () => {
   return (
     <>
-      <Header backgroundColor="rgba(51, 51, 51, 0.8)" />
+      <Header />
       <Container>
         <Title>아이디/비밀번호 찾기</Title>
         <ProcessBox>

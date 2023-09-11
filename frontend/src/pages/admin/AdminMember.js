@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AdminLayout from './AdminLayout';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   width: 100%;
@@ -129,6 +130,7 @@ const AdminMember = () => {
     },
   ];
 
+
   const subMenus = [
     { name: '전체 회원 관리', link: '/admin/member' },
     { name: '부운영자 관리', link: '/admin/managers' },
@@ -139,7 +141,7 @@ const AdminMember = () => {
       <Container>
         <Title>전체 회원 관리</Title>
         <ContentHeader>
-          <Total>전체 0 건</Total>
+          <Total>전체 {memberData.length} 건</Total>
           <BlackListBtn>
             <Delete>블랙리스트 해제</Delete>
             <Add>블랙리스트 추가</Add>
@@ -176,7 +178,11 @@ const AdminMember = () => {
                 </TableCell>
                 <TableCell>{item.number}</TableCell>
                 <TableCell>{item.grade}</TableCell>
-                <TableCell>{item.memberId}</TableCell>
+                <TableCell>
+                  <Link to={`/admin/member/${item.memberId}`}>
+                    {item.memberId}
+                  </Link>
+                </TableCell>
                 <TableCell>{item.name}</TableCell>
                 <TableCell>{item.joinDate}</TableCell>
                 <TableCell>{item.blacklist}</TableCell>

@@ -5,20 +5,18 @@ import logo from "../images/common/logo.png";
 
 const HeaderContainer = styled.div`
   width: 100%;
-  position: relative;
+  position: fixed;
   height: 120px;
-  overflow-x: scroll;
+  z-index: 999;
+  top: 0;
 `;
 
 const Container = styled.header`
   width: 100%;
   height: 120px;
   background-color: ${props => props.$background || props.theme.colors.charcoal};
-  position: fixed;
   padding: 0 40px;
   color: white;
-  z-index: 999;
-  top: 0;
 `;
 
 const TopInfo = styled.div`

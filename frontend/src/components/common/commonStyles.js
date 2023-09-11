@@ -3,7 +3,7 @@ import { css } from 'styled-components';
 export const commonContainerStyle = css`
   width: 1182px;
   margin: 0 auto;
-  margin-top: 160px;
+  padding-top: 280px;
 `;
 
 export const commonTitleStyle = css`

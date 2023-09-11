@@ -10,7 +10,7 @@ const SiteMap = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
-  margin-top: 160px;
+  margin-top: 280px;
 `;
 
 const Title = styled.p`
