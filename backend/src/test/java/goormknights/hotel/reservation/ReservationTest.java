@@ -70,7 +70,6 @@ public class ReservationTest {
                 .uuid("132123123131")
                 .discountRate(3)
                 .member(null)
-                .isUsed('N')
                 .issueDate(now)
                 .expire(30)
                 .build();
@@ -86,7 +85,6 @@ public class ReservationTest {
                 .auth("member")
                 .phoneNumber("01012341234")
                 .email("test@test.com")
-                .address("주소")
                 .privacyCheck(true)
                 .grade("Gold")
                 .couponList(couponList)

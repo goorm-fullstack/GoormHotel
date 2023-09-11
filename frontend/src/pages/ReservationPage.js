@@ -2,20 +2,20 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import { styled } from "styled-components";
 import moment from "moment";
-// import Calendar from 'react-calendar';
-import { StyledCalendar } from "../components/Reservation";
-import Product from "../components/Product";
+import { StyledCalendar } from '../components/Reservation';
+import Product from '../components/Product';
+import { commonContainerStyle, commonTitleStyle, commonSubTitleStyle } from '../components/common/commonStyles';
 
-export const Container = styled.div`
-  width: 1182px;
-  margin: 0 auto;
-  margin-top: 160px;
+const Container = styled.div`
+  ${commonContainerStyle}
 `;
 
-export const Title = styled.h1`
-  margin-bottom: 94px;
-  font-size: 36px;
-  font-weight: bold;
+const Title = styled.h1`
+  ${commonTitleStyle}
+`;
+
+const SubTitle = styled.h2`
+  ${commonSubTitleStyle}
 `;
 
 export const Wrapper = styled.div`
@@ -36,11 +36,6 @@ export const Section = styled.div`
   margin-bottom: 53px;
 `;
 
-export const SubTitle = styled.h2`
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 34px;
-`;
 
 const ReservationInfoDate = styled.div`
   display: flex;
@@ -64,6 +59,10 @@ const CheckBtn = styled.button`
   font-size: 18px;
   border: 1px solid #ddd;
   background-color: #fff;
+  
+  svg {
+    fill: #102C57;
+  }
 `;
 
 const CheckOut = styled(CheckIn)`
@@ -98,6 +97,7 @@ const Select = styled.select`
   text-align: center;
   outline: none;
   border: 1px solid #dddddd;
+  background-position: right 10px center; 
 `;
 
 const SelectWrapper = styled.div`
@@ -148,6 +148,7 @@ const CouponBtn = styled.button`
 const CouponInfo = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
 `;
 
 const CouponInfoWrapper = styled.div`
@@ -162,7 +163,11 @@ const CouponName = styled.p`
   color: #666666;
 `;
 
-const CouponPrice = styled.p``;
+const CouponPrice = styled.p`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const CouponSelect = styled.select`
   width: 100%;
@@ -170,6 +175,11 @@ const CouponSelect = styled.select`
   padding: 16px 20px;
   outline: none;
   font-size: 16px;
+
+  &:disabled {
+    color: #888888;
+    background-color: #EDEDED;
+  }
 `;
 
 const PaymentBtn = styled.button`
@@ -177,6 +187,21 @@ const PaymentBtn = styled.button`
   color: #ffffff;
   height: 60px;
   width: 100%;
+`;
+
+const RemoveButton = styled.button`
+  background-color: #bdbdbd;
+  cursor: pointer;
+  margin-left: 12px;
+  color: #fff;
+  border-radius: 100%;
+  padding: 4px;
+  text-align: center;
+  font-size: 11px;
+
+  &:hover {
+    background-color: #21201e;
+  }
 `;
 
 const ReservationPage = () => {
@@ -191,13 +216,13 @@ const ReservationPage = () => {
   const [children, setChildren] = useState(0);
   const [giftCardNumber, setGiftCardNumber] = useState("");
   // const [userLoggedIn, setUserLoggedIn] = useState(true);
-  const userLoggedIn = true;
+  const userLoggedIn = false;
   const [selectedOption, setSelectedOption] = useState("");
 
-  const roomOptions = [1, 2, 3, 4];
-  const adultOptions = [1, 2, 3, 4];
-  const childrenOptions = [0, 1, 2, 3];
-  const coupons = [
+  const roomOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const adultOptions =  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const childrenOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; 
+  const [coupons, setCoupons] = useState([
     {
       name: "추석 맞이 특가 이벤트: 객실 금액 100,000원 할인 상품권",
       price: "-100,000 원",
@@ -206,7 +231,7 @@ const ReservationPage = () => {
       name: "추석 맞이 특가 이벤트: 전 상품 금액 50,000원 할인 상품권",
       price: "-50,000 원",
     },
-  ];
+  ]);
 
   useEffect(() => {
     const today = new Date();
@@ -265,9 +290,15 @@ const ReservationPage = () => {
     console.log("Selected option:", event.target.value);
   };
 
+  const handleRemoveCoupon = (index) => {
+    // 해당 인덱스의 쿠폰을 삭제합니다.
+    const updatedCoupons = coupons.filter((_, i) => i !== index);
+    setCoupons(updatedCoupons);
+  };
+
   return (
     <div>
-      <Header backgroundColor="#21201E" />
+      <Header />
       <Container>
         <Title>예약하기</Title>
         <Wrapper>
@@ -282,67 +313,57 @@ const ReservationPage = () => {
                     <svg viewBox="0 0 32 32" width="18" height="18">
                       <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
                         <path
-                          fill="#333332"
                           d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z"
                         />
                         <rect
-                          fill="#333332"
                           x="7"
                           y="12"
                           width="4"
                           height="3"
                         />
                         <rect
-                          fill="#333332"
                           x="7"
                           y="17"
                           width="4"
                           height="3"
                         />
                         <rect
-                          fill="#333332"
                           x="7"
                           y="22"
                           width="4"
                           height="3"
                         />
                         <rect
-                          fill="#333332"
                           x="14"
                           y="22"
                           width="4"
                           height="3"
                         />
                         <rect
-                          fill="#333332"
                           x="14"
                           y="17"
                           width="4"
                           height="3"
                         />
                         <rect
-                          fill="#333332"
                           x="14"
                           y="12"
                           width="4"
                           height="3"
                         />
                         <rect
-                          fill="#333332"
                           x="21"
                           y="22"
                           width="4"
                           height="3"
                         />
                         <rect
-                          fill="#333332"
                           x="21"
                           y="17"
                           width="4"
                           height="3"
                         />
                         <rect
-                          fill="#333332"
                           x="21"
                           y="12"
                           width="4"
@@ -369,67 +390,57 @@ const ReservationPage = () => {
                     <svg viewBox="0 0 32 32" width="18" height="18">
                       <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
                         <path
-                          fill="#333332"
                           d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z"
                         />
                         <rect
-                          fill="#333332"
                           x="7"
                           y="12"
                           width="4"
                           height="3"
                         />
                         <rect
-                          fill="#333332"
                           x="7"
                           y="17"
                           width="4"
                           height="3"
                         />
                         <rect
-                          fill="#333332"
                           x="7"
                           y="22"
                           width="4"
                           height="3"
                         />
                         <rect
-                          fill="#333332"
                           x="14"
                           y="22"
                           width="4"
                           height="3"
                         />
                         <rect
-                          fill="#333332"
                           x="14"
                           y="17"
                           width="4"
                           height="3"
                         />
                         <rect
-                          fill="#333332"
                           x="14"
                           y="12"
                           width="4"
                           height="3"
                         />
                         <rect
-                          fill="#333332"
                           x="21"
                           y="22"
                           width="4"
                           height="3"
                         />
                         <rect
-                          fill="#333332"
                           x="21"
                           y="17"
                           width="4"
                           height="3"
                         />
                         <rect
-                          fill="#333332"
                           x="21"
                           y="12"
                           width="4"
@@ -472,7 +483,7 @@ const ReservationPage = () => {
                   >
                     {adultOptions.map((option) => (
                       <option key={option} value={option}>
-                        {option} 명
+                        {option}
                       </option>
                     ))}
                   </Select>
@@ -485,7 +496,7 @@ const ReservationPage = () => {
                   >
                     {childrenOptions.map((option) => (
                       <option key={option} value={option}>
-                        {option} 명
+                        {option}
                       </option>
                     ))}
                   </Select>
@@ -496,7 +507,7 @@ const ReservationPage = () => {
             <Section>
               <SubTitle>예약자 정보</SubTitle>
               <InputWrapper>
-                <NameInput placeholder="이름" />
+                <NameInput placeholder="예약자명" />
                 <PhoneInput placeholder="전화번호" />
               </InputWrapper>
               <Input placeholder="이메일" />
@@ -521,7 +532,12 @@ const ReservationPage = () => {
                     $isFirst={index === coupons.length - 1}
                   >
                     <CouponName>{coupon.name}</CouponName>
-                    <CouponPrice>{coupon.price}</CouponPrice>
+                    <CouponPrice>
+                      {coupon.price}
+                      <RemoveButton onClick={() => handleRemoveCoupon(index)}>
+                        ×
+                      </RemoveButton>
+                    </CouponPrice>
                   </CouponInfoWrapper>
                 ))}
               </CouponInfo>
@@ -547,7 +563,7 @@ const ReservationPage = () => {
                     </option>
                   </>
                 ) : (
-                  <option disabled>로그인이 필요한 서비스입니다.</option>
+                  <option disabled selected>로그인이 필요한 서비스입니다.</option>
                 )}
               </CouponSelect>
             </Section>

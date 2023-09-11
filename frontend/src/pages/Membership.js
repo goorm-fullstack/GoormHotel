@@ -42,7 +42,6 @@ const ImageBorderFooter = styled.p`
 `;
 
 const FirstUl = styled.ul`
-  margin-bottom: 40px;
   margin-left: 2rem;
 `;
 
@@ -51,7 +50,6 @@ const MembershipUl = styled.ul`
 `;
 
 const MembershipLi = styled.li`
-  margin-bottom: 12px;
   font-size: 14px;
   font-weight: 400;
   color: rgb(102, 102, 102);
@@ -59,7 +57,7 @@ const MembershipLi = styled.li`
 `;
 
 const BoldTextLi = styled.li`
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   font-size: 16px;
   font-weight: 500;
   color: rgb(33, 32, 30);
@@ -68,7 +66,6 @@ const BoldTextLi = styled.li`
 
 const MembershipInfo = styled.div`
   width: 1180px;
-  height: 1200px;
   margin: 0 auto;
   margin-top: 160px;
   display: flex;
@@ -76,7 +73,7 @@ const MembershipInfo = styled.div`
   flex-direction: column;
   align-content: center;
   align-items: flex-start;
-  gap: 100px;
+  gap: 20px;
 `;
 
 const Title = styled.p`
@@ -84,6 +81,7 @@ const Title = styled.p`
   font-weight: 500;
   color: rgb(17, 17, 17);
   line-height: 1.2;
+  margin-bottom: 100px;
 `;
 
 const MembershipBox = styled.div`
@@ -103,11 +101,9 @@ const MembershipItemBox = styled.div`
 const MembershipDetailInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   font-size: 14px;
-  font-weight: 500;
   color: #888888;
-  line-height: 1.714;
 `;
 
 const SvgIconBronze = styled.svg`
@@ -137,7 +133,7 @@ const SvgIconGold = styled.svg`
 const Membership = () => {
   return (
     <>
-      <Header backgroundColor="rgba(51, 51, 51, 0.8)" />
+      <Header />
       <MembershipInfo>
         <Title>멤버십</Title>
         <MembershipBox>

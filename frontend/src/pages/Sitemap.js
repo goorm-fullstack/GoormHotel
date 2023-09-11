@@ -14,11 +14,11 @@ const SiteMap = styled.div`
 `;
 
 const Title = styled.p`
-  height: 223px;
   font-size: 36px;
   font-weight: 500;
   color: rgb(17, 17, 17);
   line-height: 1.2;
+  margin-bottom: 100px;
 `;
 
 const Items = styled.div`
@@ -61,7 +61,7 @@ const SiteMapLink = styled(Link)`
 const Sitemap = () => {
   return (
     <>
-      <Header backgroundColor="rgba(51, 51, 51, 0.8)" />
+      <Header />
       <SiteMap>
         <Title>사이트맵</Title>
         <Items>

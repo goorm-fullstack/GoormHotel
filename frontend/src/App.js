@@ -1,29 +1,34 @@
-import Footer from "./components/Footer";
-import Home from "./pages/Home";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Terms from "./pages/Terms";
-import Room from "./pages/Room";
-import Dining from "./pages/Dining";
-import { styled } from "styled-components";
-import About from "./pages/About";
-// import Map from "./pages/Map";
-import Mypage from "./pages/Mypage";
-import ReservationPage from "./pages/ReservationPage";
-import { useState } from "react";
-import ChatModal from "./components/ChatModal";
-import Way from "./pages/way/Way";
-import Agreement from "./pages/register/Agreement";
-import Privacy from "./pages/register/Privacy";
-import Sitemap from "./pages/Sitemap";
-import FindAccount from "./pages/FindAccount";
-import FindIdResult from "./pages/FindIdResult";
-import FindPwResult from "./pages/FindPwResult";
-import Membership from "./pages/Membership";
-import KakaoMap from "./utils/KakaoMap";
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import { BrowserRouter,Route, Routes, useLocation } from 'react-router-dom';
+import Room from './pages/Room';
+import Dining from './pages/Dining';
+import { styled } from 'styled-components';
+import About from './pages/About';
+import Mypage from './pages/Mypage';
+import ReservationPage from './pages/ReservationPage';
+import { useState } from 'react';
+import ChatModal from './components/ChatModal';
+import ReservationComplete from './pages/ReservationComplete';
+import ReservationCheck from './pages/ReservationCheck';
+import ReservationItem from './pages/ReservationItem';
+import ReservationList from './pages/ReservationList';
+import Agreement from './pages/register/Agreement';
+import Sitemap from './pages/Sitemap';
+import FindAccount from './pages/FindAccount';
+import FindIdResult from './pages/FindIdResult';
+import FindPwResult from './pages/FindPwResult';
+import Membership from './pages/Membership';
+import Way from './pages/way/Way';
+import Privacy from './pages/register/Privacy';
+import ScrollToTop from './components/ScrollTop';
+import Facilities from './pages/Facilities';
+import SpecialOffer from './pages/SpecialOffer';
+import CustomerSupport from './pages/CustomerSupport';
+
 
 const AppContainer = styled.div`
   width: 100%;
-  min-width: 100%;
   min-height: 100vh;
 `;
 
@@ -31,19 +36,25 @@ const FloatingButtons = styled.div`
   position: sticky;
   bottom: 70px;
   float: right;
-  right: 100px;
+  right: 60px;
   z-index: 1;
   display: flex;
   flex-direction: column;
+  padding: 3px;
 `;
 
 const ChatButton = styled.button`
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  color: #f5f5f5;
-  box-shadow: 0px 0px 10px rgba(128, 128, 128, 0.15);
-  margin-bottom: 10px;
+  background-color: #fff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+  transition: transform 0.2s; 
+
+  &:hover {
+    transform: scale(1.1);
+  }
 
   svg {
     width: 22px;
@@ -52,10 +63,14 @@ const ChatButton = styled.button`
 `;
 
 const ScrollToTopButton = styled.button`
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  background-color: #21201e;
+  background-color: ${props => props.theme.colors.charcoal};
+
+  &:hover {
+    transform: scale(1.1);
+  }
 
   svg {
     fill: white;
@@ -81,14 +96,13 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <AppContainer>
         <Routes>
           <Route path="/" element={<Home />}></Route>
-          <Route path="/terms" element={<Terms />}></Route>
           <Route path="/rooms" element={<Room />}></Route>
           <Route path="/dining" element={<Dining />}></Route>
           <Route path="/about" element={<About />}></Route>
-          <Route path="/map" element={<KakaoMap />}></Route>
           <Route path="/mypage" element={<Mypage />}></Route>
           <Route path="/reservation" element={<ReservationPage />}></Route>
           <Route path="/location" element={<Way />}></Route>
@@ -99,6 +113,13 @@ function App() {
           <Route path="/findIdResult" element={<FindIdResult />}></Route>
           <Route path="/findPwResult" element={<FindPwResult />}></Route>
           <Route path="/membership" element={<Membership />}></Route>
+          <Route path="/reservationComplete" element={<ReservationComplete  title="예약 확인" />}></Route>
+          <Route path="/reservationCheck" element={<ReservationCheck />}></Route>
+          <Route path="/reservationItem" element={<ReservationItem />}></Route>
+          <Route path="/reservationList" element={<ReservationList />}></Route>
+          <Route path="/facilities" element={<Facilities />}></Route>
+          <Route path="/specialOffer" element={<SpecialOffer />}></Route>
+          <Route path="/customerSupport" element={<CustomerSupport />}></Route>
         </Routes>
       </AppContainer>
       <FloatingButtons>

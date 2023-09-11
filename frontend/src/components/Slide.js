@@ -8,13 +8,12 @@ import { styled } from "styled-components";
 const images = [visual03, visual02, visual01];
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 1220px;
+  margin: 0 auto;
 `;
 
 const SlideContent = styled.div`
   display: flex;
-  width: 100%;
   transition: transform 0.5s ease-in-out;
 `;
 
@@ -39,11 +38,34 @@ const SlideButton = styled.button`
 const SlideImageWrapper = styled.div`
   position: absolute;
   width: 100%;
+  min-width: 1260px;
   height: 100%;
   top: 0;
   left: 0;
   opacity: ${(props) => (props.$isActive ? 1 : 0)};
   transition: opacity 1s ease-in-out;
+`;
+
+const TextWrapper = styled.div`
+  position: absolute;
+  margin-top: 311px;
+  display: flex;
+  flex-direction: column;
+  color: #FFFFFF;
+  text-shadow: 0px 0px 19px rgba(0, 0, 0, 0.54);
+`;
+
+const Text = styled.p`
+  font-family: "Marcellus", serif;
+  font-size: 60px;
+  text-align: center;
+  letter-spacing: 8px;
+  margin-bottom: 10px;
+`;
+
+const SubText = styled.p`
+  margin-top: 60px;
+  font-size: 24px;
 `;
 
 const Slide = () => {
@@ -68,6 +90,10 @@ const Slide = () => {
           ))}
         </SlideContent>
       </Container>
+      <TextWrapper>
+        <Text>THE HOTEL GOORM</Text>
+        <SubText>고객의 작은 관심에도 귀 기울이며, 차별화된 서비스와 시설로써 보다 편안하고 안락한 휴식을 제공합니다.</SubText>
+      </TextWrapper>
       <SlideButton onClick={goToPreviousSlide} $position="left">
         <img src={slideBtnImage} alt="slideBtn" />
       </SlideButton>

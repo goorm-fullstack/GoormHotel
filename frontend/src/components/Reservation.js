@@ -4,16 +4,17 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from "moment";
 import 'moment/locale/ko';
+import { Link } from 'react-router-dom';
 
 const ReserveContainer = styled.div`
-  position: absolute;
-  bottom: -82px;
   background-color: #fff;
-  width: 1179px;
+  margin: 0 auto;
   height: 164px;
   box-shadow: 0px 18px 19px rgba(0, 0, 0, 0.13);
   padding: 43px 40px;
   display: flex;
+  z-index: 1;
+  margin-top: 740px;
 `;
 
 const ReserveDate = styled.div`
@@ -30,8 +31,7 @@ const ReserveDate = styled.div`
   }
 `;
 
-const Now = styled.div`
-`;
+const Now = styled.div``;
 
 const CheckInBtn = styled.button`
   border: 1px solid #DDDDDD;
@@ -92,11 +92,16 @@ const Select = styled.select`
   font-size: 20px;
 `;
 
-const ReservationButton = styled.button`
+const ReservationButton = styled(Link)`
   width: 150px;
   padding: 30px;
   background-color: #102C57;
   color: white;
+  text-align: center;
+
+  &:hover {
+    background-color: #041137;
+  }
 `;
 
 const CalendarContainer = styled.div`
@@ -153,9 +158,9 @@ const Reservation = () => {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
 
-  const roomOptions = [1, 2, 3, 4];
-  const adultOptions = [1, 2, 3, 4];
-  const childrenOptions = [0, 1, 2, 3]; 
+  const roomOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const adultOptions =  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const childrenOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; 
 
   useEffect(() => {
     const today = new Date();
@@ -215,7 +220,7 @@ const Reservation = () => {
               <p>체크인</p>
               <CheckInBtn onClick={handleCheckInToggle}>
                 <Now>{checkInDate}</Now>
-                <CalendarSvg  viewBox="0 0 32 32" width="18" height="18" ><g xmlns="http://www.w3.org/2000/svg" id="calendar_1_"><path fill="#333332" d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z" /><rect fill="#333332" x="7" y="12" width="4" height="3" /><rect fill="#333332" x="7" y="17" width="4" height="3" /><rect fill="#333332" x="7" y="22" width="4" height="3" /><rect fill="#333332" x="14" y="22" width="4" height="3" /><rect fill="#333332" x="14" y="17" width="4" height="3" /><rect fill="#333332" x="14" y="12" width="4" height="3" /><rect fill="#333332" x="21" y="22" width="4" height="3" /><rect fill="#333332" x="21" y="17" width="4" height="3" /><rect fill="#333332" x="21" y="12" width="4" height="3" /></g></CalendarSvg>
+                <CalendarSvg viewBox="0 0 32 32" width="18" height="18" ><g xmlns="http://www.w3.org/2000/svg" id="calendar_1_"><path  d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z" /><rect x="7" y="12" width="4" height="3" /><rect x="7" y="17" width="4" height="3" /><rect x="7" y="22" width="4" height="3" /><rect x="14" y="22" width="4" height="3" /><rect x="14" y="17" width="4" height="3" /><rect x="14" y="12" width="4" height="3" /><rect x="21" y="22" width="4" height="3" /><rect x="21" y="17" width="4" height="3" /><rect x="21" y="12" width="4" height="3" /></g></CalendarSvg>
               </CheckInBtn>
               <CalendarContainer>              
                 <CalendarWrapper open={checkInOpen}>
@@ -228,7 +233,7 @@ const Reservation = () => {
               <p>체크아웃</p>
               <CheckOutBtn onClick={handleCheckOutToggle}>
                 <Now>{checkOutDate}</Now>
-                <CalendarSvg viewBox="0 0 32 32" width="18" height="18" ><g xmlns="http://www.w3.org/2000/svg" id="calendar_1_"><path fill="#333332" d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z" /><rect fill="#333332" x="7" y="12" width="4" height="3" /><rect fill="#333332" x="7" y="17" width="4" height="3" /><rect fill="#333332" x="7" y="22" width="4" height="3" /><rect fill="#333332" x="14" y="22" width="4" height="3" /><rect fill="#333332" x="14" y="17" width="4" height="3" /><rect fill="#333332" x="14" y="12" width="4" height="3" /><rect fill="#333332" x="21" y="22" width="4" height="3" /><rect fill="#333332" x="21" y="17" width="4" height="3" /><rect fill="#333332" x="21" y="12" width="4" height="3" /></g></CalendarSvg>
+                <CalendarSvg viewBox="0 0 32 32" width="18" height="18" ><g xmlns="http://www.w3.org/2000/svg" id="calendar_1_"><path d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z" /><rect  x="7" y="12" width="4" height="3" /><rect  x="7" y="17" width="4" height="3" /><rect  x="7" y="22" width="4" height="3" /><rect  x="14" y="22" width="4" height="3" /><rect  x="14" y="17" width="4" height="3" /><rect  x="14" y="12" width="4" height="3" /><rect  x="21" y="22" width="4" height="3" /><rect  x="21" y="17" width="4" height="3" /><rect  x="21" y="12" width="4" height="3" /></g></CalendarSvg>
               </CheckOutBtn>
               <CalendarContainer>              
                 <CheckOutCalendarWrapper open={checkOutOpen}>
@@ -257,12 +262,12 @@ const Reservation = () => {
             <SelectWrapper>
               <SelectLabel>어린이</SelectLabel>
               <Select value={children} onChange={e => setChildren(parseInt(e.target.value))}>
-              {childrenOptions.map(option => (
-                        <option key={option} value={option}>{option} 명</option>
-                      ))}
+                {childrenOptions.map(option => (
+                  <option key={option} value={option}>{option} 명</option>
+                ))}
               </Select>
             </SelectWrapper>
-            <ReservationButton onClick={() => handleReservation()}>예약하기</ReservationButton>
+            <ReservationButton to="/reservation" onClick={() => handleReservation()}>예약하기</ReservationButton>
           </ReserveDetail>         
         </ReserveContainer>
   );
