@@ -95,6 +95,11 @@ select {
   cursor: pointer;
 }
 
+::selection {
+	background: #95846E;
+	color: white;
+}
+
 `;
 
 export default GlobalStyle;

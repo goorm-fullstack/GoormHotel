@@ -19,28 +19,27 @@ const AboutHeader = styled.div`
   position: fixed;
   width: 100%;
   background-color: white;
-  z-index: 10;
-  padding-left: 40px;
+  z-index: 99;
+  padding: 0 40px;
   top: 120px;
+  min-width: 1260px;
 `;
 
 const AboutHeaderTitle = styled.h1`
   font-size: 18px;
   font-weight: bold;
+  width: 235px;
 `;
 
 const LinkWrapper = styled.div`
-  float: left;
-  margin-left: 130px;
-
   & > a:not(:last-child) {
     margin-right: 40px;
   }
 `;
 
 const AboutLink = styled(NavLink)`
-  font-size: 14px;
-  color: #888888;
+  font-size: 15px;
+  color: #666;
 
   &:hover {
     color: #baa085;

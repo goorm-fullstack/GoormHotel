@@ -14,9 +14,9 @@ const ChatWindow = styled.div`
 `;
 
 const ChatHeader = styled.div`
-  background-color: #102C57;
+  background-color: #102c57;
   height: 60px;
-  color: #FFFFFF;
+  color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -36,8 +36,7 @@ const CloseImg = styled.img`
   width: 16px;
   height: 16px;
   filter: invert(1);
-`
-;
+`;
 const ChatInput = styled.input`
   padding: 8px;
   border: 1px solid #ccc;
@@ -90,7 +89,7 @@ const AdminProfileIcon = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: ${props => props.theme.colors.charcoal};
+  background-color: ${(props) => props.theme.colors.charcoal};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -121,14 +120,14 @@ const ChatModal = ({ closeChat }) => {
   ]);
   const [newChat, setNewChat] = useState('');
   const chatContainerRef = useRef(null);
-  const [roomId, setRoomId] = useState("");
+  const [roomId, setRoomId] = useState('');
   const [socketConnected, setSocketConnected] = useState(false);
-  const webSocketURL = "ws://127.0.0.1:8080/ws/chat";
+  const webSocketURL = 'ws://127.0.0.1:8080/ws/chat';
   let ws = useRef(null);
   useEffect(() => {
     const initializeWebSocket = async () => {
       try {
-        const room = await getRoomId("tester");
+        const room = await getRoomId('tester');
         setRoomId((prevRoomId) => {
           // 이전 상태(prevRoomId)를 이용하여 새로운 상태를 반환
           if (!ws.current) {
@@ -136,56 +135,53 @@ const ChatModal = ({ closeChat }) => {
             ws.current.onopen = () => {
               setSocketConnected(true);
               console.log(prevRoomId); // 이전 상태를 사용할 수 있음
-              console.log("WebSocket connected");
-  
+              console.log('WebSocket connected');
+
               // WebSocket 연결이 성공하면 ENTER 메시지 전송
               ws.current.send(
                 JSON.stringify({
-                  type: "ENTER",
+                  type: 'ENTER',
                   roomId: prevRoomId, // 이전 상태를 사용
-                  sender: "test",
-                  message: "입장",
+                  sender: 'test',
+                  message: '입장',
                 })
               );
             };
             ws.current.onclose = (error) => {
-              console.log("disconnect from " + webSocketURL);
+              console.log('disconnect from ' + webSocketURL);
               console.log(error);
             };
             ws.current.onerror = (error) => {
-              console.log("connection error " + webSocketURL);
+              console.log('connection error ' + webSocketURL);
               console.log(error);
             };
-  
+
             // 메시지 핸들러 설정
             ws.current.onmessage = (event) => {
               const message = event.data;
               const parsedMessage = JSON.parse(message);
               const chatContent = parsedMessage.message;
               const chatRoomID = parsedMessage.roomId;
-              if(chatRoomID == prevRoomId) {
-                console.log("call");
+              if (chatRoomID == prevRoomId) {
+                console.log('call');
                 // 메시지를 처리하는 로직을 여기에 추가
                 // 이전 채팅 데이터를 복사한 후 새 메시지를 추가
-                setChatData((prevChatData) => [
-                  ...prevChatData,
-                  { message: chatContent, isUser: false },
-                ]);
+                setChatData((prevChatData) => [...prevChatData, { message: chatContent, isUser: false }]);
               }
             };
           }
           return room; // 새로운 상태 반환
         });
       } catch (error) {
-        console.error("Error fetching roomId:", error);
+        console.error('Error fetching roomId:', error);
       }
     };
-  
+
     initializeWebSocket();
-  
+
     // 컴포넌트 언마운트 시 WebSocket 연결 닫기
     return () => {
-      console.log("Cleaning up WebSocket");
+      console.log('Cleaning up WebSocket');
       if (ws.current && ws.current.readyState === WebSocket.OPEN) {
         ws.current.close();
       }
@@ -194,9 +190,9 @@ const ChatModal = ({ closeChat }) => {
   }, []);
 
   const getRoomId = async () => {
-    const request = await getChatRoomInfo("tester");
+    const request = await getChatRoomInfo('tester');
     setRoomId(request);
-  } 
+  };
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -204,18 +200,17 @@ const ChatModal = ({ closeChat }) => {
     }
   }, [chatData]);
 
-  
   const handleInputKeyPress = (e) => {
     if (e.key === 'Enter' && newChat.trim() !== '' && socketConnected) {
       setChatData([...chatData, { message: newChat, isUser: true }]);
       ws.current.send(
         JSON.stringify({
-          type : "TALK",
-          roomId : roomId,
-          sender : "test",
-          message : newChat
+          type: 'TALK',
+          roomId: roomId,
+          sender: 'test',
+          message: newChat,
         })
-      )
+      );
       setNewChat('');
     }
   };
@@ -240,13 +235,24 @@ const ChatModal = ({ closeChat }) => {
     <ChatWindow>
       <ChatWrapper>
         <ChatHeader>
-          <CloseBtn onClick={closeChat}><CloseImg src={closeImg} alt="close" /></CloseBtn>
+          <CloseBtn onClick={closeChat}>
+            <CloseImg src={closeImg} alt="close" />
+          </CloseBtn>
           <p>채팅상담</p>
         </ChatHeader>
         <ChatContainer ref={chatContainerRef}>
           {chatData.map((chat, index) => (
             <ChatMessageWrapper $isUser={chat.isUser}>
-              {!chat.isUser && <AdminProfileIcon><svg fill='white' viewBox="0 0 24 24" width="20px" height="20px" xmlns="http://www.w3.org/2000/svg"><g><path d="M0 0h24v24H0z" fill="none"/><path d="M4 12h3a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7C2 6.477 6.477 2 12 2s10 4.477 10 10v7a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h3a8 8 0 1 0-16 0z"/></g></svg></AdminProfileIcon>}
+              {!chat.isUser && (
+                <AdminProfileIcon>
+                  <svg fill="white" viewBox="0 0 24 24" width="20px" height="20px" xmlns="http://www.w3.org/2000/svg">
+                    <g>
+                      <path d="M0 0h24v24H0z" fill="none" />
+                      <path d="M4 12h3a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7C2 6.477 6.477 2 12 2s10 4.477 10 10v7a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h3a8 8 0 1 0-16 0z" />
+                    </g>
+                  </svg>
+                </AdminProfileIcon>
+              )}
               <ChatMessage key={index} $isUser={chat.isUser}>
                 <div>{chat.message}</div>
               </ChatMessage>
@@ -263,8 +269,8 @@ const ChatModal = ({ closeChat }) => {
           />
           <ChatBtn type="submit">전송</ChatBtn>
         </ChatForm>
-        </ChatWrapper>
-      </ChatWindow>
+      </ChatWrapper>
+    </ChatWindow>
   );
 };
 
