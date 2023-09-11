@@ -2,18 +2,20 @@ package goormknights.hotel.item.service;
 
 import goormknights.hotel.item.dto.request.RequestDiningDto;
 import goormknights.hotel.item.dto.request.RequestImageDto;
+import goormknights.hotel.item.dto.response.ResponseDiningDto;
 import goormknights.hotel.item.exception.NotExistItemException;
 import goormknights.hotel.item.model.Dining;
 import goormknights.hotel.item.repository.DiningRepository;
 import goormknights.hotel.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -85,7 +87,8 @@ public class DiningService {
      * @param type - 1차 카테고리(다이닝 or 객실)
      * @return List<Dining> - DB에 저장된 전체 다이닝 목록
      */
-    public List<Dining> findAllDining(String type){
-        return itemRepository.findAllDining(type);
+    public Page<ResponseDiningDto> findAllDining(String type, Pageable pageable){
+        Page<Dining> allByType = diningRepository.findAllByType(type, pageable);
+        return allByType.map(Dining::toResponseDiningDto);
     }
 }

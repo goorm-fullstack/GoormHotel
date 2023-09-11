@@ -1,9 +1,5 @@
 package goormknights.hotel;
 
-import goormknights.hotel.coupon.model.Coupon;
-import goormknights.hotel.giftcard.model.GiftCard;
-import goormknights.hotel.member.model.Member;
-import goormknights.hotel.item.model.Room;
 import goormknights.hotel.coupon.repository.CouponRepository;
 import goormknights.hotel.giftcard.repository.GiftCardRepository;
 import goormknights.hotel.item.repository.ItemRepository;
@@ -11,9 +7,6 @@ import goormknights.hotel.member.repository.MemberRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Component
 public class InitData {
@@ -30,8 +23,8 @@ public class InitData {
     @Autowired
     private GiftCardRepository giftCardRepository;
 
-    // @PostConstruct
-    // void init() {
+     @PostConstruct
+     void init() {
     //     Member member = Member.builder()
     //             .email("test")
     //             .password("test")
