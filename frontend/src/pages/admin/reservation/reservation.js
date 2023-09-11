@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { styled } from "styled-components";
 import { commonContainerStyle} from '../../../components/common/commonStyles';
-import AdminHeader from "../../../components/admin/AdminHeader";
+import AdminHeader from "../AdminHeader";
 
 const Container = styled.div`
   ${commonContainerStyle}
   margin: 0;
   height : 100vh;
   margin-bottom : -220px;
+  margin-top : 100px;
 `;
 
 const FirstArticle = styled.div`

@@ -123,8 +123,6 @@ function App() {
           <Route path="/facilities" element={<Facilities />}></Route>
           <Route path="/specialOffer" element={<SpecialOffer />}></Route>
           <Route path="/customerSupport" element={<CustomerSupport />}></Route>
-          <Route path="/admin/reservation" element={<Reservation />}></Route>
-          <Route path="/admin/reservation/detail" element={<ReservationDetail />}></Route>
         </Routes>
       </AppContainer>
       <FloatingButtons>

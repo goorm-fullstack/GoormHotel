@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { commonContainerStyle} from '../../../components/common/commonStyles';
-import AdminHeader from "../../../components/admin/AdminHeader";
+import AdminHeader from "../AdminHeader";
 import { Left } from "../../ReservationPage";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css'; // css import
@@ -12,6 +12,7 @@ const Container = styled.div`
   margin: 0;
   height : 100vh;
   margin-bottom : -220px;
+  margin-top : 100px;
 `;
 
 const FirstArticle = styled.div`
@@ -112,7 +113,7 @@ export const StyledCalendar = styled(Calendar)`
   }
 `;
 
-const UserInfo = styled.p`
+const UserInfo = styled.input`
   width: 250px;
   height: 45px;
   display: flex;
@@ -137,8 +138,48 @@ const ReservationDetail = () => {
   const[applyCoupon, setApplyCoupon] = useState("");//적용 쿠폰
   const[applyGiftCard, setApplyGiftCard] = useState("");//적용 상품권
   const[totalPrice, setTotalPrice] = useState("");//결제 금액
+  const [updateClick, setUpdateClick] = useState(true);
 
+  // 캘린더 관련
+  const [checkInOpen, setCheckInOpen] = useState(false);
+  const [checkOutOpen, setCheckOutOpen] = useState(false);
+  const [checkInValue, setCheckInValue] = useState(new Date());
+  const [checkOutValue, setCheckOutValue] = useState(new Date());
+
+  const reservationData = {
+    reservationNumber : "테스트",
+    orderDae : "2023.09.01",
+    checkIn : "2023.09.25",
+    checkOut : "2023.09.27",
+    count : 3,
+    adult : 2,
+    children : 2,
+    notice : "test",
+    member : {
+      name : "name",
+      email : "test@naver.com",
+      phoneNumber : "010-0000-0000"
+    },
+    item : {
+      name : "itemName",
+    },
+    stay : 3,
+    coupon : {
+      name : "coupon name",
+    },
+    giftcard : [
+      {
+        name : "giftcard Name"
+      },
+    ],
+    sumPrice : 10000,
+    discountPrice : 0,
+    totalPrice : 10000,
+    state : "에약"
+
+  }
   useEffect(()=>{
+
     const today = new Date();
     const tomorrow = new Date();
     tomorrow.setDate(today.getDate()+1);
@@ -150,13 +191,11 @@ const ReservationDetail = () => {
     setCheckInDate(formattedToday);
     setCheckOutDate(formattedTomorrow);
     setReservationDate(formattedReservationDate);
-  });
-
-  const formatAndSetDate = (date) => {
-    const formattedDate = moment(date).format("YYYY.MM.DD");
-    const dayOfWeek = moment(date).format("dd");
-    return `${formattedDate} (${dayOfWeek})`;
-  };
+    setCustomerName(reservationData.member.name);
+    setPhoneNumber(reservationData.member.phoneNumber);
+    setEmailAddress(reservationData.member.email);
+    setCustomerRequest(reservationData.notice);
+  },[]);
 
   const formatDate = (date) => {
     const formattedDate = moment(date).format("YYYY.MM.DD");
@@ -167,6 +206,60 @@ const ReservationDetail = () => {
   const isDateDisabled = (date) => {
     return moment(date).isBefore(moment(), "day");
   };
+
+  const handleNoticeInputChange = (e) => {
+    if(!updateClick) {
+      setCustomerRequest(e.target.value);
+    }
+  }
+
+  const handleNameInputChange = (e) => {
+    if(!updateClick) {
+      setCustomerName(e.target.value);
+    }
+  }
+
+  const handlePhoneNumberInputChange = (e) => {
+    if(!updateClick) {
+      setPhoneNumber(e.target.value);
+    }
+  }
+
+
+  const handleEmailInputChange = (e) => {
+    if(!updateClick) {
+      setEmailAddress(e.target.value);
+    }
+  }
+
+  const handleCheckInToggle = () => {
+    if(!updateClick) {
+      setCheckInOpen(!checkInOpen);
+      setCheckOutOpen(false);
+    }
+  };
+
+  const handleCheckOutToggle = () => {
+    if(!updateClick) {
+      setCheckOutOpen(!checkOutOpen);
+      setCheckInOpen(false);
+    }
+  };
+
+  const handleCheckInDateChange = (selectedDate) => {
+    setCheckInValue(selectedDate);
+    setCheckInOpen(false);
+    const formattedDate = moment(selectedDate).format("YYYY.MM.DD");
+    setCheckInDate(`${formattedDate}`);
+  };
+
+  const handleCheckOutDateChange = (selectedDate) => {
+    setCheckOutValue(selectedDate);
+    setCheckOutOpen(false);
+    const formattedDate = moment(selectedDate).format("YYYY.MM.DD");
+    setCheckOutDate(`${formattedDate}`);
+  };
+
   return (
     <>
       <AdminHeader />
@@ -196,12 +289,6 @@ const ReservationDetail = () => {
       >예약 상세</h1>
       </SecondArticle>
       <ThirdArticle>
-        <TableHeaderInfo>
-          <span
-            style={{
-            }}
-          >전체 0건</span>
-        </TableHeaderInfo>
           <div style={{
             display:"flex",
             width : "1180px",
@@ -239,7 +326,7 @@ const ReservationDetail = () => {
               fontSize: "18px",
               border: "1px solid #ddd",
               backgroundColor: "#fff",
-            }}><p>{checkInDate}</p>
+            }} onClick={handleCheckInToggle}><p>{checkInDate}</p>
             <svg viewBox="0 0 32 32" width="18" height="18" style={{fill : "#102C57"}}>
                       <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
                         <path
@@ -303,9 +390,11 @@ const ReservationDetail = () => {
                     </svg>
             </button>
                     <CalendarContainer>
-                    <CalendarWrapper>
+                    <CalendarWrapper open={checkInOpen}>
                     <StyledCalendar
-                        value={checkInDate}
+                        tileDisabled={({ date }) => isDateDisabled(date)}
+                        onChange={handleCheckInDateChange}
+                        value={checkInValue}
                         formatDay={(locale, date) => moment(date).format("DD")}
                       ></StyledCalendar>
                     </CalendarWrapper>
@@ -329,7 +418,7 @@ const ReservationDetail = () => {
               fontSize: "18px",
               border: "1px solid #ddd",
               backgroundColor: "#fff",
-            }}><p>{checkInDate}</p>
+            }} onClick={handleCheckOutToggle}><p>{checkOutDate}</p>
             <svg viewBox="0 0 32 32" width="18" height="18" style={{fill : "#102C57"}}>
                       <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
                         <path
@@ -394,9 +483,11 @@ const ReservationDetail = () => {
                     </button>
             </div>
               <CalendarContainer>
-                <CalendarWrapper>
+                <CalendarWrapper open={checkOutOpen}>
                   <StyledCalendar
-                    value={checkOutDate}
+                    tileDisabled={({ date }) => isDateDisabled(date)}
+                    onChange={handleCheckOutDateChange}
+                    value={checkOutValue}
                     formatDay={(locale, date) => moment(date).format("DD")}
                   ></StyledCalendar>
                 </CalendarWrapper>
@@ -414,18 +505,18 @@ const ReservationDetail = () => {
           </TableDL>
           <TableDL>
             <TableDLDT>
-              예약자 명
+              예약자명
             </TableDLDT>
             <TableDLDD>
-            <UserInfo>{"Hello"}</UserInfo>
+            <UserInfo value={customerName} readOnly={updateClick} onChange={handleNameInputChange}></UserInfo>
             </TableDLDD>
           </TableDL>
           <TableDL>
             <TableDLDT>
-               연락처
+              연락처
             </TableDLDT>
             <TableDLDD>
-            <UserInfo>{"Hello"}</UserInfo>
+            <UserInfo value={phoneNumber} readOnly={updateClick} onChange={handlePhoneNumberInputChange}></UserInfo>
             </TableDLDD>
           </TableDL>
           <TableDL>
@@ -433,15 +524,15 @@ const ReservationDetail = () => {
               이메일
             </TableDLDT>
             <TableDLDD>
-            <UserInfo>{"Hello"}</UserInfo>
+            <UserInfo value={emailAddress} readOnly={updateClick} onChange={handleEmailInputChange}></UserInfo>
             </TableDLDD>
           </TableDL>
           <TableDL>
             <TableDLDT>
-              요청사항
+            요청사항
             </TableDLDT>
             <TableDLDD>
-            <UserInfo>{"Hello"}</UserInfo>
+            <UserInfo value={customerRequest} readOnly={updateClick} onChange={handleNoticeInputChange}></UserInfo>
             </TableDLDD>
           </TableDL>
           <TableDL>
@@ -449,7 +540,7 @@ const ReservationDetail = () => {
               적용 쿠폰
             </TableDLDT>
             <TableDLDD>
-            <p>{}</p>
+              {reservationData.coupon.name}
             </TableDLDD>
           </TableDL>
           <TableDL>
@@ -457,7 +548,9 @@ const ReservationDetail = () => {
               적용 상품권
             </TableDLDT>
             <TableDLDD>
-            <p>{}</p>
+              {reservationData.giftcard.map((gift, index) => {
+                <>{gift.name}</>
+              })}
             </TableDLDD>
           </TableDL>
           <TableDL>
@@ -465,13 +558,26 @@ const ReservationDetail = () => {
               결제 금액
             </TableDLDT>
             <TableDLDD>
-            <p>{}</p>
+              <UserInfo value={reservationData.totalPrice}></UserInfo>
             </TableDLDD>
           </TableDL>
           <div style={{
             margin : "2em",
             marginLeft : '600px'
           }}>
+            {
+              updateClick === true ?
+              <button 
+              style={{
+              width : "100px",
+              height : "40px",
+              backgroundColor : "white",
+              border : "solid 1px black",
+              marginRight : "16px",
+            }}
+            updateClick = {true}
+            onClick={() => setUpdateClick(!updateClick)}
+            >수정</button> : 
             <button 
               style={{
               width : "100px",
@@ -480,7 +586,10 @@ const ReservationDetail = () => {
               border : "solid 1px black",
               marginRight : "16px",
             }}
-            >수정</button>
+            updateClick = {false}
+            onClick={() => setUpdateClick(!updateClick)}
+            >완료</button>
+            }
             <button
             style={{
               width : "100px",
