@@ -1,7 +1,7 @@
 import React from 'react';
 import AdminHeader from './AdminHeader';
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { ReactComponent as SideMenuIcon } from '../../images/icon/ico_slide_btn.svg';
 
 
@@ -56,6 +56,8 @@ const SideIcon = styled(SideMenuIcon)`
 `;
 
 const AdminLayout = ({ children, title, subMenus }) => {
+  const location = useLocation();
+
   return (
     <div>
       <AdminHeader />
@@ -65,7 +67,15 @@ const AdminLayout = ({ children, title, subMenus }) => {
           <SideMenuItem>
             {subMenus.map((menu, index) => (
               <li key={index}>
-                <SideMenuList to={menu.link}>
+                <SideMenuList 
+                  to={menu.link}
+                  $activeClassName="active" 
+                  $isActive={(match) => {
+                    if (match) return true;
+                    if (location.pathname.startsWith('/admin/member')) return true;
+                    return false;
+                  }}
+                >
                   <div>{menu.name}</div>
                   <div><SideIcon /></div>
                 </SideMenuList>

@@ -4,6 +4,7 @@ import visual02 from "../images/main/visual02.webp";
 import visual01 from "../images/main/visual01.webp";
 import slideBtnImage from "../images/icon/ico_slide_btn.png";
 import { styled } from "styled-components";
+import { ReactComponent as SideMenuIcon } from '../images/icon/ico_slide_btn.svg';
 
 const images = [visual03, visual02, visual01];
 
@@ -29,9 +30,6 @@ const SlideButton = styled.button`
   height: 64px;
   top: 45%;
   background-color: rgba(255, 255, 255, 0);
-  img {
-    filter: brightness(0) invert(1);
-  }
   ${(props) => (props.$position === "right" ? "right: 40px;" : "left: 40px;")}
 `;
 
@@ -47,12 +45,15 @@ const SlideImageWrapper = styled.div`
 `;
 
 const TextWrapper = styled.div`
+  width: 100%;
+  min-width: 1260px;
+  text-align: center;
   position: absolute;
-  margin-top: 311px;
+  margin-top: 350px;
   display: flex;
   flex-direction: column;
   color: #FFFFFF;
-  text-shadow: 0px 0px 19px rgba(0, 0, 0, 0.54);
+  text-shadow: 0px 0px 19px rgba(0, 0, 0, 0.9);
 `;
 
 const Text = styled.p`
@@ -66,6 +67,15 @@ const Text = styled.p`
 const SubText = styled.p`
   margin-top: 60px;
   font-size: 24px;
+`;
+
+const SideIcon = styled(SideMenuIcon)`
+  width: 60px;
+  height: 60px;
+`;
+
+const SideIconRight = styled(SideIcon)`
+  transform: rotate(180deg);
 `;
 
 const Slide = () => {
@@ -95,14 +105,10 @@ const Slide = () => {
         <SubText>고객의 작은 관심에도 귀 기울이며, 차별화된 서비스와 시설로써 보다 편안하고 안락한 휴식을 제공합니다.</SubText>
       </TextWrapper>
       <SlideButton onClick={goToPreviousSlide} $position="left">
-        <img src={slideBtnImage} alt="slideBtn" />
+        <SideIcon />
       </SlideButton>
       <SlideButton onClick={goToNextSlide} $position="right">
-        <img
-          src={slideBtnImage}
-          alt="slideBtn"
-          style={{ transform: "scaleX(-1)" }}
-        />
+        <SideIconRight />
       </SlideButton>
     </>
   );
