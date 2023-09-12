@@ -1,9 +1,9 @@
 import { css } from 'styled-components';
 
 export const commonContainerStyle = css`
-  width: 1182px;
+  width: 1260px;
   margin: 0 auto;
-  margin-top: 160px;
+  padding: 280px 40px 0;
 `;
 
 export const commonTitleStyle = css`

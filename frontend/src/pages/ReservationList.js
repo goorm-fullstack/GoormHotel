@@ -5,6 +5,8 @@ import { commonContainerStyle, commonTitleStyle } from '../components/common/com
 
 const Container = styled.div`
   ${commonContainerStyle}
+  padding-left: 30px;
+  padding-right: 30px;
 `;
 
 const Title = styled.h1`
@@ -22,18 +24,21 @@ const TableHeaderRow = styled.tr`
 
 const TableHeaderCell = styled.th`
   padding: 20px;
-  border: 1px solid #DDDDDD;
+  border-top: 1px solid #DDDDDD;
 `;
 
-const TableDataRow = styled.tr`
-  &:nth-child(even) {
-    background-color: ${props => props.theme.colors.lightGray};
-  }
-`;
+const TableDataRow = styled.tr``;
 
 const TableDataCell = styled.td`
   padding: 10px;
-  border: 1px solid #DDDDDD;
+  border-bottom: 1px solid #DDDDDD;
+  text-align: center;
+  height: 60px;
+  vertical-align: middle;
+`;
+
+const PriceCell = styled(TableDataCell)`
+  text-align: right;
 `;
 
 const NoReservationsMessage = styled.p`
@@ -94,7 +99,7 @@ const ReservationList = () => {
                 <TableDataCell>{reservation.reservationNumber}</TableDataCell>
                 <TableDataCell>{reservation.reservationDate}</TableDataCell>
                 <TableDataCell>{reservation.productName}</TableDataCell>
-                <TableDataCell>{reservation.paymentAmount}</TableDataCell>
+                <PriceCell>{reservation.paymentAmount}</PriceCell>
                 <TableDataCell>{reservation.checkInDate}</TableDataCell>
                 <TableDataCell>{reservation.checkOutDate}</TableDataCell>
               </TableDataRow>

@@ -28,6 +28,11 @@ public class MemberCreationEventHandler implements ApplicationListener<MemberCre
         coupon.setMember(member);
         coupon.nameStrategy();
         coupon.setDiscountRate();
-        emailService.sendMail(new EmailMessage(member.getEmail(), "가입을 환영합니다.~", " 가입 환영 메일"));
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(member.getEmail())
+                .message("가입을 환영합니다.~")
+                .subject("가입 환영 메일")
+                .build();
+        emailService.sendMail(emailMessage);
     }
 }

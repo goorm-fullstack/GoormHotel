@@ -86,21 +86,24 @@ const DetailInfo = styled(DetailTitle)`
 
 const ReservationBtn = styled.button`
   border: 1px solid #DDDDDD;
-  background-color: #fff;
-  color: #666666;
+  background-color: ${props => props.theme.colors.brown};;
+  color: #FFFFFF;
   height: 50px;
   width: 100%;
 
   &:hover {
-    color: ${props => props.theme.colors.brown};
-    border-color: ${props => props.theme.colors.brown};
+    background-color: #8A7057;
   }
 `;
 
 const ReservationDeleteBtn = styled(ReservationBtn)`
+  background-color: transparent;
+  border-color: #D30A0A;
+  color: #D30A0A;
+  
   &:hover {
-    color: red;
-    border-color: red;
+    color: #FFFFFF;
+    background-color: #D30A0A;
   }
 `;
 
@@ -151,7 +154,7 @@ const ReservationItem = () => {
                 </StyledSelect>
               </div>
               <div>
-                <Label htmlFor="productType">상품 유형</Label>
+                <Label htmlFor="productType">상품 분류</Label>
                 <StyledSelect id="productType">
                   {productCategories.map((category, index) => (
                     <option key={index} value={category}>

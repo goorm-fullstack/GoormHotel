@@ -4,17 +4,17 @@ import visual02 from "../images/main/visual02.webp";
 import visual01 from "../images/main/visual01.webp";
 import slideBtnImage from "../images/icon/ico_slide_btn.png";
 import { styled } from "styled-components";
+import { ReactComponent as SideMenuIcon } from '../images/icon/ico_slide_btn.svg';
 
 const images = [visual03, visual02, visual01];
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 1220px;
+  margin: 0 auto;
 `;
 
 const SlideContent = styled.div`
   display: flex;
-  width: 100%;
   transition: transform 0.5s ease-in-out;
 `;
 
@@ -30,15 +30,13 @@ const SlideButton = styled.button`
   height: 64px;
   top: 45%;
   background-color: rgba(255, 255, 255, 0);
-  img {
-    filter: brightness(0) invert(1);
-  }
   ${(props) => (props.$position === "right" ? "right: 40px;" : "left: 40px;")}
 `;
 
 const SlideImageWrapper = styled.div`
   position: absolute;
   width: 100%;
+  min-width: 1260px;
   height: 100%;
   top: 0;
   left: 0;
@@ -46,15 +44,38 @@ const SlideImageWrapper = styled.div`
   transition: opacity 1s ease-in-out;
 `;
 
-const Text = styled.div`
-  position: absolute;
-  top: 50%;
-  font-family: "Marcellus", serif;
-  font-size: 35px;
+const TextWrapper = styled.div`
+  width: 100%;
+  min-width: 1260px;
   text-align: center;
-  color: #FFF;
-  
+  position: absolute;
+  margin-top: 350px;
+  display: flex;
+  flex-direction: column;
+  color: #FFFFFF;
+  text-shadow: 0px 0px 19px rgba(0, 0, 0, 0.9);
+`;
+
+const Text = styled.p`
+  font-family: "Marcellus", serif;
+  font-size: 60px;
+  text-align: center;
+  letter-spacing: 8px;
   margin-bottom: 10px;
+`;
+
+const SubText = styled.p`
+  margin-top: 60px;
+  font-size: 24px;
+`;
+
+const SideIcon = styled(SideMenuIcon)`
+  width: 60px;
+  height: 60px;
+`;
+
+const SideIconRight = styled(SideIcon)`
+  transform: rotate(180deg);
 `;
 
 const Slide = () => {
@@ -79,16 +100,15 @@ const Slide = () => {
           ))}
         </SlideContent>
       </Container>
-      <Text>구름호텔에 오신 것을 환영합니다</Text>
+      <TextWrapper>
+        <Text>THE HOTEL GOORM</Text>
+        <SubText>고객의 작은 관심에도 귀 기울이며, 차별화된 서비스와 시설로써 보다 편안하고 안락한 휴식을 제공합니다.</SubText>
+      </TextWrapper>
       <SlideButton onClick={goToPreviousSlide} $position="left">
-        <img src={slideBtnImage} alt="slideBtn" />
+        <SideIcon />
       </SlideButton>
       <SlideButton onClick={goToNextSlide} $position="right">
-        <img
-          src={slideBtnImage}
-          alt="slideBtn"
-          style={{ transform: "scaleX(-1)" }}
-        />
+        <SideIconRight />
       </SlideButton>
     </>
   );

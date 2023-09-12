@@ -1,27 +1,31 @@
 package goormknights.hotel.email.service;
 
+import goormknights.hotel.auth.service.RedisUtil;
 import goormknights.hotel.email.model.EmailMessage;
+import goormknights.hotel.email.repository.EmailSender;
+import goormknights.hotel.member.service.MemberUtilService;
+import goormknights.hotel.member.service.VerificationService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.mail.MailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
-public class EmailService {
+public class EmailService implements EmailSender {
 
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
+    private final VerificationService verificationService;
+    private final MemberUtilService memberUtilService;
+    private final RedisUtil redisUtil;
 
     // 메일 내용을 직접 입력해서 사용하는 경우에 사용해주세요
     public void sendMail(String to, String message, String title) {
@@ -72,17 +76,67 @@ public class EmailService {
             setContext("code", "인증 코드 발송", subscribeEmail);
     }
 
-    private void setContext(String type, String title, String receiver) throws MessagingException {
-        Context context = new Context();
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        helper.setSubject(title);
-        helper.setTo(receiver);
-        String html = templateEngine.process(type, context);
-        helper.setText(html, true);
-        helper.addInline("logo", new ClassPathResource("/static/images/common/logo.png"));
-        helper.addInline("check", new ClassPathResource("/static/images/mail/ico_check.png"));
+    // 기존 setContext
+//    private void setContext(String type, String title, String receiver) throws MessagingException {
+//        Context context = new Context();
+//        MimeMessage message = javaMailSender.createMimeMessage();
+//        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+//        helper.setSubject(title);
+//        helper.setTo(receiver);
+//        String html = templateEngine.process(type, context);
+//        helper.setText(html, true);
+//        helper.addInline("logo", new ClassPathResource("/static/images/common/logo.png"));
+//        helper.addInline("check", new ClassPathResource("/static/images/mail/ico_check.png"));
+//
+//        javaMailSender.send(message);
+//    }
 
-        javaMailSender.send(message);
+    // ------------------------- 아래 민종 -------------------------------
+
+    public String sendMail(EmailMessage emailMessage, String type) {
+        String authNum = verificationService.createCode();
+
+        redisUtil.setDataExpire(emailMessage.getTo(), authNum, 60 * 5L);
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+//      if (type.equals("password")) memberUtilService.setTempPassword(emailMessage.getTo(), authNum);
+        if (type.equals("findIdAndPassword") && emailMessage.getToken() != null) {
+            redisUtil.setDataExpire(emailMessage.getTo() + "_reset_token", emailMessage.getToken(), 60 * 5L);
+        }
+
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+            mimeMessageHelper.setTo(emailMessage.getTo()); // 메일 수신자
+            mimeMessageHelper.setSubject(emailMessage.getSubject()); // 메일 제목
+            try{
+                mimeMessageHelper.setText(setContext(authNum, type), true); // 메일 본문 내용, HTML 여부
+            } catch (Exception e){
+                log.error("Error setting email content", e);
+                throw new RuntimeException("Error setting email content", e);
+            }
+
+            javaMailSender.send(mimeMessage);
+            log.info("Success");
+            return authNum;
+
+        } catch (MessagingException e) {
+            log.info("fail");
+            throw new RuntimeException(e);
+        }
     }
+
+    // thymeleaf를 통한 html 적용 + 오버로딩
+    public String setContext(String code, String type) {
+        Context context = new Context();
+        context.setVariable("code", code);
+        return templateEngine.process(type, context);
+    }
+
+    public String setContext(String code, String type, String resetLink) {
+        Context context = new Context();
+        context.setVariable("code", code);
+        context.setVariable("resetLink", resetLink);
+        return templateEngine.process(type, context);
+    }
+
 }
