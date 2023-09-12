@@ -6,7 +6,6 @@ import { ThemeProvider } from "styled-components";
 import theme from "./styles/theme";
 import AdminApp from './pages/admin/AdminApp';
 
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const isAdminPage = window.location.pathname.includes("/admin");
