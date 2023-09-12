@@ -85,7 +85,6 @@ public class ReservationTest {
                 .auth("member")
                 .phoneNumber("01012341234")
                 .email("test@test.com")
-                .address("주소")
                 .privacyCheck(true)
                 .grade("Gold")
                 .couponList(couponList)

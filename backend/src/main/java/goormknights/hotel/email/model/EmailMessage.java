@@ -1,8 +1,6 @@
 package goormknights.hotel.email.model;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * 메일 엔티티
@@ -10,17 +8,16 @@ import lombok.NoArgsConstructor;
  * message - 메일 내용
  * title - 메일 제목
  */
-@Data
+@Getter
+@Setter
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class EmailMessage {
     private String to;
     private String message;
+    private String subject;
     private String title;
-
-    public EmailMessage(String to, String message, String title) {
-        this.to = to;
-        this.message = message;
-        this.title = title;
-    }
+    private String token;
+    private String resetLink;
 }
