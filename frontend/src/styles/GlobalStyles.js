@@ -95,11 +95,11 @@ select {
   cursor: pointer;
 }
 
-@media (max-width: 1260px) {
-  body {
-    overflow-x: hidden;
-  }
+::selection {
+	background: #95846E;
+	color: white;
 }
+
 `;
 
 export default GlobalStyle;

@@ -67,7 +67,7 @@ const BoldTextLi = styled.li`
 const MembershipInfo = styled.div`
   width: 1180px;
   margin: 0 auto;
-  margin-top: 160px;
+  margin-top: 250px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;

@@ -8,14 +8,21 @@ import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css'; // css import
 import moment from "moment";
 import slideBtn from "../../../images/icon/ico_slide_btn.png"
+import AdminLayout from "../AdminLayout";
 
 const Container = styled.div`
-  ${commonContainerStyle}
-  margin: 0;
-  height : 100vh;
-  margin-bottom : -220px;
-  margin-top : 100px;
+  width: 100%;
+  max-width: 1270px;
+  min-width: 760px;
+  margin-right: auto;
 `;
+
+const Title = styled.h1`
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 72px;
+`;
+
 
 const FirstArticle = styled.div`
   flex-direction: column;
@@ -275,39 +282,15 @@ const ReservationDetail = () => {
     setCheckOutDate(`${formattedDate}`);
   };
 
+  const subMenus = [
+    { name: '에약 관리', link: '/admin/reservation/detail'},
+  ];
+
   return (
-    <>
-      <AdminHeader />
+      <AdminLayout title="예약 상세" subMenus={subMenus}>
       <Container>
-      <FirstArticle>
-        <h2
-          style={{
-            fontSize: "1.5em",
-            fontStyle:"bold",
-          }}
-        >에약 관리</h2>
-        <CategoryLink
-          to = "/admin/reservation/detail"
-          $activeClassName = "active"
-          style={{
-            display:"flex",
-            marginTop : "1em",
-            justifyContent : "space-between",
-          }}
-        ><span>예약 관리</span><span style={{marginRight : "25px"}}>&gt;</span></CategoryLink>
-      </FirstArticle>
-      
-      <SecondArticle>
-      <h1
-        style={{
-          fontSize : "2em",
-          fontStyle : "bold",
-          paddingTop : "2em",
-        }}
-      >예약 상세</h1>
-      </SecondArticle>
-      <ThirdArticle>
-          <div style={{
+      <Title>예약 상세</Title>
+      <div style={{
             display:"flex",
             width : "1180px",
             flexDirection : "column",
@@ -618,9 +601,8 @@ const ReservationDetail = () => {
             }}>예약취소</button>
           </div>
         </div>
-      </ThirdArticle>
       </Container>
-    </>
+    </AdminLayout>
   );
 };
 

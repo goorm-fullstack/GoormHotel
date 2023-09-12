@@ -7,14 +7,15 @@ import 'moment/locale/ko';
 import { Link } from 'react-router-dom';
 
 const ReserveContainer = styled.div`
-  position: absolute;
-  bottom: -82px;
   background-color: #fff;
-  width: 1179px;
+  margin: 0 auto;
   height: 164px;
   box-shadow: 0px 18px 19px rgba(0, 0, 0, 0.13);
   padding: 43px 40px;
   display: flex;
+  z-index: 1;
+  position: absolute;
+  bottom: -82px;
 `;
 
 const ReserveDate = styled.div`
@@ -31,8 +32,7 @@ const ReserveDate = styled.div`
   }
 `;
 
-const Now = styled.div`
-`;
+const Now = styled.div``;
 
 const CheckInBtn = styled.button`
   border: 1px solid #DDDDDD;

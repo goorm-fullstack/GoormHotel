@@ -187,6 +187,10 @@ const PaymentBtn = styled.button`
   color: #ffffff;
   height: 60px;
   width: 100%;
+
+  &:hover {
+    background-color: #8A7057;
+  }
 `;
 
 const RemoveButton = styled.button`

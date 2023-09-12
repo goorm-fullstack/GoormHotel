@@ -1,6 +1,6 @@
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import { BrowserRouter,Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import Room from './pages/Room';
 import Dining from './pages/Dining';
 import { styled } from 'styled-components';
@@ -28,11 +28,9 @@ import CustomerSupport from './pages/CustomerSupport';
 import Reservation from './pages/admin/reservation/reservation';
 import ReservationDetail from './pages/admin/reservation/reservationDetail';
 
-
 const AppContainer = styled.div`
   width: 100%;
-  min-width: 1200px;
-  min-height: 100vh;
+  min-height: 60vh;
 `;
 
 const FloatingButtons = styled.div`
@@ -53,7 +51,7 @@ const ChatButton = styled.button`
   background-color: #fff;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   margin-bottom: 20px;
-  transition: transform 0.2s; 
+  transition: transform 0.2s;
 
   &:hover {
     transform: scale(1.1);
@@ -69,7 +67,7 @@ const ScrollToTopButton = styled.button`
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: ${props => props.theme.colors.charcoal};
+  background-color: ${(props) => props.theme.colors.charcoal};
 
   &:hover {
     transform: scale(1.1);
@@ -116,7 +114,7 @@ function App() {
           <Route path="/findIdResult" element={<FindIdResult />}></Route>
           <Route path="/findPwResult" element={<FindPwResult />}></Route>
           <Route path="/membership" element={<Membership />}></Route>
-          <Route path="/reservationComplete" element={<ReservationComplete  title="예약 확인" />}></Route>
+          <Route path="/reservationComplete" element={<ReservationComplete title="예약 확인" />}></Route>
           <Route path="/reservationCheck" element={<ReservationCheck />}></Route>
           <Route path="/reservationItem" element={<ReservationItem />}></Route>
           <Route path="/reservationList" element={<ReservationList />}></Route>
