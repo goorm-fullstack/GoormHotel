@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { styled } from "styled-components";
 import { commonContainerStyle} from '../../../components/common/commonStyles';
 import AdminHeader from "../AdminHeader";
+import { NavLink } from "react-router-dom";
 
 const Container = styled.div`
   ${commonContainerStyle}
@@ -63,6 +64,18 @@ const TableDataCell = styled.td`
   padding: 1em;
 `;
 
+const CategoryLink = styled(NavLink)`
+  font-size: 14px;
+  color: #888888;
+
+  &:hover {
+    color: #baa085;
+  }
+
+  &.active {
+    color: #baa085;
+  }
+`;
 
 const Reservation = () => {
   const [reservationList, setReservationList] = useState([]);
@@ -102,12 +115,15 @@ const Reservation = () => {
             fontStyle:"bold",
           }}
         >에약 관리</h2>
-        <p
+        <CategoryLink
+          to = "/admin/reservation"
+          $activeClassName = "active"
           style={{
+            display:"flex",
             marginTop : "1em",
-            color: "#baa085",
+            justifyContent : "space-between",
           }}
-        >예약 관리</p>
+        ><span>예약 관리</span><span style={{marginRight : "25px"}}>&gt;</span></CategoryLink>
       </FirstArticle>
       
       <SecondArticle>

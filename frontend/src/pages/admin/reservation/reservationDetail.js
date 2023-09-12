@@ -3,9 +3,11 @@ import { styled } from "styled-components";
 import { commonContainerStyle} from '../../../components/common/commonStyles';
 import AdminHeader from "../AdminHeader";
 import { Left } from "../../ReservationPage";
+import { NavLink } from "react-router-dom";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css'; // css import
 import moment from "moment";
+import slideBtn from "../../../images/icon/ico_slide_btn.png"
 
 const Container = styled.div`
   ${commonContainerStyle}
@@ -124,6 +126,19 @@ const UserInfo = styled.input`
   border: 1px solid #ddd;
   background-color: #fff;
 `
+
+const CategoryLink = styled(NavLink)`
+  font-size: 14px;
+  color: #888888;
+
+  &:hover {
+    color: #baa085;
+  }
+
+  &.active {
+    color: #baa085;
+  }
+`;
 
 const ReservationDetail = () => {
   const [reservationDate, setReservationDate] = useState("");//예약번호
@@ -271,12 +286,15 @@ const ReservationDetail = () => {
             fontStyle:"bold",
           }}
         >에약 관리</h2>
-        <p
+        <CategoryLink
+          to = "/admin/reservation/detail"
+          $activeClassName = "active"
           style={{
+            display:"flex",
             marginTop : "1em",
-            color: "#baa085",
+            justifyContent : "space-between",
           }}
-        >예약 관리</p>
+        ><span>예약 관리</span><span style={{marginRight : "25px"}}>&gt;</span></CategoryLink>
       </FirstArticle>
       
       <SecondArticle>
