@@ -3,38 +3,21 @@ import { styled } from "styled-components";
 import { commonContainerStyle} from '../../../components/common/commonStyles';
 import AdminHeader from "../AdminHeader";
 import { NavLink } from "react-router-dom";
+import AdminLayout from "../AdminLayout";
 
 const Container = styled.div`
-  ${commonContainerStyle}
-  margin: 0;
-  height : 100vh;
-  margin-bottom : -220px;
-  margin-top : 100px;
+  width: 100%;
+  max-width: 1270px;
+  min-width: 760px;
+  margin-right: auto;
 `;
 
-const FirstArticle = styled.div`
-  flex-direction: column;
-  width : 20%;
-  height : 100%;
-  border-right : solid 1px;
-  padding-top : 3em;
-  padding-left : 2em;
-  float : left;
+const Title = styled.h1`
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 72px;
 `;
 
-const SecondArticle = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-left : 5em;
-`;
-
-const ThirdArticle = styled.div`
-  margin-top: 3em;
-  display: flex;
-  flex-direction: column;
-  padding-left : 5em;
-`;
 
 const TableHeaderInfo = styled.div`
   display: flex;
@@ -104,39 +87,15 @@ const Reservation = () => {
     setTotalCount(reservations.length)
   })
 
+  const subMenus = [
+    { name: '에약 관리', link: '/admin/reservation'},
+  ];
+
   return (
-    <>
-      <AdminHeader />
+    <AdminLayout title="예약 관리" subMenus={subMenus}>
       <Container>
-      <FirstArticle>
-        <h2
-          style={{
-            fontSize: "1.5em",
-            fontStyle:"bold",
-          }}
-        >에약 관리</h2>
-        <CategoryLink
-          to = "/admin/reservation"
-          $activeClassName = "active"
-          style={{
-            display:"flex",
-            marginTop : "1em",
-            justifyContent : "space-between",
-          }}
-        ><span>예약 관리</span><span style={{marginRight : "25px"}}>&gt;</span></CategoryLink>
-      </FirstArticle>
-      
-      <SecondArticle>
-      <h1
-        style={{
-          fontSize : "2em",
-          fontStyle : "bold",
-          paddingTop : "2em",
-        }}
-      >예약 목록</h1>
-      </SecondArticle>
-      <ThirdArticle>
-        <TableHeaderInfo>
+      <Title>예약 목록</Title>
+      <TableHeaderInfo>
           <span
             style={{
             }}
@@ -185,9 +144,8 @@ const Reservation = () => {
               ))}
             </tbody>
           </table>
-      </ThirdArticle>
       </Container>
-    </>
+    </AdminLayout>
   );
 };
 
