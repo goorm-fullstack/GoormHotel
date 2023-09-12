@@ -118,7 +118,7 @@ function App() {
           <Route path="/reservationList" element={<ReservationList />}></Route>
           <Route path="/facilities" element={<Facilities />}></Route>
           <Route path="/specialOffer" element={<SpecialOffer />}></Route>
-          <Route path="/customerSupport" element={<CustomerSupport />}></Route>
+          <Route path="/customerSupport/:board" element={<CustomerSupport />}></Route>
         </Routes>
       </AppContainer>
       <FloatingButtons>

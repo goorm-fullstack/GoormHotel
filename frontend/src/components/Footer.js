@@ -314,7 +314,7 @@ const Footer = () => {
               <Link to="/location">오시는길</Link>
             </SiteLink>
             <SiteLink>
-              <Link to="/">문의하기</Link>
+              <Link to="/customerSupport/qna">문의하기</Link>
             </SiteLink>
           </div>
           <StyledText>
