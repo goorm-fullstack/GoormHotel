@@ -150,6 +150,9 @@ const PageParam = styled.ul`
     border: 1px solid #baa085;
     color: #baa085;
   }
+  li.sideParam a:hover {
+    text-decoration: none;
+  }
 `;
 
 const WriteBtn = styled.div`
@@ -222,48 +225,48 @@ const CustomerSupport = () => {
                   {/** loop */}
                   <li>
                     <div className="thumbnail">
-                      <a href="#">
+                      <a href={`/board/` + board + `/detail`}>
                         <img src="" />
                       </a>
                     </div>
                     <p className="title">
-                      <a href="">제목입니다.</a>
+                      <a href={`/board/` + board + `/detail`}>제목입니다.</a>
                     </p>
                     <p className="writer">작성자명</p>
                     <p className="date">2023-09-13</p>
                   </li>
                   <li>
                     <div className="thumbnail">
-                      <a href="#">
+                      <a href={`/board/` + board + `/detail`}>
                         <img src="" />
                       </a>
                     </div>
                     <p className="title">
-                      <a href="">제목입니다.</a>
+                      <a href={`/board/` + board + `/detail`}>제목입니다.</a>
                     </p>
                     <p className="writer">작성자명</p>
                     <p className="date">2023-09-13</p>
                   </li>
                   <li>
                     <div className="thumbnail">
-                      <a href="#">
+                      <a href={`/board/` + board + `/detail`}>
                         <img src="" />
                       </a>
                     </div>
                     <p className="title">
-                      <a href="">제목입니다.</a>
+                      <a href={`/board/` + board + `/detail`}>제목입니다.</a>
                     </p>
                     <p className="writer">작성자명</p>
                     <p className="date">2023-09-13</p>
                   </li>
                   <li>
                     <div className="thumbnail">
-                      <a href="#">
+                      <a href={`/board/` + board + `/detail`}>
                         <img src="" />
                       </a>
                     </div>
                     <p className="title">
-                      <a href="">제목입니다.</a>
+                      <a href={`/board/` + board + `/detail`}>제목입니다.</a>
                     </p>
                     <p className="writer">작성자명</p>
                     <p className="date">2023-09-13</p>
@@ -286,7 +289,7 @@ const CustomerSupport = () => {
                     <tr>
                       <td className="center">2</td>
                       <td>
-                        <a href="#">일반 글 제목입니다.</a>
+                        <a href={`/board/` + board + `/detail`}>일반 글 제목입니다.</a>
                       </td>
                       <td className="center">2023-09-13</td>
                     </tr>
@@ -294,7 +297,7 @@ const CustomerSupport = () => {
                       <td className="center">1</td>
                       <td>
                         <IsReply>답글</IsReply>
-                        <a href="#">답글 제목입니다.</a>
+                        <a href={`/board/` + board + `/detail`}>답글 제목입니다.</a>
                       </td>
                       <td className="center">2023-09-13</td>
                     </tr>

@@ -26,6 +26,7 @@ import Facilities from './pages/Facilities';
 import SpecialOffer from './pages/SpecialOffer';
 import CustomerSupport from './pages/CustomerSupport';
 import BoardWrite from './pages/board/BoardWrite';
+import BoardRead from './pages/board/BoardRead';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -121,6 +122,7 @@ function App() {
           <Route path="/specialOffer" element={<SpecialOffer />}></Route>
           <Route path="/board/:board" element={<CustomerSupport />}></Route>
           <Route path="/board/:board/write" element={<BoardWrite />}></Route>
+          <Route path="/board/:board/detail" element={<BoardRead />}></Route>
         </Routes>
       </AppContainer>
       <FloatingButtons>
