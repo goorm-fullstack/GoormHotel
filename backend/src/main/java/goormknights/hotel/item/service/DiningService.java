@@ -83,9 +83,10 @@ public class DiningService {
     }
 
     /**
-     * 전체 다이닝 조회
+     * 전체 다이닝 조회 - 페이징
      * @param type - 1차 카테고리(다이닝 or 객실)
-     * @return List<Dining> - DB에 저장된 전체 다이닝 목록
+     * @return Page<Dining> - DB에 저장된 전체 다이닝 목록 페이징 처리 후 반환
+     * pathUrl에 param으로 size(목록 갯수)와 page(현재 페이지)값을 넣을 수 있다
      */
     public Page<ResponseDiningDto> findAllDining(String type, Pageable pageable){
         Page<Dining> allByType = diningRepository.findAllByType(type, pageable);

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -63,10 +64,10 @@ public class DiningController {
         return ResponseEntity.ok(responseDiningDto);
     }
 
-    // 전체 다이닝 찾기
+    // 전체 다이닝 찾기(페이징)
     @GetMapping
-    public ResponseEntity<Page<ResponseDiningDto>> findAllDining(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)Pageable pageable){
+    public ResponseEntity<List<ResponseDiningDto>> findAllDining(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)Pageable pageable){
         Page<ResponseDiningDto> dining = diningService.findAllDining("dining", pageable);
-        return ResponseEntity.ok(dining);
+        return ResponseEntity.ok(dining.getContent());
     }
 }
