@@ -1,6 +1,8 @@
 package goormknights.hotel.item.repository;
 
 import goormknights.hotel.item.model.Room;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +13,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     Optional<Room> findByName(String roomName);
     void deleteByName(String roomName);
+
+    // 페이징
+    Page<Room> findAllByType(String type, Pageable pageable);
 }

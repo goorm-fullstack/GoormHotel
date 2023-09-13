@@ -145,27 +145,27 @@ const ChatModal = ({ closeChat }) => {
             ws.current.onopen = () => {
               setSocketConnected(true);
               console.log(prevRoomId); // 이전 상태를 사용할 수 있음
-              console.log('WebSocket connected');
-
+              console.log("WebSocket connected");
+  
               // WebSocket 연결이 성공하면 ENTER 메시지 전송
               ws.current.send(
                 JSON.stringify({
-                  type: 'ENTER',
+                  type: "ENTER",
                   roomId: prevRoomId, // 이전 상태를 사용
-                  sender: 'test',
-                  message: '입장',
+                  sender: "test",
+                  message: "입장",
                 })
               );
             };
             ws.current.onclose = (error) => {
-              console.log('disconnect from ' + webSocketURL);
+              console.log("disconnect from " + webSocketURL);
               console.log(error);
             };
             ws.current.onerror = (error) => {
-              console.log('connection error ' + webSocketURL);
+              console.log("connection error " + webSocketURL);
               console.log(error);
             };
-
+ 
             // 메시지 핸들러 설정
             ws.current.onmessage = (event) => {
               const message = event.data;
@@ -202,7 +202,7 @@ const ChatModal = ({ closeChat }) => {
   const getRoomId = async () => {
     const request = await getChatRoomInfo('tester');
     setRoomId(request);
-  };
+  } 
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -215,12 +215,12 @@ const ChatModal = ({ closeChat }) => {
       setChatData([...chatData, { message: newChat, isUser: true }]);
       ws.current.send(
         JSON.stringify({
-          type: 'TALK',
-          roomId: roomId,
-          sender: 'test',
-          message: newChat,
+          type : "TALK",
+          roomId : roomId,
+          sender : "test",
+          message : newChat
         })
-      );
+      )
       setNewChat('');
     }
   };

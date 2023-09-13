@@ -30,7 +30,7 @@ public class GiftCardController {
 
     // 사용자가 상품권을 등록하는 요청
     @PostMapping("/register")
-    public ResponseEntity<String> registerationGiftCard(@RequestParam int memberId, @RequestParam String uuid) {
+    public ResponseEntity<String> registerationGiftCard(@RequestParam Long memberId, @RequestParam String uuid) {
         giftCardService.registering(memberId, uuid);
         return new ResponseEntity<>(HttpStatus.OK.value(), "상품권 등록이 완료되었습니다.");
     }

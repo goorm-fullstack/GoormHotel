@@ -2,17 +2,19 @@ package goormknights.hotel.item.service;
 
 import goormknights.hotel.item.dto.request.RequestImageDto;
 import goormknights.hotel.item.dto.request.RequestRoomDto;
+import goormknights.hotel.item.dto.response.ResponseRoomDto;
 import goormknights.hotel.item.exception.NotExistItemException;
 import goormknights.hotel.item.model.Room;
 import goormknights.hotel.item.repository.ItemRepository;
 import goormknights.hotel.item.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -79,11 +81,13 @@ public class RoomService {
     }
 
     /**
-     * 객실 전체 조회
+     * 객실 전체 조회(페이징)
      * @param type - 1차 카테고리(객실 or 다이닝)
-     * @return 전체 객실 목록
+     * @return 페이징 처리된 전체 객실 목록
+     * pathUrl에 param으로 size(목록 갯수)와 page(현재 페이지)값을 넣을 수 있다
      */
-    public List<Room> findAllRoom(String type){
-        return itemRepository.findAllRoom(type);
+    public Page<ResponseRoomDto> findAllByType(String type, Pageable pageable){
+        Page<Room> allByType = roomRepository.findAllByType(type, pageable);
+        return allByType.map(Room::toResponseRoomDto);
     }
 }

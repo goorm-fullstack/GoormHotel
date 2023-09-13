@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.global.entity.BaseEntity;
+import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.event.MemberEventListener;
 import goormknights.hotel.member.exception.InvalidMemberException;
 import goormknights.hotel.reservation.model.Reservation;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,14 +19,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Getter
-@Setter
-@Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@Getter @Setter
+@Entity @Table(name = "members")
 @EntityListeners(MemberEventListener.class)//내가 만든 이벤트 리스너와 연결
-@Builder
-public class Member extends BaseEntity {
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Member extends BaseEntity implements Serializable {
 
     // 예약에 넘겨야 하는 정보 : 예약자명, 회원 유형(회원/비회원), 회원인 경우 ID, 연락처, 이메일
 
@@ -54,9 +54,8 @@ public class Member extends BaseEntity {
     // 정확하게 기억나지 않는데 병합 전 authority처럼 전체 단어 사용했다가 예약어랑 겹쳐서 오류 발생
     // -> auth로 변수명 변경하여 해결한 적이 있어 변경해둡니다. - 문소희
 
-    // Role 관련은 경규님과 피드백 후 주석 해제 하겠습니다 - 전민종
-//    @ManyToOne
-//    private Role role;
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.USER;
 
     @OneToMany(mappedBy = "member")
     @JsonIgnore
@@ -70,32 +69,28 @@ public class Member extends BaseEntity {
     @JsonIgnore
     private List<GiftCard> giftCardList =  new ArrayList<>();
 
+    //    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    //    private List<Post> posts;
+
     @Builder
-    public Member(String email,
-                  String memberId,
-                  String password,
-                  String name,
-                  String phoneNumber,
-                  Boolean privacyCheck,
-                  String grade,
-                  LocalDate birth,
-                  String gender,
-                  LocalDateTime signupDate,
-                  Boolean mailAuth,
-                  String auth
-    ) {
-        this.memberId = memberId;
-        this.name = name;
+    public Member(String email, String memberId, String password, String name, String phoneNumber,
+                  boolean privacyCheck, String grade, LocalDate birth,
+                  String gender, LocalDateTime signupDate, Boolean mailAuth, Role role) {
+        validateEmail(email);
+        validateDisplayName(name);
+
         this.email = email;
+        this.memberId = memberId;
         this.password = password;
+        this.name = name;
         this.phoneNumber = phoneNumber;
         this.privacyCheck = privacyCheck;
         this.grade = grade;
-        this.auth = auth;
         this.birth = birth;
         this.gender = gender;
-        this.signupDate = signupDate;
+        this.signupDate = LocalDateTime.now();
         this.mailAuth = mailAuth;
+        this.role = role;
     }
 
     private void validateEmail(final String email) {
@@ -124,6 +119,51 @@ public class Member extends BaseEntity {
     }
     public void setGrade(String grade) {
         this.grade = grade;
+    }
+
+    //    @ManyToOne
+//    @JoinColumn(name = "other_column_name")
+//    private Member member;
+
+    public void edit(MemberEditor memberEditor) {
+        name = memberEditor.getName();
+        email = memberEditor.getEmail();
+        memberId = memberEditor.getMemberId();
+        password = memberEditor.getPassword();
+        phoneNumber = memberEditor.getPhoneNumber();
+        birth = memberEditor.getBirth();
+        gender = memberEditor.getGender();
+    }
+
+    public MemberEditor.MemberEditorBuilder toEditor() {
+        return MemberEditor.builder()
+                .name(getName())
+                .email(getEmail())
+                .memberId(getMemberId())
+                .password(getPassword())
+                .phoneNumber(getPhoneNumber())
+                .birth(getBirth())
+                .gender(getGender());
+    }
+
+//    특정 유저의 id 비교, 찾기에 활용
+//    public Integer findMemberId(){
+//        return this.member.getId();
+//    }
+
+    // 비밀번호 변경 로직 (이메일인증)
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+
+    public Member update(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getUsername() {
+        return this.email;
     }
 
 }
