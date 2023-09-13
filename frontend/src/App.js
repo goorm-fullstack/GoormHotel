@@ -25,6 +25,7 @@ import ScrollToTop from './components/ScrollTop';
 import Facilities from './pages/Facilities';
 import SpecialOffer from './pages/SpecialOffer';
 import CustomerSupport from './pages/CustomerSupport';
+import BoardWrite from './pages/board/BoardWrite';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -118,7 +119,8 @@ function App() {
           <Route path="/reservationList" element={<ReservationList />}></Route>
           <Route path="/facilities" element={<Facilities />}></Route>
           <Route path="/specialOffer" element={<SpecialOffer />}></Route>
-          <Route path="/customerSupport/:board" element={<CustomerSupport />}></Route>
+          <Route path="/board/:board" element={<CustomerSupport />}></Route>
+          <Route path="/board/:board/write" element={<BoardWrite />}></Route>
         </Routes>
       </AppContainer>
       <FloatingButtons>

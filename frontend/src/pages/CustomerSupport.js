@@ -95,7 +95,83 @@ const BoardList = styled.table`
   }
 `;
 
-const BoardGallery = styled.ul``;
+const BoardGallery = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px 20px;
+
+  li {
+    width: 380px;
+    line-height: 1.4;
+  }
+
+  li .thumbnail {
+    background: #f7f7f7;
+    min-height: 240px;
+    margin-bottom: 16px;
+  }
+  li .writer {
+    margin: 6px 0 2px;
+  }
+  li .writer,
+  li .date {
+    font-size: 0.875rem;
+    color: #888;
+  }
+`;
+
+const PageParam = styled.ul`
+  text-align: center;
+  margin-top: 50px;
+
+  li {
+    display: inline-block;
+    margin: 0 2px;
+  }
+  li a {
+    display: inline-block;
+    padding: 0 8px;
+    border-radius: 100%;
+    height: 1.6rem;
+    line-height: 1.3rem;
+    color: #666;
+  }
+  li.selected a {
+    color: #baa085;
+    text-decoration: underline;
+  }
+  li a:hover {
+    text-decoration: underline;
+  }
+  li.sideParam {
+    margin: 0 8px;
+  }
+  li.sideParam a {
+    border: 1px solid #baa085;
+    color: #baa085;
+  }
+`;
+
+const WriteBtn = styled.div`
+  text-align: right;
+  margin-top: -60px;
+  margin-bottom: 20px;
+
+  a {
+    display: inline-block;
+    width: 120px;
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid #95846e;
+    color: #95846e;
+    text-align: center;
+    font-size: 0.9375rem;
+  }
+  a:hover {
+    background: #95846e;
+    color: white;
+  }
+`;
 
 const CustomerSupport = () => {
   const board = useParams().board;
@@ -105,13 +181,13 @@ const CustomerSupport = () => {
       <AboutHeader>
         <AboutHeaderTitle>고객지원</AboutHeaderTitle>
         <LinkWrapper>
-          <AboutLink to="/customerSupport/notice" activeClassName="active">
+          <AboutLink to="/board/notice" activeClassName="active">
             공지사항
           </AboutLink>
-          <AboutLink to="/customerSupport/qna" activeClassName="active">
+          <AboutLink to="/board/qna" activeClassName="active">
             문의하기
           </AboutLink>
-          <AboutLink to="/customerSupport/review" activeClassName="active">
+          <AboutLink to="/board/review" activeClassName="active">
             이용후기
           </AboutLink>
         </LinkWrapper>
@@ -131,14 +207,68 @@ const CustomerSupport = () => {
         })()}
         <div>
           {(() => {
+            if (board != 'notice') {
+              return (
+                <WriteBtn>
+                  <a href={board + `/write`}>작성하기</a>
+                </WriteBtn>
+              );
+            }
+          })()}
+          {(() => {
             if (board === 'review') {
               return (
                 <BoardGallery>
+                  {/** loop */}
                   <li>
-                    <div></div>
-                    <p></p>
-                    <p></p>
+                    <div className="thumbnail">
+                      <a href="#">
+                        <img src="" />
+                      </a>
+                    </div>
+                    <p className="title">
+                      <a href="">제목입니다.</a>
+                    </p>
+                    <p className="writer">작성자명</p>
+                    <p className="date">2023-09-13</p>
                   </li>
+                  <li>
+                    <div className="thumbnail">
+                      <a href="#">
+                        <img src="" />
+                      </a>
+                    </div>
+                    <p className="title">
+                      <a href="">제목입니다.</a>
+                    </p>
+                    <p className="writer">작성자명</p>
+                    <p className="date">2023-09-13</p>
+                  </li>
+                  <li>
+                    <div className="thumbnail">
+                      <a href="#">
+                        <img src="" />
+                      </a>
+                    </div>
+                    <p className="title">
+                      <a href="">제목입니다.</a>
+                    </p>
+                    <p className="writer">작성자명</p>
+                    <p className="date">2023-09-13</p>
+                  </li>
+                  <li>
+                    <div className="thumbnail">
+                      <a href="#">
+                        <img src="" />
+                      </a>
+                    </div>
+                    <p className="title">
+                      <a href="">제목입니다.</a>
+                    </p>
+                    <p className="writer">작성자명</p>
+                    <p className="date">2023-09-13</p>
+                  </li>
+                  {/** // loop */}
                 </BoardGallery>
               );
             } else {
@@ -152,6 +282,7 @@ const CustomerSupport = () => {
                     </tr>
                   </thead>
                   <tbody>
+                    {/** loop */}
                     <tr>
                       <td className="center">2</td>
                       <td>
@@ -167,12 +298,54 @@ const CustomerSupport = () => {
                       </td>
                       <td className="center">2023-09-13</td>
                     </tr>
+                    {/** // loop */}
                   </tbody>
                 </BoardList>
               );
             }
           })()}
         </div>
+
+        <PageParam>
+          <li className="sideParam">
+            <a href="#">«</a>
+          </li>
+          {/** loop */}
+          <li>
+            <a href="#">1</a>
+          </li>
+          <li>
+            <a href="#">2</a>
+          </li>
+          <li>
+            <a href="#">3</a>
+          </li>
+          <li>
+            <a href="#">4</a>
+          </li>
+          <li className="selected">
+            <a href="#">5</a>
+          </li>
+          <li>
+            <a href="#">6</a>
+          </li>
+          <li>
+            <a href="#">7</a>
+          </li>
+          <li>
+            <a href="#">8</a>
+          </li>
+          <li>
+            <a href="#">9</a>
+          </li>
+          <li>
+            <a href="#">10</a>
+          </li>
+          {/** // loop */}
+          <li className="sideParam">
+            <a href="#">»</a>
+          </li>
+        </PageParam>
       </Container>
     </>
   );
