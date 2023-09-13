@@ -68,16 +68,11 @@ const TableRead = styled.table`
   }
   th,
   td {
-    padding: 20px 0;
+    padding: 40px;
   }
   td {
     border-top: 1px solid #eee;
     color: #666;
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-  .contents td {
-    padding: 0;
   }
   .contents textarea {
     width: 100%;
@@ -112,8 +107,7 @@ const TableRead = styled.table`
     margin-bottom: 14px;
   }
   td.titlew {
-    padding-top: 40px;
-    padding-bottom: 40px;
+    background: #f7f7f7;
   }
 `;
 
@@ -199,7 +193,7 @@ const BoardRead = () => {
                 })()}
               </td>
             </tr>
-            <tr>
+            <tr className="contents">
               <td>내용입니다.</td>
             </tr>
           </TableRead>
