@@ -1,6 +1,5 @@
 package goormknights.hotel.item.controller;
 
-import goormknights.hotel.item.model.Item;
 import goormknights.hotel.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,56 +29,27 @@ public class ItemController {
     }
 
     /**
-     * 스페셜오퍼 카테고리화와 검색기능
+     * 스페셜오퍼 카테고리화와 검색기능(페이징)
      * @param type - 1차 카테고리
      * @param typeDetail - 2차 카테고리
      * @param keyword - 검색 키워드
-     * @return 각 파라미터가 들어있을 때 그것에 해당하는 리스트를 가져온다.
+     * @return 각 파라미터가 들어있을 때 그것에 해당하는 리스트를 페이징 처리 후 가져온다.
      */
-//    @GetMapping("/specialOffer")
-//    public ResponseEntity<List<Object>> categoryItems(@RequestParam(required = false) String type, @RequestParam(required = false) String typeDetail, @RequestParam(required = false) String keyword){
-//        List<Item> allItems;
-//        List<Object> responseItems;
-//
-//        log.info("type={}", type);
-//        log.info("typeDetail={}", typeDetail);
-//
-//        if(type != null && typeDetail != null){
-//            allItems = itemService.findAllByType(type);
-//            responseItems = itemService.getResponseItem(allItems, typeDetail);
-//        }
-//        else if(type != null && typeDetail == null){
-//            allItems = itemService.findAllByType(type);
-//            responseItems = itemService.getResponseItem(allItems);
-//        }
-//        else if(type == null && typeDetail != null){
-//            allItems = itemService.findAllByTypeDetail(typeDetail);
-//            responseItems = itemService.getResponseItem(allItems);
-//        }
-//        else{
-//            allItems = itemService.findAllItem();
-//            responseItems = itemService.getResponseItem(allItems);
-//        }
-//
-//        if(keyword != null){
-//            List<Item> byKeyword = itemService.findByKeyword(responseItems, keyword);
-//            responseItems = itemService.getResponseItem(byKeyword);
-//        }
-//
-//        return ResponseEntity.ok(responseItems);
-//    }
+    @GetMapping("/specialOffer")
+    public ResponseEntity<List<Object>> categoryItems(@RequestParam(required = false) String type, @RequestParam(required = false) String typeDetail, @RequestParam(required = false) String keyword, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+        log.info("type={}", type);
+        log.info("typeDetail={}", typeDetail);
+        log.info("keyword={}", keyword);
 
-    /**
-     * 상품 검색 기능
-     * @param keyword - 클라이언트가 검색한 단어
-     * @return 검색 단어가 들어가 있는 상품명을 찾아서 조회
-     */
+        return itemService.getListResponseEntity(type, typeDetail, keyword, pageable);
+    }
+
+    // 상품 검색 기능(페이징)
     @GetMapping("/search")
-    public ResponseEntity<List<Object>> findItems(@RequestParam String keyword){
+    public ResponseEntity<List<Object>> findItems(@RequestParam String keyword, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         log.info(keyword);
-        List<Item> searchResult = itemService.findByKeyword(keyword);
-        List<Object> responseItem = itemService.getResponseItem(searchResult);
+        List<Object> searchResult = itemService.findByKeyword(keyword, pageable);
 
-        return ResponseEntity.ok(responseItem);
+        return ResponseEntity.ok(searchResult);
     }
 }
