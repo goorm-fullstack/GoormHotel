@@ -3,38 +3,38 @@ import AdminLayout from './AdminLayout';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-const Container = styled.div`
+export const Container = styled.div`
   width: 100%;
   max-width: 1270px;
   min-width: 760px;
   margin-right: auto;
 `;
 
-const Title = styled.h1`
+export const Title = styled.h1`
   font-size: 36px;
   font-weight: bold;
   margin-bottom: 72px;
 `;
 
-const ContentHeader = styled.div`
+export const ContentHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 `;
 
-const Total = styled.span`
+export const Total = styled.span`
   color: #444444;
   font-size: 15px;
 `;
 
-const BlackListBtn = styled.div`
+export const BlackListBtn = styled.div`
   display: flex;
   gap: 10px;
   height: 40px;
 `;
 
-const Delete = styled.button`
+export const Delete = styled.button`
   width: 120px;
   height: 100%;
   text-align: center;
@@ -43,24 +43,24 @@ const Delete = styled.button`
   background-color: transparent;
 `;
 
-const Add = styled(Delete)`
+export const Add = styled(Delete)`
   border-color: #D30A0A;
   color: #D30A0A;
 `;
 
-const Table = styled.table`
+export const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
 `;
 
-const TableCheckboxWrapper = styled.th`
+export const TableCheckboxWrapper = styled.th`
   background-color: #f7f7f7;
   vertical-align: middle;
   width: 1%;
   text-align: center;
 `;
 
-const TableHeader = styled.th`
+export const TableHeader = styled.th`
   height: 60px;
   background-color: #f7f7f7;
   text-align: center;
@@ -69,7 +69,7 @@ const TableHeader = styled.th`
   width: 10%;
 `;
 
-const TableCell = styled.td`
+export const TableCell = styled.td`
   vertical-align: middle;
   height: 60px;
   text-align: center;
@@ -77,7 +77,7 @@ const TableCell = styled.td`
   border-bottom: 1px solid #DDDDDD;
 `;
 
-const TableCheckbox = styled.input`
+export const TableCheckbox = styled.input`
   width: 16px;
   height: 16px;
   border: 1px solid #DDDDDD !important;
@@ -87,15 +87,27 @@ const TableCheckbox = styled.input`
 
 const AdminMember = () => {
   const [checkedItems, setCheckedItems] = useState([]);
+  const [selectAllChecked, setSelectAllChecked] = useState(false);
+
+  const handleSelectAllChange = (e) => {
+    const checked = e.target.checked;
+    setSelectAllChecked(checked);
+
+    if (checked) {
+      const allMemberIds = memberData.map((item) => item.memberId);
+      setCheckedItems(allMemberIds);
+    } else {
+      setCheckedItems([]);
+    }
+  };
 
   const handleCheckboxChange = (memberId) => {
-    setCheckedItems((prevItems) => {
-      if (prevItems.includes(memberId)) {
-        return prevItems.filter((item) => item !== memberId);
-      } else {
-        return [...prevItems, memberId];
-      }
-    });
+    const updatedCheckedItems = checkedItems.includes(memberId)
+      ? checkedItems.filter((id) => id !== memberId)
+      : [...checkedItems, memberId];
+
+    setCheckedItems(updatedCheckedItems);
+    setSelectAllChecked(updatedCheckedItems.length === memberData.length);
   };
   
   console.log(checkedItems);
@@ -151,7 +163,7 @@ const AdminMember = () => {
           <thead>
             <tr>
               <TableCheckboxWrapper>
-                <TableCheckbox/>
+                <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange}/>
               </TableCheckboxWrapper>
               <TableHeader>No.</TableHeader>
               <TableHeader>회원등급</TableHeader>

@@ -254,7 +254,7 @@ const PrevButton = styled.button`
   color: #fff;
 
   &:hover {
-    opacity: 0.7;
+    background-color: #444;
   }
 
   img {
@@ -267,6 +267,10 @@ const PrevButton = styled.button`
 const NextButton = styled(PrevButton)`
   background-color: #FFFFFF;
   transform: scaleX(-1);
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
 
   img {
     filter: brightness(0);

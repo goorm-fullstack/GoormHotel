@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '../components/Header';
 import { Left, Right, Wrapper } from './ReservationPage';
 import { styled } from 'styled-components';
 import item from '../images/item/item1.jpg';
 import { commonContainerStyle, commonTitleStyle, commonSubTitleStyle } from '../components/common/commonStyles';
+import { ReactComponent as Cart } from '../images/icon/ico_cart.svg';
 
 const Container = styled.div`
   ${commonContainerStyle}
@@ -55,6 +56,10 @@ const RoomItem = styled.div`
 
 const RoomItemInfo = styled.div`
   padding: 35px 40px 40px 40px;
+`;
+
+const CartItemWrapper = styled(RoomItemInfo)`
+  background-color: #F5F5F5;
 `;
 
 const RoomItemTitle = styled.h1`
@@ -124,15 +129,61 @@ const NoItem = styled.div`
   width: 100%;
   height: 465px;
   border: 1px solid #DDDDDD;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
+const CartIcon = styled(Cart)`
+  fill: #888888;
+  width: 80px;
+`;
+
+const NoItemText = styled.span`
+  margin-top: 23px;
+  color: #888888;
+`;
 
 const ReservationItem = () => {
-  // const [selectedItem, setSelectedItem] = useState(true);
-  const selectedItem = true;
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  console.log(selectedProduct);
 
   const productTypes = ['객실', '다이닝'];
   const productCategories = ['디럭스', '패밀리', '스위트', '풀 빌라'];
+
+  const handleReservationClick = (productInfo) => {
+    setSelectedProduct(productInfo);
+  };
+  
+  const handleDeleteClick = () => {
+    setSelectedProduct(null);
+  };
+
+  const products = [
+    {
+      name: "디럭스 객실",
+      image: item,
+      price: 160000,
+      type: "객실",
+      category: "디럭스",
+      basicPrice: 160000,
+      adultPrice: 80000,
+      childPrice: 40000,
+    },
+    {
+      name: "패밀리 객실",
+      image: item,
+      price: 180000,
+      type: "객실",
+      category: "패밀리",
+      basicPrice: 180000,
+      adultPrice: 90000,
+      childPrice: 45000,
+    },
+    // 다른 상품들...
+  ];
 
   return (
     <div>
@@ -166,29 +217,34 @@ const ReservationItem = () => {
             </SelectWrapper>
 
             <RoomItemWrapper>
-              <RoomItem>
-                <img src={item} alt="ItemImg" />
-                <RoomItemInfo>
-                  <RoomItemTitle>상품명</RoomItemTitle>
-                  <DetailWrapper>
-                    <DetailTitle>
-                      <p>상품 유형</p>
-                      <p>상품 분류</p>
-                      <p>기본 가격(1박/2인 기준)</p>
-                      <p>어른 추가(1인)</p>
-                      <p>어린이 추가(1인)</p>
-                    </DetailTitle>
-                    <DetailInfo>
-                      <p>객실</p>
-                      <p>디럭스 </p>
-                      <p>160,000 원</p>
-                      <p>80,000 원/최대 1인</p>
-                      <p>40,000 원/최대 2인</p>
-                    </DetailInfo>
-                  </DetailWrapper>
-                  <ReservationBtn>예약하기</ReservationBtn>
-                </RoomItemInfo>
-              </RoomItem>
+              {products.map((product, index) => (
+                <RoomItem key={index}>
+                  <img src={product.image} alt="ItemImg" />
+                  <RoomItemInfo>
+                    <RoomItemTitle>{product.name}</RoomItemTitle>
+                    <DetailWrapper>
+                      <DetailTitle>
+                        <p>상품 유형</p>
+                        <p>상품 분류</p>
+                        <p>기본 가격(1박/2인 기준)</p>
+                        <p>어른 추가(1인)</p>
+                        <p>어린이 추가(1인)</p>
+                      </DetailTitle>
+                      <DetailInfo>
+                        <p>{product.type}</p>
+                        <p>{product.category}</p>
+                        <p>{product.basicPrice} 원</p>
+                        <p>{product.adultPrice} 원/최대 1인</p>
+                        <p>{product.childPrice} 원/최대 2인</p>
+                      </DetailInfo>
+                    </DetailWrapper>
+                    <ReservationBtn onClick={() => handleReservationClick(product)}>
+                      예약하기
+                    </ReservationBtn>
+                  </RoomItemInfo>
+                </RoomItem>
+              ))}
+              
               <RoomItem>
                 <img src={item} alt="ItemImg" />
                 <RoomItemInfo>
@@ -239,11 +295,12 @@ const ReservationItem = () => {
           </Left>
           
           <Right>
-            {selectedItem && (
+            <SubTitle>상품개요</SubTitle>
+            {selectedProduct && (
               <>
               <RoomItem>
               <img src={item} alt="ItemImg" />
-                <RoomItemInfo>
+                <CartItemWrapper>
                   <RoomItemTitle>상품명</RoomItemTitle>
                   <DetailWrapper>
                     <DetailTitle>
@@ -254,23 +311,25 @@ const ReservationItem = () => {
                       <p>어린이 추가(1인)</p>
                     </DetailTitle>
                     <DetailInfo>
-                      <p>객실</p>
-                      <p>디럭스 </p>
-                      <p>160,000 원</p>
-                      <p>80,000 원/최대 1인</p>
-                      <p>40,000 원/최대 2인</p>
+                      <p>{selectedProduct.type}</p>
+                      <p>{selectedProduct.category} </p>
+                      <p>{selectedProduct.basicPrice} 원</p>
+                      <p>{selectedProduct.adultPrice} 원/최대 1인</p>
+                      <p>{selectedProduct.childPrice} 원/최대 2인</p>
                     </DetailInfo>
                   </DetailWrapper>
-                  <ReservationDeleteBtn>삭제</ReservationDeleteBtn>
-                </RoomItemInfo>
+                  <ReservationDeleteBtn onClick={handleDeleteClick}>삭제</ReservationDeleteBtn>
+                </CartItemWrapper>
               </RoomItem>
               <InfoBtn>예약 정보 입력하기</InfoBtn>
               </>
             )}
-            {!selectedItem && (
+            {!selectedProduct && (
               <>
-                <SubTitle>상품개요</SubTitle>
-                <NoItem></NoItem>
+                <NoItem>
+                  <CartIcon />
+                  <NoItemText>담긴 상품이 없습니다.</NoItemText>
+                </NoItem>
                 <InfoBtn>예약 정보 입력하기</InfoBtn>
               </>
             )}
