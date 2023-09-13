@@ -5,6 +5,8 @@ import goormknights.hotel.item.model.Item;
 import goormknights.hotel.item.model.Room;
 import goormknights.hotel.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +21,22 @@ public class ItemService {
     private final ItemRepository<Item> itemRepository;
 
     /**
-     * 전체 상품 조회
-     * @return DB에 저장된 전체 상품 목록
+     * 전체 상품 조회(페이징)
+     * @return DB에 저장된 전체 상품 목록 페이징처리
+     * pathUrl에 param으로 size(목록 갯수)와 page(현재 페이지)값을 넣을 수 있다
      */
-    public List<Item> findAllItem(){
-        return itemRepository.findAll();
+    public List<Object> findAllItem(Pageable pageable){
+        Page<Item> all = itemRepository.findAll(pageable);
+        List<Object> allItem = new ArrayList<>();
+        for (Item item : all) {
+            if (item instanceof Dining) {
+                allItem.add(((Dining) item).toResponseDiningDto());
+            } else {
+                allItem.add(((Room) item).toResponseRoomDto());
+            }
+        }
+
+        return allItem;
     }
 
     public List<Item> findAllByType(String type){
