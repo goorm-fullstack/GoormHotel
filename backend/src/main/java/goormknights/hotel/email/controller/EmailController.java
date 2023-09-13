@@ -52,7 +52,7 @@ public class EmailController {
                 .subject("[GoormHotel] 임시 비밀번호 발급")
                 .build();
 
-        emailService.sendMail(emailMessage, "password");
+        emailService.sendMemberMail(emailMessage, "password");
 
         return ResponseEntity.ok().build();
     }
@@ -65,7 +65,7 @@ public class EmailController {
                 .subject("[GoormHotel] 이메일 인증을 위한 인증 코드 발송")
                 .build();
 
-        String code = emailService.sendMail(emailMessage, "email-auth");
+        String code = emailService.sendMemberMail(emailMessage, "email-auth");
 
         EmailResponseDto emailResponseDto = new EmailResponseDto();
         emailResponseDto.setCode(code);

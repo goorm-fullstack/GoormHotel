@@ -3,7 +3,6 @@ package goormknights.hotel.email.service;
 import goormknights.hotel.auth.service.RedisUtil;
 import goormknights.hotel.email.model.EmailMessage;
 import goormknights.hotel.email.repository.EmailSender;
-import goormknights.hotel.member.service.MemberUtilService;
 import goormknights.hotel.member.service.VerificationService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -24,7 +23,6 @@ public class EmailService implements EmailSender {
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
     private final VerificationService verificationService;
-    private final MemberUtilService memberUtilService;
     private final RedisUtil redisUtil;
 
     // 메일 내용을 직접 입력해서 사용하는 경우에 사용해주세요
@@ -50,7 +48,7 @@ public class EmailService implements EmailSender {
         MimeMessageHelper helper = null;
         try {
             helper = new MimeMessageHelper(message, true, "UTF-8");
-            helper.setSubject(emailMessage.getTitle());
+            helper.setSubject(emailMessage.getSubject()); // (민종) getTitle -> getSubject
             helper.setTo(emailMessage.getTo());
             context.setVariable("message", emailMessage.getMessage());
             String html = templateEngine.process("mail", context);
@@ -76,24 +74,24 @@ public class EmailService implements EmailSender {
             setContext("code", "인증 코드 발송", subscribeEmail);
     }
 
-    // 기존 setContext
-//    private void setContext(String type, String title, String receiver) throws MessagingException {
-//        Context context = new Context();
-//        MimeMessage message = javaMailSender.createMimeMessage();
-//        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-//        helper.setSubject(title);
-//        helper.setTo(receiver);
-//        String html = templateEngine.process(type, context);
-//        helper.setText(html, true);
-//        helper.addInline("logo", new ClassPathResource("/static/images/common/logo.png"));
-//        helper.addInline("check", new ClassPathResource("/static/images/mail/ico_check.png"));
-//
-//        javaMailSender.send(message);
-//    }
+    private void setContext(String type, String title, String receiver) throws MessagingException {
+        Context context = new Context();
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        helper.setSubject(title);
+        helper.setTo(receiver);
+        String html = templateEngine.process(type, context);
+        helper.setText(html, true);
+        helper.addInline("logo", new ClassPathResource("/static/images/common/logo.png"));
+        helper.addInline("check", new ClassPathResource("/static/images/mail/ico_check.png"));
+
+        javaMailSender.send(message);
+    }
 
     // ------------------------- 아래 민종 -------------------------------
 
-    public String sendMail(EmailMessage emailMessage, String type) {
+    // 회원가입 등에 필요한 메일 발송
+    public String sendMemberMail(EmailMessage emailMessage, String type) {
         String authNum = verificationService.createCode();
 
         redisUtil.setDataExpire(emailMessage.getTo(), authNum, 60 * 5L);
@@ -109,7 +107,7 @@ public class EmailService implements EmailSender {
             mimeMessageHelper.setTo(emailMessage.getTo()); // 메일 수신자
             mimeMessageHelper.setSubject(emailMessage.getSubject()); // 메일 제목
             try{
-                mimeMessageHelper.setText(setContext(authNum, type), true); // 메일 본문 내용, HTML 여부
+                mimeMessageHelper.setText(setContextForSignup(authNum, type), true); // 메일 본문 내용, HTML 여부
             } catch (Exception e){
                 log.error("Error setting email content", e);
                 throw new RuntimeException("Error setting email content", e);
@@ -126,13 +124,13 @@ public class EmailService implements EmailSender {
     }
 
     // thymeleaf를 통한 html 적용 + 오버로딩
-    public String setContext(String code, String type) {
+    public String setContextForSignup(String code, String type) {
         Context context = new Context();
         context.setVariable("code", code);
         return templateEngine.process(type, context);
     }
 
-    public String setContext(String code, String type, String resetLink) {
+    public String setContextForSignup(String code, String type, String resetLink) {
         Context context = new Context();
         context.setVariable("code", code);
         context.setVariable("resetLink", resetLink);

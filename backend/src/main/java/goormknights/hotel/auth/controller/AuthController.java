@@ -27,7 +27,6 @@ public class AuthController {
     public ResponseEntity<?> findMemberId(@RequestBody FindMemberIdRequest request) {
         try {
             String memberId = memberService.findMemberId(request.getName(), request.getEmail());
-            // 이 부분에서 프론트엔드로 리다이렉트 URI를 보내거나 다음 액션을 알릴 수 있습니다.
             return ResponseEntity.ok().body("아이디 찾기를 위한 코드가 발송되었습니다.");
         } catch (MemberNotFound e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found");
@@ -87,12 +86,6 @@ public class AuthController {
         }
     }
 
-
-
-
-
-
-
 //    @PostMapping("/verifyId")
 //    public ResponseEntity<?> verifyId(@RequestBody VerifyIdRequest request) {
 //        if (memberService.verifyCode(request.getEmail(), request.getCode())) {
@@ -101,7 +94,5 @@ public class AuthController {
 //            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid code");
 //        }
 //    }
-
-
 
 }

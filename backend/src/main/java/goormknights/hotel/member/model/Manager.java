@@ -90,4 +90,8 @@ public class Manager implements UserDetails, Serializable {
     public boolean isEnabled() {
         return true;
     }
+
+    public String getRoleKey() {
+        return this.role.getKey();
+    }
 }

@@ -41,7 +41,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                     .username(manager.getAdminId())
                     .password(manager.getPassword())
                     .roles(manager.getRole().toString())
-                    .authorities(manager.getAuthorities().toArray(new String[0]))
+                    .authorities(manager.getAuthorities())
                     .build();
         }
 
