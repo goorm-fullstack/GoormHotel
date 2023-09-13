@@ -3,19 +3,20 @@ package goormknights.hotel.item.controller;
 import goormknights.hotel.item.dto.request.RequestDiningDto;
 import goormknights.hotel.item.dto.request.RequestImageDto;
 import goormknights.hotel.item.dto.response.ResponseDiningDto;
-import goormknights.hotel.item.model.Dining;
 import goormknights.hotel.item.service.DiningService;
 import goormknights.hotel.item.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -64,14 +65,8 @@ public class DiningController {
 
     // 전체 다이닝 찾기
     @GetMapping
-    public ResponseEntity<List<ResponseDiningDto>> findAllDining(){
-        List<Dining> allDining = diningService.findAllDining("dining");
-        List<ResponseDiningDto> toResponseDtoList = new ArrayList<>();
-
-        for (Dining dining : allDining) {
-            toResponseDtoList.add(dining.toResponseDiningDto());
-        }
-
-        return ResponseEntity.ok(toResponseDtoList);
+    public ResponseEntity<Page<ResponseDiningDto>> findAllDining(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)Pageable pageable){
+        Page<ResponseDiningDto> dining = diningService.findAllDining("dining", pageable);
+        return ResponseEntity.ok(dining);
     }
 }
