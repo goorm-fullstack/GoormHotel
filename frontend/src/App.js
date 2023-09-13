@@ -25,6 +25,8 @@ import ScrollToTop from './components/ScrollTop';
 import Facilities from './pages/Facilities';
 import SpecialOffer from './pages/SpecialOffer';
 import CustomerSupport from './pages/CustomerSupport';
+import Reservation from './pages/admin/reservation/reservation';
+import ReservationDetail from './pages/admin/reservation/reservationDetail';
 
 const AppContainer = styled.div`
   width: 100%;

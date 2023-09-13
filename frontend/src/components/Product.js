@@ -81,7 +81,7 @@ const TotalPrice = styled.div`
   margin-bottom: 15px;
 `;
 
-const Price = styled.p`
+const Price = styled.div`
   font-size: 16px;
   color: #95846e;
 

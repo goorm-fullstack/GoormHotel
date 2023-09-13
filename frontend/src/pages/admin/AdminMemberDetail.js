@@ -16,31 +16,31 @@ const Title = styled.h1`
   margin-bottom: 60px;
 `;
 
-const InfoContainer = styled.div`
+export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   border-top: 1px solid #DDDDDD;
 `;
 
-const InfoWrapper = styled.div`
+export const InfoWrapper = styled.div`
   display: flex;
   align-items: center;
   border-bottom: 1px solid #DDDDDD;
 `;
 
-const Label = styled.div`
+export const Label = styled.div`
   width: 245px;
   font-weight: bold;
   background-color: #F7F7F7;
   padding: 23px 0 23px 40px;
 `;
 
-const Data = styled.div`
+export const Data = styled.div`
   flex-grow: 1;
   padding: 20px 0 23px 20px;
 `;
 
-const Input = styled.input`
+export const Input = styled.input`
   width: 200px;
   height: 40px;
   font-size: 15px;
@@ -55,16 +55,20 @@ const EmailAuth = styled.p`
   margin-left: 12px;
 `;
 
-const ModifyBtnWrapper = styled.div`
+export const ModifyBtnWrapper = styled.div`
   text-align: center;
 `;
 
-const ModifyBtn = styled.button`
+export const ModifyBtn = styled.button`
   width: 200px;
   height: 40px;
   background-color: #95846E;
   color: #FFFFFF;
   margin: 40px auto 80px;
+
+  &:hover {
+    background-color: #8A7057;
+  }
 `;
 
 const AdminMemberDetail = () => {

@@ -222,6 +222,12 @@ const ReservationPage = () => {
   // const [userLoggedIn, setUserLoggedIn] = useState(true);
   const userLoggedIn = false;
   const [selectedOption, setSelectedOption] = useState("");
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    request: ''
+  });
 
   const roomOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const adultOptions =  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -237,6 +243,14 @@ const ReservationPage = () => {
     },
   ]);
 
+  const handleChangeData = (field, e) => {
+    const value = e.target.value;
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [field]: value
+    }));
+  }
+
   useEffect(() => {
     const today = new Date();
     const tomorrow = new Date(today);
@@ -245,6 +259,7 @@ const ReservationPage = () => {
     const formattedToday = formatAndSetDate(today);
     const formattedTomorrow = formatAndSetDate(tomorrow);
 
+    //렌더링 됐을 때 현재 날짜를 받아오기 위해서
     setCheckInDate(formattedToday);
     setCheckOutDate(formattedTomorrow);
   }, []);
@@ -511,11 +526,11 @@ const ReservationPage = () => {
             <Section>
               <SubTitle>예약자 정보</SubTitle>
               <InputWrapper>
-                <NameInput placeholder="예약자명" />
-                <PhoneInput placeholder="전화번호" />
+                <NameInput placeholder="예약자명" type="text" value={formData.name} onChange={(e) => handleChangeData('name', e)} />
+                <PhoneInput placeholder="전화번호" type="text" value={formData.phone}  onChange={(e) => handleChangeData('phone', e)} />
               </InputWrapper>
-              <Input placeholder="이메일" />
-              <Input placeholder="요청사항" />
+              <Input placeholder="이메일" type="text"  value={formData.email}  onChange={(e) => handleChangeData('email', e)}/>
+              <Input placeholder="요청사항" type="text" value={formData.request}  onChange={(e) => handleChangeData('request', e)} />
             </Section>
 
             <Section>
@@ -567,7 +582,7 @@ const ReservationPage = () => {
                     </option>
                   </>
                 ) : (
-                  <option disabled selected>로그인이 필요한 서비스입니다.</option>
+                  <option disabled  value="">로그인이 필요한 서비스입니다.</option>
                 )}
               </CouponSelect>
             </Section>

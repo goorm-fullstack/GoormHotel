@@ -27,7 +27,6 @@ const AboutHeaderTitle = styled.h1`
 `;
 
 const LinkWrapper = styled.div`
-  float: left;
   margin-left: 130px;
 
   & > a:not(:last-child) {
@@ -145,10 +144,10 @@ const About = () => {
       <AboutHeader> 
         <AboutHeaderTitle>구름호텔 소개</AboutHeaderTitle>
         <LinkWrapper>
-          <AboutLink to="/about" activeClassName="active">
+          <AboutLink to="/about" $activeClassName="active">
             호텔소개
           </AboutLink>
-          <AboutLink to="/location" activeClassName="active">
+          <AboutLink to="/location" $activeClassName="active">
             오시는길
           </AboutLink>
         </LinkWrapper>

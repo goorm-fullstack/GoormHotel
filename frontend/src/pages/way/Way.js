@@ -28,17 +28,18 @@ const AboutHeader = styled.div`
 const AboutHeaderTitle = styled.h1`
   font-size: 18px;
   font-weight: bold;
-  width: 235px;
 `;
 
 const LinkWrapper = styled.div`
+  margin-left: 130px;
+  
   & > a:not(:last-child) {
     margin-right: 40px;
   }
 `;
 
 const AboutLink = styled(NavLink)`
-  font-size: 15px;
+  font-size: 14px;
   color: #666;
 
   &:hover {
