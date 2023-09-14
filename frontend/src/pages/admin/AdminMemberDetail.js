@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminLayout from './AdminLayout';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -73,11 +73,48 @@ export const ModifyBtn = styled.button`
 
 const AdminMemberDetail = () => {
   const { memberId } = useParams();
+  const [formData, setFormData] = useState({
+    memberName: '',
+    memberGrade: '',
+    password: '',
+    confirmPassword: '',
+    email: '',
+    contact: '',
+    gender: '선택 안함',
+    birthday: '입력 안함',
+  });
+  // const [joinDate, setJoinDate] = useState(null);
+
+  console.log(formData);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(`http://localhost:8080/member/members/${memberId}`);
+  //       const birth = response.data.birth;
+  //       setJoinDate(birth);
+  //     } catch (error) {
+  //       console.error('Error:', error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [memberId]);
 
   const subMenus = [
     { name: '전체 회원 관리', link: '/admin/member' },
     { name: '부운영자 관리', link: '/admin/managers' },
   ];
+  
 
   return (
     <AdminLayout title="회원관리" subMenus={subMenus}>
@@ -90,36 +127,36 @@ const AdminMemberDetail = () => {
           </InfoWrapper>
           <InfoWrapper>
             <Label>회원 이름</Label>
-            <Input placeholder="회원이름" />
+            <Input placeholder="회원이름" name="memberName" value={formData.memberName} onChange={handleChange}/>
           </InfoWrapper>
           <InfoWrapper>
             <Label>회원 등급</Label>
-            <Input placeholder="등급1" />
+            <Input placeholder="등급1"  name="memberGrade" value={formData.memberGrade} onChange={handleChange}/>
           </InfoWrapper>
           <InfoWrapper>
             <Label>비밀번호</Label>
-            <Input placeholder="비밀번호" />
+            <Input placeholder="비밀번호"  name="password" value={formData.password} onChange={handleChange}/>
           </InfoWrapper>
           <InfoWrapper>
             <Label>비밀번호 확인</Label>
-            <Input placeholder="비밀번호 확인" />
+            <Input placeholder="비밀번호 확인" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} />
           </InfoWrapper>
           <InfoWrapper>
             <Label>이메일</Label>
-            <Input placeholder="이메일" />
+            <Input placeholder="이메일" name="email" value={formData.email} onChange={handleChange} />
             <EmailAuth>상태: 인증완료</EmailAuth>
           </InfoWrapper>
           <InfoWrapper>
             <Label>연락처</Label>
-            <Input placeholder="연락처" />
+            <Input placeholder="연락처" name="contact" value={formData.contact} onChange={handleChange} />
           </InfoWrapper>
           <InfoWrapper>
             <Label>성별</Label>
-            <Input placeholder="선택 안함" />
+            <Input placeholder="선택 안함" name="gender" value={formData.gender} onChange={handleChange} />
           </InfoWrapper>
           <InfoWrapper>
             <Label>생일</Label>
-            <Input placeholder="입력 안함" />
+            <Input placeholder="입력 안함" name="birthday" value={formData.birthday} onChange={handleChange} />
           </InfoWrapper>
           <InfoWrapper>
             <Label>가입일</Label>

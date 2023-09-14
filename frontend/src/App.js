@@ -1,6 +1,6 @@
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Room from './pages/Room';
 import Dining from './pages/Dining';
 import { styled } from 'styled-components';
@@ -25,8 +25,7 @@ import ScrollToTop from './components/ScrollTop';
 import Facilities from './pages/Facilities';
 import SpecialOffer from './pages/SpecialOffer';
 import CustomerSupport from './pages/CustomerSupport';
-import Reservation from './pages/admin/reservation/reservation';
-import ReservationDetail from './pages/admin/reservation/reservationDetail';
+import Login from './pages/Login';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -121,6 +120,7 @@ function App() {
           <Route path="/facilities" element={<Facilities />}></Route>
           <Route path="/specialOffer" element={<SpecialOffer />}></Route>
           <Route path="/customerSupport" element={<CustomerSupport />}></Route>
+          <Route path="/login" element={<Login />}></Route>
         </Routes>
       </AppContainer>
       <FloatingButtons>

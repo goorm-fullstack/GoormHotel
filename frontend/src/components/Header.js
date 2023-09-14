@@ -95,7 +95,7 @@ const Header = ({ backgroundColor }) => {
               <HeaderLink to="/">예약확인</HeaderLink>
             </TopInfoItem>
             <TopInfoItem>
-              <HeaderLink to="/">로그인</HeaderLink>
+              <HeaderLink to="/login">로그인</HeaderLink>
             </TopInfoItem>
             <TopInfoItem>
               <HeaderLink to="/">회원가입</HeaderLink>
@@ -129,13 +129,13 @@ const Header = ({ backgroundColor }) => {
               <HeaderLink to="/facilities">부대시설</HeaderLink>
             </NavItem>
             <NavItem>
-              <HeaderLink to="/specialOffer">스페셜오퍼</HeaderLink>
+              <HeaderLink to="/reservationItem">스페셜오퍼</HeaderLink>
             </NavItem>
             <NavItem>
               <HeaderLink to="/customerSupport">고객지원</HeaderLink>
             </NavItem>
           </NavList>
-          <NavReserveBtn to="/reservation">예약하기</NavReserveBtn>
+          <NavReserveBtn to="/reservationItem">예약하기</NavReserveBtn>
         </Gnb>
       </Container>
     </HeaderContainer>

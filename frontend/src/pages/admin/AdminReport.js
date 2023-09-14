@@ -171,42 +171,42 @@ const AdminReport = () => {
 
         <PageParam>
           <li className="sideParam">
-            <a href="#">«</a>
+            <a href="/">«</a>
           </li>
           {/** loop */}
           <li>
-            <a href="#">1</a>
+            <a href="/">1</a>
           </li>
           <li>
-            <a href="#">2</a>
+            <a href="/">2</a>
           </li>
           <li>
-            <a href="#">3</a>
+            <a href="/">3</a>
           </li>
           <li>
-            <a href="#">4</a>
+            <a href="/">4</a>
           </li>
           <li className="selected">
-            <a href="#">5</a>
+            <a href="/">5</a>
           </li>
           <li>
-            <a href="#">6</a>
+            <a href="/">6</a>
           </li>
           <li>
-            <a href="#">7</a>
+            <a href="/">7</a>
           </li>
           <li>
-            <a href="#">8</a>
+            <a href="/">8</a>
           </li>
           <li>
-            <a href="#">9</a>
+            <a href="/">9</a>
           </li>
           <li>
-            <a href="#">10</a>
+            <a href="/">10</a>
           </li>
           {/** // loop */}
           <li className="sideParam">
-            <a href="#">»</a>
+            <a href="/">»</a>
           </li>
         </PageParam>
       </Container>
