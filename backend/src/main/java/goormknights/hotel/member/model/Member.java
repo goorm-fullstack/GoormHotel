@@ -166,4 +166,8 @@ public class Member extends BaseEntity implements Serializable {
         return this.email;
     }
 
+    public String getRoleKey() {
+        return this.role.getKey();
+    }
+
 }

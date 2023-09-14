@@ -36,7 +36,7 @@ public class LoginController {
     }
 
     // 운영자 로그인
-    @PostMapping("/adminlogin")
+    @PostMapping("/login/adminlogin")
     public ResponseEntity<?> adminLogin(@RequestBody ManagerLogin login, HttpSession session) {
         String adminId = login.getAdminId();
         String password = login.getPassword();

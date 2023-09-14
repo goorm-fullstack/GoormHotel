@@ -68,6 +68,7 @@ public class AdminService {
 
 
 
+
     // 매니저 정보 수정
 //    @Transactional
 //    public void edit(Integer id, MemberEdit memberEdit){
