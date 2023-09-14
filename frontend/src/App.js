@@ -26,6 +26,7 @@ import Facilities from './pages/Facilities';
 import SpecialOffer from './pages/SpecialOffer';
 import CustomerSupport from './pages/CustomerSupport';
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -121,6 +122,7 @@ function App() {
           <Route path="/specialOffer" element={<SpecialOffer />}></Route>
           <Route path="/customerSupport" element={<CustomerSupport />}></Route>
           <Route path="/login" element={<Login />}></Route>
+          <Route path="/signup" element={<Signup />}></Route>
         </Routes>
       </AppContainer>
       <FloatingButtons>

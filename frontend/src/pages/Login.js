@@ -114,7 +114,7 @@ const AuthBtn = styled.button`
 const CenterLine = styled.div`
   width: 1px;
   height: 100%;
-  background-color: #DDDDDD; /* 선의 색상을 지정하세요 */
+  background-color: #DDDDDD;
 `;
 
 const RightWrapper = styled.div`

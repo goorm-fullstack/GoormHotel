@@ -98,7 +98,7 @@ const Header = ({ backgroundColor }) => {
               <HeaderLink to="/login">로그인</HeaderLink>
             </TopInfoItem>
             <TopInfoItem>
-              <HeaderLink to="/">회원가입</HeaderLink>
+              <HeaderLink to="/signup">회원가입</HeaderLink>
             </TopInfoItem>
             <TopInfoItem>
               <HeaderLink to="/membership">멤버십</HeaderLink>
