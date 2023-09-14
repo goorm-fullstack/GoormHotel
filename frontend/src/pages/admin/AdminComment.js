@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AdminLayout from './AdminLayout';
-import { Container, Title, ContentHeader, Total, BlackListBtn, Delete, Add, Table, TableCheckboxWrapper, TableHeader, TableCell, TableCheckbox } from './AdminMember';
+import { Container, Title, ContentHeader, Total, BlackListBtn, Delete, Add, Table, TableCheckboxWrapper, TableHeader, TableCell, TableCheckbox, Num } from './AdminMember';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -80,9 +80,9 @@ const AdminComment = () => {
   };
 
   const subMenus = [
-    { name: '게시글 관리', link: '/admin/member' },
+    { name: '게시글 관리', link: '/admin/board' },
     { name: '댓글 관리', link: '/admin/comments' },
-    { name: '삭제된 글 관리', link: '/admin/managers' },
+    { name: '삭제된 글 관리', link: '/admin/deleteComment' },
     { name: '신고 관리', link: '/admin/report' },
   ];
 
@@ -117,7 +117,7 @@ const AdminComment = () => {
       <Container>
         <Title>댓글 관리</Title>
         <ContentHeader>
-          <Total>전체 {comments.length} 건</Total>
+          <Total>전체 <Num>{comments.length}</Num> 건</Total>
           <BlackListBtn>
             <Delete>신고처리</Delete>
             <Add>삭제</Add>

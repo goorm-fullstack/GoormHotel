@@ -4,6 +4,7 @@ import { TableTd, TableTr, Table, Form, BoldTd, Input } from '../pages/admin/Adm
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import { Select } from '../pages/admin/AdminItemList';
+import axios from 'axios';
 
 const TopOfTable = styled.div`
   display: flex;
@@ -56,6 +57,47 @@ const WriteFormButton = styled(SubmitButton)`
 const WriteFormDining = () => {
   const [imgFile, setImgFile] = useState('');
   const imgRef = useRef();
+  const [formData, setFormData] = useState({
+    name: '',
+    price: '',
+    priceAdult: '',
+    priceChildren: '',
+    type: '다이닝',
+    typeDetail: '',
+    useTime: '',
+    spare: '',
+    spareAdult: '',
+    spareChildren: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    const form = new FormData();
+    form.append('img', imgFile);
+
+    Object.keys(formData).forEach((key) => {
+      form.append(key, formData[key]);
+    });
+  
+    try {
+      await axios.post('http://localhost:8080/dinings/dining', form, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  }
 
   // 이미지 업로드 input의 onChange(이미지 미리보기)
   const saveImgFile = () => {
@@ -92,55 +134,101 @@ const WriteFormDining = () => {
           <WriteFormTr>
             <BoldTd>상품명</BoldTd>
             <TableTd>
-              <Input type="text" required />
+              <Input 
+                type="text" 
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required 
+              />
             </TableTd>
           </WriteFormTr>
           <WriteFormTr>
             <BoldTd>상품가격</BoldTd>
             <TableTd>
-              <Input type="text" required />
+              <Input
+                type="text"
+                name="price" 
+                value={formData.price}
+                onChange={handleChange} 
+                required
+              />
             </TableTd>
           </WriteFormTr>
           <WriteFormTr>
             <BoldTd>어른 추가 비용</BoldTd>
             <TableTd>
-              <Input type="text" required />
+              <Input
+                type="text"
+                name="priceAdult" 
+                onChange={handleChange}
+                value={formData.priceAdult} 
+                required
+              />
             </TableTd>
           </WriteFormTr>
           <WriteFormTr>
             <BoldTd>어린이 추가 비용</BoldTd>
             <TableTd>
-              <Input type="text" required />
+              <Input
+                type="text"
+                name="priceChildren" 
+                onChange={handleChange}
+                value={formData.priceChildren} 
+                required
+              />
             </TableTd>
           </WriteFormTr>
           <WriteFormTr>
             <BoldTd>잔여 객실 수</BoldTd>
             <TableTd>
-              <Input type="text" required />
+              <Input
+                type="text"
+                name="spare" 
+                onChange={handleChange}
+                value={formData.spare} 
+                required />
             </TableTd>
           </WriteFormTr>
           <WriteFormTr>
             <BoldTd>최대 숙박 가능 인원 수(어른)</BoldTd>
             <TableTd>
-              <Input type="text" required />
+              <Input
+                type="text"
+                name="spareAdult" 
+                onChange={handleChange}
+                value={formData.spareAdult} 
+                required
+              />
             </TableTd>
           </WriteFormTr>
           <WriteFormTr>
             <BoldTd>최대 숙박 가능 인원 수(어린이)</BoldTd>
             <TableTd>
-              <Input type="text" required />
+              <Input
+                type="text"
+                name="spareChildren" 
+                onChange={handleChange}
+                value={formData.spareChildren}
+                required />
             </TableTd>
           </WriteFormTr>
           <WriteFormTr>
             <BoldTd>상품 타입</BoldTd>
             <TableTd>
-              <Input type="text" value="다이닝" readOnly />
+              <Input
+                type="text"
+                value="다이닝"
+                name="type" 
+                onChange={handleChange} 
+                readOnly
+              />
             </TableTd>
           </WriteFormTr>
           <WriteFormTr>
             <BoldTd>세부 타입</BoldTd>
             <TableTd>
-              <WriteFormSelect>
+              <WriteFormSelect  name="typeDetail" value={formData.typeDetail} onChange={handleChange}>
                 <option value="">선택</option>
                 <option value="restaurant">레스토랑</option>
                 <option value="roomService">룸서비스</option>
@@ -152,11 +240,11 @@ const WriteFormDining = () => {
           <WriteFormTr>
             <BoldTd>이용 가능 시간</BoldTd>
             <TableTd>
-              <Input type="text" required />
+              <Input type="text"  name="useTime" value={formData.useTime} onChange={handleChange} required />
             </TableTd>
           </WriteFormTr>
         </WriteFormTable>
-        <WriteFormButton type="submit">등록</WriteFormButton>
+        <WriteFormButton type="submit" onSubmit={handleSubmit}>등록</WriteFormButton>
       </Form>
     </>
   );

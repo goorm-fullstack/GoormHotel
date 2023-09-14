@@ -62,7 +62,7 @@ const WriteFormRoom = () => {
     price: '',
     priceAdult: '',
     priceChildren: '',
-    type: '객실',
+    type: 'room',
     typeDetail: '',
     bed: '',
     spare: '',
@@ -70,6 +70,8 @@ const WriteFormRoom = () => {
     spareChildren: '',
     capacity: '',
   });
+
+
 
   // 이미지 업로드 input의 onChange
   const saveImgFile = () => {
@@ -93,11 +95,13 @@ const WriteFormRoom = () => {
     e.preventDefault();
   
     const form = new FormData();
-    form.append('img', imgFile);
+    form.append('img', imgRef.current.files[0]);
 
     Object.keys(formData).forEach((key) => {
       form.append(key, formData[key]);
     });
+
+    console.log(form);
   
     try {
       await axios.post('http://localhost:8080/rooms/room', form, {
@@ -123,7 +127,7 @@ const WriteFormRoom = () => {
           </TypeLink>
         </div>
       </TopOfTable>
-      <Form action="#" method="post">
+      <Form action="#" method="post" onSubmit={handleSubmit} encType="multipart/form-data">
         <WriteFormTable>
           <WriteFormTr>
             <BoldTd>썸네일</BoldTd>
@@ -222,7 +226,7 @@ const WriteFormRoom = () => {
                 type="text"
                 name="type" 
                 onChange={handleChange} 
-                value="객실"
+                value="room"
                 readOnly />
             </TableTd>
           </WriteFormTr>
@@ -256,7 +260,7 @@ const WriteFormRoom = () => {
             </TableTd>
           </WriteFormTr>
         </WriteFormTable>
-        <WriteFormButton type="submit" onSubmit={handleSubmit}>등록</WriteFormButton>
+        <WriteFormButton type="submit">등록</WriteFormButton>
       </Form>
     </>
   );

@@ -15,6 +15,8 @@ import AdminWriteFormRoom from './AdminWriteFormRoom';
 import AdminWriteFormDining from './AdminWriteFormDining';
 import AdminDetailDining from './AdminDetailDining';
 import AdminDetailRoom from './AdminDetailRoom';
+import AdminBoard from './AdminBoard';
+import AdminDeleteComment from './AdminDeleteComment';
 
 const AdminApp = () => {
   return (
@@ -29,12 +31,14 @@ const AdminApp = () => {
         <Route path="/admin/comments" element={<AdminComment />}></Route>
         <Route path="/admin/report" element={<AdminReport />}></Route>
         <Route path="/admin/item/list" element={<AdminItemList />}></Route>
-        <Route path="/admin/item/list/view/dining/:id" element={<AdminDetailDining />}></Route>
-        <Route path="/admin/item/list/view/room/:id" element={<AdminDetailRoom />}></Route>
+        <Route path="/admin/item/list/view/dining/:type/:name" element={<AdminDetailDining />}></Route>
+        <Route path="/admin/item/list/view/room/:type/:name" element={<AdminDetailRoom />}></Route>
         <Route path="/admin/item/list/writeForm/room" element={<AdminWriteFormRoom />}></Route>
         <Route path="/admin/item/list/writeForm/dining" element={<AdminWriteFormDining />}></Route>
         <Route path="/admin/item/giftCard" element={<AdminGiftCard />}></Route>
         <Route path="/admin/item/giftCard/view/:id" element={<AdminDetailGiftCard />}></Route>
+        <Route path="/admin/board" element={<AdminBoard />}></Route>
+        <Route path="/admin/deleteComment" element={<AdminDeleteComment />}></Route>
       </Routes>
     </BrowserRouter>
   );

@@ -63,7 +63,7 @@ const AdminHeader = () => {
           <li><Link to="/admin/member">회원 관리</Link></li>
           <li><Link>상품 관리</Link></li>
           <li><Link>예약 관리</Link></li>
-          <li><Link>게시판 관리</Link></li>
+          <li><Link to="/admin/board">게시판 관리</Link></li>
           <li><Link>채팅/메일 관리</Link></li>
         </MenuItem>
         <HeaderRight>

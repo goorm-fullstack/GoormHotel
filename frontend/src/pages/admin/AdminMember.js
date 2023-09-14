@@ -83,6 +83,24 @@ export const TableCheckbox = styled.input`
   border: 1px solid #DDDDDD !important;
   outline: none;
   margin-left: 39px;
+    width: 16px;
+  height: 16px;
+  border: 1px solid #ddd;
+  appearance: none;
+  background-color: white;
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='lightgray' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
+  background-size: 120% 120%;
+  background-position: 50%;
+  background-repeat: no-repeat;
+
+  &:checked {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
+    background-color: #baa085;
+  }
+`;
+
+export const Num = styled.span`
+  font-weight: bold;
 `;
 
 const AdminMember = () => {
@@ -153,7 +171,7 @@ const AdminMember = () => {
       <Container>
         <Title>전체 회원 관리</Title>
         <ContentHeader>
-          <Total>전체 {memberData.length} 건</Total>
+          <Total>전체 <Num>{memberData.length}</Num> 건</Total>
           <BlackListBtn>
             <Delete>블랙리스트 해제</Delete>
             <Add>블랙리스트 추가</Add>

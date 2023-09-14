@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AdminLayout from './AdminLayout';
 import styled from 'styled-components';
-import { ContentHeader, Total, BlackListBtn, Delete, Add, Table, TableCheckboxWrapper, TableHeader, TableCell, TableCheckbox } from './AdminMember';
+import { ContentHeader, Total, BlackListBtn, Delete, Add, Table, TableCheckboxWrapper, TableHeader, TableCell, TableCheckbox, Num } from './AdminMember';
 import { InfoContainer, InfoWrapper, Label, ModifyBtnWrapper, ModifyBtn } from './AdminMemberDetail';
 
 
@@ -87,18 +87,18 @@ const ManagerInfoBtn = styled.button`
 const AdminManager = () => {
   const [checkedItems, setCheckedItems] = useState([]);
   const [selectedManager, setSelectedManager] = useState(null);
+  const [selectAllChecked, setSelectAllChecked] = useState(false);
 
   console.log(checkedItems);
   console.log(selectedManager);
 
   const handleCheckboxChange = (memberId) => {
-    setCheckedItems((prevItems) => {
-      if (prevItems.includes(memberId)) {
-        return prevItems.filter((item) => item !== memberId);
-      } else {
-        return [...prevItems, memberId];
-      }
-    });
+    const updatedCheckedItems = checkedItems.includes(memberId)
+      ? checkedItems.filter((id) => id !== memberId)
+      : [...checkedItems, memberId];
+
+    setCheckedItems(updatedCheckedItems);
+    setSelectAllChecked(updatedCheckedItems.length === managerData.length);
   };
 
   const handleManagerClick = (manager) => {
@@ -112,8 +112,17 @@ const AdminManager = () => {
     }));
   };
 
+  const handleSelectAllChange = (e) => {
+    const checked = e.target.checked;
+    setSelectAllChecked(checked);
 
-
+    if (checked) {
+      const allMemberIds = managerData.map((item) => item.memberId);
+      setCheckedItems(allMemberIds);
+    } else {
+      setCheckedItems([]);
+    }
+  };
 
   const managerData = [
     {
@@ -159,7 +168,7 @@ const AdminManager = () => {
         <Section>
           <SubTitle>부운영자 계정 목록</SubTitle>
           <ContentHeader>
-            <Total>전체 {managerData.length} 건</Total>
+            <Total>전체 <Num>{managerData.length}</Num> 건</Total>
             <BlackListBtn>
               <Delete>사용함</Delete>
               <Add>사용안함</Add>
@@ -169,7 +178,7 @@ const AdminManager = () => {
             <thead>
               <tr>
                 <TableCheckboxWrapper>
-                  <TableCheckbox/>
+                  <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange}/>
                 </TableCheckboxWrapper>
                 <TableHeader>No.</TableHeader>
                 <TableHeader>운영자명</TableHeader>
