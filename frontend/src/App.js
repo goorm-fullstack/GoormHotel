@@ -23,7 +23,6 @@ import Way from './pages/way/Way';
 import Privacy from './pages/register/Privacy';
 import ScrollToTop from './components/ScrollTop';
 import Facilities from './pages/Facilities';
-import SpecialOffer from './pages/SpecialOffer';
 import CustomerSupport from './pages/CustomerSupport';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -118,10 +117,9 @@ function App() {
           <Route path="/membership" element={<Membership />}></Route>
           <Route path="/reservationComplete" element={<ReservationComplete title="예약 확인" />}></Route>
           <Route path="/reservationCheck" element={<ReservationCheck />}></Route>
-          <Route path="/reservationItem" element={<ReservationItem />}></Route>
+          <Route path="/specialOffer" element={<ReservationItem />}></Route>
           <Route path="/reservationList" element={<ReservationList />}></Route>
           <Route path="/facilities" element={<Facilities />}></Route>
-          <Route path="/specialOffer" element={<SpecialOffer />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/board/:board" element={<CustomerSupport />}></Route>

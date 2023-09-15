@@ -7,7 +7,7 @@ const Container = styled.div`
   width: 100%;
   max-width: 1270px;
   min-width: 760px;
-  margin-right: auto;
+  margin: 0 auto;
 `;
 
 const Title = styled.h1`
@@ -19,19 +19,19 @@ const Title = styled.h1`
 export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
-  border-top: 1px solid #DDDDDD;
+  border-top: 1px solid #dddddd;
 `;
 
 export const InfoWrapper = styled.div`
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #DDDDDD;
+  border-bottom: 1px solid #dddddd;
 `;
 
 export const Label = styled.div`
   width: 245px;
   font-weight: bold;
-  background-color: #F7F7F7;
+  background-color: #f7f7f7;
   padding: 23px 0 23px 40px;
 `;
 
@@ -44,7 +44,7 @@ export const Input = styled.input`
   width: 200px;
   height: 40px;
   font-size: 15px;
-  border: 1px solid #DDDDDD;
+  border: 1px solid #dddddd;
   margin-left: 20px;
   outline: none;
 `;
@@ -62,12 +62,12 @@ export const ModifyBtnWrapper = styled.div`
 export const ModifyBtn = styled.button`
   width: 200px;
   height: 40px;
-  background-color: #95846E;
-  color: #FFFFFF;
+  background-color: #95846e;
+  color: #ffffff;
   margin: 40px auto 80px;
 
   &:hover {
-    background-color: #8A7057;
+    background-color: #8a7057;
   }
 `;
 
@@ -95,7 +95,6 @@ const AdminMemberDetail = () => {
     });
   };
 
-
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -114,7 +113,6 @@ const AdminMemberDetail = () => {
     { name: '전체 회원 관리', link: '/admin/member' },
     { name: '부운영자 관리', link: '/admin/managers' },
   ];
-  
 
   return (
     <AdminLayout title="회원관리" subMenus={subMenus}>
@@ -127,15 +125,15 @@ const AdminMemberDetail = () => {
           </InfoWrapper>
           <InfoWrapper>
             <Label>회원 이름</Label>
-            <Input placeholder="회원이름" name="memberName" value={formData.memberName} onChange={handleChange}/>
+            <Input placeholder="회원이름" name="memberName" value={formData.memberName} onChange={handleChange} />
           </InfoWrapper>
           <InfoWrapper>
             <Label>회원 등급</Label>
-            <Input placeholder="등급1"  name="memberGrade" value={formData.memberGrade} onChange={handleChange}/>
+            <Input placeholder="등급1" name="memberGrade" value={formData.memberGrade} onChange={handleChange} />
           </InfoWrapper>
           <InfoWrapper>
             <Label>비밀번호</Label>
-            <Input placeholder="비밀번호"  name="password" value={formData.password} onChange={handleChange}/>
+            <Input placeholder="비밀번호" name="password" value={formData.password} onChange={handleChange} />
           </InfoWrapper>
           <InfoWrapper>
             <Label>비밀번호 확인</Label>
