@@ -70,11 +70,13 @@ const NavItem = styled.li`
 `;
 
 const NavReserveBtn = styled(Link)`
-  padding: 12px 27px;
+  padding: 12px 0;
+  width: 140px;
   background-color: #454545;
   color: white;
   background-color: #95846e;
   white-space: nowrap;
+  text-align: center;
 
   &:hover {
     background-color: #8a7057;
@@ -92,7 +94,7 @@ const Header = ({ backgroundColor }) => {
         <TopInfo>
           <TopInfoList>
             <TopInfoItem>
-              <HeaderLink to="/">예약확인</HeaderLink>
+              <HeaderLink to="/login">예약확인</HeaderLink>
             </TopInfoItem>
             <TopInfoItem>
               <HeaderLink to="/login">로그인</HeaderLink>
@@ -135,7 +137,7 @@ const Header = ({ backgroundColor }) => {
               <HeaderLink to="/board/notice">고객지원</HeaderLink>
             </NavItem>
           </NavList>
-          <NavReserveBtn to="/reservationItem">예약하기</NavReserveBtn>
+          <NavReserveBtn to="/specialOffer">예약하기</NavReserveBtn>
         </Gnb>
       </Container>
     </HeaderContainer>

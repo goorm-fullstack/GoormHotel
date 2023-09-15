@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import visual03 from "../images/main/visual03.webp";
-import visual02 from "../images/main/visual02.webp";
-import visual01 from "../images/main/visual01.webp";
-import slideBtnImage from "../images/icon/ico_slide_btn.png";
-import { styled } from "styled-components";
+import React, { useState } from 'react';
+import visual03 from '../images/main/visual03.webp';
+import visual02 from '../images/main/visual02.webp';
+import visual01 from '../images/main/visual01.webp';
+import slideBtnImage from '../images/icon/ico_slide_btn.png';
+import { styled } from 'styled-components';
 import { ReactComponent as SideMenuIcon } from '../images/icon/ico_slide_btn.svg';
 
 const images = [visual03, visual02, visual01];
@@ -26,11 +26,12 @@ const MainImage = styled.img`
 
 const SlideButton = styled.button`
   position: absolute;
-  width: 40px;
-  height: 64px;
-  top: 45%;
-  background-color: rgba(255, 255, 255, 0);
-  ${(props) => (props.$position === "right" ? "right: 40px;" : "left: 40px;")}
+  width: 60px;
+  height: 60px;
+  top: 50%;
+  background: transparent;
+  transform: translate(0, -47%);
+  ${(props) => (props.$position === 'right' ? 'right: 28px;' : 'left: 28px;')}
 `;
 
 const SlideImageWrapper = styled.div`
@@ -49,24 +50,22 @@ const TextWrapper = styled.div`
   min-width: 1260px;
   text-align: center;
   position: absolute;
-  margin-top: 350px;
-  display: flex;
-  flex-direction: column;
-  color: #FFFFFF;
-  text-shadow: 0px 0px 19px rgba(0, 0, 0, 0.9);
+  margin-top: 44vh;
+  color: #ffffff;
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
 `;
 
 const Text = styled.p`
-  font-family: "Marcellus", serif;
-  font-size: 60px;
+  font-family: 'Marcellus', serif;
+  font-size: 56px;
   text-align: center;
-  letter-spacing: 8px;
-  margin-bottom: 10px;
+  letter-spacing: 0.08em;
 `;
 
 const SubText = styled.p`
-  margin-top: 60px;
-  font-size: 24px;
+  margin-top: 40px;
+  font-size: 22px;
+  letter-spacing: -0.01em;
 `;
 
 const SideIcon = styled(SideMenuIcon)`
@@ -105,7 +104,7 @@ const Slide = () => {
         <SubText>고객의 작은 관심에도 귀 기울이며, 차별화된 서비스와 시설로써 보다 편안하고 안락한 휴식을 제공합니다.</SubText>
       </TextWrapper>
       <SlideButton onClick={goToPreviousSlide} $position="left">
-        <SideIcon />
+        <SideIcon fill="white" />
       </SlideButton>
       <SlideButton onClick={goToNextSlide} $position="right">
         <SideIconRight />
