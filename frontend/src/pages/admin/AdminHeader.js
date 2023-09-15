@@ -66,7 +66,7 @@ const AdminHeader = () => {
             <Link to="/admin/member">회원 관리</Link>
           </li>
           <li>
-            <Link>상품 관리</Link>
+            <Link to="/admin/item/list">상품 관리</Link>
           </li>
           <li>
             <Link>예약 관리</Link>
