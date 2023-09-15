@@ -2,9 +2,9 @@ package goormknights.hotel.reservation;
 
 import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.item.dto.request.RequestImageDto;
+import goormknights.hotel.item.dto.request.RequestRoomDto;
 import goormknights.hotel.item.model.Room;
 import goormknights.hotel.item.service.RoomService;
-import goormknights.hotel.item.dto.request.RequestRoomDto;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.repository.MemberRepository;
 import goormknights.hotel.reservation.dto.request.RequestReservationDto;
@@ -15,9 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootTest
@@ -35,6 +35,7 @@ public class ReservationTest {
 
     private LocalDateTime now = LocalDateTime.now();
     private LocalDateTime future = now.plusDays(3);
+
 
     /**
      * 예약 기능 테스트
@@ -78,23 +79,23 @@ public class ReservationTest {
         couponList.add(coupon);
 
         Member member = Member.builder()
-                .id(null)
+//                .id(null)
                 .memberId("test")
                 .password("password")
                 .name("테스트")
-                .auth("member")
+//                .auth("member")
                 .phoneNumber("01012341234")
                 .email("test@test.com")
                 .privacyCheck(true)
                 .grade("Gold")
-                .couponList(couponList)
-                .reservationList(null)
-                .giftCardList(null)
+//                .couponList(couponList)
+//                .reservationList(null)
+//                .giftCardList(null)
                 .gender("")
                 .birth(null)
                 .build();
 
-        memberRepository.save(member);
+//        memberRepository.save(member);
 
         RequestReservationDto reservation = RequestReservationDto.builder()
                 .id(null)
