@@ -1,6 +1,7 @@
 package goormknights.hotel.reservation;
 
 import goormknights.hotel.coupon.model.Coupon;
+import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.item.dto.request.RequestImageDto;
 import goormknights.hotel.item.model.Room;
 import goormknights.hotel.item.service.RoomService;
@@ -77,10 +78,15 @@ public class ReservationTest {
 //        List<Coupon> couponList = new ArrayList<>();
 //        couponList.add(coupon);
 
+        /**
+         * 비회원 예약 테스트
+         */
         Member member = Member.builder()
                 .email("email@email.com")
                 .name("테스트")
                 .phoneNumber("01012341234")
+                .role(Role.GUEST)
+                .mailAuth(true)
                 .build();
 
         memberRepository.save(member);
