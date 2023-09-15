@@ -113,6 +113,7 @@ const AdminMemberDetail = () => {
     { name: '전체 회원 관리', link: '/admin/member' },
     { name: '부운영자 관리', link: '/admin/managers' },
   ];
+  
 
   return (
     <AdminLayout title="회원관리" subMenus={subMenus}>

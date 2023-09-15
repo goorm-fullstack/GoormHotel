@@ -120,6 +120,8 @@ function App() {
           <Route path="/specialOffer" element={<ReservationItem />}></Route>
           <Route path="/reservationList" element={<ReservationList />}></Route>
           <Route path="/facilities" element={<Facilities />}></Route>
+          <Route path="/specialOffer" element={<SpecialOffer />}></Route>
+          <Route path="/customerSupport" element={<CustomerSupport />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/board/:board" element={<CustomerSupport />}></Route>
