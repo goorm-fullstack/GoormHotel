@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Title, SubmitButton } from '../pages/admin/AdminGiftCard';
 import { TableTd, TableTr, Table, Form, BoldTd, Input } from '../pages/admin/AdminDetailGiftCard';
 import styled from 'styled-components';
