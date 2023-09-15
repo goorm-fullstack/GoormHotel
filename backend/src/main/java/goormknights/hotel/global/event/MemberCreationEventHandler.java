@@ -22,12 +22,14 @@ public class MemberCreationEventHandler implements ApplicationListener<MemberCre
     public void onApplicationEvent(MemberCreateEvent event) {
         Member member = event.getMember();
         Coupon coupon = event.getCoupon();
+        if(member.getRole() != ROLE.GUEST) {
+            Coupon saveCoupon = couponRepository.save(coupon);
+            coupon.setMember(member);
+            coupon.nameStrategy();
+            coupon.setDiscountRate();
+            member.getCouponList().add(saveCoupon);
+        }
 
-        Coupon saveCoupon = couponRepository.save(coupon);
-        member.getCouponList().add(saveCoupon);
-        coupon.setMember(member);
-        coupon.nameStrategy();
-        coupon.setDiscountRate();
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(member.getEmail())
                 .message("가입을 환영합니다.~")
