@@ -2,16 +2,14 @@ package goormknights.hotel.member.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class MemberEdit {
     @NotBlank(message = "이름을 입력해주세요")
     private String name;

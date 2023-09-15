@@ -142,7 +142,7 @@ const Reservation = () => {
               </tr>
               ))}
             </tbody>
-            </Table>
+          </Table>
       </Container>
     </AdminLayout>
   );

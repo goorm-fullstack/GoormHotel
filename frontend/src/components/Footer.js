@@ -199,10 +199,10 @@ const SocialLink = styled.a`
   width: 34px;
   height: 34px;
   background-size: cover;
-  background-image: url(${props => props.$imageUrl});
+  background-image: url(${(props) => props.$imageUrl});
 
   &:hover {
-    background-image: url(${props => props.$hoverUrl});
+    background-image: url(${(props) => props.$hoverUrl});
   }
 
   &:not(:last-child) {
@@ -299,12 +299,24 @@ const Footer = () => {
             <SocialWrapper>
               <SocialTitle>SOCIAL</SocialTitle>
               <SocialIcon>
-                <SocialLink href="https://www.instagram.com/goorm.co/" target="_blank" rel="noopener noreferrer" $imageUrl={instagramImg} $hoverUrl={instagramImgHover}>
-                </SocialLink>
-                <YoutubeLink href="https://www.youtube.com/@goorm" target="_blank" rel="noopener noreferrer" $imageUrl={youtubeImg} $hoverUrl={youtubeImgHover}>
-                </YoutubeLink>
-                <OwlLink href="https://www.tripadvisor.co.kr/" target="_blank" rel="noopener noreferrer" $imageUrl={owlImg} $hoverUrl={owlImgHover}>
-                </OwlLink>
+                <SocialLink
+                  href="https://www.instagram.com/goorm.co/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  $imageUrl={instagramImg}
+                  $hoverUrl={instagramImgHover}></SocialLink>
+                <YoutubeLink
+                  href="https://www.youtube.com/@goorm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  $imageUrl={youtubeImg}
+                  $hoverUrl={youtubeImgHover}></YoutubeLink>
+                <OwlLink
+                  href="https://www.tripadvisor.co.kr/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  $imageUrl={owlImg}
+                  $hoverUrl={owlImgHover}></OwlLink>
               </SocialIcon>
             </SocialWrapper>
           </FirstFooterWrapper>
@@ -318,20 +330,20 @@ const Footer = () => {
               <Link to="/location">오시는길</Link>
             </SiteLink>
             <SiteLink>
-              <Link to="/">문의하기</Link>
+              <Link to="/board/qna">문의하기</Link>
             </SiteLink>
           </SiteLinkWrapeer>
           <StyledText>
-          <SiteLinkWrapeer>
-            <SiteLink>
-              <Link to="/agreement">이용약관</Link>
-            </SiteLink>
-            <SiteLink>
-              <Link to="/privacy">개인정보처리방침</Link>
-            </SiteLink>
-            <SiteLink>
-              <Link to="/sitemap">사이트맵</Link>
-            </SiteLink>
+            <SiteLinkWrapeer>
+              <SiteLink>
+                <Link to="/agreement">이용약관</Link>
+              </SiteLink>
+              <SiteLink>
+                <Link to="/privacy">개인정보처리방침</Link>
+              </SiteLink>
+              <SiteLink>
+                <Link to="/sitemap">사이트맵</Link>
+              </SiteLink>
             </SiteLinkWrapeer>
           </StyledText>
           <SiteLinkWrapeer>

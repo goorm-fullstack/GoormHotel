@@ -1,15 +1,13 @@
 import React from 'react';
 import Header from '../components/Header';
 import { styled } from 'styled-components';
-import { Link } from 'react-router-dom';
 import imgGym from '../images/facilities/gym.jpg';
 import imgMeeting from '../images/facilities/meeting.jpg';
-import imgOutdoor from '../images/facilities/outdoor.jpg';
 import imgPool from '../images/facilities/pool.jpg';
 import imgSalon from '../images/facilities/salon.jpg';
 import imgSauna from '../images/facilities/sauna.jpg';
 import imgSpa from '../images/facilities/spa.jpg';
-import { commonContainerStyle, commonTitleStyle } from '../components/common/commonStyles';
+import { commonContainerStyle } from '../components/common/commonStyles';
 
 export const Container = styled.div`
   ${commonContainerStyle}

@@ -7,7 +7,6 @@ import goormknights.hotel.auth.config.handler.Http403Handler;
 import goormknights.hotel.auth.config.handler.LoginFailHandler;
 import goormknights.hotel.auth.service.CustomOAuth2UserService;
 import goormknights.hotel.auth.service.CustomUserDetailsService;
-import goormknights.hotel.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -38,10 +38,10 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity(debug = true)
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final ObjectMapper objectMapper;
-    private final MemberRepository memberRepository;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomUserDetailsService customUserDetailsService;
 
@@ -89,7 +89,7 @@ public class SecurityConfig {
     // URL로 로그인 요청을 보내면 가로채 인증하고, 성공 실패 핸들러 호출
     @Bean
     public EmailPasswordAuthFilter usernamePasswordAuthenticationFilter(){
-        EmailPasswordAuthFilter filter = new EmailPasswordAuthFilter("/auth/login", objectMapper);
+        EmailPasswordAuthFilter filter = new EmailPasswordAuthFilter("/login/**", objectMapper);
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler("/"));
         filter.setAuthenticationFailureHandler(new LoginFailHandler(objectMapper));

@@ -50,12 +50,6 @@ public class MemberService {
         }
 
         String encryptedPassword = passwordEncoder.encode(signup.getPassword());
-//        Role defaultRole = roleRepository.findByName("USER")
-//                .orElseGet(() -> {
-//                    Role newRole = new Role();
-//                    newRole.setName("USER");
-//                    return roleRepository.save(newRole);
-//                });
 
         var member = Member.builder()
                 .name(signup.getName())
@@ -111,7 +105,7 @@ public class MemberService {
                     .to(email)
                     .subject("[GoormHotel] 아이디 찾기 인증 코드")
                     .build();
-            emailSender.sendMail(emailMessage, "findIdandPassword");
+            emailSender.sendMemberMail(emailMessage, "findIdandPassword");
             return memberOptional.get().getMemberId();
         } else {
             throw new MemberNotFound();  // 적절한 예외 처리
@@ -130,7 +124,7 @@ public class MemberService {
                     .token(token)
                     .resetLink(resetLink)
                     .build();
-            emailSender.sendMail(emailMessage, "findIdandPassword");
+            emailSender.sendMemberMail(emailMessage, "findIdandPassword");
             return token;
         } else {
             throw new MemberNotFound();  // 적절한 예외 처리

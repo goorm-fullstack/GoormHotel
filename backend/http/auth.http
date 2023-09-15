@@ -12,7 +12,7 @@ Content-Type: application/json
   "privacyCheck": true,
   "birth": "1999-01-01",
   "gender": "남성",
-  "code": "u7842k30"
+  "code": "Z62M2mnv"
 }
 
 ### 회원가입코드
@@ -45,12 +45,3 @@ Content-Type: application/json
   "memberId": "yss1902",
   "password": "1234"
 }
-
-### 메인 페이지
-GET http://localhost:8080
-
-### 관리자 페이지
-GET http://localhost:8080/admin
-
-### 유저 페이지
-GET http://localhost:8080/user

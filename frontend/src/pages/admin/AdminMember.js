@@ -7,7 +7,7 @@ export const Container = styled.div`
   width: 100%;
   max-width: 1270px;
   min-width: 760px;
-  margin-right: auto;
+  margin: 0 auto;
 `;
 
 export const Title = styled.h1`
@@ -39,13 +39,13 @@ export const Delete = styled.button`
   height: 100%;
   text-align: center;
   color: #666666;
-  border: 1px solid #DDDDDD;
+  border: 1px solid #dddddd;
   background-color: transparent;
 `;
 
 export const Add = styled(Delete)`
-  border-color: #D30A0A;
-  color: #D30A0A;
+  border-color: #d30a0a;
+  color: #d30a0a;
 `;
 
 export const Table = styled.table`
@@ -74,16 +74,16 @@ export const TableCell = styled.td`
   height: 60px;
   text-align: center;
   color: #444444;
-  border-bottom: 1px solid #DDDDDD;
+  border-bottom: 1px solid #dddddd;
 `;
 
 export const TableCheckbox = styled.input`
   width: 16px;
   height: 16px;
-  border: 1px solid #DDDDDD !important;
+  border: 1px solid #dddddd !important;
   outline: none;
   margin-left: 39px;
-    width: 16px;
+  width: 16px;
   height: 16px;
   border: 1px solid #ddd;
   appearance: none;
@@ -120,14 +120,12 @@ const AdminMember = () => {
   };
 
   const handleCheckboxChange = (memberId) => {
-    const updatedCheckedItems = checkedItems.includes(memberId)
-      ? checkedItems.filter((id) => id !== memberId)
-      : [...checkedItems, memberId];
+    const updatedCheckedItems = checkedItems.includes(memberId) ? checkedItems.filter((id) => id !== memberId) : [...checkedItems, memberId];
 
     setCheckedItems(updatedCheckedItems);
     setSelectAllChecked(updatedCheckedItems.length === memberData.length);
   };
-  
+
   console.log(checkedItems);
 
   const memberData = [
@@ -138,7 +136,7 @@ const AdminMember = () => {
       memberId: 'user001',
       name: '홍길동',
       joinDate: '2023.09.01',
-      blacklist: 'N'
+      blacklist: 'N',
     },
     {
       id: 2,
@@ -147,7 +145,7 @@ const AdminMember = () => {
       memberId: 'user002',
       name: '김철수',
       joinDate: '2023.09.01',
-      blacklist: 'Y'
+      blacklist: 'Y',
     },
     {
       id: 3,
@@ -156,10 +154,9 @@ const AdminMember = () => {
       memberId: 'user003',
       name: '이영희',
       joinDate: '2023.09.01',
-      blacklist: 'N'
+      blacklist: 'N',
     },
   ];
-
 
   const subMenus = [
     { name: '전체 회원 관리', link: '/admin/member' },
@@ -171,7 +168,9 @@ const AdminMember = () => {
       <Container>
         <Title>전체 회원 관리</Title>
         <ContentHeader>
-          <Total>전체 <Num>{memberData.length}</Num> 건</Total>
+          <Total>
+            전체 <Num>{memberData.length}</Num> 건
+          </Total>
           <BlackListBtn>
             <Delete>블랙리스트 해제</Delete>
             <Add>블랙리스트 추가</Add>
@@ -181,7 +180,7 @@ const AdminMember = () => {
           <thead>
             <tr>
               <TableCheckboxWrapper>
-                <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange}/>
+                <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
               </TableCheckboxWrapper>
               <TableHeader>No.</TableHeader>
               <TableHeader>회원등급</TableHeader>
@@ -192,11 +191,7 @@ const AdminMember = () => {
             </tr>
           </thead>
           <tbody>
-            {memberData.length === 0 && (
-              <TableCell colSpan="7">
-                등록된 회원이 없습니다.
-              </TableCell>
-            )}
+            {memberData.length === 0 && <TableCell colSpan="7">등록된 회원이 없습니다.</TableCell>}
             {memberData.map((item) => (
               <tr key={item.id}>
                 <TableCell>
@@ -209,9 +204,7 @@ const AdminMember = () => {
                 <TableCell>{item.number}</TableCell>
                 <TableCell>{item.grade}</TableCell>
                 <TableCell>
-                  <Link to={`/admin/member/${item.memberId}`}>
-                    {item.memberId}
-                  </Link>
+                  <Link to={`/admin/member/${item.memberId}`}>{item.memberId}</Link>
                 </TableCell>
                 <TableCell>{item.name}</TableCell>
                 <TableCell>{item.joinDate}</TableCell>

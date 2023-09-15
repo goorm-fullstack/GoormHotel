@@ -1,9 +1,20 @@
 import React, { useState } from 'react';
 import AdminLayout from './AdminLayout';
 import styled from 'styled-components';
-import { ContentHeader, Total, BlackListBtn, Delete, Add, Table, TableCheckboxWrapper, TableHeader, TableCell, TableCheckbox, Num } from './AdminMember';
+import {
+  ContentHeader,
+  Total,
+  BlackListBtn,
+  Delete,
+  Add,
+  Table,
+  TableCheckboxWrapper,
+  TableHeader,
+  TableCell,
+  TableCheckbox,
+  Num,
+} from './AdminMember';
 import { InfoContainer, InfoWrapper, Label, ModifyBtnWrapper, ModifyBtn } from './AdminMemberDetail';
-
 
 const Title = styled.h1`
   font-size: 36px;
@@ -15,7 +26,7 @@ const Container = styled.div`
   width: 100%;
   max-width: 1270px;
   min-width: 760px;
-  margin-right: auto;
+  margin: 0 auto;
 `;
 
 const Section = styled.section`
@@ -35,21 +46,21 @@ const InputWrapper = styled.div`
 
 const Input = styled.input`
   font-size: 15px;
-  border: 1px solid #DDDDDD;
+  border: 1px solid #dddddd;
   width: 200px;
   height: 40px;
   outline: none;
 `;
 
 const AddBtn = styled.button`
-  background-color: #95846E;
+  background-color: #95846e;
   width: 200px;
   height: 40px;
   text-align: center;
-  color: #FFFFFF;
+  color: #ffffff;
 
   &:hover {
-    background-color: #8A7057;
+    background-color: #8a7057;
   }
 `;
 
@@ -71,8 +82,8 @@ const CheckInput = styled.input.attrs({ type: 'checkbox' })`
   border: none;
 
   &:checked {
-    background-color: #95846E;
-    border: 1px solid #95846E; 
+    background-color: #95846e;
+    border: 1px solid #95846e;
   }
 `;
 
@@ -93,9 +104,7 @@ const AdminManager = () => {
   console.log(selectedManager);
 
   const handleCheckboxChange = (memberId) => {
-    const updatedCheckedItems = checkedItems.includes(memberId)
-      ? checkedItems.filter((id) => id !== memberId)
-      : [...checkedItems, memberId];
+    const updatedCheckedItems = checkedItems.includes(memberId) ? checkedItems.filter((id) => id !== memberId) : [...checkedItems, memberId];
 
     setCheckedItems(updatedCheckedItems);
     setSelectAllChecked(updatedCheckedItems.length === managerData.length);
@@ -108,7 +117,7 @@ const AdminManager = () => {
   const handleInputChange = (field, value) => {
     setSelectedManager((prevManager) => ({
       ...prevManager,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -132,7 +141,7 @@ const AdminManager = () => {
       memberId: 'memberId',
       nickname: '테스트',
       joinDate: '2023.09.01',
-      use: 'N'
+      use: 'N',
     },
     {
       id: 2,
@@ -141,7 +150,7 @@ const AdminManager = () => {
       memberId: 'testId',
       nickname: '봉수',
       joinDate: '2023.09.03',
-      use: 'N'
+      use: 'N',
     },
   ];
 
@@ -152,8 +161,8 @@ const AdminManager = () => {
 
   return (
     <AdminLayout title="회원관리" subMenus={subMenus}>
-      <Title>부운영자 관리</Title>
       <Container>
+        <Title>부운영자 관리</Title>
         <Section>
           <SubTitle>부운영자 계정 등록</SubTitle>
           <InputWrapper>
@@ -168,7 +177,9 @@ const AdminManager = () => {
         <Section>
           <SubTitle>부운영자 계정 목록</SubTitle>
           <ContentHeader>
-            <Total>전체 <Num>{managerData.length}</Num> 건</Total>
+            <Total>
+              전체 <Num>{managerData.length}</Num> 건
+            </Total>
             <BlackListBtn>
               <Delete>사용함</Delete>
               <Add>사용안함</Add>
@@ -178,7 +189,7 @@ const AdminManager = () => {
             <thead>
               <tr>
                 <TableCheckboxWrapper>
-                  <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange}/>
+                  <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
                 </TableCheckboxWrapper>
                 <TableHeader>No.</TableHeader>
                 <TableHeader>운영자명</TableHeader>
@@ -189,11 +200,7 @@ const AdminManager = () => {
               </tr>
             </thead>
             <tbody>
-              {managerData.length === 0 && (
-                <TableCell colSpan="7">
-                  등록된 회원이 없습니다.
-                </TableCell>
-              )}
+              {managerData.length === 0 && <TableCell colSpan="7">등록된 회원이 없습니다.</TableCell>}
               {managerData.map((item) => (
                 <tr key={item.id}>
                   <TableCell>
@@ -206,9 +213,7 @@ const AdminManager = () => {
                   <TableCell>{item.number}</TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>
-                    <ManagerInfoBtn onClick={() => handleManagerClick(item)}>
-                      {item.memberId}
-                    </ManagerInfoBtn>
+                    <ManagerInfoBtn onClick={() => handleManagerClick(item)}>{item.memberId}</ManagerInfoBtn>
                   </TableCell>
                   <TableCell>{item.nickname}</TableCell>
                   <TableCell>{item.joinDate}</TableCell>
@@ -221,16 +226,14 @@ const AdminManager = () => {
         <Section>
           <SubTitle>부운영자 계정 설정</SubTitle>
           <InfoContainer>
-          {selectedManager ? (
+            {selectedManager ? (
               <>
                 <InfoWrapper>
                   <Label>운영자 ID</Label>
                   <AccoutInput
                     placeholder="운영자 ID"
                     defaultValue={selectedManager.memberId}
-                    onChange={(e) =>
-                      handleInputChange("memberId", e.target.value)
-                    }
+                    onChange={(e) => handleInputChange('memberId', e.target.value)}
                   />
                 </InfoWrapper>
                 <InfoWrapper>
@@ -238,9 +241,7 @@ const AdminManager = () => {
                   <AccoutInput
                     placeholder="운영자명"
                     defaultValue={selectedManager.name}
-                    onChange={(e) =>
-                      handleInputChange("name", e.target.value)
-                    }
+                    onChange={(e) => handleInputChange('name', e.target.value)}
                   />
                 </InfoWrapper>
                 <InfoWrapper>
@@ -248,9 +249,7 @@ const AdminManager = () => {
                   <AccoutInput
                     placeholder="운영자 별명"
                     defaultValue={selectedManager.nickname}
-                    onChange={(e) =>
-                      handleInputChange("nickname", e.target.value)
-                    }
+                    onChange={(e) => handleInputChange('nickname', e.target.value)}
                   />
                 </InfoWrapper>
                 <InfoWrapper>
@@ -258,9 +257,7 @@ const AdminManager = () => {
                   <AccoutInput
                     placeholder="접속 비밀번호"
                     defaultValue={selectedManager.password}
-                    onChange={(e) =>
-                      handleInputChange("password", e.target.value)
-                    }
+                    onChange={(e) => handleInputChange('password', e.target.value)}
                   />
                 </InfoWrapper>
               </>
@@ -287,18 +284,18 @@ const AdminManager = () => {
                   <AccoutInput placeholder="접속 비밀번호 확인" />
                 </InfoWrapper>
               </>
-                )}
-                <InfoWrapper>
-                  <Label>접근 권한</Label>
-                  <CheckInputWrapper>
-                    <CheckInput type="checkbox" placeholder="회원 관리" />
-                    <span>회원관리</span>
-                    <CheckInput type="checkbox" placeholder="회원 관리" />
-                    <span>상품 및 예약 관리</span>
-                    <CheckInput type="checkbox" placeholder="회원 관리" />
-                    <span>사이트 관리</span>
-                  </CheckInputWrapper>
-                </InfoWrapper>
+            )}
+            <InfoWrapper>
+              <Label>접근 권한</Label>
+              <CheckInputWrapper>
+                <CheckInput type="checkbox" placeholder="회원 관리" />
+                <span>회원관리</span>
+                <CheckInput type="checkbox" placeholder="회원 관리" />
+                <span>상품 및 예약 관리</span>
+                <CheckInput type="checkbox" placeholder="회원 관리" />
+                <span>사이트 관리</span>
+              </CheckInputWrapper>
+            </InfoWrapper>
           </InfoContainer>
           <ModifyBtnWrapper>
             <ModifyBtn>수정</ModifyBtn>
