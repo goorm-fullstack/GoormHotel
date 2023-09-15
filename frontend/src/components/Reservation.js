@@ -11,7 +11,7 @@ const ReserveContainer = styled.div`
   width: 1180px;
   height: 150px;
   box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
-  padding: 0 60px;
+  padding: 0 80px;
   display: flex;
   z-index: 1;
   position: absolute;
@@ -28,7 +28,7 @@ const ReserveDate = styled.div`
   &::after {
     content: '';
     width: 1px;
-    height: 77px;
+    height: 65px;
     background-color: #dddddd;
     display: inline-block;
     margin: 0 60px;
@@ -56,6 +56,7 @@ const CheckIn = styled.div`
   p {
     font-size: 14px;
     color: #9c836a;
+    margin-top: 10px;
   }
 `;
 
@@ -66,14 +67,14 @@ const Stay = styled.p`
   text-align: center;
   font-size: 0.8rem;
   padding: 6px 4px;
-  margin: 18px 30px 0;
+  margin: 28px 30px 0;
   min-width: 45px;
 `;
 
 const CalendarSvg = styled.svg`
   fill: #102c57;
   position: relative;
-  top: 1px;
+  top: 2px;
 `;
 
 const CheckOut = styled(CheckIn)``;
@@ -85,17 +86,34 @@ const ReserveDetail = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+
+  & > div {
+    display: flex;
+    gap: 15px;
+  }
 `;
 
 const SelectWrapper = styled.div`
-  margin-right: 41px;
-  width: 91px;
+  margin-right: 20px;
+  width: 50px;
+
+  input {
+    border: 0;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 500;
+    padding: 15px 0;
+  }
 `;
 
 const SelectLabel = styled.label`
   display: block;
   font-size: 14px;
   color: #95846e;
+  text-align: center;
+  margin-top: 10px;
 `;
 
 const Select = styled.select`
@@ -107,7 +125,8 @@ const Select = styled.select`
 
 const ReservationButton = styled(Link)`
   width: 150px;
-  padding: 30px;
+  height: 65px;
+  line-height: 65px;
   background-color: #102c57;
   color: white;
   text-align: center;
@@ -290,39 +309,20 @@ const Reservation = () => {
         </CheckOut>
       </ReserveDate>
       <ReserveDetail>
-        <SelectWrapper>
-          <SelectLabel>객실수</SelectLabel>
-          <Select value={rooms} onChange={(e) => setRooms(parseInt(e.target.value))}>
-            {roomOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </Select>
-          <span>개</span>
-        </SelectWrapper>
-        <SelectWrapper>
-          <SelectLabel>성인</SelectLabel>
-          <Select value={adults} onChange={(e) => setAdults(parseInt(e.target.value))}>
-            {adultOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </Select>
-          <span>명</span>
-        </SelectWrapper>
-        <SelectWrapper>
-          <SelectLabel>어린이</SelectLabel>
-          <Select value={children} onChange={(e) => setChildren(parseInt(e.target.value))}>
-            {childrenOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </Select>
-          <span>명</span>
-        </SelectWrapper>
+        <div>
+          <SelectWrapper>
+            <SelectLabel>객실수</SelectLabel>
+            <input type="text" value="1" />
+          </SelectWrapper>
+          <SelectWrapper>
+            <SelectLabel>성인</SelectLabel>
+            <input type="text" value="1" />
+          </SelectWrapper>
+          <SelectWrapper>
+            <SelectLabel>어린이</SelectLabel>
+            <input type="text" value="0" />
+          </SelectWrapper>
+        </div>
         <ReservationButton to="/specialOffer" onClick={() => handleReservation()}>
           상품 검색
         </ReservationButton>

@@ -31,7 +31,7 @@ const TopInfoList = styled.ul`
 
 const TopInfoItem = styled.li`
   font-size: 12px;
-  margin-left: 12px;
+  margin-left: 15px;
   color: rgba(255, 255, 255, 0.7);
 
   &:hover {
@@ -47,13 +47,13 @@ const Gnb = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 1180px;
 `;
 
 const NavList = styled.ul`
   display: flex;
   flex: 1;
   margin-left: 45px;
-  min-width: 600px;
 `;
 
 const NavItem = styled.li`
@@ -70,16 +70,20 @@ const NavItem = styled.li`
 `;
 
 const NavReserveBtn = styled(Link)`
-  padding: 12px 0;
+  height: 42px;
+  line-height: 38px;
   width: 140px;
-  background-color: #454545;
   color: white;
-  background-color: #95846e;
+  background-color: transparent;
   white-space: nowrap;
   text-align: center;
+  border: 1px solid #fff;
+  font-size: 15px;
 
   &:hover {
-    background-color: #8a7057;
+    background-color: #9c836a;
+    border-color: #9c836a;
+    color: #fff;
   }
 `;
 
@@ -94,13 +98,13 @@ const Header = ({ backgroundColor }) => {
         <TopInfo>
           <TopInfoList>
             <TopInfoItem>
-              <HeaderLink to="/login">예약확인</HeaderLink>
-            </TopInfoItem>
-            <TopInfoItem>
               <HeaderLink to="/login">로그인</HeaderLink>
             </TopInfoItem>
             <TopInfoItem>
               <HeaderLink to="/signup">회원가입</HeaderLink>
+            </TopInfoItem>
+            <TopInfoItem>
+              <HeaderLink to="/login">예약 확인</HeaderLink>
             </TopInfoItem>
             <TopInfoItem>
               <HeaderLink to="/membership">멤버십</HeaderLink>

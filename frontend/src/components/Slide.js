@@ -30,7 +30,7 @@ const SlideButton = styled.button`
   height: 60px;
   top: 50%;
   background: transparent;
-  transform: translate(0, -47%);
+  transform: translate(0, -45%);
   ${(props) => (props.$position === 'right' ? 'right: 28px;' : 'left: 28px;')}
 `;
 
@@ -66,6 +66,7 @@ const SubText = styled.p`
   margin-top: 40px;
   font-size: 22px;
   letter-spacing: -0.01em;
+  font-weight: 300;
 `;
 
 const SideIcon = styled(SideMenuIcon)`
@@ -104,7 +105,7 @@ const Slide = () => {
         <SubText>고객의 작은 관심에도 귀 기울이며, 차별화된 서비스와 시설로써 보다 편안하고 안락한 휴식을 제공합니다.</SubText>
       </TextWrapper>
       <SlideButton onClick={goToPreviousSlide} $position="left">
-        <SideIcon fill="white" />
+        <SideIcon />
       </SlideButton>
       <SlideButton onClick={goToNextSlide} $position="right">
         <SideIconRight />
