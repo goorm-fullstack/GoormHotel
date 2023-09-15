@@ -65,33 +65,22 @@ public class ReservationTest {
         roomService.saveRoom(buildRoom, requestImageDTO);
         Room findRoom = roomService.findByRoomName(buildRoom.getName());
 
-        Coupon coupon = Coupon.builder()
-                .id(1)
-                .uuid("132123123131")
-                .discountRate(3)
-                .member(null)
-                .issueDate(now)
-                .expire(30)
-                .build();
-
-        List<Coupon> couponList = new ArrayList<>();
-        couponList.add(coupon);
+//        Coupon coupon = Coupon.builder()
+//                .id(1)
+//                .uuid("132123123131")
+//                .discountRate(3)
+//                .member(null)
+//                .issueDate(now)
+//                .expire(30)
+//                .build();
+//
+//        List<Coupon> couponList = new ArrayList<>();
+//        couponList.add(coupon);
 
         Member member = Member.builder()
-                .id(null)
-                .memberId("test")
-                .password("password")
+                .email("email@email.com")
                 .name("테스트")
-                .auth("member")
                 .phoneNumber("01012341234")
-                .email("test@test.com")
-                .privacyCheck(true)
-                .grade("Gold")
-                .couponList(couponList)
-                .reservationList(null)
-                .giftCardList(null)
-                .gender("")
-                .birth(null)
                 .build();
 
         memberRepository.save(member);

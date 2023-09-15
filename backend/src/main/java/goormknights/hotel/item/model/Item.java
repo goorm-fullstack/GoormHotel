@@ -1,5 +1,6 @@
 package goormknights.hotel.item.model;
 
+import goormknights.hotel.reservation.model.Reservation;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -58,4 +59,5 @@ public abstract class Item {
     @Column(nullable = false)
     @Builder.Default
     private boolean deleted = false; // soft delete 여부 구분
+
 }
