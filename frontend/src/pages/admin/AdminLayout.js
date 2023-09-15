@@ -4,14 +4,13 @@ import styled from 'styled-components';
 import { NavLink, useLocation } from 'react-router-dom';
 import { ReactComponent as SideMenuIcon } from '../../images/icon/ico_slide_btn.svg';
 
-
 const SideMenu = styled.div`
-  width: 330px; 
+  width: 330px;
   height: 100%;
   position: fixed;
   left: 0;
   top: 97px;
-  border-right: 1px solid #DDDDDD;
+  border-right: 1px solid #dddddd;
 `;
 
 const SideMenuWrapper = styled.div`
@@ -27,8 +26,7 @@ const SideTitle = styled.h1`
 `;
 
 const PageContents = styled.div`
-  padding-top: 177px;
-  padding-left: 470px;
+  padding: 177px 40px 100px 370px;
 `;
 
 const SideMenuItem = styled.ul`
@@ -67,17 +65,18 @@ const AdminLayout = ({ children, title, subMenus }) => {
           <SideMenuItem>
             {subMenus.map((menu, index) => (
               <li key={index}>
-                <SideMenuList 
+                <SideMenuList
                   to={menu.link}
-                  $activeClassName="active" 
+                  $activeClassName="active"
                   $isActive={(match) => {
                     if (match) return true;
                     if (location.pathname.startsWith('/admin/member')) return true;
                     return false;
-                  }}
-                >
+                  }}>
                   <div>{menu.name}</div>
-                  <div><SideIcon /></div>
+                  <div>
+                    <SideIcon />
+                  </div>
                 </SideMenuList>
               </li>
             ))}

@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import { commonContainerStyle} from '../../../components/common/commonStyles';
-import AdminHeader from "../AdminHeader";
-import { Left } from "../../ReservationPage";
-import { NavLink } from "react-router-dom";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css'; // css import
 import moment from "moment";
-import slideBtn from "../../../images/icon/ico_slide_btn.png"
 import AdminLayout from "../AdminLayout";
 
 const Container = styled.div`
@@ -20,63 +15,7 @@ const Container = styled.div`
 const Title = styled.h1`
   font-size: 36px;
   font-weight: bold;
-  margin-bottom: 72px;
-`;
-
-
-const FirstArticle = styled.div`
-  flex-direction: column;
-  width : 20%;
-  height : 100%;
-  border-right : solid 1px;
-  padding-top : 3em;
-  padding-left : 2em;
-  float : left;
-`;
-
-const SecondArticle = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-left : 5em;
-`;
-
-const ThirdArticle = styled.div`
-  margin-top: 3em;
-  display: flex;
-  flex-direction: column;
-  padding-left : 5em;
-`;
-
-const TableHeaderInfo = styled.div`
-  display: flex;
-  width: 1180px;
-  padding-bottom : 1em;
-  justify-content : space-between;
-`
-
-const TableDL = styled.dl`
-  display: table;
-  display: flex;
-  flex-direction : row;
-  width : 100%;
-  border : 1px solid #ddd;
-`;
-
-const TableDLDD = styled.dd`
-  display: table-cell;
-  vertical-align: middle;
-  border-top: 1px solid #ccc;
-  text-align: center;
-  padding : 1em;
-`;
-
-const TableDLDT = styled.dt`
-  display: table-cell;
-  text-align: center;
-  background-color : #ddd;
-  width : 200px;
-  padding : 1em;
+  margin-bottom: 60px;
 `;
 
 const CalendarContainer = styled.div`
@@ -91,7 +30,6 @@ const CalendarWrapper = styled.div`
   display: ${(props) => (props.open ? "block" : "none")};
 `;
 
-const CheckOutCalendarWrapper = styled(CalendarWrapper)``;
 
 export const StyledCalendar = styled(Calendar)`
   border-radius: 10px;
@@ -122,29 +60,81 @@ export const StyledCalendar = styled(Calendar)`
   }
 `;
 
-const UserInfo = styled.input`
-  width: 250px;
-  height: 45px;
+
+export const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #DDDDDD;
+`;
+
+export const InfoWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #DDDDDD;
+`;
+
+export const Label = styled.div`
+  width: 245px;
+  font-weight: bold;
+  background-color: #F7F7F7;
+  padding: 23px 0 23px 40px;
+`;
+
+export const Data = styled.div`
+  flex-grow: 1;
+  padding: 20px 0 23px 20px;
+  display: flex; /* Add this line */
+  align-items: center; /* Add this line */
+`;
+
+export const Input = styled.input`
+  width: 200px;
+  height: 40px;
+  font-size: 15px;
+  border: 1px solid #DDDDDD;
+  margin-left: 20px;
+  outline: none;
+`;
+
+const CalendarInput = styled.div`
+  margin-left: 20px;
+`
+
+const CalendarButton = styled.button`
+  width: 200px;
+  height : 40px;
   display: flex;
   justify-content: space-between;
   padding: 0 20px;
   align-items: center;
-  font-size: 18px;
+  font-size: 15px;
   border: 1px solid #ddd;
   background-color: #fff;
 `
 
-const CategoryLink = styled(NavLink)`
-  font-size: 14px;
-  color: #888888;
+const UpdateButton = styled.button`
+  width : 200px;
+  height : 40px;
+  background-color: #95846E;
+  color : white;
+  margin-right : 16px;
+`
 
-  &:hover {
-    color: #baa085;
-  }
+const CompleteButton = styled(UpdateButton)`
+`
 
-  &.active {
-    color: #baa085;
-  }
+const CancelButton = styled.button`
+  width : 200px;
+  height : 40px;
+  color : red;
+  background-color : white;
+  border : solid 1px red;
+`
+
+const BtnWrapper = styled.div`
+  text-align: center;
+  margin-top : 2em;
+  margin-bottom : 1em;
 `;
 
 const ReservationDetail = () => {
@@ -290,45 +280,26 @@ const ReservationDetail = () => {
       <AdminLayout title="예약 상세" subMenus={subMenus}>
       <Container>
       <Title>예약 상세</Title>
-      <div style={{
-            display:"flex",
-            width : "1180px",
-            flexDirection : "column",
-          }}>
-          <TableDL>
-            <TableDLDT>
-              예약 번호
-            </TableDLDT>
-            <TableDLDD>
-              <p>020221611653456465</p>
-            </TableDLDD>
-          </TableDL>
-          <TableDL>
-            <TableDLDT>
+      <InfoContainer>
+          <InfoWrapper>
+            <Label>예약 번호</Label>
+            <Data>020221611653456465</Data>
+          </InfoWrapper>
+          <InfoWrapper>
+            <Label>
               에약일
-            </TableDLDT>
-            <TableDLDD>
-                <p>{reservationDate}</p>
-            </TableDLDD>
-          </TableDL>
-          <TableDL>
-            <TableDLDT>
+            </Label>
+            <Data>
+                {reservationDate}
+            </Data>
+          </InfoWrapper>
+          <InfoWrapper>
+            <Label>
               체크인
-            </TableDLDT>
-            <TableDLDD>
-            <div>
-            <button style={{
-              width: "250px",
-              height: "45px",
-              display: "flex",
-              justifyContent: "space-between",
-              padding: "0 20px",
-              alignItems: "center",
-              fontSize: "18px",
-              border: "1px solid #ddd",
-              backgroundColor: "#fff",
-            }} onClick={handleCheckInToggle}><p>{checkInDate}</p>
-            <svg viewBox="0 0 32 32" width="18" height="18" style={{fill : "#102C57"}}>
+            </Label>
+            <CalendarInput>
+            <CalendarButton onClick={handleCheckInToggle}><p>{checkInDate}</p>
+            <svg viewBox="0 0 32 32" width="15" height="15" style={{fill : "#102C57"}}>
                       <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
                         <path
                           d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z"
@@ -389,7 +360,7 @@ const ReservationDetail = () => {
                         />
                       </g>
                     </svg>
-            </button>
+            </CalendarButton>
                     <CalendarContainer>
                     <CalendarWrapper open={checkInOpen}>
                     <StyledCalendar
@@ -400,27 +371,15 @@ const ReservationDetail = () => {
                       ></StyledCalendar>
                     </CalendarWrapper>
                   </CalendarContainer>
-            </div>
-            </TableDLDD>
-          </TableDL>
-          <TableDL>
-            <TableDLDT>
+            </CalendarInput>
+          </InfoWrapper>
+          <InfoWrapper>
+            <Label>
               체크아웃
-            </TableDLDT>
-            <TableDLDD>
-            <div>
-            <button style={{
-              width: "250px",
-              height: "45px",
-              display: "flex",
-              justifyContent: "space-between",
-              padding: "0 20px",
-              alignItems: "center",
-              fontSize: "18px",
-              border: "1px solid #ddd",
-              backgroundColor: "#fff",
-            }} onClick={handleCheckOutToggle}><p>{checkOutDate}</p>
-            <svg viewBox="0 0 32 32" width="18" height="18" style={{fill : "#102C57"}}>
+            </Label>
+            <CalendarInput>
+            <CalendarButton onClick={handleCheckOutToggle}><p>{checkOutDate}</p>
+            <svg viewBox="0 0 32 32" width="15" height="15" style={{fill : "#102C57"}}>
                       <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
                         <path
                           d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z"
@@ -481,9 +440,8 @@ const ReservationDetail = () => {
                         />
                       </g>
                     </svg>
-                    </button>
-            </div>
-              <CalendarContainer>
+                    </CalendarButton>
+                    <CalendarContainer>
                 <CalendarWrapper open={checkOutOpen}>
                   <StyledCalendar
                     tileDisabled={({ date }) => isDateDisabled(date)}
@@ -493,114 +451,81 @@ const ReservationDetail = () => {
                   ></StyledCalendar>
                 </CalendarWrapper>
               </CalendarContainer>
-            </TableDLDD>
-          </TableDL>
-          <TableDL>
-            <TableDLDT>
+            </CalendarInput>
+              
+          </InfoWrapper>
+          <InfoWrapper>
+            <Label>
               예약 상품
-            </TableDLDT>
-            <TableDLDD>
+            </Label>
+            <Data>
                 <span style={{textDecoration : "underline"}}>{"[스페셜 오퍼] 상품명"}</span>
                 <span>{"(스페셜 오퍼] 상품명)"}</span>
-            </TableDLDD>
-          </TableDL>
-          <TableDL>
-            <TableDLDT>
+            </Data>
+          </InfoWrapper>
+          <InfoWrapper>
+            <Label>
               예약자명
-            </TableDLDT>
-            <TableDLDD>
-            <UserInfo value={customerName} readOnly={updateClick} onChange={handleNameInputChange}></UserInfo>
-            </TableDLDD>
-          </TableDL>
-          <TableDL>
-            <TableDLDT>
+            </Label>
+            <Input value={customerName} readOnly={updateClick} onChange={handleNameInputChange}></Input>
+          </InfoWrapper>
+          <InfoWrapper>
+            <Label>
               연락처
-            </TableDLDT>
-            <TableDLDD>
-            <UserInfo value={phoneNumber} readOnly={updateClick} onChange={handlePhoneNumberInputChange}></UserInfo>
-            </TableDLDD>
-          </TableDL>
-          <TableDL>
-            <TableDLDT>
+            </Label>
+            <Input value={phoneNumber} readOnly={updateClick} onChange={handlePhoneNumberInputChange}></Input>
+          </InfoWrapper>
+          <InfoWrapper>
+            <Label>
               이메일
-            </TableDLDT>
-            <TableDLDD>
-            <UserInfo value={emailAddress} readOnly={updateClick} onChange={handleEmailInputChange}></UserInfo>
-            </TableDLDD>
-          </TableDL>
-          <TableDL>
-            <TableDLDT>
+            </Label>
+            <Input value={emailAddress} readOnly={updateClick} onChange={handleEmailInputChange}></Input>
+          </InfoWrapper>
+          <InfoWrapper>
+            <Label>
             요청사항
-            </TableDLDT>
-            <TableDLDD>
-            <UserInfo value={customerRequest} readOnly={updateClick} onChange={handleNoticeInputChange}></UserInfo>
-            </TableDLDD>
-          </TableDL>
-          <TableDL>
-            <TableDLDT>
+            </Label>
+            <Input value={customerRequest} readOnly={updateClick} onChange={handleNoticeInputChange} style={{width : "600px"}}></Input>
+          </InfoWrapper>
+          <InfoWrapper>
+            <Label>
               적용 쿠폰
-            </TableDLDT>
-            <TableDLDD>
+            </Label>
+            <Data>
               {reservationData.coupon.name}
-            </TableDLDD>
-          </TableDL>
-          <TableDL>
-            <TableDLDT>
+            </Data>
+          </InfoWrapper>
+          <InfoWrapper>
+            <Label>
               적용 상품권
-            </TableDLDT>
-            <TableDLDD>
+            </Label>
+            <Data>
               {reservationData.giftcard.map((gift, index) => {
                 <>{gift.name}</>
               })}
-            </TableDLDD>
-          </TableDL>
-          <TableDL>
-            <TableDLDT>
+            </Data>
+          </InfoWrapper>
+          <InfoWrapper>
+            <Label>
               결제 금액
-            </TableDLDT>
-            <TableDLDD>
-              <UserInfo value={reservationData.totalPrice}></UserInfo>
-            </TableDLDD>
-          </TableDL>
-          <div style={{
-            margin : "2em",
-            marginLeft : '600px'
-          }}>
+            </Label>
+              <Data>{reservationData.totalPrice}</Data>
+          </InfoWrapper>
+          <BtnWrapper>
             {
               updateClick === true ?
-              <button 
-              style={{
-              width : "100px",
-              height : "40px",
-              backgroundColor : "white",
-              border : "solid 1px black",
-              marginRight : "16px",
-            }}
+              <UpdateButton
             updateClick = {true}
             onClick={() => setUpdateClick(!updateClick)}
-            >수정</button> : 
-            <button 
-              style={{
-              width : "100px",
-              height : "40px",
-              backgroundColor : "white",
-              border : "solid 1px black",
-              marginRight : "16px",
-            }}
+            >수정</UpdateButton> : 
+            <CompleteButton 
             updateClick = {false}
             onClick={() => setUpdateClick(!updateClick)}
-            >완료</button>
+            >완료</CompleteButton>
             }
-            <button
-            style={{
-              width : "100px",
-              height : "40px",
-              color : "red",
-              backgroundColor : "white",
-              border : "solid 1px red",
-            }}>예약취소</button>
-          </div>
-        </div>
+            <CancelButton>예약취소</CancelButton>
+          </BtnWrapper>
+        </InfoContainer>
       </Container>
     </AdminLayout>
   );
