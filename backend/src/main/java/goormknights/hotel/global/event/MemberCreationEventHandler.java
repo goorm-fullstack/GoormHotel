@@ -5,6 +5,7 @@ import goormknights.hotel.coupon.repository.CouponRepository;
 import goormknights.hotel.email.model.EmailMessage;
 import goormknights.hotel.email.service.EmailService;
 import goormknights.hotel.member.model.Member;
+import goormknights.hotel.global.entity.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
