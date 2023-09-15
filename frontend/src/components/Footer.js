@@ -5,12 +5,15 @@ import { Link } from 'react-router-dom';
 import instagramImg from '../images/common/social_instagram.png';
 import youtubeImg from '../images/common/social_youtube.png';
 import owlImg from '../images/common/social_owl.png';
+import instagramImgHover from '../images/common/social_instagram_hover.png';
+import youtubeImgHover from '../images/common/social_youtube_hover.png';
+import owlImgHover from '../images/common/social_owl_hover.png';
 
 const Container = styled.div`
   margin-top: 220px;
   width: 100%;
   height: 100%;
-  min-width: 1260px;
+  min-width: 1180px;
 `;
 
 const NewsLetterContainer = styled.div`
@@ -145,14 +148,16 @@ const SecondFooter = styled.div`
   font-size: 13px;
   color: #888888;
   padding: 60px 0;
-
-  p {
-    margin-bottom: 15px;
-    white-space: nowrap;
-  }
 `;
 
-const SiteLink = styled.p`
+const SiteLinkWrapeer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 65px;
+`;
+
+const SiteLink = styled.div`
   &:hover {
     color: #fff;
   }
@@ -191,19 +196,26 @@ const SocialIcon = styled.div`
 const SocialLink = styled.a`
   display: inline-block;
   cursor: pointer;
+  width: 34px;
+  height: 34px;
+  background-size: cover;
+  background-image: url(${props => props.$imageUrl});
+
+  &:hover {
+    background-image: url(${props => props.$hoverUrl});
+  }
 
   &:not(:last-child) {
     margin-right: 24px;
   }
 `;
 
-const IconImage = styled.img`
-  max-width: 100%;
-  height: auto;
+const YoutubeLink = styled(SocialLink)`
+  width: 22px;
+`;
 
-  &:hover {
-    filter: brightness(70%);
-  }
+const OwlLink = styled(SocialLink)`
+  width: 54px;
 `;
 
 const Name = styled.a`
@@ -216,12 +228,7 @@ const Name = styled.a`
   }
 `;
 
-const FooterTextWrapper = styled.div`
-  margin-bottom: 15px;
-  white-space: nowrap;
-`;
-
-const TextStyle = styled.p`
+const TextStyle = styled.span`
   margin-right: 20px;
   display: inline;
 `;
@@ -292,21 +299,18 @@ const Footer = () => {
             <SocialWrapper>
               <SocialTitle>SOCIAL</SocialTitle>
               <SocialIcon>
-                <SocialLink href="https://www.instagram.com/goorm.co/" target="_blank" rel="noopener noreferrer">
-                  <IconImage src={instagramImg} alt="instagram" />
+                <SocialLink href="https://www.instagram.com/goorm.co/" target="_blank" rel="noopener noreferrer" $imageUrl={instagramImg} $hoverUrl={instagramImgHover}>
                 </SocialLink>
-                <SocialLink href="https://www.youtube.com/@goorm" target="_blank" rel="noopener noreferrer">
-                  <IconImage src={youtubeImg} alt="youtube" />
-                </SocialLink>
-                <SocialLink href="https://www.tripadvisor.co.kr/" target="_blank" rel="noopener noreferrer">
-                  <IconImage src={owlImg} alt="owl" />
-                </SocialLink>
+                <YoutubeLink href="https://www.youtube.com/@goorm" target="_blank" rel="noopener noreferrer" $imageUrl={youtubeImg} $hoverUrl={youtubeImgHover}>
+                </YoutubeLink>
+                <OwlLink href="https://www.tripadvisor.co.kr/" target="_blank" rel="noopener noreferrer" $imageUrl={owlImg} $hoverUrl={owlImgHover}>
+                </OwlLink>
               </SocialIcon>
             </SocialWrapper>
           </FirstFooterWrapper>
         </FirstFooter>
         <SecondFooter>
-          <div>
+          <SiteLinkWrapeer>
             <SiteLink>
               <Link to="/about">호텔소개</Link>
             </SiteLink>
@@ -316,8 +320,9 @@ const Footer = () => {
             <SiteLink>
               <Link to="/">문의하기</Link>
             </SiteLink>
-          </div>
+          </SiteLinkWrapeer>
           <StyledText>
+          <SiteLinkWrapeer>
             <SiteLink>
               <Link to="/agreement">이용약관</Link>
             </SiteLink>
@@ -327,14 +332,15 @@ const Footer = () => {
             <SiteLink>
               <Link to="/sitemap">사이트맵</Link>
             </SiteLink>
+            </SiteLinkWrapeer>
           </StyledText>
-          <div>
-            <FooterTextWrapper>
+          <SiteLinkWrapeer>
+            <div>
               <TextStyle>(주)어벤저스</TextStyle>
               <TextStyle>경기도 성남시 분당구 판교로 242 PDC A동 902호</TextStyle>
               <TextStyle>사업자 등록번호 124-87-39200</TextStyle>
               통신판매업 신고 번호 제2019-성남분당B-0224호
-            </FooterTextWrapper>
+            </div>
             <p>
               대표이사 :{' '}
               <Name href="https://github.com/WhiteKIM" target="_blank" rel="noopener noreferrer">
@@ -392,7 +398,7 @@ const Footer = () => {
               </Name>
               ). All rights reserved.
             </p>
-          </div>
+          </SiteLinkWrapeer>
         </SecondFooter>
       </FooterContainer>
     </Container>

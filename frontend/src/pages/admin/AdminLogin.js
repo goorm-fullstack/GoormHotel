@@ -71,6 +71,7 @@ const RememberBtn = styled.button`
 
 const AdminLogin = () => {
   const [adminId, setAdminId] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
   const [rememberId, setRememberId] = useState(false);
 
   const handleRememberIdChange = () => {
@@ -79,6 +80,10 @@ const AdminLogin = () => {
 
   const handleIdChange = (e) => {
     setAdminId(e.target.value);
+  };
+
+  const handlePwChange = (e) => {
+    setAdminPassword(e.target.value);
   };
 
   return (
@@ -91,8 +96,17 @@ const AdminLogin = () => {
       <Wrapper>
         <Title>관리자 로그인</Title>
         <form>
-          <Input placeholder="아이디" type="text" value={adminId} onChange={handleIdChange}/>
-          <PwInput placeholder="비밀번호" type="password"/>
+          <Input 
+            placeholder="아이디" 
+            type="text" 
+            value={adminId} 
+            onChange={handleIdChange}
+          />
+          <PwInput 
+            placeholder="비밀번호" 
+            type="password" 
+            value={adminPassword} 
+            onChange={handlePwChange}/>
           <Button>로그인</Button>
         </form>
         <RememberBtn>

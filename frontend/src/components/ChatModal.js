@@ -37,9 +37,12 @@ const CloseImg = styled.img`
   height: 16px;
   filter: invert(1);
 `;
+
 const ChatInput = styled.input`
-  padding: 8px;
+  padding: 8px 0;
+  padding-left: 12px;
   border: 1px solid #ccc;
+  border-radius: 30px;
   outline: none;
   flex: 1;
 `;
@@ -103,14 +106,21 @@ const ChatMessageWrapper = styled.div`
 
 const ChatForm = styled.form`
   display: flex;
-  bottom: 0;
+  bottom: 5px;
   position: absolute;
   height: 40px;
   width: 100%;
+  align-items: center;
 `;
 
 const ChatBtn = styled.button`
-  width: 100px;
+  width: 60px;
+  position: absolute;
+  right: 5px;
+  padding: 8px;
+  color: #fff;
+  background-color: #102c57;
+  border-radius: 30px;
 `;
 
 const ChatModal = ({ closeChat }) => {
@@ -262,7 +272,7 @@ const ChatModal = ({ closeChat }) => {
         <ChatForm onSubmit={handleFormSubmit}>
           <ChatInput
             type="text"
-            placeholder="메세지입력"
+            placeholder="문의사항을 입력해 주세요"
             value={newChat}
             onChange={(e) => setNewChat(e.target.value)}
             onKeyDown={handleInputKeyPress}
