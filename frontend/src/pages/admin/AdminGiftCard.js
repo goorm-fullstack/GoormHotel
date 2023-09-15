@@ -6,6 +6,7 @@ import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import 'moment/locale/ko';
 import { Link } from 'react-router-dom';
+import { TableCheckbox } from './AdminMember';
 
 export const Container = styled.div`
   width: 100%;
@@ -190,6 +191,11 @@ export const CheckBoxInput = styled.input`
   }
 `;
 
+const CheckBox = styled(TableCheckbox)`
+  margin: 0;
+  vertical-align: middle;
+`;
+
 export const TableTr = styled.tr`
   ${CheckBoxInput}[type=checkbox] {
     display: none;
@@ -352,8 +358,7 @@ const AdminGiftCard = () => {
               <thead>
                 <TableTr>
                   <TableTh>
-                    <CheckBoxInput type="checkbox" id="all-select-label" onClick={handleAllChecked} />
-                    <InputLabel htmlFor="all-select-label"></InputLabel>
+                    <CheckBox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
                   </TableTh>
                   <TableTh>No.</TableTh>
                   <TableTh>상품권명</TableTh>
@@ -370,8 +375,7 @@ const AdminGiftCard = () => {
                   return (
                     <TableListTr>
                       <TableTd>
-                        <CheckBoxInput type="checkbox" id={id} ref={(el) => (inputRef.current[idx] = el)} />
-                        <InputLabel htmlFor={id}></InputLabel>
+                        <CheckBox type="checkbox" id={id} ref={(el) => (inputRef.current[idx] = el)} />
                       </TableTd>
                       <TableTd>{idx + 1}</TableTd>
                       <TableTd>

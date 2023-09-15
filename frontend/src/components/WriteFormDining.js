@@ -62,7 +62,7 @@ const WriteFormDining = () => {
     price: '',
     priceAdult: '',
     priceChildren: '',
-    type: '다이닝',
+    type: 'dining',
     typeDetail: '',
     useTime: '',
     spare: '',
@@ -82,14 +82,14 @@ const WriteFormDining = () => {
     e.preventDefault();
 
     const form = new FormData();
-    form.append('img', imgFile);
+    form.append('img', imgRef.current.files[0]);
 
     Object.keys(formData).forEach((key) => {
       form.append(key, formData[key]);
     });
 
     try {
-      await axios.post('http://localhost:8080/dinings/dining', form, {
+      await axios.post('/dinings/dining', form, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -122,7 +122,7 @@ const WriteFormDining = () => {
           </TypeLink>
         </div>
       </TopOfTable>
-      <Form action="#" method="post">
+      <Form onSubmit={handleSubmit} encType="multipart/form-data">
         <WriteFormTable>
           <WriteFormTr>
             <BoldTd>썸네일</BoldTd>
@@ -198,9 +198,7 @@ const WriteFormDining = () => {
             </TableTd>
           </WriteFormTr>
         </WriteFormTable>
-        <WriteFormButton type="submit" onSubmit={handleSubmit}>
-          등록
-        </WriteFormButton>
+        <WriteFormButton type="submit">등록</WriteFormButton>
       </Form>
     </>
   );

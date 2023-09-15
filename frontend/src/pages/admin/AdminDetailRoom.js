@@ -45,10 +45,9 @@ const AdminDetailRoom = () => {
   useEffect(() => {
     axios.get(`/rooms/${type}/${encodeURIComponent(name)}`).then((response) => {
       setResponseData(response.data);
+      console.log('get 성공');
     });
-  }, []);
-
-  console.log(responseData);
+  }, [name, type]);
 
   // 이미지 업로드 input의 onChange(이미지 미리보기)
   const saveImgFile = () => {

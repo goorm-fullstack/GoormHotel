@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import AdminLayout from './AdminLayout';
-import { Title, GiftCardTable, TableTr, TableTh, CheckBoxInput, InputLabel, TableListTr, TableTd, DetailLink, TopMenuOfTable } from './AdminGiftCard';
-import Item from '../../images/item/item1.jpg';
+import { Title, GiftCardTable, TableTr, TableTh, TableListTr, TableTd, DetailLink, TopMenuOfTable } from './AdminGiftCard';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { TableCheckbox } from './AdminMember';
 
 const TotalItem = styled.p`
   display: inline-block;
@@ -36,28 +36,22 @@ const DeleteButton = styled.button`
   }
 `;
 
+const CheckBox = styled(TableCheckbox)`
+  margin: 0;
+  vertical-align: middle;
+`;
+
+const CheckBoxTh = styled.th`
+  width: 30px;
+`;
+
+const CheckBoxTd = styled.td`
+  width: 30px;
+`;
+
 const subMenus = [
   { name: '판매 상품 관리', link: '/admin/item/list' },
   { name: '상품권 관리', link: '/admin/item/giftCard' },
-];
-
-const checkboxList = [
-  {
-    thumnail: Item,
-    name: '다이닝상품',
-    price: '100,000',
-    type: '다이닝',
-    detailType: '레스토랑',
-    spare: '3',
-  },
-  {
-    thumnail: Item,
-    name: '객실 상품',
-    price: '100,000',
-    type: '객실',
-    detailType: '디럭스',
-    spare: '3',
-  },
 ];
 
 const AdminItemList = () => {
@@ -133,7 +127,7 @@ const AdminItemList = () => {
 
   useEffect(() => {
     handleLoadItems();
-  }, [type]);
+  }, []);
 
   const handleTypeDetailChange = (e) => {
     setTypeDetail(e.target.value);
@@ -210,10 +204,9 @@ const AdminItemList = () => {
         <GiftCardTable>
           <thead>
             <TableTr>
-              <TableTh>
-                <CheckBoxInput type="checkbox" id="all-select-label" onClick={handleAllChecked} />
-                <InputLabel htmlFor="all-select-label"></InputLabel>
-              </TableTh>
+              <CheckBoxTh>
+                <CheckBox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
+              </CheckBoxTh>
               <TableTh>No.</TableTh>
               <TableTh>썸네일</TableTh>
               <TableTh>상품명</TableTh>
@@ -230,21 +223,20 @@ const AdminItemList = () => {
                 const id = 'checkbox' + idx;
                 return (
                   <TableListTr key={idx}>
-                    <TableTd>
-                      <CheckBoxInput
+                    <CheckBoxTd>
+                      <CheckBox
                         type="checkbox"
                         id={id}
                         ref={(el) => (inputRef.current[idx] = el)}
                         onClick={() => handleCheckboxClick(idx, item.name, item.type)}
                       />
-                      <InputLabel htmlFor={id}></InputLabel>
-                    </TableTd>
+                    </CheckBoxTd>
                     <TableTd>{idx + 1}</TableTd>
                     <TableTd>
                       <Image src={item.thumbnailPath} />
                     </TableTd>
                     <TableTd>
-                      {item.type === '다이닝' ? (
+                      {item.type === 'dining' ? (
                         <DetailLink to={`view/dining/${item.type}/${item.name}`}>{item.name}</DetailLink>
                       ) : (
                         <DetailLink to={`view/room/${item.type}/${item.name}`}>{item.name}</DetailLink>
