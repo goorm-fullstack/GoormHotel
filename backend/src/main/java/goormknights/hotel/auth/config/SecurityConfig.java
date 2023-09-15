@@ -60,8 +60,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
-                        .requestMatchers(new AntPathRequestMatcher("/manager/**")).hasRole("MANAGER")
+//                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
+//                        .requestMatchers(new AntPathRequestMatcher("/manager/**")).hasRole("MANAGER")
                         .anyRequest().permitAll())
                 .addFilterBefore(usernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(e -> {
