@@ -17,6 +17,9 @@ import AdminDetailDining from './AdminDetailDining';
 import AdminDetailRoom from './AdminDetailRoom';
 import AdminBoard from './AdminBoard';
 import AdminDeleteComment from './AdminDeleteComment';
+import AdminChat from './chat/AdminChat';
+import AdminChatDetail from './chat/AdminChatDetail';
+import AdminMail from './chat/AdminMail';
 
 const AdminApp = () => {
   return (
@@ -39,6 +42,9 @@ const AdminApp = () => {
         <Route path="/admin/item/giftCard/view/:id" element={<AdminDetailGiftCard />}></Route>
         <Route path="/admin/board" element={<AdminBoard />}></Route>
         <Route path="/admin/deleteComment" element={<AdminDeleteComment />}></Route>
+        <Route path="/admin/chat" element={<AdminChat />}></Route>
+        <Route path="/admin/chat/:memberId" element={<AdminChatDetail />}></Route>
+        <Route path="/admin/mail" element={<AdminMail />}></Route>
       </Routes>
     </BrowserRouter>
   );

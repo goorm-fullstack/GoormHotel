@@ -132,7 +132,7 @@ const Header = ({ backgroundColor }) => {
               <HeaderLink to="/reservationItem">스페셜오퍼</HeaderLink>
             </NavItem>
             <NavItem>
-              <HeaderLink to="/customerSupport">고객지원</HeaderLink>
+              <HeaderLink to="/board/notice">고객지원</HeaderLink>
             </NavItem>
           </NavList>
           <NavReserveBtn to="/reservationItem">예약하기</NavReserveBtn>
