@@ -1,5 +1,6 @@
 package goormknights.hotel.reservation.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import goormknights.hotel.global.event.MemberEventListener;
 import goormknights.hotel.global.event.ReservationEventListener;
 import goormknights.hotel.member.model.Member;
@@ -47,11 +48,13 @@ public class Reservation {
 
     @ManyToOne
 //    @Column(nullable = false)
+    @JsonIgnore
     private Member member;              // 예약자 정보: 예약자명, 회원 유형(회원/비회원), 회원인 경우 ID, 연락처, 이메일
     private String notice;              // 고객 요청사항
 
     @OneToOne
 //    @Column(nullable = false)
+    @JsonIgnore
     private Item item;
     // 예약 상품 정보: 상품명, 상품 유형, 상품 분류, 기본가, 추가 가능 어른 수, 추가 가능 어린이 수, 어른 추가 비용, 어린이 추가 비용
 
@@ -59,9 +62,11 @@ public class Reservation {
     private Integer stay;                   // 총 예약일 수
 
     @OneToOne
+    @JsonIgnore
     private Coupon coupon;              // 적용한 쿠폰: 쿠폰명, 쿠폰 번호, 할인율(%), 사용 유무, 발행일, 만료일
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<GiftCard> giftCard;    // 적용한 상품권
 
     @Column(nullable = false)

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { styled } from "styled-components";
 import AdminLayout from "../AdminLayout";
 import { Num } from "../AdminMember";
+import Instance from "../../../utils/api/axiosInstance";
 
 const Container = styled.div`
   width: 100%;
@@ -80,7 +81,7 @@ export const TableCell = styled.td`
 const Reservation = () => {
   const [reservationList, setReservationList] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
-  useEffect(() =>{
+  useEffect( async () =>{
     const reservations = [
       {
         reservationNumber: '2023082555672148',
@@ -102,6 +103,8 @@ const Reservation = () => {
 
     setReservationList(reservations);
     setTotalCount(reservations.length)
+
+    const getReservation = await Instance.get("/")
   })
 
   const subMenus = [
