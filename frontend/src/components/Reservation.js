@@ -67,7 +67,7 @@ const Stay = styled.p`
   text-align: center;
   font-size: 0.8rem;
   padding: 6px 4px;
-  margin: 28px 30px 0;
+  margin: 28px 35px 0;
   min-width: 45px;
 `;
 
@@ -132,7 +132,7 @@ const ReservationButton = styled(Link)`
   text-align: center;
 
   &:hover {
-    background-color: #203a6a;
+    background-color: #254072;
   }
 `;
 

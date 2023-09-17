@@ -1,9 +1,7 @@
 import React from 'react';
-import Header from '../../components/Header';
 import { styled } from 'styled-components';
-import { NavLink, useLocation, useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { commonContainerStyle } from '../../components/common/commonStyles';
-import queryStirng from 'query-string';
 
 export const Container = styled.div`
   ${commonContainerStyle}
@@ -138,7 +136,6 @@ const BoardWrite = () => {
   const board = useParams().board;
   return (
     <>
-      <Header />
       <AboutHeader>
         <AboutHeaderTitle>고객지원</AboutHeaderTitle>
         <LinkWrapper>
