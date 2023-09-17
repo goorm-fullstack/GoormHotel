@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
-import { commonContainerStyle } from '../../components/common/commonStyles';
-import AdminHeader from '../common/AdminHeader';
-import { NavLink } from 'react-router-dom';
 import AdminLayout from '../common/AdminLayout';
+import { Num } from '../member/AdminMember';
 
 const Container = styled.div`
   width: 100%;
@@ -18,45 +16,65 @@ const Title = styled.h1`
   margin-bottom: 72px;
 `;
 
-const TableHeaderInfo = styled.div`
+export const ContentHeader = styled.div`
   display: flex;
-  width: 1180px;
-  padding-bottom: 1em;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 `;
 
-const TableHead = styled.th`
-  border-bottom: 1px solid #ddd;
-  border-right: 1px solid #ddd;
+export const Total = styled.span`
+  color: #444444;
+  font-size: 15px;
+`;
+
+export const BlackListBtn = styled.div`
+  display: flex;
+  gap: 10px;
+  height: 40px;
+`;
+
+export const Redo = styled.button`
+  width: 120px;
+  height: 100%;
   text-align: center;
-  padding: 2em;
-  background-color: #ddd;
-`;
-
-const TableDataRow = styled.tr`
-  &:nth-child(even) {
-    background-color: ${(props) => props.theme.colors.lightGray};
-  }
-`;
-
-const TableDataCell = styled.td`
-  padding: 10px;
+  color: #666666;
   border: 1px solid #dddddd;
-  text-align: center;
-  padding: 1em;
+  background-color: transparent;
 `;
 
-const CategoryLink = styled(NavLink)`
-  font-size: 14px;
-  color: #888888;
+export const Cancel = styled(Redo)`
+  border-color: #d30a0a;
+  color: #d30a0a;
+`;
 
-  &:hover {
-    color: #baa085;
-  }
+export const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+`;
 
-  &.active {
-    color: #baa085;
-  }
+export const TableCheckboxWrapper = styled.th`
+  background-color: #f7f7f7;
+  vertical-align: middle;
+  width: 1%;
+  text-align: center;
+`;
+
+export const TableHeader = styled.th`
+  height: 60px;
+  background-color: #f7f7f7;
+  text-align: center;
+  vertical-align: middle;
+  border: none;
+  width: 10%;
+`;
+
+export const TableCell = styled.td`
+  vertical-align: middle;
+  height: 60px;
+  text-align: center;
+  color: #444444;
+  border-bottom: 1px solid #dddddd;
 `;
 
 const Reservation = () => {
@@ -92,56 +110,39 @@ const Reservation = () => {
     <AdminLayout title="예약 관리" subMenus={subMenus}>
       <Container>
         <Title>예약 목록</Title>
-        <TableHeaderInfo>
-          <span style={{}}>전체 {totalCount}건</span>
-          <div>
-            <button
-              style={{
-                width: '100px',
-                height: '40px',
-                backgroundColor: 'white',
-                border: 'solid 1px black',
-                marginRight: '16px',
-              }}>
-              재예약
-            </button>
-            <button
-              style={{
-                width: '100px',
-                height: '40px',
-                color: 'red',
-                backgroundColor: 'white',
-                border: 'solid 1px red',
-              }}>
-              예약취소
-            </button>
-          </div>
-        </TableHeaderInfo>
-        <table
-          style={{
-            width: '1180px',
-          }}>
+        <ContentHeader>
+          <Total>
+            전체 <Num>{totalCount}</Num> 건
+          </Total>
+          <BlackListBtn>
+            <Redo>재예약</Redo>
+            <Cancel>에약 취소</Cancel>
+          </BlackListBtn>
+        </ContentHeader>
+        <Table>
           <thead>
-            <TableHead>No.</TableHead>
-            <TableHead>예약 번호</TableHead>
-            <TableHead>예약자명(회원 ID)</TableHead>
-            <TableHead>체크인</TableHead>
-            <TableHead>체크아웃</TableHead>
-            <TableHead>예약일</TableHead>
+            <tr>
+              <TableHeader>No.</TableHeader>
+              <TableHeader>예약 번호</TableHeader>
+              <TableHeader>예약자명(회원 ID)</TableHeader>
+              <TableHeader>체크인</TableHeader>
+              <TableHeader>체크아웃</TableHeader>
+              <TableHeader>예약일</TableHeader>
+            </tr>
           </thead>
           <tbody>
             {reservationList.map((reservation, index) => (
-              <TableDataRow key={index}>
-                <TableDataCell>{index + 1}</TableDataCell>
-                <TableDataCell>{reservation.reservationNumber}</TableDataCell>
-                <TableDataCell>{reservation.customerName}</TableDataCell>
-                <TableDataCell>{reservation.checkInDate}</TableDataCell>
-                <TableDataCell>{reservation.checkOutDate}</TableDataCell>
-                <TableDataCell>{reservation.reservationDate}</TableDataCell>
-              </TableDataRow>
+              <tr key={index}>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{reservation.reservationNumber}</TableCell>
+                <TableCell>{reservation.customerName}</TableCell>
+                <TableCell>{reservation.checkInDate}</TableCell>
+                <TableCell>{reservation.checkOutDate}</TableCell>
+                <TableCell>{reservation.reservationDate}</TableCell>
+              </tr>
             ))}
           </tbody>
-        </table>
+        </Table>
       </Container>
     </AdminLayout>
   );

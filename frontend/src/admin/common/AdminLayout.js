@@ -47,6 +47,14 @@ const SideMenuList = styled(NavLink)`
   &.active {
     color: #baa085;
   }
+
+  path {
+    stroke: #666 !important;
+  }
+
+  &.active path {
+    stroke: #baa085 !important;
+  }
 `;
 
 const SideIcon = styled(SideMenuIcon)`
