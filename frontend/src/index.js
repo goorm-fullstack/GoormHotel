@@ -1,14 +1,14 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import GlobalStyle from "./styles/GlobalStyles";
-import { ThemeProvider } from "styled-components";
-import theme from "./styles/theme";
-import AdminApp from './pages/admin/AdminApp';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import GlobalStyle from './components/common/GlobalStyles';
+import { ThemeProvider } from 'styled-components';
+import theme from './components/common/theme';
+import AdminApp from './admin/AdminApp';
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById('root'));
 
-const isAdminPage = window.location.pathname.includes("/admin");
+const isAdminPage = window.location.pathname.includes('/admin');
 
 const AppToRender = isAdminPage ? <AdminApp /> : <App />;
 

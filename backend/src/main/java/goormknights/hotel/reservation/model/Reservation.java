@@ -46,12 +46,12 @@ public class Reservation {
     private Integer children;               // 어린이 수
 
     @ManyToOne
-//    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private Member member;              // 예약자 정보: 예약자명, 회원 유형(회원/비회원), 회원인 경우 ID, 연락처, 이메일
     private String notice;              // 고객 요청사항
 
-    @OneToOne
-//    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(nullable = false)
     private Item item;
     // 예약 상품 정보: 상품명, 상품 유형, 상품 분류, 기본가, 추가 가능 어른 수, 추가 가능 어린이 수, 어른 추가 비용, 어린이 추가 비용
 

@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { Title, SubmitButton } from '../pages/admin/AdminGiftCard';
-import { TableTd, TableTr, Table, Form, BoldTd, Input } from '../pages/admin/AdminDetailGiftCard';
+import { Title, SubmitButton } from '../admin/item/AdminGiftCard';
+import { TableTd, TableTr, Table, Form, BoldTd, Input } from '../admin/item/AdminDetailGiftCard';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
-import { Select } from '../pages/admin/AdminItemList';
+import { Select } from '../admin/item/AdminItemList';
 import axios from 'axios';
 
 const TopOfTable = styled.div`

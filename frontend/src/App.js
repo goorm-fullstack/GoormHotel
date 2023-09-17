@@ -1,31 +1,32 @@
-import Footer from './components/Footer';
+import Header from './components/layout/Header';
+import Footer from './components/layout/Footer';
 import Home from './pages/Home';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Room from './pages/Room';
-import Dining from './pages/Dining';
+import Room from './pages/about/Room';
+import Dining from './pages/about/Dining';
 import { styled } from 'styled-components';
-import About from './pages/About';
-import Mypage from './pages/Mypage';
-import ReservationPage from './pages/ReservationPage';
+import About from './pages/about/About';
+import Mypage from './pages/member/Mypage';
+import ReservationPage from './pages/reservation/ReservationPage';
 import { useState } from 'react';
-import ChatModal from './components/ChatModal';
-import ReservationComplete from './pages/ReservationComplete';
-import ReservationCheck from './pages/ReservationCheck';
-import ReservationItem from './pages/ReservationItem';
-import ReservationList from './pages/ReservationList';
-import Agreement from './pages/register/Agreement';
-import Sitemap from './pages/Sitemap';
-import FindAccount from './pages/FindAccount';
-import FindIdResult from './pages/FindIdResult';
-import FindPwResult from './pages/FindPwResult';
-import Membership from './pages/Membership';
-import Way from './pages/way/Way';
-import Privacy from './pages/register/Privacy';
-import ScrollToTop from './components/ScrollTop';
-import Facilities from './pages/Facilities';
-import CustomerSupport from './pages/CustomerSupport';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
+import ChatModal from './components/layout/ChatModal';
+import ReservationComplete from './pages/reservation/ReservationComplete';
+import ReservationCheck from './pages/reservation/ReservationCheck';
+import ReservationItem from './pages/reservation/ReservationItem';
+import ReservationList from './pages/reservation/ReservationList';
+import Agreement from './pages/agreement/Agreement';
+import Sitemap from './pages/about/Sitemap';
+import FindAccount from './pages/member/FindAccount';
+import FindIdResult from './pages/member/FindIdResult';
+import FindPwResult from './pages/member/FindPwResult';
+import Membership from './pages/about/Membership';
+import Way from './pages/about/Location';
+import Privacy from './pages/agreement/Privacy';
+import ScrollToTop from './components/layout/ScrollTop';
+import Facilities from './pages/about/Facilities';
+import CustomerSupport from './pages/board/CustomerSupport';
+import Login from './pages/member/Login';
+import Signup from './pages/member/Signup';
 import BoardWrite from './pages/board/BoardWrite';
 import BoardRead from './pages/board/BoardRead';
 
@@ -99,6 +100,7 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <Header />
       <AppContainer>
         <Routes>
           <Route path="/" element={<Home />}></Route>
@@ -111,14 +113,14 @@ function App() {
           <Route path="/agreement" element={<Agreement />}></Route>
           <Route path="/privacy" element={<Privacy />}></Route>
           <Route path="/sitemap" element={<Sitemap />}></Route>
-          <Route path="/findAccount" element={<FindAccount />}></Route>
-          <Route path="/findIdResult" element={<FindIdResult />}></Route>
-          <Route path="/findPwResult" element={<FindPwResult />}></Route>
+          <Route path="/findid" element={<FindAccount />}></Route>
+          <Route path="/findid/result" element={<FindIdResult />}></Route>
+          <Route path="/findpw/result" element={<FindPwResult />}></Route>
           <Route path="/membership" element={<Membership />}></Route>
-          <Route path="/reservationComplete" element={<ReservationComplete title="예약 확인" />}></Route>
-          <Route path="/reservationCheck" element={<ReservationCheck />}></Route>
-          <Route path="/specialOffer" element={<ReservationItem />}></Route>
-          <Route path="/reservationList" element={<ReservationList />}></Route>
+          <Route path="/reservation/complete" element={<ReservationComplete title="예약 확인" />}></Route>
+          <Route path="/reservation/check" element={<ReservationCheck />}></Route>
+          <Route path="/offers" element={<ReservationItem />}></Route>
+          <Route path="/reservation/history" element={<ReservationList />}></Route>
           <Route path="/facilities" element={<Facilities />}></Route>
           <Route path="/customerSupport" element={<CustomerSupport />}></Route>
           <Route path="/login" element={<Login />}></Route>
