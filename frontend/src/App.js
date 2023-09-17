@@ -24,7 +24,7 @@ import Way from './pages/about/Location';
 import Privacy from './pages/agreement/Privacy';
 import ScrollToTop from './components/layout/ScrollTop';
 import Facilities from './pages/about/Facilities';
-import CustomerSupport from './pages/board/CustomerSupport';
+import CustomerSupport from './pages/board/BoardList';
 import Login from './pages/member/Login';
 import Signup from './pages/member/Signup';
 import BoardWrite from './pages/board/BoardWrite';
