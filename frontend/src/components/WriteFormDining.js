@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Title, SubmitButton } from '../admin/item/AdminGiftCard';
 import { TableTd, TableTr, Table, Form, BoldTd, Input } from '../admin/item/AdminDetailGiftCard';
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Select } from '../admin/item/AdminItemList';
 import axios from 'axios';
 
@@ -69,6 +69,7 @@ const WriteFormDining = () => {
     spareAdult: '',
     spareChildren: '',
   });
+  const navigate  = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -94,6 +95,8 @@ const WriteFormDining = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
+      
+      navigate('/admin/item/list');
     } catch (error) {
       console.error('Error:', error.message);
     }
@@ -197,6 +200,7 @@ const WriteFormDining = () => {
               <Input type="text" name="useTime" value={formData.useTime} onChange={handleChange} required />
             </TableTd>
           </WriteFormTr>
+          
         </WriteFormTable>
         <WriteFormButton type="submit">등록</WriteFormButton>
       </Form>

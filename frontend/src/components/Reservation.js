@@ -240,6 +240,14 @@ const Reservation = () => {
   const adultOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const childrenOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
+  const reservationData = {
+    checkInDate,
+    checkOutDate,
+    rooms,
+    adults,
+    children
+  };
+
   useEffect(() => {
     const today = new Date();
     const tomorrow = new Date(today);
@@ -289,7 +297,6 @@ const Reservation = () => {
     return moment(date).isBefore(moment(), 'day');
   };
 
-  const handleReservation = () => {};
 
   return (
     <ReserveContainer>
@@ -415,7 +422,7 @@ const Reservation = () => {
             </table>
           </OptionWrapper>
         </div>
-        <ReservationButton to="/offers" onClick={() => handleReservation()}>
+        <ReservationButton state={{ reservationData: reservationData }} to="/offers">
           상품 검색
         </ReservationButton>
       </ReserveDetail>

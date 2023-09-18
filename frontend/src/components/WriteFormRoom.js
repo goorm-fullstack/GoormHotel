@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Title, SubmitButton } from '../admin/item/AdminGiftCard';
 import { TableTd, TableTr, Table, Form, BoldTd, Input } from '../admin/item/AdminDetailGiftCard';
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Select } from '../admin/item/AdminItemList';
 import axios from 'axios';
 
@@ -70,6 +70,7 @@ const WriteFormRoom = () => {
     spareChildren: '',
     capacity: '',
   });
+  const navigate  = useNavigate();
 
   // 이미지 업로드 input의 onChange
   const saveImgFile = () => {
@@ -106,6 +107,8 @@ const WriteFormRoom = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
+
+      navigate('/admin/item/list');
     } catch (error) {
       console.error('Error:', error.message);
     }

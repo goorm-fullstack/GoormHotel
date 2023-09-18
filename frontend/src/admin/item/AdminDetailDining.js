@@ -6,7 +6,7 @@ import { Form, BoldTd, Input, TableTr, Table, TableTd } from './AdminDetailGiftC
 import { Image } from '../../components/WriteFormRoom';
 import { Select } from './AdminItemList';
 import styled from 'styled-components';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import axios from 'axios';
 
 const WriteFormSelect = styled(Select)`
@@ -41,6 +41,7 @@ const AdminDetailDining = () => {
   const imgRef = useRef();
   const { type, name } = useParams();
   const [responseData, setResponseData] = useState({});
+  const navigate  = useNavigate();
 
   useEffect(() => {
     axios.get(`/dinings/${type}/${encodeURIComponent(name)}`).then((response) => {
@@ -86,7 +87,8 @@ const AdminDetailDining = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log('성공');
+      console.log('수정 성공');
+      navigate('/admin/item/list');
     } catch (error) {
       console.error('Error:', error.message);
     }

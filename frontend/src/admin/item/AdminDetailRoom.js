@@ -6,7 +6,7 @@ import { Form, BoldTd, Input, TableTr, Table, TableTd } from './AdminDetailGiftC
 import { Image } from '../../components/WriteFormRoom';
 import { Select } from './AdminItemList';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const WriteFormSelect = styled(Select)`
@@ -41,6 +41,7 @@ const AdminDetailRoom = () => {
   const imgRef = useRef();
   const { type, name } = useParams();
   const [responseData, setResponseData] = useState({});
+  const navigate  = useNavigate();
 
   useEffect(() => {
     axios.get(`/rooms/${type}/${encodeURIComponent(name)}`).then((response) => {
@@ -87,6 +88,7 @@ const AdminDetailRoom = () => {
         },
       });
       console.log('성공');
+      navigate('/admin/item/list');
     } catch (error) {
       console.error('Error:', error.message);
     }

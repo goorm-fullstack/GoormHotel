@@ -37,22 +37,28 @@ const DeleteButton = styled.button`
   }
 `;
 
-const CheckBox = styled(TableCheckbox)`
-  margin: 0;
-  vertical-align: middle;
-`;
-
-const CheckBoxTh = styled.th`
-  width: 30px;
-`;
-
-const CheckBoxTd = styled.td`
-  width: 30px;
-`;
-
 const subMenus = [
   { name: '판매 상품 관리', link: '/admin/item/list' },
   { name: '상품권 관리', link: '/admin/item/giftCard' },
+];
+
+const checkboxList = [
+  {
+    thumnail: Item,
+    name: '다이닝상품',
+    price: '100,000',
+    type: '다이닝',
+    detailType: '레스토랑',
+    spare: '3',
+  },
+  {
+    thumnail: Item,
+    name: '객실 상품',
+    price: '100,000',
+    type: '객실',
+    detailType: '디럭스',
+    spare: '3',
+  },
 ];
 
 const AdminItemList = () => {
@@ -62,6 +68,8 @@ const AdminItemList = () => {
   const [selectedItems, setSelectedItems] = useState([]);
 
   console.log(selectedItems);
+
+  const length = checkboxList.length;
   let itemsToDelete = [];
 
   // 체크박스 전체 선택 or 해체 기능
@@ -128,7 +136,7 @@ const AdminItemList = () => {
 
   useEffect(() => {
     handleLoadItems();
-  }, []);
+  }, [type]);
 
   const handleTypeDetailChange = (e) => {
     setTypeDetail(e.target.value);
@@ -136,35 +144,40 @@ const AdminItemList = () => {
 
   //체크한 아이템 selectedItems 배열에 추가,해제하는 로직
   const handleCheckboxClick = (idx, itemName, type) => {
-    const isSelected = selectedItems.some((item) => item.id === idx);
-
+    const isSelected = selectedItems.some(item => item.id === idx);
+  
     if (isSelected) {
       // 이미 선택된 경우, 해당 아이템을 제거
-      setSelectedItems((prevItems) => prevItems.filter((item) => item.id !== idx));
+      setSelectedItems(prevItems => prevItems.filter(item => item.id !== idx));
     } else {
       // 선택되지 않은 경우, 아이템을 추가
-      setSelectedItems((prevItems) => [...prevItems, { id: idx, name: itemName, type: type }]);
+      setSelectedItems(prevItems => [...prevItems, { id: idx, name: itemName, type: type }]);
     }
-  };
-  // type에 따라서 삭제요청
+}
+  // type에 따라서 삭제요청 
   const handleDeleteItems = () => {
-    const deletions = selectedItems.map((item) => {
-      const url =
-        item.type === 'room' ? `${apiUrl}/rooms/room/${encodeURIComponent(item.name)}` : `${apiUrl}/dinings/dining/${encodeURIComponent(item.name)}`;
-
+    const deletions = selectedItems.map(item => {
+      const url = item.type === 'room' 
+        ? `${apiUrl}/rooms/room/${encodeURIComponent(item.name)}`
+        : `${apiUrl}/dinings/dining/${encodeURIComponent(item.name)}`;
+  
       return axios.delete(url);
     });
-
+  
     Promise.all(deletions)
-      .then((responses) => {
-        const successfulDeletions = responses.filter((response) => response.status === 200);
+      .then(responses => {
+        const successfulDeletions = responses.filter(response => response.status === 200);
         if (successfulDeletions.length === deletions.length) {
           setSelectedItems([]); // 모든 항목이 성공적으로 삭제된 경우 selectedItems를 초기화합니다.
+          handleLoadItems();
+          inputRef.current.forEach((checkbox) => {
+            checkbox.checked = false; // 체크박스를 해제합니다.
+          });
         } else {
           throw new Error('모든 항목을 삭제하지 못했습니다.');
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.error('Error:', error.message);
       });
   };
@@ -205,9 +218,10 @@ const AdminItemList = () => {
         <GiftCardTable>
           <thead>
             <TableTr>
-              <CheckBoxTh>
-                <CheckBox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
-              </CheckBoxTh>
+              <TableTh>
+                <CheckBoxInput type="checkbox" id="all-select-label" onClick={handleAllChecked} />
+                <InputLabel htmlFor="all-select-label"></InputLabel>
+              </TableTh>
               <TableTh>No.</TableTh>
               <TableTh>썸네일</TableTh>
               <TableTh>상품명</TableTh>
@@ -219,37 +233,42 @@ const AdminItemList = () => {
           </thead>
           <tbody>
             {items
-              .filter((item) => typeDetail === '' || item.typeDetail === typeDetail)
-              .map((item, idx) => {
-                const id = 'checkbox' + idx;
-                return (
-                  <TableListTr key={idx}>
-                    <CheckBoxTd>
-                      <CheckBox
-                        type="checkbox"
-                        id={id}
-                        ref={(el) => (inputRef.current[idx] = el)}
-                        onClick={() => handleCheckboxClick(idx, item.name, item.type)}
-                      />
-                    </CheckBoxTd>
-                    <TableTd>{idx + 1}</TableTd>
-                    <TableTd>
-                      <Image src={item.thumbnailPath} />
-                    </TableTd>
-                    <TableTd>
-                      {item.type === 'dining' ? (
-                        <DetailLink to={`view/dining/${item.type}/${item.name}`}>{item.name}</DetailLink>
-                      ) : (
-                        <DetailLink to={`view/room/${item.type}/${item.name}`}>{item.name}</DetailLink>
-                      )}
-                    </TableTd>
-                    <TableTd>{item.price}</TableTd>
-                    <TableTd>{item.type}</TableTd>
-                    <TableTd>{item.typeDetail}</TableTd>
-                    <TableTd>{item.spare}</TableTd>
-                  </TableListTr>
-                );
-              })}
+            .filter(item => typeDetail === "" || item.typeDetail === typeDetail)
+            .map((item, idx) => {
+              const id = 'checkbox' + idx;
+              return (
+                <TableListTr key={idx}>
+                  <TableTd>
+                    <CheckBoxInput
+                      type="checkbox"
+                      id={id}
+                      ref={(el) => {
+                        if (el) {
+                          inputRef.current[idx] = el;
+                        }
+                      }}
+                      onClick={() => handleCheckboxClick(idx, item.name, item.type)}
+                    />
+                    <InputLabel htmlFor={id}></InputLabel>
+                  </TableTd>
+                  <TableTd>{idx + 1}</TableTd>
+                  <TableTd>
+                    <Image src={item.thumbnailPath} />
+                  </TableTd>
+                  <TableTd>
+                    {item.type === '다이닝' ? (
+                      <DetailLink to={`view/dining/${item.type}/${item.name}`}>{item.name}</DetailLink>
+                    ) : (
+                      <DetailLink to={`view/room/${item.type}/${item.name}`}>{item.name}</DetailLink>
+                    )}
+                  </TableTd>
+                  <TableTd>{item.price}</TableTd>
+                  <TableTd>{item.type}</TableTd>
+                  <TableTd>{item.typeDetail}</TableTd>
+                  <TableTd>{item.spare}</TableTd>
+                </TableListTr>
+              );
+            })}
           </tbody>
         </GiftCardTable>
       </section>

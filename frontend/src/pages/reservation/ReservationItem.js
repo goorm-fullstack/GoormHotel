@@ -4,6 +4,7 @@ import { styled } from 'styled-components';
 import item from '../../images/item/item1.jpg';
 import { commonContainerStyle, commonTitleStyle, commonSubTitleStyle } from '../../components/common/commonStyles';
 import { ReactComponent as Cart } from '../../images/icon/ico_cart.svg';
+import { Link, useLocation } from 'react-router-dom';
 
 const Container = styled.div`
   ${commonContainerStyle}
@@ -146,8 +147,8 @@ const NoItemText = styled.span`
 
 const ReservationItem = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
-
-  console.log(selectedProduct);
+  const location = useLocation();
+  const { reservationData } = location.state;
 
   const productTypes = ['객실', '다이닝'];
   const productCategories = ['디럭스', '패밀리', '스위트', '풀 빌라'];
@@ -294,30 +295,32 @@ const ReservationItem = () => {
             <SubTitle>상품개요</SubTitle>
             {selectedProduct && (
               <>
-                <RoomItem>
-                  <img src={item} alt="ItemImg" />
-                  <CartItemWrapper>
-                    <RoomItemTitle>상품명</RoomItemTitle>
-                    <DetailWrapper>
-                      <DetailTitle>
-                        <p>상품 유형</p>
-                        <p>상품 분류</p>
-                        <p>기본 가격(1박/2인 기준)</p>
-                        <p>어른 추가(1인)</p>
-                        <p>어린이 추가(1인)</p>
-                      </DetailTitle>
-                      <DetailInfo>
-                        <p>{selectedProduct.type}</p>
-                        <p>{selectedProduct.category} </p>
-                        <p>{selectedProduct.basicPrice} 원</p>
-                        <p>{selectedProduct.adultPrice} 원/최대 1인</p>
-                        <p>{selectedProduct.childPrice} 원/최대 2인</p>
-                      </DetailInfo>
-                    </DetailWrapper>
-                    <ReservationDeleteBtn onClick={handleDeleteClick}>삭제</ReservationDeleteBtn>
-                  </CartItemWrapper>
-                </RoomItem>
+              <RoomItem>
+              <img src={item} alt="ItemImg" />
+                <CartItemWrapper>
+                  <RoomItemTitle>상품명</RoomItemTitle>
+                  <DetailWrapper>
+                    <DetailTitle>
+                      <p>상품 유형</p>
+                      <p>상품 분류</p>
+                      <p>기본 가격(1박/2인 기준)</p>
+                      <p>어른 추가(1인)</p>
+                      <p>어린이 추가(1인)</p>
+                    </DetailTitle>
+                    <DetailInfo>
+                      <p>{selectedProduct.type}</p>
+                      <p>{selectedProduct.category} </p>
+                      <p>{selectedProduct.basicPrice} 원</p>
+                      <p>{selectedProduct.adultPrice} 원/최대 1인</p>
+                      <p>{selectedProduct.childPrice} 원/최대 2인</p>
+                    </DetailInfo>
+                  </DetailWrapper>
+                  <ReservationDeleteBtn onClick={handleDeleteClick}>삭제</ReservationDeleteBtn>
+                </CartItemWrapper>
+              </RoomItem>
+              <Link to="/reservation" state={{ reservationData: reservationData, selectedProduct: selectedProduct }}>
                 <InfoBtn>예약 정보 입력하기</InfoBtn>
+              </Link>
               </>
             )}
             {!selectedProduct && (

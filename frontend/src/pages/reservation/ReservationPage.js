@@ -4,6 +4,7 @@ import moment from 'moment';
 import { StyledCalendar } from '../../components/Reservation';
 import Product from '../../components/Item';
 import { commonContainerStyle, commonTitleStyle, commonSubTitleStyle } from '../../components/common/commonStyles';
+import { useLocation } from 'react-router-dom';
 
 const Container = styled.div`
   ${commonContainerStyle}
@@ -226,6 +227,10 @@ const ReservationPage = () => {
     email: '',
     request: '',
   });
+
+  const location = useLocation();
+  const { reservationData, selectedProduct } = location.state;
+  console.log(reservationData, selectedProduct);
 
   const roomOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const adultOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
