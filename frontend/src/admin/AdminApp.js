@@ -26,7 +26,7 @@ const AdminApp = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/admin/reservation" element={<Reservation />}></Route>
-        <Route path="/admin/reservation/detail" element={<ReservationDetail />}></Route>
+        <Route path="/admin/reservation/:reservationNumber" element={<ReservationDetail />}></Route>
         <Route path="/admin/login" element={<AdminLogin />}></Route>
         <Route path="/admin/member" element={<AdminMember />}></Route>
         <Route path="/admin/member/:memberId" element={<AdminMemberDetail />}></Route>

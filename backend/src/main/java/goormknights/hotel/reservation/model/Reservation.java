@@ -1,5 +1,6 @@
 package goormknights.hotel.reservation.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import goormknights.hotel.global.event.MemberEventListener;
 import goormknights.hotel.global.event.ReservationEventListener;
 import goormknights.hotel.member.model.Member;
@@ -59,9 +60,11 @@ public class Reservation {
     private Integer stay;                   // 총 예약일 수
 
     @OneToOne
+    @JsonIgnore
     private Coupon coupon;              // 적용한 쿠폰: 쿠폰명, 쿠폰 번호, 할인율(%), 사용 유무, 발행일, 만료일
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<GiftCard> giftCard;    // 적용한 상품권
 
     @Column(nullable = false)
