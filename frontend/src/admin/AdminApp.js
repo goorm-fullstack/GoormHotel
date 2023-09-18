@@ -6,8 +6,8 @@ import AdminMemberDetail from './member/AdminMemberDetail';
 import AdminManager from './member/AdminManager';
 import AdminComment from './board/AdminComment';
 import AdminReport from './board/AdminReport';
-import Reservation from './reservation/reservation';
-import ReservationDetail from './reservation/reservationDetail';
+import AdminReservation from './reservation/reservation';
+import AdminReservationDetail from './reservation/reservationDetail';
 import AdminGiftCard from './item/AdminGiftCard';
 import AdminDetailGiftCard from './item/AdminDetailGiftCard';
 import AdminItemList from './item/AdminItemList';
@@ -25,8 +25,8 @@ const AdminApp = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/admin/reservation" element={<Reservation />}></Route>
-        <Route path="/admin/reservation/:reservationNumber" element={<ReservationDetail />}></Route>
+        <Route path="/admin/reservation" element={<AdminReservation />}></Route>
+        <Route path="/admin/reservation/:reservationNumber" element={<AdminReservationDetail />}></Route>
         <Route path="/admin/login" element={<AdminLogin />}></Route>
         <Route path="/admin/member" element={<AdminMember />}></Route>
         <Route path="/admin/member/:memberId" element={<AdminMemberDetail />}></Route>

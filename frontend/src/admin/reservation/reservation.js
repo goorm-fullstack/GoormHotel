@@ -1,41 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { styled } from "styled-components";
-import AdminLayout from "../AdminLayout";
-import { Num } from "../AdminMember";
-import Instance from "../../../utils/api/axiosInstance";
+import Instance from "../../utils/api/axiosInstance";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import AdminLayout from '../common/AdminLayout';
+import {
+  Container,
+  Title,
+  ContentHeader,
+  Total,
+  BlackListBtn,
+  Table,
+  TableCheckboxWrapper,
+  TableHeader,
+  TableCell,
+  TableCheckbox,
+  Num,
+} from '../member/AdminMember';
 
-const Container = styled.div`
-  width: 100%;
-  max-width: 1270px;
-  min-width: 760px;
-  margin-right: auto;
-`;
-
-const Title = styled.h1`
-  font-size: 36px;
-  font-weight: bold;
-  margin-bottom: 72px;
-`;
-
-export const ContentHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-export const Total = styled.span`
-  color: #444444;
-  font-size: 15px;
-`;
-
-export const BlackListBtn = styled.div`
-  display: flex;
-  gap: 10px;
-  height: 40px;
-`;
 
 export const Redo = styled.button`
   width: 120px;
@@ -51,58 +33,7 @@ export const Cancel = styled(Redo)`
   color: #d30a0a;
 `;
 
-export const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-`;
-
-export const TableCheckboxWrapper = styled.th`
-  background-color: #f7f7f7;
-  vertical-align: middle;
-  width: 1%;
-  text-align: center;
-`;
-
-export const TableHeader = styled.th`
-  height: 60px;
-  background-color: #f7f7f7;
-  text-align: center;
-  vertical-align: middle;
-  border: none;
-  width: 10%;
-`;
-
-export const TableCell = styled.td`
-  vertical-align: middle;
-  height: 60px;
-  text-align: center;
-  color: #444444;
-  border-bottom: 1px solid #dddddd;
-`;
-
-export const TableCheckbox = styled.input`
-  width: 16px;
-  height: 16px;
-  border: 1px solid #dddddd !important;
-  outline: none;
-  margin-left: 39px;
-  width: 16px;
-  height: 16px;
-  border: 1px solid #ddd;
-  appearance: none;
-  background-color: white;
-  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='lightgray' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
-  background-size: 120% 120%;
-  background-position: 50%;
-  background-repeat: no-repeat;
-
-  &:checked {
-    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
-    background-color: #baa085;
-  }
-`;
-
-const Reservation = () => {
+const AdminReservation = () => {
   const [reservationList, setReservationList] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [checkIn, setCheckIn] = useState(new Date());
@@ -209,4 +140,4 @@ const Reservation = () => {
   );
 };
 
-export default Reservation;
+export default AdminReservation;
