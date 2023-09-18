@@ -4,6 +4,7 @@ import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.coupon.repository.CouponRepository;
 import goormknights.hotel.email.model.EmailMessage;
 import goormknights.hotel.email.service.EmailService;
+import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.global.entity.Role;
 import lombok.RequiredArgsConstructor;
