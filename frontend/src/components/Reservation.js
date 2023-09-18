@@ -89,15 +89,15 @@ const ReserveDetail = styled.div`
 
   & > div {
     display: flex;
-    gap: 15px;
+    gap: 40px;
+    position: relative;
   }
 `;
 
 const SelectWrapper = styled.div`
-  margin-right: 20px;
   width: 50px;
 
-  input {
+  button {
     border: 0;
     width: 50px;
     height: 50px;
@@ -105,6 +105,7 @@ const SelectWrapper = styled.div`
     font-size: 20px;
     font-weight: 500;
     padding: 15px 0;
+    background: transparent;
   }
 `;
 
@@ -149,6 +150,51 @@ const CalendarWrapper = styled.div`
 `;
 
 const CheckOutCalendarWrapper = styled(CalendarWrapper)``;
+
+const OptionWrapper = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  padding: 40px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  transform: translate(-50%, 0);
+  display: none;
+
+  th,
+  td {
+    padding: 4px 0;
+  }
+  th {
+    color: #9c836a;
+    font-size: 14px;
+    min-width: 80px;
+    text-align: left;
+  }
+  td > div {
+    display: flex;
+    align-items: center;
+  }
+  input {
+    width: 60px;
+    text-align: center;
+    border: 0;
+  }
+  button {
+    background: white;
+    border: 1px solid #baa085;
+    border-radius: 100%;
+    text-align: center;
+    color: #9c836a;
+    width: 22px;
+    height: 22px;
+    line-height: 1;
+    vertical-align: text-bottom;
+    font-size: 12px;
+    padding-left: 1px;
+  }
+`;
 
 export const StyledCalendar = styled(Calendar)`
   border-radius: 10px;
@@ -312,18 +358,64 @@ const Reservation = () => {
         <div>
           <SelectWrapper>
             <SelectLabel>객실수</SelectLabel>
-            <input type="text" value="1" />
+            <button type="button">1</button>
           </SelectWrapper>
           <SelectWrapper>
             <SelectLabel>성인</SelectLabel>
-            <input type="text" value="1" />
+            <button type="button">1</button>
           </SelectWrapper>
           <SelectWrapper>
             <SelectLabel>어린이</SelectLabel>
-            <input type="text" value="0" />
+            <button type="button">0</button>
           </SelectWrapper>
+          <OptionWrapper>
+            <table>
+              <tr>
+                <th>객실수</th>
+                <td>
+                  <div>
+                    <button type="button" className="btn-minus">
+                      ─
+                    </button>
+                    <input type="text" value="1" />
+                    <button type="button" className="btn-plus">
+                      ┼
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>성인</th>
+                <td>
+                  <div>
+                    <button type="button" className="btn-minus">
+                      ─
+                    </button>
+                    <input type="text" value="1" />
+                    <button type="button" className="btn-plus">
+                      ┼
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>어린이</th>
+                <td>
+                  <div>
+                    <button type="button" className="btn-minus">
+                      ─
+                    </button>
+                    <input type="text" value="0" />
+                    <button type="button" className="btn-plus">
+                      ┼
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </OptionWrapper>
         </div>
-        <ReservationButton to="/specialOffer" onClick={() => handleReservation()}>
+        <ReservationButton to="/offers" onClick={() => handleReservation()}>
           상품 검색
         </ReservationButton>
       </ReserveDetail>
