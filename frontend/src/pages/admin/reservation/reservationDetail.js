@@ -4,6 +4,8 @@ import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css'; // css import
 import moment from "moment";
 import AdminLayout from "../AdminLayout";
+import { useParams } from "react-router-dom";
+import Instance from "../../../utils/api/axiosInstance";
 
 const Container = styled.div`
   width: 100%;
@@ -138,27 +140,20 @@ const BtnWrapper = styled.div`
 `;
 
 const ReservationDetail = () => {
-  const [reservationDate, setReservationDate] = useState("");//예약번호
-  const [checkInDate, setCheckInDate] = useState("");//예약일
-  const [checkOutDate, setCheckOutDate] = useState("");//체크인
-  const [reservationCode, setReservationCode] = useState("");//체크 아웃
+  const { reservationNumber } = useParams();//예약 번호로 조회
+  const [reservationDate, setReservationDate] = useState("");//예약 일자
+  const [checkInDate, setCheckInDate] = useState("");//체크인
+  const [checkOutDate, setCheckOutDate] = useState("");//체크아웃
   const [reservationItem, setReservationItem] = useState("");//에약 상품
   const[customerName, setCustomerName] = useState("");//예약자명
   const[phoneNumber, setPhoneNumber] = useState("");//연락처
   const[emailAddress, setEmailAddress] = useState("");//이메일
   const[customerRequest, setCustomerRequest] = useState("");//요청 사항
   const[applyCoupon, setApplyCoupon] = useState("");//적용 쿠폰
-  const[applyGiftCard, setApplyGiftCard] = useState("");//적용 상품권
+  const[applyGiftCard, setApplyGiftCard] = useState([]);//적용 상품권
   const[totalPrice, setTotalPrice] = useState("");//결제 금액
   const [updateClick, setUpdateClick] = useState(true);
-
-  // 캘린더 관련
-  const [checkInOpen, setCheckInOpen] = useState(false);
-  const [checkOutOpen, setCheckOutOpen] = useState(false);
-  const [checkInValue, setCheckInValue] = useState(new Date());
-  const [checkOutValue, setCheckOutValue] = useState(new Date());
-
-  const reservationData = {
+  const [reservationData, setReservationData] = useState({
     reservationNumber : "테스트",
     orderDae : "2023.09.01",
     checkIn : "2023.09.25",
@@ -189,24 +184,34 @@ const ReservationDetail = () => {
     totalPrice : 10000,
     state : "에약"
 
-  }
+  }) 
+
+  // 캘린더 관련
+  const [checkInOpen, setCheckInOpen] = useState(false);
+  const [checkOutOpen, setCheckOutOpen] = useState(false);
+  const [checkInValue, setCheckInValue] = useState(new Date());
+  const [checkOutValue, setCheckOutValue] = useState(new Date());
+
   useEffect(()=>{
-
-    const today = new Date();
-    const tomorrow = new Date();
-    tomorrow.setDate(today.getDate()+1);
+    Instance.get(`/reservation/reservationNumber/${reservationNumber}`)
+      .then((response) =>{
+        setReservationData(response.data);
+        console.log(response.data);
+        
+        const formattedCheckIn = formatDate(reservationData.checkIn);
+        const formattedCheckOut = formatDate(reservationData.checkOut);
+        const formattedReservationDate = formatDate(reservationData.orderDate);
     
-    const formattedToday = formatDate(today);
-    const formattedTomorrow = formatDate(tomorrow);
-    const formattedReservationDate = formatDate(tomorrow);
-
-    setCheckInDate(formattedToday);
-    setCheckOutDate(formattedTomorrow);
-    setReservationDate(formattedReservationDate);
-    setCustomerName(reservationData.member.name);
-    setPhoneNumber(reservationData.member.phoneNumber);
-    setEmailAddress(reservationData.member.email);
-    setCustomerRequest(reservationData.notice);
+        setCheckInDate(formattedCheckIn);
+        setCheckOutDate(formattedCheckOut);
+        setReservationDate(formattedReservationDate);
+        setCustomerName(reservationData.member.name);
+        setPhoneNumber(reservationData.member.phoneNumber);
+        setEmailAddress(reservationData.member.email);
+        setCustomerRequest(reservationData.notice);
+        setApplyCoupon(reservationData.coupon);
+        setApplyGiftCard(reservationData.giftCard);
+      })
   },[]);
 
   const formatDate = (date) => {
@@ -273,7 +278,7 @@ const ReservationDetail = () => {
   };
 
   const subMenus = [
-    { name: '에약 관리', link: '/admin/reservation/detail'},
+    { name: '예약 관리', link: `/admin/reservation/${reservationNumber}`},
   ];
 
   return (
@@ -283,7 +288,7 @@ const ReservationDetail = () => {
       <InfoContainer>
           <InfoWrapper>
             <Label>예약 번호</Label>
-            <Data>020221611653456465</Data>
+            <Data>{reservationNumber}</Data>
           </InfoWrapper>
           <InfoWrapper>
             <Label>
@@ -491,19 +496,35 @@ const ReservationDetail = () => {
             <Label>
               적용 쿠폰
             </Label>
-            <Data>
-              {reservationData.coupon.name}
-            </Data>
+            {
+                reservationData.coupon !== null ? (
+                  <Data>
+                    {reservationData.coupon.name}
+                  </Data>
+                ) : (
+                  <Data>
+                    적용된 쿠폰이 없습니다.
+                  </Data>
+                )
+            }
           </InfoWrapper>
           <InfoWrapper>
             <Label>
               적용 상품권
             </Label>
-            <Data>
-              {reservationData.giftcard.map((gift, index) => {
-                <>{gift.name}</>
-              })}
-            </Data>
+            {
+              applyGiftCard !==null ? (
+                <Data>
+                {applyGiftCard && applyGiftCard.map((gift, index) => {
+                  <>{gift.name}</>
+                })}
+              </Data>
+              ) : (
+                <Data>
+                  적용된 상품권이 없습니다.
+                </Data>
+              )
+            }
           </InfoWrapper>
           <InfoWrapper>
             <Label>
