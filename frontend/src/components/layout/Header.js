@@ -119,9 +119,11 @@ const Header = () => {
           </TopInfoList>
         </TopInfo>
         <Gnb>
-          <HeaderLink to="/">
-            <LogoImg src={logo} alt="logo" />
-          </HeaderLink>
+          <h1>
+            <HeaderLink to="/">
+              <LogoImg src={logo} alt="logo" />
+            </HeaderLink>
+          </h1>
           <NavList>
             <NavItem>
               <HeaderLink to="/about">구름호텔 소개</HeaderLink>

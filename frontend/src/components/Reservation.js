@@ -145,7 +145,8 @@ const CalendarWrapper = styled.div`
   z-index: 10;
   position: absolute;
   top: 100%;
-  left: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
   display: ${(props) => (props.open ? 'block' : 'none')};
 `;
 
@@ -194,34 +195,73 @@ const OptionWrapper = styled.div`
     font-size: 12px;
     padding-left: 1px;
   }
+  td.chilage {
+    font-size: 13px;
+    padding-top: 12px;
+    color: #888;
+    text-align: right;
+  }
+
+  td.chilage span {
+    border-radius: 100%;
+    background: #aaa;
+    color: white;
+    padding: 0 6px;
+    margin-right: 2px;
+    font-size: 10px;
+    font-weight: bold;
+  }
 `;
 
 export const StyledCalendar = styled(Calendar)`
   border-radius: 10px;
-  border: 1px solid #c8c8c8;
+  border: 1px solid #ddd;
+  width: 300px;
+  font-family: inherit;
+  padding: 10px 20px 20px;
 
   .react-calendar__navigation__label > span {
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 500;
   }
 
   .react-calendar__month-view__days__day--weekend {
-    color: black;
+    color: #111;
   }
-  .react-calendar__tile:enabled:hover,
-  .react-calendar__tile:enabled:focus {
-    background: #102c57;
-    color: white;
+  .react-calendar__tile {
+    padding: 6px 4px;
+    font-size: 13px;
+    color: #111;
+    border-radius: 100%;
   }
-
+  .react-calendar__tile:nth-child(7n) {
+    color: #d30a0a;
+  }
   .react-calendar__tile--now {
     // 오늘 날짜 하이라이트 커스텀
     background: white;
     color: #102c57;
   }
+  .react-calendar__tile:disabled {
+    color: #ccc;
+    background-color: white;
+  }
+  .react-calendar__tile:enabled:hover,
+  .react-calendar__tile:enabled:focus,
   .react-calendar__tile--active {
     background: #102c57;
     color: white;
+  }
+  .react-calendar__navigation {
+    margin-bottom: 0;
+  }
+  .react-calendar__navigation button:hover,
+  .react-calendar__navigation button:focus {
+    background-color: white;
+  }
+  .react-calendar__month-view__weekdays {
+    font-weight: normal;
+    font-size: 12px;
   }
 `;
 
@@ -410,6 +450,11 @@ const Reservation = () => {
                       ┼
                     </button>
                   </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" className="chilage">
+                  <span>!</span> 어린이: 4세~12세
                 </td>
               </tr>
             </table>

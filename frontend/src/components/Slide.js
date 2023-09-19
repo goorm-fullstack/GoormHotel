@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import visual03 from '../images/main/visual03.webp';
-import visual02 from '../images/main/visual02.webp';
-import visual01 from '../images/main/visual01.webp';
+import visual03 from '../images/main/visual02.webp';
+import visual02 from '../images/main/visual01.webp';
+import visual01 from '../images/main/visual03.webp';
 import slideBtnImage from '../images/icon/ico_slide_btn.png';
 import { styled } from 'styled-components';
 import { ReactComponent as SideMenuIcon } from '../images/icon/ico_slide_btn.svg';

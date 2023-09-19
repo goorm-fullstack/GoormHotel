@@ -24,9 +24,7 @@ const FirstArticle = styled.article`
 `;
 
 const SecondArticle = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 256px;
+  margin-top: 200px;
 `;
 
 const Room = styled.div`
@@ -36,10 +34,10 @@ const Room = styled.div`
   align-items: center;
 `;
 
-const PackageTitle = styled.h1`
+const PackageTitle = styled.h2`
   font-family: 'Marcellus', serif;
-  font-size: 30px;
-  margin-bottom: 12px;
+  font-size: 36px;
+  margin-bottom: 20px;
   letter-spacing: 2px;
   width: 100%;
   text-align: center;
@@ -50,21 +48,22 @@ const PackageTitle = styled.h1`
 `;
 
 const TitleDescription = styled.p`
-  font-size: 15px;
-  color: #888888;
+  color: #999;
   line-height: 1.5;
   text-align: center;
-  margin-bottom: 65px;
+  margin-bottom: 60px;
+  letter-spacing: -0.02em;
 `;
 
 const RoomDescription = styled.p`
   font-size: 15px;
-  color: #888888;
-  line-height: 1.5;
+  color: #888;
+  line-height: 1.6;
+  letter-spacing: -0.02em;
 `;
 
 const Dining = styled(Room)`
-  margin-top: 170px;
+  margin-top: 130px;
 `;
 
 const ImgList = styled.ul`
@@ -72,7 +71,7 @@ const ImgList = styled.ul`
   width: 100%;
   height: 100%;
   justify-content: space-between;
-  margin-bottom: 75px;
+  margin-bottom: 60px;
 `;
 
 const RoomItem = styled.li`
@@ -81,27 +80,27 @@ const RoomItem = styled.li`
 
 const RoomImg = styled.img``;
 
-const PackageName = styled.h1`
+const PackageName = styled.h3`
   font-size: 18px;
-  margin: 20px 0 13px 0;
-  color: #444444;
-  font-weight: bold;
+  margin: 20px 0 12px;
+  color: #444;
+  font-weight: 500;
 `;
 
 export const DetailBtn = styled(Link)`
   font-size: 15px;
   padding: 15px 20px;
-  background-color: #95846e;
+  background-color: #baa085;
   margin: 0 auto;
-  width: 160px;
+  width: 165px;
   color: white;
-  height: 40px;
+  height: 42px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 
   &:hover {
-    background-color: #8a7057;
+    background-color: #9c836a;
   }
 `;
 
@@ -121,17 +120,17 @@ const DiningItem = styled(RoomItem)`
 `;
 
 const ThirdArticle = styled.article`
-  height: 530px;
+  height: 520px;
   width: 100%;
   min-width: 1260px;
-  margin-top: 193px;
+  margin-top: 130px;
   background-color: ${(props) => props.theme.colors.lightGray};
 `;
 
 const ActivityContainer = styled.div`
-  height: 530px;
+  height: 520px;
   display: flex;
-  bottom: 70px;
+  position: relative;
 `;
 
 const ImageSlider = styled.div`
@@ -148,15 +147,17 @@ const ImageContainer = styled.div`
 `;
 
 const Image = styled.img`
-  height: auto;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 `;
 
 const ActivityInfo = styled.div`
   width: 50%;
-  margin-top: 108px;
-  float: right;
-  margin-left: 99px;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  padding-left: 100px;
 `;
 
 const Activity = styled.p`
@@ -300,7 +301,7 @@ const Home = () => {
           <PackageTitle>
             <span>ROOMS</span> & SUITES
           </PackageTitle>
-          <TitleDescription>특별한 상품과 혜택을 지금 만나보세요.</TitleDescription>
+          <TitleDescription>환상적인 서울 도심의 파노라믹뷰를 만나보세요.</TitleDescription>
           <ImgList>
             <RoomItem>
               <RoomImg src={Deluxe} alt="객실" />
@@ -332,7 +333,7 @@ const Home = () => {
           <PackageTitle>
             <span>DINING</span> PROMOTION
           </PackageTitle>
-          <TitleDescription>특별한 상품과 혜택을 지금 만나보세요.</TitleDescription>
+          <TitleDescription>세계 최고 수준의 셰프들이 직접 선보이는 다양한 요리를 즐겨보세요.</TitleDescription>
           <ImgList>
             <DiningItem>
               <RoomImg src={diningImages[0]} alt={`다이닝 ${diningImages[0]}`} />
