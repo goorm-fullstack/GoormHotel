@@ -1,12 +1,11 @@
 import React from 'react';
+import { styled } from 'styled-components';
+import { Link, NavLink } from 'react-router-dom';
+import { MoreBtn } from '../../components/common/commonStyles';
 import diningImg from '../../images/about/dining.jpg';
 import facilitiesImg from '../../images/about/facilities.jpg';
 import membershipImg from '../../images/about/membership.jpg';
 import roomImg from '../../images/about/room.jpg';
-
-import { styled } from 'styled-components';
-import { Link, NavLink } from 'react-router-dom';
-import { DetailBtn, DetailSvg } from '../Home';
 
 const AboutHeader = styled.div`
   height: 70px;
@@ -133,7 +132,7 @@ const Wrapper = styled.div`
   display: flex;
 `;
 
-const DetailLink = styled(DetailBtn)`
+const DetailLink = styled(MoreBtn)`
   margin: 0;
 `;
 
@@ -167,12 +166,12 @@ const About = () => {
             </IntroDescription>
             <DetailLink to="/rooms">
               <p>자세히보기</p>
-              <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                 <title />
                 <g data-name="Layer 2" id="Layer_2">
                   <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
                 </g>
-              </DetailSvg>
+              </svg>
             </DetailLink>
           </Intro>
         </Wrapper>
@@ -184,12 +183,12 @@ const About = () => {
             <DiningDescription>최상급 식자재를 사용한 미슐랭 스타 레스토랑부터 프리미엄 뷔페까지 호텔 다이닝을 만나보세요.</DiningDescription>
             <DetailLink to="/dining">
               <p>자세히보기</p>
-              <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                 <title />
                 <g data-name="Layer 2" id="Layer_2">
                   <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
                 </g>
-              </DetailSvg>
+              </svg>
             </DetailLink>
           </LeftIntro>
           <IntroWrapper>
@@ -209,12 +208,12 @@ const About = () => {
             </IntroDescription>
             <DetailLink to="/facilities">
               <p>자세히보기</p>
-              <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                 <title />
                 <g data-name="Layer 2" id="Layer_2">
                   <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
                 </g>
-              </DetailSvg>
+              </svg>
             </DetailLink>
           </Intro>
         </Wrapper>
@@ -222,15 +221,15 @@ const About = () => {
       <MembershipWrapper>
         <MembershipTitle>멤버십</MembershipTitle>
         <MerbershipImg src={membershipImg} alt="membership" />
-        <DetailBtn to="/membership">
+        <MoreBtn to="/membership">
           <p>자세히보기</p>
-          <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
             <title />
             <g data-name="Layer 2" id="Layer_2">
               <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
             </g>
-          </DetailSvg>
-        </DetailBtn>
+          </svg>
+        </MoreBtn>
       </MembershipWrapper>
     </>
   );

@@ -1,14 +1,14 @@
+import { useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { styled } from 'styled-components';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import Home from './pages/Home';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Room from './pages/about/Room';
 import Dining from './pages/about/Dining';
-import { styled } from 'styled-components';
 import About from './pages/about/About';
 import Mypage from './pages/member/Mypage';
 import ReservationPage from './pages/reservation/ReservationPage';
-import { useState } from 'react';
 import ChatModal from './components/layout/ChatModal';
 import ReservationComplete from './pages/reservation/ReservationComplete';
 import ReservationCheck from './pages/reservation/ReservationCheck';

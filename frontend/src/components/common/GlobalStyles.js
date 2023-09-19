@@ -34,8 +34,10 @@ html, body {
 }
 
 body {
+	min-width: 1260px;
 	line-height: 1;
   font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+	color: #111;
 }
 
 ol, ul, li {

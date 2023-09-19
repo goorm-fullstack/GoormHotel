@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
-import { DetailBtn, DetailSvg } from '../../pages/Home';
 import { Link } from 'react-router-dom';
+import { MoreBtn } from '../common/commonStyles';
 import instagramImg from '../../images/common/social_instagram.png';
 import youtubeImg from '../../images/common/social_youtube.png';
 import owlImg from '../../images/common/social_owl.png';
@@ -58,7 +58,7 @@ const EmailInput = styled.input`
   outline: none;
 `;
 
-const SubscribeBtn = styled(DetailBtn)`
+const SubscribeBtn = styled(MoreBtn)`
   height: 50px;
   min-width: 160px;
 
@@ -255,12 +255,12 @@ const Footer = () => {
               />
               <SubscribeBtn type="submit">
                 <DetailBtnTitle>구독 신청</DetailBtnTitle>
-                <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                   <title />
                   <g data-name="Layer 2" id="Layer_2">
                     <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
                   </g>
-                </DetailSvg>
+                </svg>
               </SubscribeBtn>
             </EmailForm>
             <Terms>

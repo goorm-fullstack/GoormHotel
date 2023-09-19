@@ -9,6 +9,7 @@ const HeaderContainer = styled.div`
   height: 120px;
   z-index: 999;
   top: 0;
+  min-width: 1260px;
 `;
 
 const Container = styled.header`
@@ -47,7 +48,6 @@ const Gnb = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 1180px;
 `;
 
 const NavList = styled.ul`

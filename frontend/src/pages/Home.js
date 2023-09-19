@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
+import { commonWrapperStyle, MoreBtn, BtnWrapper } from '../components/common/commonStyles';
+import { Link } from 'react-router-dom';
 import Slide from '../components/Slide';
 import Reservation from '../components/Reservation';
 import spaImg from '../images/main/spa.jpg';
@@ -11,62 +13,63 @@ import dining04 from '../images/dining/RoomService.jpg';
 import Deluxe from '../images/room/Deluxe.jpg';
 import Family from '../images/room/Family.jpg';
 import Suite from '../images/room/Suite.jpg';
-import { Link } from 'react-router-dom';
 import slideBtn from '../images/icon/ico_slide_btn.png';
 
 const diningImages = [dining01, dining02, dining03, dining04];
 const images = [spaImg, dining01, Deluxe];
 
-const FirstArticle = styled.article`
+const SlideWrapper = styled.article`
   width: 100%;
   height: 100vh;
   position: relative;
 `;
 
-const SecondArticle = styled.div`
+const IndexOffers = styled.article`
   margin-top: 200px;
 `;
 
-const Room = styled.div`
-  width: 1180px;
-  margin: 0 auto;
-  flex-direction: column;
-  align-items: center;
+const Wrapper = styled(commonWrapperStyle)`
+  margin-bottom: 150px;
 `;
 
-const PackageTitle = styled.h2`
-  font-family: 'Marcellus', serif;
-  font-size: 36px;
+const IndexTitle = styled.h2`
+  font-family: ${(props) => props.theme.font.family};
+  font-size: ${(props) => props.theme.font.big};
   margin-bottom: 20px;
-  letter-spacing: 2px;
   width: 100%;
   text-align: center;
+  color: ${(props) => props.theme.colors.goldhover};
 
   span {
-    color: #95846e;
+    color: ${(props) => props.theme.colors.charcoal};
+  }
+  &.facilities {
+    text-align: left;
+    font-size: ${(props) => props.theme.font.bigx};
   }
 `;
 
-const TitleDescription = styled.p`
-  color: #999;
-  line-height: 1.5;
+const IndexDesc = styled.p`
+  color: ${(props) => props.theme.colors.graylight};
+  line-height: 1.6;
   text-align: center;
   margin-bottom: 60px;
   letter-spacing: -0.02em;
+
+  &.facilities {
+    text-align: left;
+    word-break: keep-all;
+  }
 `;
 
-const RoomDescription = styled.p`
-  font-size: 15px;
-  color: #888;
+const ItemDesc = styled.p`
+  font-size: ${(props) => props.theme.font.sizes};
+  color: ${(props) => props.theme.colors.graylight};
   line-height: 1.6;
   letter-spacing: -0.02em;
 `;
 
-const Dining = styled(Room)`
-  margin-top: 130px;
-`;
-
-const ImgList = styled.ul`
+const ItemList = styled.ul`
   display: flex;
   width: 100%;
   height: 100%;
@@ -78,57 +81,27 @@ const RoomItem = styled.li`
   width: 380px;
 `;
 
-const RoomImg = styled.img``;
-
-const PackageName = styled.h3`
-  font-size: 18px;
+const ItemTitle = styled.h3`
+  font-size: ${(props) => props.theme.font.sizem};
   margin: 20px 0 12px;
-  color: #444;
+  color: ${(props) => props.theme.colors.charcoal};
   font-weight: 500;
-`;
-
-export const DetailBtn = styled(Link)`
-  font-size: 15px;
-  padding: 15px 20px;
-  background-color: #baa085;
-  margin: 0 auto;
-  width: 165px;
-  color: white;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  &:hover {
-    background-color: #9c836a;
-  }
-`;
-
-const FacilitiesDetailBtn = styled(DetailBtn)`
-  margin: 0;
-`;
-
-export const DetailSvg = styled.svg`
-  width: 15px;
-  height: 15px;
-  margin-left: 25px;
-  fill: white;
 `;
 
 const DiningItem = styled(RoomItem)`
   width: 280px;
 `;
 
-const ThirdArticle = styled.article`
-  height: 520px;
+const IndexFacilities = styled.article`
+  height: 500px;
   width: 100%;
-  min-width: 1260px;
+  min-width: ${(props) => props.theme.wrapper.minwidth};
   margin-top: 130px;
-  background-color: ${(props) => props.theme.colors.lightGray};
+  background-color: ${(props) => props.theme.colors.graybg};
 `;
 
-const ActivityContainer = styled.div`
-  height: 520px;
+const FacilitiesContainer = styled.div`
+  height: 500px;
   display: flex;
   position: relative;
 `;
@@ -152,77 +125,41 @@ const Image = styled.img`
   object-fit: cover;
 `;
 
-const ActivityInfo = styled.div`
+const FacilitiesInfo = styled.div`
   width: 50%;
+  max-width: calc(1180px / 2);
   position: absolute;
-  top: 20%;
+  top: 50%;
   left: 50%;
   padding-left: 100px;
+  transform: translate(0, -50%);
 `;
 
 const Activity = styled.p`
-  font-size: 18px;
-  color: #888888;
-  margin-bottom: 59px;
+  color: ${(props) => props.theme.colors.graylight};
+  margin-bottom: 50px;
 `;
 
-const ActivityTitle = styled.h1`
-  font-size: 35px;
-  margin-bottom: 26px;
-  font-family: 'Marcellus', serif;
-
-  span {
-    color: #95846e;
-  }
-`;
-
-const ActivityDescription = styled.p`
-  width: 393px;
-  font-size: 15px;
-  color: #888888;
-  margin-bottom: 83px;
-  line-height: 1.6;
-`;
-
-const FourthArticle = styled.div`
-  width: 1180px;
-  height: 780px;
-  margin: 150px auto 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const MapTitle = styled.h1`
-  font-size: 36px;
-  margin-bottom: 15px;
-  color: #95846e;
-  font-family: 'Marcellus', serif;
-`;
-
-const MapSubTitle = styled.p`
-  font-size: 16px;
-  color: #888888;
-  margin-bottom: 69px;
+const IndexLocation = styled.div`
+  margin-top: 130px;
 `;
 
 const MapAddress = styled.p`
-  font-size: 18px;
-  color: #888888;
+  font-size: ${(props) => props.theme.font.sizem};
+  color: ${(props) => props.theme.colors.graylight};
   margin-top: 40px;
 `;
 
 const Contact = styled.div`
   display: flex;
-  font-size: 15px;
-  color: #888888;
+  font-size: ${(props) => props.theme.font.sizes};
+  color: ${(props) => props.theme.colors.graylight};
   margin-top: 25px;
   margin-bottom: 40px;
 `;
 
 const ContactSvg = styled.svg`
-  fill: #444444;
+  fill: ${(props) => props.theme.colors.blacklight};
   width: 20px;
   height: 20px;
   margin-right: 10px;
@@ -246,11 +183,11 @@ const ButtonContainer = styled.div`
 const PrevButton = styled.button`
   width: 65px;
   height: 65px;
-  background-color: #21201e;
+  background-color: ${(props) => props.theme.colors.charcoal};
   color: #fff;
 
   &:hover {
-    background-color: #444;
+    background-color: ${(props) => props.theme.colors.blacklight};
   }
 
   img {
@@ -292,83 +229,71 @@ const Home = () => {
 
   return (
     <>
-      <FirstArticle>
+      <SlideWrapper>
         <Slide />
         <Reservation />
-      </FirstArticle>
-      <SecondArticle>
-        <Room>
-          <PackageTitle>
-            <span>ROOMS</span> & SUITES
-          </PackageTitle>
-          <TitleDescription>환상적인 서울 도심의 파노라믹뷰를 만나보세요.</TitleDescription>
-          <ImgList>
+      </SlideWrapper>
+      <IndexOffers>
+        <Wrapper>
+          <IndexTitle>
+            ROOMS <span>& SUITES</span>
+          </IndexTitle>
+          <IndexDesc>환상적인 서울 도심의 파노라믹뷰를 만나보세요.</IndexDesc>
+          <ItemList>
             <RoomItem>
-              <RoomImg src={Deluxe} alt="객실" />
-              <PackageName>디럭스</PackageName>
-              <RoomDescription>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</RoomDescription>
+              <img src={Deluxe} alt="객실" />
+              <ItemTitle>디럭스</ItemTitle>
+              <ItemDesc>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</ItemDesc>
             </RoomItem>
             <RoomItem>
-              <RoomImg src={Family} alt="객실" />
-              <PackageName>스위트</PackageName>
-              <RoomDescription>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</RoomDescription>
+              <img src={Family} alt="객실" />
+              <ItemTitle>스위트</ItemTitle>
+              <ItemDesc>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</ItemDesc>
             </RoomItem>
             <RoomItem>
-              <RoomImg src={Suite} alt="객실" />
-              <PackageName>패밀리</PackageName>
-              <RoomDescription>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</RoomDescription>
+              <img src={Suite} alt="객실" />
+              <ItemTitle>패밀리</ItemTitle>
+              <ItemDesc>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</ItemDesc>
             </RoomItem>
-          </ImgList>
-          <DetailBtn to="/rooms">
-            <p>자세히보기</p>
-            <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-              <title />
-              <g data-name="Layer 2" id="Layer_2">
-                <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
-              </g>
-            </DetailSvg>
-          </DetailBtn>
-        </Room>
-        <Dining>
-          <PackageTitle>
-            <span>DINING</span> PROMOTION
-          </PackageTitle>
-          <TitleDescription>세계 최고 수준의 셰프들이 직접 선보이는 다양한 요리를 즐겨보세요.</TitleDescription>
-          <ImgList>
+          </ItemList>
+          <BtnWrapper className="center">
+            <MoreBtn to="/offers?type=rooms">자세히보기</MoreBtn>
+          </BtnWrapper>
+        </Wrapper>
+        <Wrapper>
+          <IndexTitle>
+            DINING <span>PROMOTION</span>
+          </IndexTitle>
+          <IndexDesc>세계 최고 수준의 셰프들이 직접 선보이는 다양한 요리를 즐겨보세요.</IndexDesc>
+          <ItemList>
             <DiningItem>
-              <RoomImg src={diningImages[0]} alt={`다이닝 ${diningImages[0]}`} />
-              <PackageName>베이커리</PackageName>
-              <RoomDescription>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</RoomDescription>
+              <img src={diningImages[0]} alt={`다이닝 ${diningImages[0]}`} />
+              <ItemTitle>베이커리</ItemTitle>
+              <ItemDesc>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</ItemDesc>
             </DiningItem>
             <DiningItem>
-              <RoomImg src={diningImages[1]} alt={`다이닝 ${diningImages[1]}`} />
-              <PackageName>바&라운지</PackageName>
-              <RoomDescription>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</RoomDescription>
+              <img src={diningImages[1]} alt={`다이닝 ${diningImages[1]}`} />
+              <ItemTitle>바&라운지</ItemTitle>
+              <ItemDesc>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</ItemDesc>
             </DiningItem>
             <DiningItem>
-              <RoomImg src={diningImages[2]} alt={`다이닝 ${diningImages[2]}`} />
-              <PackageName>레스토랑</PackageName>
-              <RoomDescription>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</RoomDescription>
+              <img src={diningImages[2]} alt={`다이닝 ${diningImages[2]}`} />
+              <ItemTitle>레스토랑</ItemTitle>
+              <ItemDesc>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</ItemDesc>
             </DiningItem>
             <DiningItem>
-              <RoomImg src={diningImages[3]} alt={`다이닝 ${diningImages[3]}`} />
-              <PackageName>룸 서비스</PackageName>
-              <RoomDescription>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</RoomDescription>
+              <img src={diningImages[3]} alt={`다이닝 ${diningImages[3]}`} />
+              <ItemTitle>룸 서비스</ItemTitle>
+              <ItemDesc>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</ItemDesc>
             </DiningItem>
-          </ImgList>
-          <DetailBtn to="/rooms">
-            <p>자세히보기</p>
-            <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-              <title />
-              <g data-name="Layer 2" id="Layer_2">
-                <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
-              </g>
-            </DetailSvg>
-          </DetailBtn>
-        </Dining>
-      </SecondArticle>
-      <ThirdArticle>
-        <ActivityContainer>
+          </ItemList>
+          <BtnWrapper className="center">
+            <MoreBtn to="/offers?type=dining">자세히보기</MoreBtn>
+          </BtnWrapper>
+        </Wrapper>
+      </IndexOffers>
+      <IndexFacilities>
+        <FacilitiesContainer>
           <ImageSlider>
             <ImageContainer style={sliderStyle} ref={sliderRef}>
               {images.map((image, index) => (
@@ -384,59 +309,53 @@ const Home = () => {
               </NextButton>
             </ButtonContainer>
           </ImageSlider>
-          <ActivityInfo>
-            <Activity>부대시설</Activity>
-            <ActivityTitle>
-              <span>Retreat</span> Goorm Spa
-            </ActivityTitle>
-            <ActivityDescription>
-              리트릿 구름 스파는 한국 본연의 철학과 고차원적 감성을 더하여 일상 속 건강한 아름다움을 경험할 수 있는 휴식 공간입니다.
-            </ActivityDescription>
-            <FacilitiesDetailBtn to="/facilities">
-              <p>자세히보기</p>
-              <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <FacilitiesInfo>
+            <IndexDesc className="facilities">부대시설</IndexDesc>
+            <IndexTitle className="facilities">
+              Goorm <span>Facilities</span>
+            </IndexTitle>
+            <IndexDesc className="facilities">심신의 활력과 균형 잡힌 라이프 스타일을 추구하는 구름 호텔의 다양한 시설을 경험해 보세요.</IndexDesc>
+            <BtnWrapper>
+              <MoreBtn to="/facilities">자세히보기</MoreBtn>
+            </BtnWrapper>
+          </FacilitiesInfo>
+        </FacilitiesContainer>
+      </IndexFacilities>
+      <IndexLocation>
+        <Wrapper>
+          <IndexTitle>LOCATION</IndexTitle>
+          <IndexDesc>구름 호텔로 오시는 방법을 안내해드립니다.</IndexDesc>
+          <KakaoMap width="1180px" height="480px" />
+          <IndexDesc className="location">경기도 성남시 분당구 판교로 242 PDC A동 902호</IndexDesc>
+          <IndexDesc>
+            <PhoneNumber>
+              <ContactSvg height="48" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 0h48v48H0z" fill="none" />
+                <path d="M13.25 21.59c2.88 5.66 7.51 10.29 13.18 13.17l4.4-4.41c.55-.55 1.34-.71 2.03-.49C35.1 30.6 37.51 31 40 31c1.11 0 2 .89 2 2v7c0 1.11-.89 2-2 2C21.22 42 6 26.78 6 8c0-1.11.9-2 2-2h7c1.11 0 2 .89 2 2 0 2.49.4 4.9 1.14 7.14.22.69.06 1.48-.49 2.03l-4.4 4.42z" />
+              </ContactSvg>
+              <a href="tel:031-600-8586">031-600-8586</a>
+            </PhoneNumber>
+            <Mail>
+              <ContactSvg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                 <title />
-                <g data-name="Layer 2" id="Layer_2">
-                  <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
+                <g data-name="8-Email" id="_8-Email">
+                  <path d="M45,7H3a3,3,0,0,0-3,3V38a3,3,0,0,0,3,3H45a3,3,0,0,0,3-3V10A3,3,0,0,0,45,7Zm-.64,2L24,24.74,3.64,9ZM2,37.59V10.26L17.41,22.17ZM3.41,39,19,23.41l4.38,3.39a1,1,0,0,0,1.22,0L29,23.41,44.59,39ZM46,37.59,30.59,22.17,46,10.26Z" />
                 </g>
-              </DetailSvg>
-            </FacilitiesDetailBtn>
-          </ActivityInfo>
-        </ActivityContainer>
-      </ThirdArticle>
-      <FourthArticle>
-        <MapTitle>LOCATION</MapTitle>
-        <MapSubTitle>구름 호텔로 오시는 방법을 안내해드립니다.</MapSubTitle>
-        <KakaoMap width="1180px" height="480px" />
-        <MapAddress>경기도 성남시 분당구 판교로 242 PDC A동 902호</MapAddress>
-        <Contact>
-          <PhoneNumber>
-            <ContactSvg height="48" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg">
-              <path d="M0 0h48v48H0z" fill="none" />
-              <path d="M13.25 21.59c2.88 5.66 7.51 10.29 13.18 13.17l4.4-4.41c.55-.55 1.34-.71 2.03-.49C35.1 30.6 37.51 31 40 31c1.11 0 2 .89 2 2v7c0 1.11-.89 2-2 2C21.22 42 6 26.78 6 8c0-1.11.9-2 2-2h7c1.11 0 2 .89 2 2 0 2.49.4 4.9 1.14 7.14.22.69.06 1.48-.49 2.03l-4.4 4.42z" />
-            </ContactSvg>
-            <a href="tel:031-600-8586">031-600-8586</a>
-          </PhoneNumber>
-          <Mail>
-            <ContactSvg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+              </ContactSvg>
+              <a href="mailto:contact@goorm.io">contact@goorm.io</a>
+            </Mail>
+          </IndexDesc>
+          <MoreBtn to="/location">
+            <p>자세히보기</p>
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
               <title />
-              <g data-name="8-Email" id="_8-Email">
-                <path d="M45,7H3a3,3,0,0,0-3,3V38a3,3,0,0,0,3,3H45a3,3,0,0,0,3-3V10A3,3,0,0,0,45,7Zm-.64,2L24,24.74,3.64,9ZM2,37.59V10.26L17.41,22.17ZM3.41,39,19,23.41l4.38,3.39a1,1,0,0,0,1.22,0L29,23.41,44.59,39ZM46,37.59,30.59,22.17,46,10.26Z" />
+              <g data-name="Layer 2" id="Layer_2">
+                <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
               </g>
-            </ContactSvg>
-            <a href="mailto:contact@goorm.io">contact@goorm.io</a>
-          </Mail>
-        </Contact>
-        <DetailBtn to="/location">
-          <p>자세히보기</p>
-          <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <title />
-            <g data-name="Layer 2" id="Layer_2">
-              <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
-            </g>
-          </DetailSvg>
-        </DetailBtn>
-      </FourthArticle>
+            </svg>
+          </MoreBtn>
+        </Wrapper>
+      </IndexLocation>
     </>
   );
 };
