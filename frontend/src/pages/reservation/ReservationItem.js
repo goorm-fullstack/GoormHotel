@@ -149,6 +149,7 @@ const ReservationItem = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const location = useLocation();
   const { reservationData } = location.state;
+  console.log(reservationData);
 
   const productTypes = ['객실', '다이닝'];
   const productCategories = ['디럭스', '패밀리', '스위트', '풀 빌라'];
@@ -298,7 +299,7 @@ const ReservationItem = () => {
               <RoomItem>
               <img src={item} alt="ItemImg" />
                 <CartItemWrapper>
-                  <RoomItemTitle>상품명</RoomItemTitle>
+                  <RoomItemTitle>{selectedProduct.name}</RoomItemTitle>
                   <DetailWrapper>
                     <DetailTitle>
                       <p>상품 유형</p>

@@ -136,13 +136,13 @@ const Header = () => {
               <HeaderLink to="/facilities">부대시설</HeaderLink>
             </NavItem>
             <NavItem>
-              <HeaderLink to="/offers">스페셜오퍼</HeaderLink>
+              <HeaderLink to="/offers" state={{state: null}}>스페셜오퍼</HeaderLink>
             </NavItem>
             <NavItem>
               <HeaderLink to="/board/notice">고객지원</HeaderLink>
             </NavItem>
           </NavList>
-          <NavReserveBtn to="/offers">예약하기</NavReserveBtn>
+          <NavReserveBtn to="/offers" state={{state: null}}>예약하기</NavReserveBtn>
         </Gnb>
       </Container>
     </HeaderContainer>

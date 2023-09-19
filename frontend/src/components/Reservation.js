@@ -160,7 +160,7 @@ const OptionWrapper = styled.div`
   border-radius: 10px;
   border: 1px solid #ddd;
   transform: translate(-50%, 0);
-  display: none;
+  display: ${(props) => (props.open ? 'block' : 'none')};
 
   th,
   td {
@@ -232,13 +232,16 @@ const Reservation = () => {
   const [checkOutDate, setCheckOutDate] = useState('');
   const [checkInOpen, setCheckInOpen] = useState(false);
   const [checkOutOpen, setCheckOutOpen] = useState(false);
+  const [optionOpen, setOptionOpen] = useState(false);
   const [rooms, setRooms] = useState(1);
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
+  const [nights, setNights] = useState(0);
 
-  const roomOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const adultOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const childrenOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  useEffect(() => {
+    const nightsDifference = moment(checkOutValue).diff(moment(checkInValue), 'days');
+    setNights(nightsDifference);
+  }, [checkInValue, checkOutValue]);
 
   const reservationData = {
     checkInDate,
@@ -260,6 +263,12 @@ const Reservation = () => {
     setCheckOutDate(formattedTomorrow);
   }, []);
 
+  useEffect(() => {
+    const tomorrow = new Date(); 
+    tomorrow.setDate(tomorrow.getDate() + 1); 
+    setCheckOutValue(tomorrow); 
+  }, []);
+
   const formatAndSetDate = (date) => {
     const formattedDate = moment(date).format('YYYY.MM.DD');
     const dayOfWeek = moment(date).format('ddd');
@@ -275,6 +284,10 @@ const Reservation = () => {
     setCheckOutOpen(!checkOutOpen);
     setCheckInOpen(false);
   };
+
+  const handleOptionToggle = () => {
+    setOptionOpen(!optionOpen);
+  }
 
   const handleCheckInDateChange = (selectedDate) => {
     setCheckInValue(selectedDate);
@@ -297,6 +310,23 @@ const Reservation = () => {
     return moment(date).isBefore(moment(), 'day');
   };
 
+  const handleMinusClick = (stateUpdater, minValue) => {
+    stateUpdater(prevState => {
+      if (prevState > minValue) {
+        return prevState - 1;
+      }
+      return prevState;
+    });
+  };
+
+  const handlePlusClick = (stateUpdater) => {
+    stateUpdater(prevState => {
+      if (prevState < 9) {
+        return prevState + 1;
+      }
+      return prevState;
+    });
+  };
 
   return (
     <ReserveContainer>
@@ -330,7 +360,7 @@ const Reservation = () => {
             </CalendarWrapper>
           </CalendarContainer>
         </CheckIn>
-        <Stay>1박</Stay>
+        <Stay>{nights}박</Stay>
         <CheckOut>
           <p>체크아웃</p>
           <CheckOutBtn onClick={handleCheckOutToggle}>
@@ -356,7 +386,8 @@ const Reservation = () => {
                 tileDisabled={({ date }) => isDateDisabled(date)}
                 onChange={handleCheckOutDateChange}
                 value={checkOutValue}
-                formatDay={(locale, date) => moment(date).format('DD')}></StyledCalendar>
+                formatDay={(locale, date) => moment(date).format('DD')}>             
+              </StyledCalendar>
             </CheckOutCalendarWrapper>
           </CalendarContainer>
         </CheckOut>
@@ -365,27 +396,27 @@ const Reservation = () => {
         <div>
           <SelectWrapper>
             <SelectLabel>객실수</SelectLabel>
-            <button type="button">1</button>
+            <button type="button" onClick={handleOptionToggle}>{rooms}</button>
           </SelectWrapper>
           <SelectWrapper>
             <SelectLabel>성인</SelectLabel>
-            <button type="button">1</button>
+            <button type="button" onClick={handleOptionToggle}>{adults}</button>
           </SelectWrapper>
           <SelectWrapper>
             <SelectLabel>어린이</SelectLabel>
-            <button type="button">0</button>
+            <button type="button" onClick={handleOptionToggle}>{children}</button>
           </SelectWrapper>
-          <OptionWrapper>
+          <OptionWrapper open={optionOpen}>
             <table>
               <tr>
                 <th>객실수</th>
                 <td>
                   <div>
-                    <button type="button" className="btn-minus">
+                    <button type="button" className="btn-minus" onClick={() => handleMinusClick(setRooms, 1)}>
                       ─
                     </button>
-                    <input type="text" value="1" />
-                    <button type="button" className="btn-plus">
+                    <input type="text" value={rooms} readOnly/>
+                    <button type="button" className="btn-plus" onClick={() => handlePlusClick(setRooms)}>
                       ┼
                     </button>
                   </div>
@@ -395,11 +426,11 @@ const Reservation = () => {
                 <th>성인</th>
                 <td>
                   <div>
-                    <button type="button" className="btn-minus">
+                    <button type="button" className="btn-minus" onClick={() => handleMinusClick(setAdults, 1)}>
                       ─
                     </button>
-                    <input type="text" value="1" />
-                    <button type="button" className="btn-plus">
+                    <input type="text" value={adults} readOnly />
+                    <button type="button" className="btn-plus" onClick={() => handlePlusClick(setAdults)}>
                       ┼
                     </button>
                   </div>
@@ -409,11 +440,11 @@ const Reservation = () => {
                 <th>어린이</th>
                 <td>
                   <div>
-                    <button type="button" className="btn-minus">
+                    <button type="button" className="btn-minus" onClick={() => handleMinusClick(setChildren, 0)}>
                       ─
                     </button>
-                    <input type="text" value="0" />
-                    <button type="button" className="btn-plus">
+                    <input type="text" value={children} readOnly />
+                    <button type="button" className="btn-plus" onClick={() => handlePlusClick(setChildren)}>
                       ┼
                     </button>
                   </div>

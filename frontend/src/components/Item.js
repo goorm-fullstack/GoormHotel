@@ -92,13 +92,13 @@ const Price = styled.div`
   }
 `;
 
-const Item = () => {
+const Item = ({ selectedProduct }) => {
   return (
     <>
       <ProductInfo>
         <img src={item} alt="상품" />
         <Info>
-          <InfoTitle>상품명</InfoTitle>
+          <InfoTitle>{selectedProduct.name}</InfoTitle>
           <InfoWrapper>
             <InfoLeft>
               <p>상품 유형</p>
@@ -108,11 +108,11 @@ const Item = () => {
               <p>어린이 추가(1인)</p>
             </InfoLeft>
             <InfoRight>
-              <p>객실</p>
-              <p>디럭스</p>
-              <p>160,000원</p>
-              <p>80,000 원/최대 1인</p>
-              <p>40,000 원/최대 2인</p>
+              <p>{selectedProduct.type}</p>
+              <p>{selectedProduct.category}</p>
+              <p>{selectedProduct.price}원</p>
+              <p>{selectedProduct.adultPrice} 원/최대 1인</p>
+              <p>{selectedProduct.childPrice} 원/최대 2인</p>
             </InfoRight>
           </InfoWrapper>
         </Info>
