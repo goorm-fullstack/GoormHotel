@@ -40,7 +40,7 @@ public class RoomController {
 
     // 객실 수정
     @PutMapping("/room/{roomName}")
-    public ResponseEntity<ResponseRoomDto> updateRoom(@PathVariable String roomName, @Validated @ModelAttribute RequestRoomDto requestRoomDto, @RequestParam MultipartFile img) throws IOException {
+    public ResponseEntity<ResponseRoomDto> updateRoom(@PathVariable String roomName, @Validated @ModelAttribute RequestRoomDto requestRoomDto, @RequestParam(required = false) MultipartFile img) throws IOException {
 
         ResponseRoomDto responseRoomDto = roomService.modifyRoom(roomName, requestRoomDto, img).toResponseRoomDto();
 

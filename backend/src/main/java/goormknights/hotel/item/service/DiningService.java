@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Objects;
 
 @Service
 @Transactional
@@ -52,13 +51,15 @@ public class DiningService {
         Dining originDining = findByDiningName(diningName);
 
         RequestImageDto requestImageDto;
-        if(!Objects.requireNonNull(img.getOriginalFilename()).equals("")) {
+        if(img != null) {
             requestImageDto = imageService.convertToImageDto(img);
         } else {
             requestImageDto = RequestImageDto.builder()
                     .originFileName(originDining.getThumbnail().getOriginFileName())
                     .fileName(originDining.getThumbnail().getFileName())
                     .filePath(originDining.getThumbnail().getFilePath())
+                    .data(originDining.getThumbnail().getData())
+                    .mimeType(originDining.getThumbnail().getMimeType())
                     .build();
         }
 

@@ -40,7 +40,7 @@ public class DiningController {
 
     //다이닝 수정
     @PutMapping("/dining/{diningName}")
-    public ResponseEntity<ResponseDiningDto> updateDining(@PathVariable String diningName, @Validated @ModelAttribute RequestDiningDto requestDiningDto, @RequestParam MultipartFile img) throws IOException {
+    public ResponseEntity<ResponseDiningDto> updateDining(@PathVariable String diningName, @Validated @ModelAttribute RequestDiningDto requestDiningDto, @RequestParam(required = false) MultipartFile img) throws IOException {
 
         ResponseDiningDto responseDiningDto = diningService.modifyDining(diningName, requestDiningDto, img).toResponseDiningDto();
 

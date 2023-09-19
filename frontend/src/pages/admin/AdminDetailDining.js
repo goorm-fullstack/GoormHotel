@@ -43,10 +43,13 @@ const AdminDetailDining = () => {
   const [responseData, setResponseData] = useState({});
 
   useEffect(() => {
-    axios.get(`/dinings/${type}/${encodeURIComponent(name)}`).then((response) => {
-      setResponseData(response.data);
-      console.log('get 성공');
-    });
+    const getData = async () => {
+      await axios.get(`/dinings/${type}/${encodeURIComponent(name)}`).then((response) => {
+        setResponseData(response.data);
+        console.log('get 성공');
+      });
+    };
+    getData();
   }, [name, type]);
 
   // 이미지 업로드 input의 onChange(이미지 미리보기)
@@ -73,7 +76,10 @@ const AdminDetailDining = () => {
     e.preventDefault();
 
     const form = new FormData();
-    form.append('img', imgRef.current.files[0]);
+    console.log(imgRef.current.files);
+    if (imgRef.current && imgRef.current.files.length !== 0) {
+      form.append('img', imgRef.current.files[0]);
+    }
 
     Object.keys(responseData).forEach((key) => {
       form.append(key, responseData[key]);
@@ -92,6 +98,35 @@ const AdminDetailDining = () => {
     }
   };
 
+  const [imageUrls, setImageUrls] = useState([]);
+
+  useEffect(() => {
+    console.log(responseData);
+    // 단일 항목에 대한 이미지 URL을 가져옵니다
+    const fetchImageUrl = async () => {
+      try {
+        const response = await axios.get(`/image/${item.name}`, {
+          responseType: 'arraybuffer',
+        });
+
+        const blob = new Blob([response.data], { type: response.headers['content-type'] });
+        const imageUrl = URL.createObjectURL(blob);
+        setImageUrls([imageUrl]); // 이미지 URL을 상태에 설정
+        console.log('생성 성공');
+      } catch (error) {
+        console.error('이미지 URL을 가져오는 중 오류가 발생했습니다:', error);
+      }
+    };
+
+    const item = responseData;
+
+    if (Object.keys(responseData).length > 0) {
+      fetchImageUrl();
+    }
+  }, [responseData]);
+
+  console.log('imageUrls = ', imageUrls);
+
   return (
     <AdminLayout title="상품관리" subMenus={subMenus}>
       <Container>
@@ -102,8 +137,8 @@ const AdminDetailDining = () => {
               <WriteFormTr>
                 <BoldTd>썸네일</BoldTd>
                 <TableTd>
-                  <ImageInput type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required />
-                  {imgFile ? <Image src={imgFile} alt="프로필 이미지" /> : <Image src={responseData.thumnailPath} alt="프로필 이미지" />}
+                  <ImageInput type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
+                  {imgFile ? <Image src={imgFile} alt="프로필 이미지" /> : <Image src={imageUrls[0]} alt="프로필 이미지" />}
                 </TableTd>
               </WriteFormTr>
               <WriteFormTr>

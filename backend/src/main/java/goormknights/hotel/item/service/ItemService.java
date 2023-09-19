@@ -2,6 +2,7 @@ package goormknights.hotel.item.service;
 
 import goormknights.hotel.item.dto.response.ResponseDiningDto;
 import goormknights.hotel.item.dto.response.ResponseRoomDto;
+import goormknights.hotel.item.exception.NotExistItemException;
 import goormknights.hotel.item.model.Dining;
 import goormknights.hotel.item.model.Item;
 import goormknights.hotel.item.model.Room;
@@ -22,6 +23,10 @@ import java.util.List;
 public class ItemService {
 
     private final ItemRepository<Item> itemRepository;
+
+    public Item findItem(String itemName){
+        return itemRepository.findByName(itemName).orElseThrow(() -> new NotExistItemException("등록된 상품이 아닙니다."));
+    }
 
     /**
      * 전체 상품 조회(페이징)

@@ -168,6 +168,26 @@ const AdminItemList = () => {
       });
   };
 
+  const [imageUrls, setImageUrls] = useState([]);
+
+  useEffect(() => {
+    // Fetch image URLs for each item
+    const fetchImageUrls = async () => {
+      const urls = await Promise.all(
+        items.map(async (item) => {
+          const response = await axios.get(`/image/${item.name}`, {
+            responseType: 'arraybuffer', // Set responseType to arraybuffer
+          });
+          const blob = new Blob([response.data], { type: response.headers['content-type'] });
+          return URL.createObjectURL(blob);
+        })
+      );
+      setImageUrls(urls);
+    };
+
+    fetchImageUrls();
+  }, [items]);
+
   return (
     <AdminLayout title="상품관리" subMenus={subMenus}>
       <section>
@@ -233,7 +253,7 @@ const AdminItemList = () => {
                     </CheckBoxTd>
                     <TableTd>{idx + 1}</TableTd>
                     <TableTd>
-                      <Image src={item.thumbnailPath} />
+                      <Image src={imageUrls[idx] || ''} className="image" />
                     </TableTd>
                     <TableTd>
                       {item.type === 'dining' ? (

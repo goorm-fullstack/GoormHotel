@@ -73,7 +73,10 @@ const AdminDetailRoom = () => {
     e.preventDefault();
 
     const form = new FormData();
-    form.append('img', imgRef.current.files[0]);
+    console.log(imgRef.current.files);
+    if (imgRef.current && imgRef.current.files.length !== 0) {
+      form.append('img', imgRef.current.files[0]);
+    }
 
     Object.keys(responseData).forEach((key) => {
       form.append(key, responseData[key]);
@@ -92,6 +95,29 @@ const AdminDetailRoom = () => {
     }
   };
 
+  const [imageUrls, setImageUrls] = useState([]);
+
+  useEffect(() => {
+    // 단일 항목에 대한 이미지 URL을 가져옵니다
+    const fetchImageUrl = async () => {
+      try {
+        const response = await axios.get(`/image/${item.name}`, {
+          responseType: 'arraybuffer',
+        });
+
+        const blob = new Blob([response.data], { type: response.headers['content-type'] });
+        const imageUrl = URL.createObjectURL(blob);
+        setImageUrls([imageUrl]); // 이미지 URL을 상태에 설정
+      } catch (error) {
+        console.error('이미지 URL을 가져오는 중 오류가 발생했습니다:', error);
+      }
+    };
+
+    const item = responseData;
+
+    fetchImageUrl();
+  }, [responseData]); // 의존성 배열이 비어있으므로 한 번만 실행됩니다
+
   return (
     <AdminLayout title="상품관리" subMenus={subMenus}>
       <Container>
@@ -102,8 +128,8 @@ const AdminDetailRoom = () => {
               <WriteFormTr>
                 <BoldTd>썸네일</BoldTd>
                 <TableTd>
-                  <ImageInput type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required />
-                  {imgFile ? <Image src={imgFile} alt="프로필 이미지" /> : <Image src={responseData.thumnailPath} alt="프로필 이미지"></Image>}
+                  <ImageInput type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
+                  {imgFile ? <Image src={imgFile} alt="프로필 이미지" /> : <Image src={imageUrls[0] || ''} alt="프로필 이미지"></Image>}
                 </TableTd>
               </WriteFormTr>
               <WriteFormTr>

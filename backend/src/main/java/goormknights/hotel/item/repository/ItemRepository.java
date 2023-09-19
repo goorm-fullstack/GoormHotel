@@ -8,8 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ItemRepository<T extends Item> extends JpaRepository<T, Long> {
+
+    // 상품 이름으로 찾기
+    Optional<Item> findByName(String itemName);
 
     // 타입을 통한 카테고리화
     @Query("select i from Item i" + " where i.type = :type")

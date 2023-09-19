@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Objects;
 
 @Service
 @Transactional
@@ -50,13 +49,15 @@ public class RoomService {
         Room originRoom = findByRoomName(roomName);
 
         RequestImageDto requestImageDto;
-        if(!Objects.requireNonNull(img.getOriginalFilename()).equals("")) {
+        if(img != null) {
             requestImageDto = imageService.convertToImageDto(img);
         } else {
             requestImageDto = RequestImageDto.builder()
                     .originFileName(originRoom.getThumbnail().getOriginFileName())
                     .fileName(originRoom.getThumbnail().getFileName())
                     .filePath(originRoom.getThumbnail().getFilePath())
+                    .mimeType(originRoom.getThumbnail().getMimeType())
+                    .data(originRoom.getThumbnail().getData())
                     .build();
         }
 
