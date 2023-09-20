@@ -1,7 +1,7 @@
 import React from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { Container } from './AdminGiftCard';
-import WriteFormDining from '../../../components/WriteFormDining';
+import WriteFormDining from '../../components/WriteFormDining';
 
 const subMenus = [
   { name: '판매 상품 관리', link: '/admin/item/list/1' },

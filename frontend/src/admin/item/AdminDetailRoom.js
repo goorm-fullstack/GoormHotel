@@ -3,7 +3,7 @@ import AdminLayout from '../common/AdminLayout';
 import { Container } from './AdminGiftCard';
 import { Title, SubmitButton } from './AdminGiftCard';
 import { Form, BoldTd, Input, TableTr, Table, TableTd } from './AdminDetailGiftCard';
-import { Image } from '../../../components/WriteFormRoom';
+import { Image } from '../../components/WriteFormRoom';
 import { Select } from './AdminItemList';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
