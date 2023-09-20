@@ -16,4 +16,7 @@ public interface DiningRepository extends JpaRepository<Dining, Long> {
 
     // 페이징
     Page<Dining> findAllByType(String type, Pageable pageable);
+
+    // 해당 name이 존재하는지 여부 확인
+    boolean existsByName(String name);
 }

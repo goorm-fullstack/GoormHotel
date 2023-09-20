@@ -182,7 +182,7 @@ const BoardRead = () => {
               <td className="titlew">
                 <p className="title">제목입니다.</p>
                 {(() => {
-                  if (board != 'notice') {
+                  if (board !== 'notice') {
                     return (
                       <p>
                         <span>작성자명</span>

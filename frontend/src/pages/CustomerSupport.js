@@ -226,7 +226,7 @@ const CustomerSupport = () => {
                   <li>
                     <div className="thumbnail">
                       <a href={`/board/` + board + `/detail`}>
-                        <img src="" />
+                        <img src="#" />
                       </a>
                     </div>
                     <p className="title">

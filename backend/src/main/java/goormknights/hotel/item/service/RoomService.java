@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @Transactional
@@ -83,12 +84,28 @@ public class RoomService {
 
     /**
      * 객실 전체 조회(페이징)
-     * @param type - 1차 카테고리(객실 or 다이닝)
+     * @param pageable - 페이징
      * @return 페이징 처리된 전체 객실 목록
-     * pathUrl에 param으로 size(목록 갯수)와 page(현재 페이지)값을 넣을 수 있다
      */
-    public Page<ResponseRoomDto> findAllByType(String type, Pageable pageable){
-        Page<Room> allByType = roomRepository.findAllByType(type, pageable);
-        return allByType.map(Room::toResponseRoomDto);
+    public Page<Room> findAll(Pageable pageable){
+        return roomRepository.findAll(pageable);
+    }
+
+    /**
+     * 페이징된 객실 엔티티 리스트를 Dto로 변환
+     * @param roomPage - 페이징된 엔티티 리스트
+     * @return Dto로 바꾼다
+     */
+    public List<ResponseRoomDto> toResponseDtoList(Page<Room> roomPage){
+        return roomPage.map(Room::toResponseRoomDto).getContent();
+    }
+
+    /**
+     * 상품 이름 중복 체크
+     * @param roomName - 객실 상품 이름
+     * @return 중복일시 true, 아닐시 false
+     */
+    public boolean existsByName(String roomName){
+        return roomRepository.existsByName(roomName);
     }
 }

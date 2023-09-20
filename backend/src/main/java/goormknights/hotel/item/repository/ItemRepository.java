@@ -17,12 +17,10 @@ public interface ItemRepository<T extends Item> extends JpaRepository<T, Long> {
     Optional<Item> findByName(String itemName);
 
     // 타입을 통한 카테고리화
-    @Query("select i from Item i" + " where i.type = :type")
-    Page<Item> findAllByType(@Param("type") String type, Pageable pageable);
+    Page<Item> findAllByType(String type, Pageable pageable);
 
     // 세부타입을 통한 카테고리화
-    @Query("select i from Item i" + " where i.typeDetail = :typeDetail")
-    Page<Item> findAllByTypeDetail(@Param("typeDetail") String typeDetail, Pageable pageable);
+    Page<Item> findAllByTypeDetail(String typeDetail, Pageable pageable);
 
     // 검색 기능
     @Query("select i from Item i" + " where i.name like %:keyword%")
