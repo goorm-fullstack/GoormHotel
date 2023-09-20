@@ -66,10 +66,14 @@ const AdminHeader = () => {
             <Link to="/admin/member">회원 관리</Link>
           </li>
           <li>
+<<<<<<<< HEAD:frontend/src/pages/admin/common/AdminHeader.js
             <Link to="/admin/item/list/1">상품 관리</Link>
+========
+            <Link to="/admin/item/list">상품 관리</Link>
+>>>>>>>> 543385a35ddbdd40325cfd07439fc2f62d6f6311:frontend/src/admin/common/AdminHeader.js
           </li>
           <li>
-            <Link>예약 관리</Link>
+            <Link to="/admin/reservation">예약 관리</Link>
           </li>
           <li>
             <Link to="/admin/board">게시판 관리</Link>

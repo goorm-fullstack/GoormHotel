@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import Header from '../components/layout/Header';
 import { styled } from 'styled-components';
 import Slide from '../components/Slide';
 import Reservation from '../components/Reservation';
@@ -21,9 +20,6 @@ const images = [spaImg, dining01, Deluxe];
 const FirstArticle = styled.article`
   width: 100%;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   position: relative;
 `;
 
@@ -295,7 +291,6 @@ const Home = () => {
 
   return (
     <>
-      <Header backgroundColor="rgba(51, 51, 51, 0.8)" />
       <FirstArticle>
         <Slide />
         <Reservation />
@@ -396,7 +391,7 @@ const Home = () => {
             <ActivityDescription>
               리트릿 구름 스파는 한국 본연의 철학과 고차원적 감성을 더하여 일상 속 건강한 아름다움을 경험할 수 있는 휴식 공간입니다.
             </ActivityDescription>
-            <FacilitiesDetailBtn to="/">
+            <FacilitiesDetailBtn to="/facilities">
               <p>자세히보기</p>
               <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                 <title />

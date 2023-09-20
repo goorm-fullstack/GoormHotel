@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import closeImg from '../images/icon/ico_close.png';
+import closeImg from '../../images/icon/ico_close.png';
 import getChatRoomInfo from '../../utils/chat/client';
 
 const ChatWindow = styled.div`

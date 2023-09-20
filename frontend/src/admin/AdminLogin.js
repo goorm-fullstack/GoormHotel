@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import adminLogo from '../../images/common/logo_admin.png';
+import adminLogo from '../images/common/logo_admin.png';
 import { Link } from 'react-router-dom';
 
 const Header = styled.div`
   width: 100%;
   height: 97px;
-  background-color: #21201E;
+  background-color: #21201e;
 `;
 
 const HeaderLink = styled(Link)`
-  img{
+  img {
     margin-top: 30px;
     margin-left: 40px;
   }
@@ -34,7 +34,7 @@ const Input = styled.input`
   width: 510px;
   height: 60px;
   color: #888888;
-  border: 1px solid #DDDDDD;
+  border: 1px solid #dddddd;
   padding: 15px 0 15px 20px;
   outline: none;
 `;
@@ -45,10 +45,10 @@ const PwInput = styled(Input)`
 
 const Button = styled.button`
   width: 100%;
-  background-color: #95846E;
+  background-color: #95846e;
   height: 60px;
   text-align: center;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-top: 20px;
 `;
 
@@ -64,14 +64,14 @@ const RememberBtn = styled.button`
   input {
     width: 16px;
     height: 16px;
-    border: 1px solid #DDDDDD;
+    border: 1px solid #dddddd;
     margin-right: 10px;
   }
 `;
 
 const AdminLogin = () => {
-  const [adminId, setAdminId] = useState("");
-  const [adminPassword, setAdminPassword] = useState("");
+  const [adminId, setAdminId] = useState('');
+  const [adminPassword, setAdminPassword] = useState('');
   const [rememberId, setRememberId] = useState(false);
 
   const handleRememberIdChange = () => {
@@ -96,17 +96,8 @@ const AdminLogin = () => {
       <Wrapper>
         <Title>관리자 로그인</Title>
         <form>
-          <Input 
-            placeholder="아이디" 
-            type="text" 
-            value={adminId} 
-            onChange={handleIdChange}
-          />
-          <PwInput 
-            placeholder="비밀번호" 
-            type="password" 
-            value={adminPassword} 
-            onChange={handlePwChange}/>
+          <Input placeholder="아이디" type="text" value={adminId} onChange={handleIdChange} />
+          <PwInput placeholder="비밀번호" type="password" value={adminPassword} onChange={handlePwChange} />
           <Button>로그인</Button>
         </form>
         <RememberBtn>

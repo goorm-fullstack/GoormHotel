@@ -1,5 +1,5 @@
 import React from 'react';
-import AdminLayout from './AdminLayout';
+import AdminLayout from '../common/AdminLayout';
 import { Container } from './AdminGiftCard';
 import WriteFormDining from '../../../components/WriteFormDining';
 

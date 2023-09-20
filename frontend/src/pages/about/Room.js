@@ -1,10 +1,9 @@
 import React from 'react';
-import Header from '../../components/layout/Header';
 import { styled } from 'styled-components';
-import Deluxe from '../images/room/Deluxe.jpg';
-import Family from '../images/room/Family.jpg';
-import Suite from '../images/room/Suite.jpg';
-import Villa from '../images/room/Villa.jpg';
+import Deluxe from '../../images/room/Deluxe.jpg';
+import Family from '../../images/room/Family.jpg';
+import Suite from '../../images/room/Suite.jpg';
+import Villa from '../../images/room/Villa.jpg';
 import { commonContainerStyle, commonTitleStyle } from '../../components/common/commonStyles';
 
 export const Container = styled.div`
@@ -86,7 +85,6 @@ export const Location = styled.p`
 const Room = () => {
   return (
     <>
-      <Header />
       <Container>
         <Title>객실</Title>
         <TitleDescription>환상적인 서울 도심의 파노라믹뷰와 모던한 인테리어의 객실은 최상의 휴식을 제공합니다.</TitleDescription>

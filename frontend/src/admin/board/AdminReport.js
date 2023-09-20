@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import AdminLayout from '../../../pages/admin/common/AdminLayout';
 import {
   Container,
   Title,
@@ -13,10 +16,7 @@ import {
   TableCell,
   TableCheckbox,
   Num,
-} from '../member/AdminMember';
-import AdminLayout from '../common/AdminLayout';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+} from '../../../pages/admin/member/AdminMember';
 
 const LinkStyle = styled(Link)`
   &:hover {

@@ -1,10 +1,9 @@
 import React from 'react';
 import { TitleDescription, Item, List, Img, Info, Name, Description, Detail, DetailInfo, DetailTitle, Location } from './Room';
-import Header from '../../components/layout/Header';
-import Bakery from '../images/dining/Bakery.jpg';
-import Bar from '../images/dining/Bar.jpg';
-import Restaurant from '../images/dining/Restaurant.jpg';
-import RoomService from '../images/dining/RoomService.jpg';
+import Bakery from '../../images/dining/Bakery.jpg';
+import Bar from '../../images/dining/Bar.jpg';
+import Restaurant from '../../images/dining/Restaurant.jpg';
+import RoomService from '../../images/dining/RoomService.jpg';
 import { styled } from 'styled-components';
 import { commonContainerStyle, commonTitleStyle } from '../../components/common/commonStyles';
 
@@ -25,7 +24,6 @@ const DiningDetail = styled(Detail)`
 const Dining = () => {
   return (
     <>
-      <Header />
       <Container>
         <Title>다이닝</Title>
         <TitleDescription>탁트인 도심의 전경을 바라보며 세계 최고 수준의 셰프들이 직접 선보이는 다양한 요리를 즐기실 수 있습니다.</TitleDescription>

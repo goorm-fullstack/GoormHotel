@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Header from '../../components/layout/Header';
 import { Left, Right, Wrapper } from './ReservationPage';
 import { styled } from 'styled-components';
-import item from '../images/item/item1.jpg';
+import item from '../../images/item/item1.jpg';
 import { commonContainerStyle, commonTitleStyle, commonSubTitleStyle } from '../../components/common/commonStyles';
-import { ReactComponent as Cart } from '../images/icon/ico_cart.svg';
+import { ReactComponent as Cart } from '../../images/icon/ico_cart.svg';
+import { Link, useLocation } from 'react-router-dom';
 
 const Container = styled.div`
   ${commonContainerStyle}
@@ -147,8 +147,9 @@ const NoItemText = styled.span`
 
 const ReservationItem = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
-
-  console.log(selectedProduct);
+  const location = useLocation();
+  const { reservationData } = location.state;
+  console.log(reservationData);
 
   const productTypes = ['객실', '다이닝'];
   const productCategories = ['디럭스', '패밀리', '스위트', '풀 빌라'];
@@ -187,7 +188,6 @@ const ReservationItem = () => {
 
   return (
     <div>
-      <Header />
       <Container>
         <Title>예약하기</Title>
         <Wrapper>
@@ -299,7 +299,7 @@ const ReservationItem = () => {
                 <RoomItem>
                   <img src={item} alt="ItemImg" />
                   <CartItemWrapper>
-                    <RoomItemTitle>상품명</RoomItemTitle>
+                    <RoomItemTitle>{selectedProduct.name}</RoomItemTitle>
                     <DetailWrapper>
                       <DetailTitle>
                         <p>상품 유형</p>
@@ -319,7 +319,9 @@ const ReservationItem = () => {
                     <ReservationDeleteBtn onClick={handleDeleteClick}>삭제</ReservationDeleteBtn>
                   </CartItemWrapper>
                 </RoomItem>
-                <InfoBtn>예약 정보 입력하기</InfoBtn>
+                <Link to="/reservation" state={{ reservationData: reservationData, selectedProduct: selectedProduct }}>
+                  <InfoBtn>예약 정보 입력하기</InfoBtn>
+                </Link>
               </>
             )}
             {!selectedProduct && (

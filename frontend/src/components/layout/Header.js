@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { Link } from 'react-router-dom';
-import logo from '../images/common/logo.png';
+import { Link, useLocation } from 'react-router-dom';
+import logo from '../../images/common/logo.png';
 
 const HeaderContainer = styled.div`
   width: 100%;
@@ -14,7 +14,7 @@ const HeaderContainer = styled.div`
 const Container = styled.header`
   width: 100%;
   height: 120px;
-  background-color: ${(props) => props.$background || props.theme.colors.charcoal};
+  background-color: ${(props) => (props.$nowLocation == '/' ? 'rgba(51,51,51,0.8)' : props.theme.colors.charcoal)};
   padding: 0 40px;
   color: white;
 `;
@@ -31,7 +31,7 @@ const TopInfoList = styled.ul`
 
 const TopInfoItem = styled.li`
   font-size: 12px;
-  margin-left: 12px;
+  margin-left: 15px;
   color: rgba(255, 255, 255, 0.7);
 
   &:hover {
@@ -47,13 +47,13 @@ const Gnb = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 1180px;
 `;
 
 const NavList = styled.ul`
   display: flex;
   flex: 1;
   margin-left: 45px;
-  min-width: 600px;
 `;
 
 const NavItem = styled.li`
@@ -70,14 +70,20 @@ const NavItem = styled.li`
 `;
 
 const NavReserveBtn = styled(Link)`
-  padding: 12px 27px;
-  background-color: #454545;
+  height: 42px;
+  line-height: 38px;
+  width: 140px;
   color: white;
-  background-color: #95846e;
+  background-color: transparent;
   white-space: nowrap;
+  text-align: center;
+  border: 1px solid #fff;
+  font-size: 15px;
 
   &:hover {
-    background-color: #8a7057;
+    background-color: #9c836a;
+    border-color: #9c836a;
+    color: #fff;
   }
 `;
 
@@ -85,20 +91,21 @@ const LogoImg = styled.img`
   min-width: 190px;
 `;
 
-const Header = ({ backgroundColor }) => {
+const Header = () => {
+  const location = useLocation().pathname;
   return (
     <HeaderContainer>
-      <Container $background={backgroundColor}>
+      <Container $nowLocation={location}>
         <TopInfo>
           <TopInfoList>
-            <TopInfoItem>
-              <HeaderLink to="/">예약확인</HeaderLink>
-            </TopInfoItem>
             <TopInfoItem>
               <HeaderLink to="/login">로그인</HeaderLink>
             </TopInfoItem>
             <TopInfoItem>
               <HeaderLink to="/signup">회원가입</HeaderLink>
+            </TopInfoItem>
+            <TopInfoItem>
+              <HeaderLink to="/login">예약 확인</HeaderLink>
             </TopInfoItem>
             <TopInfoItem>
               <HeaderLink to="/membership">멤버십</HeaderLink>
@@ -129,13 +136,13 @@ const Header = ({ backgroundColor }) => {
               <HeaderLink to="/facilities">부대시설</HeaderLink>
             </NavItem>
             <NavItem>
-              <HeaderLink to="/reservationItem">스페셜오퍼</HeaderLink>
+              <HeaderLink to="/offers" state={{state: null}}>스페셜오퍼</HeaderLink>
             </NavItem>
             <NavItem>
               <HeaderLink to="/board/notice">고객지원</HeaderLink>
             </NavItem>
           </NavList>
-          <NavReserveBtn to="/reservationItem">예약하기</NavReserveBtn>
+          <NavReserveBtn to="/offers" state={{state: null}}>예약하기</NavReserveBtn>
         </Gnb>
       </Container>
     </HeaderContainer>

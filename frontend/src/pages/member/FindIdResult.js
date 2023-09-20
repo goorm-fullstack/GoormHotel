@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../../components/layout/Header';
 import { styled } from 'styled-components';
 
 const ResultBox = styled.div`
@@ -83,7 +82,6 @@ const FindIdResultButton = styled(LoginButton)`
 const FindIdResult = () => {
   return (
     <>
-      <Header />
       <ResultBox>
         <Title>아이디 찾기</Title>
         <ResultIdBox>

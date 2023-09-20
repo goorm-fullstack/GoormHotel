@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../../components/layout/Header';
 import { styled } from 'styled-components';
 import moment from 'moment';
 import { StyledCalendar } from '../../components/Reservation';
-import Product from '../../components/Product';
+import Item from '../../components/Item';
 import { commonContainerStyle, commonTitleStyle, commonSubTitleStyle } from '../../components/common/commonStyles';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Container = styled.div`
   ${commonContainerStyle}
@@ -210,27 +211,32 @@ const RemoveButton = styled.button`
 const ReservationPage = () => {
   const [checkInValue, setCheckInValue] = useState(new Date());
   const [checkOutValue, setCheckOutValue] = useState(new Date());
-  const [checkInDate, setCheckInDate] = useState('');
-  const [checkOutDate, setCheckOutDate] = useState('');
   const [checkInOpen, setCheckInOpen] = useState(false);
   const [checkOutOpen, setCheckOutOpen] = useState(false);
-  const [rooms, setRooms] = useState(1);
-  const [adults, setAdults] = useState(1);
-  const [children, setChildren] = useState(0);
   const [giftCardNumber, setGiftCardNumber] = useState('');
+  const [memberData, setMemberData] = useState(null);
   // const [userLoggedIn, setUserLoggedIn] = useState(true);
   const userLoggedIn = false;
   const [selectedOption, setSelectedOption] = useState('');
+  const location = useLocation();
+  const { reservationData, selectedProduct } = location.state;
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
+    checkIn: reservationData?.checkInDate || '',
+    checkOut: reservationData?.checkOutDate || '',
+    count: reservationData?.rooms || 1,
+    adult: reservationData?.adults || 1,
+    children: reservationData?.children || 0,
     name: '',
     phone: '',
     email: '',
     request: '',
   });
 
-  const roomOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const adultOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const childrenOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const roomOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const adultOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const childrenOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   const [coupons, setCoupons] = useState([
     {
       name: '추석 맞이 특가 이벤트: 객실 금액 100,000원 할인 상품권',
@@ -258,9 +264,14 @@ const ReservationPage = () => {
     const formattedToday = formatAndSetDate(today);
     const formattedTomorrow = formatAndSetDate(tomorrow);
 
-    //렌더링 됐을 때 현재 날짜를 받아오기 위해서
-    setCheckInDate(formattedToday);
-    setCheckOutDate(formattedTomorrow);
+    //reservationData가 없을 경우에는 실시간으로 오늘 내일 날짜를 부여
+    if (!reservationData) {
+      setFormData((prevData) => ({
+        ...prevData,
+        checkIn: formattedToday,
+        checkOut: formattedTomorrow,
+      }));
+    }
   }, []);
 
   const formatAndSetDate = (date) => {
@@ -284,7 +295,12 @@ const ReservationPage = () => {
     setCheckInOpen(false);
     const formattedDate = moment(selectedDate).format('YYYY.MM.DD');
     const dayOfWeek = moment(selectedDate).format('ddd');
-    setCheckInDate(`${formattedDate} (${dayOfWeek})`);
+    const newCheckInDate = `${formattedDate} (${dayOfWeek})`;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      checkIn: newCheckInDate,
+    }));
   };
 
   const handleCheckOutDateChange = (selectedDate) => {
@@ -292,7 +308,12 @@ const ReservationPage = () => {
     setCheckOutOpen(false);
     const formattedDate = moment(selectedDate).format('YYYY.MM.DD');
     const dayOfWeek = moment(selectedDate).format('ddd');
-    setCheckOutDate(`${formattedDate} (${dayOfWeek})`);
+    const newCheckOutDate = `${formattedDate} (${dayOfWeek})`;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      checkOut: newCheckOutDate,
+    }));
   };
 
   const isDateDisabled = (date) => {
@@ -314,9 +335,33 @@ const ReservationPage = () => {
     setCoupons(updatedCoupons);
   };
 
+  //member데이터를 불러오는 로직
+  useEffect(() => {
+    const fetchMember = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8080/member');
+        setMemberData(response.data);
+      } catch (error) {
+        console.error('데이터를 불러오지 못했습니다.', error);
+      }
+    };
+
+    fetchMember();
+  }, []);
+
+  //예약을 저장하는 함수
+  const handleReservation = async () => {
+    try {
+      await axios.post(`http://127.0.0.1:8080/reservation/save?memberId=1`, formData);
+
+      navigate('/');
+    } catch (error) {
+      console.error('예약 요청 실패', error);
+    }
+  };
+
   return (
     <div>
-      <Header />
       <Container>
         <Title>예약하기</Title>
         <Wrapper>
@@ -327,7 +372,7 @@ const ReservationPage = () => {
                 <CheckIn>
                   <CheckTitle>체크인</CheckTitle>
                   <CheckBtn onClick={handleCheckInToggle}>
-                    <p>{checkInDate}</p>
+                    <p>{formData.checkIn}</p>
                     <svg viewBox="0 0 32 32" width="18" height="18">
                       <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
                         <path d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z" />
@@ -348,7 +393,7 @@ const ReservationPage = () => {
                       <StyledCalendar
                         tileDisabled={({ date }) => isDateDisabled(date)}
                         onChange={handleCheckInDateChange}
-                        value={checkInValue}
+                        value={reservationData ? reservationData.checkInDate : checkInValue}
                         formatDay={(locale, date) => moment(date).format('DD')}></StyledCalendar>
                     </CalendarWrapper>
                   </CalendarContainer>
@@ -356,7 +401,7 @@ const ReservationPage = () => {
                 <CheckOut>
                   <CheckTitle>체크아웃</CheckTitle>
                   <CheckBtn onClick={handleCheckOutToggle}>
-                    <p>{checkOutDate}</p>
+                    <p>{formData.checkOut}</p>
                     <svg viewBox="0 0 32 32" width="18" height="18">
                       <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
                         <path d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z" />
@@ -377,7 +422,7 @@ const ReservationPage = () => {
                       <StyledCalendar
                         tileDisabled={({ date }) => isDateDisabled(date)}
                         onChange={handleCheckOutDateChange}
-                        value={checkOutValue}
+                        value={reservationData ? reservationData.checkOutDate : checkOutValue}
                         formatDay={(locale, date) => moment(date).format('DD')}></StyledCalendar>
                     </CalendarWrapper>
                   </CalendarContainer>
@@ -386,7 +431,7 @@ const ReservationPage = () => {
               <SelectContainer>
                 <SelectWrapper>
                   <SelectLabel>상품수량</SelectLabel>
-                  <Select value={rooms} onChange={(e) => setRooms(parseInt(e.target.value))}>
+                  <Select value={formData.count} onChange={(e) => setFormData({ ...formData, count: parseInt(e.target.value) })}>
                     {roomOptions.map((option) => (
                       <option key={option} value={option}>
                         {option}
@@ -396,7 +441,7 @@ const ReservationPage = () => {
                 </SelectWrapper>
                 <SelectWrapper>
                   <SelectLabel>어른</SelectLabel>
-                  <Select value={adults} onChange={(e) => setAdults(parseInt(e.target.value))}>
+                  <Select value={formData.adult} onChange={(e) => setFormData({ ...formData, adult: parseInt(e.target.value) })}>
                     {adultOptions.map((option) => (
                       <option key={option} value={option}>
                         {option}
@@ -406,7 +451,7 @@ const ReservationPage = () => {
                 </SelectWrapper>
                 <SelectWrapper>
                   <SelectLabel>어린이</SelectLabel>
-                  <Select value={children} onChange={(e) => setChildren(parseInt(e.target.value))}>
+                  <Select value={formData.children} onChange={(e) => setFormData({ ...formData, children: parseInt(e.target.value) })}>
                     {childrenOptions.map((option) => (
                       <option key={option} value={option}>
                         {option}
@@ -420,10 +465,10 @@ const ReservationPage = () => {
             <Section>
               <SubTitle>예약자 정보</SubTitle>
               <InputWrapper>
-                <NameInput placeholder="예약자명" type="text" value={formData.name} onChange={(e) => handleChangeData('name', e)} />
-                <PhoneInput placeholder="전화번호" type="text" value={formData.phone} onChange={(e) => handleChangeData('phone', e)} />
+                <NameInput placeholder="예약자명" type="text" value={formData.name} onChange={(e) => handleChangeData('name', e)} required />
+                <PhoneInput placeholder="전화번호" type="text" value={formData.phone} onChange={(e) => handleChangeData('phone', e)} required />
               </InputWrapper>
-              <Input placeholder="이메일" type="text" value={formData.email} onChange={(e) => handleChangeData('email', e)} />
+              <Input placeholder="이메일" type="text" value={formData.email} onChange={(e) => handleChangeData('email', e)} required />
               <Input placeholder="요청사항" type="text" value={formData.request} onChange={(e) => handleChangeData('request', e)} />
             </Section>
 
@@ -466,8 +511,8 @@ const ReservationPage = () => {
 
           <Right>
             <SubTitle>상품 개요</SubTitle>
-            <Product />
-            <PaymentBtn>예약 및 결제하기</PaymentBtn>
+            <Item selectedProduct={selectedProduct} />
+            <PaymentBtn onClick={handleReservation}>예약 및 결제하기</PaymentBtn>
           </Right>
         </Wrapper>
       </Container>

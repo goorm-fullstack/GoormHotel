@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../../components/Header';
 import { styled } from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import { commonContainerStyle } from '../../components/common/commonStyles';
@@ -66,7 +65,6 @@ const OuterDiv = styled.div`
 const Privacy = () => {
   return (
     <>
-      <Header />
       <AboutHeader>
         <AboutHeaderTitle>약관안내</AboutHeaderTitle>
         <LinkWrapper>

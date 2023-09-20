@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../../components/layout/Header';
 import { styled } from 'styled-components';
 import { commonContainerStyle } from '../../components/common/commonStyles';
 
@@ -121,7 +120,6 @@ const Auth = styled.div`
 const FindAccount = () => {
   return (
     <>
-      <Header />
       <Container>
         <Title>아이디/비밀번호 찾기</Title>
         <ProcessBox>

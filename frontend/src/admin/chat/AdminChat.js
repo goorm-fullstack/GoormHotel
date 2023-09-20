@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AdminLayout from './../AdminLayout';
+import AdminLayout from '../common/AdminLayout';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 

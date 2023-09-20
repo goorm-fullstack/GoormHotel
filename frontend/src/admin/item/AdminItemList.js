@@ -5,7 +5,7 @@ import { Title, GiftCardTable, TableTr, TableTh, TableListTr, TableTd, DetailLin
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { TableCheckbox } from '../member/AdminMember';
-import { PageParam } from '../board/AdminReport';
+import { PageParam } from '../../../admin/board/board/AdminReport';
 import { NavLink } from 'react-router-dom';
 
 const TotalItem = styled.p`

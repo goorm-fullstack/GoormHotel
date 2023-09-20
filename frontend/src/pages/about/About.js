@@ -1,11 +1,11 @@
 import React from 'react';
-import diningImg from '../images/about/dining.jpg';
-import facilitiesImg from '../images/about/facilities.jpg';
-import membershipImg from '../images/about/membership.jpg';
-import roomImg from '../images/about/room.jpg';
-import Header from '../../components/layout/Header';
+import diningImg from '../../images/about/dining.jpg';
+import facilitiesImg from '../../images/about/facilities.jpg';
+import membershipImg from '../../images/about/membership.jpg';
+import roomImg from '../../images/about/room.jpg';
+
 import { styled } from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { DetailBtn, DetailSvg } from '../Home';
 
 const AboutHeader = styled.div`
@@ -140,7 +140,6 @@ const DetailLink = styled(DetailBtn)`
 const About = () => {
   return (
     <>
-      <Header />
       <AboutHeader>
         <AboutHeaderTitle>구름호텔 소개</AboutHeaderTitle>
         <LinkWrapper>

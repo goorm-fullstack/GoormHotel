@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../../components/layout/Header';
 import { styled } from 'styled-components';
 
 const Text = styled.p`
@@ -90,7 +89,6 @@ const FindPwResultForm = styled.form`
 const FindPwResult = () => {
   return (
     <>
-      <Header backgroundColor="rgba(51, 51, 51, 0.8)" />
       <FindPwBox>
         <Title>비밀번호 찾기</Title>
         <ResetPwBox>

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import AdminLayout from '../common/AdminLayout';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import AdminLayout from '../../../pages/admin/common/AdminLayout';
 import {
   Container,
   Title,
@@ -14,9 +16,7 @@ import {
   TableCell,
   TableCheckbox,
   Num,
-} from '../member/AdminMember';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+} from '../../../pages/admin/member/AdminMember';
 
 const TableHeaderStyle = styled(TableHeader)`
   width: 20%;

@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../../components/layout/Header';
 import { styled } from 'styled-components';
 import { commonContainerStyle, commonTitleStyle } from '../../components/common/commonStyles';
 
@@ -70,7 +69,6 @@ const ReservationList = () => {
 
   return (
     <>
-      <Header />
       <Container>
         <Title>예약 목록</Title>
         <ReservationTable>

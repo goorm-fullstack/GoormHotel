@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { DetailBtn, DetailSvg } from '../../pages/Home';
 import { Link } from 'react-router-dom';
-import instagramImg from '../images/common/social_instagram.png';
-import youtubeImg from '../images/common/social_youtube.png';
-import owlImg from '../images/common/social_owl.png';
-import instagramImgHover from '../images/common/social_instagram_hover.png';
-import youtubeImgHover from '../images/common/social_youtube_hover.png';
-import owlImgHover from '../images/common/social_owl_hover.png';
+import instagramImg from '../../images/common/social_instagram.png';
+import youtubeImg from '../../images/common/social_youtube.png';
+import owlImg from '../../images/common/social_owl.png';
+import instagramImgHover from '../../images/common/social_instagram_hover.png';
+import youtubeImgHover from '../../images/common/social_youtube_hover.png';
+import owlImgHover from '../../images/common/social_owl_hover.png';
 
 const Container = styled.div`
   margin-top: 220px;

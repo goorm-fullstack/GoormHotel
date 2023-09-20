@@ -65,7 +65,7 @@ button {
   cursor: pointer;
 }
 
-a {
+a, abbr {
 	text-decoration: none;
 }
 

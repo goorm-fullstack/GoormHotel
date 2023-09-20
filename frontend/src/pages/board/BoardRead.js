@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../../components/Header';
 import { styled } from 'styled-components';
 import { NavLink, useLocation, useParams } from 'react-router-dom';
 import { commonContainerStyle } from '../../components/common/commonStyles';
@@ -148,7 +147,6 @@ const BoardRead = () => {
   const board = useParams().board;
   return (
     <>
-      <Header />
       <AboutHeader>
         <AboutHeaderTitle>고객지원</AboutHeaderTitle>
         <LinkWrapper>

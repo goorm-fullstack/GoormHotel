@@ -1,22 +1,22 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AdminLogin from './AdminLogin';
-import AdminMember from './AdminMember';
-import AdminMemberDetail from './AdminMemberDetail';
-import AdminManager from './AdminManager';
-import AdminComment from './AdminComment';
-import AdminReport from './AdminReport';
-import Reservation from './reservation/reservation';
-import ReservationDetail from './reservation/reservationDetail';
-import AdminGiftCard from './AdminGiftCard';
-import AdminDetailGiftCard from './AdminDetailGiftCard';
-import AdminItemList from './AdminItemList';
-import AdminWriteFormRoom from './AdminWriteFormRoom';
-import AdminWriteFormDining from './AdminWriteFormDining';
-import AdminDetailDining from './AdminDetailDining';
-import AdminDetailRoom from './AdminDetailRoom';
-import AdminBoard from './AdminBoard';
-import AdminDeleteComment from './AdminDeleteComment';
+import AdminMember from './member/AdminMember';
+import AdminMemberDetail from './member/AdminMemberDetail';
+import AdminManager from './member/AdminManager';
+import AdminComment from './board/AdminComment';
+import AdminReport from './board/AdminReport';
+import AdminReservation from './reservation/reservation';
+import AdminReservationDetail from './reservation/reservationDetail';
+import AdminGiftCard from './item/AdminGiftCard';
+import AdminDetailGiftCard from './item/AdminDetailGiftCard';
+import AdminItemList from './item/AdminItemList';
+import AdminWriteFormRoom from './item/AdminWriteFormRoom';
+import AdminWriteFormDining from './item/AdminWriteFormDining';
+import AdminDetailDining from './item/AdminDetailDining';
+import AdminDetailRoom from './item/AdminDetailRoom';
+import AdminBoard from './board/AdminBoard';
+import AdminDeleteComment from './board/AdminDeleteComment';
 import AdminChat from './chat/AdminChat';
 import AdminChatDetail from './chat/AdminChatDetail';
 import AdminMail from './chat/AdminMail';
@@ -25,8 +25,8 @@ const AdminApp = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/admin/reservation" element={<Reservation />}></Route>
-        <Route path="/admin/reservation/detail" element={<ReservationDetail />}></Route>
+        <Route path="/admin/reservation" element={<AdminReservation />}></Route>
+        <Route path="/admin/reservation/:reservationNumber" element={<AdminReservationDetail />}></Route>
         <Route path="/admin/login" element={<AdminLogin />}></Route>
         <Route path="/admin/member" element={<AdminMember />}></Route>
         <Route path="/admin/member/:memberId" element={<AdminMemberDetail />}></Route>

@@ -1,8 +1,7 @@
 import React from 'react';
-import Header from '../../components/layout/Header';
 import { Section, Left, Right, Wrapper } from './ReservationPage';
 import { styled } from 'styled-components';
-import Product from '../../components/Product';
+import Product from '../../components/Item';
 import { commonContainerStyle, commonTitleStyle, commonSubTitleStyle } from '../../components/common/commonStyles';
 
 const Container = styled.div`
@@ -77,7 +76,6 @@ const Payment = styled.div`
 const ReservationComplete = ({ title }) => {
   return (
     <>
-      <Header />
       <Container>
         <Title>{title}</Title>
         <Wrapper>

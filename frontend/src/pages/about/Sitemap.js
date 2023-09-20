@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../../components/layout/Header';
 import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { commonContainerStyle } from '../../components/common/commonStyles';
@@ -52,7 +51,6 @@ const SiteMapLink = styled(Link)`
 const Sitemap = () => {
   return (
     <>
-      <Header />
       <Container>
         <SiteMap>
           <Title>사이트맵</Title>

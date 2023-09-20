@@ -1,7 +1,7 @@
 import React from 'react';
 import item from '../images/item/item1.jpg';
 import { styled } from 'styled-components';
-import {commonSubTitleStyle } from '../components/common/commonStyles';
+import { commonSubTitleStyle } from './common/commonStyles';
 
 const SubTitle = styled.h2`
   ${commonSubTitleStyle}
@@ -12,18 +12,18 @@ const ProductInfo = styled.div`
   flex-direction: column;
   height: 467px;
   margin-bottom: 52px;
-  border: 1px solid #DDDDDD;
+  border: 1px solid #dddddd;
 `;
 
 const Info = styled.div`
-  background-color: ${props => props.theme.colors.lightGray};
+  background-color: ${(props) => props.theme.colors.lightGray};
   height: 100%;
   padding: 35px 46px 0 40px;
 `;
 
 const InfoTitle = styled.h1`
   font-size: 18px;
-  color: ${props => props.theme.colors.charcoal};
+  color: ${(props) => props.theme.colors.charcoal};
   margin-bottom: 30px;
   font-weight: bold;
 `;
@@ -77,7 +77,7 @@ const TotalPrice = styled.div`
   justify-content: space-between;
   align-items: center;
   font-size: 14px;
-  color: ${props => props.theme.colors.charcoal};
+  color: ${(props) => props.theme.colors.charcoal};
   margin-bottom: 15px;
 `;
 
@@ -92,13 +92,13 @@ const Price = styled.div`
   }
 `;
 
-const Product = () => {
+const Item = ({ selectedProduct }) => {
   return (
     <>
       <ProductInfo>
         <img src={item} alt="상품" />
         <Info>
-          <InfoTitle>상품명</InfoTitle>
+          <InfoTitle>{selectedProduct.name}</InfoTitle>
           <InfoWrapper>
             <InfoLeft>
               <p>상품 유형</p>
@@ -108,11 +108,11 @@ const Product = () => {
               <p>어린이 추가(1인)</p>
             </InfoLeft>
             <InfoRight>
-              <p>객실</p>
-              <p>디럭스</p>
-              <p>160,000원</p>
-              <p>80,000 원/최대 1인</p>
-              <p>40,000 원/최대 2인</p>
+              <p>{selectedProduct.type}</p>
+              <p>{selectedProduct.category}</p>
+              <p>{selectedProduct.price}원</p>
+              <p>{selectedProduct.adultPrice} 원/최대 1인</p>
+              <p>{selectedProduct.childPrice} 원/최대 2인</p>
             </InfoRight>
           </InfoWrapper>
         </Info>
@@ -130,10 +130,12 @@ const Product = () => {
       </PaymentInfo>
       <TotalPrice>
         <p>최종금액(VAT)포함</p>
-        <Price><div>300,000</div> 원</Price>
+        <Price>
+          <div>300,000</div> 원
+        </Price>
       </TotalPrice>
     </>
   );
 };
 
-export default Product;
+export default Item;

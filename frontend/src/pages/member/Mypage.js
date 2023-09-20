@@ -1,6 +1,5 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import Header from '../../components/layout/Header';
 import { commonContainerStyle, commonTitleStyle } from '../../components/common/commonStyles';
 
 const Container = styled.div`
@@ -163,7 +162,6 @@ const GuideText = styled.div`
 const Mypage = () => {
   return (
     <>
-      <Header backgroundColor="#21201E" />
       <Container>
         <Title>마이페이지</Title>
         <Contents>

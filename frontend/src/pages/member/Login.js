@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Header from '../../components/layout/Header';
 import { Link } from 'react-router-dom';
-import kakao from '../images/icon/ico_kakao.png';
-import naver from '../images/icon/ico_naver.png';
-import google from '../images/icon/ico_google.png';
+import kakao from '../../images/icon/ico_kakao.png';
+import naver from '../../images/icon/ico_naver.png';
+import google from '../../images/icon/ico_google.png';
 
 const Container = styled.div`
   width: 1180px;
@@ -182,7 +181,6 @@ const Login = () => {
 
   return (
     <>
-      <Header />
       <Container>
         <Title>로그인</Title>
         <Wrapper>

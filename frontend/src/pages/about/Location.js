@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../../components/Header';
 import { styled } from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import KakaoMap from '../../utils/KakaoMap';
@@ -32,7 +31,7 @@ const AboutHeaderTitle = styled.h1`
 
 const LinkWrapper = styled.div`
   margin-left: 130px;
-  
+
   & > a:not(:last-child) {
     margin-right: 40px;
   }
@@ -97,7 +96,6 @@ const TableDLDT = styled.dt`
 const Way = () => {
   return (
     <>
-      <Header />
       <AboutHeader>
         <AboutHeaderTitle>구름호텔 소개</AboutHeaderTitle>
         <LinkWrapper>

@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../../components/layout/Header';
 import { styled } from 'styled-components';
 
 const ImageBorder = styled.div`
@@ -133,7 +132,6 @@ const SvgIconGold = styled.svg`
 const Membership = () => {
   return (
     <>
-      <Header />
       <MembershipInfo>
         <Title>멤버십</Title>
         <MembershipBox>
