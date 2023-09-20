@@ -31,7 +31,6 @@ public class Room extends Item{
     public ResponseRoomDto toResponseRoomDto(){
         return ResponseRoomDto.builder()
                 .priceAdult(this.getPriceAdult())
-                .thumbnailPath(this.getThumbnail().getFilePath())
                 .spareChildren(this.getSpareChildren())
                 .spareAdult(this.getSpareAdult())
                 .type(this.getType())

@@ -20,11 +20,19 @@ public class RequestImageDto {
     @NotBlank
     private String filePath; // 서버의 이미지 경로
 
+    @NotBlank
+    private String mimeType; // 이미지 mimeType
+
+    @NotBlank
+    private byte[] data;
+
     @Builder(toBuilder = true)
-    public RequestImageDto(String originFileName, String fileName, String filePath) {
+    public RequestImageDto(String originFileName, String fileName, String filePath, String mimeType, @NotBlank byte[] data) {
         this.originFileName = originFileName;
         this.fileName = fileName;
         this.filePath = filePath;
+        this.mimeType = mimeType;
+        this.data = data;
     }
 
     // RequestImageDto 엔티티화
@@ -33,6 +41,8 @@ public class RequestImageDto {
                 .originFileName(originFileName)
                 .fileName(fileName)
                 .filePath(filePath)
+                .mimeType(mimeType)
+                .data(data)
                 .build();
     }
 }

@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ResponseDiningDto {
 
-    private String thumbnailPath; // 썸네일이미지
     private String name; // 상품명
     private int price; // 기본 비용
     private int priceAdult; // 어른 추가 비용
@@ -28,8 +27,7 @@ public class ResponseDiningDto {
     private String useTime; // 이용 시간(ex. 아침, 점심, 저녁)
 
     @Builder
-    public ResponseDiningDto(String thumbnailPath, String name, int price, int priceAdult, int priceChildren, int spare, int spareAdult, int spareChildren, String type, String typeDetail, String useTime) {
-        this.thumbnailPath = thumbnailPath;
+    public ResponseDiningDto(String name, int price, int priceAdult, int priceChildren, int spare, int spareAdult, int spareChildren, String type, String typeDetail, String useTime) {
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;
