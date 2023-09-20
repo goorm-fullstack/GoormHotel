@@ -3,18 +3,10 @@ import { styled } from 'styled-components';
 import moment from 'moment';
 import { StyledCalendar } from '../../components/Reservation';
 import Product from '../../components/Item';
-import { commonContainerStyle, commonTitleStyle, commonSubTitleStyle } from '../../components/common/commonStyles';
+import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
 
 const Container = styled.div`
   ${commonContainerStyle}
-`;
-
-const Title = styled.h1`
-  ${commonTitleStyle}
-`;
-
-const SubTitle = styled.h2`
-  ${commonSubTitleStyle}
 `;
 
 export const Wrapper = styled.div`
@@ -316,11 +308,11 @@ const ReservationPage = () => {
   return (
     <div>
       <Container>
-        <Title>예약하기</Title>
+        <PageTitle>예약하기</PageTitle>
         <Wrapper>
           <Left>
             <Section>
-              <SubTitle>예약 정보</SubTitle>
+              <PageTitle>예약 정보</PageTitle>
               <ReservationInfoDate>
                 <CheckIn>
                   <CheckTitle>체크인</CheckTitle>
@@ -416,7 +408,7 @@ const ReservationPage = () => {
             </Section>
 
             <Section>
-              <SubTitle>예약자 정보</SubTitle>
+              <PageTitle>예약자 정보</PageTitle>
               <InputWrapper>
                 <NameInput placeholder="예약자명" type="text" value={formData.name} onChange={(e) => handleChangeData('name', e)} />
                 <PhoneInput placeholder="전화번호" type="text" value={formData.phone} onChange={(e) => handleChangeData('phone', e)} />
@@ -426,7 +418,7 @@ const ReservationPage = () => {
             </Section>
 
             <Section>
-              <SubTitle>상품권 등록</SubTitle>
+              <PageTitle>상품권 등록</PageTitle>
               <CouponForm>
                 <CouponInput type="text" placeholder="상품권 번호 입력" value={giftCardNumber} onChange={handleCouponNumber} />
                 <CouponBtn type="submit">상품권 등록하기</CouponBtn>
@@ -445,7 +437,7 @@ const ReservationPage = () => {
             </Section>
 
             <Section>
-              <SubTitle>쿠폰 적용</SubTitle>
+              <PageTitle>쿠폰 적용</PageTitle>
               <CouponSelect value={selectedOption} onChange={handleChange} disabled={!userLoggedIn}>
                 {userLoggedIn ? (
                   <>
@@ -463,7 +455,7 @@ const ReservationPage = () => {
           </Left>
 
           <Right>
-            <SubTitle>상품 개요</SubTitle>
+            <PageTitle>상품 개요</PageTitle>
             <Product />
             <PaymentBtn>예약 및 결제하기</PaymentBtn>
           </Right>

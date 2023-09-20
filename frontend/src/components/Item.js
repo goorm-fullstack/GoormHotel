@@ -1,11 +1,7 @@
 import React from 'react';
 import item from '../images/item/item1.jpg';
 import { styled } from 'styled-components';
-import { commonSubTitleStyle } from './common/commonStyles';
-
-const SubTitle = styled.h2`
-  ${commonSubTitleStyle}
-`;
+import { PageTitle } from './common/commonStyles';
 
 const ProductInfo = styled.div`
   display: flex;
@@ -117,7 +113,7 @@ const Item = () => {
           </InfoWrapper>
         </Info>
       </ProductInfo>
-      <SubTitle>결제 정보</SubTitle>
+      <PageTitle>결제 정보</PageTitle>
       <PaymentInfo>
         <PaymentPrice>
           <p>총액</p>

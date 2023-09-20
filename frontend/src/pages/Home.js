@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { commonWrapperStyle, MoreBtn, BtnWrapper } from '../components/common/commonStyles';
-import { Link } from 'react-router-dom';
+import { commonWrapperStyle, MoreLink, BtnWrapper } from '../components/common/commonStyles';
 import Slide from '../components/Slide';
 import Reservation from '../components/Reservation';
 import spaImg from '../images/main/spa.jpg';
@@ -135,43 +134,36 @@ const FacilitiesInfo = styled.div`
   transform: translate(0, -50%);
 `;
 
-const Activity = styled.p`
-  color: ${(props) => props.theme.colors.graylight};
-  margin-bottom: 50px;
-`;
-
 const IndexLocation = styled.div`
   margin-top: 130px;
 `;
 
-const MapAddress = styled.p`
-  font-size: ${(props) => props.theme.font.sizem};
-  color: ${(props) => props.theme.colors.graylight};
-  margin-top: 40px;
+const MapAddress = styled.div`
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: white;
+  z-index: 10;
+  font-size: ${(props) => props.theme.font.sizexs};
+  padding: 20px 24px;
+  line-height: 1.6;
+  color: ${(props) => props.theme.colors.blacklight};
+
+  & > p {
+    margin-bottom: 10px;
+  }
 `;
 
-const Contact = styled.div`
+const ContactInfo = styled.div`
   display: flex;
-  font-size: ${(props) => props.theme.font.sizes};
-  color: ${(props) => props.theme.colors.graylight};
-  margin-top: 25px;
-  margin-bottom: 40px;
-`;
+  align-items: center;
 
-const ContactSvg = styled.svg`
-  fill: ${(props) => props.theme.colors.blacklight};
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-`;
-
-const PhoneNumber = styled.div`
-  display: flex;
-  margin-right: 25px;
-`;
-
-const Mail = styled.div`
-  display: flex;
+  svg {
+    fill: ${(props) => props.theme.colors.goldhover};
+    width: 16px;
+    height: 16px;
+    margin-right: 12px;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -208,6 +200,11 @@ const NextButton = styled(PrevButton)`
   img {
     filter: brightness(0);
   }
+`;
+
+const MapWrapper = styled.div`
+  position: relative;
+  margin-bottom: 60px;
 `;
 
 const Home = () => {
@@ -257,7 +254,7 @@ const Home = () => {
             </RoomItem>
           </ItemList>
           <BtnWrapper className="center">
-            <MoreBtn to="/offers?type=rooms">자세히보기</MoreBtn>
+            <MoreLink to="/offers?type=rooms">자세히보기</MoreLink>
           </BtnWrapper>
         </Wrapper>
         <Wrapper>
@@ -288,7 +285,7 @@ const Home = () => {
             </DiningItem>
           </ItemList>
           <BtnWrapper className="center">
-            <MoreBtn to="/offers?type=dining">자세히보기</MoreBtn>
+            <MoreLink to="/offers?type=dining">자세히보기</MoreLink>
           </BtnWrapper>
         </Wrapper>
       </IndexOffers>
@@ -316,7 +313,7 @@ const Home = () => {
             </IndexTitle>
             <IndexDesc className="facilities">심신의 활력과 균형 잡힌 라이프 스타일을 추구하는 구름 호텔의 다양한 시설을 경험해 보세요.</IndexDesc>
             <BtnWrapper>
-              <MoreBtn to="/facilities">자세히보기</MoreBtn>
+              <MoreLink to="/facilities">자세히보기</MoreLink>
             </BtnWrapper>
           </FacilitiesInfo>
         </FacilitiesContainer>
@@ -325,35 +322,30 @@ const Home = () => {
         <Wrapper>
           <IndexTitle>LOCATION</IndexTitle>
           <IndexDesc>구름 호텔로 오시는 방법을 안내해드립니다.</IndexDesc>
-          <KakaoMap width="1180px" height="480px" />
-          <IndexDesc className="location">경기도 성남시 분당구 판교로 242 PDC A동 902호</IndexDesc>
-          <IndexDesc>
-            <PhoneNumber>
-              <ContactSvg height="48" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 0h48v48H0z" fill="none" />
-                <path d="M13.25 21.59c2.88 5.66 7.51 10.29 13.18 13.17l4.4-4.41c.55-.55 1.34-.71 2.03-.49C35.1 30.6 37.51 31 40 31c1.11 0 2 .89 2 2v7c0 1.11-.89 2-2 2C21.22 42 6 26.78 6 8c0-1.11.9-2 2-2h7c1.11 0 2 .89 2 2 0 2.49.4 4.9 1.14 7.14.22.69.06 1.48-.49 2.03l-4.4 4.42z" />
-              </ContactSvg>
-              <a href="tel:031-600-8586">031-600-8586</a>
-            </PhoneNumber>
-            <Mail>
-              <ContactSvg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                <title />
-                <g data-name="8-Email" id="_8-Email">
-                  <path d="M45,7H3a3,3,0,0,0-3,3V38a3,3,0,0,0,3,3H45a3,3,0,0,0,3-3V10A3,3,0,0,0,45,7Zm-.64,2L24,24.74,3.64,9ZM2,37.59V10.26L17.41,22.17ZM3.41,39,19,23.41l4.38,3.39a1,1,0,0,0,1.22,0L29,23.41,44.59,39ZM46,37.59,30.59,22.17,46,10.26Z" />
-                </g>
-              </ContactSvg>
-              <a href="mailto:contact@goorm.io">contact@goorm.io</a>
-            </Mail>
-          </IndexDesc>
-          <MoreBtn to="/location">
-            <p>자세히보기</p>
-            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-              <title />
-              <g data-name="Layer 2" id="Layer_2">
-                <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
-              </g>
-            </svg>
-          </MoreBtn>
+          <MapWrapper>
+            <KakaoMap width="1180px" height="480px" />
+            <MapAddress>
+              <p>위치 : 경기도 성남시 분당구 판교로 242 PDC A동 902호</p>
+              <ContactInfo>
+                <svg height="48" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 0h48v48H0z" fill="none" />
+                  <path d="M13.25 21.59c2.88 5.66 7.51 10.29 13.18 13.17l4.4-4.41c.55-.55 1.34-.71 2.03-.49C35.1 30.6 37.51 31 40 31c1.11 0 2 .89 2 2v7c0 1.11-.89 2-2 2C21.22 42 6 26.78 6 8c0-1.11.9-2 2-2h7c1.11 0 2 .89 2 2 0 2.49.4 4.9 1.14 7.14.22.69.06 1.48-.49 2.03l-4.4 4.42z" />
+                </svg>
+                <a href="tel:031-600-8586">031-600-8586</a>
+              </ContactInfo>
+              <ContactInfo>
+                <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                  <g data-name="8-Email" id="_8-Email">
+                    <path d="M45,7H3a3,3,0,0,0-3,3V38a3,3,0,0,0,3,3H45a3,3,0,0,0,3-3V10A3,3,0,0,0,45,7Zm-.64,2L24,24.74,3.64,9ZM2,37.59V10.26L17.41,22.17ZM3.41,39,19,23.41l4.38,3.39a1,1,0,0,0,1.22,0L29,23.41,44.59,39ZM46,37.59,30.59,22.17,46,10.26Z" />
+                  </g>
+                </svg>
+                <a href="mailto:contact@goorm.io">contact@goorm.io</a>
+              </ContactInfo>
+            </MapAddress>
+          </MapWrapper>
+          <BtnWrapper className="center">
+            <MoreLink to="/location">자세히보기</MoreLink>
+          </BtnWrapper>
         </Wrapper>
       </IndexLocation>
     </>

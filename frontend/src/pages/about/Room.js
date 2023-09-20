@@ -4,15 +4,10 @@ import Deluxe from '../../images/room/Deluxe.jpg';
 import Family from '../../images/room/Family.jpg';
 import Suite from '../../images/room/Suite.jpg';
 import Villa from '../../images/room/Villa.jpg';
-import { commonContainerStyle, commonTitleStyle } from '../../components/common/commonStyles';
+import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
 
 export const Container = styled.div`
   ${commonContainerStyle}
-`;
-
-export const Title = styled.h1`
-  ${commonTitleStyle}
-  margin-bottom: 40px;
 `;
 
 export const TitleDescription = styled.p`
@@ -86,7 +81,7 @@ const Room = () => {
   return (
     <>
       <Container>
-        <Title>객실</Title>
+        <PageTitle>객실</PageTitle>
         <TitleDescription>환상적인 서울 도심의 파노라믹뷰와 모던한 인테리어의 객실은 최상의 휴식을 제공합니다.</TitleDescription>
         <Item>
           <List>

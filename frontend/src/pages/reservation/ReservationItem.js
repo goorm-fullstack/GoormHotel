@@ -2,19 +2,11 @@ import React, { useState } from 'react';
 import { Left, Right, Wrapper } from './ReservationPage';
 import { styled } from 'styled-components';
 import item from '../../images/item/item1.jpg';
-import { commonContainerStyle, commonTitleStyle, commonSubTitleStyle } from '../../components/common/commonStyles';
+import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
 import { ReactComponent as Cart } from '../../images/icon/ico_cart.svg';
 
 const Container = styled.div`
   ${commonContainerStyle}
-`;
-
-const Title = styled.h1`
-  ${commonTitleStyle}
-`;
-
-const SubTitle = styled.h2`
-  ${commonSubTitleStyle}
 `;
 
 const SelectWrapper = styled.div`
@@ -187,10 +179,10 @@ const ReservationItem = () => {
   return (
     <div>
       <Container>
-        <Title>예약하기</Title>
+        <PageTitle>예약하기</PageTitle>
         <Wrapper>
           <Left>
-            <SubTitle>예약 상품 선택</SubTitle>
+            <PageTitle>예약 상품 선택</PageTitle>
             <SelectWrapper>
               <div>
                 <Label htmlFor="productType">상품 유형</Label>
@@ -291,7 +283,7 @@ const ReservationItem = () => {
           </Left>
 
           <Right>
-            <SubTitle>상품개요</SubTitle>
+            <PageTitle>상품개요</PageTitle>
             {selectedProduct && (
               <>
                 <RoomItem>

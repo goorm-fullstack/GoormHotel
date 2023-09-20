@@ -2,18 +2,10 @@ import React from 'react';
 import { Section, Left, Right, Wrapper } from './ReservationPage';
 import { styled } from 'styled-components';
 import Product from '../../components/Item';
-import { commonContainerStyle, commonTitleStyle, commonSubTitleStyle } from '../../components/common/commonStyles';
+import { commonContainerStyle, commonTitleStyle, PageTitle } from '../../components/common/commonStyles';
 
 const Container = styled.div`
   ${commonContainerStyle}
-`;
-
-const Title = styled.h1`
-  ${commonTitleStyle}
-`;
-
-const SubTitle = styled.h2`
-  ${commonSubTitleStyle}
 `;
 
 const ReserveInfo = styled.div`
@@ -77,11 +69,11 @@ const ReservationComplete = ({ title }) => {
   return (
     <>
       <Container>
-        <Title>{title}</Title>
+        <PageTitle>{title}</PageTitle>
         <Wrapper>
           <Left>
             <Section>
-              <SubTitle>예약 정보</SubTitle>
+              <PageTitle>예약 정보</PageTitle>
               <ReserveInfo>
                 <InfoWrapper>
                   <InfoTitle>예약번호</InfoTitle>
@@ -115,7 +107,7 @@ const ReservationComplete = ({ title }) => {
             </Section>
 
             <Section>
-              <SubTitle>예약자 정보</SubTitle>
+              <PageTitle>예약자 정보</PageTitle>
               <PersonInfo>
                 <InfoWrapper>
                   <Half>
@@ -139,7 +131,7 @@ const ReservationComplete = ({ title }) => {
             </Section>
 
             <Section>
-              <SubTitle>상품권 등록</SubTitle>
+              <PageTitle>상품권 등록</PageTitle>
               <CouponInfo>
                 <Coupon>
                   <p>[추석 맞이 특가 이벤트] 객실 금액 100,000원 할인 상품권</p>
@@ -153,7 +145,7 @@ const ReservationComplete = ({ title }) => {
             </Section>
 
             <Section>
-              <SubTitle>쿠폰 적용</SubTitle>
+              <PageTitle>쿠폰 적용</PageTitle>
               <CouponInfo>
                 <Coupon>
                   <p>[Bronze 등급 혜택] 객실 5% 할인 쿠폰</p>
@@ -164,7 +156,7 @@ const ReservationComplete = ({ title }) => {
           </Left>
 
           <Right>
-            <SubTitle>상품 개요</SubTitle>
+            <PageTitle>상품 개요</PageTitle>
             <Product />
             <Payment>
               <p>결제수단</p>

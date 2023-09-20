@@ -1,15 +1,10 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { commonContainerStyle, commonTitleStyle } from '../../components/common/commonStyles';
+import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
 
 const Container = styled.div`
   ${commonContainerStyle}
 `;
-
-const Title = styled.div`
-  ${commonTitleStyle}
-`;
-
 const Contents = styled.div`
   display: flex;
 `;
@@ -163,7 +158,7 @@ const Mypage = () => {
   return (
     <>
       <Container>
-        <Title>마이페이지</Title>
+        <PageTitle>마이페이지</PageTitle>
         <Contents>
           <EditWrapper>
             <EditTitle>회원정보 수정</EditTitle>

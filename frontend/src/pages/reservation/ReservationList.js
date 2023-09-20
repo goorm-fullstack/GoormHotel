@@ -1,15 +1,11 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { commonContainerStyle, commonTitleStyle } from '../../components/common/commonStyles';
+import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
 
 const Container = styled.div`
   ${commonContainerStyle}
   padding-left: 30px;
   padding-right: 30px;
-`;
-
-const Title = styled.h1`
-  ${commonTitleStyle}
 `;
 
 const ReservationTable = styled.table`
@@ -70,7 +66,7 @@ const ReservationList = () => {
   return (
     <>
       <Container>
-        <Title>예약 목록</Title>
+        <PageTitle>예약 목록</PageTitle>
         <ReservationTable>
           <thead>
             <TableHeaderRow>

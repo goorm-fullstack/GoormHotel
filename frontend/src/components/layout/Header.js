@@ -3,45 +3,33 @@ import { styled } from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../../images/common/logo.png';
 
-const HeaderContainer = styled.div`
-  width: 100%;
+const HeaderContainer = styled.header`
   position: fixed;
-  height: 120px;
-  z-index: 999;
   top: 0;
-  min-width: 1260px;
-`;
-
-const Container = styled.header`
+  left: 0;
   width: 100%;
+  min-width: ${(props) => props.theme.wrapper.minwidth};
   height: 120px;
-  background-color: ${(props) => (props.$nowLocation == '/' ? 'rgba(51,51,51,0.8)' : props.theme.colors.charcoal)};
   padding: 0 40px;
+  z-index: 999;
+  background-color: ${(props) => (props.$nowLocation == '/' ? 'rgba(51,51,51,0.8)' : props.theme.colors.charcoal)};
   color: white;
 `;
 
-const TopInfo = styled.div`
+const TopInfo = styled.ul`
   padding: 20px 0;
-  overflow: hidden;
-`;
-
-const TopInfoList = styled.ul`
   display: flex;
-  float: right;
-`;
+  justify-content: right;
 
-const TopInfoItem = styled.li`
-  font-size: 12px;
-  margin-left: 15px;
-  color: rgba(255, 255, 255, 0.7);
+  li {
+    font-size: ${(props) => props.theme.font.sizexxxs};
+    margin-left: 15px;
+    color: rgba(255, 255, 255, 0.7);
 
-  &:hover {
-    color: white;
+    &:hover {
+      color: white;
+    }
   }
-`;
-
-const HeaderLink = styled(Link)`
-  color: inherit;
 `;
 
 const Gnb = styled.div`
@@ -57,7 +45,6 @@ const NavList = styled.ul`
 `;
 
 const NavItem = styled.li`
-  font-size: 16px;
   white-space: nowrap;
 
   &:not(:last-child) {
@@ -65,88 +52,84 @@ const NavItem = styled.li`
   }
 
   &:hover {
-    color: #baa085;
+    color: ${(props) => props.theme.colors.gold};
   }
 `;
 
 const NavReserveBtn = styled(Link)`
   height: 42px;
-  line-height: 38px;
-  width: 140px;
+  line-height: 42px;
+  width: 150px;
   color: white;
-  background-color: transparent;
+  background-color: ${(props) => props.theme.colors.gold};
   white-space: nowrap;
   text-align: center;
-  border: 1px solid #fff;
-  font-size: 15px;
+  font-size: ${(props) => props.theme.font.sizes};
 
   &:hover {
-    background-color: #9c836a;
-    border-color: #9c836a;
-    color: #fff;
+    background-color: ${(props) => props.theme.colors.goldhover};
   }
 `;
 
 const LogoImg = styled.img`
-  min-width: 190px;
+  width: 191px;
 `;
 
 const Header = () => {
   const location = useLocation().pathname;
   return (
-    <HeaderContainer>
-      <Container $nowLocation={location}>
-        <TopInfo>
-          <TopInfoList>
-            <TopInfoItem>
-              <HeaderLink to="/login">로그인</HeaderLink>
-            </TopInfoItem>
-            <TopInfoItem>
-              <HeaderLink to="/signup">회원가입</HeaderLink>
-            </TopInfoItem>
-            <TopInfoItem>
-              <HeaderLink to="/login">예약 확인</HeaderLink>
-            </TopInfoItem>
-            <TopInfoItem>
-              <HeaderLink to="/membership">멤버십</HeaderLink>
-            </TopInfoItem>
-            <TopInfoItem>
-              <HeaderLink to="/location">오시는길</HeaderLink>
-            </TopInfoItem>
-            <TopInfoItem>
-              <HeaderLink to="/sitemap">사이트맵</HeaderLink>
-            </TopInfoItem>
-          </TopInfoList>
-        </TopInfo>
-        <Gnb>
-          <h1>
-            <HeaderLink to="/">
-              <LogoImg src={logo} alt="logo" />
-            </HeaderLink>
-          </h1>
-          <NavList>
-            <NavItem>
-              <HeaderLink to="/about">구름호텔 소개</HeaderLink>
-            </NavItem>
-            <NavItem>
-              <HeaderLink to="/rooms">객실</HeaderLink>
-            </NavItem>
-            <NavItem>
-              <HeaderLink to="/dining">다이닝</HeaderLink>
-            </NavItem>
-            <NavItem>
-              <HeaderLink to="/facilities">부대시설</HeaderLink>
-            </NavItem>
-            <NavItem>
-              <HeaderLink to="/offers">스페셜오퍼</HeaderLink>
-            </NavItem>
-            <NavItem>
-              <HeaderLink to="/board/notice">고객지원</HeaderLink>
-            </NavItem>
-          </NavList>
-          <NavReserveBtn to="/offers">예약하기</NavReserveBtn>
-        </Gnb>
-      </Container>
+    <HeaderContainer $nowLocation={location}>
+      <TopInfo>
+        <li>
+          <Link to="/login">로그인</Link>
+        </li>
+        <li>
+          <Link to="/signup">회원가입</Link>
+        </li>
+        <li>
+          <Link to="/login">예약 확인</Link>
+        </li>
+        <li>
+          <Link to="/membership">멤버십</Link>
+        </li>
+        <li>
+          <Link to="/location">오시는길</Link>
+        </li>
+        <li>
+          <Link to="/sitemap">사이트맵</Link>
+        </li>
+        <li>
+          <Link to="/admin">관리자 홈</Link>
+        </li>
+      </TopInfo>
+      <Gnb>
+        <h1>
+          <Link to="/">
+            <LogoImg src={logo} alt="logo" />
+          </Link>
+        </h1>
+        <NavList>
+          <NavItem>
+            <Link to="/about">구름호텔 소개</Link>
+          </NavItem>
+          <NavItem>
+            <Link to="/rooms">객실</Link>
+          </NavItem>
+          <NavItem>
+            <Link to="/dining">다이닝</Link>
+          </NavItem>
+          <NavItem>
+            <Link to="/facilities">부대시설</Link>
+          </NavItem>
+          <NavItem>
+            <Link to="/offers">스페셜오퍼</Link>
+          </NavItem>
+          <NavItem>
+            <Link to="/board/notice">고객지원</Link>
+          </NavItem>
+        </NavList>
+        <NavReserveBtn to="/offers">예약하기</NavReserveBtn>
+      </Gnb>
     </HeaderContainer>
   );
 };

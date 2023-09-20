@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { commonContainerStyle, commonTitleStyle } from '../../components/common/commonStyles';
+import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
 
 const Container = styled.div`
   ${commonContainerStyle}
   width: 1180px;
-`;
-
-const Title = styled.h1`
-  ${commonTitleStyle}
-  margin-bottom: 95px;
 `;
 
 const Wrapper = styled.div`
@@ -183,7 +178,7 @@ const Signup = () => {
   return (
     <>
       <Container>
-        <Title>회원가입</Title>
+        <PageTitle>회원가입</PageTitle>
         <Wrapper>
           <LeftWrapper>
             <SubTitle>이용약관/개인정보처리방침 동의</SubTitle>

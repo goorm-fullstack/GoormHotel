@@ -1,130 +1,142 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import closeImg from '../../images/icon/ico_close.png';
 import getChatRoomInfo from '../../utils/chat/client';
 
 const ChatWindow = styled.div`
   position: fixed;
   float: right;
-  bottom: 70px;
-  right: 172px;
-  box-shadow: 0 0 10px rgba(0, 0, 1, 0.15);
-  border-radius: 5px;
-  z-index: 10;
+  bottom: 40px;
+  right: 140px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  z-index: 50;
+  overflow: hidden;
+  width: 380px;
+  height: 460px;
+  background: white;
+  padding: 0 7px;
 `;
 
 const ChatHeader = styled.div`
-  background-color: #102c57;
-  height: 60px;
-  color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px 5px 0 0;
-  margin-bottom: 40px;
+  color: ${(props) => props.theme.colors.charcoal};
+  height: 80px;
+  line-height: 80px;
+  text-align: center;
+  position: relative;
+  font-weight: bold;
+  font-size: ${(props) => props.theme.font.sizem};
 `;
 
 const CloseBtn = styled.button`
-  float: right;
-  background: none;
   position: absolute;
-  top: 15px;
-  right: 15px;
-`;
-
-const CloseImg = styled.img`
+  right: 10px;
+  top: 10px;
+  background: transparent;
   width: 16px;
   height: 16px;
-  filter: invert(1);
+  line-height: 16px;
+  color: ${(props) => props.theme.colors.grayborder};
+
+  &:hover {
+    color: ${(props) => props.theme.colors.graylight};
+  }
 `;
 
 const ChatInput = styled.input`
-  padding: 8px 0;
-  padding-left: 12px;
-  border: 1px solid #ccc;
-  border-radius: 30px;
-  outline: none;
+  padding: 0 80px 0 12px;
+  border: 1px solid ${(props) => props.theme.colors.grayborder};
+  border-radius: 20px;
   flex: 1;
+  height: 50px;
+  width: 100%;
+  font-size: ${(props) => props.theme.font.sizes};
 `;
 
 const ChatContainer = styled.div`
-  display: flex;
-  flex-direction: column;
   overflow-y: auto;
-  min-height: 60%;
-  max-height: 250px;
-  right: 0;
-  padding: 0 20px;
+  height: 315px;
+  padding: 0 13px 10px;
 
   &::-webkit-scrollbar {
-    width: 5px;
+    width: 2px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #888;
+    background-color: white;
     border-radius: 4px;
   }
 
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: ${(props) => props.theme.colors.graylight};
+  }
+
   &::-webkit-scrollbar-track {
-    background-color: #f0f0f0;
+    background-color: white;
   }
 `;
 
 const ChatMessage = styled.div`
-  max-width: 200px;
+  max-width: 240px;
   border-radius: 10px;
-  padding: 13px;
+  padding: 10px 15px;
   align-self: ${({ $isUser }) => ($isUser ? 'flex-end' : 'flex-start')};
-  background-color: ${({ $isUser }) => ($isUser ? '#EBECF5' : '#EBEBEB')};
-  margin-bottom: 20px;
-`;
-
-const ChatWrapper = styled.div`
-  position: relative;
-  width: 300px;
-  height: 430px;
-  background-color: white;
-  max-height: 430px;
+  background-color: ${({ $isUser }) => ($isUser ? '#21201e' : '#f0f0f0')};
+  margin-top: 10px;
+  color: ${({ $isUser }) => ($isUser ? '#fff' : '#21201e')};
+  font-size: ${(props) => props.theme.font.sizes};
+  line-height: 1.4;
+  word-break: keep-all;
 `;
 
 const AdminProfileIcon = styled.div`
-  min-width: 40px;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background-color: ${(props) => props.theme.colors.charcoal};
+  background-color: ${(props) => props.theme.colors.gold};
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 13px;
+  margin-right: 8px;
 `;
 
 const ChatMessageWrapper = styled.div`
   display: flex;
-  align-self: ${({ $isUser }) => ($isUser ? 'flex-end' : 'flex-start')};
+  justify-content: ${({ $isUser }) => ($isUser ? 'flex-end' : 'flex-start')};
 `;
 
 const ChatForm = styled.form`
   display: flex;
-  bottom: 5px;
-  position: absolute;
-  height: 40px;
+  height: 60px;
   width: 100%;
   align-items: center;
+  padding: 0 3px;
+  position: relative;
 `;
 
 const ChatBtn = styled.button`
-  width: 60px;
+  width: 80px;
+  height: 34px;
+  line-height: 34px;
   position: absolute;
-  right: 5px;
-  padding: 8px;
+  right: 10px;
   color: #fff;
-  background-color: #102c57;
-  border-radius: 30px;
+  background-color: ${(props) => props.theme.colors.navy};
+  border-radius: 15px;
+  font-size: ${(props) => props.theme.font.sizes};
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.navyhover};
+  }
 `;
 
 const ChatModal = ({ closeChat }) => {
   const [chatData, setChatData] = useState([
+    { message: '안녕하세요. 구름호텔에 오신 것을 환영합니다.😊　　　　　무엇을 도와드릴까요?', isUser: false }, // 기본 멘트
+    { message: '예약확인부탁드립니다', isUser: true },
+    { message: '관리자입니다.', isUser: false },
+    { message: '예약확인부탁드립니다', isUser: true },
+    { message: '관리자입니다.', isUser: false },
+    { message: '예약확인부탁드립니다', isUser: true },
     { message: '관리자입니다.', isUser: false },
     { message: '예약확인부탁드립니다', isUser: true },
   ]);
@@ -243,43 +255,39 @@ const ChatModal = ({ closeChat }) => {
 
   return (
     <ChatWindow>
-      <ChatWrapper>
-        <ChatHeader>
-          <CloseBtn onClick={closeChat}>
-            <CloseImg src={closeImg} alt="close" />
-          </CloseBtn>
-          <p>채팅상담</p>
-        </ChatHeader>
-        <ChatContainer ref={chatContainerRef}>
-          {chatData.map((chat, index) => (
-            <ChatMessageWrapper $isUser={chat.isUser}>
-              {!chat.isUser && (
-                <AdminProfileIcon>
-                  <svg fill="white" viewBox="0 0 24 24" width="20px" height="20px" xmlns="http://www.w3.org/2000/svg">
-                    <g>
-                      <path d="M0 0h24v24H0z" fill="none" />
-                      <path d="M4 12h3a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7C2 6.477 6.477 2 12 2s10 4.477 10 10v7a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h3a8 8 0 1 0-16 0z" />
-                    </g>
-                  </svg>
-                </AdminProfileIcon>
-              )}
-              <ChatMessage key={index} $isUser={chat.isUser}>
-                <div>{chat.message}</div>
-              </ChatMessage>
-            </ChatMessageWrapper>
-          ))}
-        </ChatContainer>
-        <ChatForm onSubmit={handleFormSubmit}>
-          <ChatInput
-            type="text"
-            placeholder="문의사항을 입력해 주세요"
-            value={newChat}
-            onChange={(e) => setNewChat(e.target.value)}
-            onKeyDown={handleInputKeyPress}
-          />
-          <ChatBtn type="submit">전송</ChatBtn>
-        </ChatForm>
-      </ChatWrapper>
+      <ChatHeader>
+        <p>1:1 채팅 문의</p>
+        <CloseBtn onClick={closeChat}>×</CloseBtn>
+      </ChatHeader>
+      <ChatContainer ref={chatContainerRef}>
+        {chatData.map((chat, index) => (
+          <ChatMessageWrapper $isUser={chat.isUser}>
+            {!chat.isUser && (
+              <AdminProfileIcon>
+                <svg fill="white" viewBox="0 0 24 24" width="18px" height="18px" xmlns="http://www.w3.org/2000/svg">
+                  <g>
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path d="M4 12h3a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7C2 6.477 6.477 2 12 2s10 4.477 10 10v7a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h3a8 8 0 1 0-16 0z" />
+                  </g>
+                </svg>
+              </AdminProfileIcon>
+            )}
+            <ChatMessage key={index} $isUser={chat.isUser}>
+              <p>{chat.message}</p>
+            </ChatMessage>
+          </ChatMessageWrapper>
+        ))}
+      </ChatContainer>
+      <ChatForm onSubmit={handleFormSubmit}>
+        <ChatInput
+          type="text"
+          placeholder="메시지를 입력해주세요."
+          value={newChat}
+          onChange={(e) => setNewChat(e.target.value)}
+          onKeyDown={handleInputKeyPress}
+        />
+        <ChatBtn type="submit">전송</ChatBtn>
+      </ChatForm>
     </ChatWindow>
   );
 };
