@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { Title, SubmitButton } from '../pages/admin/AdminGiftCard';
-import { TableTd, TableTr, Table, Form, BoldTd, Input } from '../pages/admin/AdminDetailGiftCard';
+import { Title, SubmitButton } from '../admin/item/AdminGiftCard';
+import { TableTd, TableTr, Table, Form, BoldTd, Input } from '../admin/item/AdminDetailGiftCard';
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
-import { Select } from '../pages/admin/AdminItemList';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { Select } from '../admin/item/AdminItemList';
 import axios from 'axios';
 
 const TopOfTable = styled.div`
@@ -70,6 +70,7 @@ const WriteFormRoom = () => {
     spareChildren: '',
     capacity: '',
   });
+  const navigate = useNavigate();
 
   // 이미지 업로드 input의 onChange
   const saveImgFile = () => {
@@ -98,7 +99,6 @@ const WriteFormRoom = () => {
     Object.keys(formData).forEach((key) => {
       form.append(key, formData[key]);
     });
-
     console.log(formData.typeDetail);
 
     try {
@@ -107,6 +107,8 @@ const WriteFormRoom = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
+
+      navigate('/admin/item/list');
     } catch (error) {
       console.error('Error:', error.message);
     }

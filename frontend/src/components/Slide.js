@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import visual03 from "../images/main/visual03.webp";
 import visual02 from "../images/main/visual02.webp";
 import visual01 from "../images/main/visual01.webp";
@@ -26,11 +26,12 @@ const MainImage = styled.img`
 
 const SlideButton = styled.button`
   position: absolute;
-  width: 40px;
-  height: 64px;
-  top: 45%;
-  background-color: rgba(255, 255, 255, 0);
-  ${(props) => (props.$position === "right" ? "right: 40px;" : "left: 40px;")}
+  width: 60px;
+  height: 60px;
+  top: 50%;
+  background: transparent;
+  transform: translate(0, -45%);
+  ${(props) => (props.$position === 'right' ? 'right: 28px;' : 'left: 28px;')}
 `;
 
 const SlideImageWrapper = styled.div`
@@ -49,24 +50,23 @@ const TextWrapper = styled.div`
   min-width: 1260px;
   text-align: center;
   position: absolute;
-  margin-top: 350px;
-  display: flex;
-  flex-direction: column;
-  color: #FFFFFF;
-  text-shadow: 0px 0px 19px rgba(0, 0, 0, 0.9);
+  margin-top: 44vh;
+  color: #ffffff;
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
 `;
 
 const Text = styled.p`
-  font-family: "Marcellus", serif;
-  font-size: 60px;
+  font-family: 'Marcellus', serif;
+  font-size: 56px;
   text-align: center;
-  letter-spacing: 8px;
-  margin-bottom: 10px;
+  letter-spacing: 0.08em;
 `;
 
 const SubText = styled.p`
-  margin-top: 60px;
-  font-size: 24px;
+  margin-top: 40px;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  font-weight: 300;
 `;
 
 const SideIcon = styled(SideMenuIcon)`
@@ -88,6 +88,16 @@ const Slide = () => {
   const goToNextSlide = () => {
     setCurrentIndex((currentIndex + 1) % images.length);
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      goToNextSlide();
+    }, 5000); // 5초마다 슬라이드 변경
+
+    return () => {
+      clearInterval(interval); // 컴포넌트가 언마운트 될 때 인터벌 정리
+    };
+  }, [currentIndex]);
 
   return (
     <>
