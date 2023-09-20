@@ -13,7 +13,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 @Slf4j
 public class EmailPasswordAuthFilter extends AbstractAuthenticationProcessingFilter {
@@ -27,7 +29,19 @@ public class EmailPasswordAuthFilter extends AbstractAuthenticationProcessingFil
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        UnifiedLogin login = objectMapper.readValue(request.getInputStream(), UnifiedLogin.class);
+        // InputStream을 String으로 변환
+        BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+        }
+        String requestBody = sb.toString();
+
+        log.info("Received request body: {}", requestBody);
+
+        // 다시 JSON으로 변환 - 오브젝트매퍼
+        UnifiedLogin login = objectMapper.readValue(requestBody, UnifiedLogin.class);
 
         String id = login.memberId != null ? login.memberId : login.adminId;
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(id, login.password);
@@ -35,6 +49,7 @@ public class EmailPasswordAuthFilter extends AbstractAuthenticationProcessingFil
         token.setDetails(this.authenticationDetailsSource.buildDetails(request));
         return this.getAuthenticationManager().authenticate(token);
     }
+
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
