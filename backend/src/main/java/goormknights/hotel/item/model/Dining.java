@@ -44,7 +44,6 @@ public class Dining extends Item {
     // 클라이언트에게 응답 시 ResponseDiningDto로 변경
     public ResponseDiningDto toResponseDiningDto(){
         return ResponseDiningDto.builder()
-                .thumbnailPath(this.getThumbnail().getFilePath())
                 .type(this.getType())
                 .useTime(this.getUseTime())
                 .price(this.getPrice())

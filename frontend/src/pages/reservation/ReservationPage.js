@@ -220,7 +220,7 @@ const ReservationPage = () => {
   const [selectedOption, setSelectedOption] = useState('');
   const location = useLocation();
   const { reservationData, selectedProduct } = location.state;
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     checkIn: reservationData?.checkInDate || '',
@@ -266,7 +266,7 @@ const ReservationPage = () => {
 
     //reservationData가 없을 경우에는 실시간으로 오늘 내일 날짜를 부여
     if (!reservationData) {
-      setFormData(prevData => ({
+      setFormData((prevData) => ({
         ...prevData,
         checkIn: formattedToday,
         checkOut: formattedTomorrow,
@@ -295,9 +295,9 @@ const ReservationPage = () => {
     setCheckInOpen(false);
     const formattedDate = moment(selectedDate).format('YYYY.MM.DD');
     const dayOfWeek = moment(selectedDate).format('ddd');
-    const newCheckInDate  = `${formattedDate} (${dayOfWeek})`;
+    const newCheckInDate = `${formattedDate} (${dayOfWeek})`;
 
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       checkIn: newCheckInDate,
     }));
@@ -310,10 +310,10 @@ const ReservationPage = () => {
     const dayOfWeek = moment(selectedDate).format('ddd');
     const newCheckOutDate = `${formattedDate} (${dayOfWeek})`;
 
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       checkOut: newCheckOutDate,
-    }))
+    }));
   };
 
   const isDateDisabled = (date) => {
@@ -342,9 +342,9 @@ const ReservationPage = () => {
         const response = await axios.get('http://127.0.0.1:8080/member');
         setMemberData(response.data);
       } catch (error) {
-        console.error('데이터를 불러오지 못했습니다.', error)
+        console.error('데이터를 불러오지 못했습니다.', error);
       }
-    }
+    };
 
     fetchMember();
   }, []);
@@ -394,8 +394,7 @@ const ReservationPage = () => {
                         tileDisabled={({ date }) => isDateDisabled(date)}
                         onChange={handleCheckInDateChange}
                         value={reservationData ? reservationData.checkInDate : checkInValue}
-                        formatDay={(locale, date) => moment(date).format('DD')}>
-                      </StyledCalendar>
+                        formatDay={(locale, date) => moment(date).format('DD')}></StyledCalendar>
                     </CalendarWrapper>
                   </CalendarContainer>
                 </CheckIn>
@@ -442,7 +441,7 @@ const ReservationPage = () => {
                 </SelectWrapper>
                 <SelectWrapper>
                   <SelectLabel>어른</SelectLabel>
-                  <Select value={formData.adult} onChange={(e) => setFormData({ ...formData, adult: parseInt(e.target.value)})}>
+                  <Select value={formData.adult} onChange={(e) => setFormData({ ...formData, adult: parseInt(e.target.value) })}>
                     {adultOptions.map((option) => (
                       <option key={option} value={option}>
                         {option}
@@ -452,7 +451,7 @@ const ReservationPage = () => {
                 </SelectWrapper>
                 <SelectWrapper>
                   <SelectLabel>어린이</SelectLabel>
-                  <Select value={formData.children} onChange={(e) => setFormData({ ...formData, children: parseInt(e.target.value)})}>
+                  <Select value={formData.children} onChange={(e) => setFormData({ ...formData, children: parseInt(e.target.value) })}>
                     {childrenOptions.map((option) => (
                       <option key={option} value={option}>
                         {option}
@@ -466,10 +465,10 @@ const ReservationPage = () => {
             <Section>
               <SubTitle>예약자 정보</SubTitle>
               <InputWrapper>
-                <NameInput placeholder="예약자명" type="text" value={formData.name} onChange={(e) => handleChangeData('name', e)} required/>
-                <PhoneInput placeholder="전화번호" type="text" value={formData.phone} onChange={(e) => handleChangeData('phone', e)} required/>
+                <NameInput placeholder="예약자명" type="text" value={formData.name} onChange={(e) => handleChangeData('name', e)} required />
+                <PhoneInput placeholder="전화번호" type="text" value={formData.phone} onChange={(e) => handleChangeData('phone', e)} required />
               </InputWrapper>
-              <Input placeholder="이메일" type="text" value={formData.email} onChange={(e) => handleChangeData('email', e)} required/>
+              <Input placeholder="이메일" type="text" value={formData.email} onChange={(e) => handleChangeData('email', e)} required />
               <Input placeholder="요청사항" type="text" value={formData.request} onChange={(e) => handleChangeData('request', e)} />
             </Section>
 
@@ -512,7 +511,7 @@ const ReservationPage = () => {
 
           <Right>
             <SubTitle>상품 개요</SubTitle>
-            <Item selectedProduct={selectedProduct}/>
+            <Item selectedProduct={selectedProduct} />
             <PaymentBtn onClick={handleReservation}>예약 및 결제하기</PaymentBtn>
           </Right>
         </Wrapper>
