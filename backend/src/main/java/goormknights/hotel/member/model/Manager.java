@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Manager implements UserDetails, Serializable {
+public class Manager implements UserDetails {
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;

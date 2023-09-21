@@ -1,9 +1,6 @@
 package goormknights.hotel.auth.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import goormknights.hotel.auth.config.filter.EmailPasswordAuthFilter;
-import goormknights.hotel.auth.config.handler.Http401Handler;
-import goormknights.hotel.auth.config.handler.Http403Handler;
 import goormknights.hotel.auth.config.handler.LoginFailHandler;
 import goormknights.hotel.auth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +39,7 @@ public class SecurityConfig {
 
     private final ObjectMapper objectMapper;
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final CustomUserDetailsService customUserDetailsService;
+
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
@@ -61,6 +58,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
 //                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
 //                        .requestMatchers(new AntPathRequestMatcher("/manager/**")).hasRole("MANAGER")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/manager/**").hasRole("MANAGER")
                         .anyRequest().permitAll())
 
                 .rememberMe(rm -> rm
