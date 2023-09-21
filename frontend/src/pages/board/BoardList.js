@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { styled } from 'styled-components';
 import { NavLink, useParams } from 'react-router-dom';
 import { commonContainerStyle } from '../../components/common/commonStyles';
+import axios from "axios";
 
 export const Container = styled.div`
   ${commonContainerStyle}
@@ -176,6 +177,27 @@ const WriteBtn = styled.div`
 
 const CustomerSupport = () => {
   const board = useParams().board;
+
+  const [boards, setBoard] = useState([]);
+
+  useEffect(() => {
+    axios.get('/boards/find/boardTitle/공지사항').then((response) => {
+      setBoard(response.data);
+      console.log('get 성공');
+    });
+  }, []);
+
+  let writeDate;
+  let newMonth;
+  boards.map((Item) => {
+    if (Item.boardWriteDate[1].length === 1) {
+      newMonth = "0" + Item.boardWriteDate[1];
+    } else {
+      newMonth = Item.boardWriteDate[1];
+    }
+    writeDate = Item.boardWriteDate[0] + "-" + newMonth + "-" + Item.boardWriteDate[2];
+  });
+
   return (
     <>
       <AboutHeader>
@@ -283,6 +305,13 @@ const CustomerSupport = () => {
                   </thead>
                   <tbody>
                     {/** loop */}
+                    {boards.map((board) => (
+                        <tr key={board.boardId}>
+                          <td className = "center">{board.boardId}</td>
+                          <td>{board.title}</td>
+                          <td className = "center">{`${board.boardWriteDate[0]}-${(board.boardWriteDate[1] < 10 ? '0' : '')}${board.boardWriteDate[1]}-${(board.boardWriteDate[2] < 10 ? '0' : '')}${board.boardWriteDate[2]}`}</td>
+                        </tr>
+                    ))}
                     <tr>
                       <td className="center">2</td>
                       <td>

@@ -87,17 +87,35 @@ public class BoardController {
 
     //내용, 제목으로 게시물 조회
     @GetMapping("/find/{keyword}")
-    public ResponseEntity<List<ResponseBoardDto>> findByBoardTitleOrContent(@PathVariable String keyword){
+    public ResponseEntity<List<ResponseBoardDto>> findBytitleOrContent(@PathVariable String keyword){
         List<ResponseBoardDto> byTitleOrContent = boardService.findByTitleOrContent(keyword, false);
 
         return ResponseEntity.ok(byTitleOrContent);
     }
 
     //제목으로 게시물 조회
-    @GetMapping("/find/title/{boardTitle}")
-    public ResponseEntity<List<ResponseBoardDto>> findByBoardTitle(@PathVariable String boardTitle) {
-        List<ResponseBoardDto> Titles = boardService.findByTitle(boardTitle, false);
+    @GetMapping("/find/title/{title}")
+    public ResponseEntity<List<ResponseBoardDto>> findBytitle(@PathVariable String title) {
+        List<ResponseBoardDto> Titles = boardService.findByTitle(title, false);
 
         return ResponseEntity.ok(Titles);
     }
+
+    //게시판으로 찾기
+    @GetMapping("/find/boardTitle/{boardTitle}")
+    public ResponseEntity<List<ResponseBoardDto>> findByboardTitle(@PathVariable String boardTitle){
+        List<ResponseBoardDto> boardTitles = boardService.getAllByboardTitle(boardTitle, false);
+
+        return ResponseEntity.ok(boardTitles);
+    }
+
+    //게시판-카테고리로 찾기
+    @GetMapping("/find/category/{category}")
+    public ResponseEntity<List<ResponseBoardDto>> findByCategory(@PathVariable String category){
+        List<ResponseBoardDto> allByCategory = boardService.getAllByCategory(category, false);
+
+        return ResponseEntity.ok(allByCategory);
+    }
+
+
 }

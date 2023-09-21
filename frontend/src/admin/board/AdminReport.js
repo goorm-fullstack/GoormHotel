@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
@@ -17,6 +17,7 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
+import axios from "axios";
 
 const LinkStyle = styled(Link)`
   &:hover {
@@ -68,6 +69,14 @@ const PageParam = styled.ul`
 const AdminReport = () => {
   const [checkedItems, setCheckedItems] = useState([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
+  const [report, setReport] = useState([]);
+  useEffect(() => {
+    axios.get('/report/list').then((response) => {
+      setReport(response.data);
+
+      console.log('get 성공');
+    })
+  }, []);
 
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
@@ -124,7 +133,7 @@ const AdminReport = () => {
         <Title>신고 관리</Title>
         <ContentHeader>
           <Total>
-            전체 <Num>{reportData.length}</Num> 건
+            전체 <Num>{report.length}</Num> 건
           </Total>
           <BlackListBtn>
             <Delete>확인 완료</Delete>
@@ -147,28 +156,30 @@ const AdminReport = () => {
             </tr>
           </thead>
           <tbody>
-            {reportData.length === 0 && <TableCell colSpan="7">등록된 회원이 없습니다.</TableCell>}
-            {reportData.map((item) => (
-              <tr key={item.id}>
+            {report.length === 0 && <TableCell colSpan="7">등록된 회원이 없습니다.</TableCell>}
+            {report.map((report) => (
+              <tr key={report.reportId}>
                 <TableCell>
                   <TableCheckbox
                     type="checkbox"
-                    checked={checkedItems.includes(item.memberId)}
-                    onChange={() => handleCheckboxChange(item.memberId)}
+                    checked={checkedItems.includes(report.reportId)}
+                    onChange={() => handleCheckboxChange(report.reportId)}
+                    // checked={checkedItems.includes(item.memberId)}
+                    // onChange={() => handleCheckboxChange(item.memberId)}
                   />
                 </TableCell>
-                <TableCell>{item.id}</TableCell>
+                <TableCell>{report.reportId}</TableCell>
                 <TableCell>
-                  <LinkStyle>{item.reportedPost}</LinkStyle>
+                  <LinkStyle>{report.title}</LinkStyle>
                 </TableCell>
                 <TableCell>
-                  {item.author.name}
-                  <LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>
+                  {report.reportWriter}
+                  {/*<LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>*/}
                 </TableCell>
-                <TableCell>{item.reportReason}</TableCell>
-                <TableCell>{item.reportDate}</TableCell>
-                <TableCell>{item.confirmation}</TableCell>
-                <TableCell>{item.result}</TableCell>
+                <TableCell>{report.reportReason}</TableCell>
+                <TableCell>{`${report.reportDate[0]}-${(report.reportDate[1] < 10 ? '0' : '')}${report.reportDate[1]}-${(report.reportDate[2] < 10 ? '0' : '')}${report.reportDate[2]}`}</TableCell>
+                <TableCell>{report.reportCheck}</TableCell>
+                <TableCell>{report.reportResult}</TableCell>
               </tr>
             ))}
           </tbody>

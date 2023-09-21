@@ -13,16 +13,16 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Board findByBoardIdAndBoardDelete(Long boardId, boolean bool);
 
     //작성자 이름으로 게시물 조회
-    List<Board> findByBoardWriterAndBoardDelete(String keyword, boolean bool);
+    List<Board> findAllByBoardWriterAndBoardDelete(String keyword, boolean bool);
 
     //제목으로 게시물 조회
-    List<Board> findByBoardTitleContainingAndBoardDelete(String keyword, boolean bool);
+    List<Board> findAllByTitleContainingAndBoardDelete(String keyword, boolean bool);
 
     //내용으로 게시물 조회
-    List<Board> findByBoardContentContainingAndBoardDelete(String keyword, boolean bool);
+    List<Board> findAllByBoardContentContainingAndBoardDelete(String keyword, boolean bool);
 
     //제목 또는 내용 키워드로 게시물 조회
-    @Query("SELECT b FROM Board b WHERE b.boardTitle LIKE %:keyword% OR b.boardContent LIKE %:keyword% And b.boardDelete = :bool")
+    @Query("SELECT b FROM Board b WHERE b.title LIKE %:keyword% OR b.boardContent LIKE %:keyword% And b.boardDelete = :bool")
     List<Board> findByTitleOrContent(@Param("keyword") String keyword, @Param("bool") boolean bool);
 
     //게시물 삭제
@@ -30,5 +30,11 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     //삭제 유무 게시물 조회
     List<Board> findAllByBoardDelete(boolean bool);
+
+    //게시판 제목으로 게시물 찾기
+    List<Board> findAllByBoardTitleAndBoardDelete(String boardTitle, boolean bool);
+
+    //게시판-카테고리로 게시물 찾기
+    List<Board> findAllByCategoryAndBoardDelete(String category, boolean bool);
 
 }

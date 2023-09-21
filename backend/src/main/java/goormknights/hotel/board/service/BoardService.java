@@ -8,9 +8,12 @@ import goormknights.hotel.board.model.Board;
 import goormknights.hotel.board.repository.BoardRepository;
 import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.reply.model.Reply;
+import goormknights.hotel.report.dto.response.ResponseReportDto;
+import goormknights.hotel.report.model.Report;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +31,7 @@ public class BoardService {
                 .boardImage(requestImageDto.toEntity())
                 .build();
 
-        return boardRepository.save(board).getBoardTitle();
+        return boardRepository.save(board).getTitle();
     }
 
     //게시물 인덱스 번호로 찾기
@@ -55,7 +58,7 @@ public class BoardService {
 
     //게시물 작성자 이름으로 찾기
     public List<ResponseBoardDto> findByBoardWriter(String boardWriter, boolean bool){
-        List<Board> byBoardWriter = boardRepository.findByBoardWriterAndBoardDelete(boardWriter, bool);
+        List<Board> byBoardWriter = boardRepository.findAllByBoardWriterAndBoardDelete(boardWriter, bool);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : byBoardWriter) {
@@ -79,7 +82,7 @@ public class BoardService {
 
     //제목으로 게시물 조회
     public List<ResponseBoardDto> findByTitle(String keyword, boolean bool){
-        List<Board> boards = boardRepository.findByBoardTitleContainingAndBoardDelete(keyword, bool);
+        List<Board> boards = boardRepository.findAllByTitleContainingAndBoardDelete(keyword, bool);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
@@ -91,7 +94,7 @@ public class BoardService {
 
     //내용으로 게시물 조회
     public List<ResponseBoardDto> findByContent(String keyword, boolean bool){
-        List<Board> boards = boardRepository.findByBoardContentContainingAndBoardDelete(keyword, bool);
+        List<Board> boards = boardRepository.findAllByBoardContentContainingAndBoardDelete(keyword, bool);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
@@ -124,8 +127,10 @@ public class BoardService {
         List<ResponseBoardDto> response = new ArrayList<>();
         for (Board board : all) {
             ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
-            List<ResponseReplyDto> list = board.getReplies().stream().map(Reply::toResponseReplyDto).toList();
-            responseBoardDto.setReply(list);
+            List<ResponseReportDto> reportList = board.getReport().stream().map(Report::toResponseReportDto).toList();
+            List<ResponseReplyDto> replyList = board.getReplies().stream().map(Reply::toResponseReplyDto).toList();
+            responseBoardDto.setReply(replyList);
+            responseBoardDto.setReport(reportList);
             response.add(responseBoardDto);
         }
         return response;
@@ -138,4 +143,31 @@ public class BoardService {
 
         return boardRepository.save(afterBoard);
     }
+
+    //게시판으로 게시물 찾기
+    public List<ResponseBoardDto> getAllByboardTitle(String boardTitle, boolean bool) {
+        List<Board> allByBoardTitle = boardRepository.findAllByBoardTitleAndBoardDelete(boardTitle, bool);
+        List<ResponseBoardDto> response = new ArrayList<>();
+
+        for (Board board : allByBoardTitle) {
+            ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
+            response.add(responseBoardDto);
+        }
+
+        return response;
+    }
+
+    //게시판-카테고리로 게시물 찾기
+    public List<ResponseBoardDto> getAllByCategory(String category, boolean bool){
+        List<Board> allByCataegory = boardRepository.findAllByCategoryAndBoardDelete(category, bool);
+        List<ResponseBoardDto> response = new ArrayList<>();
+
+        for(Board board : allByCataegory){
+            ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
+            response.add(responseBoardDto);
+        }
+
+        return response;
+    }
+
 }

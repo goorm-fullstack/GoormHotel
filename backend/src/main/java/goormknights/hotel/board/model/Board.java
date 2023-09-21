@@ -3,6 +3,7 @@ package goormknights.hotel.board.model;
 import goormknights.hotel.board.dto.request.RequestBoardDto;
 import goormknights.hotel.board.dto.response.ResponseBoardDto;
 import goormknights.hotel.reply.model.Reply;
+import goormknights.hotel.report.model.Report;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -27,7 +28,7 @@ public class Board {
     private Long boardId;       //인덱스 번호
 
     @Column(nullable = false)
-    private String boardTitle;  //제목
+    private String title;  //제목
 
     @Column(nullable = false)
     private String boardContent;    //내용
@@ -42,38 +43,51 @@ public class Board {
     private BoardImage boardImage;       //이미지 저장
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Reply> replies = new ArrayList<>();
+    private List<Reply> replies = new ArrayList<>();            //게시물 댓글
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Report> report = new ArrayList<>();            //신고
 
     @Column(nullable = false)
-    private boolean boardDelete = false;
+    private boolean boardDelete = false;        //게시물 삭제 유무
+
+    @Column(nullable = false)
+    private String boardTitle;      //게시판 이름
+
+    @Column(nullable = false)
+    private String category;        //게시판-카테고리
 
 //    @ManyToOne
 //    private Member member;
 
     @Builder(toBuilder = true)
-    public Board(Long boardId, String boardTitle, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage) {
+    public Board(Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, String boardTitle, String category) {
         this.boardId = boardId;
-        this.boardTitle = boardTitle;
+        this.title = title;
         this.boardContent = boardContent;
         this.boardWriter = boardWriter;
         this.boardWriteDate = boardWriteDate;
         this.boardImage = boardImage;
+        this.boardTitle = boardTitle;
+        this.category = category;
     }
 
     public ResponseBoardDto toResponseBoardDto(){
         return ResponseBoardDto.builder()
                 .boardId(boardId)
-                .boardTitle(boardTitle)
+                .title(title)
                 .boardContent(boardContent)
                 .boardWriteDate(boardWriteDate)
                 .boardWriter(boardWriter)
+                .boardTitle(boardTitle)
+                .category(category)
                 .build();
     }
 
     public Board updateBoard(Long boardId, RequestBoardDto requestBoardDto){
         return this.toBuilder()
                 .boardId(boardId)
-                .boardTitle(requestBoardDto.getBoardTitle())
+                .title(requestBoardDto.getTitle())
                 .boardContent(requestBoardDto.getBoardContent())
                 .boardWriter(requestBoardDto.getBoardWriter())
                 .build();

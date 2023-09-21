@@ -76,6 +76,7 @@ const AdminComment = () => {
   useEffect(() => {
     axios.get('/reply/list').then((response) => {
       setReply(response.data);
+
       console.log('get 성공');
     });
   }, []);
@@ -185,7 +186,7 @@ const AdminComment = () => {
                   {reply.replyWriter}
                   {/*<LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>*/}
                 </TableCell>
-                <TableCell>{reply.replyWriteDate}</TableCell>
+                <TableCell>{`${reply.replyWriteDate[0]}-${(reply.replyWriteDate[1] < 10 ? '0' : '')}${reply.replyWriteDate[1]}-${(reply.replyWriteDate[2] < 10 ? '0' : '')}${reply.replyWriteDate[2]}`}</TableCell>
               </tr>
             ))}
           </tbody>

@@ -95,11 +95,11 @@ const AdminIndex = () => {
                     </AdminMenu>
 
                     <AdminMenu>
-                        <MenuTitle>게시판 관리</MenuTitle>
+                        <MenuTitle to={"/admin/board"}>게시판 관리</MenuTitle>
                         <MenuBorder>
-                            <TopMenuList>게시글 관리</TopMenuList>
+                            <TopMenuList to={"/admin/board"}>게시글 관리</TopMenuList>
                             <MenuList to={"/admin/comments"}>댓글 관리</MenuList>
-                            <MenuList>삭제된 글 관리</MenuList>
+                            <MenuList to={"/admin/deleteComment"}>삭제된 글 관리</MenuList>
                             <MenuList to={"/admin/report"}>신고 관리</MenuList>
                         </MenuBorder>
                     </AdminMenu>

@@ -31,7 +31,7 @@ public class Reply {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
-    private Board board;
+    private Board board;        //게시글
 
     public void setBoard(Board board) {
         this.board = board;

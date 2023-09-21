@@ -34,7 +34,7 @@ public class BoardImageService {
         String path = "images\\" + year + "\\" + month + "\\" + day;
 
         File file = new File(absolutePath);
-
+        if (!file.exists()) file.mkdirs();
         file = new File(absolutePath + "\\" + newFileName + fileExtension);
         boardImage.transferTo(file);
 
