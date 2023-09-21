@@ -53,19 +53,45 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-//                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
-//                        .requestMatchers(new AntPathRequestMatcher("/manager/**")).hasRole("MANAGER")
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/manager/**").hasRole("MANAGER")
+                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/manager/**")).hasRole("MANAGER")
+                        .anyRequest().permitAll())
+
+
+                .rememberMe(rm -> rm
+                        .rememberMeParameter("remember")
+                        .alwaysRemember(false)
+                        .tokenValiditySeconds(2592000))
+
+                .oauth2Login(oauth -> oauth
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                        )
+                )
+                .sessionManagement(sm -> sm
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .invalidSessionUrl("/invalid-session")
+                        .maximumSessions(1))
+                .csrf(AbstractHttpConfigurer::disable);
+        return http.build();
+    }
+
+    @Bean
+    public SecurityFilterChain memberSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/manager/**")).hasRole("MANAGER")
                         .anyRequest().permitAll())
 
                 .rememberMe(rm -> rm
                         .rememberMeParameter("remember")
                         .alwaysRemember(false)
                         .tokenValiditySeconds(2592000))
+
                 .oauth2Login(oauth -> oauth
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
