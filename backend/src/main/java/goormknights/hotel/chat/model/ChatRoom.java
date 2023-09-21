@@ -33,9 +33,11 @@ public class ChatRoom {
     public void handlerActions(WebSocketSession session, ChatMessage chatMessage, ChatService chatService) {
         if(chatMessage.getType().equals(ChatMessage.MessageType.ENTER)) {//처음에 메시지를 보내면 타입을 ENTER로 보내고, ENTER타입이라면 세션을 소켓을 접속
             sessions.add(session);
-            if(!chatMessage.getSender().equals("admin"))
-                chatMessage.setMessage("관리자와 연결 중입니다. 잠시만 기다려주세요");
-            sendMessage(chatMessage, chatService);
+            if(!chatMessage.getSender().equals("admin")) {
+                chatMessage.setSender("admin");
+                chatMessage.setMessage("안녕하세요. 구름호텔에 오신것을 환영합니다.\n 무엇을 도와드릴까요?");
+                sendMessage(chatMessage, chatService);
+            }
         } else if (chatMessage.getType().equals(ChatMessage.MessageType.TALK)) {
             chatMessage.setMessage(chatMessage.getMessage());
             sendMessage(chatMessage, chatService);
