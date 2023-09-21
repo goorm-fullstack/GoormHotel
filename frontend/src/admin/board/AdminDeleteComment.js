@@ -38,7 +38,7 @@ const LinkStyle = styled(Link)`
 const subMenus = [
   { name: '게시글 관리', link: '/admin/board' },
   { name: '댓글 관리', link: '/admin/comments' },
-  { name: '삭제된 글 관리', link: '/admin/managers' },
+  { name: '삭제된 글 관리', link: '/admin/deleteComment' },
   { name: '신고 관리', link: '/admin/report' },
 ];
 
