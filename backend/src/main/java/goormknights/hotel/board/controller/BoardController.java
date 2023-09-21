@@ -25,7 +25,7 @@ public class BoardController {
     // 모든 게시물 조회
     @GetMapping("/list")
     public ResponseEntity<List<ResponseBoardDto>> getAllBoards() {
-        List<ResponseBoardDto> boards = boardService.getAllBoards();
+        List<ResponseBoardDto> boards = boardService.getAllBoards(false);
 
         return ResponseEntity.ok(boards);
     }
@@ -50,9 +50,17 @@ public class BoardController {
     // 게시물 수정
     @PutMapping("/{boardId}")
     public ResponseEntity<ResponseBoardDto> updateBoard(@PathVariable Long boardId, @RequestBody RequestBoardDto requestBoardDto) {
-        Board board = boardService.updateBoard(boardId, requestBoardDto);
+        Board board = boardService.updateBoard(boardId, requestBoardDto, false);
 
         return ResponseEntity.ok(board.toResponseBoardDto());
+    }
+
+    // 삭제된 게시물 전체 조회
+    @GetMapping("/deleted")
+    public ResponseEntity<List<ResponseBoardDto>> getDeletedBoards() {
+        List<ResponseBoardDto> deletedBoards = boardService.findAllBoardDelete(true);
+
+        return ResponseEntity.ok(deletedBoards);
     }
 
     // 게시물 삭제
@@ -61,30 +69,34 @@ public class BoardController {
         boardService.deleteById(boardId);
     }
 
+    //작성자로 게시물 조회
     @GetMapping("/find/writer/{boardWriter}")
     public ResponseEntity<List<ResponseBoardDto>> findByBoardWriter(@PathVariable String boardWriter) {
-        List<ResponseBoardDto> byBoardWriter = boardService.findByBoardWriter(boardWriter);
+        List<ResponseBoardDto> byBoardWriter = boardService.findByBoardWriter(boardWriter, false);
 
         return ResponseEntity.ok(byBoardWriter);
     }
 
+    //내용으로 게시물 조회
     @GetMapping("/find/content/{boardContent}")
     public ResponseEntity<List<ResponseBoardDto>> findByBoardContent(@PathVariable String boardContent) {
-        List<ResponseBoardDto> content = boardService.findByContent(boardContent);
+        List<ResponseBoardDto> content = boardService.findByContent(boardContent, false);
 
         return ResponseEntity.ok(content);
     }
 
+    //내용, 제목으로 게시물 조회
     @GetMapping("/find/{keyword}")
     public ResponseEntity<List<ResponseBoardDto>> findByBoardTitleOrContent(@PathVariable String keyword){
-        List<ResponseBoardDto> byTitleOrContent = boardService.findByTitleOrContent(keyword);
+        List<ResponseBoardDto> byTitleOrContent = boardService.findByTitleOrContent(keyword, false);
 
         return ResponseEntity.ok(byTitleOrContent);
     }
 
+    //제목으로 게시물 조회
     @GetMapping("/find/title/{boardTitle}")
     public ResponseEntity<List<ResponseBoardDto>> findByBoardTitle(@PathVariable String boardTitle) {
-        List<ResponseBoardDto> Titles = boardService.findByTitle(boardTitle);
+        List<ResponseBoardDto> Titles = boardService.findByTitle(boardTitle, false);
 
         return ResponseEntity.ok(Titles);
     }

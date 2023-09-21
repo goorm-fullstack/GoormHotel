@@ -4,7 +4,9 @@ import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.coupon.repository.CouponRepository;
 import goormknights.hotel.email.model.EmailMessage;
 import goormknights.hotel.email.service.EmailService;
+import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.member.model.Member;
+import goormknights.hotel.global.entity.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
@@ -22,12 +24,14 @@ public class MemberCreationEventHandler implements ApplicationListener<MemberCre
     public void onApplicationEvent(MemberCreateEvent event) {
         Member member = event.getMember();
         Coupon coupon = event.getCoupon();
+        if(member.getRole() != Role.GUEST) {
+            Coupon saveCoupon = couponRepository.save(coupon);
+            coupon.setMember(member);
+            coupon.nameStrategy();
+            coupon.setDiscountRate();
+            member.getCouponList().add(saveCoupon);
+        }
 
-        Coupon saveCoupon = couponRepository.save(coupon);
-        member.getCouponList().add(saveCoupon);
-        coupon.setMember(member);
-        coupon.nameStrategy();
-        coupon.setDiscountRate();
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(member.getEmail())
                 .message("가입을 환영합니다.~")

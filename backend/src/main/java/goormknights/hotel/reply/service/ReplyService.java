@@ -24,7 +24,7 @@ public class ReplyService {
     public Reply create(RequestReplyDto requestReplyDto){
 
         Long boardId = requestReplyDto.getBoardId();
-        Board byBoardId = boardRepository.findByBoardId(boardId);
+        Board byBoardId = boardRepository.findByBoardIdAndBoardDelete(boardId, false);
 
         Reply reply = requestReplyDto.toEntity();
         reply.setBoard(byBoardId);
@@ -62,7 +62,7 @@ public class ReplyService {
 
     //boardId로 댓글 찾기
     public List<ResponseReplyDto> findByBoardId(Long boardId){
-        Board BoardId = boardRepository.findByBoardId(boardId);
+        Board BoardId = boardRepository.findByBoardIdAndBoardDelete(boardId, false);
         List<Reply> replies = replyRepository.findByBoard(BoardId);
         List<ResponseReplyDto> response = new ArrayList<>();
 

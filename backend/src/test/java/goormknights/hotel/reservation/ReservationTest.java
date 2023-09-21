@@ -1,10 +1,11 @@
 package goormknights.hotel.reservation;
 
 import goormknights.hotel.coupon.model.Coupon;
+import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.item.dto.request.RequestImageDto;
+import goormknights.hotel.item.dto.request.RequestRoomDto;
 import goormknights.hotel.item.model.Room;
 import goormknights.hotel.item.service.RoomService;
-import goormknights.hotel.item.dto.request.RequestRoomDto;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.repository.MemberRepository;
 import goormknights.hotel.reservation.dto.request.RequestReservationDto;
@@ -15,9 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootTest
@@ -36,11 +37,12 @@ public class ReservationTest {
     private LocalDateTime now = LocalDateTime.now();
     private LocalDateTime future = now.plusDays(3);
 
+
     /**
      * 예약 기능 테스트
      */
     @Test
-    public void reservationTest() {
+    public void reservationTest() { // 테스트 오류납니다, fe 병합하면서 일단 같이 올리는거에요 - moon
 
         RequestRoomDto buildRoom = RequestRoomDto.builder()
                 .bed("single")
@@ -65,36 +67,30 @@ public class ReservationTest {
         roomService.saveRoom(buildRoom, requestImageDTO);
         Room findRoom = roomService.findByRoomName(buildRoom.getName());
 
-        Coupon coupon = Coupon.builder()
-                .id(1)
-                .uuid("132123123131")
-                .discountRate(3)
-                .member(null)
-                .issueDate(now)
-                .expire(30)
-                .build();
+//        Coupon coupon = Coupon.builder()
+//                .id(1)
+//                .uuid("132123123131")
+//                .discountRate(3)
+//                .member(null)
+//                .issueDate(now)
+//                .expire(30)
+//                .build();
+//
+//        List<Coupon> couponList = new ArrayList<>();
+//        couponList.add(coupon);
 
-        List<Coupon> couponList = new ArrayList<>();
-        couponList.add(coupon);
-
+        /**
+         * 비회원 예약 테스트
+         */
         Member member = Member.builder()
-                .id(null)
-                .memberId("test")
-                .password("password")
+                .email("email@email.com")
                 .name("테스트")
-                .auth("member")
                 .phoneNumber("01012341234")
-                .email("test@test.com")
-                .privacyCheck(true)
-                .grade("Gold")
-                .couponList(couponList)
-                .reservationList(null)
-                .giftCardList(null)
-                .gender("")
-                .birth(null)
+                .role(Role.GUEST)
+                .mailAuth(true)
                 .build();
 
-        memberRepository.save(member);
+//        memberRepository.save(member);
 
         RequestReservationDto reservation = RequestReservationDto.builder()
                 .id(null)

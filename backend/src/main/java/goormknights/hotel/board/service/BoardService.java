@@ -54,8 +54,8 @@ public class BoardService {
     }
 
     //게시물 작성자 이름으로 찾기
-    public List<ResponseBoardDto> findByBoardWriter(String boardWriter){
-        List<Board> byBoardWriter = boardRepository.findByBoardWriter(boardWriter);
+    public List<ResponseBoardDto> findByBoardWriter(String boardWriter, boolean bool){
+        List<Board> byBoardWriter = boardRepository.findByBoardWriterAndBoardDelete(boardWriter, bool);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : byBoardWriter) {
@@ -66,8 +66,8 @@ public class BoardService {
     }
 
     //제목 또는 내용으로 게시물 조회
-    public List<ResponseBoardDto> findByTitleOrContent(String keyword){
-        List<Board> boards = boardRepository.findByBoardTitleContainingOrBoardContentContaining(keyword);
+    public List<ResponseBoardDto> findByTitleOrContent(String keyword, boolean bool){
+        List<Board> boards = boardRepository.findByTitleOrContent(keyword, bool);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
@@ -78,8 +78,8 @@ public class BoardService {
     }
 
     //제목으로 게시물 조회
-    public List<ResponseBoardDto> findByTitle(String keyword){
-        List<Board> boards = boardRepository.findByBoardTitleContaining(keyword);
+    public List<ResponseBoardDto> findByTitle(String keyword, boolean bool){
+        List<Board> boards = boardRepository.findByBoardTitleContainingAndBoardDelete(keyword, bool);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
@@ -90,11 +90,23 @@ public class BoardService {
     }
 
     //내용으로 게시물 조회
-    public List<ResponseBoardDto> findByContent(String keyword){
-        List<Board> boards = boardRepository.findByBoardContentContaining(keyword);
+    public List<ResponseBoardDto> findByContent(String keyword, boolean bool){
+        List<Board> boards = boardRepository.findByBoardContentContainingAndBoardDelete(keyword, bool);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
+            response.add(board.toResponseBoardDto());
+        }
+
+        return response;
+    }
+
+    //삭제된 게시물만 조회
+    public List<ResponseBoardDto> findAllBoardDelete(Boolean bool){
+        List<Board> boardDelete = boardRepository.findAllByBoardDelete(bool);
+        List<ResponseBoardDto> response = new ArrayList<>();
+
+        for (Board board : boardDelete){
             response.add(board.toResponseBoardDto());
         }
 
@@ -107,8 +119,8 @@ public class BoardService {
     }
 
     //모든 게시물 조회
-    public List<ResponseBoardDto> getAllBoards() {
-        List<Board> all = boardRepository.findAll();
+    public List<ResponseBoardDto> getAllBoards(boolean bool) {
+        List<Board> all = boardRepository.findAllByBoardDelete(bool);
         List<ResponseBoardDto> response = new ArrayList<>();
         for (Board board : all) {
             ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
@@ -120,8 +132,8 @@ public class BoardService {
     }
 
     // 게시물 수정
-    public Board updateBoard(Long boardId, RequestBoardDto requestBoardDto) {
-        Board beforeBoard = boardRepository.findByBoardId(boardId);
+    public Board updateBoard(Long boardId, RequestBoardDto requestBoardDto, boolean bool) {
+        Board beforeBoard = boardRepository.findByBoardIdAndBoardDelete(boardId, bool);
         Board afterBoard = beforeBoard.updateBoard(boardId, requestBoardDto);
 
         return boardRepository.save(afterBoard);

@@ -15,13 +15,11 @@ import AdminWriteFormRoom from './AdminWriteFormRoom';
 import AdminWriteFormDining from './AdminWriteFormDining';
 import AdminDetailDining from './AdminDetailDining';
 import AdminDetailRoom from './AdminDetailRoom';
-import AdminIndex from "./AdminIndex";
 
 const AdminApp = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/admin" element={<AdminIndex/>}></Route>
         <Route path="/admin/reservation" element={<Reservation />}></Route>
         <Route path="/admin/reservation/detail" element={<ReservationDetail />}></Route>
         <Route path="/admin/login" element={<AdminLogin />}></Route>

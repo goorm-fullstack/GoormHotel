@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Title, SubmitButton } from '../pages/admin/AdminGiftCard';
-import { TableTd, TableTr, Table, Form, BoldTd, Input } from '../pages/admin/AdminDetailGiftCard';
+import { Title, SubmitButton } from '../admin/item/AdminGiftCard';
+import { TableTd, TableTr, Table, Form, BoldTd, Input } from '../admin/item/AdminDetailGiftCard';
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
-import { Select } from '../pages/admin/AdminItemList';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { Select } from '../admin/item/AdminItemList';
 import axios from 'axios';
 
 const TopOfTable = styled.div`
@@ -62,7 +62,7 @@ const WriteFormRoom = () => {
     price: '',
     priceAdult: '',
     priceChildren: '',
-    type: '객실',
+    type: 'room',
     typeDetail: '',
     bed: '',
     spare: '',
@@ -70,6 +70,7 @@ const WriteFormRoom = () => {
     spareChildren: '',
     capacity: '',
   });
+  const navigate  = useNavigate();
 
   // 이미지 업로드 input의 onChange
   const saveImgFile = () => {
@@ -85,30 +86,33 @@ const WriteFormRoom = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const form = new FormData();
-    form.append('img', imgFile);
+    form.append('img', imgRef.current.files[0]);
 
     Object.keys(formData).forEach((key) => {
       form.append(key, formData[key]);
     });
-  
+    console.log(formData.typeDetail);
+
     try {
       await axios.post('http://localhost:8080/rooms/room', form, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
+
+      navigate('/admin/item/list');
     } catch (error) {
       console.error('Error:', error.message);
     }
-  }
+  };
 
   return (
     <>
@@ -123,7 +127,7 @@ const WriteFormRoom = () => {
           </TypeLink>
         </div>
       </TopOfTable>
-      <Form action="#" method="post">
+      <Form onSubmit={handleSubmit} encType="multipart/form-data">
         <WriteFormTable>
           <WriteFormTr>
             <BoldTd>썸네일</BoldTd>
@@ -135,95 +139,49 @@ const WriteFormRoom = () => {
           <WriteFormTr>
             <BoldTd>상품명</BoldTd>
             <TableTd>
-              <Input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange} 
-                required />
+              <Input type="text" name="name" value={formData.name} onChange={handleChange} required />
             </TableTd>
           </WriteFormTr>
           <WriteFormTr>
             <BoldTd>상품가격</BoldTd>
             <TableTd>
-              <Input 
-                type="text"
-                name="price" 
-                value={formData.price}
-                onChange={handleChange} 
-                required 
-              />
+              <Input type="text" name="price" value={formData.price} onChange={handleChange} required />
             </TableTd>
           </WriteFormTr>
           <WriteFormTr>
             <BoldTd>어른 추가 비용</BoldTd>
             <TableTd>
-              <Input 
-                type="text"
-                name="priceAdult" 
-                onChange={handleChange}
-                value={formData.priceAdult} 
-                required 
-              />
+              <Input type="text" name="priceAdult" onChange={handleChange} value={formData.priceAdult} required />
             </TableTd>
           </WriteFormTr>
           <WriteFormTr>
             <BoldTd>어린이 추가 비용</BoldTd>
             <TableTd>
-              <Input 
-                type="text"
-                name="priceChildren" 
-                onChange={handleChange}
-                value={formData.priceChildren} 
-                required 
-              />
+              <Input type="text" name="priceChildren" onChange={handleChange} value={formData.priceChildren} required />
             </TableTd>
           </WriteFormTr>
           <WriteFormTr>
             <BoldTd>잔여 객실 수</BoldTd>
             <TableTd>
-              <Input 
-                type="text"
-                name="spare" 
-                onChange={handleChange}
-                value={formData.spare} 
-                required 
-              />
+              <Input type="text" name="spare" onChange={handleChange} value={formData.spare} required />
             </TableTd>
           </WriteFormTr>
           <WriteFormTr>
             <BoldTd>최대 숙박 가능 인원 수(어른)</BoldTd>
             <TableTd>
-              <Input 
-                type="text"
-                name="spareAdult" 
-                onChange={handleChange}
-                value={formData.spareAdult} 
-                required 
-              />
+              <Input type="text" name="spareAdult" onChange={handleChange} value={formData.spareAdult} required />
             </TableTd>
           </WriteFormTr>
           <WriteFormTr>
             <BoldTd>최대 숙박 가능 인원 수(어린이)</BoldTd>
             <TableTd>
-              <Input 
-                type="text"
-                name="spareChildren" 
-                onChange={handleChange}
-                value={formData.spareChildren}
-                required 
-              />
+              <Input type="text" name="spareChildren" onChange={handleChange} value={formData.spareChildren} required />
             </TableTd>
           </WriteFormTr>
           <WriteFormTr>
             <BoldTd>상품 타입</BoldTd>
             <TableTd>
-              <Input 
-                type="text"
-                name="type" 
-                onChange={handleChange} 
-                value="객실"
-                readOnly />
+              <Input type="text" name="type" onChange={handleChange} value="room" readOnly />
             </TableTd>
           </WriteFormTr>
           <WriteFormTr>
@@ -256,7 +214,7 @@ const WriteFormRoom = () => {
             </TableTd>
           </WriteFormTr>
         </WriteFormTable>
-        <WriteFormButton type="submit" onSubmit={handleSubmit}>등록</WriteFormButton>
+        <WriteFormButton type="submit">등록</WriteFormButton>
       </Form>
     </>
   );

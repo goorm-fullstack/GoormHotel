@@ -18,7 +18,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Where(clause = "board_delete = false")
+//@Where(clause = "board_delete = false")
 @SQLDelete(sql = "UPDATE Board SET board_Delete = true WHERE board_Id = ?")
 public class Board {
 
@@ -45,8 +45,7 @@ public class Board {
     private List<Reply> replies = new ArrayList<>();
 
     @Column(nullable = false)
-    //@Builder.Default
-    private Boolean boardDelete = false;
+    private boolean boardDelete = false;
 
 //    @ManyToOne
 //    private Member member;

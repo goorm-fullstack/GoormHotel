@@ -10,22 +10,25 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
     //인덱스 번호로 게시물 조회
-    Board findByBoardId(Long boardId);
+    Board findByBoardIdAndBoardDelete(Long boardId, boolean bool);
 
     //작성자 이름으로 게시물 조회
-    List<Board> findByBoardWriter(String keyword);
+    List<Board> findByBoardWriterAndBoardDelete(String keyword, boolean bool);
 
     //제목으로 게시물 조회
-    List<Board> findByBoardTitleContaining(String keyword);
+    List<Board> findByBoardTitleContainingAndBoardDelete(String keyword, boolean bool);
 
     //내용으로 게시물 조회
-    List<Board> findByBoardContentContaining(String keyword);
+    List<Board> findByBoardContentContainingAndBoardDelete(String keyword, boolean bool);
 
     //제목 또는 내용 키워드로 게시물 조회
-    @Query("SELECT b FROM Board b WHERE b.boardTitle LIKE %:keyword% OR b.boardContent LIKE %:keyword%")
-    List<Board> findByBoardTitleContainingOrBoardContentContaining(@Param("keyword") String keyword);
+    @Query("SELECT b FROM Board b WHERE b.boardTitle LIKE %:keyword% OR b.boardContent LIKE %:keyword% And b.boardDelete = :bool")
+    List<Board> findByTitleOrContent(@Param("keyword") String keyword, @Param("bool") boolean bool);
 
     //게시물 삭제
     void deleteByBoardId(Long boardId);
+
+    //삭제 유무 게시물 조회
+    List<Board> findAllByBoardDelete(boolean bool);
 
 }

@@ -94,8 +94,9 @@ public class ReservationController {
      * 작업중 - 테스트 필요
      * @param reservationNumber - 예약 번호
      * @return 해당 예약 번호를 가진 예약 내역
+     * 2023.09.17 일부 수정 -> 동일한 위치에서 @PathVariable를 사용하면 모호성으로 오류가 발생합니다.
      */
-    @GetMapping("/{reservationNumber}")
+    @GetMapping("/reservationNumber/{reservationNumber}")
     public ResponseEntity<ResponseReservationDto> getReservationByNumber(@PathVariable String reservationNumber){
         ResponseReservationDto responseReservationDto
                 = reservationService.getReservationByNumber(reservationNumber)
