@@ -6,7 +6,6 @@ import goormknights.hotel.auth.config.handler.Http401Handler;
 import goormknights.hotel.auth.config.handler.Http403Handler;
 import goormknights.hotel.auth.config.handler.LoginFailHandler;
 import goormknights.hotel.auth.service.CustomOAuth2UserService;
-import goormknights.hotel.auth.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -63,11 +62,7 @@ public class SecurityConfig {
 //                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
 //                        .requestMatchers(new AntPathRequestMatcher("/manager/**")).hasRole("MANAGER")
                         .anyRequest().permitAll())
-                .addFilterBefore(usernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(e -> {
-                    e.accessDeniedHandler(new Http403Handler(objectMapper));
-                    e.authenticationEntryPoint(new Http401Handler(objectMapper));
-                })
+
                 .rememberMe(rm -> rm
                         .rememberMeParameter("remember")
                         .alwaysRemember(false)
@@ -81,7 +76,6 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                         .invalidSessionUrl("/invalid-session")
                         .maximumSessions(1))
-
                 .csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
