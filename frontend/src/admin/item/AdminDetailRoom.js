@@ -9,11 +9,13 @@ import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
+// 세부 타입 select
 const WriteFormSelect = styled(Select)`
   width: 200px;
   margin: 0;
 `;
 
+// 테이블 스타일
 const WriteFormTable = styled(Table)``;
 
 const WriteFormTr = styled(TableTr)`
@@ -28,16 +30,19 @@ const WriteFormBoldTd = styled(BoldTd)`
   vertical-align: middle;
 `;
 
+// 이미지
 const ImageInput = styled(Input)`
   margin-top: 60px;
   height: 100px;
   border: none;
 `;
 
+// 등록 버튼
 const WriteFormButton = styled(SubmitButton)`
   margin-bottom: 60px;
 `;
 
+// 중복검사 버튼
 const DuplicateButton = styled.button`
   vertical-align: middle;
   margin-left: 50px;
@@ -52,12 +57,14 @@ const DuplicateButton = styled.button`
   }
 `;
 
+// 중복검사 경고 문구
 const RedP = styled.p`
   color: #ec5353;
   display: inline-block;
   margin-left: 30px;
 `;
 
+// 중복검사 성공 문구
 const GreenP = styled.p`
   color: #008000;
   display: inline-block;

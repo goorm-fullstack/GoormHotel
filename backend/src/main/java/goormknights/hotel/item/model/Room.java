@@ -24,9 +24,6 @@ public class Room extends Item{
     @Column(nullable = false)
     private String bed; // 침대 타입(ex. 싱글, 더블/트윈, 킹)
 
-    @Column(nullable = false)
-    private int capacity; // 숙박 인원 기준
-
     // 클라이언트에게 응답 시 ResponseRoomDto로 변경
     public ResponseRoomDto toResponseRoomDto(){
         return ResponseRoomDto.builder()
