@@ -1,7 +1,8 @@
-import React from 'react';
 import styled from 'styled-components';
 import adminLogo from '../../images/common/logo_admin.png';
 import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import Instance from '../../utils/api/axiosInstance';
 
 const Container = styled.div`
   display: flex;
@@ -54,7 +55,30 @@ const LogoutBtn = styled.button`
   width: 90px;
 `;
 
+const handleLogout = () => {
+  Instance.post('/logout')
+      .then(response => {
+        sessionStorage.removeItem('sessionId');
+      })
+      .catch(error => {
+        console.error('로그아웃 실패', error);
+      });
+};
+
+
 const AdminHeader = () => {
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    Instance.get('/admin/userinfo')
+        .then(response => {
+          setUserInfo(response.data);
+        })
+        .catch(error => {
+          console.error('유저 정보 에러: ', error);
+        });
+  }, []);
+
   return (
     <Container>
       <Wrapper>
@@ -93,8 +117,8 @@ const AdminHeader = () => {
               />
             </g>
           </svg>
-          <ManagerId>관리자(memberId)</ManagerId>
-          <LogoutBtn>로그아웃</LogoutBtn>
+          {userInfo && <ManagerId>{`관리자(${userInfo.username})`}</ManagerId>}
+          <LogoutBtn onClick={handleLogout}>로그아웃</LogoutBtn>
         </HeaderRight>
       </Wrapper>
     </Container>

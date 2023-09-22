@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import styled from 'styled-components';
+import axios from "axios";
 import {
   ContentHeader,
   Total,
@@ -99,6 +100,12 @@ const AdminManager = () => {
   const [checkedItems, setCheckedItems] = useState([]);
   const [selectedManager, setSelectedManager] = useState(null);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
+  const [managerData, setManagerData] = useState([]);
+
+  const [adminId, setAdminId] = useState("");
+  const [adminName, setAdminName] = useState("");
+  const [adminNickname, setAdminNickname] = useState("");
+  const [password, setPassword] = useState("");
 
   console.log(checkedItems);
   console.log(selectedManager);
@@ -133,7 +140,27 @@ const AdminManager = () => {
     }
   };
 
-  const managerData = [
+  // 부운영자 등록
+  const addManager = async () => {
+    const newManager = {
+      adminId,
+      password,
+      adminName,
+      adminNickname,
+      isActive: true,
+      authorities: ["ROLE_MANAGER"]
+    };
+    try {
+      const response = await axios.post("/api/managers", newManager);
+      if (response.status === 200) {
+        setManagerData([...managerData, response.data]);  // 상태 업데이트
+      }
+    } catch (error) {
+      console.error("Manager addition failed:", error);
+    }
+  };
+
+  const managerDataExample = [
     {
       id: 1,
       number: 1,
@@ -166,12 +193,12 @@ const AdminManager = () => {
         <Section>
           <SubTitle>부운영자 계정 등록</SubTitle>
           <InputWrapper>
-            <Input placeholder="운영자 ID" />
-            <Input placeholder="운영자명" />
-            <Input placeholder="운영자 별명" />
-            <Input placeholder="접속 비밀번호" />
-            <Input placeholder="접속 비밀번호 확인" />
-            <AddBtn>부운영자 등록</AddBtn>
+            <Input placeholder="운영자 ID" value={adminId} onChange={(e) => setAdminId(e.target.value)} />
+            <Input placeholder="운영자명" value={adminName} onChange={(e) => setAdminName(e.target.value)} />
+            <Input placeholder="운영자 별명" value={adminNickname} onChange={(e) => setAdminNickname(e.target.value)} />
+            <Input placeholder="접속 비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input placeholder="접속 비밀번호 확인" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <AddBtn onClick={addManager}>부운영자 등록</AddBtn>
           </InputWrapper>
         </Section>
         <Section>

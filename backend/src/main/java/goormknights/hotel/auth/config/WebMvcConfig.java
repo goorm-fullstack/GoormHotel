@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-//    private final MemberSessionRepository memberSessionRepository;
+
 //    private final AppConfig appConfig;
 
 //    @Override

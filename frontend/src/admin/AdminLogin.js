@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import adminLogo from '../images/common/logo_admin.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Instance from '../utils/api/axiosInstance';
 
 const Header = styled.div`
   width: 100%;
@@ -70,9 +71,31 @@ const RememberBtn = styled.button`
 `;
 
 const AdminLogin = () => {
+  const navigate = useNavigate();
   const [adminId, setAdminId] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
   const [rememberId, setRememberId] = useState(false);
+
+  const handleLogin = async () => {
+    const params = new URLSearchParams();
+    params.append('adminId', adminId);
+    params.append('password', adminPassword);
+
+    try {
+      const response = await Instance.post('/login/adminlogin', params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        }
+      });
+      if (response.status === 200) {
+        sessionStorage.setItem('sessionId', response.data.sessionId);
+        navigate('/admin');
+      }
+    } catch (error) {
+      console.log(error)
+      alert('아이디 혹은 비밀번호가 올바르지 않습니다');
+    }
+  };
 
   const handleRememberIdChange = () => {
     setRememberId(!rememberId);
@@ -98,7 +121,7 @@ const AdminLogin = () => {
         <form>
           <Input placeholder="아이디" type="text" value={adminId} onChange={handleIdChange} />
           <PwInput placeholder="비밀번호" type="password" value={adminPassword} onChange={handlePwChange} />
-          <Button>로그인</Button>
+          <Button onClick={handleLogin}>로그인</Button>
         </form>
         <RememberBtn>
           <input type="checkbox" checked={handleRememberIdChange} />

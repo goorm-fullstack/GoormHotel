@@ -2,11 +2,13 @@ package goormknights.hotel.auth.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import goormknights.hotel.auth.config.handler.LoginFailHandler;
+import goormknights.hotel.auth.service.AdminDetailService;
 import goormknights.hotel.auth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -39,6 +41,7 @@ public class SecurityConfig {
 
     private final ObjectMapper objectMapper;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final AdminDetailService adminDetailService;
 
 
     @Bean
@@ -53,33 +56,40 @@ public class SecurityConfig {
     }
 
     @Bean
+    @Order(1)
     public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/manager/**")).hasRole("MANAGER")
                         .anyRequest().permitAll())
-
-
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login/adminlogin")
+                        .usernameParameter("adminId")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/")
+                        .failureHandler(new LoginFailHandler(objectMapper))
+                )
                 .rememberMe(rm -> rm
                         .rememberMeParameter("remember")
                         .alwaysRemember(false)
                         .tokenValiditySeconds(2592000))
-
-                .oauth2Login(oauth -> oauth
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .userService(customOAuth2UserService)
-                        )
-                )
                 .sessionManagement(sm -> sm
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                        .invalidSessionUrl("/invalid-session")
-                        .maximumSessions(1))
+//                        .invalidSessionUrl("/invalid-session")
+                        .maximumSessions(10))
+                .logout(lo -> lo
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/admin")
+                        .deleteCookies("remove")
+                        .invalidateHttpSession(true))
                 .csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
 
     @Bean
+    @Order(2)
     public SecurityFilterChain memberSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
@@ -100,34 +110,27 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                         .invalidSessionUrl("/invalid-session")
-                        .maximumSessions(1))
+                        .maximumSessions(10))
                 .csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
 
-    // URL로 로그인 요청을 보내면 가로채 인증하고, 성공 실패 핸들러 호출
     @Bean
-    public EmailPasswordAuthFilter usernamePasswordAuthenticationFilter(){
-        EmailPasswordAuthFilter filter = new EmailPasswordAuthFilter("/login/**", objectMapper);
-        filter.setAuthenticationManager(authenticationManager());
-        filter.setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler("/"));
-        filter.setAuthenticationFailureHandler(new LoginFailHandler(objectMapper));
-        filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
-
-        SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
-        rememberMeServices.setAlwaysRemember(true);
-        rememberMeServices.setValiditySeconds(3600*24*30);
-        filter.setRememberMeServices(rememberMeServices);
-        return filter;
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(adminDetailService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return daoAuthenticationProvider;
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(){
+    public AuthenticationManager customAuthenticationManager() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(customUserDetailsService);
+        provider.setUserDetailsService(adminDetailService);
         provider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(Arrays.asList(provider));
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder(){
