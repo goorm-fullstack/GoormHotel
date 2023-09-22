@@ -29,7 +29,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
         ChatMessage chatMessage = objectMapper.readValue(payload, ChatMessage.class);
         chatMessageRepository.save(chatMessage);
         ChatRoom chatRoom = chatService.findRoomById(chatMessage.getRoomId());
-        chatRoom.handlerActions(session, chatMessage, chatService);
+        try {
+            chatRoom.handlerActions(session, chatMessage, chatService);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

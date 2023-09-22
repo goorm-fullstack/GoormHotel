@@ -1,6 +1,8 @@
 package goormknights.hotel.chat.controller;
 
 import goormknights.hotel.chat.model.ChatRoom;
+import goormknights.hotel.chat.model.ChatRoomDto;
+import goormknights.hotel.chat.repository.ChatRoomRepository;
 import goormknights.hotel.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,7 @@ import java.util.List;
 @RequestMapping("/chat")
 public class ChatController {
     private final ChatService chatService;
+    private final ChatRoomRepository chatRoomRepository;
 
 
     // 채팅방을 개설하고, 그에 관한 정보를 JSON 형태로 보내준다.
@@ -31,7 +34,7 @@ public class ChatController {
 
 //    @PreAuthorize("hasRole('Admin')")
     @GetMapping
-    public List<ChatRoom> findAllRoom() {
-        return chatService.findAllRoom();
+    public List<ChatRoomDto> findAllRoom() {
+        return chatRoomRepository.findAll();
     }
 }

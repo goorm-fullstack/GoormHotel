@@ -248,7 +248,8 @@ const Reservation = () => {
     checkOutDate,
     rooms,
     adults,
-    children
+    children,
+    nights
   };
 
   useEffect(() => {

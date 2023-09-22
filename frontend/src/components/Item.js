@@ -109,10 +109,10 @@ const Item = ({ selectedProduct }) => {
             </InfoLeft>
             <InfoRight>
               <p>{selectedProduct.type}</p>
-              <p>{selectedProduct.category}</p>
+              <p>{selectedProduct.typeDetail}</p>
               <p>{selectedProduct.price}원</p>
-              <p>{selectedProduct.adultPrice} 원/최대 1인</p>
-              <p>{selectedProduct.childPrice} 원/최대 2인</p>
+              <p>{selectedProduct.priceAdult} 원/최대 1인</p>
+              <p>{selectedProduct.priceChildren} 원/최대 2인</p>
             </InfoRight>
           </InfoWrapper>
         </Info>

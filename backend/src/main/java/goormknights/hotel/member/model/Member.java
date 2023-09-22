@@ -69,6 +69,8 @@ public class Member extends BaseEntity implements Serializable {
     @JsonIgnore
     private List<GiftCard> giftCardList =  new ArrayList<>();
 
+    private String roomId;
+
     //    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     //    private List<Post> posts;
 

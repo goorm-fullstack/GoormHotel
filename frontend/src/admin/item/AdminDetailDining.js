@@ -284,7 +284,12 @@ const AdminDetailDining = () => {
               <WriteFormTr>
                 <WriteFormBoldTd>세부 타입</WriteFormBoldTd>
                 <WriteFormTd>
-                  <WriteFormSelect name="typeDetail" defaultValue={responseData.typeDetail} onChange={handleChange}>
+                  <WriteFormSelect
+                    name="typeDetail"
+                    key={responseData.typeDetail}
+                    defaultValue={responseData.typeDetail}
+                    onChange={handleChange}
+                    required>
                     <option value="">선택</option>
                     <option value="restaurant">레스토랑</option>
                     <option value="roomService">룸서비스</option>

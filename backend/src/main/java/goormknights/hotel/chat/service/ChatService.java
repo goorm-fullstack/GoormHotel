@@ -2,7 +2,9 @@ package goormknights.hotel.chat.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import goormknights.hotel.chat.model.ChatRoom;
+import goormknights.hotel.chat.model.ChatRoomDto;
 import goormknights.hotel.chat.repository.ChatMessageRepository;
+import goormknights.hotel.chat.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
@@ -16,6 +18,7 @@ import java.util.*;
 public class ChatService {
     private final ObjectMapper objectMapper;
     private Map<String, ChatRoom> chatRooms = new HashMap<>();
+    private final ChatRoomRepository chatRoomRepository;
 
     public List<ChatRoom> findAllRoom() {
         return new ArrayList<>(chatRooms.values());
@@ -32,6 +35,10 @@ public class ChatService {
                 .name(name)
                 .build();
         chatRooms.put(randomId, chatRoom);
+        ChatRoomDto chatRoomDto = new ChatRoomDto();
+        chatRoomDto.setRoomId(randomId);
+        chatRoomDto.setName(name);
+        chatRoomRepository.save(chatRoomDto);
         return chatRoom;
     }
 

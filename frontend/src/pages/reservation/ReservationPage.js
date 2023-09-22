@@ -213,14 +213,15 @@ const ReservationPage = () => {
   const [checkOutValue, setCheckOutValue] = useState(new Date());
   const [checkInOpen, setCheckInOpen] = useState(false);
   const [checkOutOpen, setCheckOutOpen] = useState(false);
-  const [giftCardNumber, setGiftCardNumber] = useState('');
+  const [giftCardNumber, setGiftCardNumber] = useState("");
   const [memberData, setMemberData] = useState(null);
   // const [userLoggedIn, setUserLoggedIn] = useState(true);
   const userLoggedIn = false;
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState("");
   const location = useLocation();
   const { reservationData, selectedProduct } = location.state;
-  const navigate = useNavigate();
+  const navigate  = useNavigate();
+  const [nights, setNights] = useState(1);
 
   const [formData, setFormData] = useState({
     checkIn: reservationData?.checkInDate || '',
@@ -228,11 +229,22 @@ const ReservationPage = () => {
     count: reservationData?.rooms || 1,
     adult: reservationData?.adults || 1,
     children: reservationData?.children || 0,
-    name: '',
-    phone: '',
-    email: '',
-    request: '',
+    stay: reservationData?.nights,
+    name: "",
+    phone: "",
+    email: "",
+    notice: "",
+    sumPrice: selectedProduct.price,
+    discountPrice : "0",
+    totalPrice: "12345",
   });
+
+  useEffect(() => {
+    setFormData(prevData => ({
+      ...prevData,
+      stay: nights,
+    }));
+  }, [nights, reservationData]);
 
   const roomOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const adultOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -297,10 +309,14 @@ const ReservationPage = () => {
     const dayOfWeek = moment(selectedDate).format('ddd');
     const newCheckInDate = `${formattedDate} (${dayOfWeek})`;
 
-    setFormData((prevData) => ({
+    const nightsDifference = moment(checkOutValue).diff(moment(selectedDate), 'days') + 1;
+
+    setFormData(prevData => ({
       ...prevData,
       checkIn: newCheckInDate,
     }));
+    
+    setNights(nightsDifference);
   };
 
   const handleCheckOutDateChange = (selectedDate) => {
@@ -310,10 +326,15 @@ const ReservationPage = () => {
     const dayOfWeek = moment(selectedDate).format('ddd');
     const newCheckOutDate = `${formattedDate} (${dayOfWeek})`;
 
-    setFormData((prevData) => ({
+    const nightsDifference = moment(selectedDate).diff(moment(checkInValue), 'days') + 1;
+    console.log(nightsDifference);
+
+    setFormData(prevData => ({
       ...prevData,
       checkOut: newCheckOutDate,
     }));
+
+    setNights(nightsDifference);
   };
 
   const isDateDisabled = (date) => {
@@ -342,23 +363,39 @@ const ReservationPage = () => {
         const response = await axios.get('http://127.0.0.1:8080/member');
         setMemberData(response.data);
       } catch (error) {
-        console.error('데이터를 불러오지 못했습니다.', error);
+        console.error('사용자 데이터를 불러오지 못했습니다.', error)
       }
     };
 
     fetchMember();
   }, []);
 
+  const formatDateForServer = (date) => {
+    return moment(date).format('YYYY-MM-DDTHH:mm:ss');
+  };
+
   //예약을 저장하는 함수
   const handleReservation = async () => {
-    try {
-      await axios.post(`http://127.0.0.1:8080/reservation/save?memberId=1`, formData);
+    const confirmed = window.confirm('예약을 진행하시겠습니까?');
 
-      navigate('/');
-    } catch (error) {
-      console.error('예약 요청 실패', error);
+    const serverFormattedData = {
+      ...formData,
+      checkIn: formatDateForServer(formData.checkIn),
+      checkOut: formatDateForServer(formData.checkOut)
+    };
+
+    if (confirmed) {
+      try {
+
+        await axios.post(`http://127.0.0.1:8080/reservation/save?memberId=1`, serverFormattedData);
+  
+        navigate('/');
+        window.alert('예약이 완료되었습니다');
+      } catch (error) {
+        console.error('예약 요청 실패', error);
+      }
     }
-  };
+  };  
 
   return (
     <div>
@@ -468,8 +505,8 @@ const ReservationPage = () => {
                 <NameInput placeholder="예약자명" type="text" value={formData.name} onChange={(e) => handleChangeData('name', e)} required />
                 <PhoneInput placeholder="전화번호" type="text" value={formData.phone} onChange={(e) => handleChangeData('phone', e)} required />
               </InputWrapper>
-              <Input placeholder="이메일" type="text" value={formData.email} onChange={(e) => handleChangeData('email', e)} required />
-              <Input placeholder="요청사항" type="text" value={formData.request} onChange={(e) => handleChangeData('request', e)} />
+              <Input placeholder="이메일" type="text" value={formData.email} onChange={(e) => handleChangeData('email', e)} required/>
+              <Input placeholder="요청사항" type="text" value={formData.notice} onChange={(e) => handleChangeData('notice', e)} />
             </Section>
 
             <Section>
