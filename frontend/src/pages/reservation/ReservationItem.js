@@ -137,6 +137,8 @@ const NoItem = styled.div`
   vertical-align: middle;
   line-height: 1.6;
   color: ${(props) => props.theme.colors.graylight};
+  font-size: ${(props) => props.theme.font.sizes};
+  letter-spacing: -0.02em;
 
   svg {
     width: 100px;
@@ -377,7 +379,7 @@ const ReservationItem = () => {
                           <th>성인</th>
                           <td>{selectedProduct.adultPrice} 원</td>
                           {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 
-                          
+
                           예약 정보 입력 페이지에서 기준 인원 초과하여 인원 추가하는 경우 
                           추가된 인원 수에 맞춰 위 계산법 적용됩니다. 이하 동일 */}
                         </tr>
