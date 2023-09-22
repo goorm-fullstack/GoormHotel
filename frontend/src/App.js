@@ -102,7 +102,7 @@ function App() {
           <Route path="/dining" element={<Dining />}></Route>
           <Route path="/about" element={<About />}></Route>
           <Route path="/mypage" element={<Mypage />}></Route>
-          <Route path="/reservation" element={<ReservationPage />}></Route>
+          <Route path="/offers/step2" element={<ReservationPage />}></Route>
           <Route path="/location" element={<Way />}></Route>
           <Route path="/agreement" element={<Agreement />}></Route>
           <Route path="/privacy" element={<Privacy />}></Route>

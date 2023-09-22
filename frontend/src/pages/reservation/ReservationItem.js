@@ -11,6 +11,7 @@ import {
   NormalBtn,
   BtnWrapper,
   SubmitBtn,
+  CircleCloseBtn,
 } from '../../components/common/commonStyles';
 import Paging from '../../components/common/Paging';
 
@@ -128,29 +129,6 @@ const RoomItemInfo = styled.div`
   }
 `;
 
-const ReservationBtn = styled.button`
-  border: 1px solid #dddddd;
-  background-color: ${(props) => props.theme.colors.brown};
-  color: #ffffff;
-  height: 50px;
-  width: 100%;
-
-  &:hover {
-    background-color: #8a7057;
-  }
-`;
-
-const ReservationDeleteBtn = styled(ReservationBtn)`
-  background-color: transparent;
-  border-color: #d30a0a;
-  color: #d30a0a;
-
-  &:hover {
-    color: #ffffff;
-    background-color: #d30a0a;
-  }
-`;
-
 const NoItem = styled.div`
   width: 293px;
   height: 500px;
@@ -166,8 +144,58 @@ const NoItem = styled.div`
 `;
 
 const SelectedItem = styled.div`
+  position: relative;
+
   h4 {
     font-weight: 500;
+    color: ${(props) => props.theme.colors.goldhover};
+    padding: 21px 20px;
+    border-bottom: 1px solid ${(props) => props.theme.colors.grayborder};
+    margin-bottom: 20px;
+    background: white;
+  }
+
+  h5 {
+    font-size: ${(props) => props.theme.font.sizes};
+    color: ${(props) => props.theme.colors.blacklight};
+    font-weight: 500;
+    margin-top: 30px;
+    padding: 0 20px;
+  }
+
+  button {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+  }
+
+  p {
+    padding: 0 20px;
+    line-height: 1.5;
+    font-size: ${(props) => props.theme.font.sizes};
+    color: ${(props) => props.theme.colors.graydark};
+  }
+
+  table {
+    margin-top: 20px;
+    width: 100%;
+
+    th,
+    td {
+      line-height: 1.5;
+      font-size: ${(props) => props.theme.font.sizes};
+      color: ${(props) => props.theme.colors.graydark};
+    }
+
+    th {
+      padding-left: 20px;
+      text-align: left;
+    }
+
+    td {
+      padding-right: 20px;
+      text-align: right;
+    }
   }
 `;
 
@@ -177,6 +205,7 @@ const SelectItem = styled.div`
   border: 1px solid ${(props) => props.theme.colors.grayborder};
   border-radius: 5px;
   background: ${(props) => props.theme.colors.graybg};
+  overflow: hidden;
 `;
 
 const ReservationItem = () => {
@@ -308,7 +337,7 @@ const ReservationItem = () => {
                     <h5>추가 인원 비용</h5>
                     <table>
                       <tr>
-                        <th>어른(1인)</th>
+                        <th>성인(1인)</th>
                         <td>{product.adultPrice} 원</td>
                       </tr>
                       <tr>
@@ -333,16 +362,32 @@ const ReservationItem = () => {
                   return (
                     <SelectedItem>
                       <h4>{selectedProduct.name}</h4>
-                      <p>
-                        {selectedProduct.type}
-                        <span>{selectedProduct.category}</span>
-                        <span>성인 {selectedProduct.capacity}</span>
-                      </p>
-                      <p className="price">
-                        총액&nbsp;
-                        <strong>{selectedProduct.basicPrice}</strong> 원
-                      </p>
-                      <ReservationDeleteBtn onClick={handleDeleteClick}>삭제</ReservationDeleteBtn>
+                      <p>{selectedProduct.type}</p>
+                      <p>{selectedProduct.category}</p>
+                      <p>성인 {selectedProduct.capacity}</p>
+                      <table>
+                        <tr>
+                          <th>기본가</th>
+                          <td>{selectedProduct.basicPrice} 원</td>
+                        </tr>
+                      </table>
+                      <h5>추가 인원 비용</h5>
+                      <table>
+                        <tr>
+                          <th>성인</th>
+                          <td>{selectedProduct.adultPrice} 원</td>
+                          {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 
+                          
+                          예약 정보 입력 페이지에서 기준 인원 초과하여 인원 추가하는 경우 
+                          추가된 인원 수에 맞춰 위 계산법 적용됩니다. 이하 동일 */}
+                        </tr>
+                        <tr>
+                          <th>어린이</th>
+                          <td>{selectedProduct.childPrice} 원</td>
+                          {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 */}
+                        </tr>
+                      </table>
+                      <CircleCloseBtn onClick={handleDeleteClick}></CircleCloseBtn>
                     </SelectedItem>
                   );
                 } else {
