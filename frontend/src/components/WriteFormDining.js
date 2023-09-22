@@ -237,7 +237,7 @@ const WriteFormDining = () => {
             </WriteFormTd>
           </WriteFormTr>
           <WriteFormTr>
-            <WriteFormBoldTd>어른 추가 비용</WriteFormBoldTd>
+            <WriteFormBoldTd>성인 추가 비용</WriteFormBoldTd>
             <WriteFormTd>
               <Input type="text" name="priceAdult" onChange={handleChange} value={formData.priceAdult} required />
             </WriteFormTd>
@@ -255,7 +255,7 @@ const WriteFormDining = () => {
             </WriteFormTd>
           </WriteFormTr>
           <WriteFormTr>
-            <WriteFormBoldTd>최대 숙박 가능 인원 수(어른)</WriteFormBoldTd>
+            <WriteFormBoldTd>최대 숙박 가능 인원 수(성인)</WriteFormBoldTd>
             <WriteFormTd>
               <Input type="text" name="spareAdult" onChange={handleChange} value={formData.spareAdult} required />
             </WriteFormTd>

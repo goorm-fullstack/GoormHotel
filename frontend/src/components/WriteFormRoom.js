@@ -218,7 +218,7 @@ const WriteFormRoom = () => {
             <WriteFormBoldTd>썸네일</WriteFormBoldTd>
             <WriteFormTd>
               <ImageInput type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required />
-              {imgFile ? <Image src={imgFile} alt="프로필 이미지" /> : <Image style={{ display: 'none' }}></Image>}
+              {imgFile ? <Image src={imgFile} alt="프로필 이미지" /> : <Image style={{ display: 'none' }} />}
             </WriteFormTd>
           </WriteFormTr>
           <WriteFormTr>
@@ -238,7 +238,7 @@ const WriteFormRoom = () => {
             </WriteFormTd>
           </WriteFormTr>
           <WriteFormTr>
-            <WriteFormBoldTd>어른 추가 비용</WriteFormBoldTd>
+            <WriteFormBoldTd>성인 추가 비용</WriteFormBoldTd>
             <WriteFormTd>
               <Input type="text" name="priceAdult" onChange={handleChange} value={formData.priceAdult} required />
             </WriteFormTd>
@@ -256,7 +256,7 @@ const WriteFormRoom = () => {
             </WriteFormTd>
           </WriteFormTr>
           <WriteFormTr>
-            <WriteFormBoldTd>최대 숙박 가능 인원 수(어른)</WriteFormBoldTd>
+            <WriteFormBoldTd>최대 숙박 가능 인원 수(성인)</WriteFormBoldTd>
             <WriteFormTd>
               <Input type="text" name="spareAdult" onChange={handleChange} value={formData.spareAdult} required />
             </WriteFormTd>
