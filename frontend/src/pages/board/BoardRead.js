@@ -1,68 +1,20 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { NavLink, useLocation, useParams } from 'react-router-dom';
-import { commonContainerStyle } from '../../components/common/commonStyles';
-import queryStirng from 'query-string';
+import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn } from '../../components/common/commonStyles';
+import SubHeader from '../../components/layout/SubHeader';
 
-export const Container = styled.div`
-  ${commonContainerStyle}
-`;
-
-const Title = styled.p`
-  font-size: 36px;
-  font-weight: bold;
-  color: rgb(17, 17, 17);
-  margin-bottom: 100px;
-`;
-
-const AboutHeader = styled.div`
-  height: 70px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #dddddd;
-  position: fixed;
-  width: 100%;
-  background-color: white;
-  z-index: 99;
-  padding: 0 40px;
-  top: 120px;
-  min-width: 1260px;
-`;
-
-const AboutHeaderTitle = styled.h1`
-  font-size: 18px;
-  font-weight: bold;
-  width: 235px;
-`;
-
-const LinkWrapper = styled.div`
-  & > a:not(:last-child) {
-    margin-right: 40px;
-  }
-`;
-
-const AboutLink = styled(NavLink)`
-  font-size: 15px;
-  color: #666;
-
-  &:hover {
-    color: #baa085;
-  }
-
-  &.active {
-    color: #baa085;
-  }
-`;
+export const Container = styled(commonContainerStyle)``;
 
 const TableRead = styled.table`
-  border-bottom: 1px solid #21201e;
+  border-bottom: 1px solid ${(props) => props.theme.colors.charcoal};
   width: 100%;
 
   th {
-    border-top: 1px solid #eee;
+    border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
     font-weight: 500;
-    background: #f7f7f7;
-    color: #21201e;
+    background: ${(props) => props.theme.colors.graybg};
+    color: ${(props) => props.theme.colors.charcoal};
     vertical-align: top;
   }
   th,
@@ -70,8 +22,8 @@ const TableRead = styled.table`
     padding: 40px;
   }
   td {
-    border-top: 1px solid #eee;
-    color: #666;
+    border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
+    color: ${(props) => props.theme.colors.graydark};
   }
   .contents textarea {
     width: 100%;
@@ -81,7 +33,7 @@ const TableRead = styled.table`
   }
   tr:first-child th,
   tr:first-child td {
-    border-top-color: #21201e;
+    border-top-color: ${(props) => props.theme.colors.charcoal};
   }
   input {
     height: 36px;
@@ -94,52 +46,19 @@ const TableRead = styled.table`
     width: 80%;
   }
   td.titlew p {
-    font-size: 0.9375rem;
+    font-size: ${(props) => props.theme.font.sizes};
   }
   td.titlew p span {
     margin-right: 8px;
-    color: #888;
+    color: ${(props) => props.theme.colors.graylight};
   }
   td.titlew .title {
-    font-size: 1.4rem;
-    color: #111;
+    font-size: ${(props) => props.theme.font.sizesl};
+    color: ${(props) => props.theme.colors.charcoal};
     margin-bottom: 14px;
   }
   td.titlew {
-    background: #f7f7f7;
-  }
-`;
-
-const ButtonWrap = styled.div`
-  margin: 40px 0 0;
-  text-align: center;
-
-  button[type='submit'] {
-    background: #baa085;
-    color: white;
-    display: inline-block;
-    width: 160px;
-    height: 45px;
-    margin: 0 5px;
-    vertical-align: middle;
-  }
-  button[type='submit']:hover {
-    background: #8a7057;
-  }
-  a {
-    border: 1px solid #baa085;
-    color: #baa085;
-    display: inline-block;
-    width: 160px;
-    height: 45px;
-    line-height: 45px;
-    text-align: center;
-    vertical-align: middle;
-    margin: 0 5px;
-  }
-  a:hover {
-    background: #baa085;
-    color: white;
+    background: ${(props) => props.theme.colors.graybg};
   }
 `;
 
@@ -147,31 +66,18 @@ const BoardRead = () => {
   const board = useParams().board;
   return (
     <>
-      <AboutHeader>
-        <AboutHeaderTitle>고객지원</AboutHeaderTitle>
-        <LinkWrapper>
-          <AboutLink to="/board/notice" activeClassName="active">
-            공지사항
-          </AboutLink>
-          <AboutLink to="/board/qna" activeClassName="active">
-            문의하기
-          </AboutLink>
-          <AboutLink to="/board/review" activeClassName="active">
-            이용후기
-          </AboutLink>
-        </LinkWrapper>
-      </AboutHeader>
+      <SubHeader kind="board" />
       <Container>
         {(() => {
           switch (board) {
             case 'notice':
-              return <Title>공지사항</Title>;
+              return <PageTitle>공지사항</PageTitle>;
             case 'qna':
-              return <Title>문의하기</Title>;
+              return <PageTitle>문의하기</PageTitle>;
             case 'review':
-              return <Title>이용후기</Title>;
+              return <PageTitle>이용후기</PageTitle>;
             default:
-              return <Title>고객지원</Title>;
+              return <PageTitle>고객지원</PageTitle>;
           }
         })()}
         <div>
@@ -195,9 +101,9 @@ const BoardRead = () => {
               <td>내용입니다.</td>
             </tr>
           </TableRead>
-          <ButtonWrap>
-            <a href={`/board/` + board}>목록</a>
-          </ButtonWrap>
+          <BtnWrapper className="center mt40">
+            <LinkBtn to={`/board/` + board}>목록</LinkBtn>
+          </BtnWrapper>
         </div>
       </Container>
     </>

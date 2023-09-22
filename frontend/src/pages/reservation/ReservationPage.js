@@ -11,16 +11,16 @@ const Container = styled.div`
 
 export const Wrapper = styled.div`
   display: flex;
+  width: 100%;
 `;
 
 export const Left = styled.div`
-  width: 770px;
-  margin-right: 29px;
+  width: 70%;
+  padding-right: 40px;
 `;
 
 export const Right = styled.div`
-  width: 380px;
-  height: 820px;
+  width: 30%;
 `;
 
 export const Section = styled.div`

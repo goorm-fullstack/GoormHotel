@@ -2,17 +2,32 @@ import React, { useState } from 'react';
 import { Left, Right, Wrapper } from './ReservationPage';
 import { styled } from 'styled-components';
 import item from '../../images/item/item1.jpg';
-import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
+import { commonContainerStyle, PageTitle, ContentsTitleXSmall, CheckLabel, InputCheckbox } from '../../components/common/commonStyles';
 import { ReactComponent as Cart } from '../../images/icon/ico_cart.svg';
 
-const Container = styled.div`
-  ${commonContainerStyle}
-`;
+const Container = styled(commonContainerStyle)``;
 
 const SelectWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
   margin-bottom: 40px;
+
+  .typewrapper {
+    background-color: ${(props) => props.theme.colors.graybg};
+    display: flex;
+    padding: 21px 20px;
+    gap: 0 20px;
+  }
+
+  .categorywrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+
+    p {
+      font-weight: 500;
+      font-size: ${(props) => props.theme.font.sizexs};
+    }
+  }
 `;
 
 const Label = styled.label`
@@ -136,13 +151,28 @@ const NoItemText = styled.span`
   color: #888888;
 `;
 
+const SelectCategory = styled.select``;
+
 const ReservationItem = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   console.log(selectedProduct);
 
-  const productTypes = ['객실', '다이닝'];
-  const productCategories = ['디럭스', '패밀리', '스위트', '풀 빌라'];
+  const productTypes = [
+    {
+      name: '전체',
+      id: 'all',
+    },
+    {
+      name: '객실',
+      id: 'rooms',
+    },
+    {
+      name: '다이닝',
+      id: 'dining',
+    },
+  ];
+  const productCategories = ['전체', '디럭스', '패밀리', '스위트', '풀 빌라'];
 
   const handleReservationClick = (productInfo) => {
     setSelectedProduct(productInfo);
@@ -179,30 +209,28 @@ const ReservationItem = () => {
   return (
     <div>
       <Container>
-        <PageTitle>예약하기</PageTitle>
+        <PageTitle>스페셜오퍼</PageTitle>
         <Wrapper>
           <Left>
-            <PageTitle>예약 상품 선택</PageTitle>
+            <ContentsTitleXSmall>예약 상품 선택</ContentsTitleXSmall>
             <SelectWrapper>
-              <div>
-                <Label htmlFor="productType">상품 유형</Label>
-                <StyledSelect id="productType">
-                  {productTypes.map((type, index) => (
-                    <option key={index} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </StyledSelect>
+              <div className="typewrapper">
+                {productTypes.map((type) => (
+                  <CheckLabel for={type.id}>
+                    <InputCheckbox type="checkbox" id={type.id} />
+                    {type.name}
+                  </CheckLabel>
+                ))}
               </div>
-              <div>
-                <Label htmlFor="productType">상품 분류</Label>
-                <StyledSelect id="productType">
+              <div className="categorywrap">
+                <p>전체 0 개</p>
+                <SelectCategory id="productType">
                   {productCategories.map((category, index) => (
                     <option key={index} value={category}>
                       {category}
                     </option>
                   ))}
-                </StyledSelect>
+                </SelectCategory>
               </div>
             </SelectWrapper>
 
@@ -283,7 +311,7 @@ const ReservationItem = () => {
           </Left>
 
           <Right>
-            <PageTitle>상품개요</PageTitle>
+            <ContentsTitleXSmall>상품개요</ContentsTitleXSmall>
             {selectedProduct && (
               <>
                 <RoomItem>

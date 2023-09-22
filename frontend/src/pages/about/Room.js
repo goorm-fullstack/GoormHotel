@@ -6,75 +6,61 @@ import Suite from '../../images/room/Suite.jpg';
 import Villa from '../../images/room/Villa.jpg';
 import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
 
-export const Container = styled.div`
-  ${commonContainerStyle}
-`;
-
-export const TitleDescription = styled.p`
-  font-size: 18px;
-  color: #888888;
-  margin-bottom: 78px;
-`;
+export const Container = styled(commonContainerStyle)``;
 
 export const Item = styled.ul`
-  display: flex;
-  flex-direction: column;
+  li {
+    width: 100%;
+    height: 400px;
+    margin-bottom: 58px;
+    display: flex;
+    border: 1px solid ${(props) => props.theme.colors.grayborder};
+  }
 `;
 
-export const List = styled.li`
-  height: 402px;
-  margin-bottom: 58px;
-  display: flex;
-  border: 1px solid #dddddd;
-`;
-
-export const Img = styled.img`
-  width: 679px;
+export const ImgWrapper = styled.div`
+  width: 680px;
+  height: 398px;
+  background-size: cover;
 `;
 
 export const Info = styled.div`
-  display: flex;
-  flex-direction: column;
+  width: 500px;
   padding: 60px;
 `;
 
-export const Name = styled.h1`
-  font-size: 28px;
-  font-weight: bold;
+export const Name = styled.h3`
+  font-size: ${(props) => props.theme.font.sizexl};
   color: ${(props) => props.theme.colors.charcoal};
-  margin-bottom: 24px;
+  margin-bottom: 30px;
 `;
 
 export const Description = styled.p`
-  font-size: 14px;
-  color: #888888;
-  line-height: 1.5;
+  font-size: ${(props) => props.theme.font.sizes};
+  color: ${(props) => props.theme.colors.graylight};
+  line-height: 1.6;
+  word-break: keep-all;
 `;
 
-export const Detail = styled.div`
-  display: flex;
-  height: 71px;
-  margin-top: 41px;
-  margin-bottom: 40px;
-`;
+export const Detail = styled.table`
+  width: 100%;
+  line-height: 1.8;
+  margin: 25px 0;
+  font-size: ${(props) => props.theme.font.sizexs};
 
-export const DetailInfo = styled.div`
-  color: #888888;
-  font-size: 14px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
-
-export const DetailTitle = styled(DetailInfo)`
-  margin-right: 50px;
-  font-weight: bold;
-  color: #111111;
+  th {
+    font-weight: 500;
+    width: 40%;
+    color: ${(props) => props.theme.colors.charcoal};
+  }
+  td {
+    color: ${(props) => props.theme.colors.graylight};
+  }
 `;
 
 export const Location = styled.p`
-  font-size: 14px;
-  color: #baa085;
+  font-size: ${(props) => props.theme.font.sizexs};
+  color: ${(props) => props.theme.colors.goldhover};
 `;
 
 const Room = () => {
@@ -82,10 +68,9 @@ const Room = () => {
     <>
       <Container>
         <PageTitle>객실</PageTitle>
-        <TitleDescription>환상적인 서울 도심의 파노라믹뷰와 모던한 인테리어의 객실은 최상의 휴식을 제공합니다.</TitleDescription>
         <Item>
-          <List>
-            <Img src={Deluxe}></Img>
+          <li>
+            <ImgWrapper style={{ backgroundImage: `url(${Deluxe})` }}></ImgWrapper>
             <Info>
               <Name>디럭스</Name>
               <Description>
@@ -93,45 +78,49 @@ const Room = () => {
                 제공합니다.
               </Description>
               <Detail>
-                <DetailTitle>
-                  <div>침대타입</div>
-                  <div>투숙인원</div>
-                  <div>체크인/체크아웃</div>
-                </DetailTitle>
-                <DetailInfo>
-                  <div>더블/트윈</div>
-                  <div>2명</div>
-                  <div>15:00/11:00</div>
-                </DetailInfo>
+                <tr>
+                  <th>침대타입</th>
+                  <td>더블/트윈</td>
+                </tr>
+                <tr>
+                  <th>투숙인원</th>
+                  <td>2명</td>
+                </tr>
+                <tr>
+                  <th>체크인/체크아웃</th>
+                  <td>15:00/11:00</td>
+                </tr>
               </Detail>
-              <Location>• 위치 : 본관</Location>
+              <Location>•&nbsp;&nbsp;위치 : 본관</Location>
             </Info>
-          </List>
-          <List>
-            <Img src={Suite}></Img>
+          </li>
+          <li>
+            <ImgWrapper style={{ backgroundImage: `url(${Suite})` }}></ImgWrapper>
             <Info>
               <Name>스위트</Name>
               <Description>
-                스위트 룸은 넓은 공간과 세련된 디자인의 응접실 및 다이닝룸을 갖춘 객실입니다. 대형 창문을 통해 펼쳐지는 아름다운 서울의 전망과 함께
+                스위트 룸은 넓은 공간과 세련된 디자인의 응접실 및 다이닝 룸을 갖춘 객실입니다. 대형 창문을 통해 펼쳐지는 아름다운 서울의 전망과 함께
                 세심한 서비스를 느껴보세요.
               </Description>
               <Detail>
-                <DetailTitle>
-                  <div>침대타입</div>
-                  <div>투숙인원</div>
-                  <div>체크인/체크아웃</div>
-                </DetailTitle>
-                <DetailInfo>
-                  <div>더블/트윈</div>
-                  <div>2명</div>
-                  <div>15:00/11:00</div>
-                </DetailInfo>
+                <tr>
+                  <th>침대타입</th>
+                  <td>더블/트윈</td>
+                </tr>
+                <tr>
+                  <th>투숙인원</th>
+                  <td>2명</td>
+                </tr>
+                <tr>
+                  <th>체크인/체크아웃</th>
+                  <td>15:00/11:00</td>
+                </tr>
               </Detail>
-              <Location>• 위치 : 본관</Location>
+              <Location>•&nbsp;&nbsp;위치 : 본관</Location>
             </Info>
-          </List>
-          <List>
-            <Img src={Family}></Img>
+          </li>
+          <li>
+            <ImgWrapper style={{ backgroundImage: `url(${Family})` }}></ImgWrapper>
             <Info>
               <Name>패밀리</Name>
               <Description>
@@ -139,22 +128,24 @@ const Room = () => {
                 있습니다.
               </Description>
               <Detail>
-                <DetailTitle>
-                  <div>침대타입</div>
-                  <div>투숙인원</div>
-                  <div>체크인/체크아웃</div>
-                </DetailTitle>
-                <DetailInfo>
-                  <div>더블/트윈</div>
-                  <div>2명</div>
-                  <div>15:00/11:00</div>
-                </DetailInfo>
+                <tr>
+                  <th>침대타입</th>
+                  <td>더블/트윈</td>
+                </tr>
+                <tr>
+                  <th>투숙인원</th>
+                  <td>2명</td>
+                </tr>
+                <tr>
+                  <th>체크인/체크아웃</th>
+                  <td>15:00/11:00</td>
+                </tr>
               </Detail>
-              <Location>• 위치 : 본관</Location>
+              <Location>•&nbsp;&nbsp;위치 : 본관</Location>
             </Info>
-          </List>
-          <List>
-            <Img src={Villa}></Img>
+          </li>
+          <li>
+            <ImgWrapper style={{ backgroundImage: `url(${Villa})` }}></ImgWrapper>
             <Info>
               <Name>풀 빌라</Name>
               <Description>
@@ -162,20 +153,22 @@ const Room = () => {
                 장소입니다.
               </Description>
               <Detail>
-                <DetailTitle>
-                  <div>침대타입</div>
-                  <div>투숙인원</div>
-                  <div>체크인/체크아웃</div>
-                </DetailTitle>
-                <DetailInfo>
-                  <div>더블/트윈</div>
-                  <div>2명</div>
-                  <div>15:00/11:00</div>
-                </DetailInfo>
+                <tr>
+                  <th>침대타입</th>
+                  <td>더블/트윈</td>
+                </tr>
+                <tr>
+                  <th>투숙인원</th>
+                  <td>2명</td>
+                </tr>
+                <tr>
+                  <th>체크인/체크아웃</th>
+                  <td>15:00/11:00</td>
+                </tr>
               </Detail>
-              <Location>• 위치 : 별채</Location>
+              <Location>•&nbsp;&nbsp;위치 : 별채</Location>
             </Info>
-          </List>
+          </li>
         </Item>
       </Container>
     </>

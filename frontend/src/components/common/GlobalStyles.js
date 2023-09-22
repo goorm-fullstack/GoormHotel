@@ -89,12 +89,18 @@ select {
   -moz-appearance: none;
   appearance: none;
 
-  padding: 10px;
-  background-image: url('data:image/svg+xml;utf8,<svg fill="%23444444" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  padding: 0 39px 0 15px;
+  background-image: url('data:image/svg+xml;utf8,<svg height="512px" id="Layer_1" style="enable-background:new 0 0 512 512;" fill="gray" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="396.6,160 416,180.7 256,352 96,180.7 115.3,160 256,310.5 "/></svg>');
   background-repeat: no-repeat;
-  background-position: right center; 
+  background-position: 90% center; 
+	background-size: 14px;
   padding-right: 30px; 
   cursor: pointer;
+	border: 1px solid #ddd;
+	height: 40px;
+	width: 152px;
+	font-size: 14px;
+	letter-spacing: -0.02em;
 }
 
 ::selection {

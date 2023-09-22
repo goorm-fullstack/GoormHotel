@@ -271,7 +271,7 @@ const Footer = () => {
             </SiteLinkWrapeer>
             <CompanykWrapeer>
               <p>
-                <span>(주)어벤져스</span>
+                <span>(주)리벤져스</span>
                 <span>경기도 성남시 분당구 판교로 242 PDC A동 902호</span>
                 <span>사업자등록번호 : 124-87-39200</span>
               </p>
@@ -291,7 +291,7 @@ const Footer = () => {
                 </span>
               </p>
               <p>
-                Copyright &copy; 어벤져스팀(
+                Copyright &copy; 리벤져스팀(
                 <a href="https://github.com/WhiteKIM" target="_blank">
                   김경규
                 </a>

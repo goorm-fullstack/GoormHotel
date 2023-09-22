@@ -10,7 +10,6 @@ import About from './pages/about/About';
 import Mypage from './pages/member/Mypage';
 import ReservationPage from './pages/reservation/ReservationPage';
 import ChatModal from './components/layout/ChatModal';
-import ReservationComplete from './pages/reservation/ReservationComplete';
 import ReservationCheck from './pages/reservation/ReservationCheck';
 import ReservationItem from './pages/reservation/ReservationItem';
 import ReservationList from './pages/reservation/ReservationList';
@@ -29,6 +28,7 @@ import Login from './pages/member/Login';
 import Signup from './pages/member/Signup';
 import BoardWrite from './pages/board/BoardWrite';
 import BoardRead from './pages/board/BoardRead';
+import JoinComplete from './pages/member/JoinComplete';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -107,18 +107,18 @@ function App() {
           <Route path="/agreement" element={<Agreement />}></Route>
           <Route path="/privacy" element={<Privacy />}></Route>
           <Route path="/sitemap" element={<Sitemap />}></Route>
-          <Route path="/findid" element={<FindAccount />}></Route>
+          <Route path="/findidpw" element={<FindAccount />}></Route>
           <Route path="/findid/result" element={<FindIdResult />}></Route>
           <Route path="/findpw/result" element={<FindPwResult />}></Route>
           <Route path="/membership" element={<Membership />}></Route>
-          <Route path="/reservation/complete" element={<ReservationComplete title="예약 확인" />}></Route>
-          <Route path="/reservation/check" element={<ReservationCheck />}></Route>
+          <Route path="/reservation/:number" element={<ReservationCheck />}></Route>
           <Route path="/offers" element={<ReservationItem />}></Route>
-          <Route path="/reservation/history" element={<ReservationList />}></Route>
+          <Route path="/reservation/history/:memberid" element={<ReservationList />}></Route>
           <Route path="/facilities" element={<Facilities />}></Route>
           <Route path="/customerSupport" element={<CustomerSupport />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
+          <Route path="/signup/result" element={<JoinComplete />}></Route>
           <Route path="/board/:board" element={<CustomerSupport />}></Route>
           <Route path="/board/:board/write" element={<BoardWrite />}></Route>
           <Route path="/board/:board/detail" element={<BoardRead />}></Route>

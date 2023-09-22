@@ -87,7 +87,7 @@ const Header = () => {
           <Link to="/signup">회원가입</Link>
         </li>
         <li>
-          <Link to="/login">예약 확인</Link>
+          <Link to="/login?type=reservation">예약 확인</Link>
         </li>
         <li>
           <Link to="/membership">멤버십</Link>
