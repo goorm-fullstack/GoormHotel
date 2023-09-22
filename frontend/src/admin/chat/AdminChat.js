@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import Instance from '../../utils/api/axiosInstance';
 
 const Container = styled.div`
   width: 100%;
@@ -142,20 +143,7 @@ const TableCheckbox = styled.input`
 
 const AdminChat = () => {
   const [checkedItems, setCheckedItems] = useState([]);
-
-  const handleCheckboxChange = (memberId) => {
-    setCheckedItems((prevItems) => {
-      if (prevItems.includes(memberId)) {
-        return prevItems.filter((item) => item !== memberId);
-      } else {
-        return [...prevItems, memberId];
-      }
-    });
-  };
-
-  console.log(checkedItems);
-
-  const chatData = [
+  const [chatData, setChatData] = useState([
     {
       id: 3,
       number: 3,
@@ -184,7 +172,27 @@ const AdminChat = () => {
       lastDate: '2023.09.04',
       state: '종료',
     },
-  ];
+  ])
+
+  useEffect(()=> {
+    Instance.get("/chat/getLastMessage")
+      .then((response) =>{
+        setChatData(response.data)
+      })
+  },[])
+
+  const handleCheckboxChange = (memberId) => {
+    setCheckedItems((prevItems) => {
+      if (prevItems.includes(memberId)) {
+        return prevItems.filter((item) => item !== memberId);
+      } else {
+        return [...prevItems, memberId];
+      }
+    });
+  };
+
+  console.log(checkedItems);
+
 
   const subMenus = [
     { name: '채팅 관리', link: '/admin/chat' },
