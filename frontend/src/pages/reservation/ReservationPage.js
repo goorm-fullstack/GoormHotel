@@ -15,12 +15,12 @@ export const Wrapper = styled.div`
 `;
 
 export const Left = styled.div`
-  width: 70%;
+  width: 75%;
   padding-right: 40px;
 `;
 
 export const Right = styled.div`
-  width: 30%;
+  width: 25%;
 `;
 
 export const Section = styled.div`

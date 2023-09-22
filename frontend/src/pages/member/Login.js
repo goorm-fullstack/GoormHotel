@@ -51,12 +51,6 @@ const Input = styled.input`
   }
 `;
 
-const LoginBtn = styled(SubmitBtn)`
-  width: 100%;
-  height: 60px;
-  line-height: 60px;
-`;
-
 const RememberAndFind = styled.div`
   display: flex;
   justify-content: space-between;
@@ -96,12 +90,6 @@ const SecondText = styled.p`
   color: ${(props) => props.theme.colors.graylight};
   margin-bottom: 60px;
   line-height: 1.6;
-`;
-
-const SignupBtn = styled(LinkBtn)`
-  width: 100%;
-  height: 60px;
-  line-height: 58px;
 `;
 
 const Login = () => {
@@ -150,8 +138,10 @@ const Login = () => {
               <form id="memberLogin">
                 <Input placeholder="아이디" value={memberId} onChange={handleIdChange} />
                 <Input className="password" placeholder="비밀번호" value={memberPassword} onChange={handlePwChange} />
-                <BtnWrapper className="mt20">
-                  <LoginBtn type="submit">로그인</LoginBtn>
+                <BtnWrapper className="mt20 full">
+                  <SubmitBtn type="submit" className="height60">
+                    로그인
+                  </SubmitBtn>
                 </BtnWrapper>
               </form>
             </div>
@@ -180,7 +170,11 @@ const Login = () => {
               회원이 되시면 구름 리워즈 멤버십 회원으로서
               <br />더 큰 혜택과 편리함을 누릴 수 있습니다.
             </SecondText>
-            <SignupBtn to="/signup">회원가입</SignupBtn>
+            <BtnWrapper className="full">
+              <LinkBtn to="/signup" className="height60">
+                회원가입
+              </LinkBtn>
+            </BtnWrapper>
           </RightWrapper>
         </Wrapper>
       </Container>

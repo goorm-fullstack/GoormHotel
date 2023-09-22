@@ -38,7 +38,6 @@ const PwProcess = styled.div`
 `;
 
 const FindSubmitBtn = styled(SubmitBtn)`
-  width: 100%;
   height: 60px;
   line-height: 60px;
 `;
@@ -58,10 +57,10 @@ const FindAccount = () => {
                 <AuthBtn>인증번호 요청</AuthBtn>
               </Auth>
               <input placeholder="인증번호를 입력하세요." name="#" required />
-              <BtnWrapper className="mt20">
-                <FindSubmitBtn type="submit" form="find-id">
+              <BtnWrapper className="mt20 full">
+                <SubmitBtn type="submit" form="find-id" className="height60">
                   아이디 찾기
-                </FindSubmitBtn>
+                </SubmitBtn>
               </BtnWrapper>
             </form>
           </IdProcess>
@@ -75,10 +74,10 @@ const FindAccount = () => {
                 <AuthBtn>인증번호 요청</AuthBtn>
               </Auth>
               <input placeholder="인증번호를 입력하세요." name="#" required />
-              <BtnWrapper className="mt20">
-                <FindSubmitBtn type="submit" form="find-pw">
+              <BtnWrapper className="mt20 full">
+                <SubmitBtn type="submit" form="find-pw" className="height60">
                   비밀번호 찾기
-                </FindSubmitBtn>
+                </SubmitBtn>
               </BtnWrapper>
             </form>
           </PwProcess>

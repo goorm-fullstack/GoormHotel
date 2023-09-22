@@ -67,12 +67,6 @@ const GuideText = styled.ul`
   margin-top: 20px;
 `;
 
-const ModifySubmitBtn = styled(SubmitBtn)`
-  width: 100%;
-  height: 60px;
-  line-height: 60px;
-`;
-
 const Mypage = () => {
   return (
     <>
@@ -94,8 +88,10 @@ const Mypage = () => {
               <input placeholder="연락처" />
               <input placeholder="생년월일(선택입력)" />
               <input placeholder="성별(선택입력)" />
-              <BtnWrapper className="mt20">
-                <ModifySubmitBtn type="submit">회원 정보 수정</ModifySubmitBtn>
+              <BtnWrapper className="mt20 full">
+                <SubmitBtn type="submit" className="height60">
+                  회원 정보 수정
+                </SubmitBtn>
               </BtnWrapper>
             </form>
           </EditWrapper>

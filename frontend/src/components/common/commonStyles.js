@@ -86,6 +86,9 @@ export const BtnWrapper = styled.div`
   &.mt40 {
     margin-top: 40px;
   }
+  &.mt30 {
+    margin-top: 30px;
+  }
   &.mt20 {
     margin-top: 20px;
   }
@@ -93,6 +96,11 @@ export const BtnWrapper = styled.div`
   &.double > button,
   &.double > a {
     margin: 0 5px;
+  }
+
+  &.full > button,
+  &.full > a {
+    width: 100%;
   }
 `;
 
@@ -122,6 +130,23 @@ export const LinkBtn = styled(commonLinkBtn)`
     background-color: ${(props) => props.theme.colors.gold};
     color: white;
   }
+
+  &.height60 {
+    height: 60px;
+    line-height: 58px;
+  }
+`;
+
+export const NormalBtn = styled(commonButton)`
+  background: white;
+  border: 1px solid ${(props) => props.theme.colors.grayborder};
+  color: ${(props) => props.theme.colors.graylight};
+  line-height: 40px;
+
+  &:hover {
+    border-color: ${(props) => props.theme.colors.gold};
+    color: ${(props) => props.theme.colors.goldhover};
+  }
 `;
 
 export const SubmitBtn = styled(commonButton)`
@@ -130,6 +155,15 @@ export const SubmitBtn = styled(commonButton)`
 
   &:hover {
     background-color: ${(props) => props.theme.colors.goldhover};
+  }
+
+  &.height50 {
+    height: 50px;
+    line-height: 50px;
+  }
+  &.height60 {
+    height: 60px;
+    line-height: 60px;
   }
 `;
 

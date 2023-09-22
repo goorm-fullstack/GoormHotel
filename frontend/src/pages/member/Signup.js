@@ -29,13 +29,17 @@ const LeftWrapper = styled.div`
   border-right: 1px solid ${(props) => props.theme.colors.grayborder};
 
   & > div {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+
+    label {
+      color: ${(props) => props.theme.colors.graydark};
+    }
   }
 `;
 
 const AgreementText = styled.div`
-  font-size: 14px;
-  color: ${(props) => props.theme.colors.blacklight};
+  font-size: ${(props) => props.theme.font.sizexs};
+  color: ${(props) => props.theme.colors.graydark};
   height: 200px;
   border: 1px solid ${(props) => props.theme.colors.grayborder};
   padding: 20px;
@@ -60,12 +64,6 @@ const RightWrapper = styled.div`
   & form > input {
     width: 100%;
   }
-`;
-
-const JoinSubmitBtn = styled(SubmitBtn)`
-  width: 100%;
-  height: 60px;
-  line-height: 60px;
 `;
 
 const Signup = () => {
@@ -167,10 +165,10 @@ const Signup = () => {
               <input type="text" name="phoneNumber" value={formData.phoneNumber} placeholder="연락처" onChange={handleChange} required />
               <input type="text" name="birthdate" value={formData.birthdate} placeholder="생년월일(선택입력)" onChange={handleChange} />
               <input type="text" name="gender" value={formData.gender} placeholder="성별(선택입력)" onChange={handleChange} />
-              <BtnWrapper className="mt20">
-                <JoinSubmitBtn type="submit" onClick={handleSignupButton}>
+              <BtnWrapper className="mt20 full">
+                <SubmitBtn type="submit" onClick={handleSignupButton} className="height60">
                   회원가입
-                </JoinSubmitBtn>
+                </SubmitBtn>
               </BtnWrapper>
             </form>
           </RightWrapper>

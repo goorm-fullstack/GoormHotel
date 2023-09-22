@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 
 export const PageParam = styled.ul`
   text-align: center;
-  margin-top: 40px;
+  margin-top: 60px;
 
   li {
     display: inline-block;

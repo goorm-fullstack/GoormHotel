@@ -2,8 +2,17 @@ import React, { useState } from 'react';
 import { Left, Right, Wrapper } from './ReservationPage';
 import { styled } from 'styled-components';
 import item from '../../images/item/item1.jpg';
-import { commonContainerStyle, PageTitle, ContentsTitleXSmall, CheckLabel, InputCheckbox } from '../../components/common/commonStyles';
-import { ReactComponent as Cart } from '../../images/icon/ico_cart.svg';
+import {
+  commonContainerStyle,
+  PageTitle,
+  ContentsTitleXSmall,
+  CheckLabel,
+  InputCheckbox,
+  NormalBtn,
+  BtnWrapper,
+  SubmitBtn,
+} from '../../components/common/commonStyles';
+import Paging from '../../components/common/Paging';
 
 const Container = styled(commonContainerStyle)``;
 
@@ -17,6 +26,10 @@ const SelectWrapper = styled.div`
     gap: 0 20px;
   }
 
+  .typewrapper label {
+    color: ${(props) => props.theme.colors.blacklight};
+  }
+
   .categorywrap {
     display: flex;
     align-items: center;
@@ -27,72 +40,92 @@ const SelectWrapper = styled.div`
       font-weight: 500;
       font-size: ${(props) => props.theme.font.sizexs};
     }
+
+    strong {
+      color: ${(props) => props.theme.colors.goldhover};
+    }
   }
 `;
 
-const Label = styled.label`
-  display: block;
-  font-size: 14px;
-  color: #111111;
-  margin-bottom: 12px;
-`;
-
-const StyledSelect = styled.select`
-  width: 380px;
-  height: 60px;
-  font-size: 18px;
-  padding-left: 20px;
-  border: 1px solid #dddddd;
-  outline: none;
-`;
-
-const RoomItemWrapper = styled.div`
+const RoomItemWrapper = styled.ul`
   display: flex;
+  width: 100%;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 20px 16px;
 `;
 
-const RoomItem = styled.div`
-  width: 380px;
-  height: 555px;
-  border: 1px solid #dddddd;
-  display: flex;
-  flex-direction: column;
+const RoomItem = styled.li`
+  width: calc((100% / 3) - (32px / 3));
+  border: 1px solid ${(props) => props.theme.colors.graylightborder};
+
+  .imgwrap {
+    width: 100%;
+    height: 190px;
+    background-size: cover;
+  }
 `;
 
 const RoomItemInfo = styled.div`
-  padding: 35px 40px 40px 40px;
-`;
+  width:100%;
+  padding: 30px;
+  letter-spacing; -0.02em;
 
-const CartItemWrapper = styled(RoomItemInfo)`
-  background-color: #f5f5f5;
-`;
+  h4 {
+    font-size: ${(props) => props.theme.font.sizem};
+    font-weight: 500;
+    color: ${(props) => props.theme.colors.charcoal};
+    margin-bottom: 10px;
+  }
 
-const RoomItemTitle = styled.h1`
-  font-size: 18px;
-  font-weight: bold;
-  color: ${(props) => props.theme.colors.charcoal};
-  margin-bottom: 25px;
-`;
+  p {
+    color: ${(props) => props.theme.colors.graydark};
+    font-size: ${(props) => props.theme.font.sizexs};
 
-const DetailWrapper = styled.div`
-  display: flex;
-  height: 127px;
-  font-size: 14px;
-  margin-bottom: 47px;
-`;
+    span::before {
+      content: '';
+      width: 1px;
+      height: 9px;
+      background: ${(props) => props.theme.colors.grayborder};
+      display: inline-block;
+      margin: 0 8px;
+    }
+  }
 
-const DetailTitle = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  color: #888888;
-  width: 160px;
-`;
+  p.price {
+    color: ${(props) => props.theme.colors.blacklight};
+    font-weight: 500;
+    margin: 15px 0 30px;
+    letter-spacing: -0.02em;
 
-const DetailInfo = styled(DetailTitle)`
-  width: 136px;
-  color: #666666;
+    strong {
+      font-size: ${(props) => props.theme.font.sizem};
+    }
+  }
+
+  h5 {
+    font-size: ${(props) => props.theme.font.sizexs};
+    color: ${(props) => props.theme.colors.blacklight};
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  th, td {
+    color: ${(props) => props.theme.colors.graydark};
+    font-size: ${(props) => props.theme.font.sizexs};
+    line-height: 1.5;
+  }
+
+  th {
+    width: 50%;
+  }
+
+  td {
+    text-align: right;
+  }
 `;
 
 const ReservationBtn = styled.button`
@@ -118,40 +151,33 @@ const ReservationDeleteBtn = styled(ReservationBtn)`
   }
 `;
 
-const InfoBtn = styled.button`
-  background-color: #95846e;
-  color: #ffffff;
-  height: 60px;
-  width: 100%;
-  margin-top: 60px;
+const NoItem = styled.div`
+  width: 293px;
+  height: 500px;
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+  line-height: 1.6;
+  color: ${(props) => props.theme.colors.graylight};
 
-  &:hover {
-    background-color: #8a7057;
+  svg {
+    width: 100px;
   }
 `;
 
-const NoItem = styled.div`
-  background-color: ${(props) => props.theme.colors.lightGray};
+const SelectedItem = styled.div`
+  h4 {
+    font-weight: 500;
+  }
+`;
+
+const SelectItem = styled.div`
   width: 100%;
-  height: 465px;
-  border: 1px solid #dddddd;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  height: 502px;
+  border: 1px solid ${(props) => props.theme.colors.grayborder};
+  border-radius: 5px;
+  background: ${(props) => props.theme.colors.graybg};
 `;
-
-const CartIcon = styled(Cart)`
-  fill: #888888;
-  width: 80px;
-`;
-
-const NoItemText = styled.span`
-  margin-top: 23px;
-  color: #888888;
-`;
-
-const SelectCategory = styled.select``;
 
 const ReservationItem = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -186,22 +212,52 @@ const ReservationItem = () => {
     {
       name: '디럭스 객실',
       image: item,
-      price: 160000,
       type: '객실',
       category: '디럭스',
-      basicPrice: 160000,
-      adultPrice: 80000,
-      childPrice: 40000,
+      basicPrice: '160,000',
+      capacity: 2,
+      adultPrice: '80,000',
+      childPrice: '40,000',
     },
     {
       name: '패밀리 객실',
       image: item,
-      price: 180000,
       type: '객실',
       category: '패밀리',
-      basicPrice: 180000,
-      adultPrice: 90000,
-      childPrice: 45000,
+      basicPrice: '180,000',
+      capacity: 2,
+      adultPrice: '90,000',
+      childPrice: '45,000',
+    },
+    {
+      name: '패밀리 객실',
+      image: item,
+      type: '객실',
+      category: '패밀리',
+      basicPrice: '180,000',
+      capacity: 2,
+      adultPrice: '90,000',
+      childPrice: '45,000',
+    },
+    {
+      name: '패밀리 객실',
+      image: item,
+      type: '객실',
+      category: '패밀리',
+      basicPrice: '180,000',
+      capacity: 2,
+      adultPrice: '90,000',
+      childPrice: '45,000',
+    },
+    {
+      name: '패밀리 객실',
+      image: item,
+      type: '객실',
+      category: '패밀리',
+      basicPrice: '180,000',
+      capacity: 2,
+      adultPrice: '90,000',
+      childPrice: '45,000',
     },
     // 다른 상품들...
   ];
@@ -223,132 +279,108 @@ const ReservationItem = () => {
                 ))}
               </div>
               <div className="categorywrap">
-                <p>전체 0 개</p>
-                <SelectCategory id="productType">
+                <p>
+                  전체 <strong>0</strong> 개
+                </p>
+                <select id="productType">
                   {productCategories.map((category, index) => (
                     <option key={index} value={category}>
                       {category}
                     </option>
                   ))}
-                </SelectCategory>
+                </select>
               </div>
             </SelectWrapper>
-
             <RoomItemWrapper>
               {products.map((product, index) => (
                 <RoomItem key={index}>
-                  <img src={product.image} alt="ItemImg" />
+                  <div className="imgwrap" style={{ backgroundImage: `url(${product.image})` }} alt="ItemImg" />
                   <RoomItemInfo>
-                    <RoomItemTitle>{product.name}</RoomItemTitle>
-                    <DetailWrapper>
-                      <DetailTitle>
-                        <p>상품 유형</p>
-                        <p>상품 분류</p>
-                        <p>기본 가격(1박/2인 기준)</p>
-                        <p>어른 추가(1인)</p>
-                        <p>어린이 추가(1인)</p>
-                      </DetailTitle>
-                      <DetailInfo>
-                        <p>{product.type}</p>
-                        <p>{product.category}</p>
-                        <p>{product.basicPrice} 원</p>
-                        <p>{product.adultPrice} 원/최대 1인</p>
-                        <p>{product.childPrice} 원/최대 2인</p>
-                      </DetailInfo>
-                    </DetailWrapper>
-                    <ReservationBtn onClick={() => handleReservationClick(product)}>예약하기</ReservationBtn>
+                    <h4>{product.name}</h4>
+                    <p>
+                      {product.type}
+                      <span>{product.category}</span>
+                      <span>{product.capacity}인 기준</span>
+                    </p>
+                    <p className="price">
+                      <strong>{product.basicPrice}</strong> 원 ~
+                    </p>
+                    <h5>추가 인원 비용</h5>
+                    <table>
+                      <tr>
+                        <th>어른(1인)</th>
+                        <td>{product.adultPrice} 원</td>
+                      </tr>
+                      <tr>
+                        <th>어린이(1인)</th>
+                        <td>{product.childPrice} 원</td>
+                      </tr>
+                    </table>
+                    <BtnWrapper className="full mt30">
+                      <NormalBtn onClick={() => handleReservationClick(product)}>상품 담기(예약)</NormalBtn>
+                    </BtnWrapper>
                   </RoomItemInfo>
                 </RoomItem>
               ))}
-
-              <RoomItem>
-                <img src={item} alt="ItemImg" />
-                <RoomItemInfo>
-                  <RoomItemTitle>상품명</RoomItemTitle>
-                  <DetailWrapper>
-                    <DetailTitle>
-                      <p>상품 유형</p>
-                      <p>상품 분류</p>
-                      <p>기본 가격(1박/2인 기준)</p>
-                      <p>어른 추가(1인)</p>
-                      <p>어린이 추가(1인)</p>
-                    </DetailTitle>
-                    <DetailInfo>
-                      <p>객실</p>
-                      <p>디럭스 </p>
-                      <p>160,000 원</p>
-                      <p>80,000 원/최대 1인</p>
-                      <p>40,000 원/최대 2인</p>
-                    </DetailInfo>
-                  </DetailWrapper>
-                  <ReservationBtn>예약하기</ReservationBtn>
-                </RoomItemInfo>
-              </RoomItem>
-              <RoomItem>
-                <img src={item} alt="ItemImg" />
-                <RoomItemInfo>
-                  <RoomItemTitle>상품명</RoomItemTitle>
-                  <DetailWrapper>
-                    <DetailTitle>
-                      <p>상품 유형</p>
-                      <p>상품 분류</p>
-                      <p>기본 가격(1박/2인 기준)</p>
-                      <p>어른 추가(1인)</p>
-                      <p>어린이 추가(1인)</p>
-                    </DetailTitle>
-                    <DetailInfo>
-                      <p>객실</p>
-                      <p>디럭스 </p>
-                      <p>160,000 원</p>
-                      <p>80,000 원/최대 1인</p>
-                      <p>40,000 원/최대 2인</p>
-                    </DetailInfo>
-                  </DetailWrapper>
-                  <ReservationBtn>예약하기</ReservationBtn>
-                </RoomItemInfo>
-              </RoomItem>
             </RoomItemWrapper>
+            <Paging />
           </Left>
-
           <Right>
-            <ContentsTitleXSmall>상품개요</ContentsTitleXSmall>
-            {selectedProduct && (
-              <>
-                <RoomItem>
-                  <img src={item} alt="ItemImg" />
-                  <CartItemWrapper>
-                    <RoomItemTitle>상품명</RoomItemTitle>
-                    <DetailWrapper>
-                      <DetailTitle>
-                        <p>상품 유형</p>
-                        <p>상품 분류</p>
-                        <p>기본 가격(1박/2인 기준)</p>
-                        <p>어른 추가(1인)</p>
-                        <p>어린이 추가(1인)</p>
-                      </DetailTitle>
-                      <DetailInfo>
-                        <p>{selectedProduct.type}</p>
-                        <p>{selectedProduct.category} </p>
-                        <p>{selectedProduct.basicPrice} 원</p>
-                        <p>{selectedProduct.adultPrice} 원/최대 1인</p>
-                        <p>{selectedProduct.childPrice} 원/최대 2인</p>
-                      </DetailInfo>
-                    </DetailWrapper>
-                    <ReservationDeleteBtn onClick={handleDeleteClick}>삭제</ReservationDeleteBtn>
-                  </CartItemWrapper>
-                </RoomItem>
-                <InfoBtn>예약 정보 입력하기</InfoBtn>
-              </>
-            )}
-            {!selectedProduct && (
-              <>
-                <NoItem>
-                  <CartIcon />
-                  <NoItemText>담긴 상품이 없습니다.</NoItemText>
-                </NoItem>
-                <InfoBtn>예약 정보 입력하기</InfoBtn>
-              </>
-            )}
+            <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
+            <SelectItem>
+              {(() => {
+                if (selectedProduct) {
+                  return (
+                    <SelectedItem>
+                      <h4>{selectedProduct.name}</h4>
+                      <p>
+                        {selectedProduct.type}
+                        <span>{selectedProduct.category}</span>
+                        <span>성인 {selectedProduct.capacity}</span>
+                      </p>
+                      <p className="price">
+                        총액&nbsp;
+                        <strong>{selectedProduct.basicPrice}</strong> 원
+                      </p>
+                      <ReservationDeleteBtn onClick={handleDeleteClick}>삭제</ReservationDeleteBtn>
+                    </SelectedItem>
+                  );
+                } else {
+                  return (
+                    <NoItem>
+                      <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                        <rect fill="none" height="256" width="256" />
+                        <path
+                          d="M184,184H69.8L41.9,30.6A8,8,0,0,0,34.1,24H16"
+                          fill="none"
+                          stroke="#ddd"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="16"
+                        />
+                        <circle cx="80" cy="204" fill="none" r="20" stroke="#ddd" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+                        <circle cx="184" cy="204" fill="none" r="20" stroke="#ddd" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+                        <path
+                          d="M62.5,144H188.1a15.9,15.9,0,0,0,15.7-13.1L216,64H48"
+                          fill="none"
+                          stroke="#ddd"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="16"
+                        />
+                      </svg>
+                      <br />
+                      담긴 상품이 없습니다.
+                    </NoItem>
+                  );
+                }
+              })()}
+            </SelectItem>
+            <BtnWrapper className="full mt40">
+              <SubmitBtn type="submit" className="height60">
+                예약 정보 입력하기
+              </SubmitBtn>
+            </BtnWrapper>
           </Right>
         </Wrapper>
       </Container>
