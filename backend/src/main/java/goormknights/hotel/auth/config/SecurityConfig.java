@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import goormknights.hotel.auth.config.handler.LoginFailHandler;
 import goormknights.hotel.auth.service.AdminDetailService;
 import goormknights.hotel.auth.service.CustomOAuth2UserService;
+import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -12,9 +13,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,11 +21,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
 
 import java.util.Arrays;
 
@@ -36,7 +31,6 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity(debug = true)
-@EnableMethodSecurity
 public class SecurityConfig {
 
     private final ObjectMapper objectMapper;
@@ -46,13 +40,8 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
-        return new WebSecurityCustomizer() {
-            @Override
-            public void customize(WebSecurity web) {
-                web.ignoring().requestMatchers(new AntPathRequestMatcher("/error"))
-                        .requestMatchers(toH2Console());
-            }
-        };
+        return web -> web.ignoring().requestMatchers(new AntPathRequestMatcher("/error"))
+                .requestMatchers(toH2Console());
     }
 
     @Bean
@@ -60,11 +49,14 @@ public class SecurityConfig {
     public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
-                        .requestMatchers(new AntPathRequestMatcher("/manager/**")).hasRole("MANAGER")
+                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+//                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
+//                        .requestMatchers(new AntPathRequestMatcher("/manager/**")).hasRole("MANAGER")
+//                        .requestMatchers(AntPathRequestMatcher.antMatcher("/admin/**")).hasRole("ADMIN")
+//                        .requestMatchers(AntPathRequestMatcher.antMatcher("/manager/**")).hasRole("MANAGER")
                         .anyRequest().permitAll())
                 .formLogin(formLogin -> formLogin
-                        .loginPage("/login")
+                        .loginPage("/admin/login")
                         .loginProcessingUrl("/login/adminlogin")
                         .usernameParameter("adminId")
                         .passwordParameter("password")
@@ -73,12 +65,12 @@ public class SecurityConfig {
                 )
                 .rememberMe(rm -> rm
                         .rememberMeParameter("remember")
-                        .alwaysRemember(false)
+                        .alwaysRemember(true)
                         .tokenValiditySeconds(2592000))
                 .sessionManagement(sm -> sm
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 //                        .invalidSessionUrl("/invalid-session")
-                        .maximumSessions(10))
+                        .maximumSessions(1))
                 .logout(lo -> lo
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/admin")
@@ -88,32 +80,32 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    @Order(2)
-    public SecurityFilterChain memberSecurityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
-                        .requestMatchers(new AntPathRequestMatcher("/manager/**")).hasRole("MANAGER")
-                        .anyRequest().permitAll())
-
-                .rememberMe(rm -> rm
-                        .rememberMeParameter("remember")
-                        .alwaysRemember(false)
-                        .tokenValiditySeconds(2592000))
-
-                .oauth2Login(oauth -> oauth
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .userService(customOAuth2UserService)
-                        )
-                )
-                .sessionManagement(sm -> sm
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                        .invalidSessionUrl("/invalid-session")
-                        .maximumSessions(10))
-                .csrf(AbstractHttpConfigurer::disable);
-        return http.build();
-    }
+//    @Bean
+//    @Order(2)
+//    public SecurityFilterChain memberSecurityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .authorizeHttpRequests(authz -> authz
+//                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
+//                        .requestMatchers(new AntPathRequestMatcher("/manager/**")).hasRole("MANAGER")
+//                        .anyRequest().permitAll())
+//
+//                .rememberMe(rm -> rm
+//                        .rememberMeParameter("remember")
+//                        .alwaysRemember(false)
+//                        .tokenValiditySeconds(2592000))
+//
+//                .oauth2Login(oauth -> oauth
+//                        .userInfoEndpoint(userInfo -> userInfo
+//                                .userService(customOAuth2UserService)
+//                        )
+//                )
+//                .sessionManagement(sm -> sm
+//                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+//                        .invalidSessionUrl("/invalid-session")
+//                        .maximumSessions(10))
+//                .csrf(AbstractHttpConfigurer::disable);
+//        return http.build();
+//    }
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {

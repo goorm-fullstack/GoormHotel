@@ -55,8 +55,7 @@ public class LoginController {
         return "loginPage";  // 로그인 페이지 뷰 이름
     }
 
-
-
+    // 관리자 로그인
     @PostMapping("/login/adminlogin")
     public ResponseEntity<?> adminLogin(@RequestBody ManagerLogin login,
                                         HttpServletRequest request,
@@ -69,7 +68,15 @@ public class LoginController {
                     new UsernamePasswordAuthenticationToken(adminId, password)
             );
 
+            Cookie cookie = new Cookie("adminId", adminId);
+            cookie.setPath("/");
+            cookie.setSecure(false);
+            cookie.setHttpOnly(true);
+            cookie.setMaxAge(60 * 60 * 24);
+            response.setHeader("Set-Cookie", "key=value; SameSite=None");
+            response.addCookie(cookie);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.info("컨트롤러"+authentication);
             return ResponseEntity.ok().body("로그인 완료");
         } catch (Exception e) {
             return ResponseEntity.status(401).body("어드민 로그인 실패");

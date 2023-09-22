@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AdminLogin from './AdminLogin';
 import AdminMember from './member/AdminMember';
@@ -21,10 +20,12 @@ import AdminChat from './chat/AdminChat';
 import AdminChatDetail from './chat/AdminChatDetail';
 import AdminMail from './chat/AdminMail';
 import AdminIndex from "./AdminIndex";
+import CheckAndNavigate from '../utils/api/CheckAndNavigate';
 
 const AdminApp = () => {
   return (
     <BrowserRouter>
+      <CheckAndNavigate />
       <Routes>
         <Route path="/admin" element={<AdminIndex />}></Route>
         <Route path="/admin/reservation" element={<AdminReservation />}></Route>

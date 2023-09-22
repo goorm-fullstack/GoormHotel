@@ -1,5 +1,7 @@
 package goormknights.hotel.auth.controller;
 
+import goormknights.hotel.auth.config.authorize.AdminAuthorize;
+import goormknights.hotel.auth.config.authorize.ManagerAuthorize;
 import goormknights.hotel.member.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +19,13 @@ public class RoleController {
 
     private final AdminService adminService;
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @AdminAuthorize
     @GetMapping("/admin")
     public String admin(){
         return "관리자 페이지 입니다.";
     }
 
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @ManagerAuthorize
     @GetMapping("/manager")
     public String manager(){
         return "매니저 페이지 입니다.";
