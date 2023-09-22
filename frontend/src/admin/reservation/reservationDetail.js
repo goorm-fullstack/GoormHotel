@@ -10,6 +10,7 @@ import {
   Container,
   Title,
 } from '../member/AdminMember';
+import { numberWithCommas } from './../../utils/function/comma';
 
 
 const CalendarContainer = styled.div`
@@ -165,10 +166,12 @@ const AdminReservationDetail = () => {
     stay : 3,
     coupon : {
       name : "coupon name",
+      discountPrice : "1000",
     },
     giftcard : [
       {
-        name : "giftcard Name"
+        name : "giftcard Name",
+        money : "5000",
       },
     ],
     sumPrice : 10000,
@@ -202,7 +205,7 @@ const AdminReservationDetail = () => {
         setEmailAddress(reservationData.member.email);
         setCustomerRequest(reservationData.notice);
         setApplyCoupon(reservationData.coupon);
-        setApplyGiftCard(reservationData.giftCard);
+        setApplyGiftCard(reservationData.giftcard);
       })
   },[]);
 
@@ -491,7 +494,7 @@ const AdminReservationDetail = () => {
             {
                 reservationData.coupon !== null ? (
                   <Data>
-                    {reservationData.coupon.name}
+                    {reservationData.coupon.name}(적용 금액 : {numberWithCommas(reservationData.coupon.discountPrice)})
                   </Data>
                 ) : (
                   <Data>
@@ -504,25 +507,24 @@ const AdminReservationDetail = () => {
             <Label>
               적용 상품권
             </Label>
-            {
-              applyGiftCard !==null ? (
-                <Data>
-                {applyGiftCard && applyGiftCard.map((gift, index) => {
-                  <>{gift.name}</>
-                })}
-              </Data>
-              ) : (
-                <Data>
-                  적용된 상품권이 없습니다.
-                </Data>
-              )
-            }
+            <Data>
+              {reservationData.giftcard !== null && reservationData.giftcard.length > 0 ? (
+                reservationData.giftcard.map((gift, index) => (
+                  <span key={index}>
+                    {gift.name}(적용 금액 : {numberWithCommas(gift.money)})
+                    {index < reservationData.giftcard.length - 1 ? ', ' : ''}
+                  </span>
+                  ))
+                ) : (
+                 '적용된 상품권이 없습니다.'
+                )}
+          </Data>
           </InfoWrapper>
           <InfoWrapper>
             <Label>
               결제 금액
             </Label>
-              <Data>{reservationData.totalPrice}</Data>
+              <Data>{numberWithCommas(reservationData.totalPrice)}</Data>
           </InfoWrapper>
           <BtnWrapper>
             {

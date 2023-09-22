@@ -177,6 +177,7 @@ const AdminChat = () => {
   useEffect(()=> {
     Instance.get("/chat/getLastMessage")
       .then((response) =>{
+        console.log(response.data);
         setChatData(response.data)
       })
   },[])
@@ -236,7 +237,7 @@ const AdminChat = () => {
           </thead>
           <tbody>
             {chatData.length === 0 && <TableCell colSpan="7">채팅 메시지 기록이 없습니다.</TableCell>}
-            {chatData.map((item) => (
+            {chatData.map((item, index) => (
               <tr key={item.id}>
                 <TableCell>
                   <TableCheckbox
@@ -245,21 +246,21 @@ const AdminChat = () => {
                     onChange={() => handleCheckboxChange(item.memberId)}
                   />
                 </TableCell>
-                <TableCell>{item.number}</TableCell>
+                <TableCell>{index+1}</TableCell>
                 <TableCell>
                   {item.name}(
-                  <Link to={`/admin/member/${item.memberId}`} className="memberId">
-                    {item.memberId}
+                  <Link to={`/admin/member/${item.sender}`} className="memberId">
+                    {item.sender}
                   </Link>
                   )
                 </TableCell>
                 <TableCell className="lastChat">
                   <p>
-                    <Link to={`/admin/chat/${item.memberId}`}>{item.lastChat}</Link>
+                    <Link to={`/admin/chat/${item.roomId}`}>{item.message}</Link>
                   </p>
-                  <div className="allMessage">{item.lastChat}</div>
+                  <div className="allMessage">{item.message}</div>
                 </TableCell>
-                <TableCell>{item.lastDate}</TableCell>
+                <TableCell>{item.createTime}</TableCell>
                 <TableCell>{item.state}</TableCell>
               </tr>
             ))}

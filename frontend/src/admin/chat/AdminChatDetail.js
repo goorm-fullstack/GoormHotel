@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import Privacy from './../../pages/agreement/Privacy';
+import Instance from '../../utils/api/axiosInstance';
 
 const Container = styled.div`
   width: 100%;
@@ -140,12 +142,113 @@ const ModifyBtn = styled.button`
 `;
 
 const AdminChatDetail = () => {
-  const { memberId } = useParams();
-
+  const { roomId } = useParams();
+  const [socketConnected, setSocketConnected] = useState(false);
+  const [chatData, setChatData] = useState([]);
+  const chatContainerRef = useRef(null);
+  const [newChat, setNewChat] = useState('');
   const subMenus = [
     { name: '채팅 관리', link: '/admin/chat' },
     { name: '메일 작성', link: '/admin/mail' },
   ];
+
+  const webSocketURL = 'ws://127.0.0.1:8080/ws/chat';
+  let ws = useRef(null);
+
+  useLayoutEffect(()=>{
+    Instance.get(`/chat/getPrevId/`+roomId)
+      .then((response) =>{
+        setChatData(response.data);
+        settingWebSocket(roomId);
+      }).catch((error) => {
+        console.log("에러 "+error);
+      })
+  }, [])
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [chatData]);
+
+  const settingWebSocket = (roomId1) => {
+    // 이전 상태(prevRoomId)를 이용하여 새로운 상태를 반환
+    if (!ws.current) {
+     ws.current = new WebSocket(webSocketURL);
+     ws.current.onopen = () => {
+       setSocketConnected(true);
+       console.log("WebSocket connected");
+
+       // WebSocket 연결이 성공하면 ENTER 메시지 전송
+       ws.current.send(
+         JSON.stringify({
+           type: "ENTER",
+           roomId: roomId1, // 이전 상태를 사용
+           sender: "admin",
+           message: "입장",
+         })
+       );
+     };
+     ws.current.onclose = (error) => {
+       console.log("disconnect from " + webSocketURL);
+       console.log(error);
+     };
+     ws.current.onerror = (error) => {
+       console.log("connection error " + webSocketURL);
+       console.log(error);
+     };
+
+     // 메시지 핸들러 설정
+     ws.current.onmessage = (event) => {
+       const message = event.data;
+       const parsedMessage = JSON.parse(message);
+       const chatContent = parsedMessage.message;
+       const chatRoomID = parsedMessage.roomId;
+       const sender = parsedMessage.sender;
+       console.log("caal thos")
+       // 메시지 발신자가 어드민이 아닌 경우에만 호출된다.
+       if(chatRoomID === roomId && sender !== "admin") {
+         console.log("call");
+         // 메시지를 처리하는 로직을 여기에 추가
+         // 이전 채팅 데이터를 복사한 후 새 메시지를 추가
+         setChatData((p) => [...p,{ message: chatContent, sender: sender, type: 'TALK' },]);
+       }
+     };
+   }
+    // 컴포넌트 언마운트 시 WebSocket 연결 닫기
+    return () => {
+     console.log("Cleaning up WebSocket");
+     if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+       ws.current.close();
+     }
+     setSocketConnected(false);
+   };
+ }
+
+  // setChatData(p => [...p, { message: newChat, isUser: true }]); -> 권희준 멘트님 추천사항
+  const handleInputKeyPress = (e) => {
+    if (e.key === 'Enter' && newChat.trim() !== '' && socketConnected) {
+      setChatData(p => [...p, { message: newChat, sender: "admin", type: 'TALK' }]);
+      ws.current.send(
+        JSON.stringify({
+          type: 'TALK',
+          roomId: roomId,
+          sender: 'admin',
+          message: newChat,
+        })
+      );
+      setNewChat('');
+    }
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    if (newChat.trim() !== '') {
+      setChatData(p=> [...p, { message: newChat, sender: "admin", type: 'TALK' }]);
+      setNewChat('');
+    }
+  };
 
   return (
     <AdminLayout title="채팅/메일 관리" subMenus={subMenus}>
@@ -153,8 +256,8 @@ const AdminChatDetail = () => {
         <Title>채팅 관리</Title>
         <InfoContainer>
           <InfoWrapper>
-            <Label>회원명(회원 ID)</Label>
-            <Data>홍구름({memberId})</Data>
+            <Label>방 번호(회원 ID)</Label>
+            <Data>({roomId})</Data>
           </InfoWrapper>
           <InfoWrapper>
             <Label>최근 발송일</Label>
@@ -176,26 +279,33 @@ const AdminChatDetail = () => {
           </InfoWrapper>
           <InfoWrapper>
             <Data colSpan="2" className="chatWrapper">
-              <ul className="chatLog">
-                <li>
-                  <storng className="member">회원명(회원 ID) : </storng>
-                  <span>채팅 내용입니다.</span>
-                </li>
-                <li>
-                  <storng className="manager">관리자(관리자 ID) : </storng>
-                  <span>채팅 내용입니다.</span>
-                </li>
-                <li>
-                  <storng className="member">회원명(회원 ID) : </storng>
-                  <span>채팅 내용입니다.</span>
-                </li>
-                <li>
-                  <storng className="manager">관리자(관리자 ID) : </storng>
-                  <span>채팅 내용입니다.</span>
-                </li>
+              <ul className="chatLog" ref={chatContainerRef}>
+                {chatData.map((chat, index) => (
+                  chat.type === 'TALK' ? ( // chat.type이 'TALK'인 경우에만 출력
+                    <li key={index}>
+                      {chat.sender === 'admin' ? (
+                      <>
+                        <strong className="manager">관리자(관리자 ID) : </strong>
+                        <span>{chat.message}</span>
+                      </>
+                    ) : (
+                      <>
+                        <strong className="member">회원명(회원 ID) : </strong>
+                        <span>{chat.message}</span>
+                      </>
+                    )}
+                    </li>
+                  ) : null
+                ))}
               </ul>
-              <div className="writeWrapper">
-                <textarea></textarea>
+              <div className="writeWrapper" onSubmit={handleFormSubmit}>
+                <textarea
+                  type="text"
+                  placeholder="메시지를 입력해 주세요"
+                  value={newChat}
+                  onChange={(e) => setNewChat(e.target.value)}
+                  onKeyDown={ handleInputKeyPress}
+                ></textarea>
                 <button type="submit">전송</button>
               </div>
             </Data>

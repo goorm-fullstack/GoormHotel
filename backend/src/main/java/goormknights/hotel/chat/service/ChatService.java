@@ -64,8 +64,10 @@ public class ChatService {
 
         for(ChatRoom chatRoom : allRoom) {
             List<ChatMessage> orderMessage = chatMessageRepository.findByRoomIdOrderByCreateTimeDesc(chatRoom.getRoomId());
-            ChatMessage lastMessage = orderMessage.get(0);
-            result.add(lastMessage);
+            if(!orderMessage.isEmpty()) {
+                ChatMessage lastMessage = orderMessage.get(0);
+                result.add(lastMessage);
+            }
         }
 
         return result;
