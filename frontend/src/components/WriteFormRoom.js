@@ -6,11 +6,13 @@ import { NavLink } from 'react-router-dom';
 import { Select } from '../admin/item/AdminItemList';
 import axios from 'axios';
 
+// 테이블 상단
 const TopOfTable = styled.div`
   display: flex;
   justify-content: space-between;
 `;
 
+// 객실 OR 다이닝 등록 버튼
 const TypeButton = styled(SubmitButton)`
   margin-left: 30px;
   &.active {
@@ -26,6 +28,7 @@ const TypeLink = styled(NavLink)`
   }
 `;
 
+// 테이블
 const WriteFormTable = styled(Table)``;
 
 const WriteFormTr = styled(TableTr)`
@@ -40,27 +43,33 @@ const WriteFormBoldTd = styled(BoldTd)`
   vertical-align: middle;
 `;
 
+// 이미지 미리보기
 export const Image = styled.img`
   width: 300px;
+  height: 100px;
   vertical-align: middle;
   margin-left: 50px;
 `;
 
+// 이미지 선택
 const ImageInput = styled(Input)`
   margin-top: 60px;
   height: 100px;
   border: none;
 `;
 
+// 세부타입 선택
 const WriteFormSelect = styled(Select)`
   width: 200px;
   margin: 0;
 `;
 
+// 수정 버튼
 const WriteFormButton = styled(SubmitButton)`
   margin-bottom: 60px;
 `;
 
+// 중복검사버튼
 const DuplicateButton = styled.button`
   vertical-align: middle;
   margin-left: 50px;
@@ -75,12 +84,14 @@ const DuplicateButton = styled.button`
   }
 `;
 
+// 중복검사 경고 문구
 const RedP = styled.p`
   color: #ec5353;
   display: inline-block;
   margin-left: 30px;
 `;
 
+// 중복검사 성공 문구
 const GreenP = styled.p`
   color: #008000;
   display: inline-block;
