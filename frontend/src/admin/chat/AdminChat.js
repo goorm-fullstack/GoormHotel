@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import Instance from '../../utils/api/axiosInstance';
 
 const Container = styled.div`
   width: 100%;
@@ -142,20 +143,7 @@ const TableCheckbox = styled.input`
 
 const AdminChat = () => {
   const [checkedItems, setCheckedItems] = useState([]);
-
-  const handleCheckboxChange = (memberId) => {
-    setCheckedItems((prevItems) => {
-      if (prevItems.includes(memberId)) {
-        return prevItems.filter((item) => item !== memberId);
-      } else {
-        return [...prevItems, memberId];
-      }
-    });
-  };
-
-  console.log(checkedItems);
-
-  const chatData = [
+  const [chatData, setChatData] = useState([
     {
       id: 3,
       number: 3,
@@ -184,7 +172,28 @@ const AdminChat = () => {
       lastDate: '2023.09.04',
       state: '종료',
     },
-  ];
+  ])
+
+  useEffect(()=> {
+    Instance.get("/chat/getLastMessage")
+      .then((response) =>{
+        console.log(response.data);
+        setChatData(response.data)
+      })
+  },[])
+
+  const handleCheckboxChange = (memberId) => {
+    setCheckedItems((prevItems) => {
+      if (prevItems.includes(memberId)) {
+        return prevItems.filter((item) => item !== memberId);
+      } else {
+        return [...prevItems, memberId];
+      }
+    });
+  };
+
+  console.log(checkedItems);
+
 
   const subMenus = [
     { name: '채팅 관리', link: '/admin/chat' },
@@ -228,7 +237,7 @@ const AdminChat = () => {
           </thead>
           <tbody>
             {chatData.length === 0 && <TableCell colSpan="7">채팅 메시지 기록이 없습니다.</TableCell>}
-            {chatData.map((item) => (
+            {chatData.map((item, index) => (
               <tr key={item.id}>
                 <TableCell>
                   <TableCheckbox
@@ -237,21 +246,21 @@ const AdminChat = () => {
                     onChange={() => handleCheckboxChange(item.memberId)}
                   />
                 </TableCell>
-                <TableCell>{item.number}</TableCell>
+                <TableCell>{index+1}</TableCell>
                 <TableCell>
                   {item.name}(
-                  <Link to={`/admin/member/${item.memberId}`} className="memberId">
-                    {item.memberId}
+                  <Link to={`/admin/member/${item.sender}`} className="memberId">
+                    {item.sender}
                   </Link>
                   )
                 </TableCell>
                 <TableCell className="lastChat">
                   <p>
-                    <Link to={`/admin/chat/${item.memberId}`}>{item.lastChat}</Link>
+                    <Link to={`/admin/chat/${item.roomId}`}>{item.message}</Link>
                   </p>
-                  <div className="allMessage">{item.lastChat}</div>
+                  <div className="allMessage">{item.message}</div>
                 </TableCell>
-                <TableCell>{item.lastDate}</TableCell>
+                <TableCell>{item.createTime}</TableCell>
                 <TableCell>{item.state}</TableCell>
               </tr>
             ))}
