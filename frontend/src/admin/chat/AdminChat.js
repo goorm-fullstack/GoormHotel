@@ -147,29 +147,40 @@ const AdminChat = () => {
     {
       id: 3,
       number: 3,
-      memberId: 'user001',
-      name: '홍길동',
-      lastChat: '마지막 채팅 내용입니다.',
-      lastDate: '2023.09.03',
+      chatMessages : [
+        {
+          memberId: 'user001',
+          name: '홍길동',
+          lastChat: '마지막 채팅 내용입니다.',
+          lastDate: '2023.09.03',
+        }
+      ],
       state: '미확인',
     },
     {
       id: 2,
       number: 2,
-      memberId: 'user002',
-      name: '홍구름',
-      lastChat: '마지막 채팅 내용입니다.',
-      lastDate: '2023.09.03',
+      chatMessages : [
+        {
+          memberId: 'user001',
+          name: '홍길동',
+          lastChat: '마지막 채팅 내용입니다.',
+          lastDate: '2023.09.03',
+        }
+      ],
       state: '종료',
     },
     {
       id: 1,
       number: 1,
-      memberId: 'user003',
-      name: '김구름',
-      lastChat:
-        '마지막 채팅 내용입니다. 마지막 채팅 내용입니다. 마지막 채팅 내용입니다. 마지막 채팅 내용입니다.마지막 채팅 내용입니다. 마지막 채팅 내용입니다. 마지막 채팅 내용입니다. 마지막 채팅 내용입니다.',
-      lastDate: '2023.09.04',
+      chatMessages : [
+        {
+          memberId: 'user001',
+          name: '홍길동',
+          lastChat: '마지막 채팅 내용입니다.',
+          lastDate: '2023.09.03',
+        }
+      ],
       state: '종료',
     },
   ])
@@ -242,26 +253,26 @@ const AdminChat = () => {
                 <TableCell>
                   <TableCheckbox
                     type="checkbox"
-                    checked={checkedItems.includes(item.memberId)}
-                    onChange={() => handleCheckboxChange(item.memberId)}
+                    checked={checkedItems.includes(item.chatMessages.memberId)}
+                    onChange={() => handleCheckboxChange(item.chatMessages.memberId)}
                   />
                 </TableCell>
                 <TableCell>{index+1}</TableCell>
                 <TableCell>
-                  {item.name}(
-                  <Link to={`/admin/member/${item.sender}`} className="memberId">
-                    {item.sender}
+                  {item.chatMessages.name}(
+                  <Link to={`/admin/member/${item.chatMessages[0].sender}`} className="memberId">
+                    {item.chatMessages[0].sender}
                   </Link>
                   )
                 </TableCell>
                 <TableCell className="lastChat">
                   <p>
-                    <Link to={`/admin/chat/${item.roomId}`}>{item.message}</Link>
+                    <Link to={`/admin/chat/${item.roomId}`}>{item.chatMessages[0].message}</Link>
                   </p>
-                  <div className="allMessage">{item.message}</div>
+                  <div className="allMessage">{item.chatMessages[0].message}</div>
                 </TableCell>
-                <TableCell>{item.createTime}</TableCell>
-                <TableCell>{item.state}</TableCell>
+                <TableCell>{item.timestamp}</TableCell>
+                <TableCell>{item.status}</TableCell>
               </tr>
             ))}
           </tbody>

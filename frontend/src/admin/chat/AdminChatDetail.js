@@ -147,6 +147,8 @@ const AdminChatDetail = () => {
   const [chatData, setChatData] = useState([]);
   const chatContainerRef = useRef(null);
   const [newChat, setNewChat] = useState('');
+  const [chatRoomData, setChatRoomData] = useState({});
+  const [status, setStatus] = useState("");
   const subMenus = [
     { name: '채팅 관리', link: '/admin/chat' },
     { name: '메일 작성', link: '/admin/mail' },
@@ -158,7 +160,12 @@ const AdminChatDetail = () => {
   useLayoutEffect(()=>{
     Instance.get(`/chat/getPrevId/`+roomId)
       .then((response) =>{
-        setChatData(response.data);
+        console.log("==============================");
+        console.log(response.data)
+        setChatRoomData(response.data)
+        setStatus(chatRoomData.status)
+        console.log("==============================");
+        setChatData(response.data.chatMessages);
         settingWebSocket(roomId);
       }).catch((error) => {
         console.log("에러 "+error);
@@ -250,6 +257,13 @@ const AdminChatDetail = () => {
     }
   };
 
+  const handleClosedClick = (e) => {
+    setStatus("종료");
+    Instance.get("/chat/closed/"+roomId).then((response)=>{
+      console.log(response)
+    })
+  }
+
   return (
     <AdminLayout title="채팅/메일 관리" subMenus={subMenus}>
       <Container>
@@ -261,13 +275,13 @@ const AdminChatDetail = () => {
           </InfoWrapper>
           <InfoWrapper>
             <Label>최근 발송일</Label>
-            <Data>2023.09.03</Data>
+            <Data>{chatRoomData.createTime}</Data>
           </InfoWrapper>
           <InfoWrapper>
             <Label>상태</Label>
             <Data>
-              미확인{/** 종료 버튼 클릭 시 답변 알림 메일 발송 */}
-              <button type="button" className="chatClose">
+              {status}
+              <button type="button" className="chatClose" onClick={handleClosedClick}>
                 종료
               </button>
             </Data>
