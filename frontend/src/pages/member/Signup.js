@@ -1,138 +1,73 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { commonContainerStyle, commonTitleStyle } from '../../components/common/commonStyles';
+import {
+  commonContainerStyle,
+  PageTitle,
+  InputCheckbox,
+  CheckLabel,
+  ContentsTitleXSmall,
+  AuthBtn,
+  BtnWrapper,
+  SubmitBtn,
+  Auth,
+  RequiredTitle,
+} from '../../components/common/commonStyles';
+import AgreementContents from '../../components/AgreementCon';
+import PrivacyContents from '../../components/PrivacyCon';
 
-const Container = styled.div`
-  ${commonContainerStyle}
-  width: 1180px;
-`;
-
-const Title = styled.h1`
-  ${commonTitleStyle}
-  margin-bottom: 95px;
-`;
+const Container = styled(commonContainerStyle)``;
 
 const Wrapper = styled.div`
   display: flex;
-  height: 756px;
-`;
 
-const CenterLine = styled.div`
-  width: 1px;
-  height: 100%;
-  background-color: #dddddd;
-  margin: 0 80px;
-`;
-
-const LeftWrapper = styled.div`
-  width: 510px;
-`;
-
-const SubTitle = styled.h2`
-  color: #21201e;
-  font-weight: bold;
-  margin-bottom: 33px;
-`;
-
-const AgreementSection = styled.div`
-  width: 100%;
-`;
-
-const PrivacySection = styled(AgreementSection)`
-  margin-top: 35px;
-`;
-
-const AgreementText = styled.div`
-  font-size: 14px;
-  color: #444444;
-  height: 200px;
-  border: 1px solid #dddddd;
-  padding: 17px 17px 0 21px;
-  margin-bottom: 16px;
-`;
-
-const TextContent = styled.div`
-  line-height: 1.9;
-  font-size: 14px;
-  color: #444444;
-`;
-
-const AgreementCheck = styled.input`
-  margin-right: 10px;
-  border: 1px solid #dddddd !important;
-  outline: none;
-  width: 16px;
-  height: 16px;
-  border: 1px solid #ddd;
-  appearance: none;
-  background-color: white;
-  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='lightgray' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
-  background-size: 120% 120%;
-  background-position: 50%;
-  background-repeat: no-repeat;
-
-  &:checked {
-    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
-    background-color: #baa085;
+  & > div {
+    width: 50%;
   }
 `;
 
-const Agreement = styled.div`
-  background-color: transparent;
-  display: flex;
-  align-items: center;
+const LeftWrapper = styled.div`
+  padding-right: 80px;
+  border-right: 1px solid ${(props) => props.theme.colors.grayborder};
+
+  & > div {
+    margin-bottom: 30px;
+
+    label {
+      color: ${(props) => props.theme.colors.graydark};
+    }
+  }
 `;
 
-const AgreementCheckText = styled.span`
-  font-size: 14px;
-  color: #888888;
+export const AgreementText = styled.div`
+  font-size: ${(props) => props.theme.font.sizexs};
+  color: ${(props) => props.theme.colors.graydark};
+  height: 200px;
+  border: 1px solid ${(props) => props.theme.colors.grayborder};
+  padding: 20px;
+  margin-bottom: 16px;
+  overflow-y: scroll;
+  line-height: 1.6;
+  background: ${(props) => props.theme.colors.graybg};
+
+  &.forreserv {
+    height: 130px;
+  }
 `;
 
 const RightWrapper = styled.div`
-  width: 510px;
-`;
+  padding-left: 80px;
 
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  height: 60px;
-  padding-left: 21px;
-  color: #888888;
-  outline: none;
-`;
-
-const EmailInputSection = styled.div`
-  display: flex;
-`;
-
-const EmailInput = styled(Input)`
-  width: 380px;
-  margin-right: 10px;
-`;
-
-const CertificationBtn = styled.button`
-  width: 120px;
-  height: 60px;
-  background-color: #ededed;
-  border: 1px solid #dddddd;
-  color: #888888;
-`;
-
-const Button = styled.button`
-  width: 100%;
-  padding: 20px 0;
-  color: #fff;
-  text-align: center;
-  background-color: #95846e;
-  margin-top: 10px;
-
-  &:hover {
-    background-color: #8a7057;
+  input {
+    height: 50px;
+    padding-left: 18px;
+    margin-top: 10px;
+    display: block;
+  }
+  input:first-child {
+    margin-top: 0;
+  }
+  & form > input {
+    width: 100%;
   }
 `;
 
@@ -183,50 +118,45 @@ const Signup = () => {
   return (
     <>
       <Container>
-        <Title>회원가입</Title>
+        <PageTitle>회원가입</PageTitle>
         <Wrapper>
           <LeftWrapper>
-            <SubTitle>이용약관/개인정보처리방침 동의</SubTitle>
-            <AgreementSection>
+            <ContentsTitleXSmall>약관 동의</ContentsTitleXSmall>
+            <div>
+              <RequiredTitle>
+                <h4>
+                  이용약관 동의 <span>(필수)</span>
+                </h4>
+                <CheckLabel onChange={handleTermsCheck} for="agreementcheck">
+                  <InputCheckbox type="checkbox" id="agreementcheck" checked={termsAgree} onChange={handleTermsCheck} required />
+                  동의합니다
+                </CheckLabel>
+              </RequiredTitle>
               <AgreementText>
-                <TextContent>
-                  이용약관 내용
-                  <br /> 이용약관 내용
-                  <br /> 이용약관 내용
-                  <br /> 이용약관 내용
-                  <br /> 이용약관 내용
-                  <br /> 이용약관 내용
-                </TextContent>
+                <AgreementContents />
               </AgreementText>
-              <Agreement onChange={handleTermsCheck}>
-                <AgreementCheck type="checkbox" checked={termsAgree} onChange={handleTermsCheck} required />
-                <AgreementCheckText>이용약관에 동의합니다.</AgreementCheckText>
-              </Agreement>
-            </AgreementSection>
-            <PrivacySection>
+            </div>
+            <div>
+              <RequiredTitle>
+                <h4>
+                  개인정보처리방침 동의 <span>(필수)</span>
+                </h4>
+                <CheckLabel for="privacycheck">
+                  <InputCheckbox type="checkbox" id="privacycheck" checked={privacyAgree} onChange={handlePrivacyAgree} required />
+                  동의합니다
+                </CheckLabel>
+              </RequiredTitle>
               <AgreementText>
-                <TextContent>
-                  개인정보처리방침 내용
-                  <br /> 이용약관 내용
-                  <br /> 이용약관 내용
-                  <br /> 이용약관 내용
-                  <br /> 이용약관 내용
-                  <br /> 이용약관 내용
-                </TextContent>
+                <PrivacyContents />
               </AgreementText>
-              <Agreement>
-                <AgreementCheck type="checkbox" checked={privacyAgree} onChange={handlePrivacyAgree} required />
-                <AgreementCheckText>개인정보처리방침에 동의합니다.</AgreementCheckText>
-              </Agreement>
-            </PrivacySection>
+            </div>
           </LeftWrapper>
-          <CenterLine />
           <RightWrapper>
-            <SubTitle>회원정보 입력</SubTitle>
-            <Form>
-              <Input type="text" placeholder="아이디" name="memberId" value={formData.memberId} onChange={handleChange} required />
-              <Input type="password" name="password" value={formData.password} placeholder="비밀번호" onChange={handleChange} required />
-              <Input
+            <ContentsTitleXSmall>회원정보 입력</ContentsTitleXSmall>
+            <form>
+              <input type="text" placeholder="아이디" name="memberId" value={formData.memberId} onChange={handleChange} required />
+              <input type="password" name="password" value={formData.password} placeholder="비밀번호" onChange={handleChange} required />
+              <input
                 type="password"
                 name="confirmPassword"
                 value={formData.confirmPassword}
@@ -234,12 +164,12 @@ const Signup = () => {
                 onChange={handleChange}
                 required
               />
-              <Input type="text" name="name" value={formData.name} placeholder="이름" onChange={handleChange} required />
-              <EmailInputSection>
-                <EmailInput placeholder="이메일" type="email" name="email" value={formData.email} onChange={handleChange} required />
-                <CertificationBtn>인증번호 요청</CertificationBtn>
-              </EmailInputSection>
-              <Input
+              <input type="text" name="name" value={formData.name} placeholder="이름" onChange={handleChange} required />
+              <Auth>
+                <input placeholder="이메일" type="email" name="email" value={formData.email} onChange={handleChange} required />
+                <AuthBtn>인증번호 요청</AuthBtn>
+              </Auth>
+              <input
                 type="text"
                 name="certificationCode"
                 value={formData.certificationCode}
@@ -247,11 +177,15 @@ const Signup = () => {
                 onChange={handleChange}
                 required
               />
-              <Input type="text" name="phoneNumber" value={formData.phoneNumber} placeholder="연락처" onChange={handleChange} required />
-              <Input type="text" name="birthdate" value={formData.birthdate} placeholder="생년월일(선택입력)" onChange={handleChange} />
-              <Input type="text" name="gender" value={formData.gender} placeholder="성별(선택입력)" onChange={handleChange} />
-              <Button onClick={handleSignupButton}>회원가입</Button>
-            </Form>
+              <input type="text" name="phoneNumber" value={formData.phoneNumber} placeholder="연락처" onChange={handleChange} required />
+              <input type="text" name="birthdate" value={formData.birthdate} placeholder="생년월일(선택입력)" onChange={handleChange} />
+              <input type="text" name="gender" value={formData.gender} placeholder="성별(선택입력)" onChange={handleChange} />
+              <BtnWrapper className="mt20 full">
+                <SubmitBtn type="submit" onClick={handleSignupButton}>
+                  회원가입
+                </SubmitBtn>
+              </BtnWrapper>
+            </form>
           </RightWrapper>
         </Wrapper>
       </Container>

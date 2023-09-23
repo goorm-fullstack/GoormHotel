@@ -19,21 +19,20 @@ const ResultBox = styled.div`
   }
 `;
 
-const FindIdResult = () => {
+const JoinComplete = () => {
   return (
     <>
       <Container>
-        <PageTitle>아이디 찾기</PageTitle>
+        <PageTitle>회원가입 완료</PageTitle>
         <ResultBox>
-          <h3>홍구름님의 아이디는 memberID입니다.</h3>
+          <h3>홍구름님, 환영합니다!</h3>
           <p>
-            고객님 아이디 찾기가 완료되었습니다.
-            <br />
-            비밀번호를 잊으신 경우 비밀번호 찾기를 이용해주세요.
+            이제 구름 호텔 멤버십 회원으로서
+            <br />더 큰 혜택과 편리함을 누려보세요.
           </p>
           <BtnWrapper className="mt40 double">
             <SubmitBtn>로그인</SubmitBtn>
-            <LinkBtn to="/findidpw">비밀번호 찾기</LinkBtn>
+            <LinkBtn to="/">메인 페이지로 이동</LinkBtn>
           </BtnWrapper>
         </ResultBox>
       </Container>
@@ -41,4 +40,4 @@ const FindIdResult = () => {
   );
 };
 
-export default FindIdResult;
+export default JoinComplete;
