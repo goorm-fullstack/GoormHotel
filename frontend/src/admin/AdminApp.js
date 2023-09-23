@@ -20,7 +20,7 @@ import AdminDeleteComment from './board/AdminDeleteComment';
 import AdminChat from './chat/AdminChat';
 import AdminChatDetail from './chat/AdminChatDetail';
 import AdminMail from './chat/AdminMail';
-import AdminIndex from "./AdminIndex";
+import AdminIndex from './AdminIndex';
 
 const AdminApp = () => {
   return (
