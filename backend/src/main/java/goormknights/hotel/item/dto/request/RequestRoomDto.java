@@ -20,7 +20,7 @@ public class RequestRoomDto {
     private Integer price; // 기본 비용
 
     @Positive
-    private int priceAdult; // 어른 추가 비용
+    private int priceAdult; // 성인 추가 비용
 
     @PositiveOrZero
     private int priceChildren; // 어린이 추가 비용
@@ -43,7 +43,7 @@ public class RequestRoomDto {
     private int spare; // 잔여 객실 수
 
     @Positive
-    private int spareAdult; // 최대 숙박 가능 인원 수(어른)
+    private int spareAdult; // 최대 숙박 가능 인원 수(성인)
 
     @Positive
     private int spareChildren; // 최대 숙박 가능 인원 수(어린이)

@@ -15,12 +15,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,7 +43,18 @@ public class DiningController {
      * @throws IOException
      */
     @PostMapping("/dining")
-    public ResponseEntity<Object> uploadDining(@Validated @ModelAttribute RequestDiningDto requestDiningDto, @RequestParam MultipartFile img) throws IOException {
+    public ResponseEntity<Object> uploadDining(@Validated @ModelAttribute RequestDiningDto requestDiningDto, @RequestParam MultipartFile img, BindingResult bindingResult) throws IOException {
+
+        if(bindingResult.hasErrors()){
+            StringBuilder stringBuilder = new StringBuilder();
+            for(FieldError fieldError : bindingResult.getFieldErrors()){
+                bindingResult.getFieldErrors().forEach(error -> {
+                    stringBuilder.append(error.getField()).append(": ").append(error.getDefaultMessage()).append(", ");
+                });
+                log.info("errorMessage={}", fieldError.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body("Validation failed: " + stringBuilder.toString());
+        }
 
         RequestImageDto requestImageDto = imageService.convertToImageDto(img);
 
