@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
+import { Link } from 'react-router-dom';
 import { commonWrapperStyle, MoreLink, BtnWrapper } from '../components/common/commonStyles';
 import Slide from '../components/Slide';
 import Reservation from '../components/Reservation';
@@ -190,7 +191,7 @@ const PrevButton = styled.button`
 `;
 
 const NextButton = styled(PrevButton)`
-  background-color: #ffffff;
+  background-color: white;
   transform: scaleX(-1);
 
   &:hover {
@@ -205,6 +206,40 @@ const NextButton = styled(PrevButton)`
 const MapWrapper = styled.div`
   position: relative;
   margin-bottom: 60px;
+`;
+
+const ReserveContainer = styled.div`
+  background-color: white;
+  width: 1180px;
+  height: 150px;
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+  padding: 0 80px;
+  display: flex;
+  z-index: 1;
+  position: absolute;
+  bottom: 0;
+  transform: translate(-50%, 50%);
+  left: 50%;
+  border-radius: 12px;
+
+  .searchbtnwrap {
+    display: flex;
+    align-items: center;
+  }
+`;
+
+const ReservationButton = styled(Link)`
+  width: 150px;
+  height: 65px;
+  line-height: 65px;
+  background-color: ${(props) => props.theme.colors.navy};
+  color: white;
+  text-align: center;
+  display: inline-block;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.navyhover};
+  }
 `;
 
 const Home = () => {
@@ -224,11 +259,20 @@ const Home = () => {
     transform: `translateX(-${activeIndex * sliderRef.current?.offsetWidth}px)`,
   };
 
+  const handleReservation = () => {};
+
   return (
     <>
       <SlideWrapper>
         <Slide />
-        <Reservation />
+        <ReserveContainer>
+          <Reservation />
+          <BtnWrapper className="searchbtnwrap">
+            <ReservationButton to="/offers" onClick={() => handleReservation()}>
+              상품 검색
+            </ReservationButton>
+          </BtnWrapper>
+        </ReserveContainer>
       </SlideWrapper>
       <IndexOffers>
         <Wrapper>

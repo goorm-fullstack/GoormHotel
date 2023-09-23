@@ -1,166 +1,204 @@
-import React from 'react';
-import { Section, Left, Right, Wrapper } from './ReservationPage';
+import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
+import Reservation from '../../components/Reservation';
 import Product from '../../components/Item';
-import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
+import {
+  commonContainerStyle,
+  PageTitle,
+  ContentsTitleXSmall,
+  SubmitBtn,
+  BtnWrapper,
+  AuthBtn,
+  InputCheckbox,
+  NormalBtn,
+  CheckLabel,
+  RequiredTitle,
+} from '../../components/common/commonStyles';
+import { CouponForm, Wrapper, Left, Right, Section, OptionWrap, CouponInfo } from './ReservationPage';
 
-const Container = styled(commonContainerStyle)``;
+const Container = styled(commonContainerStyle)`
+  .used td {
+    padding: 17px 0;
+  }
 
-const ReserveInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 242px;
-  border-top: 1px solid #dddddd;
+  .userinfo {
+    table {
+      width: 100%;
+      border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
+    }
+    th,
+    td {
+      border-bottom: 1px solid ${(props) => props.theme.colors.graylightborder};
+      text-align: left;
+      padding: 16.5px 20px;
+      font-size: ${(props) => props.theme.font.sizes};
+    }
+    th {
+      width: 120px;
+      background: ${(props) => props.theme.colors.graybg};
+      color: ${(props) => props.theme.colors.charcoal};
+    }
+    td {
+      width: 302.5px;
+      color: ${(props) => props.theme.colors.blacklight};
+    }
+  }
+
+  .checkoption {
+    svg {
+      display: none;
+    }
+  }
 `;
 
-const ContentsTitle = styled.p``;
+const Payment = styled.table`
+  margin-top: 20px;
+  width: 100%;
+  line-height: 1.6;
 
-const InfoWrapper = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #dddddd;
-  height: 100%;
+  th,
+  td {
+    font-size: ${(props) => props.theme.font.sizexs};
+    color: ${(props) => props.theme.colors.blacklight};
+  }
+
+  th {
+    text-align: left;
+  }
+  td {
+    text-align: right;
+
+    &.notice {
+      color: ${(props) => props.theme.colors.graylight};
+      padding-top: 16px;
+      text-align: left;
+      line-height: 1.4;
+
+      a {
+        text-decoration: underline;
+      }
+    }
+  }
 `;
 
-const InfoTitle = styled.p`
-  font-size: 14px;
-  color: #111111;
-  padding: 28px 0 19px 19px;
-  background-color: ${(props) => props.theme.colors.lightGray};
-  width: 120px;
-  height: 100%;
+const RevNumber = styled.p`
+  background: ${(props) => props.theme.colors.graybg};
+  height: 60px;
+  line-height: 60px;
+  padding: 0 20px;
+  margin-bottom: 16px;
+  color: ${(props) => props.theme.colors.charcoal};
+  font-size: ${(props) => props.theme.font.sizes};
+  font-weight: 500;
+
+  strong {
+    font-size: ${(props) => props.theme.font.default};
+    color: ${(props) => props.theme.colors.goldhover};
+    margin-left: 6px;
+  }
 `;
 
-const Info = styled.p`
-  font-size: 16px;
-  padding-left: 19px;
-`;
-
-const Half = styled(InfoWrapper)`
-  width: 50%;
-  border: none;
-`;
-
-const PersonInfo = styled(ReserveInfo)`
-  height: 182px;
-`;
-
-const CouponInfo = styled(ReserveInfo)`
-  height: auto;
-`;
-
-const Coupon = styled.div`
-  display: flex;
-  justify-content: space-between;
-  color: #666666;
-  padding: 13px 0;
-  border-bottom: 1px solid #dddddd;
-`;
-
-const Payment = styled.div`
-  display: flex;
-  justify-content: space-between;
-  color: #21201e;
-  font-size: 14px;
-`;
-
-const ReservationCheck = ({ title }) => {
+const ReservationCheck = () => {
+  const [coupons, setCoupons] = useState([
+    {
+      name: '추석 맞이 특가 이벤트: 객실 금액 100,000원 할인 상품권',
+      price: '-100,000 원',
+    },
+    {
+      name: '추석 맞이 특가 이벤트: 전 상품 금액 50,000원 할인 상품권',
+      price: '-50,000 원',
+    },
+  ]);
   return (
     <>
       <Container>
-        <PageTitle>{title}</PageTitle>
+        <PageTitle>예약 확인</PageTitle>
         <Wrapper>
           <Left>
             <Section>
-              <ContentsTitle>예약 정보</ContentsTitle>
-              <ReserveInfo>
-                <InfoWrapper>
-                  <InfoTitle>예약번호</InfoTitle>
-                  <Info>2023082555672148</Info>
-                </InfoWrapper>
-                <InfoWrapper>
-                  <Half>
-                    <InfoTitle>체크인</InfoTitle>
-                    <Info>2023.08.16 (수)</Info>
-                  </Half>
-                  <Half>
-                    <InfoTitle>체크아웃</InfoTitle>
-                    <Info>2023.08.17 (목)</Info>
-                  </Half>
-                </InfoWrapper>
-                <InfoWrapper>
-                  <InfoTitle>상품수량</InfoTitle>
-                  <Info>1개</Info>
-                </InfoWrapper>
-                <InfoWrapper>
-                  <Half>
-                    <InfoTitle>어른</InfoTitle>
-                    <Info>1명</Info>
-                  </Half>
-                  <Half>
-                    <InfoTitle>어린이</InfoTitle>
-                    <Info>1명</Info>
-                  </Half>
-                </InfoWrapper>
-              </ReserveInfo>
+              <ContentsTitleXSmall>상품 상세</ContentsTitleXSmall>
+              <RevNumber>
+                [예약번호] <strong>2023092312315646</strong>
+              </RevNumber>
+              <OptionWrap className="checkoption">
+                <Reservation />
+              </OptionWrap>
+            </Section>
+
+            <Section className="userinfo">
+              <ContentsTitleXSmall>고객 정보</ContentsTitleXSmall>
+              <table>
+                <tr>
+                  <th>고객명</th>
+                  <td>홍길동</td>
+                  <th>연락처</th>
+                  <td>010-1234-1234</td>
+                </tr>
+                <tr>
+                  <th>이메일</th>
+                  <td colSpan="3">goorm@goorm.com</td>
+                </tr>
+                <tr>
+                  <th>요청사항</th>
+                  <td colSpan="3">내용</td>
+                </tr>
+              </table>
             </Section>
 
             <Section>
-              <ContentsTitle>예약자 정보</ContentsTitle>
-              <PersonInfo>
-                <InfoWrapper>
-                  <Half>
-                    <InfoTitle>예약자명</InfoTitle>
-                    <Info>홍길동</Info>
-                  </Half>
-                  <Half>
-                    <InfoTitle>연락처</InfoTitle>
-                    <Info>010-1234-1234</Info>
-                  </Half>
-                </InfoWrapper>
-                <InfoWrapper>
-                  <InfoTitle>이메일</InfoTitle>
-                  <Info>goorm@goorm.com</Info>
-                </InfoWrapper>
-                <InfoWrapper>
-                  <InfoTitle>요청사항</InfoTitle>
-                  <Info>내용</Info>
-                </InfoWrapper>
-              </PersonInfo>
-            </Section>
-
-            <Section>
-              <ContentsTitle>상품권 등록</ContentsTitle>
-              <CouponInfo>
-                <Coupon>
-                  <p>[추석 맞이 특가 이벤트] 객실 금액 100,000원 할인 상품권</p>
-                  <p>-100,000 원</p>
-                </Coupon>
-                <Coupon>
-                  <p>[추석 맞이 특가 이벤트] 전 상품 금액 50,000원 할인 상품권</p>
-                  <p>-50,000 원</p>
-                </Coupon>
+              <ContentsTitleXSmall>사용한 상품권</ContentsTitleXSmall>
+              <CouponInfo className="used">
+                <table>
+                  {coupons.map((coupon, index) => (
+                    <tr key={index}>
+                      <td>{coupon.name}</td>
+                      <td className="right">{coupon.price}</td>
+                    </tr>
+                  ))}
+                </table>
               </CouponInfo>
             </Section>
 
             <Section>
-              <ContentsTitle>쿠폰 적용</ContentsTitle>
-              <CouponInfo>
-                <Coupon>
-                  <p>[Bronze 등급 혜택] 객실 5% 할인 쿠폰</p>
-                  <p>-25,000 원</p>
-                </Coupon>
+              <ContentsTitleXSmall>사용한 쿠폰</ContentsTitleXSmall>
+              <CouponInfo className="used">
+                <table>
+                  {coupons.map((coupon, index) => (
+                    <tr key={index}>
+                      <td>{coupon.name}</td>
+                      <td className="right">{coupon.price}</td>
+                    </tr>
+                  ))}
+                  <tr>
+                    {/* 사용한 쿠폰이 없는 경우 */}
+                    <td colSpan="2">사용한 쿠폰이 없습니다.</td>
+                  </tr>
+                </table>
               </CouponInfo>
             </Section>
           </Left>
 
           <Right>
-            <ContentsTitle>상품 개요</ContentsTitle>
+            <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
             <Product />
             <Payment>
-              <p>결제수단</p>
-              <p>신용카드</p>
+              <tr>
+                <th>결제수단</th>
+                <td>신용카드</td>
+              </tr>
+              <tr>
+                <th>결제일</th>
+                <td>2023.09.23</td>
+              </tr>
+              <tr>
+                <td colSpan="2" className="notice">
+                  ⁕ 결제된 금액은 포트원 정책에 따라 매일 자동 취소됩니다. 자세한 내용은{' '}
+                  <a href="https://developers.portone.io/docs/ko/readme/get-started" target="_blank">
+                    포트원 개발자센터 홈페이지
+                  </a>
+                  를 확인해주세요.
+                </td>
+              </tr>
             </Payment>
           </Right>
         </Wrapper>

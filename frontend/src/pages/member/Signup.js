@@ -10,6 +10,7 @@ import {
   BtnWrapper,
   SubmitBtn,
   Auth,
+  RequiredTitle,
 } from '../../components/common/commonStyles';
 import AgreementContents from '../../components/AgreementCon';
 import PrivacyContents from '../../components/PrivacyCon';
@@ -37,7 +38,7 @@ const LeftWrapper = styled.div`
   }
 `;
 
-const AgreementText = styled.div`
+export const AgreementText = styled.div`
   font-size: ${(props) => props.theme.font.sizexs};
   color: ${(props) => props.theme.colors.graydark};
   height: 200px;
@@ -46,15 +47,19 @@ const AgreementText = styled.div`
   margin-bottom: 16px;
   overflow-y: scroll;
   line-height: 1.6;
+  background: ${(props) => props.theme.colors.graybg};
+
+  &.forreserv {
+    height: 130px;
+  }
 `;
 
 const RightWrapper = styled.div`
   padding-left: 80px;
 
   input {
-    height: 60px;
+    height: 50px;
     padding-left: 18px;
-    font-size: ${(props) => props.theme.font.sizes};
     margin-top: 10px;
     display: block;
   }
@@ -116,24 +121,34 @@ const Signup = () => {
         <PageTitle>회원가입</PageTitle>
         <Wrapper>
           <LeftWrapper>
-            <ContentsTitleXSmall>이용약관/개인정보처리방침 동의</ContentsTitleXSmall>
+            <ContentsTitleXSmall>약관 동의</ContentsTitleXSmall>
             <div>
+              <RequiredTitle>
+                <h4>
+                  이용약관 동의 <span>(필수)</span>
+                </h4>
+                <CheckLabel onChange={handleTermsCheck} for="agreementcheck">
+                  <InputCheckbox type="checkbox" id="agreementcheck" checked={termsAgree} onChange={handleTermsCheck} required />
+                  동의합니다
+                </CheckLabel>
+              </RequiredTitle>
               <AgreementText>
                 <AgreementContents />
               </AgreementText>
-              <CheckLabel onChange={handleTermsCheck} for="agreementcheck">
-                <InputCheckbox type="checkbox" id="agreementcheck" checked={termsAgree} onChange={handleTermsCheck} required />
-                이용약관에 동의합니다.
-              </CheckLabel>
             </div>
             <div>
+              <RequiredTitle>
+                <h4>
+                  개인정보처리방침 동의 <span>(필수)</span>
+                </h4>
+                <CheckLabel for="privacycheck">
+                  <InputCheckbox type="checkbox" id="privacycheck" checked={privacyAgree} onChange={handlePrivacyAgree} required />
+                  동의합니다
+                </CheckLabel>
+              </RequiredTitle>
               <AgreementText>
                 <PrivacyContents />
               </AgreementText>
-              <CheckLabel for="privacycheck">
-                <InputCheckbox type="checkbox" id="privacycheck" checked={privacyAgree} onChange={handlePrivacyAgree} required />
-                개인정보처리방침에 동의합니다.
-              </CheckLabel>
             </div>
           </LeftWrapper>
           <RightWrapper>
@@ -166,7 +181,7 @@ const Signup = () => {
               <input type="text" name="birthdate" value={formData.birthdate} placeholder="생년월일(선택입력)" onChange={handleChange} />
               <input type="text" name="gender" value={formData.gender} placeholder="성별(선택입력)" onChange={handleChange} />
               <BtnWrapper className="mt20 full">
-                <SubmitBtn type="submit" onClick={handleSignupButton} className="height60">
+                <SubmitBtn type="submit" onClick={handleSignupButton}>
                   회원가입
                 </SubmitBtn>
               </BtnWrapper>

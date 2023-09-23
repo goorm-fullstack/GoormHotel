@@ -2,6 +2,7 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../../images/common/logo.png';
+import { SubmitLinkBtn, BtnWrapper } from '../common/commonStyles';
 
 const HeaderContainer = styled.header`
   position: fixed;
@@ -14,6 +15,8 @@ const HeaderContainer = styled.header`
   z-index: 999;
   background-color: ${(props) => (props.$nowLocation == '/' ? 'rgba(51,51,51,0.8)' : props.theme.colors.charcoal)};
   color: white;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
 `;
 
 const TopInfo = styled.ul`
@@ -56,19 +59,10 @@ const NavItem = styled.li`
   }
 `;
 
-const NavReserveBtn = styled(Link)`
-  height: 42px;
-  line-height: 42px;
-  width: 150px;
-  color: white;
-  background-color: ${(props) => props.theme.colors.gold};
-  white-space: nowrap;
-  text-align: center;
-  font-size: ${(props) => props.theme.font.sizes};
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.goldhover};
-  }
+const NavReserveBtn = styled(SubmitLinkBtn)`
+  height: 47px;
+  line-height: 47px;
+  width: 180px;
 `;
 
 const LogoImg = styled.img`
@@ -128,7 +122,9 @@ const Header = () => {
             <Link to="/board/notice">고객지원</Link>
           </NavItem>
         </NavList>
-        <NavReserveBtn to="/offers">예약하기</NavReserveBtn>
+        <BtnWrapper>
+          <NavReserveBtn to="/offers">예약하기</NavReserveBtn>
+        </BtnWrapper>
       </Gnb>
     </HeaderContainer>
   );

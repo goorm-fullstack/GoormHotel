@@ -18,6 +18,7 @@ const theme = {
     blacklight: '#444',
     charcoal: '#21201e',
     black: '#111',
+    caution: '#aaa',
   },
   font: {
     default: '16px',

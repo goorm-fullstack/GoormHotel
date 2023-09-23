@@ -113,7 +113,7 @@ function App() {
           <Route path="/membership" element={<Membership />}></Route>
           <Route path="/reservation/:number" element={<ReservationCheck />}></Route>
           <Route path="/offers" element={<ReservationItem />}></Route>
-          <Route path="/reservation/history/:memberid" element={<ReservationList />}></Route>
+          <Route path="/reservation/history" element={<ReservationList />}></Route>
           <Route path="/facilities" element={<Facilities />}></Route>
           <Route path="/customerSupport" element={<CustomerSupport />}></Route>
           <Route path="/login" element={<Login />}></Route>

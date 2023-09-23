@@ -43,6 +43,19 @@ export const ContentsTitleXSmall = styled(ContentsTitle)`
   margin-bottom: 30px;
 `;
 
+export const RequiredTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: ${(props) => props.theme.font.sizexs};
+  margin-bottom: 16px;
+  font-weight: normal;
+
+  span {
+    color: ${(props) => props.theme.colors.red};
+  }
+`;
+
 export const CheckLabel = styled.label`
   color: ${(props) => props.theme.colors.graylight};
   display: flex;
@@ -51,7 +64,7 @@ export const CheckLabel = styled.label`
   font-size: ${(props) => props.theme.font.sizexs};
 
   input {
-    margin-right: 6px;
+    margin-right: 8px;
   }
 `;
 
@@ -102,24 +115,45 @@ export const BtnWrapper = styled.div`
   &.full > a {
     width: 100%;
   }
+
+  &.flexspace {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &.flexgap {
+    display: flex;
+    column-gap: 10px;
+  }
 `;
 
 export const commonLinkBtn = styled(Link)`
   font-size: ${(props) => props.theme.font.sizes};
-  width: 165px;
-  height: 42px;
-  line-height: 40px;
+  width: 200px;
+  height: 50px;
+  line-height: 50px;
   display: inline-block;
   text-align: center;
+
+  &.height60 {
+    height: 60px;
+    line-height: 58px;
+  }
 `;
 
 export const commonButton = styled.button`
   font-size: ${(props) => props.theme.font.sizes};
-  width: 165px;
-  height: 42px;
-  line-height: 42px;
+  width: 200px;
+  height: 50px;
+  line-height: 50px;
   display: inline-block;
   text-align: center;
+
+  &.height60 {
+    height: 60px;
+    line-height: 60px;
+  }
 `;
 
 export const LinkBtn = styled(commonLinkBtn)`
@@ -130,10 +164,14 @@ export const LinkBtn = styled(commonLinkBtn)`
     background-color: ${(props) => props.theme.colors.gold};
     color: white;
   }
+`;
 
-  &.height60 {
-    height: 60px;
-    line-height: 58px;
+export const SubmitLinkBtn = styled(commonLinkBtn)`
+  background-color: ${(props) => props.theme.colors.gold};
+  color: white;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.goldhover};
   }
 `;
 
@@ -147,6 +185,13 @@ export const NormalBtn = styled(commonButton)`
     border-color: ${(props) => props.theme.colors.gold};
     color: ${(props) => props.theme.colors.goldhover};
   }
+
+  &.mini {
+    width: 80px;
+    height: 32px;
+    line-height: 30px;
+    font-size: ${(props) => props.theme.font.sizexs};
+  }
 `;
 
 export const SubmitBtn = styled(commonButton)`
@@ -157,13 +202,8 @@ export const SubmitBtn = styled(commonButton)`
     background-color: ${(props) => props.theme.colors.goldhover};
   }
 
-  &.height50 {
-    height: 50px;
-    line-height: 50px;
-  }
-  &.height60 {
-    height: 60px;
-    line-height: 60px;
+  &.shadow {
+    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.2);
   }
 `;
 
@@ -173,7 +213,6 @@ export const MoreLink = styled(commonLinkBtn)`
   background-repeat: no-repeat;
   background-position: 87% center;
   color: white;
-  line-height: 42px;
   padding-left: 20px;
   text-align: left;
 
@@ -206,6 +245,11 @@ export const CircleCloseBtn = styled(commonButton)`
   border-radius: 50%;
   width: 24px;
   height: 24px;
+
+  &.small {
+    width: 18px;
+    height: 18px;
+  }
 `;
 
 export const Auth = styled.div`
@@ -215,14 +259,15 @@ export const Auth = styled.div`
 
   button {
     width: 120px;
-    height: 60px;
-    line-height: 58px;
+    height: 50px;
+    line-height: 48px;
   }
 
   & > input {
     width: 380px;
   }
 `;
+
 export const AuthBtn = styled(commonButton)`
   border: 1px solid ${(props) => props.theme.colors.charcoal};
   background: white;

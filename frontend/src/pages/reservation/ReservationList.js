@@ -1,12 +1,9 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
+import { BoardList } from '../board/BoardList';
 
-const Container = styled.div`
-  ${commonContainerStyle}
-  padding-left: 30px;
-  padding-right: 30px;
-`;
+const Container = styled(commonContainerStyle)``;
 
 const ReservationTable = styled.table`
   width: 100%;
@@ -48,7 +45,7 @@ const ReservationList = () => {
     {
       reservationNumber: '2023082555672148',
       reservationDate: '2023-09-10',
-      productName: '디럭스',
+      productName: '디럭스 디럭스',
       paymentAmount: '500,000 원',
       checkInDate: '2023-09-15',
       checkOutDate: '2023-09-20',
@@ -56,7 +53,8 @@ const ReservationList = () => {
     {
       reservationNumber: '2023082555672149',
       reservationDate: '2023-09-12',
-      productName: '풀 빌라',
+      productName:
+        '풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스',
       paymentAmount: '300,000 원',
       checkInDate: '2023-09-17',
       checkOutDate: '2023-09-22',
@@ -67,40 +65,44 @@ const ReservationList = () => {
     <>
       <Container>
         <PageTitle>예약 목록</PageTitle>
-        <ReservationTable>
+        <BoardList>
           <thead>
-            <TableHeaderRow>
-              <TableHeaderCell>번호</TableHeaderCell>
-              <TableHeaderCell>예약번호</TableHeaderCell>
-              <TableHeaderCell>예약날짜</TableHeaderCell>
-              <TableHeaderCell>상품명</TableHeaderCell>
-              <TableHeaderCell>결제 금액</TableHeaderCell>
-              <TableHeaderCell>체크인 날짜</TableHeaderCell>
-              <TableHeaderCell>체크아웃 날짜</TableHeaderCell>
-            </TableHeaderRow>
+            <tr>
+              <th width="110px">번호</th>
+              <th width="220px">예약번호</th>
+              <th width="280px">상품명</th>
+              <th width="140px">체크인</th>
+              <th width="140px">체크아웃</th>
+              <th width="140px">예약(결제)일</th>
+              <th width="150px">결제금액</th>
+            </tr>
           </thead>
           <tbody>
             {reservations.length === 0 ? (
               <tr>
-                <TableDataCell colSpan="7">
-                  <NoReservationsMessage>예약 정보가 없습니다.</NoReservationsMessage>
-                </TableDataCell>
+                <td colSpan="7" className="center">
+                  예약 정보가 없습니다.
+                </td>
               </tr>
             ) : (
               reservations.map((reservation, index) => (
-                <TableDataRow key={index}>
-                  <TableDataCell>{index + 1}</TableDataCell>
-                  <TableDataCell>{reservation.reservationNumber}</TableDataCell>
-                  <TableDataCell>{reservation.reservationDate}</TableDataCell>
-                  <TableDataCell>{reservation.productName}</TableDataCell>
-                  <PriceCell>{reservation.paymentAmount}</PriceCell>
-                  <TableDataCell>{reservation.checkInDate}</TableDataCell>
-                  <TableDataCell>{reservation.checkOutDate}</TableDataCell>
-                </TableDataRow>
+                <tr key={index}>
+                  <td className="center">{index + 1}</td>
+                  <td className="center">
+                    <a href={`/reservation/:number`}>{reservation.reservationNumber}</a>
+                  </td>
+                  <td className="center">
+                    <p className="textover">{reservation.productName}</p>
+                  </td>
+                  <td className="center">{reservation.checkInDate}</td>
+                  <td className="center">{reservation.checkOutDate}</td>
+                  <td className="center">{reservation.reservationDate}</td>
+                  <td className="center">{reservation.paymentAmount}</td>
+                </tr>
               ))
             )}
           </tbody>
-        </ReservationTable>
+        </BoardList>
       </Container>
     </>
   );

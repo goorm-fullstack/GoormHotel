@@ -44,7 +44,7 @@ const NewsTitle = styled.h3`
 `;
 
 const EmailInput = styled.input`
-  width: 750px;
+  width: 715px;
   height: 50px;
   color: ${(props) => props.theme.colors.graylight};
   margin-bottom: 10px;

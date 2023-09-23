@@ -42,9 +42,8 @@ const NonMemberBtn = styled(MemberBtn)``;
 
 const Input = styled.input`
   width: 100%;
-  height: 60px;
+  height: 50px;
   padding-left: 18px;
-  font-size: ${(props) => props.theme.font.sizes};
 
   &.password {
     margin-top: 10px;
@@ -83,7 +82,7 @@ const RightWrapper = styled.div`
 const FirstText = styled.p`
   font-size: ${(props) => props.theme.font.sizel};
   color: ${(props) => props.theme.colors.goldhover};
-  margin: 75px 0 20px;
+  margin: 55px 0 20px;
 `;
 
 const SecondText = styled.p`
@@ -139,9 +138,7 @@ const Login = () => {
                 <Input placeholder="아이디" value={memberId} onChange={handleIdChange} />
                 <Input className="password" placeholder="비밀번호" value={memberPassword} onChange={handlePwChange} />
                 <BtnWrapper className="mt20 full">
-                  <SubmitBtn type="submit" className="height60">
-                    로그인
-                  </SubmitBtn>
+                  <SubmitBtn type="submit">로그인</SubmitBtn>
                 </BtnWrapper>
               </form>
             </div>
@@ -171,9 +168,7 @@ const Login = () => {
               <br />더 큰 혜택과 편리함을 누릴 수 있습니다.
             </SecondText>
             <BtnWrapper className="full">
-              <LinkBtn to="/signup" className="height60">
-                회원가입
-              </LinkBtn>
+              <LinkBtn to="/signup">회원가입</LinkBtn>
             </BtnWrapper>
           </RightWrapper>
         </Wrapper>

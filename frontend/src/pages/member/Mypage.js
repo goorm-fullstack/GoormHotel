@@ -19,9 +19,8 @@ const EditWrapper = styled.div`
   border-right: 1px solid ${(props) => props.theme.colors.grayborder};
 
   input {
-    height: 60px;
+    height: 50px;
     padding-left: 18px;
-    font-size: ${(props) => props.theme.font.sizes};
     margin-top: 10px;
     display: block;
   }
@@ -39,11 +38,11 @@ const RightWrapper = styled.div`
   padding-left: 80px;
 
   .historyWrapper {
-    margin-top: 60px;
+    margin-bottom: 60px;
 
     p {
       background-color: ${(props) => props.theme.colors.graybg};
-      padding: 25px 20px;
+      padding: 32.5px 30px;
       font-size: ${(props) => props.theme.font.sizes};
       display: flex;
       justify-content: space-between;
@@ -57,8 +56,6 @@ const RightWrapper = styled.div`
     }
   }
 `;
-
-const CouponWrapper = styled.div``;
 
 const GuideText = styled.ul`
   font-size: ${(props) => props.theme.font.sizexs};
@@ -89,13 +86,18 @@ const Mypage = () => {
               <input placeholder="생년월일(선택입력)" />
               <input placeholder="성별(선택입력)" />
               <BtnWrapper className="mt20 full">
-                <SubmitBtn type="submit" className="height60">
-                  회원 정보 수정
-                </SubmitBtn>
+                <SubmitBtn type="submit">회원 정보 수정</SubmitBtn>
               </BtnWrapper>
             </form>
           </EditWrapper>
           <RightWrapper>
+            <div className="historyWrapper">
+              <ContentsTitleXSmall>예약 내역 확인</ContentsTitleXSmall>
+              <p>
+                현재까지의 예약 내역을 확인할 수 있습니다.
+                <Link to="/reservation/history">자세히보기</Link>
+              </p>
+            </div>
             <div>
               <ContentsTitleXSmall>멤버십 쿠폰</ContentsTitleXSmall>
               <Coupon grade="bronze" />
@@ -104,13 +106,6 @@ const Mypage = () => {
                 <li>⁕&nbsp;&nbsp;특전의 세부 이용 조건은 약관을 통해 확인하실 수 있습니다.</li>
                 <li>⁕&nbsp;&nbsp;등급 심사는 매월 1일 진행되며 최근 2년 간의 실적을 기준으로 합니다.</li>
               </GuideText>
-            </div>
-            <div className="historyWrapper">
-              <ContentsTitleXSmall>예약 내역 확인</ContentsTitleXSmall>
-              <p>
-                현재까지의 예약 내역을 확인할 수 있습니다.
-                <Link to="/reservation/history/:memberid">자세히보기</Link>
-              </p>
             </div>
           </RightWrapper>
         </Contents>

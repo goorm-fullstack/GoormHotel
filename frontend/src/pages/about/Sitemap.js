@@ -103,7 +103,7 @@ const Sitemap = () => {
               <SiteMapLink to="/signup">회원가입</SiteMapLink>
             </List>
             <List>
-              <SiteMapLink to="/mypage">회원 정보 수정</SiteMapLink>
+              <SiteMapLink to="/mypage">마이페이지</SiteMapLink>
             </List>
             <List>
               <SiteMapLink to="/membership">멤버십 소개</SiteMapLink>

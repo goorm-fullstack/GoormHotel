@@ -13,9 +13,8 @@ const ProcessBox = styled.div`
   }
 
   input {
-    height: 60px;
+    height: 50px;
     padding-left: 18px;
-    font-size: ${(props) => props.theme.font.sizes};
     margin-top: 10px;
     display: block;
   }
@@ -37,11 +36,6 @@ const PwProcess = styled.div`
   padding-left: 80px;
 `;
 
-const FindSubmitBtn = styled(SubmitBtn)`
-  height: 60px;
-  line-height: 60px;
-`;
-
 const FindAccount = () => {
   return (
     <>
@@ -58,7 +52,7 @@ const FindAccount = () => {
               </Auth>
               <input placeholder="인증번호를 입력하세요." name="#" required />
               <BtnWrapper className="mt20 full">
-                <SubmitBtn type="submit" form="find-id" className="height60">
+                <SubmitBtn type="submit" form="find-id">
                   아이디 찾기
                 </SubmitBtn>
               </BtnWrapper>
@@ -75,7 +69,7 @@ const FindAccount = () => {
               </Auth>
               <input placeholder="인증번호를 입력하세요." name="#" required />
               <BtnWrapper className="mt20 full">
-                <SubmitBtn type="submit" form="find-pw" className="height60">
+                <SubmitBtn type="submit" form="find-pw">
                   비밀번호 찾기
                 </SubmitBtn>
               </BtnWrapper>

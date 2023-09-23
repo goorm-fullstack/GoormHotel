@@ -36,7 +36,7 @@ html, body {
 body {
 	min-width: 1260px;
 	line-height: 1;
-  font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  font-family: 'Pretendard', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
 	color: #111;
 }
 
@@ -80,8 +80,8 @@ a, button {
 input {
 	border: 1px solid #ddd;
 	padding: 0 8px;
-	font-size: 16px;
 	font: inherit;
+	font-size: 15px;
 }
 
 select {
@@ -101,6 +101,12 @@ select {
 	width: 152px;
 	font-size: 14px;
 	letter-spacing: -0.02em;
+
+	&:disabled {
+		color: #444;
+    background-color: #f7f7f7;
+    background-image: none;
+  }
 }
 
 ::selection {

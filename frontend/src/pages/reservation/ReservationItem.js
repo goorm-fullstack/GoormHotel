@@ -61,7 +61,7 @@ const RoomItem = styled.li`
 
   .imgwrap {
     width: 100%;
-    height: 190px;
+    height: 165px;
     background-size: cover;
   }
 `;
@@ -127,11 +127,15 @@ const RoomItemInfo = styled.div`
   td {
     text-align: right;
   }
+
+  button {
+    border-color: ${(props) => props.theme.colors.graylightborder};
+  }
 `;
 
 const NoItem = styled.div`
   width: 293px;
-  height: 500px;
+  height: 550px;
   text-align: center;
   display: table-cell;
   vertical-align: middle;
@@ -146,15 +150,21 @@ const NoItem = styled.div`
 `;
 
 const SelectedItem = styled.div`
-  position: relative;
+  .imgwrap {
+    width: 100%;
+    height: 165px;
+    background-size: cover;
+  }
 
   h4 {
     font-weight: 500;
     color: ${(props) => props.theme.colors.goldhover};
     padding: 21px 20px;
+    border-top: 1px solid ${(props) => props.theme.colors.grayborder};
     border-bottom: 1px solid ${(props) => props.theme.colors.grayborder};
     margin-bottom: 20px;
     background: white;
+    position: relative;
   }
 
   h5 {
@@ -167,7 +177,7 @@ const SelectedItem = styled.div`
 
   button {
     position: absolute;
-    top: 16px;
+    top: 17px;
     right: 20px;
   }
 
@@ -203,7 +213,7 @@ const SelectedItem = styled.div`
 
 const SelectItem = styled.div`
   width: 100%;
-  height: 502px;
+  height: 552px;
   border: 1px solid ${(props) => props.theme.colors.grayborder};
   border-radius: 5px;
   background: ${(props) => props.theme.colors.graybg};
@@ -363,7 +373,11 @@ const ReservationItem = () => {
                 if (selectedProduct) {
                   return (
                     <SelectedItem>
-                      <h4>{selectedProduct.name}</h4>
+                      <div className="imgwrap" style={{ backgroundImage: `url(${selectedProduct.image})` }} alt="ItemImg" />
+                      <h4>
+                        {selectedProduct.name}
+                        <CircleCloseBtn onClick={handleDeleteClick}></CircleCloseBtn>
+                      </h4>
                       <p>{selectedProduct.type}</p>
                       <p>{selectedProduct.category}</p>
                       <p>성인 {selectedProduct.capacity}</p>
@@ -389,7 +403,6 @@ const ReservationItem = () => {
                           {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 */}
                         </tr>
                       </table>
-                      <CircleCloseBtn onClick={handleDeleteClick}></CircleCloseBtn>
                     </SelectedItem>
                   );
                 } else {
@@ -423,8 +436,8 @@ const ReservationItem = () => {
                 }
               })()}
             </SelectItem>
-            <BtnWrapper className="full mt40">
-              <SubmitBtn type="submit" className="height60">
+            <BtnWrapper className="full mt20">
+              <SubmitBtn type="submit" className="shadow">
                 예약 정보 입력하기
               </SubmitBtn>
             </BtnWrapper>

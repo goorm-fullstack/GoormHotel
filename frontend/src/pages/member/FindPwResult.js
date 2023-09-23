@@ -34,12 +34,6 @@ const ResultBox = styled.div`
   input:first-child {
     margin-top: 0;
   }
-
-  form button {
-    width: 100%;
-    height: 50px;
-    line-height: 50px;
-  }
 `;
 
 const FindPwResult = () => {
@@ -57,7 +51,7 @@ const FindPwResult = () => {
           <form action="#" method="post">
             <input placeholder="비밀번호" name="#" required />
             <input placeholder="비밀번호 확인" name="#" required />
-            <BtnWrapper className="mt20">
+            <BtnWrapper className="mt20 full">
               <SubmitBtn>비밀번호 재설정</SubmitBtn>
             </BtnWrapper>
           </form>

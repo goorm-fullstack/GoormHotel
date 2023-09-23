@@ -14,13 +14,13 @@ const IsReply = styled.span`
   font-size: ${(props) => props.theme.font.sizexxxs};
   padding: 0 7px;
   border-radius: 8px;
-  height: 1.4rem;
-  line-height: 1.31rem;
+  height: 14px;
+  line-height: 14px;
   margin-right: 10px;
   vertical-align: middle;
 `;
 
-const BoardList = styled.table`
+export const BoardList = styled.table`
   width: 100%;
   border-bottom: 1px solid ${(props) => props.theme.colors.charcoal};
 
@@ -33,17 +33,25 @@ const BoardList = styled.table`
   }
   th,
   td {
-    padding: 20px 12px;
+    padding: 21.5px 12px;
   }
   td {
     border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
-    color: ${(props) => props.theme.colors.graydark};
+    color: ${(props) => props.theme.colors.blacklight};
   }
   td.center {
     text-align: center;
   }
   td a:hover {
     color: ${(props) => props.theme.colors.goldhover};
+  }
+
+  .textover {
+    width: 100%;
+    max-width: 250px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 `;
 
@@ -73,7 +81,7 @@ const BoardGallery = styled.ul`
 `;
 
 const WriteBtnWrapper = styled(BtnWrapper)`
-  margin-top: -62px;
+  margin-top: -70px;
   margin-bottom: 20px;
 `;
 
@@ -116,7 +124,7 @@ const CustomerSupport = () => {
                         <img src="" />
                       </a>
                     </div>
-                    <p className="title">
+                    <p className="title textover">
                       <a href={`/board/` + board + `/detail`}>제목입니다.</a>
                     </p>
                     <p className="writer">작성자명</p>
@@ -128,7 +136,7 @@ const CustomerSupport = () => {
                         <img src="" />
                       </a>
                     </div>
-                    <p className="title">
+                    <p className="title textover">
                       <a href={`/board/` + board + `/detail`}>제목입니다.</a>
                     </p>
                     <p className="writer">작성자명</p>
@@ -140,7 +148,7 @@ const CustomerSupport = () => {
                         <img src="" />
                       </a>
                     </div>
-                    <p className="title">
+                    <p className="title textover">
                       <a href={`/board/` + board + `/detail`}>제목입니다.</a>
                     </p>
                     <p className="writer">작성자명</p>
@@ -152,7 +160,7 @@ const CustomerSupport = () => {
                         <img src="" />
                       </a>
                     </div>
-                    <p className="title">
+                    <p className="title textover">
                       <a href={`/board/` + board + `/detail`}>제목입니다.</a>
                     </p>
                     <p className="writer">작성자명</p>
