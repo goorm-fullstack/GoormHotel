@@ -68,11 +68,13 @@ public class Report {
     }
 
     public ResponseReportDto toResponseReportDto() {
-        if(reply.getReplyId() == null){
+        if(reply == null){
             return ResponseReportDto.builder()
                     .reportId(reportId)
                     .boardId(board.getBoardId())
                     .title(board.getTitle())
+                    .replyId(null)
+                    .replyContent(null)
                     .reportWriter(reportWriter)
                     .reportReason(reportReason)
                     .reportDate(reportDate)
@@ -83,6 +85,8 @@ public class Report {
         else{
             return ResponseReportDto.builder()
                     .reportId(reportId)
+                    .boardId(null)
+                    .title(null)
                     .replyId(reply.getReplyId())
                     .replyContent(reply.getReplyContent())
                     .reportWriter(reportWriter)
