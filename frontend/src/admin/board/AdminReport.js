@@ -194,7 +194,6 @@ const AdminReport = () => {
                       return <TableCell>N</TableCell>;
                   }
                 })()}
-
                 {(() => {
                   switch (report.reportResult) {
                     case 'false':

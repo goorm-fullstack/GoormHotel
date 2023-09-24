@@ -35,6 +35,7 @@ public class BoardImage {
     private String mimeType;        //이미지 mimeType
 
     @Column(nullable = false)
+    @Lob
     private byte[] data;
 
     @Builder(toBuilder = true)
