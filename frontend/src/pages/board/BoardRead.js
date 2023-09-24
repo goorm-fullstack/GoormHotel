@@ -1,32 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import { styled } from 'styled-components';
 import { NavLink, useLocation, useParams } from 'react-router-dom';
-import { commonContainerStyle } from '../../components/common/commonStyles';
-import queryStirng from 'query-string';
-import axios from "axios";
-
-const Title = styled.p`
-  font-size: 36px;
-  font-weight: bold;
-  color: rgb(17, 17, 17);
-  margin-bottom: 100px;
-`;
-
-const AboutHeader = styled.div`
-  height: 70px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #dddddd;
-  position: fixed;
-  width: 100%;
-  background-color: white;
-  z-index: 99;
-  padding: 0 40px;
-  top: 120px;
-  min-width: 1260px;
-`;
 import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn } from '../../components/common/commonStyles';
 import SubHeader from '../../components/layout/SubHeader';
+import axios from "axios";
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -88,6 +65,29 @@ const TableRead = styled.table`
 
 const BoardRead = () => {
   const board = useParams().board;
+  const [boardData, setBoardData] = useState(null);
+
+  useEffect(() => {
+    axios.get(`/boards/${board}`).then((response) => {
+      setBoardData(response.data);
+    });
+  }, []);
+
+  let listlink;
+  if (boardData) {
+    switch (boardData.boardTitle) {
+      case '문의하기':
+        listlink = '/board/qna';
+        break;
+      case '공지사항':
+        listlink = '/board/notice';
+        break;
+      case '이용후기':
+        listlink = '/board/review';
+        break;
+    }
+  }
+
   return (
     <>
       <SubHeader kind="board" />

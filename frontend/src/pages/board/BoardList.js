@@ -1,11 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom'; // Remove duplicate import
 import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn } from '../../components/common/commonStyles';
 import SubHeader from '../../components/layout/SubHeader';
 import Paging from '../../components/common/Paging';
-import { NavLink, useParams } from 'react-router-dom';
-import { commonContainerStyle } from '../../components/common/commonStyles';
 import axios from "axios";
 
 export const Container = styled(commonContainerStyle)``;
@@ -134,51 +132,99 @@ const CustomerSupport = () => {
         <>
             <SubHeader kind="board" />
             <Container>
-                {(() => {
-                    switch (board) {
-                        case 'notice':
-                            return <Title>공지사항</Title>;
-                        case 'qna':
-                            return <Title>문의하기</Title>;
-                        case 'review':
-                            return <Title>이용후기</Title>;
-                        default:
-                            return <Title>고객지원</Title>;
-                    }
-                })()}
+              {(() => {
+                switch (board) {
+                  case 'notice':
+                    return <PageTitle>공지사항</PageTitle>;
+                  case 'qna':
+                    return <PageTitle>문의하기</PageTitle>;
+                  case 'review':
+                    return <PageTitle>이용후기</PageTitle>;
+                  default:
+                    return <PageTitle>고객지원</PageTitle>;
+                }
+              })()}
                 <div>
                     {(() => {
                         if (board != 'notice') {
-                            return (
-                                <WriteBtn>
-                                    <a href={board + `/write`}>작성하기</a>
-                                </WriteBtn>
-                            );
+                          return (
+                              <WriteBtnWrapper className="right">
+                                <LinkBtn to={`/board/` + board + `/write`}>작성하기</LinkBtn>
+                              </WriteBtnWrapper>
+                          );
                         }
                     })()}
                     {(() => {
-                        if (board === 'review') {
-                            return (
-                                <BoardGallery>
-                                    {/** loop */}
-                                    {boards.map((board) => (
-                                        <li>
-                                            <div className="thumbnail">
-                                                <a href={`/board/${board.id}/detail`}>
-                                                    <img src="#"/>
-                                                </a>
-                                            </div>
-                                            <p className="title">
-                                                <a href={`/board/` + board.boardId + `/detail`}>{board.title}</a>
-                                            </p>
-                                            <p className="writer">{board.boardWriter}</p>
-                                            <p className="date">{`${board.boardWriteDate[0]}-${(board.boardWriteDate[1] < 10 ? '0' : '')}${board.boardWriteDate[1]}-${(board.boardWriteDate[2] < 10 ? '0' : '')}${board.boardWriteDate[2]}`}</p>
-                                        </li>
-                                    ))}
-                                    {/** // loop */}
-                                </BoardGallery>
-                            );
-                        } else {
+                      if (board === 'review') {
+                        return (
+                          <BoardGallery>
+                              {/** loop */}
+                            {boards.map((board) => (
+                              <li>
+                                <div className="thumbnail">
+                                  <a href={`/board/${board.id}/detail`}>
+                                    <img src="#"/>
+                                  </a>
+                                </div>
+                                <p className="title">
+                                  <a href={`/board/` + board.boardId + `/detail`}>{board.title}</a>
+                                </p>
+                                <p className="writer">{board.boardWriter}</p>
+                                <p className="date">{`${board.boardWriteDate[0]}-${(board.boardWriteDate[1] < 10 ? '0' : '')}${board.boardWriteDate[1]}-${(board.boardWriteDate[2] < 10 ? '0' : '')}${board.boardWriteDate[2]}`}</p>
+                              </li>
+                            ))}
+                            <li>
+                              <div className="thumbnail">
+                                <a href={`/board/` + board + `/detail`}>
+                                  <img src="#" />
+                                </a>
+                              </div>
+                              <p className="title textover">
+                                <a href={`/board/` + board + `/detail`}>제목입니다.</a>
+                              </p>
+                              <p className="writer">작성자명</p>
+                              <p className="date">2023-09-13</p>
+                            </li>
+                            <li>
+                              <div className="thumbnail">
+                                <a href={`/board/` + board + `/detail`}>
+                                  <img src="" />
+                                </a>
+                              </div>
+                              <p className="title textover">
+                                <a href={`/board/` + board + `/detail`}>제목입니다.</a>
+                              </p>
+                              <p className="writer">작성자명</p>
+                              <p className="date">2023-09-13</p>
+                            </li>
+                            <li>
+                              <div className="thumbnail">
+                                <a href={`/board/` + board + `/detail`}>
+                                  <img src="" />
+                                </a>
+                              </div>
+                              <p className="title textover">
+                                <a href={`/board/` + board + `/detail`}>제목입니다.</a>
+                              </p>
+                              <p className="writer">작성자명</p>
+                              <p className="date">2023-09-13</p>
+                            </li>
+                            <li>
+                              <div className="thumbnail">
+                                <a href={`/board/` + board + `/detail`}>
+                                  <img src="" />
+                                </a>
+                              </div>
+                              <p className="title textover">
+                                <a href={`/board/` + board + `/detail`}>제목입니다.</a>
+                              </p>
+                              <p className="writer">작성자명</p>
+                              <p className="date">2023-09-13</p>
+                            </li>
+                              {/** // loop */}
+                          </BoardGallery>
+                        );
+                      } else {
                             return (
                                 <BoardList>
                                     <thead>
