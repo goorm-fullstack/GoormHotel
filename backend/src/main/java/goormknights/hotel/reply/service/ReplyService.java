@@ -10,6 +10,7 @@ import goormknights.hotel.reply.repository.ReplyRepository;
 import goormknights.hotel.report.dto.response.ResponseReportDto;
 import goormknights.hotel.report.model.Report;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -43,7 +44,7 @@ public class ReplyService {
     //Read
     //댓글 전부 찾기
     public List<ResponseReplyDto> getAll(Pageable pageable){
-        Page<Reply> all = replyRepository.findAll(pageable);
+        Page<Reply> all = replyRepository.findAllByReplyDelete(pageable, false);
         List<ResponseReplyDto> response = new ArrayList<>();
 //        for (Board board : all) {
 //            ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
@@ -66,7 +67,7 @@ public class ReplyService {
 
     //댓글 내용으로 찾기
     public List<ResponseReplyDto> findByContent(String keyword){
-        List<Reply> replies = replyRepository.findByReplyContentContaining(keyword);
+        List<Reply> replies = replyRepository.findByReplyContentContainingAndReplyDelete(keyword, false);
         List<ResponseReplyDto> response = new ArrayList<>();
 
         for (Reply reply : replies){
@@ -90,7 +91,7 @@ public class ReplyService {
 
     //댓글 인덱스 번호로 찾기
     public ResponseReplyDto findByReplyId(Long replyId){
-        Reply reply = replyRepository.findByReplyId(replyId);
+        Reply reply = replyRepository.findByReplyIdAndReplyDelete(replyId, false);
 
         return reply.toResponseReplyDto();
     }
@@ -98,7 +99,7 @@ public class ReplyService {
     //Update
     //댓글 내용 수정하기
     public Reply updateReply(Long replyId, RequestReplyDto requestReplyDto){
-        Reply beforeReply = replyRepository.findByReplyId(replyId);
+        Reply beforeReply = replyRepository.findByReplyIdAndReplyDelete(replyId, false);
         Reply afterReply = beforeReply.updateReply(replyId, requestReplyDto);
 
         return replyRepository.save(afterReply);
@@ -109,5 +110,14 @@ public class ReplyService {
     //댓글 삭제
     public void deleteById(Long replyId){
         replyRepository.deleteById(replyId);
+    }
+
+    //삭제 댓글 복원
+    public Reply undeleted(Long boardId){
+        Reply reply = replyRepository.findByReplyIdAndReplyDelete(boardId, true);
+        if(reply!=null){
+            reply.setReplyDelete(false);
+        }
+        return replyRepository.save(reply);
     }
 }

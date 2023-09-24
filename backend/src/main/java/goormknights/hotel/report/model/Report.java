@@ -7,11 +7,15 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE Report SET report_Delete = true WHERE report_Id = ?")
+
 public class Report {
 
     @Id
@@ -40,6 +44,10 @@ public class Report {
 
     @Column(nullable = false)
     private boolean reportResult = false;       //신고 처리 결과
+
+    @Column(nullable = false)
+    @Setter
+    private boolean reportDelete = false;
 
     public void setBoard(Board board) {
         this.board = board;
