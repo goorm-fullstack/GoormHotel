@@ -14,10 +14,10 @@ const TotalItem = styled.p`
   margin-right: 100px;
 `;
 
-// 카테고리
+// 카테고리 셀렉트
 export const Select = styled.select`
   margin-left: 30px;
-  border: 1px solid #dddddd;
+  border: 1px solid #dddddd; // theme.colors.grayborder
 `;
 
 // 썸네일 표시
@@ -30,7 +30,7 @@ const Image = styled.img`
 // 상품 등록 버튼
 const InitButton = styled.button`
   &:hover {
-    background-color: #95846e;
+    background-color: #95846e; // theme.colors.
     color: #ffffff;
   }
 `;
@@ -38,8 +38,8 @@ const InitButton = styled.button`
 // 상품 삭제 버튼
 const DeleteButton = styled.button`
   &:hover {
-    border: 1px solid #d30a0a;
-    color: #d30a0a;
+    border: 1px solid #d30a0a; // theme.colors.red
+    color: #d30a0a; // theme.colors.red
   }
 `;
 
@@ -60,7 +60,7 @@ const CheckBoxTd = styled.td`
 // 최하단 페이징 링크
 const PageLink = styled(NavLink)`
   &.active {
-    color: #baa085;
+    color: #baa085; // theme.colors.gold
     text-decoration: underline;
   }
 `;
