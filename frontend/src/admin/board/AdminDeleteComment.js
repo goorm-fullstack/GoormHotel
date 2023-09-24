@@ -17,6 +17,7 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
+import Paging from '../../components/common/Paging';
 import axios from 'axios';
 
 const TableHeaderStyle = styled(TableHeader)`
@@ -135,6 +136,7 @@ const AdminDeleteComment = () => {
             ))}
           </tbody>
         </Table>
+        <Paging />
       </Container>
     </AdminLayout>
   );

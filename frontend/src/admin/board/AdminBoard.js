@@ -17,6 +17,7 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
+import Paging from '../../components/common/Paging';
 import axios from 'axios';
 
 const memberData = [
@@ -132,6 +133,7 @@ const AdminBoard = () => {
             ))}
           </tbody>
         </Table>
+        <Paging />
       </Container>
     </AdminLayout>
   );

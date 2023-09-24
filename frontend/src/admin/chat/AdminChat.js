@@ -18,6 +18,7 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
+import Paging from '../../components/common/Paging';
 
 const AdminChat = () => {
   const [checkedItems, setCheckedItems] = useState([]);
@@ -148,6 +149,7 @@ const AdminChat = () => {
             ))}
           </tbody>
         </Table>
+        <Paging />
       </Container>
     </AdminLayout>
   );

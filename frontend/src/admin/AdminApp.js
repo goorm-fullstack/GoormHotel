@@ -28,27 +28,27 @@ const AdminApp = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/admin" element={<AdminIndex />}></Route>
-        <Route path="/admin/reservation" element={<AdminReservation />}></Route>
-        <Route path="/admin/reservation/:reservationNumber" element={<AdminReservationDetail />}></Route>
+        <Route path="/admin/reservation/:page" element={<AdminReservation />}></Route>
+        <Route path="/admin/reservation/detail/:reservationNumber" element={<AdminReservationDetail />}></Route>
         <Route path="/admin/login" element={<AdminLogin />}></Route>
-        <Route path="/admin/member" element={<AdminMember />}></Route>
-        <Route path="/admin/member/:memberId" element={<AdminMemberDetail />}></Route>
-        <Route path="/admin/managers" element={<AdminManager />}></Route>
-        <Route path="/admin/comments" element={<AdminComment />}></Route>
-        <Route path="/admin/report" element={<AdminReport />}></Route>
-        <Route path="/admin/item/list/:page" element={<AdminItemList />}></Route>
-        <Route path="/admin/item/list/detail/dining/:type/:name" element={<AdminDetailDining />}></Route>
-        <Route path="/admin/item/list/detail/room/:type/:name" element={<AdminDetailRoom />}></Route>
-        <Route path="/admin/item/list/add/room" element={<AdminWriteFormRoom />}></Route>
-        <Route path="/admin/item/list/add/dining" element={<AdminWriteFormDining />}></Route>
-        <Route path="/admin/item/giftcard" element={<AdminGiftCard />}></Route>
-        <Route path="/admin/item/giftcard/detail/:id" element={<AdminDetailGiftCard />}></Route>
-        <Route path="/admin/board" element={<AdminBoard />}></Route>
-        <Route path="/admin/deletepost" element={<AdminDeleteComment />}></Route>
-        <Route path="/admin/chat" element={<AdminChat />}></Route>
-        <Route path="/admin/chat/:roomId" element={<AdminChatDetail />}></Route>
+        <Route path="/admin/member/:page" element={<AdminMember />}></Route>
+        <Route path="/admin/member/detail/:memberId" element={<AdminMemberDetail />}></Route>
+        <Route path="/admin/managers/:page" element={<AdminManager />}></Route>
+        <Route path="/admin/comments/:page" element={<AdminComment />}></Route>
+        <Route path="/admin/report/:page" element={<AdminReport />}></Route>
+        <Route path="/admin/item/:page" element={<AdminItemList />}></Route>
+        <Route path="/admin/item/detail/dining/:type/:name" element={<AdminDetailDining />}></Route>
+        <Route path="/admin/item/detail/room/:type/:name" element={<AdminDetailRoom />}></Route>
+        <Route path="/admin/item/add/room" element={<AdminWriteFormRoom />}></Route>
+        <Route path="/admin/item/add/dining" element={<AdminWriteFormDining />}></Route>
+        <Route path="/admin/giftcard/:page" element={<AdminGiftCard />}></Route>
+        <Route path="/admin/giftcard/detail/:id" element={<AdminDetailGiftCard />}></Route>
+        <Route path="/admin/board/:page" element={<AdminBoard />}></Route>
+        <Route path="/admin/deletepost/:page" element={<AdminDeleteComment />}></Route>
+        <Route path="/admin/chat/:page" element={<AdminChat />}></Route>
+        <Route path="/admin/chat/detail/:roomId" element={<AdminChatDetail />}></Route>
         <Route path="/admin/mail" element={<AdminMail />}></Route>
-        <Route path="/admin/news" element={<AdminNews />}></Route>
+        <Route path="/admin/subscriber/:page" element={<AdminNews />}></Route>
       </Routes>
     </BrowserRouter>
   );

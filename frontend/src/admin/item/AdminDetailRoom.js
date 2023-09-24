@@ -132,7 +132,7 @@ const AdminDetailRoom = () => {
               'Content-Type': 'multipart/form-data',
             },
           });
-          window.location.href = '/admin/item/list/1';
+          window.location.href = '/admin/item/1';
         } catch (error) {
           console.error('Error:', error.message);
           if (error.response.data.message.startsWith('Validation failed')) {

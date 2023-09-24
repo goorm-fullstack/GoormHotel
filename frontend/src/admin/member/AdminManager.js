@@ -17,6 +17,7 @@ import {
   Num,
 } from './AdminMember';
 import { InfoContainer, InfoWrapper, Label, ModifyBtnWrapper, ModifyBtn } from './AdminMemberDetail';
+import Paging from '../../components/common/Paging';
 
 const Section = styled.section`
   margin-bottom: 60px;
@@ -206,6 +207,7 @@ const AdminManager = () => {
               ))}
             </tbody>
           </Table>
+          <Paging />
         </Section>
         <Section>
           <SubTitle>부운영자 계정 설정</SubTitle>

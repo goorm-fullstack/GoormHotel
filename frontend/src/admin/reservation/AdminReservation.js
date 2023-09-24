@@ -17,6 +17,7 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
+import Paging from '../../components/common/Paging';
 
 export const Redo = styled.button`
   width: 120px;
@@ -130,6 +131,7 @@ const AdminReservation = () => {
             ))}
           </tbody>
         </Table>
+        <Paging />
       </Container>
     </AdminLayout>
   );

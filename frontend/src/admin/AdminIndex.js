@@ -134,7 +134,7 @@ const AdminIndex = () => {
           <Latest>
             <li>
               <h4>
-                공지사항<Link to={'/admin/board'}>자세히보기</Link>
+                공지사항<Link to={'/admin/board/1'}>자세히보기</Link>
               </h4>
               <LatestList>
                 <li>
@@ -159,7 +159,7 @@ const AdminIndex = () => {
             </li>
             <li>
               <h4>
-                문의하기<Link to={'/admin/board'}>자세히보기</Link>
+                문의하기<Link to={'/admin/board/1'}>자세히보기</Link>
               </h4>
               <LatestList>
                 <li>
@@ -184,7 +184,7 @@ const AdminIndex = () => {
             </li>
             <li>
               <h4>
-                이용후기<Link to={'/admin/board'}>자세히보기</Link>
+                이용후기<Link to={'/admin/board/1'}>자세히보기</Link>
               </h4>
               <LatestList>
                 <li>
@@ -212,76 +212,76 @@ const AdminIndex = () => {
           <Sitemap>
             <li>
               <h4>
-                <Link to={'/admin/member'}>회원 관리</Link>
+                <Link to={'/admin/member/1'}>회원 관리</Link>
               </h4>
               <MenuWrap>
                 <li>
-                  <Link to={'/admin/member'}>전체 회원 관리</Link>
+                  <Link to={'/admin/member/1'}>전체 회원 관리</Link>
                 </li>
                 <li>
-                  <Link to={'/admin/managers'}>부운영자 관리</Link>
+                  <Link to={'/admin/managers/1'}>부운영자 관리</Link>
                 </li>
               </MenuWrap>
             </li>
 
             <li>
               <h4>
-                <Link to={'/admin/item/list/1'}>상품 관리</Link>
+                <Link to={'/admin/item/1'}>상품 관리</Link>
               </h4>
               <MenuWrap>
                 <li>
-                  <Link to={'/admin/item/list/1'}>판매 상품 관리</Link>
+                  <Link to={'/admin/item/1'}>판매 상품 관리</Link>
                 </li>
                 <li>
-                  <Link to={'/admin/item/giftcard'}>상품권 관리</Link>
+                  <Link to={'/admin/giftcard/1'}>상품권 관리</Link>
                 </li>
               </MenuWrap>
             </li>
 
             <li>
               <h4>
-                <Link to={'/admin/reservation'}>예약 관리</Link>
+                <Link to={'/admin/reservation/1'}>예약 관리</Link>
               </h4>
               <MenuWrap>
                 <li>
-                  <Link to={'/admin/reservation'}>예약 관리</Link>
+                  <Link to={'/admin/reservation/1'}>예약 관리</Link>
                 </li>
               </MenuWrap>
             </li>
 
             <li>
               <h4>
-                <Link to={'/admin/board'}>게시판 관리</Link>
+                <Link to={'/admin/board/1'}>게시판 관리</Link>
               </h4>
               <MenuWrap>
                 <li>
-                  <Link to={'/admin/board'}>게시글 관리</Link>
+                  <Link to={'/admin/board/1'}>게시글 관리</Link>
                 </li>
                 <li>
-                  <Link to={'/admin/comments'}>댓글 관리</Link>
+                  <Link to={'/admin/comments/1'}>댓글 관리</Link>
                 </li>
                 <li>
-                  <Link to={'/admin/deletepost'}>삭제된 글 관리</Link>
+                  <Link to={'/admin/deletepost/1'}>삭제된 글 관리</Link>
                 </li>
                 <li>
-                  <Link to={'/admin/report'}>신고 관리</Link>
+                  <Link to={'/admin/report/1'}>신고 관리</Link>
                 </li>
               </MenuWrap>
             </li>
 
             <li>
               <h4>
-                <Link to={'/admin/chat'}>채팅/메일 관리</Link>
+                <Link to={'/admin/chat/1'}>채팅/메일 관리</Link>
               </h4>
               <MenuWrap>
                 <li>
-                  <Link to={'/admin/chat'}>채팅 관리</Link>
+                  <Link to={'/admin/chat/1'}>채팅 관리</Link>
                 </li>
                 <li>
                   <Link to={'/admin/mail'}>메일 작성</Link>
                 </li>
                 <li>
-                  <Link to={'/admin/news'}>구독자 관리</Link>
+                  <Link to={'/admin/subscriber/1'}>구독자 관리</Link>
                 </li>
               </MenuWrap>
             </li>

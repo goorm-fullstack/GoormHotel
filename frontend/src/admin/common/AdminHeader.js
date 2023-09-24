@@ -84,19 +84,19 @@ const AdminHeader = () => {
       </HeaderLink>
       <MenuItem>
         <li>
-          <Link to="/admin/member">회원 관리</Link>
+          <Link to="/admin/member/1">회원 관리</Link>
         </li>
         <li>
-          <Link to="/admin/item/list/1">상품 관리</Link>
+          <Link to="/admin/item/1">상품 관리</Link>
         </li>
         <li>
-          <Link to="/admin/reservation">예약 관리</Link>
+          <Link to="/admin/reservation/1">예약 관리</Link>
         </li>
         <li>
-          <Link to="/admin/board">게시판 관리</Link>
+          <Link to="/admin/board/1">게시판 관리</Link>
         </li>
         <li>
-          <Link to="/admin/chat">채팅/메일 관리</Link>
+          <Link to="/admin/chat/1">채팅/메일 관리</Link>
         </li>
       </MenuItem>
       <HeaderRight>
@@ -119,7 +119,7 @@ const AdminHeader = () => {
             </g>
           </svg>
           <span>관리자(admin)</span>
-          <LogoutBtn>로그아웃</LogoutBtn>
+          <LogoutBtn type="button">로그아웃</LogoutBtn>
         </ManagerId>
       </HeaderRight>
     </Container>

@@ -67,11 +67,11 @@ export const adminsubnav = {
     nav: [
       {
         title: '전체 회원 관리',
-        linkto: '/admin/member',
+        linkto: '/admin/member/1',
       },
       {
         title: '부운영자 관리',
-        linkto: '/admin/managers',
+        linkto: '/admin/managers/1',
       },
     ],
   },
@@ -80,11 +80,11 @@ export const adminsubnav = {
     nav: [
       {
         title: '판매 상품 관리',
-        linkto: '/admin/item/list/1',
+        linkto: '/admin/item/1',
       },
       {
         title: '상품권 관리',
-        linkto: '/admin/item/giftcard',
+        linkto: '/admin/giftcard/1',
       },
     ],
   },
@@ -93,7 +93,7 @@ export const adminsubnav = {
     nav: [
       {
         title: '예약 관리',
-        linkto: '/admin/reservation',
+        linkto: '/admin/reservation/1',
       },
     ],
   },
@@ -102,19 +102,19 @@ export const adminsubnav = {
     nav: [
       {
         title: '게시글 관리',
-        linkto: '/admin/board',
+        linkto: '/admin/board/1',
       },
       {
         title: '댓글 관리',
-        linkto: '/admin/comments',
+        linkto: '/admin/comments/1',
       },
       {
         title: '삭제된 글 관리',
-        linkto: '/admin/deletepost',
+        linkto: '/admin/deletepost/1',
       },
       {
         title: '신고 관리',
-        linkto: '/admin/report',
+        linkto: '/admin/report/1',
       },
     ],
   },
@@ -123,7 +123,7 @@ export const adminsubnav = {
     nav: [
       {
         title: '채팅 관리',
-        linkto: '/admin/chat',
+        linkto: '/admin/chat/1',
       },
       {
         title: '메일 작성',
@@ -131,7 +131,7 @@ export const adminsubnav = {
       },
       {
         title: '구독자 관리',
-        linkto: '/admin/news',
+        linkto: '/admin/subscriber/1',
       },
     ],
   },

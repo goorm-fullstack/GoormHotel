@@ -5,9 +5,9 @@ import { PageTitle } from '../../components/common/commonStyles';
 import { GiftCardTable, TableTr, TableTh, TableListTr, TableTd, DetailLink, TopMenuOfTable } from './AdminGiftCard';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { PageParam } from '../board/AdminReport';
 import { NavLink } from 'react-router-dom';
 import { Container, TableCheckbox } from '../member/AdminMember';
+import Paging from '../../components/common/Paging';
 
 // 전체 데이터 갯수 표시 태그
 const TotalItem = styled.p`
@@ -180,16 +180,6 @@ const AdminItemList = () => {
     }
   };
 
-  // 총 페이지 수에 맞게 페이지 태그 생성
-  const listElements = [];
-  for (let i = 1; i <= totalPages; i++) {
-    listElements.push(
-      <li key={i}>
-        <PageLink to={`/admin/item/list/${i}`}>{i}</PageLink>
-      </li>
-    );
-  }
-
   //체크한 아이템 selectedItems 배열에 추가,해제하는 로직
   const handleCheckboxClick = (idx, itemName, type) => {
     const isSelected = selectedItems.some((item) => item.id === idx);
@@ -248,44 +238,6 @@ const AdminItemList = () => {
 
     fetchImageUrls();
   }, [items]);
-
-  const currentPage = parseInt(page, 10); // 현재페이지
-
-  // 이전 페이지 이동
-  const previousPageChange = () => {
-    let route = '';
-    if (currentPage === 1) {
-      route = '/admin/item/list/1';
-    } else {
-      route = `/admin/item/list/${currentPage - 1}`;
-    }
-    return route;
-  };
-
-  // 다음 페이지 이동
-  const nextPageChange = () => {
-    let route = '';
-    if (currentPage === totalPages) {
-      route = `/admin/item/list/${currentPage}`;
-    } else {
-      route = `/admin/item/list/${currentPage + 1}`;
-    }
-    return route;
-  };
-
-  // 첫 페이지에서 이전 페이지로 이동 시 발생 이벤트
-  const onClickFirstPage = () => {
-    if (currentPage === 1) {
-      alert('첫 번째 페이지입니다.');
-    }
-  };
-
-  // 마지막 페이지에서 다음 페이지로 이동 시 발생 이벤트
-  const onClickLastPage = () => {
-    if (currentPage === totalPages) {
-      alert('마지막 페이지입니다.');
-    }
-  };
 
   // 숫자 포맷
   const addComma = (number) => {
@@ -352,7 +304,7 @@ const AdminItemList = () => {
             </InitButton>
           </div>
           <div>
-            <Link to="/admin/item/list/writeForm/room">
+            <Link to="/admin/item/add/room">
               <InitButton type="button">상품등록</InitButton>
             </Link>
             <DeleteButton type="button" onClick={deleteButton}>
@@ -394,9 +346,9 @@ const AdminItemList = () => {
                   </TableTd>
                   <TableTd>
                     {item.type === 'dining' ? (
-                      <DetailLink to={`/admin/item/list/view/dining/${item.type}/${item.name}`}>{item.name}</DetailLink>
+                      <DetailLink to={`/admin/item/detail/dining/${item.type}/${item.name}`}>{item.name}</DetailLink>
                     ) : (
-                      <DetailLink to={`/admin/item/list/view/room/${item.type}/${item.name}`}>{item.name}</DetailLink>
+                      <DetailLink to={`/admin/item/detail/room/${item.type}/${item.name}`}>{item.name}</DetailLink>
                     )}
                   </TableTd>
                   <TableTd>{addComma(item.price)}</TableTd>
@@ -408,19 +360,7 @@ const AdminItemList = () => {
             })}
           </tbody>
         </GiftCardTable>
-        <PageParam>
-          <li className="sideParam">
-            <Link to={previousPageChange()} onClick={onClickFirstPage}>
-              «
-            </Link>
-          </li>
-          {listElements}
-          <li className="sideParam">
-            <Link to={nextPageChange()} onClick={onClickLastPage}>
-              »
-            </Link>
-          </li>
-        </PageParam>
+        <Paging />
       </Container>
     </AdminLayout>
   );

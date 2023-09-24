@@ -163,7 +163,7 @@ const WriteFormDining = () => {
               'Content-Type': 'multipart/form-data',
             },
           });
-          window.location.href = '/admin/item/list/1';
+          window.location.href = '/admin/item/1';
         } catch (error) {
           console.error('Error:', error.message);
           if (error.response.data.message.startsWith('Validation failed')) {
@@ -223,10 +223,10 @@ const WriteFormDining = () => {
       <TopOfTable>
         <Title>다이닝 등록</Title>
         <div>
-          <TypeLink to="/admin/item/list/writeForm/room">
+          <TypeLink to="/admin/item/add/room">
             <TypeButton type="button">객실 등록</TypeButton>
           </TypeLink>
-          <TypeLink to="/admin/item/list/writeForm/dining">
+          <TypeLink to="/admin/item/add/dining">
             <TypeButton type="button">다이닝 등록</TypeButton>
           </TypeLink>
         </div>

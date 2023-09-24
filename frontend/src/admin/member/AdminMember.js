@@ -3,6 +3,7 @@ import AdminLayout from '../common/AdminLayout';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
+import Paging from '../../components/common/Paging';
 
 export const Container = styled(commonAdminContents)``;
 
@@ -204,6 +205,7 @@ const AdminMember = () => {
             ))}
           </tbody>
         </Table>
+        <Paging />
       </Container>
     </AdminLayout>
   );

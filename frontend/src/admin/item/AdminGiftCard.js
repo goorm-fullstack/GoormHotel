@@ -8,6 +8,7 @@ import moment from 'moment';
 import 'moment/locale/ko';
 import { Link } from 'react-router-dom';
 import { Container, TableCheckbox } from '../member/AdminMember';
+import Paging from '../../components/common/Paging';
 
 const SubTitle = styled.p`
   font-size: 18px;
@@ -376,6 +377,7 @@ const AdminGiftCard = () => {
                 })}
               </tbody>
             </GiftCardTable>
+            <Paging />
           </div>
         </div>
       </Container>
