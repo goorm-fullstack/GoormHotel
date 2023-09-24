@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import moment from "moment";
 import Instance from '../../utils/api/axiosInstance';
 
 const Container = styled.div`
@@ -203,8 +204,6 @@ const AdminChat = () => {
     });
   };
 
-  console.log(checkedItems);
-
 
   const subMenus = [
     { name: '채팅 관리', link: '/admin/chat' },
@@ -271,7 +270,7 @@ const AdminChat = () => {
                   </p>
                   <div className="allMessage">{item.chatMessages[0].message}</div>
                 </TableCell>
-                <TableCell>{item.timestamp}</TableCell>
+                <TableCell>{item.chatMessages[0].createTime}</TableCell>
                 <TableCell>{item.status}</TableCell>
               </tr>
             ))}

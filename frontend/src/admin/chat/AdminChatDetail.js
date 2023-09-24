@@ -148,6 +148,7 @@ const AdminChatDetail = () => {
   const chatContainerRef = useRef(null);
   const [newChat, setNewChat] = useState('');
   const [chatRoomData, setChatRoomData] = useState({});
+  const [recentTime, setRecentTime] = useState("");
   const [status, setStatus] = useState("");
   const navigation = useNavigate();
 
@@ -172,6 +173,7 @@ const AdminChatDetail = () => {
         setStatus(response.data.status)
         console.log("==============================");
         setChatData(response.data.chatMessages);
+        setRecentTime(chatData[chatData.length-1].createTime)
         settingWebSocket(roomId);
       }).catch((error) => {
         console.log("에러 "+error);
@@ -218,7 +220,6 @@ const AdminChatDetail = () => {
        const chatContent = parsedMessage.message;
        const chatRoomID = parsedMessage.roomId;
        const sender = parsedMessage.sender;
-       console.log("caal thos")
        // 메시지 발신자가 어드민이 아닌 경우에만 호출된다.
        if(chatRoomID === roomId && sender !== "admin") {
          console.log("call");
@@ -281,7 +282,7 @@ const AdminChatDetail = () => {
           </InfoWrapper>
           <InfoWrapper>
             <Label>최근 발송일</Label>
-            <Data>{chatRoomData.createTime}</Data>
+            <Data>{recentTime}</Data>
           </InfoWrapper>
           <InfoWrapper>
             <Label>상태</Label>
