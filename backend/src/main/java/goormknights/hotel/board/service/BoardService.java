@@ -128,10 +128,10 @@ public class BoardService {
         List<ResponseBoardDto> response = new ArrayList<>();
         for (Board board : all) {
             ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
-            List<ResponseReportDto> reportList = board.getReport().stream().map(Report::toResponseReportDto).toList();
+//            List<ResponseReportDto> reportList = board.getReport().stream().map(Report::toResponseReportDto).toList();
             List<ResponseReplyDto> replyList = board.getReplies().stream().map(Reply::toResponseReplyDto).toList();
             responseBoardDto.setReply(replyList);
-            responseBoardDto.setReport(reportList);
+//            responseBoardDto.setReport(reportList);
             response.add(responseBoardDto);
         }
         return response;

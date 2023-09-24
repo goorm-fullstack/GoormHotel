@@ -29,7 +29,7 @@ public class ReportService {
         Long boardId = requestReportDto.getBoardId();
         Long replyId = requestReportDto.getReplyId();
         if(boardId == null){
-            Reply byReplyId = replyRepository.findByReplyId(replyId);
+            Reply byReplyId = replyRepository.findByReplyIdAndReplyDelete(replyId, false);
 
             Report report = requestReportDto.toEntity();
             report.setReply(byReplyId);

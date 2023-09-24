@@ -5,10 +5,8 @@ import goormknights.hotel.reply.dto.request.RequestReplyDto;
 import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.report.model.Report;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +15,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE Reply SET reply_Delete = true WHERE reply_Id = ?")
 public class Reply {
 
     @Id
@@ -31,6 +30,10 @@ public class Reply {
 
     @Column(nullable = false)
     private LocalDateTime replyWriteDate;   //댓글 작성 시간
+
+    @Column(nullable = false)
+    @Setter
+    private boolean replyDelete = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
