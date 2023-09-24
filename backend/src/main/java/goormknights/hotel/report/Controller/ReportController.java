@@ -1,5 +1,6 @@
 package goormknights.hotel.report.Controller;
 
+import goormknights.hotel.reply.model.Reply;
 import goormknights.hotel.report.Service.ReportService;
 import goormknights.hotel.report.dto.request.RequestReportDto;
 import goormknights.hotel.report.dto.response.ResponseReportDto;
@@ -43,10 +44,18 @@ public class ReportController {
     }
 
     //신고 삭제 복원
-    @PostMapping("/undeleted/{reportId}")
+    @PutMapping("/undelete/{reportId}")
     public ResponseEntity<ResponseReportDto> undeleted(@PathVariable Long reportId){
         Report report = reportService.undeleted(reportId);
 
         return ResponseEntity.ok(report.toResponseReportDto());
     }
+
+    @PutMapping("/softdelete/{reportId}")
+    public ResponseEntity<Object> softdeleteReport(@PathVariable Long reportId) {
+        Report report = reportService.softdeleteReport(reportId);
+
+        return ResponseEntity.ok(report.toResponseReportDto());
+    }
+
 }

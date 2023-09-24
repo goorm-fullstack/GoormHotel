@@ -8,10 +8,7 @@ import goormknights.hotel.reply.dto.request.RequestReplyDto;
 import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.reply.model.Reply;
 import goormknights.hotel.reply.repository.ReplyRepository;
-import goormknights.hotel.report.dto.response.ResponseReportDto;
-import goormknights.hotel.report.model.Report;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -103,7 +100,7 @@ public class ReplyService {
     //댓글 내용 수정하기
     public Reply updateReply(Long replyId, RequestReplyDto requestReplyDto){
         Reply beforeReply = replyRepository.findByReplyIdAndReplyDelete(replyId, false);
-        Reply afterReply = beforeReply.updateReply(replyId, requestReplyDto);
+        Reply afterReply = beforeReply.updateReply(beforeReply, requestReplyDto);
 
         return replyRepository.save(afterReply);
     }

@@ -48,6 +48,9 @@ public class Report {
     @Setter
     private boolean reportDelete = false;
 
+    @Setter
+    private LocalDateTime reportDeleteTime;
+
     public void setBoard(Board board) {
         this.board = board;
     }

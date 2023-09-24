@@ -73,7 +73,7 @@ public class ReplyController {
     }
 
     //소프트딜리트 복원
-    @PutMapping("/undeleted/{replyId}")
+    @PutMapping("/undelete/{replyId}")
     public ResponseEntity<ResponseReplyDto> undeleted(@PathVariable Long replyId) {
         Reply reply = replyService.undeleted(replyId);
 

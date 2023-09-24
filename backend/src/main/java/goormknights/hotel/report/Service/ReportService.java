@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +82,22 @@ public class ReportService {
         Report report = reportRepository.findByReportIdAndReportDelete(reportId, true);
         if(report!=null){
             report.setReportDelete(false);
+            report.setReportDeleteTime(null);
         }
         return reportRepository.save(report);
     }
+
+    public Report softdeleteReport(Long reportId) {
+        Report report = reportRepository.findByReportIdAndReportDelete(reportId, false);
+
+        String datePattern = "yyyy-MM-dd'T'HH:mm:ss";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(datePattern);
+        String now = LocalDateTime.now().format(formatter);
+        LocalDateTime reportDeleteTime = LocalDateTime.parse(now, formatter);
+        report.setReportDelete(true);
+        report.setReportDeleteTime(reportDeleteTime);
+
+        return reportRepository.save(report);
+    }
+
 }
