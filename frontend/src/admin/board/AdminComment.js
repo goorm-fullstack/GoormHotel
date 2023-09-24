@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
 import {
   Container,
   ContentHeader,
@@ -130,7 +130,7 @@ const AdminComment = () => {
     <AdminLayout subMenus="board">
       <Container>
         <PageTitle>댓글 관리</PageTitle>
-        <ContentHeader>
+        <TableHeader>
           <Total>
             전체 <Num>{reply.length}</Num> 건
           </Total>
@@ -138,48 +138,48 @@ const AdminComment = () => {
             <Delete>신고처리</Delete>
             <Add>삭제</Add>
           </BlackListBtn>
-        </ContentHeader>
+        </TableHeader>
         <Table>
           <thead>
             <tr>
-              <TableCheckboxWrapper>
+              <th>
                 <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
-              </TableCheckboxWrapper>
-              <TableHeader>No.</TableHeader>
-              <TableHeader>게시판</TableHeader>
-              <TableHeader>게시글</TableHeader>
-              <CommentTableHeader>댓글 내용</CommentTableHeader>
-              <CommentTableHeader>작성자명(회원 ID)</CommentTableHeader>
-              <TableHeader>작성일</TableHeader>
+              </th>
+              <th>No.</th>
+              <th>게시판</th>
+              <th>게시글</th>
+              <th>댓글 내용</th>
+              <th>작성자명(회원 ID)</th>
+              <th>작성일</th>
             </tr>
           </thead>
           <tbody>
-            {reply.length === 0 && <TableCell colSpan="7">등록된 댓글이 없습니다.</TableCell>}
+            {reply.length === 0 && <td colSpan="7">등록된 댓글이 없습니다.</td>}
             {reply.map((reply) => (
               <tr key={reply.replyId}>
-                <TableCell>
+                <td>
                   <TableCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(null)} //item.author.id
                     onChange={() => handleCheckboxChange(null)} //item.author.id
                   />
-                </TableCell>
-                <TableCell>{reply.replyId}</TableCell>
-                <TableCell>{'카테고리(후기, 문의)'}</TableCell>
-                <TableCell>
+                </td>
+                <td>{reply.replyId}</td>
+                <td>{'카테고리(후기, 문의)'}</td>
+                <td>
                   <LinkStyle to="/">{reply.boardId}</LinkStyle>
-                </TableCell>
-                <CommentTableCell>
+                </td>
+                <td>
                   <CommentText>{truncateString(reply.replyContent, 8)}</CommentText>
                   <ModalContainer>
                     <ModalContent>{reply.replyContent}</ModalContent>
                   </ModalContainer>
-                </CommentTableCell>
-                <TableCell>
+                </td>
+                <td>
                   {reply.replyWriter}
                   {/*<LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>*/}
-                </TableCell>
-                <TableCell>{reply.replyWriteDate}</TableCell>
+                </td>
+                <td>{reply.replyWriteDate}</td>
               </tr>
             ))}
           </tbody>

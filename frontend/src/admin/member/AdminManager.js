@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
 import styled from 'styled-components';
 import {
   Container,
@@ -161,48 +161,52 @@ const AdminManager = () => {
         </Section>
         <Section>
           <SubTitle>부운영자 계정 목록</SubTitle>
-          <ContentHeader>
-            <Total>
-              전체 <Num>{managerData.length}</Num> 건
-            </Total>
-            <BlackListBtn>
-              <Delete>사용함</Delete>
-              <Add>사용안함</Add>
-            </BlackListBtn>
-          </ContentHeader>
+          <TableHeader>
+            <p className="total">
+              전체 <strong>{managerData.length}</strong> 건
+            </p>
+            <BtnWrapper className="flexgap right">
+              <NormalBtn className="header">사용함</NormalBtn>
+              <NormalBtn className="header red">사용안함</NormalBtn>
+            </BtnWrapper>
+          </TableHeader>
           <Table>
             <thead>
               <tr>
-                <TableCheckboxWrapper>
-                  <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
-                </TableCheckboxWrapper>
-                <TableHeader>No.</TableHeader>
-                <TableHeader>운영자명</TableHeader>
-                <TableHeader>운영자 ID</TableHeader>
-                <TableHeader>운영자 별명</TableHeader>
-                <TableHeader>생성일</TableHeader>
-                <TableHeader>사용여부</TableHeader>
+                <th>
+                  <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
+                </th>
+                <th>No.</th>
+                <th>운영자명</th>
+                <th>운영자 ID</th>
+                <th>운영자 별명</th>
+                <th>생성일</th>
+                <th>사용여부</th>
               </tr>
             </thead>
             <tbody>
-              {managerData.length === 0 && <TableCell colSpan="7">등록된 회원이 없습니다.</TableCell>}
+              {managerData.length === 0 && (
+                <td colSpan="7" className="center">
+                  등록된 회원이 없습니다.
+                </td>
+              )}
               {managerData.map((item) => (
                 <tr key={item.id}>
-                  <TableCell>
-                    <TableCheckbox
+                  <td className="center">
+                    <InputCheckbox
                       type="checkbox"
                       checked={checkedItems.includes(item.memberId)}
                       onChange={() => handleCheckboxChange(item.memberId)}
                     />
-                  </TableCell>
-                  <TableCell>{item.number}</TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>
+                  </td>
+                  <td className="center">{item.number}</td>
+                  <td className="center">{item.name}</td>
+                  <td className="center">
                     <ManagerInfoBtn onClick={() => handleManagerClick(item)}>{item.memberId}</ManagerInfoBtn>
-                  </TableCell>
-                  <TableCell>{item.nickname}</TableCell>
-                  <TableCell>{item.joinDate}</TableCell>
-                  <TableCell>{item.use}</TableCell>
+                  </td>
+                  <td className="center">{item.nickname}</td>
+                  <td className="center">{item.joinDate}</td>
+                  <td className="center">{item.use}</td>
                 </tr>
               ))}
             </tbody>
@@ -211,81 +215,130 @@ const AdminManager = () => {
         </Section>
         <Section>
           <SubTitle>부운영자 계정 설정</SubTitle>
-          <InfoContainer>
+          <Table className="horizontal">
+            <colgroup>
+              <col width="240px" />
+              <col width="auto" />
+            </colgroup>
             {selectedManager ? (
-              <>
-                <InfoWrapper>
-                  <Label>운영자 ID</Label>
-                  <AccoutInput
-                    placeholder="운영자 ID"
-                    defaultValue={selectedManager.memberId}
-                    onChange={(e) => handleInputChange('memberId', e.target.value)}
-                  />
-                </InfoWrapper>
-                <InfoWrapper>
-                  <Label>운영자명</Label>
-                  <AccoutInput
-                    placeholder="운영자명"
-                    defaultValue={selectedManager.name}
-                    onChange={(e) => handleInputChange('name', e.target.value)}
-                  />
-                </InfoWrapper>
-                <InfoWrapper>
-                  <Label>운영자 별명</Label>
-                  <AccoutInput
-                    placeholder="운영자 별명"
-                    defaultValue={selectedManager.nickname}
-                    onChange={(e) => handleInputChange('nickname', e.target.value)}
-                  />
-                </InfoWrapper>
-                <InfoWrapper>
-                  <Label>접속 비밀번호</Label>
-                  <AccoutInput
-                    placeholder="접속 비밀번호"
-                    defaultValue={selectedManager.password}
-                    onChange={(e) => handleInputChange('password', e.target.value)}
-                  />
-                </InfoWrapper>
-              </>
+              <tbody>
+                <tr>
+                  <th>운영자 ID</th>
+                  <td>
+                    <input
+                      type="text"
+                      placeholder="운영자 ID"
+                      defaultValue={selectedManager.memberId}
+                      onChange={(e) => handleInputChange('memberId', e.target.value)}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>운영자명</th>
+                  <td>
+                    <input
+                      type="text"
+                      placeholder="운영자명"
+                      defaultValue={selectedManager.name}
+                      onChange={(e) => handleInputChange('name', e.target.value)}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>운영자 별명</th>
+                  <td>
+                    <input
+                      type="text"
+                      placeholder="운영자 별명"
+                      defaultValue={selectedManager.nickname}
+                      onChange={(e) => handleInputChange('nickname', e.target.value)}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>접속 비밀번호</th>
+                  <td>
+                    <input
+                      type="text"
+                      placeholder="접속 비밀번호"
+                      defaultValue={selectedManager.password}
+                      onChange={(e) => handleInputChange('password', e.target.value)}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>접근 권한</th>
+                  <td>
+                    <CheckLabel>
+                      <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                      회원관리
+                    </CheckLabel>
+                    <CheckLabel>
+                      <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                      상품 및 예약 관리
+                    </CheckLabel>
+                    <CheckLabel>
+                      <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                      사이트 관리
+                    </CheckLabel>
+                  </td>
+                </tr>
+              </tbody>
             ) : (
-              <>
-                <InfoWrapper>
-                  <Label>운영자 ID</Label>
-                  <AccoutInput placeholder="운영자 ID" />
-                </InfoWrapper>
-                <InfoWrapper>
-                  <Label>운영자명</Label>
-                  <AccoutInput placeholder="운영자명" />
-                </InfoWrapper>
-                <InfoWrapper>
-                  <Label>운영자 별명</Label>
-                  <AccoutInput placeholder="운영자 별명" />
-                </InfoWrapper>
-                <InfoWrapper>
-                  <Label>접속 비밀번호</Label>
-                  <AccoutInput placeholder="접속 비밀번호" />
-                </InfoWrapper>
-                <InfoWrapper>
-                  <Label>접속 비밀번호 확인</Label>
-                  <AccoutInput placeholder="접속 비밀번호 확인" />
-                </InfoWrapper>
-              </>
+              <tbody>
+                <tr>
+                  <th>운영자 ID</th>
+                  <td>
+                    <input type="text" placeholder="운영자 ID" />
+                  </td>
+                </tr>
+                <tr>
+                  <th>운영자명</th>
+                  <td>
+                    <input type="text" placeholder="운영자명" />
+                  </td>
+                </tr>
+                <tr>
+                  <th>운영자 별명</th>
+                  <td>
+                    <input type="text" placeholder="운영자 별명" />
+                  </td>
+                </tr>
+                <tr>
+                  <th>접속 비밀번호</th>
+                  <td>
+                    <input type="text" placeholder="접속 비밀번호" />
+                  </td>
+                </tr>
+                <tr>
+                  <th>접속 비밀번호 확인</th>
+                  <td>
+                    <input type="text" placeholder="접속 비밀번호 확인" />
+                  </td>
+                </tr>
+                <tr>
+                  <th>접근 권한</th>
+                  <td>
+                    <CheckLabel>
+                      <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                      회원관리
+                    </CheckLabel>
+                    <CheckLabel>
+                      <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                      상품 및 예약 관리
+                    </CheckLabel>
+                    <CheckLabel>
+                      <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                      사이트 관리
+                    </CheckLabel>
+                  </td>
+                </tr>
+              </tbody>
             )}
-            <InfoWrapper>
-              <Label>접근 권한</Label>
-              <CheckInputWrapper>
-                <CheckInput type="checkbox" placeholder="회원 관리" />
-                <span>회원관리</span>
-                <CheckInput type="checkbox" placeholder="회원 관리" />
-                <span>상품 및 예약 관리</span>
-                <CheckInput type="checkbox" placeholder="회원 관리" />
-                <span>사이트 관리</span>
-              </CheckInputWrapper>
-            </InfoWrapper>
-          </InfoContainer>
-          <ModifyBtnWrapper>
+          </Table>
+          <BtnWrapper>
             <ModifyBtn>수정</ModifyBtn>
-          </ModifyBtnWrapper>
+          </BtnWrapper>
         </Section>
       </Container>
     </AdminLayout>

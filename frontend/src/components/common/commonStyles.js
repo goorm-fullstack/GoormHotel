@@ -213,6 +213,18 @@ export const NormalBtn = styled(commonButton)`
     line-height: 30px;
     font-size: ${(props) => props.theme.font.sizexs};
   }
+
+  &.header {
+    width: 120px;
+    height: 32px;
+    line-height: 30px;
+    font-size: ${(props) => props.theme.font.sizexs};
+  }
+
+  &.red {
+    border-color: ${(props) => props.theme.colors.red};
+    color: ${(props) => props.theme.colors.red};
+  }
 `;
 
 export const SubmitBtn = styled(commonButton)`
@@ -298,4 +310,61 @@ export const AuthBtn = styled(commonButton)`
   }
 `;
 
-export const commonTable = styled.table``;
+export const commonTable = styled.table`
+  width: 100%;
+  border-bottom: 1px solid ${(props) => props.theme.colors.charcoal};
+
+  th {
+    border-top: 1px solid ${(props) => props.theme.colors.charcoal};
+    border-bottom: 1px solid ${(props) => props.theme.colors.grayborder};
+    font-weight: 500;
+    background: ${(props) => props.theme.colors.graybg};
+    color: ${(props) => props.theme.colors.charcoal};
+  }
+  th,
+  td {
+    padding: 16.5px 12px;
+  }
+  td {
+    border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
+    color: ${(props) => props.theme.colors.blacklight};
+
+    input[type='text'],
+    input[type='password'],
+    input[type='email'],
+    input[type='tel'],
+    input[type='date'] {
+      height: 36px;
+    }
+  }
+  td.center {
+    text-align: center;
+  }
+  td a:hover {
+    color: ${(props) => props.theme.colors.goldhover};
+  }
+
+  &.horizontal {
+    tr:last-child th {
+      border-bottom-color: ${(props) => props.theme.colors.charcoal};
+    }
+    tr:first-child td {
+      border-top-color: ${(props) => props.theme.colors.charcoal};
+    }
+    td {
+      padding-top: 9px;
+      padding-bottom: 9px;
+    }
+    th {
+      text-align: center;
+    }
+  }
+
+  .textover {
+    width: 100%;
+    max-width: 250px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+`;

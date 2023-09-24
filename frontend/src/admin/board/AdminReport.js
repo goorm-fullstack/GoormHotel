@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
 import {
   Container,
   ContentHeader,
@@ -116,7 +116,7 @@ const AdminReport = () => {
     <AdminLayout subMenus="board">
       <Container>
         <PageTitle>신고 관리</PageTitle>
-        <ContentHeader>
+        <TableHeader>
           <Total>
             전체 <Num>{reportData.length}</Num> 건
           </Total>
@@ -124,45 +124,45 @@ const AdminReport = () => {
             <Delete>확인 완료</Delete>
             <Add>블랙리스트 추가</Add>
           </BlackListBtn>
-        </ContentHeader>
+        </TableHeader>
         <Table>
           <thead>
             <tr>
-              <TableCheckboxWrapper>
+              <th>
                 <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
-              </TableCheckboxWrapper>
-              <TableHeader>No.</TableHeader>
-              <PostTableHeader>신고된 글</PostTableHeader>
-              <TableHeader>작성자 명</TableHeader>
-              <TableHeader>신고사유</TableHeader>
-              <TableHeader>신고일</TableHeader>
-              <TableHeader>확인여부</TableHeader>
-              <TableHeader>처리 결과</TableHeader>
+              </th>
+              <th>No.</th>
+              <th>신고된 글</th>
+              <th>작성자 명</th>
+              <th>신고사유</th>
+              <th>신고일</th>
+              <th>확인여부</th>
+              <th>처리 결과</th>
             </tr>
           </thead>
           <tbody>
-            {reportData.length === 0 && <TableCell colSpan="7">등록된 회원이 없습니다.</TableCell>}
+            {reportData.length === 0 && <td colSpan="7">등록된 회원이 없습니다.</td>}
             {reportData.map((item) => (
               <tr key={item.id}>
-                <TableCell>
+                <td>
                   <TableCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(item.memberId)}
                     onChange={() => handleCheckboxChange(item.memberId)}
                   />
-                </TableCell>
-                <TableCell>{item.id}</TableCell>
-                <TableCell>
+                </td>
+                <td>{item.id}</td>
+                <td>
                   <LinkStyle>{item.reportedPost}</LinkStyle>
-                </TableCell>
-                <TableCell>
+                </td>
+                <td>
                   {item.author.name}
                   <LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>
-                </TableCell>
-                <TableCell>{item.reportReason}</TableCell>
-                <TableCell>{item.reportDate}</TableCell>
-                <TableCell>{item.confirmation}</TableCell>
-                <TableCell>{item.result}</TableCell>
+                </td>
+                <td>{item.reportReason}</td>
+                <td>{item.reportDate}</td>
+                <td>{item.confirmation}</td>
+                <td>{item.result}</td>
               </tr>
             ))}
           </tbody>

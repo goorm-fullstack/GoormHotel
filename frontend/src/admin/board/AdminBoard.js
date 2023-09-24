@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
 import {
   Container,
   ContentHeader,
@@ -85,7 +85,7 @@ const AdminBoard = () => {
     <AdminLayout subMenus="board">
       <Container>
         <PageTitle>게시글 관리</PageTitle>
-        <ContentHeader>
+        <TableHeader>
           <Total>
             전체 <Num>{board.length}</Num> 건
           </Total>
@@ -93,42 +93,42 @@ const AdminBoard = () => {
             <Delete>블랙리스트 해제</Delete>
             <Add>블랙리스트 추가</Add>
           </BlackListBtn>
-        </ContentHeader>
+        </TableHeader>
         <Table>
           <thead>
             <tr>
-              <TableCheckboxWrapper>
+              <th>
                 <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
-              </TableCheckboxWrapper>
-              <TableHeader>No.</TableHeader>
-              <TableHeader>게시판</TableHeader>
-              <TableHeader>제목</TableHeader>
-              <TableHeader>작성자</TableHeader>
-              <TableHeader>작성일</TableHeader>
-              <TableHeader>블랙리스트</TableHeader>
+              </th>
+              <th>No.</th>
+              <th>게시판</th>
+              <th>제목</th>
+              <th>작성자</th>
+              <th>작성일</th>
+              <th>블랙리스트</th>
             </tr>
           </thead>
           <tbody>
             {board.length === 0 && <TableCell colSpan="7">등록된 회원이 없습니다.</TableCell>}
             {board.map((board) => (
               <tr key={board.boardId}>
-                <TableCell>
+                <td>
                   <TableCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(board.boardId)}
                     onChange={() => handleCheckboxChange(board.boardId)}
                   />
-                </TableCell>
-                <TableCell>{board.boardId}</TableCell>
-                <TableCell>{'카테고리(공지, 후기)'}</TableCell>
-                <TableCell>
+                </td>
+                <td>{board.boardId}</td>
+                <td>{'카테고리(공지, 후기)'}</td>
+                <td>
                   <Link to={`/admin/member/${board.boardId}`}>{board.boardTitle}</Link>
-                </TableCell>
-                <TableCell>
+                </td>
+                <td>
                   <Link to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</Link>
-                </TableCell>
-                <TableCell>{board.boardWriteDate}</TableCell>
-                <TableCell>{board.blacklist}</TableCell>
+                </td>
+                <td>{board.boardWriteDate}</td>
+                <td>{board.blacklist}</td>
               </tr>
             ))}
           </tbody>

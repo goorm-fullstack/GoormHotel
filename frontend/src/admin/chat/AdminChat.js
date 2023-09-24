@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
@@ -87,7 +87,7 @@ const AdminChat = () => {
     <AdminLayout subMenus="chat">
       <Container>
         <PageTitle>채팅 관리</PageTitle>
-        <ContentHeader>
+        <TableHeader>
           <Total>
             전체 <strong>{chatData.length}</strong> 건
           </Total>
@@ -96,7 +96,7 @@ const AdminChat = () => {
             <Delete>블랙리스트 해제</Delete>
             <Add>블랙리스트 추가</Add>
           </BlackListBtn>
-        </ContentHeader>
+        </TableHeader>
         <Table>
           <colgroup>
             <col style={{ width: '100px' }} />
@@ -108,43 +108,43 @@ const AdminChat = () => {
           </colgroup>
           <thead>
             <tr>
-              <TableCheckboxWrapper>
+              <th>
                 <TableCheckbox type="checkbox" />
-              </TableCheckboxWrapper>
-              <TableHeader>번호</TableHeader>
-              <TableHeader>회원명(회원ID)</TableHeader>
-              <TableHeader>최근 메시지</TableHeader>
-              <TableHeader>최근 발송일</TableHeader>
-              <TableHeader>상태</TableHeader>
+              </th>
+              <th>번호</th>
+              <th>회원명(회원ID)</th>
+              <th>최근 메시지</th>
+              <th>최근 발송일</th>
+              <th>상태</th>
             </tr>
           </thead>
           <tbody>
-            {chatData.length === 0 && <TableCell colSpan="7">채팅 메시지 기록이 없습니다.</TableCell>}
+            {chatData.length === 0 && <td colSpan="7">채팅 메시지 기록이 없습니다.</td>}
             {chatData.map((item, index) => (
               <tr key={item.id}>
-                <TableCell>
+                <td>
                   <TableCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(item.chatMessages.memberId)}
                     onChange={() => handleCheckboxChange(item.chatMessages.memberId)}
                   />
-                </TableCell>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>
+                </td>
+                <td>{index + 1}</td>
+                <td>
                   {item.chatMessages.name}(
                   <Link to={`/admin/member/${item.chatMessages[0].sender}`} className="memberId">
                     {item.chatMessages[0].sender}
                   </Link>
                   )
-                </TableCell>
-                <TableCell className="lastChat">
+                </td>
+                <td className="lastChat">
                   <p>
                     <Link to={`/admin/chat/${item.roomId}`}>{item.chatMessages[0].message}</Link>
                   </p>
                   <div className="allMessage">{item.chatMessages[0].message}</div>
-                </TableCell>
-                <TableCell>{item.timestamp}</TableCell>
-                <TableCell>{item.status}</TableCell>
+                </td>
+                <td>{item.timestamp}</td>
+                <td>{item.status}</td>
               </tr>
             ))}
           </tbody>

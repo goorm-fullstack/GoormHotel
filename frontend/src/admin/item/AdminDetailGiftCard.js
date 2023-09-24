@@ -1,12 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
 import { SubmitButton, DateBtn, Now, CalendarSvg, CalendarContainer, CalendarWrapper, StyledCalendar } from './AdminGiftCard';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import 'moment/locale/ko';
-import { Container, Table } from '../member/AdminMember';
+import {
+  Container,
+  ContentHeader,
+  Total,
+  BlackListBtn,
+  Delete,
+  Add,
+  Table,
+  TableCheckboxWrapper,
+  TableHeader,
+  TableCell,
+  TableCheckbox,
+  Num,
+} from '../member/AdminMember';
 
 export const TableTr = styled.tr`
   border-top: 1px solid #dddddd;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
+import { commonAdminContents, PageTitle, commonTable, InputCheckbox, BtnWrapper, NormalBtn } from '../../components/common/commonStyles';
 import Paging from '../../components/common/Paging';
 
 export const Container = styled(commonAdminContents)``;
@@ -21,8 +21,12 @@ export const ContentHeader = styled.div`
 `;
 
 export const Total = styled.span`
-  color: #444444;
-  font-size: 15px;
+  color: ${(props) => props.theme.colors.charcoal};
+
+  strong {
+    font-weight: 500;
+    color: ${(props) => props.theme.colors.goldhover};
+  }
 `;
 
 export const BlackListBtn = styled.div`
@@ -45,10 +49,7 @@ export const Add = styled(Delete)`
   color: #d30a0a;
 `;
 
-export const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-`;
+export const Table = styled(commonTable)``;
 
 export const TableCheckboxWrapper = styled.th`
   background-color: #f7f7f7;
@@ -57,13 +58,15 @@ export const TableCheckboxWrapper = styled.th`
   text-align: center;
 `;
 
-export const TableHeader = styled.th`
-  height: 60px;
-  background-color: #f7f7f7;
-  text-align: center;
-  vertical-align: middle;
-  border: none;
-  width: 10%;
+export const TableHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+
+  strong {
+    color: ${(props) => props.theme.colors.goldhover};
+  }
 `;
 
 export const TableCell = styled.td`
@@ -159,48 +162,52 @@ const AdminMember = () => {
     <AdminLayout subMenus="member">
       <Container>
         <PageTitle>전체 회원 관리</PageTitle>
-        <ContentHeader>
-          <Total>
-            전체 <Num>{memberData.length}</Num> 건
-          </Total>
-          <BlackListBtn>
-            <Delete>블랙리스트 해제</Delete>
-            <Add>블랙리스트 추가</Add>
-          </BlackListBtn>
-        </ContentHeader>
+        <TableHeader>
+          <p className="total">
+            전체 <strong>{memberData.length}</strong> 건
+          </p>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn className="header">블랙리스트 해제</NormalBtn>
+            <NormalBtn className="header red">블랙리스트 추가</NormalBtn>
+          </BtnWrapper>
+        </TableHeader>
         <Table>
           <thead>
             <tr>
-              <TableCheckboxWrapper>
-                <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
-              </TableCheckboxWrapper>
-              <TableHeader>No.</TableHeader>
-              <TableHeader>회원등급</TableHeader>
-              <TableHeader>회원ID</TableHeader>
-              <TableHeader>회원 이름</TableHeader>
-              <TableHeader>가입일</TableHeader>
-              <TableHeader>블랙리스트</TableHeader>
+              <th>
+                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
+              </th>
+              <th>No.</th>
+              <th>회원등급</th>
+              <th>회원ID</th>
+              <th>회원 이름</th>
+              <th>가입일</th>
+              <th>블랙리스트</th>
             </tr>
           </thead>
           <tbody>
-            {memberData.length === 0 && <TableCell colSpan="7">등록된 회원이 없습니다.</TableCell>}
+            {memberData.length === 0 && (
+              <td colSpan="7" className="center">
+                등록된 회원이 없습니다.
+              </td>
+            )}
             {memberData.map((item) => (
               <tr key={item.id}>
-                <TableCell>
-                  <TableCheckbox
+                <td className="center">
+                  <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(item.memberId)}
                     onChange={() => handleCheckboxChange(item.memberId)}
                   />
-                </TableCell>
-                <TableCell>{item.number}</TableCell>
-                <TableCell>{item.grade}</TableCell>
-                <TableCell>
-                  <Link to={`/admin/member/${item.memberId}`}>{item.memberId}</Link>
-                </TableCell>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{item.joinDate}</TableCell>
-                <TableCell>{item.blacklist}</TableCell>
+                </td>
+                <td className="center">{item.number}</td>
+                <td className="center">{item.grade}</td>
+                <td className="center">
+                  <Link to={`/admin/member/detail/${item.memberId}`}>{item.memberId}</Link>
+                </td>
+                <td className="center">{item.name}</td>
+                <td className="center">{item.joinDate}</td>
+                <td className="center">{item.blacklist}</td>
               </tr>
             ))}
           </tbody>

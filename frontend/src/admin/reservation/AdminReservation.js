@@ -86,7 +86,7 @@ const AdminReservation = () => {
     <AdminLayout subMenus="reservation">
       <Container>
         <PageTitle>예약 목록 </PageTitle>
-        <ContentHeader>
+        <TableHeader>
           <Total>
             전체 <Num>{totalCount}</Num> 건
           </Total>
@@ -94,39 +94,39 @@ const AdminReservation = () => {
             <Redo>재예약</Redo>
             <Cancel>예약 취소</Cancel>
           </BlackListBtn>
-        </ContentHeader>
+        </TableHeader>
         <Table>
           <thead>
             <tr>
-              <TableCheckboxWrapper>
+              <th>
                 <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
-              </TableCheckboxWrapper>
-              <TableHeader>No.</TableHeader>
-              <TableHeader>예약 번호</TableHeader>
-              <TableHeader>예약자명(회원 ID)</TableHeader>
-              <TableHeader>체크인</TableHeader>
-              <TableHeader>체크아웃</TableHeader>
-              <TableHeader>예약일</TableHeader>
+              </th>
+              <th>No.</th>
+              <th>예약 번호</th>
+              <th>예약자명(회원 ID)</th>
+              <th>체크인</th>
+              <th>체크아웃</th>
+              <th>예약일</th>
             </tr>
           </thead>
           <tbody>
             {reservationList.map((reservation, index) => (
               <tr key={index}>
-                <TableCell>
+                <td>
                   <TableCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(reservation.id)}
                     onChange={() => handleCheckboxChange(reservation.id)}
                   />
-                </TableCell>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>
+                </td>
+                <td>{index + 1}</td>
+                <td>
                   <Link to={`/admin/reservation/${reservation.reservationNumber}`}>{reservation.reservationNumber}</Link>
-                </TableCell>
-                <TableCell>{reservation.member.name}</TableCell>
-                <TableCell>{checkIn}</TableCell>
-                <TableCell>{checkOut}</TableCell>
-                <TableCell>{orderDate}</TableCell>
+                </td>
+                <td>{reservation.member.name}</td>
+                <td>{checkIn}</td>
+                <td>{checkOut}</td>
+                <td>{orderDate}</td>
               </tr>
             ))}
           </tbody>

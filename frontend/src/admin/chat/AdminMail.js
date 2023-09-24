@@ -1,9 +1,22 @@
 import React from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Container } from '../member/AdminMember';
+import {
+  Container,
+  ContentHeader,
+  Total,
+  BlackListBtn,
+  Delete,
+  Add,
+  Table,
+  TableCheckboxWrapper,
+  TableHeader,
+  TableCell,
+  TableCheckbox,
+  Num,
+} from '../member/AdminMember';
 
 const InfoContainer = styled.table`
   width: 100%;
@@ -107,47 +120,47 @@ const AdminMail = () => {
     <AdminLayout subMenus="chat">
       <Container>
         <PageTitle>메일 작성</PageTitle>
-        <InfoContainer>
-          <InfoWrapper>
-            <Label>
+        <Table className="horizontal">
+          <tr>
+            <th>
               받는사람{' '}
               <label>
                 <AllMember type="checkbox" /> 모든 회원
               </label>{' '}
-            </Label>
-            <Data>
+            </th>
+            <td>
               <input type="text" />
-            </Data>
-          </InfoWrapper>
-          <InfoWrapper>
-            <Label>참조</Label>
-            <Data>
+            </td>
+          </tr>
+          <tr>
+            <th>참조</th>
+            <td>
               <input type="text" />
-            </Data>
-          </InfoWrapper>
-          <InfoWrapper>
-            <Label>제목</Label>
-            <Data>
+            </td>
+          </tr>
+          <tr>
+            <th>제목</th>
+            <td>
               <input type="text" />
-            </Data>
-          </InfoWrapper>
-          <InfoWrapper>
-            <Label>파일첨부</Label>
-            <Data>
+            </td>
+          </tr>
+          <tr>
+            <th>파일첨부</th>
+            <td>
               <input type="file" />
-            </Data>
-          </InfoWrapper>
-          <InfoWrapper>
-            <Label colSpan="2" className="center">
+            </td>
+          </tr>
+          <tr>
+            <td colSpan="2" className="center">
               내용 작성
-            </Label>
-          </InfoWrapper>
-          <InfoWrapper>
-            <Data colSpan="2" className="writeWrapper">
+            </td>
+          </tr>
+          <tr>
+            <td colSpan="2" className="writeWrapper">
               <textarea></textarea>
-            </Data>
-          </InfoWrapper>
-        </InfoContainer>
+            </td>
+          </tr>
+        </Table>
         <ModifyBtnWrapper>
           <ModifyBtn>전송</ModifyBtn>
         </ModifyBtnWrapper>
