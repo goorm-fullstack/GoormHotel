@@ -1,27 +1,13 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
+import { PageTitle } from '../../components/common/commonStyles';
 import { GiftCardTable, TableTr, TableTh, TableListTr, TableTd, DetailLink, TopMenuOfTable } from './AdminGiftCard';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { PageParam } from '../board/AdminReport';
 import { NavLink } from 'react-router-dom';
-import {
-  Container,
-  Title,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from '../member/AdminMember';
+import { Container, TableCheckbox } from '../member/AdminMember';
 
 // 전체 데이터 갯수 표시 태그
 const TotalItem = styled.p`
@@ -89,10 +75,6 @@ const SearchInput = styled.input`
 const AdminItemList = () => {
   const { page } = useParams(); // url 파라미터
 
-  const subMenus = [
-    { name: '판매 상품 관리', link: `/admin/item/list/${page}` },
-    { name: '상품권 관리', link: '/admin/item/giftCard' },
-  ];
   const [type, setType] = useState('all'); // 타입 상태관리
   const [items, setItems] = useState([]); // get 요청으로 받아온 전체 데이터 상태관리
   const [typeDetail, setTypeDetail] = useState('all'); // 세부 타입 상태관리

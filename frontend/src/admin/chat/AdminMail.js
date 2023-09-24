@@ -1,23 +1,9 @@
 import React from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
+import { PageTitle } from '../../components/common/commonStyles';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import {
-  Container,
-  Title,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from '../member/AdminMember';
+import { Container } from '../member/AdminMember';
 
 const InfoContainer = styled.table`
   width: 100%;
@@ -116,11 +102,6 @@ const AllMember = styled.input`
 
 const AdminMail = () => {
   const { memberId } = useParams();
-
-  const subMenus = [
-    { name: '채팅 관리', link: '/admin/chat' },
-    { name: '메일 작성', link: '/admin/mail' },
-  ];
 
   return (
     <AdminLayout subMenus="chat">

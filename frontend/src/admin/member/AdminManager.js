@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
+import { PageTitle } from '../../components/common/commonStyles';
 import styled from 'styled-components';
 import {
   Container,
-  Title,
   ContentHeader,
   Total,
   BlackListBtn,
@@ -142,11 +141,6 @@ const AdminManager = () => {
       joinDate: '2023.09.03',
       use: 'N',
     },
-  ];
-
-  const subMenus = [
-    { name: '전체 회원 관리', link: '/admin/member' },
-    { name: '부운영자 관리', link: '/admin/managers' },
   ];
 
   return (

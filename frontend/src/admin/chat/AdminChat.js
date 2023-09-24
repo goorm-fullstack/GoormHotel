@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
+import { PageTitle } from '../../components/common/commonStyles';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
 import {
   Container,
-  Title,
   ContentHeader,
   Total,
   BlackListBtn,
@@ -26,39 +25,39 @@ const AdminChat = () => {
     {
       id: 3,
       number: 3,
-      chatMessages : [
+      chatMessages: [
         {
           memberId: 'user001',
           name: '홍길동',
           lastChat: '마지막 채팅 내용입니다.',
           lastDate: '2023.09.03',
-        }
+        },
       ],
       state: '미확인',
     },
     {
       id: 2,
       number: 2,
-      chatMessages : [
+      chatMessages: [
         {
           memberId: 'user001',
           name: '홍길동',
           lastChat: '마지막 채팅 내용입니다.',
           lastDate: '2023.09.03',
-        }
+        },
       ],
       state: '종료',
     },
     {
       id: 1,
       number: 1,
-      chatMessages : [
+      chatMessages: [
         {
           memberId: 'user001',
           name: '홍길동',
           lastChat: '마지막 채팅 내용입니다.',
           lastDate: '2023.09.03',
-        }
+        },
       ],
       state: '종료',
     },
@@ -82,11 +81,6 @@ const AdminChat = () => {
   };
 
   console.log(checkedItems);
-
-  const subMenus = [
-    { name: '채팅 관리', link: '/admin/chat' },
-    { name: '메일 작성', link: '/admin/mail' },
-  ];
 
   return (
     <AdminLayout subMenus="chat">

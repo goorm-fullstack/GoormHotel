@@ -1,26 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
+import { PageTitle } from '../../components/common/commonStyles';
 import { SubmitButton, DateBtn, Now, CalendarSvg, CalendarContainer, CalendarWrapper, StyledCalendar } from './AdminGiftCard';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import 'moment/locale/ko';
-import {
-  Container,
-  Title,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from '../member/AdminMember';
+import { Container, Table } from '../member/AdminMember';
 
 export const TableTr = styled.tr`
   border-top: 1px solid #dddddd;
@@ -63,11 +49,6 @@ const Calendar = styled(CalendarWrapper)`
   top: 110%;
   left: -80px;
 `;
-
-const subMenus = [
-  { name: '판매 상품 관리', link: '/admin/item/list' },
-  { name: '상품권 관리', link: '/admin/item/giftCard' },
-];
 
 const giftCard = [
   {

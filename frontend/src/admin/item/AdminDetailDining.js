@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
+import { PageTitle } from '../../components/common/commonStyles';
 import { SubmitButton } from './AdminGiftCard';
 import { Form, BoldTd, Input, TableTr, TableTd } from './AdminDetailGiftCard';
 import { Image } from '../../components/WriteFormRoom';
@@ -8,21 +8,7 @@ import { Select } from './AdminItemList';
 import styled from 'styled-components';
 import { useParams } from 'react-router';
 import axios from 'axios';
-import {
-  Container,
-  Title,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from '../member/AdminMember';
+import { Container, Table } from '../member/AdminMember';
 
 // 세부타입 선택
 const WriteFormSelect = styled(Select)`

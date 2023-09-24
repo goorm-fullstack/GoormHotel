@@ -1,23 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
+import { PageTitle } from '../../components/common/commonStyles';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import {
-  Container,
-  Title,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from './AdminMember';
+import { Container } from './AdminMember';
 
 export const InfoContainer = styled.div`
   display: flex;
@@ -111,11 +97,6 @@ const AdminMemberDetail = () => {
 
   //   fetchData();
   // }, [memberId]);
-
-  const subMenus = [
-    { name: '전체 회원 관리', link: '/admin/member' },
-    { name: '부운영자 관리', link: '/admin/managers' },
-  ];
 
   return (
     <AdminLayout subMenus="member">

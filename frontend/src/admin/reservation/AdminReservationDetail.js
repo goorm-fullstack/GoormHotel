@@ -6,8 +6,8 @@ import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
 import AdminLayout from '../common/AdminLayout';
-import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
-import { Container, Title } from '../member/AdminMember';
+import { PageTitle } from '../../components/common/commonStyles';
+import { Container } from '../member/AdminMember';
 import { numberWithCommas } from '../../utils/function/comma';
 
 const CalendarContainer = styled.div`
@@ -261,8 +261,6 @@ const AdminReservationDetail = () => {
     const formattedDate = moment(selectedDate).format('YYYY.MM.DD');
     setCheckOutDate(`${formattedDate}`);
   };
-
-  const subMenus = [{ name: '예약 관리', link: `/admin/reservation/${reservationNumber}` }];
 
   return (
     <AdminLayout subMenus="reservation">

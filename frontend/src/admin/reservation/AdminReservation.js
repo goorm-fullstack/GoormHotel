@@ -4,10 +4,9 @@ import Instance from '../../utils/api/axiosInstance';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import AdminLayout from '../common/AdminLayout';
-import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
+import { PageTitle } from '../../components/common/commonStyles';
 import {
   Container,
-  Title,
   ContentHeader,
   Total,
   BlackListBtn,
@@ -81,8 +80,6 @@ const AdminReservation = () => {
     const formattedDate = moment(date).format('YYYY.MM.DD');
     return `${formattedDate}`;
   };
-
-  const subMenus = [{ name: '예약 관리', link: '/admin/reservation' }];
 
   return (
     <AdminLayout subMenus="reservation">

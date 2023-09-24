@@ -1,25 +1,10 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { useNavigate, useParams } from 'react-router-dom';
-import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
+import { PageTitle } from '../../components/common/commonStyles';
 import styled from 'styled-components';
-import Privacy from './../../pages/agreement/Privacy';
 import Instance from '../../utils/api/axiosInstance';
-import {
-  Container,
-  Title,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from '../member/AdminMember';
+import { Container } from '../member/AdminMember';
 
 const InfoContainer = styled.table`
   width: 100%;
@@ -157,11 +142,6 @@ const AdminChatDetail = () => {
   const navigateToChatList = () => {
     navigation('/admin/chat');
   };
-
-  const subMenus = [
-    { name: '채팅 관리', link: '/admin/chat' },
-    { name: '메일 작성', link: '/admin/mail' },
-  ];
 
   const webSocketURL = 'ws://127.0.0.1:8080/ws/chat';
   let ws = useRef(null);
