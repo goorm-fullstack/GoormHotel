@@ -10,7 +10,6 @@ import goormknights.hotel.report.model.Report;
 import goormknights.hotel.report.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
