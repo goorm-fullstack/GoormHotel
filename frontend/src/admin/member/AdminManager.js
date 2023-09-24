@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
+import { PageTitle } from '../../components/common/commonStyles';
 import styled from 'styled-components';
 import {
   ContentHeader,
@@ -160,9 +161,9 @@ const AdminManager = () => {
   ];
 
   return (
-    <AdminLayout title="회원관리" subMenus={subMenus}>
+    <AdminLayout subMenus="member">
       <Container>
-        <Title>부운영자 관리</Title>
+        <PageTitle>부운영자 관리</PageTitle>
         <Section>
           <SubTitle>부운영자 계정 등록</SubTitle>
           <InputWrapper>

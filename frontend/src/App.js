@@ -134,7 +134,6 @@ function App() {
           <Route path="/offers" element={<ReservationItem />}></Route>
           <Route path="/reservation/history" element={<ReservationList />}></Route>
           <Route path="/facilities" element={<Facilities />}></Route>
-          <Route path="/customerSupport" element={<CustomerSupport />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/signup/result" element={<JoinComplete />}></Route>

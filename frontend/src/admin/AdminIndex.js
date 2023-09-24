@@ -3,17 +3,19 @@ import { Link } from 'react-router-dom';
 import AdminHeader from './common/AdminHeader';
 import { commonAdminContainer, commonContentsStyle, PageTitle } from '../components/common/commonStyles';
 
-export const AdminContainer = styled(commonAdminContainer)``;
+export const AdminContainer = styled(commonAdminContainer)`
+  padding-bottom: 100px;
+`;
 
 export const Container = styled(commonContentsStyle)`
   & > h3 {
     border-bottom: 1px solid ${(props) => props.theme.colors.graylightborder};
     padding-bottom: 20px;
-    margin-bottom: 28px;
+    margin-bottom: 32px;
     font-size: ${(props) => props.theme.font.sizem};
     font-weight: bold;
     color: ${(props) => props.theme.colors.goldhover};
-    margin-top: 60px;
+    margin-top: 80px;
 
     &:first-child {
       margin-top: 0;
@@ -46,7 +48,7 @@ const Sitemap = styled.ul`
     h4 {
       font-weight: 500;
       color: ${(props) => props.theme.colors.charcoal};
-      padding-top: 18px;
+      padding-top: 14px;
       margin-bottom: 20px;
     }
   }
@@ -54,11 +56,11 @@ const Sitemap = styled.ul`
 
 const Latest = styled.ul`
   display: flex;
-  column-gap: 32px;
+  column-gap: 28px;
   justify-content: space-between;
 
   & > li {
-    width: calc((1180px - (32px * 2)) / 3);
+    width: calc((1180px - (28px * 2)) / 3);
     padding: 28px 22px;
     background-color: ${(props) => props.theme.colors.graybg};
 
@@ -70,7 +72,7 @@ const Latest = styled.ul`
       justify-content: space-between;
 
       a {
-        font-size: ${(props) => props.theme.font.sizexs};
+        font-size: ${(props) => props.theme.font.sizexxs};
         letter-spacing: -0.02em;
         color: ${(props) => props.theme.colors.graylight};
         text-decoration: underline;
@@ -83,7 +85,7 @@ const LatestList = styled.ul`
   li {
     width: 100%;
     overflow: hidden;
-    line-height: 1.6;
+    line-height: 1.8;
     font-size: ${(props) => props.theme.font.sizes};
     letter-spacing: -0.01em;
     position: relative;
@@ -110,7 +112,7 @@ const LatestList = styled.ul`
     }
 
     p {
-      width: 75%;
+      width: 70%;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
@@ -232,7 +234,7 @@ const AdminIndex = () => {
                   <Link to={'/admin/item/list/1'}>판매 상품 관리</Link>
                 </li>
                 <li>
-                  <Link to={'/admin/item/giftCard'}>상품권 관리</Link>
+                  <Link to={'/admin/item/giftcard'}>상품권 관리</Link>
                 </li>
               </MenuWrap>
             </li>
@@ -260,7 +262,7 @@ const AdminIndex = () => {
                   <Link to={'/admin/comments'}>댓글 관리</Link>
                 </li>
                 <li>
-                  <Link to={'/admin/deleteComment'}>삭제된 글 관리</Link>
+                  <Link to={'/admin/deletepost'}>삭제된 글 관리</Link>
                 </li>
                 <li>
                   <Link to={'/admin/report'}>신고 관리</Link>
@@ -270,7 +272,7 @@ const AdminIndex = () => {
 
             <li>
               <h4>
-                <Link to={'/admin/chat'}>채팅 / 메일</Link>
+                <Link to={'/admin/chat'}>채팅/메일 관리</Link>
               </h4>
               <MenuWrap>
                 <li>
@@ -278,6 +280,9 @@ const AdminIndex = () => {
                 </li>
                 <li>
                   <Link to={'/admin/mail'}>메일 작성</Link>
+                </li>
+                <li>
+                  <Link to={'/admin/news'}>구독자 관리</Link>
                 </li>
               </MenuWrap>
             </li>

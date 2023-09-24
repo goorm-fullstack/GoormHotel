@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
+import { PageTitle } from '../../components/common/commonStyles';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
@@ -293,10 +294,10 @@ const AdminGiftCard = () => {
   };
 
   return (
-    <AdminLayout title="상품관리" subMenus={subMenus}>
+    <AdminLayout subMenus="item">
       <Container>
         <div>
-          <Title>상품권 관리</Title>
+          <PageTitle>상품권 관리</PageTitle>
           <GiftCardBox>
             <SubTitle>상품권 발행</SubTitle>
             <GiftCardForm action="#" method="post">

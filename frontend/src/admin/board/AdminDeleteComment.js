@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
+import { PageTitle } from '../../components/common/commonStyles';
 import {
   Container,
   Title,
@@ -17,7 +18,7 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
-import axios from "axios";
+import axios from 'axios';
 
 const TableHeaderStyle = styled(TableHeader)`
   width: 20%;
@@ -69,7 +70,7 @@ const AdminDeleteComment = () => {
     axios.get('/boards/deleted').then((response) => {
       setBoard(response.data);
       console.log('get 성공');
-    })
+    });
   }, []);
 
   const handleSelectAllChange = (e) => {
@@ -92,9 +93,9 @@ const AdminDeleteComment = () => {
   };
 
   return (
-    <AdminLayout title="게시판 관리" subMenus={subMenus}>
+    <AdminLayout subMenus="board">
       <Container>
-        <Title>삭제된 글 관리</Title>
+        <PageTitle>삭제된 글 관리</PageTitle>
         <ContentHeader>
           <Total>
             전체 <Num>{board.length}</Num> 건
@@ -129,7 +130,7 @@ const AdminDeleteComment = () => {
                   {/*/>*/}
                 </TableCell>
                 <TableCell>{board.boardId}</TableCell>
-                <TableCell>{"카테고리(후기, 공지)"}</TableCell>
+                <TableCell>{'카테고리(후기, 공지)'}</TableCell>
                 <TableCell>
                   <LinkStyle to={`/admin/member/${board.boardContent}`}>{board.boardContent}</LinkStyle>
                 </TableCell>

@@ -85,6 +85,23 @@ const contents = {
       },
     ],
   },
+  facilities: {
+    pagetitle: '시설 소개',
+    nav: [
+      {
+        title: '객실',
+        linkto: '/rooms',
+      },
+      {
+        title: '다이닝',
+        linkto: '/dining',
+      },
+      {
+        title: '부대시설',
+        linkto: '/facilities',
+      },
+    ],
+  },
 };
 
 const SubHeader = ({ kind }) => {

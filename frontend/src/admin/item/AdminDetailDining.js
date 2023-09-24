@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import AdminLayout from '../common/AdminLayout';
+import { PageTitle } from '../../components/common/commonStyles';
 import { Container } from './AdminGiftCard';
 import { Title, SubmitButton } from './AdminGiftCard';
 import { Form, BoldTd, Input, TableTr, Table, TableTd } from './AdminDetailGiftCard';
@@ -210,9 +211,9 @@ const AdminDetailDining = () => {
   }
 
   return (
-    <AdminLayout title="상품관리" subMenus={subMenus}>
+    <AdminLayout subMenus="item">
       <Container>
-        <Title>다이닝 상세</Title>
+        <PageTitle>다이닝 상세</PageTitle>
         <Form onSubmit={handleSubmit} encType="multipart/form-data">
           {responseData && (
             <WriteFormTable>

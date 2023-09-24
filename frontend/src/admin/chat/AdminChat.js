@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
+import { PageTitle } from '../../components/common/commonStyles';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
@@ -172,15 +173,14 @@ const AdminChat = () => {
       lastDate: '2023.09.04',
       state: '종료',
     },
-  ])
+  ]);
 
-  useEffect(()=> {
-    Instance.get("/chat/getLastMessage")
-      .then((response) =>{
-        console.log(response.data);
-        setChatData(response.data)
-      })
-  },[])
+  useEffect(() => {
+    Instance.get('/chat/getLastMessage').then((response) => {
+      console.log(response.data);
+      setChatData(response.data);
+    });
+  }, []);
 
   const handleCheckboxChange = (memberId) => {
     setCheckedItems((prevItems) => {
@@ -194,16 +194,15 @@ const AdminChat = () => {
 
   console.log(checkedItems);
 
-
   const subMenus = [
     { name: '채팅 관리', link: '/admin/chat' },
     { name: '메일 작성', link: '/admin/mail' },
   ];
 
   return (
-    <AdminLayout title="채팅/메일 관리" subMenus={subMenus}>
+    <AdminLayout subMenus="chat">
       <Container>
-        <Title>채팅 관리</Title>
+        <PageTitle>채팅 관리</PageTitle>
         <ContentHeader>
           <Total>
             전체 <strong>{chatData.length}</strong> 건
@@ -246,7 +245,7 @@ const AdminChat = () => {
                     onChange={() => handleCheckboxChange(item.memberId)}
                   />
                 </TableCell>
-                <TableCell>{index+1}</TableCell>
+                <TableCell>{index + 1}</TableCell>
                 <TableCell>
                   {item.name}(
                   <Link to={`/admin/member/${item.sender}`} className="memberId">

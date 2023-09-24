@@ -1,5 +1,6 @@
 import React from 'react';
 import AdminLayout from '../common/AdminLayout';
+import { PageTitle } from '../../components/common/commonStyles';
 import { Container } from './AdminGiftCard';
 import WriteFormRoom from '../../components/WriteFormRoom';
 
@@ -10,7 +11,7 @@ const subMenus = [
 
 const AdminWriteFormRoom = () => {
   return (
-    <AdminLayout title="상품관리" subMenus={subMenus}>
+    <AdminLayout subMenus="item">
       <Container>
         <WriteFormRoom></WriteFormRoom>
       </Container>

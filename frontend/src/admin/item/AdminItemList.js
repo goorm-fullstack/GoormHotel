@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
+import { PageTitle } from '../../components/common/commonStyles';
 import { Title, GiftCardTable, TableTr, TableTh, TableListTr, TableTd, DetailLink, TopMenuOfTable } from './AdminGiftCard';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -332,9 +333,9 @@ const AdminItemList = () => {
       );
 
   return (
-    <AdminLayout title="상품관리" subMenus={subMenus}>
+    <AdminLayout subMenus="item">
       <section>
-        <Title>판매 상품 관리</Title>
+        <PageTitle>판매 상품 관리</PageTitle>
         <TopMenuOfTable>
           <div>
             <TotalItem className="number-of-list">전체{totalData}건</TotalItem>

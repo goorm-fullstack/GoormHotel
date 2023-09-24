@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
+import { PageTitle } from '../../components/common/commonStyles';
 import { Title, Container, SubmitButton, DateBtn, Now, CalendarSvg, CalendarContainer, CalendarWrapper, StyledCalendar } from './AdminGiftCard';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
@@ -103,9 +104,9 @@ const AdminDetailGiftCard = () => {
   };
 
   return (
-    <AdminLayout title="상품관리" subMenus={subMenus}>
+    <AdminLayout subMenus="item">
       <Container>
-        <Title>상품권 정보 상세</Title>
+        <PageTitle>상품권 정보 상세</PageTitle>
         <Form action="#" method="post">
           <Table>
             {giftCard.map((item) => {

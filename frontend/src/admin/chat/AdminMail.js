@@ -1,5 +1,6 @@
 import React from 'react';
 import AdminLayout from '../common/AdminLayout';
+import { PageTitle } from '../../components/common/commonStyles';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -120,9 +121,9 @@ const AdminMail = () => {
   ];
 
   return (
-    <AdminLayout title="채팅/메일 관리" subMenus={subMenus}>
+    <AdminLayout subMenus="chat">
       <Container>
-        <Title>메일 작성</Title>
+        <PageTitle>메일 작성</PageTitle>
         <InfoContainer>
           <InfoWrapper>
             <Label>

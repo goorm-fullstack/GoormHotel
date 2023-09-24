@@ -51,7 +51,6 @@ const HeaderRight = styled.ul`
 
 const ManagerId = styled.li`
   color: #ffffff;
-  margin-right: 15px;
   margin-left: 10px;
   display: flex;
   align-items: center;

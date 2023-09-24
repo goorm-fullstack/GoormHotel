@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { PageTitle } from '../../components/common/commonStyles';
 
 export const Container = styled.div`
   width: 100%;
@@ -158,15 +159,10 @@ const AdminMember = () => {
     },
   ];
 
-  const subMenus = [
-    { name: '전체 회원 관리', link: '/admin/member' },
-    { name: '부운영자 관리', link: '/admin/managers' },
-  ];
-
   return (
-    <AdminLayout title="회원관리" subMenus={subMenus}>
+    <AdminLayout subMenus="member">
       <Container>
-        <Title>전체 회원 관리</Title>
+        <PageTitle>전체 회원 관리</PageTitle>
         <ContentHeader>
           <Total>
             전체 <Num>{memberData.length}</Num> 건

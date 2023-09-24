@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
+import { PageTitle } from '../../components/common/commonStyles';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -115,9 +116,9 @@ const AdminMemberDetail = () => {
   ];
 
   return (
-    <AdminLayout title="회원관리" subMenus={subMenus}>
+    <AdminLayout subMenus="member">
       <Container>
-        <Title>회원 정보 상세</Title>
+        <PageTitle>회원 정보 상세</PageTitle>
         <InfoContainer>
           <InfoWrapper>
             <Label>회원 ID</Label>
