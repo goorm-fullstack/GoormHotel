@@ -29,9 +29,11 @@ public class RequestReportDto {
 
     private String reportWriter;    //신고자
 
-    private boolean reportCheck;    //신고 확인 여부
+    @Builder.Default
+    private boolean reportCheck = false;    //신고 확인 여부
 
-    private boolean reportResult;   //신고 처리 결과
+    @Builder.Default
+    private String reportResult = "처리 중";   //신고 처리 결과
 
     public Report toEntity(){
         return Report.builder()

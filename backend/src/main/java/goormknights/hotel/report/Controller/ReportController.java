@@ -58,4 +58,20 @@ public class ReportController {
         return ResponseEntity.ok(report.toResponseReportDto());
     }
 
+
+    // 신고 게시글 확인 완료
+    @PutMapping("/check/{reportId}")
+    public ResponseEntity<Object> check(@PathVariable Long reportId){
+        reportService.check(reportId, false);
+
+        return ResponseEntity.ok().build();
+    }
+
+    // 신고 게시글 블랙리스트 처리
+    @PutMapping("/black/{reportId}")
+    public ResponseEntity<Object> black(@PathVariable Long reportId){
+        reportService.toBlackList(reportId, false);
+
+        return ResponseEntity.ok().build();
+    }
 }
