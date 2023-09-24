@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
+import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
 import {
   Container,
   Title,
@@ -119,9 +120,9 @@ const AdminReport = () => {
   ];
 
   return (
-    <AdminLayout title="게시판 관리" subMenus={subMenus}>
+    <AdminLayout subMenus="board">
       <Container>
-        <Title>신고 관리</Title>
+        <PageTitle>신고 관리</PageTitle>
         <ContentHeader>
           <Total>
             전체 <Num>{reportData.length}</Num> 건

@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
+import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
 import styled from 'styled-components';
 import {
+  Container,
+  Title,
   ContentHeader,
   Total,
   BlackListBtn,
@@ -15,19 +18,6 @@ import {
   Num,
 } from './AdminMember';
 import { InfoContainer, InfoWrapper, Label, ModifyBtnWrapper, ModifyBtn } from './AdminMemberDetail';
-
-const Title = styled.h1`
-  font-size: 36px;
-  font-weight: bold;
-  margin-bottom: 72px;
-`;
-
-const Container = styled.div`
-  width: 100%;
-  max-width: 1270px;
-  min-width: 760px;
-  margin: 0 auto;
-`;
 
 const Section = styled.section`
   margin-bottom: 60px;
@@ -160,9 +150,9 @@ const AdminManager = () => {
   ];
 
   return (
-    <AdminLayout title="회원관리" subMenus={subMenus}>
+    <AdminLayout subMenus="member">
       <Container>
-        <Title>부운영자 관리</Title>
+        <PageTitle>부운영자 관리</PageTitle>
         <Section>
           <SubTitle>부운영자 계정 등록</SubTitle>
           <InputWrapper>

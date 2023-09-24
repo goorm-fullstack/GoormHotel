@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
+import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
 import {
   Container,
   Title,
@@ -17,7 +18,7 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
-import axios, {get} from "axios";
+import axios, { get } from 'axios';
 
 const CommentTableHeader = styled(TableHeader)`
   width: 15%;
@@ -32,7 +33,7 @@ const ModalContainer = styled.div`
   position: absolute;
   width: 217px;
   height: 104px;
-  border: 1px solid #DDDDDD;
+  border: 1px solid #dddddd;
   background-color: #fff;
   text-align: left;
   padding-top: 27px;
@@ -50,7 +51,7 @@ const CommentText = styled.div`
     text-decoration-color: #444444;
     text-underline-offset: 10px;
   }
-  
+
   &:hover + ${ModalContainer} {
     display: block;
   }
@@ -61,7 +62,6 @@ const ModalContent = styled.div`
 `;
 
 const LinkStyle = styled(Link)`
-  
   &:hover {
     text-decoration: underline;
     text-decoration-color: #444444;
@@ -134,9 +134,9 @@ const AdminComment = () => {
   };
 
   return (
-    <AdminLayout title="게시판 관리" subMenus={subMenus}>
+    <AdminLayout subMenus="board">
       <Container>
-        <Title>댓글 관리</Title>
+        <PageTitle>댓글 관리</PageTitle>
         <ContentHeader>
           <Total>
             전체 <Num>{reply.length}</Num> 건
@@ -167,12 +167,12 @@ const AdminComment = () => {
                 <TableCell>
                   <TableCheckbox
                     type="checkbox"
-                    checked={checkedItems.includes(null)}   //item.author.id
-                    onChange={() => handleCheckboxChange(null)}   //item.author.id
+                    checked={checkedItems.includes(null)} //item.author.id
+                    onChange={() => handleCheckboxChange(null)} //item.author.id
                   />
                 </TableCell>
                 <TableCell>{reply.replyId}</TableCell>
-                <TableCell>{"카테고리(후기, 문의)"}</TableCell>
+                <TableCell>{'카테고리(후기, 문의)'}</TableCell>
                 <TableCell>
                   <LinkStyle to="/">{reply.boardId}</LinkStyle>
                 </TableCell>

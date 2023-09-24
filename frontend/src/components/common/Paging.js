@@ -11,14 +11,14 @@ export const PageParam = styled.ul`
   }
   li a {
     display: inline-block;
-    padding: 0 8px;
+    padding: 0 7px;
     border-radius: 100%;
-    height: 1.6rem;
-    line-height: 1.3rem;
-    color: #666;
+    height: ${(props) => props.theme.font.sizel};
+    line-height: ${(props) => props.theme.font.sizesl};
+    color: ${(props) => props.theme.colors.graydark};
   }
   li.selected a {
-    color: #baa085;
+    color: ${(props) => props.theme.colors.goldhover};
     text-decoration: underline;
   }
   li a:hover {
@@ -28,8 +28,9 @@ export const PageParam = styled.ul`
     margin: 0 8px;
   }
   li.sideParam a {
-    border: 1px solid #baa085;
-    color: #baa085;
+    width: ${(props) => props.theme.font.sizel};
+    border: 1px solid ${(props) => props.theme.colors.gold};
+    color: ${(props) => props.theme.colors.goldhover};
   }
   li.sideParam a:hover {
     text-decoration: none;

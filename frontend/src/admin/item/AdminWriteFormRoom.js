@@ -1,7 +1,22 @@
 import React from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { Container } from './AdminGiftCard';
+import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
 import WriteFormRoom from '../../components/WriteFormRoom';
+import {
+  Container,
+  Title,
+  ContentHeader,
+  Total,
+  BlackListBtn,
+  Delete,
+  Add,
+  Table,
+  TableCheckboxWrapper,
+  TableHeader,
+  TableCell,
+  TableCheckbox,
+  Num,
+} from '../member/AdminMember';
 
 const subMenus = [
   { name: '판매 상품 관리', link: '/admin/item/list/1' },
@@ -10,7 +25,7 @@ const subMenus = [
 
 const AdminWriteFormRoom = () => {
   return (
-    <AdminLayout title="상품관리" subMenus={subMenus}>
+    <AdminLayout subMenus="item">
       <Container>
         <WriteFormRoom></WriteFormRoom>
       </Container>

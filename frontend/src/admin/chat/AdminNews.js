@@ -1,7 +1,8 @@
 import React from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
-import WriteFormDining from '../../components/WriteFormDining';
+import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import {
   Container,
   Title,
@@ -18,19 +19,21 @@ import {
   Num,
 } from '../member/AdminMember';
 
-const subMenus = [
-  { name: '판매 상품 관리', link: '/admin/item/list/1' },
-  { name: '상품권 관리', link: '/admin/item/giftCard' },
-];
+const AdminNews = () => {
+  const { memberId } = useParams();
 
-const AdminWriteFormDining = () => {
+  const subMenus = [
+    { name: '채팅 관리', link: '/admin/chat' },
+    { name: '메일 작성', link: '/admin/mail' },
+  ];
+
   return (
-    <AdminLayout subMenus="item">
+    <AdminLayout subMenus="chat">
       <Container>
-        <WriteFormDining></WriteFormDining>
+        <PageTitle>구독자 관리</PageTitle>
       </Container>
     </AdminLayout>
   );
 };
 
-export default AdminWriteFormDining;
+export default AdminNews;

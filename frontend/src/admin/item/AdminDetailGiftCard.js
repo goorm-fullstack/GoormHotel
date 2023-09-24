@@ -1,17 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { Title, Container, SubmitButton, DateBtn, Now, CalendarSvg, CalendarContainer, CalendarWrapper, StyledCalendar } from './AdminGiftCard';
+import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
+import { SubmitButton, DateBtn, Now, CalendarSvg, CalendarContainer, CalendarWrapper, StyledCalendar } from './AdminGiftCard';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import 'moment/locale/ko';
-
-// 테이블 스타일
-export const Table = styled.table`
-  width: 100%;
-  margin-bottom: 40px;
-  vertical-align: middle;
-`;
+import {
+  Container,
+  Title,
+  ContentHeader,
+  Total,
+  BlackListBtn,
+  Delete,
+  Add,
+  Table,
+  TableCheckboxWrapper,
+  TableHeader,
+  TableCell,
+  TableCheckbox,
+  Num,
+} from '../member/AdminMember';
 
 export const TableTr = styled.tr`
   border-top: 1px solid #dddddd;
@@ -103,9 +112,9 @@ const AdminDetailGiftCard = () => {
   };
 
   return (
-    <AdminLayout title="상품관리" subMenus={subMenus}>
+    <AdminLayout subMenus="item">
       <Container>
-        <Title>상품권 정보 상세</Title>
+        <PageTitle>상품권 정보 상세</PageTitle>
         <Form action="#" method="post">
           <Table>
             {giftCard.map((item) => {

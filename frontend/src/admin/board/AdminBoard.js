@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
+import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
 import {
   Container,
   Title,
@@ -17,14 +18,7 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
-import axios from "axios";
-
-const subMenus = [
-  { name: '게시글 관리', link: '/admin/board' },
-  { name: '댓글 관리', link: '/admin/comments' },
-  { name: '삭제된 글 관리', link: '/admin/deleteComment' },
-  { name: '신고 관리', link: '/admin/report' },
-];
+import axios from 'axios';
 
 const memberData = [
   {
@@ -88,9 +82,9 @@ const AdminBoard = () => {
   };
 
   return (
-    <AdminLayout title="게시판 관리" subMenus={subMenus}>
+    <AdminLayout subMenus="board">
       <Container>
-        <Title>게시글 관리</Title>
+        <PageTitle>게시글 관리</PageTitle>
         <ContentHeader>
           <Total>
             전체 <Num>{board.length}</Num> 건
@@ -126,7 +120,7 @@ const AdminBoard = () => {
                   />
                 </TableCell>
                 <TableCell>{board.boardId}</TableCell>
-                <TableCell>{"카테고리(공지, 후기)"}</TableCell>
+                <TableCell>{'카테고리(공지, 후기)'}</TableCell>
                 <TableCell>
                   <Link to={`/admin/member/${board.boardId}`}>{board.boardTitle}</Link>
                 </TableCell>
