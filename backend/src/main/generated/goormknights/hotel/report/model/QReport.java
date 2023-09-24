@@ -36,7 +36,7 @@ public class QReport extends EntityPathBase<Report> {
 
     public final StringPath reportReason = createString("reportReason");
 
-    public final BooleanPath reportResult = createBoolean("reportResult");
+    public final StringPath reportResult = createString("reportResult");
 
     public final StringPath reportWriter = createString("reportWriter");
 

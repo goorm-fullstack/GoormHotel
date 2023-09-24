@@ -19,10 +19,10 @@ public class ResponseReportDto {
     private LocalDateTime reportDate;
     private String reportWriter;
     private boolean reportCheck;
-    private boolean reportResult;
+    private String reportResult;
 
     @Builder
-    public ResponseReportDto(Long reportId, Long boardId, String title, String reportReason, LocalDateTime reportDate, String reportWriter, boolean reportCheck, boolean reportResult, Long replyId, String replyContent) {
+    public ResponseReportDto(Long reportId, Long boardId, String title, String reportReason, LocalDateTime reportDate, String reportWriter, boolean reportCheck, String reportResult, Long replyId, String replyContent) {
         this.reportId = reportId;
         this.boardId = boardId;
         this.title = title;

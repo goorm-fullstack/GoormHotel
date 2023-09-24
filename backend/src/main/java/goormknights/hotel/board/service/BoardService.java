@@ -8,6 +8,8 @@ import goormknights.hotel.board.model.Board;
 import goormknights.hotel.board.repository.BoardRepository;
 import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.reply.model.Reply;
+import goormknights.hotel.report.dto.response.ResponseReportDto;
+import goormknights.hotel.report.model.Report;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

@@ -83,4 +83,40 @@ public class ReportService {
         }
         return reportRepository.save(report);
     }
+
+    // 신고 게시글 확인 완료 클릭
+    public void check(Long reportId, boolean delete){
+        Report byReportIdAndReportDelete = reportRepository.findByReportIdAndReportDelete(reportId, delete);
+
+        Report build = Report.builder()
+                .reportResult("이상 없음")
+                .reportCheck(true)
+                .reportWriter(byReportIdAndReportDelete.getReportWriter())
+                .reportReason(byReportIdAndReportDelete.getReportReason())
+                .reportDate(byReportIdAndReportDelete.getReportDate())
+                .reportId(byReportIdAndReportDelete.getReportId())
+                .board(byReportIdAndReportDelete.getBoard())
+                .reply(byReportIdAndReportDelete.getReply())
+                .build();
+        reportRepository.save(build);
+    }
+
+    // 신고 게시글 블랙 리스트 추가 처리
+    public void toBlackList(Long reportId, boolean delete){
+        Report byReportIdAndReportDelete = reportRepository.findByReportIdAndReportDelete(reportId, delete);
+        String reportWriter = byReportIdAndReportDelete.getReportWriter();
+        // reportWriter를 이용하여 member 정보를 가져오고 memberService의 블랙리스트 추가 로직 사용
+
+        Report build = Report.builder()
+                .reportResult("블랙리스트")
+                .reportCheck(true)
+                .reportWriter(byReportIdAndReportDelete.getReportWriter())
+                .reportReason(byReportIdAndReportDelete.getReportReason())
+                .reportDate(byReportIdAndReportDelete.getReportDate())
+                .reportId(byReportIdAndReportDelete.getReportId())
+                .board(byReportIdAndReportDelete.getBoard())
+                .reply(byReportIdAndReportDelete.getReply())
+                .build();
+        reportRepository.save(build);
+    }
 }
