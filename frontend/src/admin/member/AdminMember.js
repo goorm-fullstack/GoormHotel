@@ -2,14 +2,9 @@ import React, { useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { PageTitle } from '../../components/common/commonStyles';
+import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
 
-export const Container = styled.div`
-  width: 100%;
-  max-width: 1270px;
-  min-width: 760px;
-  margin: 0 auto;
-`;
+export const Container = styled(commonAdminContents)``;
 
 export const Title = styled.h1`
   font-size: 36px;

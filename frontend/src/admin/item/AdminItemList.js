@@ -1,13 +1,27 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
-import { Title, GiftCardTable, TableTr, TableTh, TableListTr, TableTd, DetailLink, TopMenuOfTable } from './AdminGiftCard';
+import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
+import { GiftCardTable, TableTr, TableTh, TableListTr, TableTd, DetailLink, TopMenuOfTable } from './AdminGiftCard';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { TableCheckbox } from '../member/AdminMember';
 import { PageParam } from '../board/AdminReport';
 import { NavLink } from 'react-router-dom';
+import {
+  Container,
+  Title,
+  ContentHeader,
+  Total,
+  BlackListBtn,
+  Delete,
+  Add,
+  Table,
+  TableCheckboxWrapper,
+  TableHeader,
+  TableCell,
+  TableCheckbox,
+  Num,
+} from '../member/AdminMember';
 
 // 전체 데이터 갯수 표시 태그
 const TotalItem = styled.p`
@@ -334,7 +348,7 @@ const AdminItemList = () => {
 
   return (
     <AdminLayout subMenus="item">
-      <section>
+      <Container>
         <PageTitle>판매 상품 관리</PageTitle>
         <TopMenuOfTable>
           <div>
@@ -425,7 +439,7 @@ const AdminItemList = () => {
             </Link>
           </li>
         </PageParam>
-      </section>
+      </Container>
     </AdminLayout>
   );
 };

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
 import {
   Container,
   Title,
@@ -19,13 +19,6 @@ import {
   Num,
 } from '../member/AdminMember';
 import axios from 'axios';
-
-const subMenus = [
-  { name: '게시글 관리', link: '/admin/board' },
-  { name: '댓글 관리', link: '/admin/comments' },
-  { name: '삭제된 글 관리', link: '/admin/deleteComment' },
-  { name: '신고 관리', link: '/admin/report' },
-];
 
 const memberData = [
   {

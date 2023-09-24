@@ -4,7 +4,7 @@ import Instance from '../../utils/api/axiosInstance';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
 import {
   Container,
   Title,

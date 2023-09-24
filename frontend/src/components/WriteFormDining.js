@@ -1,9 +1,24 @@
 import React, { useRef, useState } from 'react';
-import { Title, SubmitButton } from '../admin/item/AdminGiftCard';
-import { TableTd, TableTr, Table, Form, BoldTd, Input } from '../admin/item/AdminDetailGiftCard';
+import { SubmitButton } from '../admin/item/AdminGiftCard';
+import { TableTd, TableTr, Form, BoldTd, Input } from '../admin/item/AdminDetailGiftCard';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import { Select } from '../admin/item/AdminItemList';
+import {
+  Container,
+  Title,
+  ContentHeader,
+  Total,
+  BlackListBtn,
+  Delete,
+  Add,
+  Table,
+  TableCheckboxWrapper,
+  TableHeader,
+  TableCell,
+  TableCheckbox,
+  Num,
+} from '../admin/member/AdminMember';
 import axios from 'axios';
 
 // 테이블 상단

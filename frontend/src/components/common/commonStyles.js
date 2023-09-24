@@ -11,6 +11,13 @@ export const commonAdminContainer = styled(commonContainerStyle)`
   padding-top: 200px;
 `;
 
+export const commonAdminContents = styled.div`
+  width: 100%;
+  max-width: ${(props) => props.theme.wrapper.minwidth};
+  min-width: 760px;
+  margin: 0 auto;
+`;
+
 export const commonWrapperStyle = styled(commonContainerStyle)`
   padding: 0 40px;
 `;

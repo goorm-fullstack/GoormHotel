@@ -1,27 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import 'moment/locale/ko';
 import { Link } from 'react-router-dom';
-import { TableCheckbox } from '../member/AdminMember';
-
-export const Container = styled.div`
-  width: 100%;
-  max-width: 1270px;
-  min-width: 760px;
-  margin-left: 50px;
-`;
-
-export const Title = styled.h1`
-  font-size: 36px;
-  font-weight: 500;
-  color: rgb(17, 17, 17);
-  margin-bottom: 60px;
-`;
+import {
+  Container,
+  Title,
+  ContentHeader,
+  Total,
+  BlackListBtn,
+  Delete,
+  Add,
+  Table,
+  TableCheckboxWrapper,
+  TableHeader,
+  TableCell,
+  TableCheckbox,
+  Num,
+} from '../member/AdminMember';
 
 const SubTitle = styled.p`
   font-size: 18px;
@@ -219,11 +219,6 @@ export const DetailLink = styled(Link)`
     border-bottom: 1px solid #dddddd;
   }
 `;
-
-const subMenus = [
-  { name: '판매 상품 관리', link: '/admin/item/list/1' },
-  { name: '상품권 관리', link: '/admin/item/giftCard' },
-];
 
 const checkboxList = [
   {

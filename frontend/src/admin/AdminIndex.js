@@ -63,6 +63,7 @@ const Latest = styled.ul`
     width: calc((1180px - (28px * 2)) / 3);
     padding: 28px 22px;
     background-color: ${(props) => props.theme.colors.graybg};
+    border-radius: 5px;
 
     h4 {
       font-weight: 500;

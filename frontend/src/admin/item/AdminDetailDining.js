@@ -1,14 +1,28 @@
 import React, { useState, useRef, useEffect } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
-import { Container } from './AdminGiftCard';
-import { Title, SubmitButton } from './AdminGiftCard';
-import { Form, BoldTd, Input, TableTr, Table, TableTd } from './AdminDetailGiftCard';
+import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
+import { SubmitButton } from './AdminGiftCard';
+import { Form, BoldTd, Input, TableTr, TableTd } from './AdminDetailGiftCard';
 import { Image } from '../../components/WriteFormRoom';
 import { Select } from './AdminItemList';
 import styled from 'styled-components';
 import { useParams } from 'react-router';
 import axios from 'axios';
+import {
+  Container,
+  Title,
+  ContentHeader,
+  Total,
+  BlackListBtn,
+  Delete,
+  Add,
+  Table,
+  TableCheckboxWrapper,
+  TableHeader,
+  TableCell,
+  TableCheckbox,
+  Num,
+} from '../member/AdminMember';
 
 // 세부타입 선택
 const WriteFormSelect = styled(Select)`
@@ -71,11 +85,6 @@ const GreenP = styled.p`
   display: inline-block;
   margin-left: 30px;
 `;
-
-const subMenus = [
-  { name: '판매 상품 관리', link: '/admin/item/list/1' },
-  { name: '상품권 관리', link: '/admin/item/giftCard' },
-];
 
 const AdminDetailDining = () => {
   const [imgFile, setImgFile] = useState(''); // 이미지 상태관리
