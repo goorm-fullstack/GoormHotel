@@ -1,0 +1,48 @@
+### 어드민 회원가입
+POST http://localhost:8080/auth/adminsignup
+Content-Type: application/json
+
+{
+  "adminId": "yss1902admin",
+  "password": "1234",
+  "adminName": "김영한",
+  "adminNickname": "호랑이",
+  "authorities": ["MEMBER_MANAGE", "SITE_MANAGE"]
+}
+
+### 운영자 로그인
+POST http://localhost:8080/login/adminlogin
+Content-Type: application/json
+
+{
+  "adminId": "yss1902admin",
+  "password": "1234"
+}
+
+### 어드민1의 권한 수정
+PUT http://localhost:8080/yss1902admin/auth
+Content-Type: application/json
+
+[
+  "MEMBER_MANAGE",
+  "PRODRES_MANAGE",
+  "SITE_MANAGE"
+]
+
+### 어드민1의 모든 권한 삭제
+PUT http://localhost:8080/yss1902admin/auth
+Content-Type: application/json
+
+[]
+
+### 메인 페이지
+GET http://localhost:8080
+
+### 관리자 페이지
+GET http://localhost:8080/admin
+
+### 매니저 페이지
+GET http://localhost:8080/manager
+
+### 매니저 페이지
+GET http://localhost:8080/manager/member

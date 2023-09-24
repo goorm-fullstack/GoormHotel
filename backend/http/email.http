@@ -1,0 +1,47 @@
+### name과 email을 이용하여 memberId 찾기
+POST http://localhost:8080/findMemberId
+Content-Type: application/json
+
+{
+  "name": "김영한",
+  "email": "yss1902@naver.com"
+}
+
+### name과 email이 존재하면 코드 발송
+POST http://localhost:8080/verifycode
+Content-Type: application/json
+
+{
+  "name": "김영한",
+  "email": "yss1902@naver.com",
+  "code": "1Xh43N76"
+}
+
+### password 찾기
+POST http://localhost:8080/findpassword
+Content-Type: application/json
+
+{
+  "memberId": "yss1902",
+  "name": "김영한",
+  "email": "yss1902@naver.com"
+}
+
+### 토큰 유효성 검사
+POST http://localhost:8080/api/mail/verifyResetToken
+Content-Type: application/json
+
+{
+  "token": "83Ybz11C",
+  "email": "yss1902@naver.com"
+}
+
+### 비밀번호 리셋 및 저장
+POST http://localhost:8080/resetpassword
+Content-Type: application/json
+
+{
+  "email": "yss1902@naver.com",
+  "token": "83Ybz11C",
+  "newPassword": "7890"
+}
