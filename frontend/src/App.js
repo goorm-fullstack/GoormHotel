@@ -131,15 +131,15 @@ function App() {
           <Route path="/findpw/result" element={<FindPwResult />}></Route>
           <Route path="/membership" element={<Membership />}></Route>
           <Route path="/reservation/:number" element={<ReservationCheck />}></Route>
-          <Route path="/offers" element={<ReservationItem />}></Route>
-          <Route path="/reservation/history" element={<ReservationList />}></Route>
+          <Route path="/offers/:page" element={<ReservationItem />}></Route>
+          <Route path="/myhistory/:page" element={<ReservationList />}></Route>
           <Route path="/facilities" element={<Facilities />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/signup/result" element={<JoinComplete />}></Route>
-          <Route path="/board/:board" element={<CustomerSupport />}></Route>
+          <Route path="/board/:board/:page" element={<CustomerSupport />}></Route>
           <Route path="/board/:board/write" element={<BoardWrite />}></Route>
-          <Route path="/board/:board/detail" element={<BoardRead />}></Route>
+          <Route path="/board/:board/detail/:title" element={<BoardRead />}></Route>
         </Routes>
       </AppContainer>
       <FloatingWrapper>

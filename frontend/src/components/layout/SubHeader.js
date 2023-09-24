@@ -60,15 +60,15 @@ const contents = {
     nav: [
       {
         title: '공지사항',
-        linkto: '/board/notice',
+        linkto: '/board/notice/1',
       },
       {
         title: '문의하기',
-        linkto: '/board/qna',
+        linkto: '/board/qna/1',
       },
       {
         title: '이용후기',
-        linkto: '/board/review',
+        linkto: '/board/review/1',
       },
     ],
   },
