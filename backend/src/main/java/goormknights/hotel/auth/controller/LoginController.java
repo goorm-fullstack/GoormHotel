@@ -1,97 +1,70 @@
 package goormknights.hotel.auth.controller;
 
-import goormknights.hotel.auth.dto.request.Login;
 import goormknights.hotel.auth.dto.request.ManagerLogin;
+import goormknights.hotel.auth.dto.request.MemberLogin;
+import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.member.service.AdminService;
 import goormknights.hotel.member.service.MemberService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.Collections;
 
 @Slf4j
 @Controller
+@RequestMapping("/login")
 @RequiredArgsConstructor
 public class LoginController {
 
     private final MemberService memberService;
-    private final AuthenticationManager authenticationManager;
     private final AdminService adminService;
 
+
     // 회원 로그인
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Login login, HttpSession session) {
-        String memberId = login.getMemberId();
-        String password = login.getPassword();
-
-        try {
-            String loginResult = memberService.login(memberId, password, session);
-            return ResponseEntity.ok().body(loginResult);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");
+    @PostMapping("/member")
+    public ResponseEntity<?> loginMember(@RequestBody MemberLogin memberLogin, HttpSession session) {
+        boolean success = memberService.loginMember(memberLogin.getMemberId(), memberLogin.getPassword(), session);
+        if (success) {
+            return ResponseEntity.ok("Logged in successfully.");
+        } else {
+            return ResponseEntity.badRequest().body("Invalid username or password.");
         }
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "loginPage";  // 로그인 페이지 뷰 이름
     }
 
     // 관리자 로그인
-    @PostMapping("/login/adminlogin")
-    public ResponseEntity<?> adminLogin(@RequestBody ManagerLogin login,
-                                        HttpServletRequest request,
-                                        HttpServletResponse response) {
-        String adminId = login.getAdminId();
-        String password = login.getPassword();
-
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(adminId, password)
-            );
-
-            Cookie cookie = new Cookie("adminId", adminId);
-            cookie.setPath("/");
-            cookie.setSecure(false);
-            cookie.setHttpOnly(true);
-            cookie.setMaxAge(60 * 60 * 24);
-            response.setHeader("Set-Cookie", "key=value; SameSite=None");
-            response.addCookie(cookie);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.info("컨트롤러"+authentication);
-            return ResponseEntity.ok().body("로그인 완료");
-        } catch (Exception e) {
-            return ResponseEntity.status(401).body("어드민 로그인 실패");
+    @PostMapping("/manager")
+    public ResponseEntity<?> loginManager(@RequestBody ManagerLogin managerLogin, HttpSession session) {
+        boolean success = adminService.loginManager(managerLogin.getAdminId(), managerLogin.getPassword(), session);
+        if (success) {
+            String sessionId = session.getId();  // 세션 ID 가져오기
+            log.info("세션"+sessionId);
+            return ResponseEntity.ok(Collections.singletonMap("sessionId", sessionId));  // 세션 ID를 응답에 추가
+        } else {
+            return ResponseEntity.badRequest().body("Invalid username or password.");
         }
     }
 
-    // 유저 정보 알아내기
-    @GetMapping("/admin/userinfo")
-    public ResponseEntity<?> getAdminInfo(@AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not logged in");
+
+    // 역할 체크
+    @GetMapping("/checkRole")
+    public ResponseEntity<?> checkRole(HttpSession session) {
+        Role role = (Role) session.getAttribute("role");
+        if (role != null) {
+            return ResponseEntity.ok(role);
+        } else {
+            return ResponseEntity.badRequest().body("Not logged in.");
         }
-        String username = userDetails.getUsername();
-        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-        return ResponseEntity.ok(Map.of("username", username, "roles", authorities));
     }
 
 

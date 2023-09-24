@@ -56,9 +56,10 @@ public class AdminService {
         Optional<Manager> managerOptional = managerRepository.findByAdminId(username);
         if (managerOptional.isPresent()) {
             Manager manager = managerOptional.get();
-            if (manager.getPassword().equals(password)) {
+            if (passwordEncoder.matches(password, manager.getPassword())) {
                 session.setAttribute("user", manager);
                 session.setAttribute("role", manager.getRole());
+                session.setAttribute("authorities", manager.getAuthorities());
                 return true;
             }
         }

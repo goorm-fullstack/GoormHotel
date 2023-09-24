@@ -1,26 +1,47 @@
 package goormknights.hotel.auth.controller;
 
+import goormknights.hotel.auth.service.AuthService;
 import goormknights.hotel.member.dto.request.FindMemberIdRequest;
 import goormknights.hotel.member.dto.request.FindPasswordRequest;
 import goormknights.hotel.member.dto.request.ResetPasswordRequest;
 import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.service.MemberService;
 import goormknights.hotel.member.service.VerificationService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class AuthController {
 
     private final MemberService memberService;
+    private final AuthService authService;
     private final VerificationService verificationService;
+
+    // 로그아웃
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session) {
+        authService.logout(session);
+        return ResponseEntity.ok("Logged out successfully.");
+    }
+
+    @RequestMapping("/someEndpoint")
+    public void someMethod(HttpSession session) {
+        String sessionId = session.getId();
+        log.info("세션"+sessionId);
+    }
+
+
+
+
 
     // 아이디 찾기
     @PostMapping("/findMemberId")

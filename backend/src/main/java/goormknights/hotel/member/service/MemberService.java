@@ -17,8 +17,6 @@ import goormknights.hotel.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -153,16 +151,17 @@ public class MemberService {
 
 
     // 로그인
-    public String login(String memberId, String rawPassword, HttpSession session) {
-        Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new UsernameNotFoundException("해당되는 회원이 없습니다"));
-
-        if (passwordEncoder.matches(rawPassword, member.getPassword())) {
-            session.setAttribute("member", member);
-            return "로그인 완료";
-        } else {
-            throw new BadCredentialsException("비밀번호가 다릅니다");
+    public boolean loginMember(String username, String password, HttpSession session) {
+        Optional<Member> memberOptional = memberRepository.findByMemberId(username);
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            if (member.getPassword().equals(password)) {
+                session.setAttribute("user", member);
+                session.setAttribute("role", member.getRole());
+                return true;
+            }
         }
+        return false;
     }
 
 

@@ -23,7 +23,7 @@ public class TempController {
     private final AdminService adminService;
 
 //    @GetMapping("/auth/login")
-//    public SessionResponse login(@RequestBody Login login){
+//    public SessionResponse login(@RequestBody MemberLogin login){
 //        String accessToken = authService.signin(login);
 //
 //        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);

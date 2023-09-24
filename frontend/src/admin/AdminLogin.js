@@ -77,22 +77,28 @@ const AdminLogin = () => {
   const [rememberId, setRememberId] = useState(false);
 
   const handleLogin = async () => {
-    const params = new URLSearchParams();
-    params.append('adminId', adminId);
-    params.append('password', adminPassword);
+    // 백엔드에 맞춰 JSON 형식으로 보내기
+    const loginInfo = {
+      adminId: adminId,
+      password: adminPassword,
+    };
 
     try {
-      const response = await Instance.post('/login/adminlogin', params, {
+      // Content-Type을 'application/json'으로 설정
+      const response = await Instance.post('/login/manager', loginInfo, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        }
+          'Content-Type': 'application/json',
+        },
       });
+      console.log("세션 응답 아이디: ", response.data);
+      // 백엔드 로직에 따라서 세션 정보 저장
       if (response.status === 200) {
         sessionStorage.setItem('sessionId', response.data.sessionId);
+        console.log("세션: " + sessionStorage.getItem('sessionId'));
         navigate('/admin');
       }
+
     } catch (error) {
-      console.log(error)
       alert('아이디 혹은 비밀번호가 올바르지 않습니다');
     }
   };

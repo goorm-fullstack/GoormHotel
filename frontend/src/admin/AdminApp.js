@@ -20,14 +20,38 @@ import AdminChat from './chat/AdminChat';
 import AdminChatDetail from './chat/AdminChatDetail';
 import AdminMail from './chat/AdminMail';
 import AdminIndex from "./AdminIndex";
-import CheckAndNavigate from '../utils/api/CheckAndNavigate';
+import RouteAuthCheck from "../utils/api/RouteAuthCheck";
+import Instance from "../utils/api/axiosInstance";
+import {useEffect} from "react";
+
+
+
 
 const AdminApp = () => {
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await Instance.get('/api/session');
+        if (response.status === 200) {
+          console.log("세션 유효함");
+        }
+      } catch (error) {
+        console.log("세션 무효함", error);
+      }
+    };
+
+    checkSession();
+  }, []);
+
+  const adminOrManager = RouteAuthCheck(["ADMIN", "MANAGER"]);
+  const memberManage = RouteAuthCheck(["ADMIN", "MANAGER"], ["MemberManage"]);
+  const prodResManage = RouteAuthCheck(["ADMIN", "MANAGER"], ["ProdResManage"]);
+  const siteManage = RouteAuthCheck(["ADMIN", "MANAGER"], ["SiteManage"]);
+
   return (
     <BrowserRouter>
-      <CheckAndNavigate />
       <Routes>
-        <Route path="/admin" element={<AdminIndex />}></Route>
+        {adminOrManager && <Route path="/admin" element={<AdminIndex />}></Route>}
         <Route path="/admin/reservation" element={<AdminReservation />}></Route>
         <Route path="/admin/reservation/:reservationNumber" element={<AdminReservationDetail />}></Route>
         <Route path="/admin/login" element={<AdminLogin />}></Route>
