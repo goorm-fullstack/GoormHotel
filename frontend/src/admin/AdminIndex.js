@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 import AdminHeader from './common/AdminHeader';
 import { commonAdminContainer, commonContentsStyle, PageTitle } from '../components/common/commonStyles';
 
-export const AdminContainer = styled(commonAdminContainer)`
-  padding-bottom: 100px;
-`;
+export const AdminContainer = styled(commonAdminContainer)``;
 
 export const Container = styled(commonContentsStyle)`
   & > h3 {

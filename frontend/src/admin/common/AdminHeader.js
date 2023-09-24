@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import adminLogo from '../../images/common/logo_admin.png';
 import { Link } from 'react-router-dom';
 
-const Container = styled.div`
+export const Container = styled.header`
   width: 100%;
   height: 100px;
   background-color: ${(props) => props.theme.colors.charcoal};

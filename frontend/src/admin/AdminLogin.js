@@ -2,71 +2,41 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import adminLogo from '../images/common/logo_admin.png';
 import { Link } from 'react-router-dom';
+import { commonAdminContainer, PageTitle, SubmitBtn, BtnWrapper, CheckLabel, InputCheckbox } from '../components/common/commonStyles';
+import { Container } from './common/AdminHeader';
 
-const Header = styled.div`
+const LoginContainer = styled.div`
   width: 100%;
-  height: 97px;
-  background-color: #21201e;
-`;
-
-const HeaderLink = styled(Link)`
-  img {
-    margin-top: 30px;
-    margin-left: 40px;
-  }
-`;
-
-const Wrapper = styled.div`
-  width: 512px;
-  margin: 0 auto;
-  margin-top: 243px;
-`;
-
-const Title = styled.h1`
-  font-size: 36px;
-  font-weight: bold;
-  margin-bottom: 40px;
-  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background-color: ${(props) => props.theme.colors.graybg};
   text-align: center;
 `;
 
-const Input = styled.input`
-  width: 510px;
-  height: 60px;
-  color: #888888;
-  border: 1px solid #dddddd;
-  padding: 15px 0 15px 20px;
-  outline: none;
-`;
+const AdminContainer = styled(commonAdminContainer)`
+  width: 400px;
+  padding-top: calc(100px + 25vh);
 
-const PwInput = styled(Input)`
-  margin-top: 12px;
-`;
-
-const Button = styled.button`
-  width: 100%;
-  background-color: #95846e;
-  height: 60px;
-  text-align: center;
-  color: #ffffff;
-  margin-top: 20px;
-`;
-
-const RememberBtn = styled.button`
-  margin-top: 15px;
-  font-size: 14px;
-  color: #888888;
-  float: left;
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-
-  input {
-    width: 16px;
-    height: 16px;
-    border: 1px solid #dddddd;
-    margin-right: 10px;
+  h2 {
+    margin-bottom: 40px;
   }
+
+  form {
+    margin-bottom: 10px;
+
+    input {
+      width: 100%;
+      height: 50px;
+      margin-top: 10px;
+      padding-left: 12px;
+    }
+  }
+`;
+
+const Header = styled(Container)``;
+
+const HeaderLink = styled.h1`
+  margin-right: 45px;
 `;
 
 const AdminLogin = () => {
@@ -87,25 +57,31 @@ const AdminLogin = () => {
   };
 
   return (
-    <div>
+    <LoginContainer>
       <Header>
-        <HeaderLink to="/admin/member">
-          <img src={adminLogo} alt="logo" />
+        <HeaderLink>
+          <Link to="/admin">
+            <img src={adminLogo} alt="logo" />
+          </Link>
         </HeaderLink>
       </Header>
-      <Wrapper>
-        <Title>관리자 로그인</Title>
+      <AdminContainer>
+        <PageTitle>관리자 로그인</PageTitle>
         <form>
-          <Input placeholder="아이디" type="text" value={adminId} onChange={handleIdChange} />
-          <PwInput placeholder="비밀번호" type="password" value={adminPassword} onChange={handlePwChange} />
-          <Button>로그인</Button>
+          <input placeholder="아이디" type="text" value={adminId} onChange={handleIdChange} />
+          <input placeholder="비밀번호" type="password" value={adminPassword} onChange={handlePwChange} />
+          <BtnWrapper className="full mt20">
+            <SubmitBtn>로그인</SubmitBtn>
+          </BtnWrapper>
         </form>
-        <RememberBtn>
-          <input type="checkbox" checked={handleRememberIdChange} />
-          아이디 기억하기
-        </RememberBtn>
-      </Wrapper>
-    </div>
+        <div>
+          <CheckLabel>
+            <InputCheckbox type="checkbox" checked={handleRememberIdChange} />
+            아이디 기억하기
+          </CheckLabel>
+        </div>
+      </AdminContainer>
+    </LoginContainer>
   );
 };
 
