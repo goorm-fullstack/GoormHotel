@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
@@ -17,6 +17,7 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
+import axios from "axios";
 
 const subMenus = [
   { name: '게시글 관리', link: '/admin/board' },
@@ -59,6 +60,14 @@ const AdminBoard = () => {
   const [checkedItems, setCheckedItems] = useState([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
 
+  const [board, setBoard] = useState([]);
+  useEffect(() => {
+    axios.get('/boards/list').then((response) => {
+      setBoard(response.data);
+      console.log('get 성공');
+    });
+  }, []);
+
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
@@ -84,7 +93,7 @@ const AdminBoard = () => {
         <Title>게시글 관리</Title>
         <ContentHeader>
           <Total>
-            전체 <Num>{memberData.length}</Num> 건
+            전체 <Num>{board.length}</Num> 건
           </Total>
           <BlackListBtn>
             <Delete>블랙리스트 해제</Delete>
@@ -98,32 +107,34 @@ const AdminBoard = () => {
                 <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
               </TableCheckboxWrapper>
               <TableHeader>No.</TableHeader>
-              <TableHeader>회원등급</TableHeader>
-              <TableHeader>회원ID</TableHeader>
-              <TableHeader>회원 이름</TableHeader>
-              <TableHeader>가입일</TableHeader>
+              <TableHeader>게시판</TableHeader>
+              <TableHeader>제목</TableHeader>
+              <TableHeader>작성자</TableHeader>
+              <TableHeader>작성일</TableHeader>
               <TableHeader>블랙리스트</TableHeader>
             </tr>
           </thead>
           <tbody>
-            {memberData.length === 0 && <TableCell colSpan="7">등록된 회원이 없습니다.</TableCell>}
-            {memberData.map((item) => (
-              <tr key={item.id}>
+            {board.length === 0 && <TableCell colSpan="7">등록된 회원이 없습니다.</TableCell>}
+            {board.map((board) => (
+              <tr key={board.boardId}>
                 <TableCell>
                   <TableCheckbox
                     type="checkbox"
-                    checked={checkedItems.includes(item.memberId)}
-                    onChange={() => handleCheckboxChange(item.memberId)}
+                    checked={checkedItems.includes(board.boardId)}
+                    onChange={() => handleCheckboxChange(board.boardId)}
                   />
                 </TableCell>
-                <TableCell>{item.number}</TableCell>
-                <TableCell>{item.grade}</TableCell>
+                <TableCell>{board.boardId}</TableCell>
+                <TableCell>{"카테고리(공지, 후기)"}</TableCell>
                 <TableCell>
-                  <Link to={`/admin/member/${item.memberId}`}>{item.memberId}</Link>
+                  <Link to={`/admin/member/${board.boardId}`}>{board.boardTitle}</Link>
                 </TableCell>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{item.joinDate}</TableCell>
-                <TableCell>{item.blacklist}</TableCell>
+                <TableCell>
+                  <Link to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</Link>
+                </TableCell>
+                <TableCell>{board.boardWriteDate}</TableCell>
+                <TableCell>{board.blacklist}</TableCell>
               </tr>
             ))}
           </tbody>

@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import visual03 from '../images/main/visual03.webp';
-import visual02 from '../images/main/visual02.webp';
-import visual01 from '../images/main/visual01.webp';
-import slideBtnImage from '../images/icon/ico_slide_btn.png';
+import React, { useEffect, useState } from 'react';
+import visual03 from '../images/main/visual02.webp';
+import visual02 from '../images/main/visual01.webp';
+import visual01 from '../images/main/visual03.webp';
 import { styled } from 'styled-components';
 import { ReactComponent as SideMenuIcon } from '../images/icon/ico_slide_btn.svg';
 
@@ -88,6 +87,16 @@ const Slide = () => {
   const goToNextSlide = () => {
     setCurrentIndex((currentIndex + 1) % images.length);
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      goToNextSlide();
+    }, 5000); // 5초마다 슬라이드 변경
+
+    return () => {
+      clearInterval(interval); // 컴포넌트가 언마운트 될 때 인터벌 정리
+    };
+  }, [currentIndex]);
 
   return (
     <>

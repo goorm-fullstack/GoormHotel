@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
@@ -17,6 +17,7 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
+import axios, {get} from "axios";
 
 const CommentTableHeader = styled(TableHeader)`
   width: 15%;
@@ -31,7 +32,7 @@ const ModalContainer = styled.div`
   position: absolute;
   width: 217px;
   height: 104px;
-  border: 1px solid #dddddd;
+  border: 1px solid #DDDDDD;
   background-color: #fff;
   text-align: left;
   padding-top: 27px;
@@ -49,7 +50,7 @@ const CommentText = styled.div`
     text-decoration-color: #444444;
     text-underline-offset: 10px;
   }
-
+  
   &:hover + ${ModalContainer} {
     display: block;
   }
@@ -60,6 +61,7 @@ const ModalContent = styled.div`
 `;
 
 const LinkStyle = styled(Link)`
+  
   &:hover {
     text-decoration: underline;
     text-decoration-color: #444444;
@@ -70,6 +72,14 @@ const LinkStyle = styled(Link)`
 const AdminComment = () => {
   const [checkedItems, setCheckedItems] = useState([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
+  const [reply, setReply] = useState([]);
+
+  useEffect(() => {
+    axios.get('/reply/list').then((response) => {
+      setReply(response.data);
+      console.log('get 성공');
+    });
+  }, []);
 
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
@@ -129,7 +139,7 @@ const AdminComment = () => {
         <Title>댓글 관리</Title>
         <ContentHeader>
           <Total>
-            전체 <Num>{comments.length}</Num> 건
+            전체 <Num>{reply.length}</Num> 건
           </Total>
           <BlackListBtn>
             <Delete>신고처리</Delete>
@@ -151,32 +161,32 @@ const AdminComment = () => {
             </tr>
           </thead>
           <tbody>
-            {comments.length === 0 && <TableCell colSpan="7">등록된 회원이 없습니다.</TableCell>}
-            {comments.map((item) => (
-              <tr key={item.id}>
+            {reply.length === 0 && <TableCell colSpan="7">등록된 댓글이 없습니다.</TableCell>}
+            {reply.map((reply) => (
+              <tr key={reply.replyId}>
                 <TableCell>
                   <TableCheckbox
                     type="checkbox"
-                    checked={checkedItems.includes(item.author.id)}
-                    onChange={() => handleCheckboxChange(item.author.id)}
+                    checked={checkedItems.includes(null)}   //item.author.id
+                    onChange={() => handleCheckboxChange(null)}   //item.author.id
                   />
                 </TableCell>
-                <TableCell>{item.id}</TableCell>
-                <TableCell>{item.board}</TableCell>
+                <TableCell>{reply.replyId}</TableCell>
+                <TableCell>{"카테고리(후기, 문의)"}</TableCell>
                 <TableCell>
-                  <LinkStyle to="/">{item.post}</LinkStyle>
+                  <LinkStyle to="/">{reply.boardId}</LinkStyle>
                 </TableCell>
                 <CommentTableCell>
-                  <CommentText>{truncateString(item.content, 8)}</CommentText>
+                  <CommentText>{truncateString(reply.replyContent, 8)}</CommentText>
                   <ModalContainer>
-                    <ModalContent>{item.content}</ModalContent>
+                    <ModalContent>{reply.replyContent}</ModalContent>
                   </ModalContainer>
                 </CommentTableCell>
                 <TableCell>
-                  {item.author.name}
-                  <LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>
+                  {reply.replyWriter}
+                  {/*<LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>*/}
                 </TableCell>
-                <TableCell>{item.date}</TableCell>
+                <TableCell>{reply.replyWriteDate}</TableCell>
               </tr>
             ))}
           </tbody>

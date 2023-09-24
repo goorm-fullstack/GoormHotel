@@ -58,7 +58,7 @@ const AdminHeader = () => {
   return (
     <Container>
       <Wrapper>
-        <HeaderLink to="/admin/member">
+        <HeaderLink to="/admin">
           <img src={adminLogo} alt="logo" />
         </HeaderLink>
         <MenuItem>
@@ -66,7 +66,7 @@ const AdminHeader = () => {
             <Link to="/admin/member">회원 관리</Link>
           </li>
           <li>
-            <Link to="/admin/item/list">상품 관리</Link>
+            <Link to="/admin/item/list/1">상품 관리</Link>
           </li>
           <li>
             <Link to="/admin/reservation">예약 관리</Link>

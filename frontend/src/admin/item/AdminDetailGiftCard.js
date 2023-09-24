@@ -6,6 +6,7 @@ import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import 'moment/locale/ko';
 
+// 테이블 스타일
 export const Table = styled.table`
   width: 100%;
   margin-bottom: 40px;
@@ -32,16 +33,19 @@ export const TableTd = styled.td`
   text-align: left;
 `;
 
+// input
 export const Input = styled.input`
   height: 40px;
   width: 200px;
   vertical-align: middle;
 `;
 
+// form
 export const Form = styled.form`
   text-align: center;
 `;
 
+// 캘린더 관련
 const DateSelectBtn = styled(DateBtn)`
   width: 200px;
 `;

@@ -20,11 +20,13 @@ import AdminDeleteComment from './board/AdminDeleteComment';
 import AdminChat from './chat/AdminChat';
 import AdminChatDetail from './chat/AdminChatDetail';
 import AdminMail from './chat/AdminMail';
+import AdminIndex from './AdminIndex';
 
 const AdminApp = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/admin" element={<AdminIndex />}></Route>
         <Route path="/admin/reservation" element={<AdminReservation />}></Route>
         <Route path="/admin/reservation/:reservationNumber" element={<AdminReservationDetail />}></Route>
         <Route path="/admin/login" element={<AdminLogin />}></Route>
@@ -33,7 +35,7 @@ const AdminApp = () => {
         <Route path="/admin/managers" element={<AdminManager />}></Route>
         <Route path="/admin/comments" element={<AdminComment />}></Route>
         <Route path="/admin/report" element={<AdminReport />}></Route>
-        <Route path="/admin/item/list" element={<AdminItemList />}></Route>
+        <Route path="/admin/item/list/:page" element={<AdminItemList />}></Route>
         <Route path="/admin/item/list/view/dining/:type/:name" element={<AdminDetailDining />}></Route>
         <Route path="/admin/item/list/view/room/:type/:name" element={<AdminDetailRoom />}></Route>
         <Route path="/admin/item/list/writeForm/room" element={<AdminWriteFormRoom />}></Route>

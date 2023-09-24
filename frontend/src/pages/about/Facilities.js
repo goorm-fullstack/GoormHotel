@@ -6,18 +6,9 @@ import imgPool from '../../images/facilities/pool.jpg';
 import imgSalon from '../../images/facilities/salon.jpg';
 import imgSauna from '../../images/facilities/sauna.jpg';
 import imgSpa from '../../images/facilities/spa.jpg';
-import { commonContainerStyle } from '../../components/common/commonStyles';
+import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
 
-export const Container = styled.div`
-  ${commonContainerStyle}
-`;
-
-const Title = styled.p`
-  font-size: 36px;
-  font-weight: bold;
-  color: rgb(17, 17, 17);
-  margin-bottom: 100px;
-`;
+export const Container = styled(commonContainerStyle)``;
 
 const Type = styled.p`
   color: #baa085;
@@ -52,7 +43,7 @@ const Facilities = () => {
   return (
     <>
       <Container>
-        <Title>부대시설</Title>
+        <PageTitle>부대시설</PageTitle>
         <WrapHalf>
           <Halfli>
             <div>

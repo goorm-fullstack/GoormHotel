@@ -4,40 +4,33 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import 'moment/locale/ko';
-import { Link } from 'react-router-dom';
-
-const ReserveContainer = styled.div`
-  background-color: #fff;
-  width: 1180px;
-  height: 150px;
-  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
-  padding: 0 80px;
-  display: flex;
-  z-index: 1;
-  position: absolute;
-  bottom: 0;
-  transform: translate(-50%, 50%);
-  left: 50%;
-  border-radius: 12px;
-`;
 
 const ReserveDate = styled.div`
   display: flex;
   align-items: center;
 
+  .stay {
+    background: ${(props) => props.theme.colors.gold};
+    color: white;
+    border-radius: 20px;
+    text-align: center;
+    font-size: ${(props) => props.theme.font.sizexxs};
+    padding: 6px 4px;
+    margin: 28px 35px 0;
+    min-width: 45px;
+  }
+
   &::after {
     content: '';
     width: 1px;
     height: 65px;
-    background-color: #dddddd;
+    background-color: ${(props) => props.theme.colors.graylightborder};
     display: inline-block;
-    margin: 0 60px;
+    margin: 0 60px 0 66px;
   }
 `;
 
-const Now = styled.div``;
-
-const CheckInBtn = styled.button`
+const CheckBtn = styled.button`
   border: 0;
   background-color: #fff;
   padding: 15px 0;
@@ -47,39 +40,23 @@ const CheckInBtn = styled.button`
   width: 170px;
   height: 50px;
   font-weight: 500;
-  color: #111;
 `;
 
-const CheckIn = styled.div`
+const Check = styled.div`
   font-size: 19px;
 
   p {
-    font-size: 14px;
-    color: #9c836a;
+    font-size: ${(props) => props.theme.font.sizexs};
+    color: ${(props) => props.theme.colors.goldhover};
     margin-top: 10px;
   }
 `;
 
-const Stay = styled.p`
-  background: #baa085;
-  color: white;
-  border-radius: 20px;
-  text-align: center;
-  font-size: 0.8rem;
-  padding: 6px 4px;
-  margin: 28px 35px 0;
-  min-width: 45px;
-`;
-
 const CalendarSvg = styled.svg`
-  fill: #102c57;
+  fill: ${(props) => props.theme.colors.navy};
   position: relative;
   top: 2px;
 `;
-
-const CheckOut = styled(CheckIn)``;
-
-const CheckOutBtn = styled(CheckInBtn)``;
 
 const ReserveDetail = styled.div`
   display: flex;
@@ -89,15 +66,15 @@ const ReserveDetail = styled.div`
 
   & > div {
     display: flex;
-    gap: 15px;
+    gap: 40px;
+    position: relative;
   }
 `;
 
 const SelectWrapper = styled.div`
-  margin-right: 20px;
   width: 50px;
 
-  input {
+  button {
     border: 0;
     width: 50px;
     height: 50px;
@@ -105,35 +82,16 @@ const SelectWrapper = styled.div`
     font-size: 20px;
     font-weight: 500;
     padding: 15px 0;
+    background: transparent;
   }
 `;
 
 const SelectLabel = styled.label`
   display: block;
-  font-size: 14px;
-  color: #95846e;
+  font-size: ${(props) => props.theme.font.sizexs};
+  color: ${(props) => props.theme.colors.goldhover};
   text-align: center;
   margin-top: 10px;
-`;
-
-const Select = styled.select`
-  border: none;
-  border-bottom: 1px solid #dddddd;
-  height: 50px;
-  font-size: 20px;
-`;
-
-const ReservationButton = styled(Link)`
-  width: 150px;
-  height: 65px;
-  line-height: 65px;
-  background-color: #102c57;
-  color: white;
-  text-align: center;
-
-  &:hover {
-    background-color: #254072;
-  }
 `;
 
 const CalendarContainer = styled.div`
@@ -144,38 +102,121 @@ const CalendarWrapper = styled.div`
   z-index: 10;
   position: absolute;
   top: 100%;
-  left: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
   display: ${(props) => (props.open ? 'block' : 'none')};
 `;
 
-const CheckOutCalendarWrapper = styled(CalendarWrapper)``;
+const OptionWrapper = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  padding: 40px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid ${(props) => props.theme.colors.grayborder};
+  transform: translate(-50%, 0);
+  display: ${(props) => (props.open ? 'block' : 'none')};
+
+  th,
+  td {
+    padding: 4px 0;
+  }
+  th {
+    color: ${(props) => props.theme.colors.goldhover};
+    font-size: ${(props) => props.theme.font.sizexs};
+    min-width: 80px;
+    text-align: left;
+  }
+  td > div {
+    display: flex;
+    align-items: center;
+  }
+  input {
+    width: 60px;
+    text-align: center;
+    border: 0;
+  }
+  button {
+    background: white;
+    border: 1px solid ${(props) => props.theme.colors.gold};
+    border-radius: 100%;
+    text-align: center;
+    color: ${(props) => props.theme.colors.goldhover};
+    width: 22px;
+    height: 22px;
+    line-height: 1;
+    vertical-align: text-bottom;
+    font-size: ${(props) => props.theme.font.sizexxxs};
+    padding-left: 1px;
+  }
+  td.chilage {
+    font-size: ${(props) => props.theme.font.sizexxs};
+    padding-top: 12px;
+    color: ${(props) => props.theme.colors.graylight};
+    text-align: right;
+  }
+
+  td.chilage span {
+    border-radius: 100%;
+    background: ${(props) => props.theme.colors.caution};
+    color: white;
+    padding: 0 6px;
+    margin-right: 2px;
+    font-size: 10px;
+    font-weight: bold;
+  }
+`;
 
 export const StyledCalendar = styled(Calendar)`
   border-radius: 10px;
-  border: 1px solid #c8c8c8;
+  border: 1px solid ${(props) => props.theme.colors.grayborder};
+  width: 300px;
+  font-family: inherit;
+  padding: 10px 20px 20px;
 
   .react-calendar__navigation__label > span {
-    font-size: 13px;
-    font-weight: 600;
+    font-size: ${(props) => props.theme.font.sizexxs};
+    font-weight: 500;
   }
 
   .react-calendar__month-view__days__day--weekend {
-    color: black;
+    color: ${(props) => props.theme.colors.black};
   }
-  .react-calendar__tile:enabled:hover,
-  .react-calendar__tile:enabled:focus {
-    background: #102c57;
-    color: white;
+  .react-calendar__tile {
+    padding: 6px 4px;
+    font-size: ${(props) => props.theme.font.sizexxs};
+    color: ${(props) => props.theme.colors.black};
+    border-radius: 100%;
   }
-
+  .react-calendar__tile:nth-child(7n) {
+    color: ${(props) => props.theme.colors.red};
+  }
   .react-calendar__tile--now {
     // 오늘 날짜 하이라이트 커스텀
     background: white;
-    color: #102c57;
+    color: ${(props) => props.theme.colors.goldhover};
   }
+  .react-calendar__tile:disabled {
+    color: #ccc;
+    background-color: white;
+  }
+  .react-calendar__tile:enabled:hover,
+  .react-calendar__tile:enabled:focus,
   .react-calendar__tile--active {
-    background: #102c57;
-    color: white;
+    background: ${(props) => props.theme.colors.navy};
+    color: white !important;
+  }
+  .react-calendar__navigation {
+    margin-bottom: 0;
+  }
+  .react-calendar__navigation button:hover,
+  .react-calendar__navigation button:focus {
+    background-color: white;
+  }
+  .react-calendar__month-view__weekdays {
+    font-weight: normal;
+    font-size: ${(props) => props.theme.font.sizexxxs};
   }
 `;
 
@@ -186,13 +227,25 @@ const Reservation = () => {
   const [checkOutDate, setCheckOutDate] = useState('');
   const [checkInOpen, setCheckInOpen] = useState(false);
   const [checkOutOpen, setCheckOutOpen] = useState(false);
+  const [optionOpen, setOptionOpen] = useState(false);
   const [rooms, setRooms] = useState(1);
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
+  const [nights, setNights] = useState(0);
 
-  const roomOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const adultOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const childrenOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const reservationData = {
+    checkInDate,
+    checkOutDate,
+    rooms,
+    adults,
+    children,
+    nights,
+  };
+
+  useEffect(() => {
+    const nightsDifference = moment(checkOutValue).diff(moment(checkInValue), 'days');
+    setNights(nightsDifference);
+  }, [checkInValue, checkOutValue]);
 
   useEffect(() => {
     const today = new Date();
@@ -204,6 +257,12 @@ const Reservation = () => {
 
     setCheckInDate(formattedToday);
     setCheckOutDate(formattedTomorrow);
+  }, []);
+
+  useEffect(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    setCheckOutValue(tomorrow);
   }, []);
 
   const formatAndSetDate = (date) => {
@@ -220,6 +279,10 @@ const Reservation = () => {
   const handleCheckOutToggle = () => {
     setCheckOutOpen(!checkOutOpen);
     setCheckInOpen(false);
+  };
+
+  const handleOptionToggle = () => {
+    setOptionOpen(!optionOpen);
   };
 
   const handleCheckInDateChange = (selectedDate) => {
@@ -243,15 +306,32 @@ const Reservation = () => {
     return moment(date).isBefore(moment(), 'day');
   };
 
-  const handleReservation = () => {};
+  const handleMinusClick = (stateUpdater, minValue) => {
+    stateUpdater((prevState) => {
+      if (prevState > minValue) {
+        return prevState - 1;
+      }
+      return prevState;
+    });
+  };
+
+  const handlePlusClick = (stateUpdater) => {
+    stateUpdater((prevState) => {
+      if (prevState < 9) {
+        return prevState + 1;
+      }
+      return prevState;
+    });
+  };
 
   return (
-    <ReserveContainer>
-      <ReserveDate>
-        <CheckIn>
+    <>
+      <ReserveDate className="reservedate">
+        <Check>
           <p>체크인</p>
-          <CheckInBtn onClick={handleCheckInToggle}>
-            <Now>{checkInDate}</Now>
+          <CheckBtn onClick={handleCheckInToggle}>
+            {checkInDate}
+            {/* {formData.checkIn} */}
             <CalendarSvg viewBox="0 0 32 32" width="18" height="18">
               <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
                 <path d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z" />
@@ -266,22 +346,23 @@ const Reservation = () => {
                 <rect x="21" y="12" width="4" height="3" />
               </g>
             </CalendarSvg>
-          </CheckInBtn>
+          </CheckBtn>
           <CalendarContainer>
             <CalendarWrapper open={checkInOpen}>
               <StyledCalendar
                 tileDisabled={({ date }) => isDateDisabled(date)}
                 onChange={handleCheckInDateChange}
-                value={checkInValue}
+                value={reservationData ? reservationData.checkInDate : checkInValue}
                 formatDay={(locale, date) => moment(date).format('DD')}></StyledCalendar>
             </CalendarWrapper>
           </CalendarContainer>
-        </CheckIn>
-        <Stay>1박</Stay>
-        <CheckOut>
+        </Check>
+        <p className="stay">{nights}박</p>
+        <Check>
           <p>체크아웃</p>
-          <CheckOutBtn onClick={handleCheckOutToggle}>
-            <Now>{checkOutDate}</Now>
+          <CheckBtn onClick={handleCheckOutToggle}>
+            {checkOutDate}
+            {/* {formData.checkOut} */}
             <CalendarSvg viewBox="0 0 32 32" width="18" height="18">
               <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
                 <path d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z" />
@@ -296,38 +377,92 @@ const Reservation = () => {
                 <rect x="21" y="12" width="4" height="3" />
               </g>
             </CalendarSvg>
-          </CheckOutBtn>
+          </CheckBtn>
           <CalendarContainer>
-            <CheckOutCalendarWrapper open={checkOutOpen}>
+            <CalendarWrapper open={checkOutOpen}>
               <StyledCalendar
                 tileDisabled={({ date }) => isDateDisabled(date)}
                 onChange={handleCheckOutDateChange}
-                value={checkOutValue}
+                value={reservationData ? reservationData.checkOutDate : checkOutValue}
                 formatDay={(locale, date) => moment(date).format('DD')}></StyledCalendar>
-            </CheckOutCalendarWrapper>
+            </CalendarWrapper>
           </CalendarContainer>
-        </CheckOut>
+        </Check>
       </ReserveDate>
       <ReserveDetail>
-        <div>
+        <div className="option">
           <SelectWrapper>
-            <SelectLabel>객실수</SelectLabel>
-            <input type="text" value="1" />
+            <SelectLabel>객실수 {/* 객실이면 객실수, 다이닝이면 좌석수, index 페이지에서는 기본 객실수 */}</SelectLabel>
+            <button type="button" onClick={handleOptionToggle}>
+              {rooms}
+            </button>
           </SelectWrapper>
           <SelectWrapper>
             <SelectLabel>성인</SelectLabel>
-            <input type="text" value="1" />
+            <button type="button" onClick={handleOptionToggle}>
+              {adults}
+            </button>
           </SelectWrapper>
           <SelectWrapper>
             <SelectLabel>어린이</SelectLabel>
-            <input type="text" value="0" />
+            <button type="button" onClick={handleOptionToggle}>
+              {children}
+            </button>
           </SelectWrapper>
+          <OptionWrapper open={optionOpen}>
+            <table>
+              <tr>
+                <th>객실수</th>
+                <td>
+                  <div>
+                    <button type="button" className="btn-minus" onClick={() => handleMinusClick(setRooms, 1)}>
+                      ─
+                    </button>
+                    <input type="text" value={rooms} readOnly />
+                    <button type="button" className="btn-plus" onClick={() => handlePlusClick(setRooms)}>
+                      ┼
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>성인</th>
+                <td>
+                  <div>
+                    <button type="button" className="btn-minus" onClick={() => handleMinusClick(setAdults, 1)}>
+                      ─
+                    </button>
+                    <input type="text" value={adults} readOnly />
+                    <button type="button" className="btn-plus" onClick={() => handlePlusClick(setAdults)}>
+                      ┼
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>어린이</th>
+                <td>
+                  <div>
+                    <button type="button" className="btn-minus" onClick={() => handleMinusClick(setChildren, 0)}>
+                      ─
+                    </button>
+                    <input type="text" value={children} readOnly />
+                    <button type="button" className="btn-plus" onClick={() => handlePlusClick(setChildren)}>
+                      ┼
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" className="chilage">
+                  <span>!</span> 어린이: 4세~12세
+                </td>
+              </tr>
+            </table>
+          </OptionWrapper>
         </div>
-        <ReservationButton to="/specialOffer" onClick={() => handleReservation()}>
-          상품 검색
-        </ReservationButton>
       </ReserveDetail>
-    </ReserveContainer>
+    </>
   );
 };
 
