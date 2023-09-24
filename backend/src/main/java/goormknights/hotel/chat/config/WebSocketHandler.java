@@ -14,6 +14,9 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RequiredArgsConstructor
 @Component
 @Slf4j
@@ -29,6 +32,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         ChatMessage chatMessage = objectMapper.readValue(payload, ChatMessage.class);
         chatMessageRepository.save(chatMessage);
         ChatRoom chatRoom = chatService.findRoomById(chatMessage.getRoomId());
+        chatService.setStatus(chatRoom.getRoomId(), chatRoom.getStatus());
         try {
             chatRoom.handlerActions(session, chatMessage, chatService);
         } catch (Exception e) {

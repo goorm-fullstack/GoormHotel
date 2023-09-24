@@ -1,130 +1,89 @@
 import React from 'react';
 import { styled } from 'styled-components';
+import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
 
 const ImageBorder = styled.div`
-  background-color: rgb(235, 235, 235);
-  width: 340px;
-  height: 334px;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
+  background-color: ${(props) => props.theme.colors.graybg};
+  width: 100%;
+  text-align: center;
+  padding: 55px 0;
 `;
 
-const BronzeText = styled.p`
-  font-size: 22px;
+const Grade = styled.h3`
+  font-size: ${(props) => props.theme.font.sizel};
   font-weight: 500;
-  color: rgb(145, 104, 74);
-  line-height: 1.182;
-`;
+  color: ${(props) => props.theme.memberColors.bronze};
+  margin: 15px 0;
 
-const SilverText = styled.p`
-  font-size: 22px;
-  font-weight: 500;
-  color: rgb(97, 103, 122);
-  line-height: 1.182;
-`;
-
-const GoldText = styled.p`
-  font-size: 22px;
-  font-weight: 500;
-  color: rgb(197, 168, 128);
-  line-height: 1.182;
+  &.silver {
+    color: ${(props) => props.theme.memberColors.silver};
+  }
+  &.gold {
+    color: ${(props) => props.theme.memberColors.gold};
+  }
 `;
 
 const ImageBorderFooter = styled.p`
-  font-size: 14px;
-  color: rgb(136, 136, 136);
-  line-height: 2.286;
+  font-size: ${(props) => props.theme.font.sizes};
+  color: ${(props) => props.theme.colors.graylight};
 `;
 
-const FirstUl = styled.ul`
-  margin-left: 2rem;
+const Benefit = styled.div`
+  width: 100%;
+  padding: 0 40px;
+
+  h4 {
+    margin: 40px 0 10px;
+    font-weight: 500;
+    color: rgb(33, 32, 30);
+    line-height: 2;
+    font-size: ${(props) => props.theme.font.sizes};
+  }
+
+  li {
+    font-size: ${(props) => props.theme.font.sizexs};
+    color: ${(props) => props.theme.colors.graylight};
+    line-height: 1.8;
+  }
+
+  li::before {
+    content: '•';
+    margin-right: 8px;
+  }
 `;
 
-const MembershipUl = styled.ul`
-  margin-left: 2rem;
-`;
-
-const MembershipLi = styled.li`
-  font-size: 14px;
-  font-weight: 400;
-  color: rgb(102, 102, 102);
-  line-height: 1.714;
-`;
-
-const BoldTextLi = styled.li`
-  margin-bottom: 10px;
-  font-size: 16px;
-  font-weight: 500;
-  color: rgb(33, 32, 30);
-  line-height: 2;
-`;
-
-const MembershipInfo = styled.div`
-  width: 1180px;
-  margin: 0 auto;
-  margin-top: 250px;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  align-content: center;
-  align-items: flex-start;
-  gap: 20px;
-`;
-
-const Title = styled.p`
-  font-size: 36px;
-  font-weight: 500;
-  color: rgb(17, 17, 17);
-  line-height: 1.2;
-  margin-bottom: 100px;
-`;
+const Container = styled(commonContainerStyle)``;
 
 const MembershipBox = styled.div`
   display: flex;
-  flex-direction: row;
-  gap: 4rem;
+  justify-content: space-between;
 `;
 
 const MembershipItemBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  height: 860px;
-  border: 1px solid rgb(221, 221, 221);
+  width: 360px;
+  height: 750px;
+  border: 1px solid ${(props) => props.theme.colors.grayborder};
 `;
 
-const MembershipDetailInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font-size: 14px;
-  color: #888888;
+const MembershipDetailInfo = styled.ul`
+  margin-top: 20px;
+  font-size: ${(props) => props.theme.font.sizexs};
+  color: ${(props) => props.theme.colors.graylight};
+  line-height: 1.6;
 `;
 
-const SvgIconBronze = styled.svg`
-  width: 134px;
-  height: 128px;
-  & path {
+const MemberIcon = styled.svg`
+  width: 160px;
+  position: relative;
+  left: 6px; /* 시각 보정 */
+
+  &.bronze path {
     fill: url('#gradient1');
   }
-`;
-
-const SvgIconSilver = styled.svg`
-  width: 134px;
-  height: 128px;
-  & path {
+  &.silver path {
     fill: url('#gradient2');
   }
-`;
-
-const SvgIconGold = styled.svg`
-  width: 134px;
-  height: 128px;
-  & path {
+  &.gold path {
     fill: url('#gradient3');
   }
 `;
@@ -132,12 +91,18 @@ const SvgIconGold = styled.svg`
 const Membership = () => {
   return (
     <>
-      <MembershipInfo>
-        <Title>멤버십</Title>
+      <Container>
+        <PageTitle>멤버십</PageTitle>
         <MembershipBox>
           <MembershipItemBox>
             <ImageBorder>
-              <SvgIconBronze fill="rgb(145, 104, 74)" data-name="Layer 1" id="Layer_1" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <MemberIcon
+                className="bronze"
+                fill="rgb(145, 104, 74)"
+                data-name="Layer 1"
+                id="Layer_1"
+                viewBox="0 0 128 128"
+                xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#493323"></stop>
@@ -172,22 +137,24 @@ const Membership = () => {
                 <path d="M52.82,14.83a1.28,1.28,0,1,0-1.28,1.28A1.28,1.28,0,0,0,52.82,14.83Z" />
                 <path d="M27.77,90.12a1.29,1.29,0,1,0-1.28,1.28A1.28,1.28,0,0,0,27.77,90.12Z" />
                 <path d="M98.91,14.83a1.28,1.28,0,1,0-1.28,1.28A1.28,1.28,0,0,0,98.91,14.83Z" />
-              </SvgIconBronze>
-              <BronzeText>Bronze</BronzeText>
+              </MemberIcon>
+              <Grade>Bronze</Grade>
               <ImageBorderFooter>회원가입 즉시</ImageBorderFooter>
             </ImageBorder>
-            <FirstUl>
-              <BoldTextLi>멤버십 쿠폰</BoldTextLi>
-              <MembershipLi>· 객실 5% 할인 쿠폰</MembershipLi>
-            </FirstUl>
-            <MembershipUl>
-              <BoldTextLi>멤버십 혜택</BoldTextLi>
-              <MembershipLi>· 전시 관람 혜택</MembershipLi>
-            </MembershipUl>
+            <Benefit>
+              <h4>멤버십 쿠폰</h4>
+              <ul>
+                <li>객실 5% 할인 쿠폰</li>
+              </ul>
+              <h4>멤버십 혜택</h4>
+              <ul>
+                <li>전시 관람 혜택</li>
+              </ul>
+            </Benefit>
           </MembershipItemBox>
           <MembershipItemBox>
             <ImageBorder>
-              <SvgIconSilver data-name="Layer 1" id="Layer_2" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <MemberIcon className="silver" data-name="Layer 1" id="Layer_2" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#61677a"></stop>
@@ -222,26 +189,28 @@ const Membership = () => {
                 <path d="M52.82,14.83a1.28,1.28,0,1,0-1.28,1.28A1.28,1.28,0,0,0,52.82,14.83Z" />
                 <path d="M27.77,90.12a1.29,1.29,0,1,0-1.28,1.28A1.28,1.28,0,0,0,27.77,90.12Z" />
                 <path d="M98.91,14.83a1.28,1.28,0,1,0-1.28,1.28A1.28,1.28,0,0,0,98.91,14.83Z" />
-              </SvgIconSilver>
-              <SilverText>Silver</SilverText>
+              </MemberIcon>
+              <Grade className="silver">Silver</Grade>
               <ImageBorderFooter>연간 10박 숙박 시</ImageBorderFooter>
             </ImageBorder>
-            <MembershipUl>
-              <BoldTextLi>멤버십 쿠폰</BoldTextLi>
-              <MembershipLi>· 객실 10% 할인 쿠폰</MembershipLi>
-              <MembershipLi>· 다이닝 5% 할인 쿠폰</MembershipLi>
-            </MembershipUl>
-            <MembershipUl>
-              <BoldTextLi>멤버십 혜택</BoldTextLi>
-              <MembershipLi>· 전시 관람 혜택</MembershipLi>
-              <MembershipLi>· 투숙 중 무료 세탁 서비스</MembershipLi>
-              <MembershipLi>· 웰컴 어메니티 제공</MembershipLi>
-              <MembershipLi>· 체크인 시 한강뷰 업그레이드</MembershipLi>
-            </MembershipUl>
+            <Benefit>
+              <h4>멤버십 쿠폰</h4>
+              <ul>
+                <li>객실 10% 할인 쿠폰</li>
+                <li>다이닝 5% 할인 쿠폰</li>
+              </ul>
+              <h4>멤버십 혜택</h4>
+              <ul>
+                <li>전시 관람 혜택</li>
+                <li>투숙 중 무료 세탁 서비스</li>
+                <li>웰컴 어메니티 제공</li>
+                <li>체크인 시 한강뷰 업그레이드</li>
+              </ul>
+            </Benefit>
           </MembershipItemBox>
           <MembershipItemBox>
             <ImageBorder>
-              <SvgIconGold data-name="Layer 1" id="Layer_3" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <MemberIcon className="gold" data-name="Layer 1" id="Layer_3" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#6a492b"></stop>
@@ -276,32 +245,34 @@ const Membership = () => {
                 <path d="M52.82,14.83a1.28,1.28,0,1,0-1.28,1.28A1.28,1.28,0,0,0,52.82,14.83Z" />
                 <path d="M27.77,90.12a1.29,1.29,0,1,0-1.28,1.28A1.28,1.28,0,0,0,27.77,90.12Z" />
                 <path d="M98.91,14.83a1.28,1.28,0,1,0-1.28,1.28A1.28,1.28,0,0,0,98.91,14.83Z" />
-              </SvgIconGold>
-              <GoldText>Gold</GoldText>
+              </MemberIcon>
+              <Grade className="gold">Gold</Grade>
               <ImageBorderFooter>연간 50박 숙박 시</ImageBorderFooter>
             </ImageBorder>
-            <MembershipUl>
-              <BoldTextLi>멤버십 쿠폰</BoldTextLi>
-              <MembershipLi>· 객실 15% 할인 쿠폰</MembershipLi>
-              <MembershipLi>· 다이닝 10% 할인 쿠폰</MembershipLi>
-            </MembershipUl>
-            <MembershipUl>
-              <BoldTextLi>멤버십 혜택</BoldTextLi>
-              <MembershipLi>· 전시 관람 혜택</MembershipLi>
-              <MembershipLi>· 투숙 중 무료 세탁 서비스</MembershipLi>
-              <MembershipLi>· 웰컴 어메니티 제공</MembershipLi>
-              <MembershipLi>· 체크인 시 한강뷰 업그레이드</MembershipLi>
-              <MembershipLi>· 체크인 시 객실 업그레이드</MembershipLi>
-              <MembershipLi>· 라운지 무료 이용(회원 포함 최대 2인)</MembershipLi>
-            </MembershipUl>
+            <Benefit>
+              <h4>멤버십 쿠폰</h4>
+              <ul>
+                <li>객실 15% 할인 쿠폰</li>
+                <li>다이닝 10% 할인 쿠폰</li>
+              </ul>
+              <h4>멤버십 혜택</h4>
+              <ul>
+                <li>전시 관람 혜택</li>
+                <li>투숙 중 무료 세탁 서비스</li>
+                <li>웰컴 어메니티 제공</li>
+                <li>체크인 시 한강뷰 업그레이드</li>
+                <li>체크인 시 객실 업그레이드</li>
+                <li>라운지 무료 이용(회원 포함 최대 2인)</li>
+              </ul>
+            </Benefit>
           </MembershipItemBox>
         </MembershipBox>
         <MembershipDetailInfo>
-          <p>* 상기 멤버십 서비스 혜택은 변경 및 종료될 수 있습니다.</p>
-          <p>* 특전의 세부 이용 조건은 약관을 통해 확인하실 수 있습니다.</p>
-          <p>* 등급 심사는 매월 1일 진행되며 최근 2년 간의 실적을 기준으로 합니다.</p>
+          <li>⁕&nbsp;&nbsp;상기 멤버십 서비스 혜택은 변경 및 종료될 수 있습니다.</li>
+          <li>⁕&nbsp;&nbsp;특전의 세부 이용 조건은 약관을 통해 확인하실 수 있습니다.</li>
+          <li>⁕&nbsp;&nbsp;등급 심사는 매월 1일 진행되며 최근 2년 간의 실적을 기준으로 합니다.</li>
         </MembershipDetailInfo>
-      </MembershipInfo>
+      </Container>
     </>
   );
 };

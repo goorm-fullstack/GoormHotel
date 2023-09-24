@@ -1,254 +1,190 @@
 import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import moment from 'moment';
-import { StyledCalendar } from '../../components/Reservation';
 import Item from '../../components/Item';
-import { commonContainerStyle, commonTitleStyle, commonSubTitleStyle } from '../../components/common/commonStyles';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Reservation from '../../components/Reservation';
+import {
+  commonContainerStyle,
+  PageTitle,
+  ContentsTitleXSmall,
+  SubmitBtn,
+  BtnWrapper,
+  AuthBtn,
+  InputCheckbox,
+  NormalBtn,
+  CheckLabel,
+  RequiredTitle,
+} from '../../components/common/commonStyles';
+import PrivacyContents from '../../components/PrivacyCon';
+import PaymentAgree from '../../components/PayAgree';
+import { AgreementText } from '../member/Signup';
 
-const Container = styled.div`
-  ${commonContainerStyle}
-`;
-
-const Title = styled.h1`
-  ${commonTitleStyle}
-`;
-
-const SubTitle = styled.h2`
-  ${commonSubTitleStyle}
-`;
+const Container = styled(commonContainerStyle)``;
 
 export const Wrapper = styled.div`
   display: flex;
+  width: 100%;
 `;
 
 export const Left = styled.div`
-  width: 770px;
-  margin-right: 29px;
+  width: 75%;
+  padding-right: 40px;
 `;
 
 export const Right = styled.div`
-  width: 380px;
-  height: 820px;
+  width: 25%;
 `;
 
 export const Section = styled.div`
-  margin-bottom: 53px;
-`;
+  margin-bottom: 50px;
 
-const ReservationInfoDate = styled.div`
-  display: flex;
-  margin-bottom: 19px;
-`;
+  &.privacy {
+    input {
+      height: 50px;
+      padding-left: 18px;
+    }
+    .flex {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 16px;
 
-const CheckIn = styled.div``;
+      input {
+        width: calc((100% - 32px) / 3);
+      }
+    }
+    .full input {
+      width: 100%;
+    }
+  }
 
-const CheckTitle = styled.p`
-  font-size: 14px;
-  margin-bottom: 11px;
-`;
-
-const CheckBtn = styled.button`
-  width: 380px;
-  height: 60px;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 20px;
-  align-items: center;
-  font-size: 18px;
-  border: 1px solid #ddd;
-  background-color: #fff;
-
-  svg {
-    fill: #102c57;
+  &.agreewrapper > div {
+    margin-bottom: 30px;
   }
 `;
 
-const CheckOut = styled(CheckIn)`
-  margin-left: 9px;
+export const CouponForm = styled.div`
+  margin-bottom: 20px;
+
+  form {
+    display: flex;
+    height: 50px;
+    justify-content: space-between;
+
+    input {
+      width: calc(100% - 210px);
+      padding-left: 18px;
+    }
+  }
 `;
 
-const CalendarContainer = styled.div`
-  position: relative;
-`;
+export const CouponInfo = styled.div`
+  table {
+    width: 100%;
+    border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
+    margin-top: 16px;
+  }
 
-const CalendarWrapper = styled.div`
-  z-index: 10;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  display: ${(props) => (props.open ? 'block' : 'none')};
-`;
+  td {
+    border-bottom: 1px solid ${(props) => props.theme.colors.graylightborder};
+    vertical-align: middle;
+    padding: 13px 0;
+    font-size: ${(props) => props.theme.font.sizes};
+    color: ${(props) => props.theme.colors.blacklight};
 
-const SelectContainer = styled.div`
-  display: flex;
-`;
+    &.right {
+      text-align: right;
+      color: ${(props) => props.theme.colors.charcoal};
+      font-weight: 500;
+      width: 20%;
+    }
 
-const SelectLabel = styled.label`
-  font-size: 14px;
-  margin-bottom: 10px;
-`;
-
-const Select = styled.select`
-  width: 250px;
-  height: 60px;
-  font-size: 20px;
-  text-align: center;
-  outline: none;
-  border: 1px solid #dddddd;
-  background-position: right 10px center;
-`;
-
-const SelectWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-right: 9px;
-`;
-
-const Input = styled.input`
-  height: 60px;
-  width: 770px;
-  outline: none;
-  margin-top: 10px;
-`;
-
-const NameInput = styled.input`
-  height: 60px;
-  width: 380px;
-`;
-
-const PhoneInput = styled(NameInput)`
-  margin-left: 10px;
-`;
-
-const InputWrapper = styled.div`
-  display: flex;
-`;
-
-const CouponForm = styled.form`
-  display: flex;
-  height: 60px;
-  font-size: 16px;
-  margin-bottom: 23px;
-`;
-
-const CouponInput = styled.input`
-  width: 580px;
-  padding-left: 21px;
-  margin-right: 10px;
-`;
-
-const CouponBtn = styled.button`
-  width: 180px;
-  background-color: #dddddd;
-  color: #777777;
-`;
-
-const CouponInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const CouponInfoWrapper = styled.div`
-  display: flex;
-  font-size: 16px;
-  justify-content: space-between;
-  padding: 11px 0;
-  border-bottom: ${({ $isFirst }) => ($isFirst ? 'none' : '1px solid #DDDDDD')};
-`;
-
-const CouponName = styled.p`
-  color: #666666;
-`;
-
-const CouponPrice = styled.p`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    label {
+      color: ${(props) => props.theme.colors.blacklight};
+      font-size: ${(props) => props.theme.font.sizes};
+    }
+  }
 `;
 
 const CouponSelect = styled.select`
   width: 100%;
-  height: 60px;
-  padding: 16px 20px;
-  outline: none;
-  font-size: 16px;
-
-  &:disabled {
-    color: #888888;
-    background-color: #ededed;
-  }
+  height: 50px;
+  font-size: ${(props) => props.theme.font.sizes};
+  background-position: 98% center;
 `;
 
-const PaymentBtn = styled.button`
-  background-color: #95846e;
-  color: #ffffff;
-  height: 60px;
-  width: 100%;
+export const OptionWrap = styled.div`
+  border: 1px solid ${(props) => props.theme.colors.grayborder};
+  padding: 45px 45px 46px;
+  display: flex;
+  justify-content: center;
 
-  &:hover {
-    background-color: #8a7057;
+  .reservedate::after {
+    margin: 0 47px 0 53px;
   }
-`;
 
-const RemoveButton = styled.button`
-  background-color: #bdbdbd;
-  cursor: pointer;
-  margin-left: 12px;
-  color: #fff;
-  border-radius: 100%;
-  padding: 4px;
-  text-align: center;
-  font-size: 11px;
+  .stay {
+    margin-left: 28px;
+    margin-right: 28px;
+  }
 
-  &:hover {
-    background-color: #21201e;
+  .option {
+    gap: 30px;
   }
 `;
 
 const ReservationPage = () => {
-  const [checkInValue, setCheckInValue] = useState(new Date());
-  const [checkOutValue, setCheckOutValue] = useState(new Date());
-  const [checkInOpen, setCheckInOpen] = useState(false);
-  const [checkOutOpen, setCheckOutOpen] = useState(false);
-  const [giftCardNumber, setGiftCardNumber] = useState("");
+  const [giftCardNumber, setGiftCardNumber] = useState('');
   const [memberData, setMemberData] = useState(null);
+
   // const [userLoggedIn, setUserLoggedIn] = useState(true);
   const userLoggedIn = false;
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState('');
   const location = useLocation();
-  const { reservationData, selectedProduct } = location.state;
-  const navigate  = useNavigate();
+  // const { reservationData, selectedProduct } = location.state;
+  const navigate = useNavigate();
   const [nights, setNights] = useState(1);
 
+  const selectedProduct = {};
+  const checkInDate = {};
+  const checkOutDate = {};
+  const rooms = {};
+  const adults = {};
+  const children = {};
+
   const [formData, setFormData] = useState({
-    checkIn: reservationData?.checkInDate || '',
-    checkOut: reservationData?.checkOutDate || '',
-    count: reservationData?.rooms || 1,
-    adult: reservationData?.adults || 1,
-    children: reservationData?.children || 0,
-    stay: reservationData?.nights,
-    name: "",
-    phone: "",
-    email: "",
-    notice: "",
+    // checkIn: reservationData?.checkInDate || '',
+    // checkOut: reservationData?.checkOutDate || '',
+    // count: reservationData?.rooms || 1,
+    // adult: reservationData?.adults || 1,
+    // children: reservationData?.children || 0,
+    // stay: reservationData?.nights,
+    name: '',
+    phone: '',
+    email: '',
+    notice: '',
     sumPrice: selectedProduct.price,
-    discountPrice : "0",
-    totalPrice: "12345",
+    discountPrice: '0',
+    totalPrice: '12345',
   });
 
+  const reservationData = {
+    checkInDate,
+    checkOutDate,
+    rooms,
+    adults,
+    children,
+    nights,
+  };
+
   useEffect(() => {
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       stay: nights,
     }));
   }, [nights, reservationData]);
 
-  const roomOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const adultOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const childrenOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   const [coupons, setCoupons] = useState([
     {
       name: '추석 맞이 특가 이벤트: 객실 금액 100,000원 할인 상품권',
@@ -266,79 +202,6 @@ const ReservationPage = () => {
       ...prevFormData,
       [field]: value,
     }));
-  };
-
-  useEffect(() => {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-
-    const formattedToday = formatAndSetDate(today);
-    const formattedTomorrow = formatAndSetDate(tomorrow);
-
-    //reservationData가 없을 경우에는 실시간으로 오늘 내일 날짜를 부여
-    if (!reservationData) {
-      setFormData((prevData) => ({
-        ...prevData,
-        checkIn: formattedToday,
-        checkOut: formattedTomorrow,
-      }));
-    }
-  }, []);
-
-  const formatAndSetDate = (date) => {
-    const formattedDate = moment(date).format('YYYY.MM.DD');
-    const dayOfWeek = moment(date).format('ddd');
-    return `${formattedDate} (${dayOfWeek})`;
-  };
-
-  const handleCheckInToggle = () => {
-    setCheckInOpen(!checkInOpen);
-    setCheckOutOpen(false);
-  };
-
-  const handleCheckOutToggle = () => {
-    setCheckOutOpen(!checkOutOpen);
-    setCheckInOpen(false);
-  };
-
-  const handleCheckInDateChange = (selectedDate) => {
-    setCheckInValue(selectedDate);
-    setCheckInOpen(false);
-    const formattedDate = moment(selectedDate).format('YYYY.MM.DD');
-    const dayOfWeek = moment(selectedDate).format('ddd');
-    const newCheckInDate = `${formattedDate} (${dayOfWeek})`;
-
-    const nightsDifference = moment(checkOutValue).diff(moment(selectedDate), 'days') + 1;
-
-    setFormData(prevData => ({
-      ...prevData,
-      checkIn: newCheckInDate,
-    }));
-    
-    setNights(nightsDifference);
-  };
-
-  const handleCheckOutDateChange = (selectedDate) => {
-    setCheckOutValue(selectedDate);
-    setCheckOutOpen(false);
-    const formattedDate = moment(selectedDate).format('YYYY.MM.DD');
-    const dayOfWeek = moment(selectedDate).format('ddd');
-    const newCheckOutDate = `${formattedDate} (${dayOfWeek})`;
-
-    const nightsDifference = moment(selectedDate).diff(moment(checkInValue), 'days') + 1;
-    console.log(nightsDifference);
-
-    setFormData(prevData => ({
-      ...prevData,
-      checkOut: newCheckOutDate,
-    }));
-
-    setNights(nightsDifference);
-  };
-
-  const isDateDisabled = (date) => {
-    return moment(date).isBefore(moment(), 'day');
   };
 
   const handleCouponNumber = (event) => {
@@ -363,7 +226,7 @@ const ReservationPage = () => {
         const response = await axios.get('http://127.0.0.1:8080/member');
         setMemberData(response.data);
       } catch (error) {
-        console.error('사용자 데이터를 불러오지 못했습니다.', error)
+        console.error('사용자 데이터를 불러오지 못했습니다.', error);
       }
     };
 
@@ -381,161 +244,94 @@ const ReservationPage = () => {
     const serverFormattedData = {
       ...formData,
       checkIn: formatDateForServer(formData.checkIn),
-      checkOut: formatDateForServer(formData.checkOut)
+      checkOut: formatDateForServer(formData.checkOut),
     };
 
     if (confirmed) {
       try {
-
         await axios.post(`http://127.0.0.1:8080/reservation/save?memberId=1`, serverFormattedData);
-  
+
         navigate('/');
         window.alert('예약이 완료되었습니다');
       } catch (error) {
         console.error('예약 요청 실패', error);
       }
     }
-  };  
+  };
 
   return (
     <div>
       <Container>
-        <Title>예약하기</Title>
+        <PageTitle>상품 예약</PageTitle>
         <Wrapper>
           <Left>
             <Section>
-              <SubTitle>예약 정보</SubTitle>
-              <ReservationInfoDate>
-                <CheckIn>
-                  <CheckTitle>체크인</CheckTitle>
-                  <CheckBtn onClick={handleCheckInToggle}>
-                    <p>{formData.checkIn}</p>
-                    <svg viewBox="0 0 32 32" width="18" height="18">
-                      <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
-                        <path d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z" />
-                        <rect x="7" y="12" width="4" height="3" />
-                        <rect x="7" y="17" width="4" height="3" />
-                        <rect x="7" y="22" width="4" height="3" />
-                        <rect x="14" y="22" width="4" height="3" />
-                        <rect x="14" y="17" width="4" height="3" />
-                        <rect x="14" y="12" width="4" height="3" />
-                        <rect x="21" y="22" width="4" height="3" />
-                        <rect x="21" y="17" width="4" height="3" />
-                        <rect x="21" y="12" width="4" height="3" />
-                      </g>
-                    </svg>
-                  </CheckBtn>
-                  <CalendarContainer>
-                    <CalendarWrapper open={checkInOpen}>
-                      <StyledCalendar
-                        tileDisabled={({ date }) => isDateDisabled(date)}
-                        onChange={handleCheckInDateChange}
-                        value={reservationData ? reservationData.checkInDate : checkInValue}
-                        formatDay={(locale, date) => moment(date).format('DD')}></StyledCalendar>
-                    </CalendarWrapper>
-                  </CalendarContainer>
-                </CheckIn>
-                <CheckOut>
-                  <CheckTitle>체크아웃</CheckTitle>
-                  <CheckBtn onClick={handleCheckOutToggle}>
-                    <p>{formData.checkOut}</p>
-                    <svg viewBox="0 0 32 32" width="18" height="18">
-                      <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
-                        <path d="M 29.334 3 H 25 V 1 c 0 -0.553 -0.447 -1 -1 -1 s -1 0.447 -1 1 v 2 h -6 V 1 c 0 -0.553 -0.448 -1 -1 -1 s -1 0.447 -1 1 v 2 H 9 V 1 c 0 -0.553 -0.448 -1 -1 -1 S 7 0.447 7 1 v 2 H 2.667 C 1.194 3 0 4.193 0 5.666 v 23.667 C 0 30.806 1.194 32 2.667 32 h 26.667 C 30.807 32 32 30.806 32 29.333 V 5.666 C 32 4.193 30.807 3 29.334 3 Z M 30 29.333 C 30 29.701 29.701 30 29.334 30 H 2.667 C 2.299 30 2 29.701 2 29.333 V 5.666 C 2 5.299 2.299 5 2.667 5 H 7 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.448 1 1 1 s 1 -0.447 1 -1 V 5 h 6 v 2 c 0 0.553 0.447 1 1 1 s 1 -0.447 1 -1 V 5 h 4.334 C 29.701 5 30 5.299 30 5.666 V 29.333 Z" />
-                        <rect x="7" y="12" width="4" height="3" />
-                        <rect x="7" y="17" width="4" height="3" />
-                        <rect x="7" y="22" width="4" height="3" />
-                        <rect x="14" y="22" width="4" height="3" />
-                        <rect x="14" y="17" width="4" height="3" />
-                        <rect x="14" y="12" width="4" height="3" />
-                        <rect x="21" y="22" width="4" height="3" />
-                        <rect x="21" y="17" width="4" height="3" />
-                        <rect x="21" y="12" width="4" height="3" />
-                      </g>
-                    </svg>
-                  </CheckBtn>
-                  <CalendarContainer>
-                    <CalendarWrapper open={checkOutOpen}>
-                      <StyledCalendar
-                        tileDisabled={({ date }) => isDateDisabled(date)}
-                        onChange={handleCheckOutDateChange}
-                        value={reservationData ? reservationData.checkOutDate : checkOutValue}
-                        formatDay={(locale, date) => moment(date).format('DD')}></StyledCalendar>
-                    </CalendarWrapper>
-                  </CalendarContainer>
-                </CheckOut>
-              </ReservationInfoDate>
-              <SelectContainer>
-                <SelectWrapper>
-                  <SelectLabel>상품수량</SelectLabel>
-                  <Select value={formData.count} onChange={(e) => setFormData({ ...formData, count: parseInt(e.target.value) })}>
-                    {roomOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </Select>
-                </SelectWrapper>
-                <SelectWrapper>
-                  <SelectLabel>어른</SelectLabel>
-                  <Select value={formData.adult} onChange={(e) => setFormData({ ...formData, adult: parseInt(e.target.value) })}>
-                    {adultOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </Select>
-                </SelectWrapper>
-                <SelectWrapper>
-                  <SelectLabel>어린이</SelectLabel>
-                  <Select value={formData.children} onChange={(e) => setFormData({ ...formData, children: parseInt(e.target.value) })}>
-                    {childrenOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </Select>
-                </SelectWrapper>
-              </SelectContainer>
+              <ContentsTitleXSmall>상품 상세 설정</ContentsTitleXSmall>
+              <OptionWrap>
+                <Reservation />
+              </OptionWrap>
+            </Section>
+
+            <Section className="privacy">
+              <ContentsTitleXSmall>고객 정보 입력</ContentsTitleXSmall>
+              <div className="flex">
+                <input placeholder="고객명" type="text" value={formData.name} onChange={(e) => handleChangeData('name', e)} required />
+                <input placeholder="연락처" type="text" value={formData.phone} onChange={(e) => handleChangeData('phone', e)} required />
+                <input placeholder="이메일" type="text" value={formData.email} onChange={(e) => handleChangeData('email', e)} required />
+              </div>
+              <div className="full">
+                <input placeholder="요청사항" type="text" value={formData.notice} onChange={(e) => handleChangeData('notice', e)} />
+              </div>
             </Section>
 
             <Section>
-              <SubTitle>예약자 정보</SubTitle>
-              <InputWrapper>
-                <NameInput placeholder="예약자명" type="text" value={formData.name} onChange={(e) => handleChangeData('name', e)} required />
-                <PhoneInput placeholder="전화번호" type="text" value={formData.phone} onChange={(e) => handleChangeData('phone', e)} required />
-              </InputWrapper>
-              <Input placeholder="이메일" type="text" value={formData.email} onChange={(e) => handleChangeData('email', e)} required/>
-              <Input placeholder="요청사항" type="text" value={formData.notice} onChange={(e) => handleChangeData('notice', e)} />
-            </Section>
-
-            <Section>
-              <SubTitle>상품권 등록</SubTitle>
+              <ContentsTitleXSmall>상품권 사용</ContentsTitleXSmall>
               <CouponForm>
-                <CouponInput type="text" placeholder="상품권 번호 입력" value={giftCardNumber} onChange={handleCouponNumber} />
-                <CouponBtn type="submit">상품권 등록하기</CouponBtn>
+                <form>
+                  <input type="text" placeholder="상품권 번호 입력" value={giftCardNumber} onChange={handleCouponNumber} />
+                  <AuthBtn type="submit">상품권 등록하기</AuthBtn>
+                </form>
               </CouponForm>
               <CouponInfo>
-                {coupons.map((coupon, index) => (
-                  <CouponInfoWrapper key={index} $isFirst={index === coupons.length - 1}>
-                    <CouponName>{coupon.name}</CouponName>
-                    <CouponPrice>
-                      {coupon.price}
-                      <RemoveButton onClick={() => handleRemoveCoupon(index)}>×</RemoveButton>
-                    </CouponPrice>
-                  </CouponInfoWrapper>
-                ))}
+                <BtnWrapper className="flexspace">
+                  <div>
+                    <CheckLabel>
+                      <InputCheckbox type="checkbox" /> 전체 선택
+                    </CheckLabel>
+                  </div>
+                  <BtnWrapper className="flexgap">
+                    <NormalBtn type="button" className="mini">
+                      선택 삭제
+                    </NormalBtn>
+                    <NormalBtn type="button" className="mini">
+                      전체 삭제
+                    </NormalBtn>
+                  </BtnWrapper>
+                </BtnWrapper>
+                <table>
+                  {coupons.map((coupon, index) => (
+                    <tr key={index}>
+                      <td>
+                        <CheckLabel>
+                          <InputCheckbox type="checkbox" />
+                          {coupon.name}
+                        </CheckLabel>
+                      </td>
+                      <td className="right">{coupon.price}</td>
+                    </tr>
+                  ))}
+                </table>
               </CouponInfo>
             </Section>
 
             <Section>
-              <SubTitle>쿠폰 적용</SubTitle>
+              <ContentsTitleXSmall>쿠폰 사용</ContentsTitleXSmall>
               <CouponSelect value={selectedOption} onChange={handleChange} disabled={!userLoggedIn}>
                 {userLoggedIn ? (
                   <>
-                    <option value="">쿠폰 선택</option>
-                    <option value="coupon1"> [Bronze 등급 혜택] 객실 5% 할인 쿠폰</option>
-                    <option value="coupon2"> [Silver 등급 혜택] 객실 10% 할인 쿠폰</option>
+                    <option value="">선택 안함</option>
+                    <option value="coupon1"> [Bronze 등급 혜택] 객실 5% 할인 쿠폰(-100,000원 적용)</option>
+                    <option value="coupon2"> [Bronze 등급 혜택] 객실 10% 할인 쿠폰(-150,000원 적용)</option>
                   </>
                 ) : (
                   <option disabled value="">
@@ -544,12 +340,48 @@ const ReservationPage = () => {
                 )}
               </CouponSelect>
             </Section>
+
+            <Section className="agreewrapper">
+              <ContentsTitleXSmall>약관 동의</ContentsTitleXSmall>
+              <div>
+                <RequiredTitle>
+                  <h4>
+                    개인정보처리방침 동의 <span>(필수)</span>
+                  </h4>
+                  <CheckLabel for="privacycheck">
+                    <InputCheckbox type="checkbox" id="privacycheck" required />
+                    동의합니다
+                  </CheckLabel>
+                </RequiredTitle>
+                <AgreementText className="forreserv">
+                  <PrivacyContents />
+                </AgreementText>
+              </div>
+              <div>
+                <RequiredTitle>
+                  <h4>
+                    취소 환불 수수료에 관한 동의 <span>(필수)</span>
+                  </h4>
+                  <CheckLabel for="privacycheck">
+                    <InputCheckbox type="checkbox" id="privacycheck" required />
+                    동의합니다
+                  </CheckLabel>
+                </RequiredTitle>
+                <AgreementText className="forreserv">
+                  <PaymentAgree />
+                </AgreementText>
+              </div>
+            </Section>
           </Left>
 
           <Right>
-            <SubTitle>상품 개요</SubTitle>
+            <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
             <Item selectedProduct={selectedProduct} />
-            <PaymentBtn onClick={handleReservation}>예약 및 결제하기</PaymentBtn>
+            <BtnWrapper className="full mt20">
+              <SubmitBtn type="submit" className="shadow" onClick={handleReservation}>
+                예약 및 결제하기
+              </SubmitBtn>
+            </BtnWrapper>
           </Right>
         </Wrapper>
       </Container>

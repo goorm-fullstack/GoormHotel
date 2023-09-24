@@ -4,16 +4,15 @@ import { styled } from 'styled-components';
 const MapContainer = styled.div`
   width: ${(props) => props.width || '100%'};
   height: ${(props) => props.height || '480px'};
-  border: 1px solid #ddd;
+  border: 1px solid ${(props) => props.theme.colors.grayborder};
 `;
 
 const KakaoMap = ({ width, height }) => {
-
   useEffect(() => {
     window.kakao.maps.load(() => {
       const container = document.getElementById('map');
       const options = {
-        center: new window.kakao.maps.LatLng(37.40254481282269, 127.1011263244144), 
+        center: new window.kakao.maps.LatLng(37.40254481282269, 127.1011263244144),
         level: 3, // 지도 초기 줌 레벨
       };
 
@@ -27,9 +26,7 @@ const KakaoMap = ({ width, height }) => {
     });
   }, []);
 
-  return (
-    <MapContainer id="map" width={width} height={height} />
-  );
+  return <MapContainer id="map" width={width} height={height} />;
 };
 
 export default KakaoMap;

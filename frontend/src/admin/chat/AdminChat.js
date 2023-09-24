@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import Instance from '../../utils/api/axiosInstance';
 
 const Container = styled.div`
   width: 100%;
@@ -142,6 +143,55 @@ const TableCheckbox = styled.input`
 
 const AdminChat = () => {
   const [checkedItems, setCheckedItems] = useState([]);
+  const [chatData, setChatData] = useState([
+    {
+      id: 3,
+      number: 3,
+      chatMessages : [
+        {
+          memberId: 'user001',
+          name: '홍길동',
+          lastChat: '마지막 채팅 내용입니다.',
+          lastDate: '2023.09.03',
+        }
+      ],
+      state: '미확인',
+    },
+    {
+      id: 2,
+      number: 2,
+      chatMessages : [
+        {
+          memberId: 'user001',
+          name: '홍길동',
+          lastChat: '마지막 채팅 내용입니다.',
+          lastDate: '2023.09.03',
+        }
+      ],
+      state: '종료',
+    },
+    {
+      id: 1,
+      number: 1,
+      chatMessages : [
+        {
+          memberId: 'user001',
+          name: '홍길동',
+          lastChat: '마지막 채팅 내용입니다.',
+          lastDate: '2023.09.03',
+        }
+      ],
+      state: '종료',
+    },
+  ])
+
+  useEffect(()=> {
+    Instance.get("/chat/getLastMessage")
+      .then((response) =>{
+        console.log(response.data);
+        setChatData(response.data)
+      })
+  },[])
 
   const handleCheckboxChange = (memberId) => {
     setCheckedItems((prevItems) => {
@@ -155,36 +205,6 @@ const AdminChat = () => {
 
   console.log(checkedItems);
 
-  const chatData = [
-    {
-      id: 3,
-      number: 3,
-      memberId: 'user001',
-      name: '홍길동',
-      lastChat: '마지막 채팅 내용입니다.',
-      lastDate: '2023.09.03',
-      state: '미확인',
-    },
-    {
-      id: 2,
-      number: 2,
-      memberId: 'user002',
-      name: '홍구름',
-      lastChat: '마지막 채팅 내용입니다.',
-      lastDate: '2023.09.03',
-      state: '종료',
-    },
-    {
-      id: 1,
-      number: 1,
-      memberId: 'user003',
-      name: '김구름',
-      lastChat:
-        '마지막 채팅 내용입니다. 마지막 채팅 내용입니다. 마지막 채팅 내용입니다. 마지막 채팅 내용입니다.마지막 채팅 내용입니다. 마지막 채팅 내용입니다. 마지막 채팅 내용입니다. 마지막 채팅 내용입니다.',
-      lastDate: '2023.09.04',
-      state: '종료',
-    },
-  ];
 
   const subMenus = [
     { name: '채팅 관리', link: '/admin/chat' },
@@ -228,31 +248,31 @@ const AdminChat = () => {
           </thead>
           <tbody>
             {chatData.length === 0 && <TableCell colSpan="7">채팅 메시지 기록이 없습니다.</TableCell>}
-            {chatData.map((item) => (
+            {chatData.map((item, index) => (
               <tr key={item.id}>
                 <TableCell>
                   <TableCheckbox
                     type="checkbox"
-                    checked={checkedItems.includes(item.memberId)}
-                    onChange={() => handleCheckboxChange(item.memberId)}
+                    checked={checkedItems.includes(item.chatMessages.memberId)}
+                    onChange={() => handleCheckboxChange(item.chatMessages.memberId)}
                   />
                 </TableCell>
-                <TableCell>{item.number}</TableCell>
+                <TableCell>{index+1}</TableCell>
                 <TableCell>
-                  {item.name}(
-                  <Link to={`/admin/member/${item.memberId}`} className="memberId">
-                    {item.memberId}
+                  {item.chatMessages.name}(
+                  <Link to={`/admin/member/${item.chatMessages[0].sender}`} className="memberId">
+                    {item.chatMessages[0].sender}
                   </Link>
                   )
                 </TableCell>
                 <TableCell className="lastChat">
                   <p>
-                    <Link to={`/admin/chat/${item.memberId}`}>{item.lastChat}</Link>
+                    <Link to={`/admin/chat/${item.roomId}`}>{item.chatMessages[0].message}</Link>
                   </p>
-                  <div className="allMessage">{item.lastChat}</div>
+                  <div className="allMessage">{item.chatMessages[0].message}</div>
                 </TableCell>
-                <TableCell>{item.lastDate}</TableCell>
-                <TableCell>{item.state}</TableCell>
+                <TableCell>{item.timestamp}</TableCell>
+                <TableCell>{item.status}</TableCell>
               </tr>
             ))}
           </tbody>

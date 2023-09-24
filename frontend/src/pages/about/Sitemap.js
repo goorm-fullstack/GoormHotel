@@ -1,20 +1,11 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { commonContainerStyle } from '../../components/common/commonStyles';
+import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
 
-const Container = styled.div`
-  ${commonContainerStyle}
-`;
+const Container = styled(commonContainerStyle)``;
 
 const SiteMap = styled.div``;
-
-const Title = styled.p`
-  font-size: 36px;
-  font-weight: bold;
-  color: rgb(17, 17, 17);
-  margin-bottom: 100px;
-`;
 
 const Items = styled.div`
   display: flex;
@@ -25,22 +16,19 @@ const Items = styled.div`
 `;
 
 const SubTitle = styled.p`
-  font-size: 22px;
+  font-size: ${(props) => props.theme.font.sizesl};
   font-weight: 500;
   width: 340px;
   padding-bottom: 20px;
   margin-bottom: 20px;
-  border-bottom: 1px solid rgb(221, 221, 221);
+  border-bottom: 1px solid ${(props) => props.theme.colors.grayborder};
 `;
 
 const List = styled.li`
-  font-size: 18px;
-  font-weight: 400;
-  color: rgb(102, 102, 102);
+  color: ${(props) => props.theme.colors.graylight};
   line-height: 1.8;
-  &:hover {
-    color: rgb(186, 160, 133);
-    cursor: pointer;
+  & > a:hover {
+    color: ${(props) => props.theme.colors.goldhover};
   }
 `;
 
@@ -52,95 +40,87 @@ const Sitemap = () => {
   return (
     <>
       <Container>
-        <SiteMap>
-          <Title>사이트맵</Title>
-          <Items>
-            <ul>
-              <SubTitle>
-                <SiteMapLink to="/">구름호텔 소개</SiteMapLink>
-              </SubTitle>
-              <List>
-                <SiteMapLink to="/">호텔 소개</SiteMapLink>
-              </List>
-              <List>
-                <SiteMapLink to="/">오시는 길</SiteMapLink>
-              </List>
-            </ul>
-            <ul>
-              <SubTitle>
-                <SiteMapLink to="/">시설 소개</SiteMapLink>
-              </SubTitle>
-              <List>
-                <SiteMapLink to="/">객식</SiteMapLink>
-              </List>
-              <List>
-                <SiteMapLink to="/">다이닝</SiteMapLink>
-              </List>
-              <List>
-                <SiteMapLink to="/">부대시설</SiteMapLink>
-              </List>
-            </ul>
-            <ul>
-              <SubTitle>
-                <SiteMapLink to="/">스페셜 오퍼</SiteMapLink>
-              </SubTitle>
-              <List>
-                <SiteMapLink to="/">패키지/프로모션</SiteMapLink>
-              </List>
-              <List>
-                <SiteMapLink to="/">객실/다이닝 예약</SiteMapLink>
-              </List>
-              <List>
-                <SiteMapLink to="/">예약확인</SiteMapLink>
-              </List>
-            </ul>
-            <ul>
-              <SubTitle>
-                <SiteMapLink to="/">고객 지원</SiteMapLink>
-              </SubTitle>
-              <List>
-                <SiteMapLink to="/">공지사항</SiteMapLink>
-              </List>
-              <List>
-                <SiteMapLink to="/">문의하기</SiteMapLink>
-              </List>
-              <List>
-                <SiteMapLink to="/">이용후기</SiteMapLink>
-              </List>
-            </ul>
-            <ul>
-              <SubTitle>
-                <SiteMapLink to="/">마이 페이지</SiteMapLink>
-              </SubTitle>
-              <List>
-                <SiteMapLink to="/">로그인</SiteMapLink>
-              </List>
-              <List>
-                <SiteMapLink to="/">회원가입</SiteMapLink>
-              </List>
-              <List>
-                <SiteMapLink to="/">회원정보수정</SiteMapLink>
-              </List>
-              <List>
-                <SiteMapLink to="/">멤버십 소개</SiteMapLink>
-              </List>
-              <List>
-                <SiteMapLink to="/">쿠폰</SiteMapLink>
-              </List>
-            </ul>
-            <ul>
-              <SubTitle>
-                <SiteMapLink to="/">약관안내</SiteMapLink>
-              </SubTitle>
-              <List>
-                <SiteMapLink to="/">이용약관</SiteMapLink>
-              </List>
-              <List>
-                <SiteMapLink to="/">개인정보처리방침</SiteMapLink>
-              </List>
-            </ul>
-          </Items>
-        </SiteMap>
+        <PageTitle>사이트맵</PageTitle>
+        <Items>
+          <ul>
+            <SubTitle>
+              <SiteMapLink to="/about">구름호텔 소개</SiteMapLink>
+            </SubTitle>
+            <List>
+              <SiteMapLink to="/about">호텔 소개</SiteMapLink>
+            </List>
+            <List>
+              <SiteMapLink to="/location">오시는 길</SiteMapLink>
+            </List>
+          </ul>
+          <ul>
+            <SubTitle>
+              <SiteMapLink to="/rooms">시설 소개</SiteMapLink>
+            </SubTitle>
+            <List>
+              <SiteMapLink to="/rooms">객실</SiteMapLink>
+            </List>
+            <List>
+              <SiteMapLink to="/dining">다이닝</SiteMapLink>
+            </List>
+            <List>
+              <SiteMapLink to="/facilities">부대시설</SiteMapLink>
+            </List>
+          </ul>
+          <ul>
+            <SubTitle>
+              <SiteMapLink to="/offers">스페셜오퍼</SiteMapLink>
+            </SubTitle>
+            <List>
+              <SiteMapLink to="/offers">스페셜오퍼</SiteMapLink>
+            </List>
+            <List>
+              <SiteMapLink to="/login?type=reservation">예약확인</SiteMapLink>
+            </List>
+          </ul>
+          <ul>
+            <SubTitle>
+              <SiteMapLink to="/board/notice">고객지원</SiteMapLink>
+            </SubTitle>
+            <List>
+              <SiteMapLink to="/board/notice">공지사항</SiteMapLink>
+            </List>
+            <List>
+              <SiteMapLink to="/board/qna">문의하기</SiteMapLink>
+            </List>
+            <List>
+              <SiteMapLink to="/board/review">이용후기</SiteMapLink>
+            </List>
+          </ul>
+          <ul>
+            <SubTitle>
+              <SiteMapLink to="/mypage">마이페이지</SiteMapLink>
+            </SubTitle>
+            <List>
+              <SiteMapLink to="/login">로그인</SiteMapLink>
+            </List>
+            <List>
+              <SiteMapLink to="/signup">회원가입</SiteMapLink>
+            </List>
+            <List>
+              <SiteMapLink to="/mypage">마이페이지</SiteMapLink>
+            </List>
+            <List>
+              <SiteMapLink to="/membership">멤버십 소개</SiteMapLink>
+            </List>
+          </ul>
+          <ul>
+            <SubTitle>
+              <SiteMapLink to="/agreement">약관 안내</SiteMapLink>
+            </SubTitle>
+            <List>
+              <SiteMapLink to="/agreement">이용약관</SiteMapLink>
+            </List>
+            <List>
+              <SiteMapLink to="/privacy">개인정보처리방침</SiteMapLink>
+            </List>
+          </ul>
+        </Items>
       </Container>
     </>
   );
