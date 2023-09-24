@@ -4,6 +4,7 @@ import goormknights.hotel.item.model.Room;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class RequestRoomDto {
 
     @NotBlank
+    @Size(min = 1, max = 13, message = "상품명은 13자 이하이어야 합니다.")
     private String name; // 상품명
 
     @Positive

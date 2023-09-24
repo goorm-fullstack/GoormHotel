@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class RequestDiningDto {
 
     @NotBlank
-    @Size(min = 1, max = 13)
+    @Size(min = 1, max = 13, message = "상품명은 13자 이하이어야 합니다.")
     private String name; // 상품명
 
     @Positive
