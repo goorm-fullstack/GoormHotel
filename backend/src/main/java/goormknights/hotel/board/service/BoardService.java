@@ -12,9 +12,11 @@ import goormknights.hotel.report.dto.response.ResponseReportDto;
 import goormknights.hotel.report.model.Report;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
-import java.sql.Array;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -180,11 +182,19 @@ public class BoardService {
         return boardRepository.save(board);
     }
 
-    //게시물 소프트 삭제
-//    public Board softdeleteBoard(Long boardId, RequestBoardDto requestBoardDto) {
-//        Board beforeBoard = boardRepository.findByBoardIdAndBoardDelete(boardId, false);
-//        Board afterBoard = beforeBoard.updateBoard(boardId, requestBoardDto);
-//
-//        return boardRepository.save(afterBoard);
-//    }
+    //게시물 소프트딜리트
+    public Board softdeleteBoard(Long boardId) {
+        Board board = boardRepository.findByBoardIdAndBoardDelete(boardId, false);
+
+        String datePattern = "yyyy-MM-dd'T'HH:mm:ss";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(datePattern);
+        String now = LocalDateTime.now().format(formatter);
+        LocalDateTime boardDeleteTime = LocalDateTime.parse(now, formatter);
+        board.setBoardDeleteTime(boardDeleteTime);
+        board.setBoardDelete(true);
+
+        return boardRepository.save(board);
+
+    }
+
 }

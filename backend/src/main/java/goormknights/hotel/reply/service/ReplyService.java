@@ -1,5 +1,6 @@
 package goormknights.hotel.reply.service;
 
+import goormknights.hotel.board.dto.request.RequestBoardDto;
 import goormknights.hotel.board.dto.response.ResponseBoardDto;
 import goormknights.hotel.board.model.Board;
 import goormknights.hotel.board.repository.BoardRepository;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,7 +120,22 @@ public class ReplyService {
         Reply reply = replyRepository.findByReplyIdAndReplyDelete(boardId, true);
         if(reply!=null){
             reply.setReplyDelete(false);
+            reply.setReplyDeleteTime(null);
         }
         return replyRepository.save(reply);
     }
+
+    public Reply softdeleteReply(Long replyId) {
+        Reply reply = replyRepository.findByReplyIdAndReplyDelete(replyId, false);
+
+        String datePattern = "yyyy-MM-dd'T'HH:mm:ss";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(datePattern);
+        String now = LocalDateTime.now().format(formatter);
+        LocalDateTime replyDeleteTime = LocalDateTime.parse(now, formatter);
+        reply.setReplyDeleteTime(replyDeleteTime);
+        reply.setReplyDelete(true);
+
+        return replyRepository.save(reply);
+    }
+
 }

@@ -128,4 +128,24 @@ public class BoardController {
         return ResponseEntity.ok(allByCategory);
     }
 
+    //게시물 소프트딜리트
+    @PutMapping("/softdelete/{boardId}")
+    public ResponseEntity<Object> softdeleteBoard(@PathVariable Long boardId, @RequestBody RequestBoardDto requestBoardDto) {
+        Board board = boardService.softdeleteBoard(boardId);
+
+        return ResponseEntity.ok(board.toResponseBoardDto());
+    }
+
+//    public ResponseEntity<Object> createBoard(@ModelAttribute RequestBoardDto requestBoardDto, @RequestParam MultipartFile multipartFile) throws IOException {
+//        RequestImageDto requestImageDto = boardImageService.requestImageDto(multipartFile);
+//
+//        boardService.create(requestBoardDto, requestImageDto);
+//        return ResponseEntity.ok().build();
+//    }
+
+//    public ResponseEntity<ResponseBoardDto> updateBoard(@PathVariable Long boardId, @RequestBody RequestBoardDto requestBoardDto) {
+//        Board board = boardService.updateBoard(boardId, requestBoardDto, false);
+//
+//        return ResponseEntity.ok(board.toResponseBoardDto());
+//    }
 }

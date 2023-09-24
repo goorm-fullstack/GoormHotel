@@ -55,11 +55,14 @@ public class Board {
     @Column(nullable = false)
     private String category;        //게시판-카테고리
 
+    @Setter
+    private LocalDateTime boardDeleteTime;      //게시글 삭제 날짜
+
 //    @ManyToOne
 //    private Member member;
 
     @Builder(toBuilder = true)
-    public Board(Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, String boardTitle, String category) {
+    public Board(Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, String boardTitle, String category, LocalDateTime boardDeleteTime) {
         this.boardId = boardId;
         this.title = title;
         this.boardContent = boardContent;

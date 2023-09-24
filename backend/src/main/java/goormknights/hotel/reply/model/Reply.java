@@ -35,6 +35,9 @@ public class Reply {
     @Setter
     private boolean replyDelete = false;
 
+    @Setter
+    private LocalDateTime replyDeleteTime;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;        //게시글

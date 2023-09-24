@@ -1,5 +1,6 @@
 package goormknights.hotel.reply.controller;
 
+import goormknights.hotel.board.dto.request.RequestBoardDto;
 import goormknights.hotel.board.dto.response.ResponseBoardDto;
 import goormknights.hotel.board.model.Board;
 import goormknights.hotel.reply.dto.request.RequestReplyDto;
@@ -72,9 +73,16 @@ public class ReplyController {
     }
 
     //소프트딜리트 복원
-    @PostMapping("/undeleted/{replyId}")
+    @PutMapping("/undeleted/{replyId}")
     public ResponseEntity<ResponseReplyDto> undeleted(@PathVariable Long replyId) {
         Reply reply = replyService.undeleted(replyId);
+
+        return ResponseEntity.ok(reply.toResponseReplyDto());
+    }
+
+    @PutMapping("/softdelete/{replyId}")
+    public ResponseEntity<Object> softdeleteReply(@PathVariable Long replyId) {
+        Reply reply = replyService.softdeleteReply(replyId);
 
         return ResponseEntity.ok(reply.toResponseReplyDto());
     }
