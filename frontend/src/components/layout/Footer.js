@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
-import { DetailBtn, DetailSvg } from '../../pages/Home';
 import { Link } from 'react-router-dom';
+import { MoreBtn, commonWrapperStyle, BtnWrapper } from '../common/commonStyles';
 import instagramImg from '../../images/common/social_instagram.png';
 import youtubeImg from '../../images/common/social_youtube.png';
 import owlImg from '../../images/common/social_owl.png';
@@ -10,15 +10,14 @@ import youtubeImgHover from '../../images/common/social_youtube_hover.png';
 import owlImgHover from '../../images/common/social_owl_hover.png';
 
 const Container = styled.div`
-  margin-top: 220px;
+  margin-top: 150px;
   width: 100%;
-  height: 100%;
-  min-width: 1180px;
+  font-size: ${(props) => props.theme.font.sizexs};
+  color: ${(props) => props.theme.colors.graylight};
 `;
 
 const NewsLetterContainer = styled.div`
-  height: 200px;
-  background-color: ${(props) => props.theme.colors.lightGray};
+  background-color: ${(props) => props.theme.colors.graybg};
   padding: 60px 0;
   width: 100%;
 `;
@@ -29,173 +28,124 @@ const FooterContainer = styled.div`
   background-color: ${(props) => props.theme.colors.charcoal};
 `;
 
-const NewsLetterWrapper = styled.div`
-  display: flex;
-  margin: 0 auto;
-  width: 1220px;
+const NewsLetterWrapper = styled(commonWrapperStyle)`
+  & > form {
+    display: flex;
+    justify-content: space-between;
+  }
 `;
 
-const Title = styled.h1`
-  min-width: 200px;
-  font-size: 24px;
-  color: #baa085;
-  margin-right: 38px;
-  margin-top: 10px;
-  font-family: 'Marcellus', serif;
-`;
-
-const EmailForm = styled.form`
-  display: flex;
+const NewsTitle = styled.h3`
+  width: 240px;
+  font-size: ${(props) => props.theme.font.sizel};
+  line-height: 50px;
+  color: ${(props) => props.theme.colors.goldhover};
+  font-family: ${(props) => props.theme.font.family};
 `;
 
 const EmailInput = styled.input`
-  width: 800px;
+  width: 715px;
   height: 50px;
-  color: #888888;
-  margin-right: 21px;
+  color: ${(props) => props.theme.colors.graylight};
   margin-bottom: 10px;
-  padding-left: 24px;
-  outline: none;
+  padding-left: 16px;
 `;
 
-const SubscribeBtn = styled(DetailBtn)`
+const SubscribeBtn = styled(MoreBtn)`
   height: 50px;
-  min-width: 160px;
-
-  &:hover {
-    background-color: #8a7057;
-  }
 `;
 
-const DetailBtnTitle = styled.p`
-  margin-right: 20px;
-`;
-
-const Terms = styled.div`
-  font-size: 14px;
-  color: #888888;
+const Terms = styled.p`
+  font-size: ${(props) => props.theme.font.sizexs};
   display: flex;
   align-items: center;
-`;
-
-const TermsDescription = styled.p`
-  margin-right: 5px;
+  letter-spacing: -0.02em;
 `;
 
 const TermsLink = styled(Link)`
-  padding: 5px;
-  background-color: #102c57;
+  padding: 4px 6px;
+  background-color: ${(props) => props.theme.colors.navy};
   color: white;
-  font-size: 12px;
-`;
-
-const FirstFooter = styled.div`
-  display: flex;
-  padding: 60px 0 60px 0;
-  border-bottom: 1px solid #2c2b29;
-  width: 1220px;
-  margin: 0 auto;
-`;
-
-const FooterTitle = styled.h1`
-  font-size: 14px;
-  margin-bottom: 25px;
-  font-weight: bold;
-  color: #95846e;
-`;
-
-const PhoneNumber = styled.div`
-  display: flex;
-  font-size: 13px;
-  color: white;
-  margin-bottom: 16px;
-  color: rgba(255, 255, 255, 0.7);
-`;
-
-const Tell = styled.div`
-  font-size: 18px;
+  font-size: ${(props) => props.theme.font.sizexxxs};
   margin-left: 10px;
+`;
 
-  &:hover {
-    color: #ffffff;
+const FooterInfo = styled.div`
+  padding: 50px 0;
+
+  &.cs {
+    border-bottom: 1px solid #2c2b29;
   }
 `;
 
-const RoomNumber = styled.div`
+const FooterWrapper = styled(commonWrapperStyle)`
   display: flex;
-  align-items: center;
-`;
-
-const InquiryNumber = styled(RoomNumber)`
-  margin-left: 54px;
-`;
-const FaxEmail = styled.div`
-  display: flex;
-  color: #888888;
-  font-size: 13px;
-`;
-
-const Fax = styled.div`
-  margin-right: 20px;
-`;
-
-const Email = styled.div``;
-
-const SecondFooter = styled.div`
-  display: flex;
-  width: 1220px;
-  margin: 0 auto;
-  font-size: 13px;
-  color: #888888;
-  padding: 60px 0;
-`;
-
-const SiteLinkWrapeer = styled.div`
-  display: flex;
-  flex-direction: column;
   justify-content: space-between;
-  height: 65px;
-`;
 
-const SiteLink = styled.div`
-  &:hover {
-    color: #fff;
+  & > div {
+    min-width: 380px;
   }
 `;
 
-const StyledText = styled.span`
-  margin: 0 80px;
-`;
-
-const SocialWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const SocialTitle = styled.h1`
-  font-size: 14px;
+const FooterCsTitle = styled.h3`
+  margin-bottom: 28px;
   font-weight: bold;
-  color: #baa085;
-  margin-bottom: 24px;
+  color: ${(props) => props.theme.colors.goldhover};
 `;
 
-const FirstFooterLeft = styled.div`
-  flex: 1;
-`;
-
-const FirstFooterWrapper = styled.div`
-  width: 959px;
+const ContactInfo = styled.ul`
   display: flex;
+  margin-bottom: 16px;
+
+  &.tel {
+    color: white;
+  }
+  &.tel li {
+    display: flex;
+    align-items: center;
+  }
+  &.tel a {
+    font-size: ${(props) => props.theme.font.sizem};
+    margin-left: 10px;
+  }
+  & > li {
+    margin-right: 25px;
+  }
+  & > li a {
+    margin-left: 5px;
+  }
+  & > li a:hover {
+    color: white;
+  }
 `;
 
-const SocialIcon = styled.div`
-  display: flex;
-  align-items: center;
+const SiteLinkWrapeer = styled.ul`
+  display: grid;
+  grid-template-columns: 140px 140px;
+  padding-right: 60px;
+
+  li {
+    line-height: 1.7;
+  }
+  a:hover {
+    color: white;
+  }
+`;
+
+const CompanykWrapeer = styled.div`
+  line-height: 1.7;
+  width: calc(100% - 320px);
+
+  a:hover {
+    color: white;
+  }
+  span {
+    margin-right: 10px;
+  }
 `;
 
 const SocialLink = styled.a`
   display: inline-block;
-  cursor: pointer;
   width: 34px;
   height: 34px;
   background-size: cover;
@@ -206,31 +156,16 @@ const SocialLink = styled.a`
   }
 
   &:not(:last-child) {
-    margin-right: 24px;
+    margin-right: 25px;
   }
-`;
 
-const YoutubeLink = styled(SocialLink)`
-  width: 22px;
-`;
-
-const OwlLink = styled(SocialLink)`
-  width: 54px;
-`;
-
-const Name = styled.a`
-  color: inherit;
-  font: inherit;
-  text-decoration: none;
-
-  &:hover {
-    color: white;
+  &.youtube {
+    width: 22px;
   }
-`;
 
-const TextStyle = styled.span`
-  margin-right: 20px;
-  display: inline;
+  &.trip {
+    width: 54px;
+  }
 `;
 
 const Footer = () => {
@@ -244,174 +179,147 @@ const Footer = () => {
     <Container>
       <NewsLetterContainer>
         <NewsLetterWrapper>
-          <Title>E-NEWS LETTER</Title>
-          <div>
-            <EmailForm onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
+            <NewsTitle>E-NEWS LETTER</NewsTitle>
+            <div>
               <EmailInput
                 placeholder="이메일을 입력해주세요. (example@email.com)"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <SubscribeBtn type="submit">
-                <DetailBtnTitle>구독 신청</DetailBtnTitle>
-                <DetailSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                  <title />
-                  <g data-name="Layer 2" id="Layer_2">
-                    <path d="M22,9a1,1,0,0,0,0,1.42l4.6,4.6H3.06a1,1,0,1,0,0,2H26.58L22,21.59A1,1,0,0,0,22,23a1,1,0,0,0,1.41,0l6.36-6.36a.88.88,0,0,0,0-1.27L23.42,9A1,1,0,0,0,22,9Z" />
-                  </g>
-                </DetailSvg>
-              </SubscribeBtn>
-            </EmailForm>
-            <Terms>
-              <TermsDescription>뉴스레터 발송을 위한 개인 정보 수집 및 이용에 동의합니다.</TermsDescription>
-              <TermsLink to="/agreement">약관 상세보기</TermsLink>
-            </Terms>
-          </div>
+              <Terms>
+                뉴스레터 발송을 위한 개인 정보 수집 및 이용에 동의합니다.<TermsLink to="/agreement">약관 상세보기</TermsLink>
+              </Terms>
+            </div>
+            <BtnWrapper className="right">
+              <SubscribeBtn type="submit">구독 신청하기</SubscribeBtn>
+            </BtnWrapper>
+          </form>
         </NewsLetterWrapper>
       </NewsLetterContainer>
       <FooterContainer>
-        <FirstFooter>
-          <FirstFooterWrapper>
-            <FirstFooterLeft>
-              <FooterTitle>CUSTOMER CENTER</FooterTitle>
-              <PhoneNumber>
-                <RoomNumber>
-                  <p>객실예약</p>
-                  <Tell>
-                    <a href="tel:031-600-8586">031-600-8586</a>
-                  </Tell>
-                </RoomNumber>
-                <InquiryNumber>
-                  <p>문의하기</p>
-                  <Tell>
-                    <a href="tel:031-600-8586">031-600-8586</a>
-                  </Tell>
-                </InquiryNumber>
-              </PhoneNumber>
-              <FaxEmail>
-                <Fax>FAX&nbsp; 000-0000-0000</Fax>
-                <Email>
-                  이메일&nbsp; <a href="mailto:contact@goorm.io">contact@goorm.io</a>
-                </Email>
-              </FaxEmail>
-            </FirstFooterLeft>
-            <SocialWrapper>
-              <SocialTitle>SOCIAL</SocialTitle>
-              <SocialIcon>
+        <FooterInfo className="cs">
+          <FooterWrapper>
+            <div>
+              <FooterCsTitle>CUSTOMER CENTER</FooterCsTitle>
+              <ContactInfo className="tel">
+                <li>
+                  객실예약 <a href="tel:031-600-8585">031-600-8585</a>
+                </li>
+                <li>
+                  문의하기 <a href="tel:031-600-8586">031-600-8586</a>
+                </li>
+              </ContactInfo>
+              <ContactInfo>
+                <li>
+                  FAX <a href="fax:031-600-8587">031-600-8587</a>
+                </li>
+                <li>
+                  이메일 <a href="mailto:contact@goorm.io">contact@goorm.io</a>
+                </li>
+              </ContactInfo>
+            </div>
+            <div>
+              <FooterCsTitle>SOCIAL</FooterCsTitle>
+              <div>
                 <SocialLink
                   href="https://www.instagram.com/goorm.co/"
                   target="_blank"
                   rel="noopener noreferrer"
                   $imageUrl={instagramImg}
                   $hoverUrl={instagramImgHover}></SocialLink>
-                <YoutubeLink
+                <SocialLink
+                  className="youtube"
                   href="https://www.youtube.com/@goorm"
                   target="_blank"
                   rel="noopener noreferrer"
                   $imageUrl={youtubeImg}
-                  $hoverUrl={youtubeImgHover}></YoutubeLink>
-                <OwlLink
+                  $hoverUrl={youtubeImgHover}></SocialLink>
+                <SocialLink
+                  className="trip"
                   href="https://www.tripadvisor.co.kr/"
                   target="_blank"
                   rel="noopener noreferrer"
                   $imageUrl={owlImg}
-                  $hoverUrl={owlImgHover}></OwlLink>
-              </SocialIcon>
-            </SocialWrapper>
-          </FirstFooterWrapper>
-        </FirstFooter>
-        <SecondFooter>
-          <SiteLinkWrapeer>
-            <SiteLink>
-              <Link to="/about">호텔소개</Link>
-            </SiteLink>
-            <SiteLink>
-              <Link to="/location">오시는길</Link>
-            </SiteLink>
-            <SiteLink>
-              <Link to="/board/qna">문의하기</Link>
-            </SiteLink>
-          </SiteLinkWrapeer>
-          <StyledText>
-            <SiteLinkWrapeer>
-              <SiteLink>
-                <Link to="/agreement">이용약관</Link>
-              </SiteLink>
-              <SiteLink>
-                <Link to="/privacy">개인정보처리방침</Link>
-              </SiteLink>
-              <SiteLink>
-                <Link to="/sitemap">사이트맵</Link>
-              </SiteLink>
-            </SiteLinkWrapeer>
-          </StyledText>
-          <SiteLinkWrapeer>
-            <div>
-              <TextStyle>(주)어벤저스</TextStyle>
-              <TextStyle>경기도 성남시 분당구 판교로 242 PDC A동 902호</TextStyle>
-              <TextStyle>사업자 등록번호 124-87-39200</TextStyle>
-              통신판매업 신고 번호 제2019-성남분당B-0224호
+                  $hoverUrl={owlImgHover}></SocialLink>
+              </div>
             </div>
-            <p>
-              대표이사 :{' '}
-              <Name href="https://github.com/WhiteKIM" target="_blank" rel="noopener noreferrer">
-                김경규
-              </Name>
-              ,{' '}
-              <Name href="https://github.com/soheetech" target="_blank" rel="noopener noreferrer">
-                문소희
-              </Name>
-              ,{' '}
-              <Name href="https://github.com/parkjikuk" target="_blank" rel="noopener noreferrer">
-                박지국
-              </Name>
-              ,{' '}
-              <Name href="https://github.com/JinhwanB" target="_blank" rel="noopener noreferrer">
-                배진환
-              </Name>
-              ,{' '}
-              <Name href="https://github.com/LEE-Donggyu" target="_blank" rel="noopener noreferrer">
-                이동규
-              </Name>
-              ,{' '}
-              <Name href="https://github.com/yss1902" target="_blank" rel="noopener noreferrer">
-                <TextStyle>전민종</TextStyle>
-              </Name>
-              <TextStyle>
-                <a href="tel:031-600-8586">Tel : 031-600-8586</a>
-              </TextStyle>
-              <a href="mailto:contact@goorm.io">Email : contact@goorm.io</a>
-            </p>
-            <p>
-              Copyright &copy; 어벤저스(
-              <Name href="https://github.com/WhiteKIM" target="_blank" rel="noopener noreferrer">
-                김경규
-              </Name>
-              ,{' '}
-              <Name href="https://github.com/soheetech" target="_blank" rel="noopener noreferrer">
-                문소희
-              </Name>
-              ,{' '}
-              <Name href="https://github.com/parkjikuk" target="_blank" rel="noopener noreferrer">
-                박지국
-              </Name>
-              ,{' '}
-              <Name href="https://github.com/JinhwanB" target="_blank" rel="noopener noreferrer">
-                배진환
-              </Name>
-              ,{' '}
-              <Name href="https://github.com/LEE-Donggyu" target="_blank" rel="noopener noreferrer">
-                이동규
-              </Name>
-              ,{' '}
-              <Name href="https://github.com/yss1902" target="_blank" rel="noopener noreferrer">
-                전민종
-              </Name>
-              ). All rights reserved.
-            </p>
-          </SiteLinkWrapeer>
-        </SecondFooter>
+          </FooterWrapper>
+        </FooterInfo>
+        <FooterInfo>
+          <FooterWrapper>
+            <SiteLinkWrapeer>
+              <li>
+                <Link to="/about">호텔소개</Link>
+              </li>
+              <li>
+                <Link to="/agreement">이용약관</Link>
+              </li>
+              <li>
+                <Link to="/location">오시는길</Link>
+              </li>
+              <li>
+                <Link to="/privacy">개인정보처리방침</Link>
+              </li>
+              <li>
+                <Link to="/board/qna">문의하기</Link>
+              </li>
+              <li>
+                <Link to="/sitemap">사이트맵</Link>
+              </li>
+            </SiteLinkWrapeer>
+            <CompanykWrapeer>
+              <p>
+                <span>(주)리벤져스</span>
+                <span>경기도 성남시 분당구 판교로 242 PDC A동 902호</span>
+                <span>사업자등록번호 : 124-87-39200</span>
+              </p>
+              <p>
+                <span>통신판매업신고번호 : 제2019-성남분당B-0224호</span>
+                <span>
+                  대표이사(팀장) :{' '}
+                  <a href="https://github.com/LEE-Donggyu" target="_blank">
+                    이동규
+                  </a>
+                </span>
+                <span>
+                  대표번호 : <a href="tel:031-600-8586">031-600-8586</a>
+                </span>
+                <span>
+                  이메일 : <a href="mailto:contact@goorm.io">contact@goorm.io</a>
+                </span>
+              </p>
+              <p>
+                Copyright &copy; 리벤져스팀(
+                <a href="https://github.com/WhiteKIM" target="_blank">
+                  김경규
+                </a>
+                ,{' '}
+                <a href="https://github.com/soheetech" target="_blank">
+                  문소희
+                </a>
+                ,{' '}
+                <a href="https://github.com/parkjikuk" target="_blank">
+                  박지국
+                </a>
+                ,{' '}
+                <a href="https://github.com/JinhwanB" target="_blank">
+                  배진환
+                </a>
+                ,{' '}
+                <a href="https://github.com/LEE-Donggyu" target="_blank">
+                  이동규
+                </a>
+                ,{' '}
+                <a href="https://github.com/yss1902" target="_blank">
+                  전민종
+                </a>
+                ). All rights reserved.
+              </p>
+            </CompanykWrapeer>
+          </FooterWrapper>
+        </FooterInfo>
       </FooterContainer>
     </Container>
   );

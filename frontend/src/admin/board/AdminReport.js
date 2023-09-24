@@ -31,7 +31,7 @@ const PostTableHeader = styled(TableHeader)`
   width: 20%;
 `;
 
-const PageParam = styled.ul`
+export const PageParam = styled.ul`
   text-align: center;
   margin-top: 50px;
 

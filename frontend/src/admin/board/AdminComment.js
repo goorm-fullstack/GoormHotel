@@ -32,7 +32,7 @@ const ModalContainer = styled.div`
   position: absolute;
   width: 217px;
   height: 104px;
-  border: 1px solid #dddddd;
+  border: 1px solid #DDDDDD;
   background-color: #fff;
   text-align: left;
   padding-top: 27px;
@@ -50,7 +50,7 @@ const CommentText = styled.div`
     text-decoration-color: #444444;
     text-underline-offset: 10px;
   }
-
+  
   &:hover + ${ModalContainer} {
     display: block;
   }
@@ -61,6 +61,7 @@ const ModalContent = styled.div`
 `;
 
 const LinkStyle = styled(Link)`
+  
   &:hover {
     text-decoration: underline;
     text-decoration-color: #444444;

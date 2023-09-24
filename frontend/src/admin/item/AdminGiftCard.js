@@ -34,6 +34,7 @@ const GiftCardBox = styled.div`
   margin-bottom: 60px;
 `;
 
+// 캘린더
 export const Now = styled.div`
   color: #8f8f8f;
 `;
@@ -90,7 +91,9 @@ export const StyledCalendar = styled(Calendar)`
     color: white;
   }
 `;
+// 캘린더 끝
 
+// form
 const GiftCardForm = styled.form`
   width: 100%;
   display: flex;
@@ -109,6 +112,7 @@ const GiftCardForm = styled.form`
   }
 `;
 
+// 발행 버튼
 export const SubmitButton = styled.button`
   width: 200px;
   height: 40px;
@@ -122,13 +126,16 @@ export const SubmitButton = styled.button`
   }
 `;
 
+// 사용가능, 사용불가능
 export const FilterButton = styled.button``;
 
+// 테이블 상단
 export const TopMenuOfTable = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  height: 40px;
   & p {
     font-size: 15px;
     font-weight: 500;
@@ -157,6 +164,7 @@ export const TopMenuOfTable = styled.div`
   }
 `;
 
+// 테이블
 export const GiftCardTable = styled.table`
   width: 100%;
   text-align: center;
@@ -176,39 +184,34 @@ export const TableTd = styled.td`
   color: rgb(68, 68, 68);
 `;
 
-export const InputLabel = styled.label`
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 1px solid rgb(221, 221, 221);
-  vertical-align: text-bottom;
+export const TableTr = styled.tr``;
+
+export const TableListTr = styled.tr`
+  border-bottom: 1px solid #dddddd;
 `;
 
-export const CheckBoxInput = styled.input`
-  &:checked + ${InputLabel}:after {
-    content: '\\2714';
-    font-size: 12px;
-  }
-`;
+// export const InputLabel = styled.label`
+//   display: inline-block;
+//   width: 20px;
+//   height: 20px;
+//   border: 1px solid rgb(221, 221, 221);
+//   vertical-align: text-bottom;
+// `;
 
+// export const CheckBoxInput = styled.input`
+//   &:checked + ${InputLabel}:after {
+//     content: '\\2714';
+//     font-size: 12px;
+//   }
+// `;
+
+// 체크 박스
 const CheckBox = styled(TableCheckbox)`
   margin: 0;
   vertical-align: middle;
 `;
 
-export const TableTr = styled.tr`
-  ${CheckBoxInput}[type=checkbox] {
-    display: none;
-  }
-`;
-
-export const TableListTr = styled.tr`
-  ${CheckBoxInput}[type=checkbox] {
-    display: none;
-  }
-  border-bottom: 1px solid #dddddd;
-`;
-
+// 상품권 상세(상품권 이름)
 export const DetailLink = styled(Link)`
   text-decoration: none;
   &:hover {
@@ -217,7 +220,7 @@ export const DetailLink = styled(Link)`
 `;
 
 const subMenus = [
-  { name: '판매 상품 관리', link: '/admin/item/list' },
+  { name: '판매 상품 관리', link: '/admin/item/list/1' },
   { name: '상품권 관리', link: '/admin/item/giftCard' },
 ];
 

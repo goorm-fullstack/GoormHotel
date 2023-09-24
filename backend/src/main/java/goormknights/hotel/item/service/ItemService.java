@@ -1,15 +1,14 @@
 package goormknights.hotel.item.service;
 
-import goormknights.hotel.item.dto.response.ResponseDiningDto;
-import goormknights.hotel.item.dto.response.ResponseRoomDto;
+import goormknights.hotel.item.exception.NotExistItemException;
 import goormknights.hotel.item.model.Dining;
 import goormknights.hotel.item.model.Item;
 import goormknights.hotel.item.model.Room;
 import goormknights.hotel.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,23 +23,29 @@ public class ItemService {
     private final ItemRepository<Item> itemRepository;
 
     /**
+     * 상품 이름을 통해 상품 조회
+     * @param itemName - 상품 이름
+     * @return 상품 이름과 같은 상품 조회
+     */
+    public Item findItem(String itemName){
+        return itemRepository.findByName(itemName).orElseThrow(() -> new NotExistItemException("등록된 상품이 아닙니다."));
+    }
+
+    /**
      * 전체 상품 조회(페이징)
      * @return DB에 저장된 전체 상품 목록 페이징처리
      * pathUrl에 param으로 size(목록 갯수)와 page(현재 페이지)값을 넣을 수 있다
      */
-    public List<Object> findAllItem(Pageable pageable){
-        Page<Item> all = itemRepository.findAll(pageable);
-        return getResponseObjects(all);
+    public Page<Item> findAllItem(Pageable pageable){
+        return itemRepository.findAll(pageable);
     }
 
-    public List<Object> findAllByType(String type, Pageable pageable){
-        Page<Item> allByType = itemRepository.findAllByType(type, pageable);
-        return getResponseObjects(allByType);
+    public Page<Item> findAllByType(String type, Pageable pageable){
+        return itemRepository.findAllByType(type, pageable);
     }
 
-    public List<Object> findAllByTypeDetail(String typeDetail, Pageable pageable){
-        Page<Item> allByTypeDetail = itemRepository.findAllByTypeDetail(typeDetail, pageable);
-        return getResponseObjects(allByTypeDetail);
+    public Page<Item> findAllByTypeDetail(String typeDetail, Pageable pageable){
+        return itemRepository.findAllByTypeDetail(typeDetail, pageable);
     }
 
     /**
@@ -49,13 +54,12 @@ public class ItemService {
      * @return 검색한 단어가 포함된 상품명으로 페이징 처리되어 아이템 조회
      * pathUrl에 param으로 size(목록 갯수)와 page(현재 페이지)값을 넣을 수 있다
      */
-    public List<Object> findByKeyword(String keyword, Pageable pageable){
-        Page<Item> byKeyword = itemRepository.findByKeyword(keyword, pageable);
-        return getResponseObjects(byKeyword);
+    public Page<Item> findByKeyword(String keyword, Pageable pageable){
+        return itemRepository.findByKeyword(keyword, pageable);
     }
 
     // List에 있는 Item객체들 Dto화
-    private static List<Object> getResponseObjects(Page<Item> all) {
+    public List<Object> getResponseObjects(Page<Item> all) {
         List<Object> allItem = new ArrayList<>();
         for (Item item : all) {
             if (item instanceof Dining) {
@@ -67,46 +71,53 @@ public class ItemService {
         return allItem;
     }
 
-    public ResponseEntity<List<Object>> getListResponseEntity(String type, String typeDetail, String keyword, Pageable pageable) {
-        List<Object> responseItems = new ArrayList<>();
+    /**
+     * 카테고리와 검색어를 통해 페이징된 상품 리스트 조회
+     * @param type - 타입
+     * @param typeDetail - 세부 타입
+     * @param keyword - 검색어
+     * @param pageable - 페이징처리
+     * @return 페이징된 상품 리스트
+     */
+    public Page<Item> getListByCategory(String type, String typeDetail, String keyword, Pageable pageable) {
+        Page<Item> result;
 
         if(type != null && typeDetail != null){
-            List<Object> allByType = findAllByType(type, pageable);
-            for (Object o : allByType) {
-                if((o.getClass() == ResponseDiningDto.class && ((ResponseDiningDto) o).getTypeDetail().equals(typeDetail)) || (o.getClass() == ResponseRoomDto.class && ((ResponseRoomDto) o).getTypeDetail().equals(typeDetail))){
-                    responseItems.add(o);
+            Page<Item> allByType = findAllByType(type, pageable);
+            List<Item> matchingItems = new ArrayList<>();
+            for (Item o : allByType) {
+                if((o.getClass() == Dining.class && ((Dining) o).getTypeDetail().equals(typeDetail)) || (o.getClass() == Room.class && ((Room) o).getTypeDetail().equals(typeDetail))){
+                    matchingItems.add(o);
                 }
             }
+           result = new PageImpl<>(matchingItems, pageable, matchingItems.size());
         }
         else if(type != null && typeDetail == null){
-            List<Object> allByType = findAllByType(type, pageable);
-            responseItems.addAll(allByType);
+            result = findAllByType(type, pageable);
         }
         else if(type == null && typeDetail != null){
-            List<Object> allByTypeDetail = findAllByTypeDetail(typeDetail, pageable);
-            responseItems.addAll(allByTypeDetail);
+            result = findAllByTypeDetail(typeDetail, pageable);
         }
         else{
-            List<Object> allItem = findAllItem(pageable);
-            responseItems.addAll(allItem);
+            result = findAllItem(pageable);
         }
 
         if(keyword != null){
-            List<Object> byKeywordList = new ArrayList<>();
-            for (Object responseItem : responseItems) {
-                if(responseItem.getClass() == ResponseDiningDto.class){
-                    if(((ResponseDiningDto) responseItem).getName().contains(keyword)){
-                        byKeywordList.add(responseItem);
+            List<Item> byKeywordList = new ArrayList<>();
+            for (Item item : result) {
+                if(item.getClass() == Dining.class){
+                    if(((Dining) item).getName().contains(keyword)){
+                        byKeywordList.add(item);
                     }
                 }else{
-                    if(((ResponseRoomDto) responseItem).getName().contains(keyword)){
-                        byKeywordList.add(responseItem);
+                    if(((Room) item).getName().contains(keyword)){
+                        byKeywordList.add(item);
                     }
                 }
             }
-            return ResponseEntity.ok(byKeywordList);
+            return new PageImpl<>(byKeywordList, pageable, byKeywordList.size());
         }else{
-            return ResponseEntity.ok(responseItems);
+            return result;
         }
     }
 }
