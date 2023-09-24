@@ -239,9 +239,13 @@ const Reservation = () => {
   const [nights, setNights] = useState(0);
 
   useEffect(() => {
-    const nightsDifference = moment(checkOutValue).diff(moment(checkInValue), 'days');
+    const checkInMoment = moment(checkInValue);
+    const checkOutMoment = moment(checkOutValue);
+  
+    const nightsDifference = checkOutMoment.diff(checkInMoment, 'days');
     setNights(nightsDifference);
   }, [checkInValue, checkOutValue]);
+
 
   const reservationData = {
     checkInDate,
@@ -296,9 +300,17 @@ const Reservation = () => {
     const formattedDate = moment(selectedDate).format('YYYY.MM.DD');
     const dayOfWeek = moment(selectedDate).format('ddd');
     setCheckInDate(`${formattedDate} (${dayOfWeek})`);
-  };
+
+    const checkOutDate = new Date(checkOutValue);
+    console.log(checkOutDate.getTime());
+    const timeDifference = checkOutDate.getTime() - selectedDate.getTime();
+    const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
+
+    setNights(daysDifference);
+};
 
   const handleCheckOutDateChange = (selectedDate) => {
+    selectedDate.setHours(12, 0, 0, 0);
     setCheckOutValue(selectedDate);
     setCheckOutOpen(false);
     const formattedDate = moment(selectedDate).format('YYYY.MM.DD');

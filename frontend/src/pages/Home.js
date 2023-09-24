@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import Slide from '../components/Slide';
 import Reservation from '../components/Reservation';
@@ -8,14 +8,14 @@ import dining01 from '../images/dining/Bakery.jpg';
 import dining02 from '../images/dining/Bar.jpg';
 import dining03 from '../images/dining/Restaurant.jpg';
 import dining04 from '../images/dining/RoomService.jpg';
-import Deluxe from '../images/room/Deluxe.jpg';
+import deluxe from '../images/room/Deluxe.jpg';
 import Family from '../images/room/Family.jpg';
 import Suite from '../images/room/Suite.jpg';
 import { Link } from 'react-router-dom';
 import slideBtn from '../images/icon/ico_slide_btn.png';
 
 const diningImages = [dining01, dining02, dining03, dining04];
-const images = [spaImg, dining01, Deluxe];
+const images = [spaImg, dining01, deluxe];
 
 const FirstArticle = styled.article`
   width: 100%;
@@ -273,21 +273,50 @@ const NextButton = styled(PrevButton)`
 `;
 
 const Home = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const handleNext = () => {
-    setActiveIndex((prevIndex) => (prevIndex + 1) % images.length);
-  };
+  const [activeIndex, setActiveIndex] = useState(1);
+  const SLIDE_NUM = images.length;
+  const beforeSlide = images[SLIDE_NUM - 1];
+  const afterSlide = images[0];
+  let copiedArr = [beforeSlide, ...images, afterSlide];
 
   const handlePrev = () => {
-    setActiveIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+    if (activeIndex !== 0) {
+      setActiveIndex(activeIndex - 1);
+    }
   };
 
+  const handleNext = () => {
+    if (activeIndex !== 4) {
+      setActiveIndex(activeIndex + 1);
+    }
+  }
   const sliderRef = useRef(null);
 
-  const sliderStyle = {
-    transform: `translateX(-${activeIndex * sliderRef.current?.offsetWidth}px)`,
-  };
+  useEffect(() => {
+    console.log(activeIndex);
+    if (activeIndex === 4) {
+      if (sliderRef.current) {  
+        setTimeout(() => {
+          sliderRef.current.style.transition = "none";
+          setActiveIndex(1);
+        }, 500);
+        setTimeout(() => {
+          sliderRef.current.style.transition = "all 500ms ease-in-out";
+        }, 600);
+      }
+    } else if (activeIndex === 0) {
+      if (sliderRef.current) {
+        setTimeout(() => {
+          sliderRef.current.style.transition = "none";
+          setActiveIndex(3);
+        }, 500);
+        setTimeout(() => {
+          sliderRef.current.style.transition = "all 500ms ease-in-out";
+        }, 600);
+      }
+    }
+  }, [activeIndex]);
+
 
   return (
     <>
@@ -303,7 +332,7 @@ const Home = () => {
           <TitleDescription>특별한 상품과 혜택을 지금 만나보세요.</TitleDescription>
           <ImgList>
             <RoomItem>
-              <RoomImg src={Deluxe} alt="객실" />
+              <RoomImg src={deluxe} alt="객실" />
               <PackageName>디럭스</PackageName>
               <RoomDescription>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</RoomDescription>
             </RoomItem>
@@ -369,10 +398,10 @@ const Home = () => {
       <ThirdArticle>
         <ActivityContainer>
           <ImageSlider>
-            <ImageContainer style={sliderStyle} ref={sliderRef}>
-              {images.map((image, index) => (
-                <Image key={index} src={image} alt={`Image ${index}`} />
-              ))}
+            <ImageContainer style={{transform: `translateX(-${activeIndex * 100}%)`}} ref={sliderRef}>
+                {copiedArr.map((image, index) => (
+                  <Image key={index} src={image} alt={`Image ${index}`} />
+                ))}
             </ImageContainer>
             <ButtonContainer>
               <PrevButton onClick={handlePrev}>

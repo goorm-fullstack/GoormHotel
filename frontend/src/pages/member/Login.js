@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import kakao from '../../images/icon/ico_kakao.png';
 import naver from '../../images/icon/ico_naver.png';
 import google from '../../images/icon/ico_google.png';
@@ -152,10 +152,16 @@ const SignupBtn = styled(Link)`
 `;
 
 const Login = () => {
-  const [isMemberActive, setIsMemberActive] = useState(true);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search); 
+  const isReservation = queryParams.get('type') === 'reservation';
+
+  const [isMemberActive, setIsMemberActive] = useState(!isReservation);
   const [emailId, setEmailId] = useState('');
   const [Password, setPassword] = useState('');
-  const [rememberId, setRememberId] = useState(false);
+  const [reservationNumber, setReservationNumber] = useState('');
+  const [contactNumber, setContactNumber] = useState('');
+  const [rememberId, setRememberId] = useState(false); //아이디 기억하기 상태
 
   const handleIdChange = (e) => {
     setEmailId(e.target.value);
@@ -163,6 +169,14 @@ const Login = () => {
 
   const handlePwChange = (e) => {
     setPassword(e.target.value);
+  };
+
+  const handleReservationNumberChange = (e) => {
+    setReservationNumber(e.target.value);
+  };
+
+  const handleContactNumberChange = (e) => {
+    setContactNumber(e.target.value);
   };
 
   const handleMemberClick = () => {
@@ -177,7 +191,12 @@ const Login = () => {
     setRememberId(!rememberId);
   };
 
-  console.log(rememberId);
+  useEffect(() => {
+    if (isReservation) {
+      setIsMemberActive(false);
+    }
+  }, [isReservation]);
+
 
   return (
     <>
@@ -193,18 +212,28 @@ const Login = () => {
                 비회원(예약확인)
               </NonMemberBtn>
             </ButtonWrapper>
-            <Form>
-              <Input placeholder="이메일 아이디" value={emailId} onChange={handleIdChange} />
-              <PasswordInput placeholder="비밀번호" value={Password} onChange={handlePwChange} />
-              <LoginBtn>로그인</LoginBtn>
-            </Form>
-            <RememberAndFind>
-              <RememberBtn>
-                <input type="checkbox" checked={rememberId} onChange={handleRememberIdChange} />
-                <span onClick={handleRememberIdChange}>아이디 기억하기</span>
-              </RememberBtn>
-              <Link to="/findAccount">아이디/비밀번호 찾기</Link>
-            </RememberAndFind>
+            {isMemberActive ? (
+              <Form>
+                <Input placeholder="이메일 아이디" value={emailId} onChange={handleIdChange} />
+                <PasswordInput placeholder="비밀번호" value={Password} onChange={handlePwChange} />
+                <LoginBtn>로그인</LoginBtn>
+              </Form>
+            ) : (
+              <Form>
+                <Input placeholder="예약번호" value={reservationNumber} onChange={handleReservationNumberChange}/>
+                <PasswordInput placeholder="연락처" value={contactNumber} onChange={handleContactNumberChange}/>
+                <LoginBtn>예약 확인</LoginBtn>
+              </Form>
+            )}
+            {isMemberActive && (
+              <RememberAndFind>
+                <RememberBtn>
+                  <input type="checkbox" checked={rememberId} onChange={handleRememberIdChange} />
+                  <span onClick={handleRememberIdChange}>아이디 기억하기</span>
+                </RememberBtn>
+                <Link to="/findAccount">아이디/비밀번호 찾기</Link>
+              </RememberAndFind>
+            )}
             <AuthWrapper>
               <AuthBtn>
                 <img src={google} alt="authImg" />
@@ -224,7 +253,7 @@ const Login = () => {
               회원이 되시면 구름 리워즈 멤버십 회원으로서
               <br />더 큰 혜택과 편리함을 누릴 수 있습니다.
             </SecondText>
-            <SignupBtn to="/">회원가입</SignupBtn>
+            <SignupBtn to="/signup">회원가입</SignupBtn>
           </RightWrapper>
         </Wrapper>
       </Container>
