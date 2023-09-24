@@ -41,7 +41,8 @@ dependencies {
 			'org.springframework.boot:spring-boot-starter-websocket',
 			'org.springframework.security:spring-security-crypto',
 			'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect',
-			'org.springframework.session:spring-session-jdbc'
+			'org.springframework.session:spring-session-jdbc',
+			'org.mariadb.jdbc:mariadb-java-client:2.1.2'
 	)
 	compileOnly(
 			'org.projectlombok:lombok',
