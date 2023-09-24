@@ -4,16 +4,13 @@ import goormknights.hotel.board.model.Board;
 import goormknights.hotel.reply.model.Reply;
 import goormknights.hotel.report.dto.response.ResponseReportDto;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.SQLDelete;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 //@SQLDelete(sql = "UPDATE Report SET report_Delete = true WHERE report_Id = ?")
 public class Report {
 
@@ -39,14 +36,13 @@ public class Report {
     private LocalDateTime reportDate;   //신고 날짜
 
     @Column(nullable = false)
-    private boolean reportCheck = false;        //신고 확인 여부
+    private boolean reportCheck;       //신고 확인 여부
 
     @Column(nullable = false)
-    private boolean reportResult = false;       //신고 처리 결과
+    private String reportResult;       //신고 처리 결과
 
-    @Column(nullable = false)
     @Setter
-    private boolean reportDelete = false;
+    private LocalDateTime reportDeleteTime;
 
     public void setBoard(Board board) {
         this.board = board;
@@ -56,14 +52,17 @@ public class Report {
         this.reply = reply;
     }
 
+
     @Builder
-    public Report(Long reportId, String reportWriter, String reportReason, LocalDateTime reportDate, boolean reportCheck, boolean reportResult) {
+    public Report(Long reportId, String reportWriter, String reportReason, LocalDateTime reportDate, boolean reportCheck, String reportResult, Board board, Reply reply) {
         this.reportId = reportId;
         this.reportWriter = reportWriter;
         this.reportReason = reportReason;
         this.reportDate = reportDate;
         this.reportCheck = reportCheck;
         this.reportResult = reportResult;
+        this.board = board;
+        this.reply = reply;
     }
 
     public ResponseReportDto toResponseReportDto() {

@@ -1,7 +1,6 @@
 package goormknights.hotel.board.controller;
 
 import goormknights.hotel.board.service.BoardImageService;
-import goormknights.hotel.item.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

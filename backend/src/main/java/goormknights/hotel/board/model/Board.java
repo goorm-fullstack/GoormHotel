@@ -1,13 +1,12 @@
 package goormknights.hotel.board.model;
 
 import goormknights.hotel.board.dto.request.RequestBoardDto;
+import goormknights.hotel.board.dto.request.RequestImageDto;
 import goormknights.hotel.board.dto.response.ResponseBoardDto;
 import goormknights.hotel.reply.model.Reply;
 import goormknights.hotel.report.model.Report;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -46,20 +45,19 @@ public class Board {
     private List<Report> report = new ArrayList<>();            //신고
 
     @Column(nullable = false)
-    @Setter
-    private boolean boardDelete = false;        //게시물 삭제 유무
-
-    @Column(nullable = false)
     private String boardTitle;      //게시판 이름
 
     @Column(nullable = false)
     private String category;        //게시판-카테고리
 
+    @Setter
+    private LocalDateTime boardDeleteTime;      //게시글 삭제 날짜
+
 //    @ManyToOne
 //    private Member member;
 
     @Builder(toBuilder = true)
-    public Board(Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, String boardTitle, String category) {
+    public Board(Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, String boardTitle, String category, List<Reply> replies, List<Report> report) {
         this.boardId = boardId;
         this.title = title;
         this.boardContent = boardContent;
@@ -68,6 +66,8 @@ public class Board {
         this.boardImage = boardImage;
         this.boardTitle = boardTitle;
         this.category = category;
+        this.replies = replies;
+        this.report = report;
     }
 
     public ResponseBoardDto toResponseBoardDto(){
@@ -82,12 +82,18 @@ public class Board {
                 .build();
     }
 
-    public Board updateBoard(Long boardId, RequestBoardDto requestBoardDto){
-        return this.toBuilder()
-                .boardId(boardId)
+    public Board updateBoard(Board board, RequestBoardDto requestBoardDto, RequestImageDto requestImageDto){
+        return Board.builder()
+                .boardId(board.getBoardId())
                 .title(requestBoardDto.getTitle())
                 .boardContent(requestBoardDto.getBoardContent())
                 .boardWriter(requestBoardDto.getBoardWriter())
+                .boardImage(requestImageDto.toEntity())
+                .boardTitle(requestBoardDto.getBoardTitle())
+                .category(requestBoardDto.getCategory())
+                .boardWriteDate(requestBoardDto.getBoardWriteDate())
+                .replies(board.getReplies())
+                .report(board.getReport())
                 .build();
     }
 }

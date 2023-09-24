@@ -10,9 +10,12 @@ import goormknights.hotel.report.model.Report;
 import goormknights.hotel.report.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +37,7 @@ public class ReportService {
         log.info("replyId={}", replyId);
 
         if(boardId == null){
-            Reply byReplyId = replyRepository.findByReplyIdAndReplyDelete(replyId, false);
+            Reply byReplyId = replyRepository.findByReplyId(replyId);
 
             Report report = requestReportDto.toEntity();
             report.setReply(byReplyId);
@@ -45,7 +48,7 @@ public class ReportService {
             return save;
         }
         else{
-            Board byBoardId = boardRepository.findByBoardIdAndBoardDelete(boardId, false);
+            Board byBoardId = boardRepository.findByBoardId(boardId);
             Report report = requestReportDto.toEntity();
             report.setBoard(byBoardId);
 
@@ -60,11 +63,13 @@ public class ReportService {
 
     //신고 조회(Read)
     public List<ResponseReportDto> getAllReports(Pageable pageable) {
-        List<Report> all = reportRepository.findAllByReportDelete(false, pageable);
+        Page<Report> all = reportRepository.findAll(pageable);
         List<ResponseReportDto> response = new ArrayList<>();
 
         for (Report report : all) {
-            response.add(report.toResponseReportDto());
+            if(report.getReportDeleteTime()==null){
+                response.add(report.toResponseReportDto());
+            }
         }
 
         return response;
@@ -77,10 +82,59 @@ public class ReportService {
 
     //신고 삭제 복원
     public Report undeleted(Long reportId){
-        Report report = reportRepository.findByReportIdAndReportDelete(reportId, true);
+        Report report = reportRepository.findByReportId(reportId);
         if(report!=null){
-            report.setReportDelete(false);
+            report.setReportDeleteTime(null);
         }
         return reportRepository.save(report);
+    }
+
+    public Report softdeleteReport(Long reportId) {
+        Report report = reportRepository.findByReportId(reportId);
+
+        String datePattern = "yyyy-MM-dd'T'HH:mm:ss";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(datePattern);
+        String now = LocalDateTime.now().format(formatter);
+        LocalDateTime reportDeleteTime = LocalDateTime.parse(now, formatter);
+        report.setReportDeleteTime(reportDeleteTime);
+
+        return reportRepository.save(report);
+    }
+
+
+    // 신고 게시글 확인 완료 클릭
+    public void check(Long reportId){
+        Report byReportIdAndReportDelete = reportRepository.findByReportId(reportId);
+
+        Report build = Report.builder()
+                .reportResult("이상 없음")
+                .reportCheck(true)
+                .reportWriter(byReportIdAndReportDelete.getReportWriter())
+                .reportReason(byReportIdAndReportDelete.getReportReason())
+                .reportDate(byReportIdAndReportDelete.getReportDate())
+                .reportId(byReportIdAndReportDelete.getReportId())
+                .board(byReportIdAndReportDelete.getBoard())
+                .reply(byReportIdAndReportDelete.getReply())
+                .build();
+        reportRepository.save(build);
+    }
+
+    // 신고 게시글 블랙 리스트 추가 처리
+    public void toBlackList(Long reportId){
+        Report byReportIdAndReportDelete = reportRepository.findByReportId(reportId);
+        String reportWriter = byReportIdAndReportDelete.getReportWriter();
+        // reportWriter를 이용하여 member 정보를 가져오고 memberService의 블랙리스트 추가 로직 사용
+
+        Report build = Report.builder()
+                .reportResult("블랙리스트")
+                .reportCheck(true)
+                .reportWriter(byReportIdAndReportDelete.getReportWriter())
+                .reportReason(byReportIdAndReportDelete.getReportReason())
+                .reportDate(byReportIdAndReportDelete.getReportDate())
+                .reportId(byReportIdAndReportDelete.getReportId())
+                .board(byReportIdAndReportDelete.getBoard())
+                .reply(byReportIdAndReportDelete.getReply())
+                .build();
+        reportRepository.save(build);
     }
 }

@@ -6,7 +6,6 @@ import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.report.model.Report;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,9 +30,8 @@ public class Reply {
     @Column(nullable = false)
     private LocalDateTime replyWriteDate;   //댓글 작성 시간
 
-    @Column(nullable = false)
     @Setter
-    private boolean replyDelete = false;
+    private LocalDateTime replyDeleteTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
@@ -47,11 +45,13 @@ public class Reply {
     }
 
     @Builder(toBuilder = true)
-    public Reply(Long replyId, String replyContent, String replyWriter, LocalDateTime replyWriteDate) {
+    public Reply(Long replyId, String replyContent, String replyWriter, LocalDateTime replyWriteDate, Board board, List<Report> report) {
         this.replyId = replyId;
         this.replyContent = replyContent;
         this.replyWriter = replyWriter;
         this.replyWriteDate = replyWriteDate;
+        this.board = board;
+        this.report = report;
     }
 
     public ResponseReplyDto toResponseReplyDto() {
@@ -65,11 +65,14 @@ public class Reply {
                 .build();
     }
 
-    public Reply updateReply(Long replyId, RequestReplyDto requestReplyDto){
-        return this.toBuilder()
+    public Reply updateReply(Reply reply, RequestReplyDto requestReplyDto){
+        return Reply.builder()
                 .replyId(replyId)
                 .replyContent(requestReplyDto.getReplyContent())
                 .replyWriter(requestReplyDto.getReplyWriter())
+                .replyWriteDate(requestReplyDto.getReplyWriteDate())
+                .board(reply.getBoard())
+                .report(reply.getReport())
                 .build();
     }
 }

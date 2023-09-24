@@ -31,6 +31,8 @@ public class RequestBoardDto {
 
     private String category;        //게시판-카테고리
 
+    private LocalDateTime boardDeleteTime;      //소프트딜리트 시간
+
     public Board toEntity() {
         return Board.builder()
                 .boardId(boardId)

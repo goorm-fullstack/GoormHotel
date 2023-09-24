@@ -1,7 +1,6 @@
 package goormknights.hotel.board.controller;
 
 import goormknights.hotel.board.dto.request.RequestBoardDto;
-import goormknights.hotel.board.dto.request.RequestImageDto;
 import goormknights.hotel.board.dto.response.ResponseBoardDto;
 import goormknights.hotel.board.model.Board;
 import goormknights.hotel.board.service.BoardImageService;
@@ -17,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+import static goormknights.hotel.reply.model.QReply.reply;
+
 @RestController
 @RequestMapping("/boards")
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class BoardController {
     // 모든 게시물 조회
     @GetMapping("/list")
     public ResponseEntity<List<ResponseBoardDto>> getAllBoards(@PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
-        List<ResponseBoardDto> boards = boardService.findAllBoards(false, pageable);
+        List<ResponseBoardDto> boards = boardService.findAllBoards(pageable);
 
         return ResponseEntity.ok(boards);
     }
@@ -43,25 +44,23 @@ public class BoardController {
 
     // 게시물 작성
     @PostMapping("/writeform")
-    public ResponseEntity<Object> createBoard(@ModelAttribute RequestBoardDto requestBoardDto, @RequestParam MultipartFile multipartFile) throws IOException {
-        RequestImageDto requestImageDto = boardImageService.requestImageDto(multipartFile);
-
-        boardService.create(requestBoardDto, requestImageDto);
+    public ResponseEntity<Object> createBoard(@ModelAttribute RequestBoardDto requestBoardDto, @RequestParam(required = false) MultipartFile multipartFile) throws IOException {
+        boardService.create(requestBoardDto, multipartFile);
         return ResponseEntity.ok().build();
     }
 
     // 게시물 수정
     @PutMapping("/{boardId}")
-    public ResponseEntity<ResponseBoardDto> updateBoard(@PathVariable Long boardId, @RequestBody RequestBoardDto requestBoardDto) {
-        Board board = boardService.updateBoard(boardId, requestBoardDto, false);
+    public ResponseEntity<ResponseBoardDto> updateBoard(@PathVariable Long boardId, @ModelAttribute RequestBoardDto requestBoardDto, @RequestParam(required = false) MultipartFile multipartFile) throws IOException {
+        boardService.updateBoard(boardId, requestBoardDto, multipartFile, false);
 
-        return ResponseEntity.ok(board.toResponseBoardDto());
+        return ResponseEntity.ok().build();
     }
 
     // 삭제된 게시물 전체 조회
     @GetMapping("/deleted")
     public ResponseEntity<List<ResponseBoardDto>> getDeletedBoards(@PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
-        List<ResponseBoardDto> deletedBoards = boardService.findAllBoardDelete(true, pageable);
+        List<ResponseBoardDto> deletedBoards = boardService.findAllBoardDelete(pageable);
 
         return ResponseEntity.ok(deletedBoards);
     }
@@ -72,18 +71,10 @@ public class BoardController {
         boardService.deleteById(boardId);
     }
 
-    //삭제된 게시물 복원
-    @PostMapping("/undeleted/{boardId}")
-    public ResponseEntity<ResponseBoardDto> undeleted(@PathVariable Long boardId) {
-        Board board = boardService.undeleted(boardId);
-
-        return ResponseEntity.ok(board.toResponseBoardDto());
-    }
-
     //작성자로 게시물 조회
     @GetMapping("/find/writer/{boardWriter}")
     public ResponseEntity<List<ResponseBoardDto>> findByBoardWriter(@PathVariable String boardWriter, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
-        List<ResponseBoardDto> byBoardWriter = boardService.findByBoardWriter(boardWriter, false, pageable);
+        List<ResponseBoardDto> byBoardWriter = boardService.findByBoardWriter(boardWriter, pageable);
 
         return ResponseEntity.ok(byBoardWriter);
     }
@@ -91,7 +82,7 @@ public class BoardController {
     //내용으로 게시물 조회
     @GetMapping("/find/content/{boardContent}")
     public ResponseEntity<List<ResponseBoardDto>> findByBoardContent(@PathVariable String boardContent, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
-        List<ResponseBoardDto> content = boardService.findByContent(boardContent, false, pageable);
+        List<ResponseBoardDto> content = boardService.findByContent(boardContent, pageable);
 
         return ResponseEntity.ok(content);
     }
@@ -99,7 +90,7 @@ public class BoardController {
     //내용, 제목으로 게시물 조회
     @GetMapping("/find/{keyword}")
     public ResponseEntity<List<ResponseBoardDto>> findBytitleOrContent(@PathVariable String keyword, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable){
-        List<ResponseBoardDto> byTitleOrContent = boardService.findByTitleOrContent(keyword, false, pageable);
+        List<ResponseBoardDto> byTitleOrContent = boardService.findByTitleOrContent(keyword, pageable);
 
         return ResponseEntity.ok(byTitleOrContent);
     }
@@ -107,7 +98,7 @@ public class BoardController {
     //제목으로 게시물 조회
     @GetMapping("/find/title/{title}")
     public ResponseEntity<List<ResponseBoardDto>> findBytitle(@PathVariable String title, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
-        List<ResponseBoardDto> Titles = boardService.findByTitle(title, false, pageable);
+        List<ResponseBoardDto> Titles = boardService.findByTitle(title, pageable);
 
         return ResponseEntity.ok(Titles);
     }
@@ -115,7 +106,7 @@ public class BoardController {
     //게시판으로 찾기
     @GetMapping("/find/boardTitle/{boardTitle}")
     public ResponseEntity<List<ResponseBoardDto>> findByboardTitle(@PathVariable String boardTitle, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable){
-        List<ResponseBoardDto> boardTitles = boardService.getAllByboardTitle(boardTitle, false, pageable);
+        List<ResponseBoardDto> boardTitles = boardService.getAllByboardTitle(boardTitle, pageable);
 
         return ResponseEntity.ok(boardTitles);
     }
@@ -123,9 +114,24 @@ public class BoardController {
     //게시판-카테고리로 찾기
     @GetMapping("/find/category/{category}")
     public ResponseEntity<List<ResponseBoardDto>> findByCategory(@PathVariable String category, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable){
-        List<ResponseBoardDto> allByCategory = boardService.getAllByCategory(category, false, pageable);
+        List<ResponseBoardDto> allByCategory = boardService.getAllByCategory(category, pageable);
 
         return ResponseEntity.ok(allByCategory);
     }
 
+    //게시물 소프트딜리트
+    @PutMapping("/softdelete/{boardId}")
+    public ResponseEntity<Object> softdeleteBoard(@PathVariable Long boardId) {
+        Board board = boardService.softdeleteBoard(boardId);
+
+        return ResponseEntity.ok(board.toResponseBoardDto());
+    }
+
+    //삭제된 게시물 복원
+    @PutMapping("/undelete/{boardId}")
+    public ResponseEntity<ResponseBoardDto> undeleted(@PathVariable Long boardId) {
+        Board board = boardService.undeleted(boardId);
+
+        return ResponseEntity.ok(board.toResponseBoardDto());
+    }
 }

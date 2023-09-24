@@ -12,14 +12,14 @@ import java.util.List;
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
     //댓글 내용으로 조회
-    List<Reply> findByReplyContentContainingAndReplyDelete(String keyword, boolean bool);
+    List<Reply> findByReplyContentContaining(String keyword);
 
     //댓글 번호로 찾기
-    Reply findByReplyIdAndReplyDelete(Long replyId, boolean bool);
+    Reply findByReplyId(Long replyId);
 
     //게시글 번호로 댓글 찾기
     List<Reply> findByBoard(Board board);
 
-    Page<Reply> findAllByReplyDelete(Pageable pageable, boolean bool);
+    Page<Reply> findAll(Pageable pageable);
 
 }

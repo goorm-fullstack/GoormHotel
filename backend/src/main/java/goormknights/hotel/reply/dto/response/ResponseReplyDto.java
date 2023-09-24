@@ -1,10 +1,8 @@
 package goormknights.hotel.reply.dto.response;
 
 import goormknights.hotel.report.dto.response.ResponseReportDto;
-import goormknights.hotel.report.model.Report;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -43,10 +43,34 @@ public class ReportController {
     }
 
     //신고 삭제 복원
-    @PostMapping("/undeleted/{reportId}")
+    @PutMapping("/undelete/{reportId}")
     public ResponseEntity<ResponseReportDto> undeleted(@PathVariable Long reportId){
         Report report = reportService.undeleted(reportId);
 
         return ResponseEntity.ok(report.toResponseReportDto());
+    }
+
+    @PutMapping("/softdelete/{reportId}")
+    public ResponseEntity<Object> softdeleteReport(@PathVariable Long reportId) {
+        Report report = reportService.softdeleteReport(reportId);
+
+        return ResponseEntity.ok(report.toResponseReportDto());
+    }
+
+
+    // 신고 게시글 확인 완료
+    @PutMapping("/check/{reportId}")
+    public ResponseEntity<Object> check(@PathVariable Long reportId){
+        reportService.check(reportId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    // 신고 게시글 블랙리스트 처리
+    @PutMapping("/black/{reportId}")
+    public ResponseEntity<Object> black(@PathVariable Long reportId){
+        reportService.toBlackList(reportId);
+
+        return ResponseEntity.ok().build();
     }
 }
