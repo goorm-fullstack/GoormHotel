@@ -151,6 +151,10 @@ const WriteFormDining = () => {
           window.location.href = '/admin/item/list/1';
         } catch (error) {
           console.error('Error:', error.message);
+          if (error.response.data.message.startsWith('Validation failed')) {
+            const errorMessage = error.response.data.errors[0].defaultMessage;
+            alert(errorMessage);
+          }
         }
       } else {
         e.preventDefault();
@@ -186,6 +190,7 @@ const WriteFormDining = () => {
       }
     } catch (error) {
       setDuplicateMessage(error.response.data);
+      console.log(error.response.data);
       setIsConfirm(false);
     }
   };

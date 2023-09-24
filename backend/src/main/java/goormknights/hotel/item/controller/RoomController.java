@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,12 +40,16 @@ public class RoomController {
      * @throws IOException
      */
     @PostMapping("/room")
-    public ResponseEntity<Object> uploadRoom(@Validated @ModelAttribute RequestRoomDto requestRoomDto, @RequestParam MultipartFile img) throws IOException {
+    public ResponseEntity<Object> uploadRoom(@Validated @ModelAttribute RequestRoomDto requestRoomDto, @RequestParam MultipartFile img, BindingResult bindingResult) throws IOException {
 
-        RequestImageDto requestImageDto = imageService.convertToImageDto(img);
+        if(bindingResult.hasErrors()){
+            return ResponseEntity.badRequest().build();
+        }else{
+            RequestImageDto requestImageDto = imageService.convertToImageDto(img);
 
-        roomService.saveRoom(requestRoomDto, requestImageDto);
-        return ResponseEntity.ok().build();
+            roomService.saveRoom(requestRoomDto, requestImageDto);
+            return ResponseEntity.ok().build();
+        }
     }
 
     /**
@@ -56,11 +61,15 @@ public class RoomController {
      * @throws IOException
      */
     @PutMapping("/room/{roomName}")
-    public ResponseEntity<ResponseRoomDto> updateRoom(@PathVariable String roomName, @Validated @ModelAttribute RequestRoomDto requestRoomDto, @RequestParam(required = false) MultipartFile img) throws IOException {
+    public ResponseEntity<ResponseRoomDto> updateRoom(@PathVariable String roomName, @Validated @ModelAttribute RequestRoomDto requestRoomDto, @RequestParam(required = false) MultipartFile img, BindingResult bindingResult) throws IOException {
 
-        ResponseRoomDto responseRoomDto = roomService.modifyRoom(roomName, requestRoomDto, img).toResponseRoomDto();
+        if(bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }else{
+            ResponseRoomDto responseRoomDto = roomService.modifyRoom(roomName, requestRoomDto, img).toResponseRoomDto();
 
-        return ResponseEntity.ok(responseRoomDto);
+            return ResponseEntity.ok(responseRoomDto);
+        }
     }
 
     /**
@@ -96,6 +105,7 @@ public class RoomController {
      * 예) /rooms?size=20&page=1
      */
     @GetMapping
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
     public ResponseEntity<List<ResponseRoomDto>> findAllRoom(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         Page<Room> all = roomService.findAll(pageable);
         List<ResponseRoomDto> responseDtoList = roomService.toResponseDtoList(all);
