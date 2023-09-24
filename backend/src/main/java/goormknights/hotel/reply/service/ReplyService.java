@@ -7,6 +7,8 @@ import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.reply.model.Reply;
 import goormknights.hotel.reply.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -37,11 +39,11 @@ public class ReplyService {
 
     //Read
     //댓글 전부 찾기
-    public List<ResponseReplyDto> getAll(){
-        List<Reply> replies = replyRepository.findAll();
+    public List<ResponseReplyDto> getAll(Pageable pageable){
+        Page<Reply> all = replyRepository.findAll(pageable);
         List<ResponseReplyDto> response = new ArrayList<>();
 
-        for(Reply reply : replies){
+        for(Reply reply : all){
             response.add(reply.toResponseReplyDto());
         }
 

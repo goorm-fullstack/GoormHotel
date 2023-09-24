@@ -2,6 +2,8 @@ package goormknights.hotel.board.service;
 
 
 import goormknights.hotel.board.dto.request.RequestImageDto;
+import goormknights.hotel.board.model.Board;
+import goormknights.hotel.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,8 @@ import java.time.temporal.ChronoField;
 @Transactional
 @RequiredArgsConstructor
 public class BoardImageService {
+
+    private final BoardRepository boardRepository;
 
     public RequestImageDto requestImageDto(MultipartFile boardImage) throws IOException {
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -43,6 +47,16 @@ public class BoardImageService {
                 .boardImageName(newFileName + fileExtension)
                 .boardImagePath(path)
                 .build();
+    }
+
+//    public byte[] getByteImage(Long boardId){
+//        Board board = boardRepository.findByBoardIdAndBoardDelete(boardId, false);
+//        return board.getBoardImage().get;
+//    }
+
+    public String getMimeTypeImage(Long boardId){
+        Board board = boardRepository.findByBoardIdAndBoardDelete(boardId, false);
+        return board.getBoardImage().getMimeType();
     }
 
 }

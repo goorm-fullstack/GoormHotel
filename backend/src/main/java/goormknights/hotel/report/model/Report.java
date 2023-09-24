@@ -58,6 +58,8 @@ public class Report {
                 .reportWriter(reportWriter)
                 .reportReason(reportReason)
                 .reportDate(reportDate)
+                .reportCheck(reportCheck)
+                .reportResult(reportResult)
                 .build();
     }
 }

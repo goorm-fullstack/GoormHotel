@@ -131,7 +131,7 @@ const AdminBoard = () => {
                   />
                 </TableCell>
                 <TableCell>{board.boardId}</TableCell>
-                <TableCell>{"카테고리(공지, 후기)"}</TableCell>
+                <TableCell>{board.boardTitle}</TableCell>
                 <TableCell>
                   <Link to={`/admin/member/${board.boardId}`}>{board.title}</Link>
                 </TableCell>

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { styled } from 'styled-components';
 import { NavLink, useLocation, useParams } from 'react-router-dom';
 import { commonContainerStyle } from '../../components/common/commonStyles';
 import queryStirng from 'query-string';
+import axios from "axios";
 
 export const Container = styled.div`
   ${commonContainerStyle}
@@ -145,6 +146,29 @@ const ButtonWrap = styled.div`
 
 const BoardRead = () => {
   const board = useParams().board;
+  const [boardData, setBoardData] = useState(null);
+
+  useEffect(() => {
+    axios.get(`/boards/${board}`).then((response) => {
+      setBoardData(response.data);
+    });
+  }, []);
+
+  let listlink;
+  if (boardData) {
+    switch (boardData.boardTitle) {
+      case '문의하기':
+        listlink = '/board/qna';
+        break;
+      case '공지사항':
+        listlink = '/board/notice';
+        break;
+      case '이용후기':
+        listlink = '/board/review';
+        break;
+    }
+  }
+
   return (
     <>
       <AboutHeader>
@@ -178,25 +202,27 @@ const BoardRead = () => {
           <TableRead>
             <tr>
               <td className="titlew">
-                <p className="title">제목입니다.</p>
+                {/* 수정된 부분: boardData가 null인 경우에 대비하여 조건부 렌더링 */}
+                <p className="title">{boardData ? boardData.title : ''}</p>
                 {(() => {
-                  if (board != 'notice') {
+                  // board가 'notice'가 아니고 boardData가 존재하는 경우에만 렌더링
+                  if (board !== 'notice' && boardData) {
                     return (
-                      <p>
-                        <span>작성자명</span>
-                        <span>2023-09-13</span>
-                      </p>
+                        <p>
+                          <span>{boardData.boardWriter}</span>
+                          <span>{`${boardData.boardWriteDate[0]}-${(boardData.boardWriteDate[1] < 10 ? '0' : '')}${boardData.boardWriteDate[1]}-${(boardData.boardWriteDate[2] < 10 ? '0' : '')}${boardData.boardWriteDate[2]}`}</span>
+                        </p>
                     );
                   }
                 })()}
               </td>
             </tr>
             <tr className="contents">
-              <td>내용입니다.</td>
+              <td>{boardData && boardData.boardContent ? boardData.boardContent : ''}</td>
             </tr>
           </TableRead>
           <ButtonWrap>
-            <a href={`/board/` + board}>목록</a>
+            <a href={listlink}>목록</a>
           </ButtonWrap>
         </div>
       </Container>

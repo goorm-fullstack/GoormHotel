@@ -5,6 +5,9 @@ import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.reply.model.Reply;
 import goormknights.hotel.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +31,8 @@ public class ReplyController {
     //Read
     //모든 댓글 출력
     @GetMapping("/list")
-    public ResponseEntity<List<ResponseReplyDto>> getAllBoards() {
-        List<ResponseReplyDto> replies = replyService.getAll();
+    public ResponseEntity<List<ResponseReplyDto>> getAllBoards(@PageableDefault(size = 10, sort = "replyId", direction = Sort.Direction.DESC) Pageable pageable) {
+        List<ResponseReplyDto> replies = replyService.getAll(pageable);
 
         return ResponseEntity.ok(replies);
     }

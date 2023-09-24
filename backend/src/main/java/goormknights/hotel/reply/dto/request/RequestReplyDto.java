@@ -19,8 +19,6 @@ public class RequestReplyDto {
 
     private Long boardId;   //게시글 번호
 
-    private String title;   //게시글 제목
-
     private String replyContent;    //댓글 내용
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")

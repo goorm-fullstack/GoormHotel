@@ -72,12 +72,18 @@ const AdminReport = () => {
   const [report, setReport] = useState([]);
   useEffect(() => {
     axios.get('/report/list').then((response) => {
-      setReport(response.data);
-
+      // 데이터를 가져올 때 reportCheck와 reportResult를 문자열로 처리
+      const modifiedData = response.data.map((item) => ({
+        ...item,
+        reportCheck: item.reportCheck.toString(),
+        reportResult: item.reportResult.toString(),
+      }));
+      setReport(modifiedData);
       console.log('get 성공');
-    })
+    });
   }, []);
 
+  console.log(report);
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
@@ -178,13 +184,31 @@ const AdminReport = () => {
                 </TableCell>
                 <TableCell>{report.reportReason}</TableCell>
                 <TableCell>{`${report.reportDate[0]}-${(report.reportDate[1] < 10 ? '0' : '')}${report.reportDate[1]}-${(report.reportDate[2] < 10 ? '0' : '')}${report.reportDate[2]}`}</TableCell>
-                <TableCell>{report.reportCheck}</TableCell>
-                <TableCell>{report.reportResult}</TableCell>
+                {(() => {
+                  switch (report.reportCheck) {
+                    case 'false':
+                      return <TableCell>N</TableCell>;
+                    case 'true':
+                      return <TableCell>Y</TableCell>;
+                    default:
+                      return <TableCell>N</TableCell>;
+                  }
+                })()}
+
+                {(() => {
+                  switch (report.reportResult) {
+                    case 'false':
+                      return <TableCell>N</TableCell>;
+                    case 'true':
+                      return <TableCell>Y</TableCell>;
+                    default:
+                      return <TableCell>N</TableCell>;
+                  }
+                })()}
               </tr>
             ))}
           </tbody>
         </Table>
-
         <PageParam>
           <li className="sideParam">
             <a href="/">«</a>

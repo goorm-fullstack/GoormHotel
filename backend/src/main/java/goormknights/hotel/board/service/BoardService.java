@@ -11,6 +11,7 @@ import goormknights.hotel.reply.model.Reply;
 import goormknights.hotel.report.dto.response.ResponseReportDto;
 import goormknights.hotel.report.model.Report;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Array;
@@ -57,8 +58,8 @@ public class BoardService {
     }
 
     //게시물 작성자 이름으로 찾기
-    public List<ResponseBoardDto> findByBoardWriter(String boardWriter, boolean bool){
-        List<Board> byBoardWriter = boardRepository.findAllByBoardWriterAndBoardDelete(boardWriter, bool);
+    public List<ResponseBoardDto> findByBoardWriter(String boardWriter, boolean bool, Pageable pageable){
+        List<Board> byBoardWriter = boardRepository.findAllByBoardWriterAndBoardDelete(boardWriter, bool, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : byBoardWriter) {
@@ -69,8 +70,8 @@ public class BoardService {
     }
 
     //제목 또는 내용으로 게시물 조회
-    public List<ResponseBoardDto> findByTitleOrContent(String keyword, boolean bool){
-        List<Board> boards = boardRepository.findByTitleOrContent(keyword, bool);
+    public List<ResponseBoardDto> findByTitleOrContent(String keyword, boolean bool, Pageable pageable){
+        List<Board> boards = boardRepository.findByTitleOrContent(keyword, bool, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
@@ -81,8 +82,8 @@ public class BoardService {
     }
 
     //제목으로 게시물 조회
-    public List<ResponseBoardDto> findByTitle(String keyword, boolean bool){
-        List<Board> boards = boardRepository.findAllByTitleContainingAndBoardDelete(keyword, bool);
+    public List<ResponseBoardDto> findByTitle(String keyword, boolean bool, Pageable pageable){
+        List<Board> boards = boardRepository.findAllByTitleContainingAndBoardDelete(keyword, bool, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
@@ -93,8 +94,8 @@ public class BoardService {
     }
 
     //내용으로 게시물 조회
-    public List<ResponseBoardDto> findByContent(String keyword, boolean bool){
-        List<Board> boards = boardRepository.findAllByBoardContentContainingAndBoardDelete(keyword, bool);
+    public List<ResponseBoardDto> findByContent(String keyword, boolean bool, Pageable pageable){
+        List<Board> boards = boardRepository.findAllByBoardContentContainingAndBoardDelete(keyword, bool, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
@@ -105,8 +106,8 @@ public class BoardService {
     }
 
     //삭제된 게시물만 조회
-    public List<ResponseBoardDto> findAllBoardDelete(Boolean bool){
-        List<Board> boardDelete = boardRepository.findAllByBoardDelete(bool);
+    public List<ResponseBoardDto> findAllBoardDelete(Boolean bool, Pageable pageable){
+        List<Board> boardDelete = boardRepository.findAllByBoardDelete(bool, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boardDelete){
@@ -122,8 +123,8 @@ public class BoardService {
     }
 
     //모든 게시물 조회
-    public List<ResponseBoardDto> getAllBoards(boolean bool) {
-        List<Board> all = boardRepository.findAllByBoardDelete(bool);
+    public List<ResponseBoardDto> findAllBoards(boolean bool, Pageable pageable) {
+        List<Board> all = boardRepository.findAllByBoardDelete(bool, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
         for (Board board : all) {
             ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
@@ -145,8 +146,8 @@ public class BoardService {
     }
 
     //게시판으로 게시물 찾기
-    public List<ResponseBoardDto> getAllByboardTitle(String boardTitle, boolean bool) {
-        List<Board> allByBoardTitle = boardRepository.findAllByBoardTitleAndBoardDelete(boardTitle, bool);
+    public List<ResponseBoardDto> getAllByboardTitle(String boardTitle, boolean bool, Pageable pageable) {
+        List<Board> allByBoardTitle = boardRepository.findAllByBoardTitleAndBoardDelete(boardTitle, bool, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : allByBoardTitle) {
@@ -158,8 +159,8 @@ public class BoardService {
     }
 
     //게시판-카테고리로 게시물 찾기
-    public List<ResponseBoardDto> getAllByCategory(String category, boolean bool){
-        List<Board> allByCataegory = boardRepository.findAllByCategoryAndBoardDelete(category, bool);
+    public List<ResponseBoardDto> getAllByCategory(String category, boolean bool, Pageable pageable){
+        List<Board> allByCataegory = boardRepository.findAllByCategoryAndBoardDelete(category, bool, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for(Board board : allByCataegory){

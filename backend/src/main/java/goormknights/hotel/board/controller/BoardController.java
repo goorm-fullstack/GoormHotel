@@ -7,6 +7,9 @@ import goormknights.hotel.board.model.Board;
 import goormknights.hotel.board.service.BoardImageService;
 import goormknights.hotel.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,8 +27,8 @@ public class BoardController {
 
     // 모든 게시물 조회
     @GetMapping("/list")
-    public ResponseEntity<List<ResponseBoardDto>> getAllBoards() {
-        List<ResponseBoardDto> boards = boardService.getAllBoards(false);
+    public ResponseEntity<List<ResponseBoardDto>> getAllBoards(@PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
+        List<ResponseBoardDto> boards = boardService.findAllBoards(false, pageable);
 
         return ResponseEntity.ok(boards);
     }
@@ -57,8 +60,8 @@ public class BoardController {
 
     // 삭제된 게시물 전체 조회
     @GetMapping("/deleted")
-    public ResponseEntity<List<ResponseBoardDto>> getDeletedBoards() {
-        List<ResponseBoardDto> deletedBoards = boardService.findAllBoardDelete(true);
+    public ResponseEntity<List<ResponseBoardDto>> getDeletedBoards(@PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
+        List<ResponseBoardDto> deletedBoards = boardService.findAllBoardDelete(true, pageable);
 
         return ResponseEntity.ok(deletedBoards);
     }
@@ -71,48 +74,48 @@ public class BoardController {
 
     //작성자로 게시물 조회
     @GetMapping("/find/writer/{boardWriter}")
-    public ResponseEntity<List<ResponseBoardDto>> findByBoardWriter(@PathVariable String boardWriter) {
-        List<ResponseBoardDto> byBoardWriter = boardService.findByBoardWriter(boardWriter, false);
+    public ResponseEntity<List<ResponseBoardDto>> findByBoardWriter(@PathVariable String boardWriter, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
+        List<ResponseBoardDto> byBoardWriter = boardService.findByBoardWriter(boardWriter, false, pageable);
 
         return ResponseEntity.ok(byBoardWriter);
     }
 
     //내용으로 게시물 조회
     @GetMapping("/find/content/{boardContent}")
-    public ResponseEntity<List<ResponseBoardDto>> findByBoardContent(@PathVariable String boardContent) {
-        List<ResponseBoardDto> content = boardService.findByContent(boardContent, false);
+    public ResponseEntity<List<ResponseBoardDto>> findByBoardContent(@PathVariable String boardContent, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
+        List<ResponseBoardDto> content = boardService.findByContent(boardContent, false, pageable);
 
         return ResponseEntity.ok(content);
     }
 
     //내용, 제목으로 게시물 조회
     @GetMapping("/find/{keyword}")
-    public ResponseEntity<List<ResponseBoardDto>> findBytitleOrContent(@PathVariable String keyword){
-        List<ResponseBoardDto> byTitleOrContent = boardService.findByTitleOrContent(keyword, false);
+    public ResponseEntity<List<ResponseBoardDto>> findBytitleOrContent(@PathVariable String keyword, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable){
+        List<ResponseBoardDto> byTitleOrContent = boardService.findByTitleOrContent(keyword, false, pageable);
 
         return ResponseEntity.ok(byTitleOrContent);
     }
 
     //제목으로 게시물 조회
     @GetMapping("/find/title/{title}")
-    public ResponseEntity<List<ResponseBoardDto>> findBytitle(@PathVariable String title) {
-        List<ResponseBoardDto> Titles = boardService.findByTitle(title, false);
+    public ResponseEntity<List<ResponseBoardDto>> findBytitle(@PathVariable String title, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
+        List<ResponseBoardDto> Titles = boardService.findByTitle(title, false, pageable);
 
         return ResponseEntity.ok(Titles);
     }
 
     //게시판으로 찾기
     @GetMapping("/find/boardTitle/{boardTitle}")
-    public ResponseEntity<List<ResponseBoardDto>> findByboardTitle(@PathVariable String boardTitle){
-        List<ResponseBoardDto> boardTitles = boardService.getAllByboardTitle(boardTitle, false);
+    public ResponseEntity<List<ResponseBoardDto>> findByboardTitle(@PathVariable String boardTitle, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable){
+        List<ResponseBoardDto> boardTitles = boardService.getAllByboardTitle(boardTitle, false, pageable);
 
         return ResponseEntity.ok(boardTitles);
     }
 
     //게시판-카테고리로 찾기
     @GetMapping("/find/category/{category}")
-    public ResponseEntity<List<ResponseBoardDto>> findByCategory(@PathVariable String category){
-        List<ResponseBoardDto> allByCategory = boardService.getAllByCategory(category, false);
+    public ResponseEntity<List<ResponseBoardDto>> findByCategory(@PathVariable String category, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable){
+        List<ResponseBoardDto> allByCategory = boardService.getAllByCategory(category, false, pageable);
 
         return ResponseEntity.ok(allByCategory);
     }
