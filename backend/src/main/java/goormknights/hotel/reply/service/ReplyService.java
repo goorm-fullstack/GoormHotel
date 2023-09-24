@@ -1,7 +1,5 @@
 package goormknights.hotel.reply.service;
 
-import goormknights.hotel.board.dto.request.RequestBoardDto;
-import goormknights.hotel.board.dto.response.ResponseBoardDto;
 import goormknights.hotel.board.model.Board;
 import goormknights.hotel.board.repository.BoardRepository;
 import goormknights.hotel.reply.dto.request.RequestReplyDto;
@@ -30,7 +28,7 @@ public class ReplyService {
     public Reply create(RequestReplyDto requestReplyDto){
 
         Long boardId = requestReplyDto.getBoardId();
-        Board byBoardId = boardRepository.findByBoardIdAndBoardDelete(boardId, false);
+        Board byBoardId = boardRepository.findByBoardId(boardId);
 
         Reply reply = requestReplyDto.toEntity();
         reply.setBoard(byBoardId);
@@ -44,7 +42,7 @@ public class ReplyService {
     //Read
     //댓글 전부 찾기
     public List<ResponseReplyDto> getAll(Pageable pageable){
-        Page<Reply> all = replyRepository.findAllByReplyDelete(pageable, false);
+        Page<Reply> all = replyRepository.findAll(pageable);
         List<ResponseReplyDto> response = new ArrayList<>();
 //        for (Board board : all) {
 //            ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
@@ -56,10 +54,12 @@ public class ReplyService {
 //        }
 
         for(Reply reply : all){
+            if(reply.getReplyDeleteTime()==null){
+                response.add(reply.toResponseReplyDto());
+            }
 //            ResponseReplyDto responseReplyDto = reply.toResponseReplyDto();
 //            List<ResponseReportDto> list = reply.getReport().stream().map(Report::toResponseReportDto).toList();
 //            responseReplyDto.setReport(list);
-            response.add(reply.toResponseReplyDto());
         }
 
         return response;
@@ -67,11 +67,13 @@ public class ReplyService {
 
     //댓글 내용으로 찾기
     public List<ResponseReplyDto> findByContent(String keyword){
-        List<Reply> replies = replyRepository.findByReplyContentContainingAndReplyDelete(keyword, false);
+        List<Reply> replies = replyRepository.findByReplyContentContaining(keyword);
         List<ResponseReplyDto> response = new ArrayList<>();
 
         for (Reply reply : replies){
-            response.add(reply.toResponseReplyDto());
+            if(reply.getReplyDeleteTime()==null){
+                response.add(reply.toResponseReplyDto());
+            }
         }
 
         return response;
@@ -79,19 +81,21 @@ public class ReplyService {
 
     //boardId로 댓글 찾기
     public List<ResponseReplyDto> findByBoardId(Long boardId){
-        Board BoardId = boardRepository.findByBoardIdAndBoardDelete(boardId, false);
+        Board BoardId = boardRepository.findByBoardId(boardId);
         List<Reply> replies = replyRepository.findByBoard(BoardId);
         List<ResponseReplyDto> response = new ArrayList<>();
 
         for(Reply reply : replies){
-            response.add(reply.toResponseReplyDto());
+            if(reply.getReplyDeleteTime()==null){
+                response.add(reply.toResponseReplyDto());
+            }
         }
         return response;
     }
 
     //댓글 인덱스 번호로 찾기
     public ResponseReplyDto findByReplyId(Long replyId){
-        Reply reply = replyRepository.findByReplyIdAndReplyDelete(replyId, false);
+        Reply reply = replyRepository.findByReplyId(replyId);
 
         return reply.toResponseReplyDto();
     }
@@ -99,7 +103,7 @@ public class ReplyService {
     //Update
     //댓글 내용 수정하기
     public Reply updateReply(Long replyId, RequestReplyDto requestReplyDto){
-        Reply beforeReply = replyRepository.findByReplyIdAndReplyDelete(replyId, false);
+        Reply beforeReply = replyRepository.findByReplyId(replyId);
         Reply afterReply = beforeReply.updateReply(beforeReply, requestReplyDto);
 
         return replyRepository.save(afterReply);
@@ -113,24 +117,23 @@ public class ReplyService {
     }
 
     //삭제 댓글 복원
-    public Reply undeleted(Long boardId){
-        Reply reply = replyRepository.findByReplyIdAndReplyDelete(boardId, true);
+    public Reply undeleted(Long replyId){
+        Reply reply = replyRepository.findByReplyId(replyId);
         if(reply!=null){
-            reply.setReplyDelete(false);
             reply.setReplyDeleteTime(null);
         }
         return replyRepository.save(reply);
     }
 
+    //댓글 소프트딜리트
     public Reply softdeleteReply(Long replyId) {
-        Reply reply = replyRepository.findByReplyIdAndReplyDelete(replyId, false);
+        Reply reply = replyRepository.findByReplyId(replyId);
 
         String datePattern = "yyyy-MM-dd'T'HH:mm:ss";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(datePattern);
         String now = LocalDateTime.now().format(formatter);
         LocalDateTime replyDeleteTime = LocalDateTime.parse(now, formatter);
         reply.setReplyDeleteTime(replyDeleteTime);
-        reply.setReplyDelete(true);
 
         return replyRepository.save(reply);
     }

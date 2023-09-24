@@ -63,12 +63,12 @@ public class BoardImageService {
     }
 
     public byte[] getByteImage(Long boardId){
-        Board board = boardRepository.findByBoardIdAndBoardDelete(boardId, false);
+        Board board = boardRepository.findByBoardId(boardId);
         return board.getBoardImage().getData();
     }
 
     public String getMimeTypeImage(Long boardId){
-        Board board = boardRepository.findByBoardIdAndBoardDelete(boardId, false);
+        Board board = boardRepository.findByBoardId(boardId);
         return board.getBoardImage().getMimeType();
     }
 

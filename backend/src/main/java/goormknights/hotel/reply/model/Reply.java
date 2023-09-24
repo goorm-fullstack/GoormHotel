@@ -6,7 +6,6 @@ import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.report.model.Report;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,10 +29,6 @@ public class Reply {
 
     @Column(nullable = false)
     private LocalDateTime replyWriteDate;   //댓글 작성 시간
-
-    @Column(nullable = false)
-    @Setter
-    private boolean replyDelete = false;
 
     @Setter
     private LocalDateTime replyDeleteTime;

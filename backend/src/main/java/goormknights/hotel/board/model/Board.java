@@ -7,7 +7,6 @@ import goormknights.hotel.reply.model.Reply;
 import goormknights.hotel.report.model.Report;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -44,10 +43,6 @@ public class Board {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Report> report = new ArrayList<>();            //신고
-
-    @Column(nullable = false)
-    @Setter
-    private boolean boardDelete = false;        //게시물 삭제 유무
 
     @Column(nullable = false)
     private String boardTitle;      //게시판 이름
