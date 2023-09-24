@@ -1,10 +1,7 @@
 package goormknights.hotel.chat.model;
 
 import goormknights.hotel.chat.service.ChatService;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.socket.WebSocketSession;
@@ -20,12 +17,15 @@ public class ChatRoom {
     private String roomId;
     private String name;
     private Set<WebSocketSession> sessions = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.CONTINUE;//초기 방 상태
 
     @Builder
     public ChatRoom(String roomId, String name) {
         this.roomId = roomId;
         this.name = name;
     }
+    
 
     // 메시지가 전송되면 세션 리스트에 세션을 추가하고
     // 메시지를 입력하는 로직
@@ -39,6 +39,11 @@ public class ChatRoom {
                 sendMessage(chatMessage, chatService);
             }
         } else if (chatMessage.getType().equals(ChatMessage.MessageType.TALK)) {
+            if(!chatMessage.getSender().equals("admin")) {
+                if(status == Status.CLOSED) {
+                    status = Status.CONTINUE;
+                }
+            }
             chatMessage.setMessage(chatMessage.getMessage());
             sendMessage(chatMessage, chatService);
         }
