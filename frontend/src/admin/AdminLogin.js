@@ -15,7 +15,7 @@ const LoginContainer = styled.div`
 
 const AdminContainer = styled(commonAdminContainer)`
   width: 400px;
-  padding-top: calc(100px + 25vh);
+  padding-top: calc(100px + 20vh);
 
   h2 {
     margin-bottom: 40px;
@@ -37,6 +37,13 @@ const Header = styled(Container)``;
 
 const HeaderLink = styled.h1`
   margin-right: 45px;
+`;
+
+const ShareID = styled.div`
+  line-height: 1.6;
+  padding: 20px;
+  margin-top: 40px;
+  color: ${(props) => props.theme.colors.graylight};
 `;
 
 const AdminLogin = () => {
@@ -67,6 +74,7 @@ const AdminLogin = () => {
       </Header>
       <AdminContainer>
         <PageTitle>관리자 로그인</PageTitle>
+
         <form>
           <input placeholder="아이디" type="text" value={adminId} onChange={handleIdChange} />
           <input placeholder="비밀번호" type="password" value={adminPassword} onChange={handlePwChange} />
@@ -80,6 +88,10 @@ const AdminLogin = () => {
             아이디 기억하기
           </CheckLabel>
         </div>
+        <ShareID>
+          <p>[관리자 페이지 체험용 부운영자 계정 정보]</p>
+          <p>ID : manager / PW : administrator1!</p>
+        </ShareID>
       </AdminContainer>
     </LoginContainer>
   );
