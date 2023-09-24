@@ -18,65 +18,6 @@ import {
   Num,
 } from '../member/AdminMember';
 
-const InfoContainer = styled.table`
-  width: 100%;
-
-  th,
-  td {
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    font-size: 15px;
-  }
-`;
-
-const InfoWrapper = styled.tr``;
-
-const Label = styled.th`
-  width: 240px;
-  font-weight: 500;
-  background-color: #f7f7f7;
-  padding: 21.5px 40px;
-  text-align: left;
-  color: #111;
-
-  &.center {
-    text-align: center;
-  }
-
-  label {
-    font-size: 0.875rem;
-    color: #666;
-  }
-`;
-
-const Data = styled.td`
-  padding: 10px 20px;
-  color: #444;
-
-  &.writeWrapper {
-    padding: 0;
-  }
-
-  input {
-    width: 100%;
-    height: 35px;
-  }
-
-  textarea {
-    border: 0;
-    width: 100%;
-    resize: none;
-    height: 400px;
-    border-radius: 3px;
-    padding: 10px;
-  }
-
-  input[type='file'] {
-    border: 0;
-    padding: 0;
-  }
-`;
-
 const ModifyBtnWrapper = styled.div`
   text-align: center;
 `;

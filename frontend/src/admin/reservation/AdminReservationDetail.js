@@ -22,7 +22,7 @@ const CalendarWrapper = styled.div`
   display: ${(props) => (props.open ? 'block' : 'none')};
 `;
 
-export const StyledCalendar = styled(Calendar)`
+const StyledCalendar = styled(Calendar)`
   border-radius: 10px;
   border: 1px solid #c8c8c8;
 
@@ -51,33 +51,33 @@ export const StyledCalendar = styled(Calendar)`
   }
 `;
 
-export const InfoContainer = styled.div`
+const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   border-top: 1px solid #dddddd;
 `;
 
-export const InfoWrapper = styled.div`
+const InfoWrapper = styled.div`
   display: flex;
   align-items: center;
   border-bottom: 1px solid #dddddd;
 `;
 
-export const Label = styled.div`
+const Label = styled.div`
   width: 245px;
   font-weight: bold;
   background-color: #f7f7f7;
   padding: 23px 0 23px 40px;
 `;
 
-export const Data = styled.div`
+const Data = styled.div`
   flex-grow: 1;
   padding: 20px 0 23px 20px;
   display: flex; /* Add this line */
   align-items: center; /* Add this line */
 `;
 
-export const Input = styled.input`
+const Input = styled.input`
   width: 200px;
   height: 40px;
   font-size: 15px;

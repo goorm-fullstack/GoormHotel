@@ -63,14 +63,6 @@ const CheckBox = styled(TableCheckbox)`
   vertical-align: middle;
 `;
 
-const CheckBoxTh = styled.th`
-  width: 30px;
-`;
-
-const CheckBoxTd = styled.td`
-  width: 30px;
-`;
-
 // 최하단 페이징 링크
 const PageLink = styled(NavLink)`
   &.active {

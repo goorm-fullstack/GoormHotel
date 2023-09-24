@@ -54,29 +54,6 @@ const AddBtn = styled.button`
   }
 `;
 
-const AccoutInput = styled(Input)`
-  margin-left: 20px;
-`;
-
-const CheckInputWrapper = styled.div`
-  margin-left: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const CheckInput = styled.input.attrs({ type: 'checkbox' })`
-  width: 16px;
-  height: 16px;
-  margin: 10px;
-  border: none;
-
-  &:checked {
-    background-color: #95846e;
-    border: 1px solid #95846e;
-  }
-`;
-
 const ManagerInfoBtn = styled.button`
   background-color: transparent;
 

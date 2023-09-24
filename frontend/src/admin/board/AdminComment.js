@@ -20,14 +20,6 @@ import {
 import axios, { get } from 'axios';
 import Paging from '../../components/common/Paging';
 
-const CommentTableHeader = styled(TableHeader)`
-  width: 15%;
-`;
-
-const CommentTableCell = styled(TableCell)`
-  position: relative;
-`;
-
 const ModalContainer = styled.div`
   display: none;
   position: absolute;

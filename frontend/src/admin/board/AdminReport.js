@@ -27,10 +27,6 @@ const LinkStyle = styled(Link)`
   }
 `;
 
-const PostTableHeader = styled(TableHeader)`
-  width: 20%;
-`;
-
 export const PageParam = styled.ul`
   text-align: center;
   margin-top: 50px;

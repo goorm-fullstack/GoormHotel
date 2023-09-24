@@ -191,21 +191,6 @@ export const TableListTr = styled.tr`
   border-bottom: 1px solid #dddddd;
 `;
 
-// export const InputLabel = styled.label`
-//   display: inline-block;
-//   width: 20px;
-//   height: 20px;
-//   border: 1px solid rgb(221, 221, 221);
-//   vertical-align: text-bottom;
-// `;
-
-// export const CheckBoxInput = styled.input`
-//   &:checked + ${InputLabel}:after {
-//     content: '\\2714';
-//     font-size: 12px;
-//   }
-// `;
-
 // 체크 박스
 const CheckBox = styled(TableCheckbox)`
   margin: 0;

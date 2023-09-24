@@ -20,14 +20,6 @@ import {
 import Paging from '../../components/common/Paging';
 import axios from 'axios';
 
-const TableHeaderStyle = styled(TableHeader)`
-  width: 20%;
-`;
-
-const WriterTableHeader = styled(TableHeader)`
-  width: 15%;
-`;
-
 const LinkStyle = styled(Link)`
   &:hover {
     text-decoration: underline;
