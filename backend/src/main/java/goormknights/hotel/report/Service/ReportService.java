@@ -9,7 +9,7 @@ import goormknights.hotel.report.dto.response.ResponseReportDto;
 import goormknights.hotel.report.model.Report;
 import goormknights.hotel.report.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReportService {
 
     private final ReportRepository reportRepository;
@@ -27,7 +28,10 @@ public class ReportService {
     public Report reportCreate(RequestReportDto requestReportDto){
 
         Long boardId = requestReportDto.getBoardId();
+        log.info("boardId={}", boardId);
         Long replyId = requestReportDto.getReplyId();
+        log.info("replyId={}", replyId);
+
         if(boardId == null){
             Reply byReplyId = replyRepository.findByReplyId(replyId);
 
