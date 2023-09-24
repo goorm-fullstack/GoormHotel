@@ -70,7 +70,7 @@ public class ReportService {
         return response;
     }
 
-    //신고 삭제
+    //신고 완전 삭제
     public void deletedById(Long reportId){
         boardRepository.deleteById(reportId);
     }

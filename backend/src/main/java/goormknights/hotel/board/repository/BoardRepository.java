@@ -34,6 +34,4 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     //게시판-카테고리로 게시물 찾기
     List<Board> findAllByCategoryAndBoardDelete(String category, boolean bool, Pageable pageable);
-
-    List<Board> findAllByBoardDelete(boolean bool);
 }

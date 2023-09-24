@@ -65,7 +65,7 @@ public class ReplyController {
     }
 
     //Delete
-    //댓글 삭제
+    //댓글 완전 삭제
     @DeleteMapping("/{replyId}")
     public void deleteReply(@PathVariable Long replyId){
         replyService.deleteById(replyId);

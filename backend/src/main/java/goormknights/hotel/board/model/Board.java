@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 //@Where(clause = "board_delete = false")
-@SQLDelete(sql = "UPDATE Board SET board_Delete = true WHERE board_Id = ?")
+//@SQLDelete(sql = "UPDATE Board SET board_Delete = true WHERE board_Id = ?")
 public class Board {
 
     @Id

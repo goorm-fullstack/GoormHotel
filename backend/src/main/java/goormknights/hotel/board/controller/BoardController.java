@@ -66,7 +66,7 @@ public class BoardController {
         return ResponseEntity.ok(deletedBoards);
     }
 
-    // 게시물 삭제
+    // 게시물 영구 삭제
     @DeleteMapping("/{boardId}")
     public void deleteBoard(@PathVariable Long boardId) {
         boardService.deleteById(boardId);

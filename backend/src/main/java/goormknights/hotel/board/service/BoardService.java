@@ -117,7 +117,7 @@ public class BoardService {
         return response;
     }
 
-    //게시물 삭제
+    //게시물 영구 삭제
     public void deleteById(Long boardId){
         boardRepository.deleteById(boardId);
     }
@@ -128,10 +128,10 @@ public class BoardService {
         List<ResponseBoardDto> response = new ArrayList<>();
         for (Board board : all) {
             ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
-//            List<ResponseReportDto> reportList = board.getReport().stream().map(Report::toResponseReportDto).toList();
+            List<ResponseReportDto> reportList = board.getReport().stream().map(Report::toResponseReportDto).toList();
             List<ResponseReplyDto> replyList = board.getReplies().stream().map(Reply::toResponseReplyDto).toList();
             responseBoardDto.setReply(replyList);
-//            responseBoardDto.setReport(reportList);
+            responseBoardDto.setReport(reportList);
             response.add(responseBoardDto);
         }
         return response;
@@ -180,4 +180,11 @@ public class BoardService {
         return boardRepository.save(board);
     }
 
+    //게시물 소프트 삭제
+//    public Board softdeleteBoard(Long boardId, RequestBoardDto requestBoardDto) {
+//        Board beforeBoard = boardRepository.findByBoardIdAndBoardDelete(boardId, false);
+//        Board afterBoard = beforeBoard.updateBoard(boardId, requestBoardDto);
+//
+//        return boardRepository.save(afterBoard);
+//    }
 }
