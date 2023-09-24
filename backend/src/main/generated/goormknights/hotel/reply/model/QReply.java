@@ -32,6 +32,8 @@ public class QReply extends EntityPathBase<Reply> {
 
     public final StringPath replyWriter = createString("replyWriter");
 
+    public final ListPath<goormknights.hotel.report.model.Report, goormknights.hotel.report.model.QReport> report = this.<goormknights.hotel.report.model.Report, goormknights.hotel.report.model.QReport>createList("report", goormknights.hotel.report.model.Report.class, goormknights.hotel.report.model.QReport.class, PathInits.DIRECT2);
+
     public QReply(String variable) {
         this(Reply.class, forVariable(variable), INITS);
     }

@@ -1,11 +1,14 @@
 package goormknights.hotel.reply.service;
 
+import goormknights.hotel.board.dto.response.ResponseBoardDto;
 import goormknights.hotel.board.model.Board;
 import goormknights.hotel.board.repository.BoardRepository;
 import goormknights.hotel.reply.dto.request.RequestReplyDto;
 import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.reply.model.Reply;
 import goormknights.hotel.reply.repository.ReplyRepository;
+import goormknights.hotel.report.dto.response.ResponseReportDto;
+import goormknights.hotel.report.model.Report;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,8 +45,19 @@ public class ReplyService {
     public List<ResponseReplyDto> getAll(Pageable pageable){
         Page<Reply> all = replyRepository.findAll(pageable);
         List<ResponseReplyDto> response = new ArrayList<>();
+//        for (Board board : all) {
+//            ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
+//            List<ResponseReportDto> reportList = board.getReport().stream().map(Report::toResponseReportDto).toList();
+//            List<ResponseReplyDto> replyList = board.getReplies().stream().map(Reply::toResponseReplyDto).toList();
+//            responseBoardDto.setReply(replyList);
+//            responseBoardDto.setReport(reportList);
+//            response.add(responseBoardDto);
+//        }
 
         for(Reply reply : all){
+//            ResponseReplyDto responseReplyDto = reply.toResponseReplyDto();
+//            List<ResponseReportDto> list = reply.getReport().stream().map(Report::toResponseReportDto).toList();
+//            responseReplyDto.setReport(list);
             response.add(reply.toResponseReplyDto());
         }
 

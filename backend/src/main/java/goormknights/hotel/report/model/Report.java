@@ -1,6 +1,7 @@
 package goormknights.hotel.report.model;
 
 import goormknights.hotel.board.model.Board;
+import goormknights.hotel.reply.model.Reply;
 import goormknights.hotel.report.dto.response.ResponseReportDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -19,7 +20,11 @@ public class Report {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
-    private Board board;        //게시글
+    private Board board;           //게시글
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reply_id")
+    private Reply reply;
 
     @Column(nullable = false)
     private String reportWriter;    //신고자
@@ -40,6 +45,10 @@ public class Report {
         this.board = board;
     }
 
+    public void setReply(Reply reply){
+        this.reply = reply;
+    }
+
     @Builder
     public Report(Long reportId, String reportWriter, String reportReason, LocalDateTime reportDate, boolean reportCheck, boolean reportResult) {
         this.reportId = reportId;
@@ -51,15 +60,29 @@ public class Report {
     }
 
     public ResponseReportDto toResponseReportDto() {
-        return ResponseReportDto.builder()
-                .reportId(reportId)
-                .boardId(board.getBoardId())
-                .title(board.getTitle())
-                .reportWriter(reportWriter)
-                .reportReason(reportReason)
-                .reportDate(reportDate)
-                .reportCheck(reportCheck)
-                .reportResult(reportResult)
-                .build();
+        if(reply.getReplyId() == null){
+            return ResponseReportDto.builder()
+                    .reportId(reportId)
+                    .boardId(board.getBoardId())
+                    .title(board.getTitle())
+                    .reportWriter(reportWriter)
+                    .reportReason(reportReason)
+                    .reportDate(reportDate)
+                    .reportCheck(reportCheck)
+                    .reportResult(reportResult)
+                    .build();
+        }
+        else{
+            return ResponseReportDto.builder()
+                    .reportId(reportId)
+                    .replyId(reply.getReplyId())
+                    .replyContent(reply.getReplyContent())
+                    .reportWriter(reportWriter)
+                    .reportReason(reportReason)
+                    .reportDate(reportDate)
+                    .reportCheck(reportCheck)
+                    .reportResult(reportResult)
+                    .build();
+        }
     }
 }

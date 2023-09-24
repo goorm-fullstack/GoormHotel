@@ -72,6 +72,14 @@ public class BoardController {
         boardService.deleteById(boardId);
     }
 
+    //삭제된 게시물 복원
+    @PostMapping("/undeleted/{boardId}")
+    public ResponseEntity<ResponseBoardDto> undeleted(@PathVariable Long boardId) {
+        Board board = boardService.undeleted(boardId);
+
+        return ResponseEntity.ok(board.toResponseBoardDto());
+    }
+
     //작성자로 게시물 조회
     @GetMapping("/find/writer/{boardWriter}")
     public ResponseEntity<List<ResponseBoardDto>> findByBoardWriter(@PathVariable String boardWriter, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -119,6 +127,5 @@ public class BoardController {
 
         return ResponseEntity.ok(allByCategory);
     }
-
 
 }

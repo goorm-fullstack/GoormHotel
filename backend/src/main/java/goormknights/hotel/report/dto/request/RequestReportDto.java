@@ -19,7 +19,7 @@ public class RequestReportDto {
 
     private Long boardId;       //게시글 번호
 
-    private String title;       //게시글 제목
+    private Long replyId;       //댓글 번호
 
     private String reportReason;    //신고 이유
 

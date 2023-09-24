@@ -3,6 +3,7 @@ package goormknights.hotel.reply.model;
 import goormknights.hotel.board.model.Board;
 import goormknights.hotel.reply.dto.request.RequestReplyDto;
 import goormknights.hotel.reply.dto.response.ResponseReplyDto;
+import goormknights.hotel.report.model.Report;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,6 +36,9 @@ public class Reply {
     @JoinColumn(name = "board_id")
     private Board board;        //게시글
 
+    @OneToMany(mappedBy = "reply", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Report> report = new ArrayList<>();            //신고
+
     public void setBoard(Board board) {
         this.board = board;
     }
@@ -52,6 +58,7 @@ public class Reply {
                 .replyContent(replyContent)
                 .replyWriteDate(replyWriteDate)
                 .replyWriter(replyWriter)
+                .report(report.stream().map(Report::toResponseReportDto).toList())
                 .build();
     }
 

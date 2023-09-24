@@ -108,7 +108,7 @@ const CustomerSupport = () => {
       });
 
       // 이미지 정보 가져오기
-      // axios.get('/board_image').then((response) => {
+      // axios.get(`/boards/image/${board.boardId}`).then((response) => {
       //   setBoardImages(response.data);
       //   console.log('이미지 정보 get 성공');
       // });

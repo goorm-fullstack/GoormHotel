@@ -5,10 +5,7 @@ import goormknights.hotel.board.dto.response.ResponseBoardDto;
 import goormknights.hotel.reply.model.Reply;
 import goormknights.hotel.report.model.Report;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -49,6 +46,7 @@ public class Board {
     private List<Report> report = new ArrayList<>();            //신고
 
     @Column(nullable = false)
+    @Setter
     private boolean boardDelete = false;        //게시물 삭제 유무
 
     @Column(nullable = false)
@@ -92,5 +90,4 @@ public class Board {
                 .boardWriter(requestBoardDto.getBoardWriter())
                 .build();
     }
-
 }

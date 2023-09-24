@@ -31,13 +31,6 @@ public class RequestBoardDto {
 
     private String category;        //게시판-카테고리
 
-//    @Builder
-//    public RequestBoardDto(String title, String boardContent, String boardWriter) {
-//        this.title = title;
-//        this.boardContent = boardContent;
-//        this.boardWriter = boardWriter;
-//    }
-
     public Board toEntity() {
         return Board.builder()
                 .boardId(boardId)

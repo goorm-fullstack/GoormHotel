@@ -16,13 +16,15 @@ public class ReportController {
 
     private final ReportService reportService;
 
+    //게시글 신고하기
     @PostMapping("/writeform")
-    public ResponseEntity<Object> createReport(@RequestBody RequestReportDto requestReportDto){
-        reportService.create(requestReportDto);
+    public ResponseEntity<Object> boardCreateReport(@RequestBody RequestReportDto requestReportDto){
+        reportService.reportCreate(requestReportDto);
 
         return ResponseEntity.ok().build();
     }
 
+    //신고 목록
     @GetMapping("/list")
     public ResponseEntity<List<ResponseReportDto>> gettAllReport() {
         List<ResponseReportDto> reports = reportService.getAllReports();

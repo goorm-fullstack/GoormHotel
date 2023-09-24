@@ -171,4 +171,13 @@ public class BoardService {
         return response;
     }
 
+    //삭제 게시물 복원
+    public Board undeleted(Long boardId){
+        Board board = boardRepository.findByBoardIdAndBoardDelete(boardId, true);
+        if(board!=null){
+            board.setBoardDelete(false);
+        }
+        return boardRepository.save(board);
+    }
+
 }
