@@ -88,6 +88,8 @@ const LatestList = styled.ul`
     letter-spacing: -0.01em;
     position: relative;
     padding-left: 12px;
+    display: flex;
+    justify-content: space-between;
 
     &::before {
       content: '';
@@ -103,9 +105,19 @@ const LatestList = styled.ul`
     }
 
     span {
-      float: right;
       font-size: ${(props) => props.theme.font.sizexs};
       color: ${(props) => props.theme.colors.graylight};
+    }
+
+    p {
+      width: 75%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+
+      a:hover {
+        text-decoration: underline;
+      }
     }
   }
 `;
@@ -125,13 +137,22 @@ const AdminIndex = () => {
               </h4>
               <LatestList>
                 <li>
-                  <Link to="#">최근 글 제목</Link> <span>2023.09.24</span>
+                  <p>
+                    <Link to="#">최근 글 제목최근 글 제목최근 글 제목최근 글 제목</Link>
+                  </p>{' '}
+                  <span>2023.09.24</span>
                 </li>
                 <li>
-                  <Link to="#">최근 글 제목</Link> <span>2023.09.24</span>
+                  <p>
+                    <Link to="#">최근 글 제목</Link>
+                  </p>{' '}
+                  <span>2023.09.24</span>
                 </li>
                 <li>
-                  <Link to="#">최근 글 제목</Link> <span>2023.09.24</span>
+                  <p>
+                    <Link to="#">최근 글 제목</Link>
+                  </p>{' '}
+                  <span>2023.09.24</span>
                 </li>
               </LatestList>
             </li>
@@ -141,13 +162,22 @@ const AdminIndex = () => {
               </h4>
               <LatestList>
                 <li>
-                  <Link to="#">최근 글 제목</Link> <span>2023.09.24</span>
+                  <p>
+                    <Link to="#">최근 글 제목</Link>
+                  </p>{' '}
+                  <span>2023.09.24</span>
                 </li>
                 <li>
-                  <Link to="#">최근 글 제목</Link> <span>2023.09.24</span>
+                  <p>
+                    <Link to="#">최근 글 제목</Link>
+                  </p>{' '}
+                  <span>2023.09.24</span>
                 </li>
                 <li>
-                  <Link to="#">최근 글 제목</Link> <span>2023.09.24</span>
+                  <p>
+                    <Link to="#">최근 글 제목</Link>
+                  </p>{' '}
+                  <span>2023.09.24</span>
                 </li>
               </LatestList>
             </li>
@@ -157,13 +187,22 @@ const AdminIndex = () => {
               </h4>
               <LatestList>
                 <li>
-                  <Link to="#">최근 글 제목</Link> <span>2023.09.24</span>
+                  <p>
+                    <Link to="#">최근 글 제목</Link>
+                  </p>{' '}
+                  <span>2023.09.24</span>
                 </li>
                 <li>
-                  <Link to="#">최근 글 제목</Link> <span>2023.09.24</span>
+                  <p>
+                    <Link to="#">최근 글 제목</Link>
+                  </p>{' '}
+                  <span>2023.09.24</span>
                 </li>
                 <li>
-                  <Link to="#">최근 글 제목</Link> <span>2023.09.24</span>
+                  <p>
+                    <Link to="#">최근 글 제목</Link>
+                  </p>{' '}
+                  <span>2023.09.24</span>
                 </li>
               </LatestList>
             </li>
