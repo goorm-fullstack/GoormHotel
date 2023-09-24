@@ -1,7 +1,6 @@
 package goormknights.hotel.board.controller;
 
 import goormknights.hotel.board.dto.request.RequestBoardDto;
-import goormknights.hotel.board.dto.request.RequestImageDto;
 import goormknights.hotel.board.dto.response.ResponseBoardDto;
 import goormknights.hotel.board.model.Board;
 import goormknights.hotel.board.service.BoardImageService;
@@ -43,19 +42,17 @@ public class BoardController {
 
     // 게시물 작성
     @PostMapping("/writeform")
-    public ResponseEntity<Object> createBoard(@ModelAttribute RequestBoardDto requestBoardDto, @RequestParam MultipartFile multipartFile) throws IOException {
-        RequestImageDto requestImageDto = boardImageService.requestImageDto(multipartFile);
-
-        boardService.create(requestBoardDto, requestImageDto);
+    public ResponseEntity<Object> createBoard(@ModelAttribute RequestBoardDto requestBoardDto, @RequestParam(required = false) MultipartFile multipartFile) throws IOException {
+        boardService.create(requestBoardDto, multipartFile);
         return ResponseEntity.ok().build();
     }
 
     // 게시물 수정
     @PutMapping("/{boardId}")
-    public ResponseEntity<ResponseBoardDto> updateBoard(@PathVariable Long boardId, @RequestBody RequestBoardDto requestBoardDto) {
-        Board board = boardService.updateBoard(boardId, requestBoardDto, false);
+    public ResponseEntity<ResponseBoardDto> updateBoard(@PathVariable Long boardId, @ModelAttribute RequestBoardDto requestBoardDto, @RequestParam(required = false) MultipartFile multipartFile) throws IOException {
+        boardService.updateBoard(boardId, requestBoardDto, multipartFile, false);
 
-        return ResponseEntity.ok(board.toResponseBoardDto());
+        return ResponseEntity.ok().build();
     }
 
     // 삭제된 게시물 전체 조회

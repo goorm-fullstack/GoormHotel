@@ -8,13 +8,12 @@ import goormknights.hotel.board.model.Board;
 import goormknights.hotel.board.repository.BoardRepository;
 import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.reply.model.Reply;
-import goormknights.hotel.report.dto.response.ResponseReportDto;
-import goormknights.hotel.report.model.Report;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Array;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,10 +26,17 @@ public class BoardService {
     private final BoardImageService boardImageService;
 
     //게시물 작성
-    public String create(RequestBoardDto requestBoardDto, RequestImageDto requestImageDto) {
-        Board board = requestBoardDto.toEntity().toBuilder()
-                .boardImage(requestImageDto.toEntity())
-                .build();
+    public String create(RequestBoardDto requestBoardDto, MultipartFile multipartFile) throws IOException {
+        Board board;
+        RequestImageDto requestImageDto;
+        if(multipartFile == null){
+            board = requestBoardDto.toEntity();
+        }else{
+            requestImageDto = boardImageService.requestImageDto(multipartFile);
+            board = requestBoardDto.toEntity().toBuilder()
+                    .boardImage(requestImageDto.toEntity())
+                    .build();
+        }
 
         return boardRepository.save(board).getTitle();
     }
@@ -138,9 +144,21 @@ public class BoardService {
     }
 
     // 게시물 수정
-    public Board updateBoard(Long boardId, RequestBoardDto requestBoardDto, boolean bool) {
+    public Board updateBoard(Long boardId, RequestBoardDto requestBoardDto, MultipartFile multipartFile, boolean bool) throws IOException {
         Board beforeBoard = boardRepository.findByBoardIdAndBoardDelete(boardId, bool);
-        Board afterBoard = beforeBoard.updateBoard(boardId, requestBoardDto);
+        RequestImageDto requestImageDto;
+        if(multipartFile == null) {
+            requestImageDto = RequestImageDto.builder()
+                    .boardImageName(beforeBoard.getBoardImage().getBoardImageName())
+                    .boardImagePath(beforeBoard.getBoardImage().getBoardImagePath())
+                    .mimeType(beforeBoard.getBoardImage().getMimeType())
+                    .data(beforeBoard.getBoardImage().getData())
+                    .originalboardImageName(beforeBoard.getBoardImage().getOriginalboardImageName())
+                    .build();
+        }else{
+            requestImageDto = boardImageService.requestImageDto(multipartFile);
+        }
+        Board afterBoard = beforeBoard.updateBoard(beforeBoard, requestBoardDto, requestImageDto);
 
         return boardRepository.save(afterBoard);
     }

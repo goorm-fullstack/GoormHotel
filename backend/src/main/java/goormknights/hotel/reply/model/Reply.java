@@ -47,11 +47,13 @@ public class Reply {
     }
 
     @Builder(toBuilder = true)
-    public Reply(Long replyId, String replyContent, String replyWriter, LocalDateTime replyWriteDate) {
+    public Reply(Long replyId, String replyContent, String replyWriter, LocalDateTime replyWriteDate, Board board, List<Report> report) {
         this.replyId = replyId;
         this.replyContent = replyContent;
         this.replyWriter = replyWriter;
         this.replyWriteDate = replyWriteDate;
+        this.board = board;
+        this.report = report;
     }
 
     public ResponseReplyDto toResponseReplyDto() {
@@ -65,11 +67,14 @@ public class Reply {
                 .build();
     }
 
-    public Reply updateReply(Long replyId, RequestReplyDto requestReplyDto){
-        return this.toBuilder()
+    public Reply updateReply(Reply reply, RequestReplyDto requestReplyDto){
+        return Reply.builder()
                 .replyId(replyId)
                 .replyContent(requestReplyDto.getReplyContent())
                 .replyWriter(requestReplyDto.getReplyWriter())
+                .replyWriteDate(requestReplyDto.getReplyWriteDate())
+                .board(reply.getBoard())
+                .report(reply.getReport())
                 .build();
     }
 }
