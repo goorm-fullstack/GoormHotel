@@ -297,3 +297,5 @@ export const AuthBtn = styled(commonButton)`
     color: white;
   }
 `;
+
+export const commonTable = styled.table``;
