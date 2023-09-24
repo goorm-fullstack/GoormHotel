@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Privacy from './../../pages/agreement/Privacy';
 import Instance from '../../utils/api/axiosInstance';
@@ -149,6 +149,12 @@ const AdminChatDetail = () => {
   const [newChat, setNewChat] = useState('');
   const [chatRoomData, setChatRoomData] = useState({});
   const [status, setStatus] = useState("");
+  const navigation = useNavigate();
+
+  const navigateToChatList = () => {
+    navigation("/admin/chat");
+  };
+
   const subMenus = [
     { name: '채팅 관리', link: '/admin/chat' },
     { name: '메일 작성', link: '/admin/mail' },
@@ -326,7 +332,7 @@ const AdminChatDetail = () => {
           </InfoWrapper>
         </InfoContainer>
         <ModifyBtnWrapper>
-          <ModifyBtn>목록</ModifyBtn>
+          <ModifyBtn onClick={navigateToChatList}>목록</ModifyBtn>
         </ModifyBtnWrapper>
       </Container>
     </AdminLayout>
