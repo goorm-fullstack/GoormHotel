@@ -36,7 +36,7 @@ public class ReportController {
         return ResponseEntity.ok(reports);
     }
 
-    //신고 삭제
+    //신고 완전 삭제
     @DeleteMapping("/{reportId}")
     public void deleteReport(@PathVariable Long reportId){
         reportService.deletedById(reportId);

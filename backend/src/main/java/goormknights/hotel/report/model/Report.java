@@ -14,8 +14,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE Report SET report_Delete = true WHERE report_Id = ?")
-
+//@SQLDelete(sql = "UPDATE Report SET report_Delete = true WHERE report_Id = ?")
 public class Report {
 
     @Id

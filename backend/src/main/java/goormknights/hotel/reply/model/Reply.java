@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE Reply SET reply_Delete = true WHERE reply_Id = ?")
+//@SQLDelete(sql = "UPDATE Reply SET reply_Delete = true WHERE reply_Id = ?")
 public class Reply {
 
     @Id

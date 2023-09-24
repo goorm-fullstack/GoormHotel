@@ -11,7 +11,6 @@ import goormknights.hotel.report.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -71,7 +70,7 @@ public class ReportService {
         return response;
     }
 
-    //신고 삭제
+    //신고 완전 삭제
     public void deletedById(Long reportId){
         boardRepository.deleteById(reportId);
     }

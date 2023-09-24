@@ -103,7 +103,7 @@ public class ReplyService {
 
 
     //Delete
-    //댓글 삭제
+    //댓글 완전 삭제
     public void deleteById(Long replyId){
         replyRepository.deleteById(replyId);
     }
