@@ -163,7 +163,7 @@ const AdminChatDetail = () => {
         console.log("==============================");
         console.log(response.data)
         setChatRoomData(response.data)
-        setStatus(chatRoomData.status)
+        setStatus(response.data.status)
         console.log("==============================");
         setChatData(response.data.chatMessages);
         settingWebSocket(roomId);
