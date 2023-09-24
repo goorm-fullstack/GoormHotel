@@ -66,6 +66,11 @@ const AdminDeleteComment = () => {
     });
   }, []);
 
+  let writeDate;
+  board.map((Item) => {
+    writeDate = Item.boardWriteDate[0] + "-" + Item.boardWriteDate[1] + "-" + Item.boardWriteDate[2];
+  });
+
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
@@ -131,7 +136,7 @@ const AdminDeleteComment = () => {
                   {board.boardWriter}
                   <LinkStyle to={`/admin/member/${board.boardWriter}`}>({board.boardWriter})</LinkStyle>
                 </TableCell>
-                <TableCell>{board.boardWriteDate}</TableCell>
+                <TableCell>{`${board.boardWriteDate[0]}-${(board.boardWriteDate[1] < 10 ? '0' : '')}${board.boardWriteDate[1]}-${(board.boardWriteDate[2] < 10 ? '0' : '')}${board.boardWriteDate[2]}`}</TableCell>
               </tr>
             ))}
           </tbody>

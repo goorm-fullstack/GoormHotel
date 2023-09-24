@@ -17,7 +17,7 @@ public class RequestBoardDto {
 
     private Long boardId;
 
-    private String boardTitle;  //제목
+    private String title;  //제목
 
     private String boardContent;    //내용
 
@@ -27,21 +27,19 @@ public class RequestBoardDto {
 
     private String boardWriter; //작성자
 
-//    @Builder
-//    public RequestBoardDto(String boardTitle, String boardContent, String boardWriter) {
-//        this.boardTitle = boardTitle;
-//        this.boardContent = boardContent;
-//        this.boardWriter = boardWriter;
-//    }
+    private String boardTitle;      //게시판 이름
+
+    private String category;        //게시판-카테고리
 
     public Board toEntity() {
         return Board.builder()
                 .boardId(boardId)
-                .boardTitle(boardTitle)
+                .title(title)
                 .boardContent(boardContent)
                 .boardWriter(boardWriter)
                 .boardWriteDate(boardWriteDate)
+                .boardTitle(boardTitle)
+                .category(category)
                 .build();
     }
-
 }

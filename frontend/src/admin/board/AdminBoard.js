@@ -62,6 +62,11 @@ const AdminBoard = () => {
     });
   }, []);
 
+  let writeDate;
+  board.map((Item) => {
+    writeDate = Item.boardWriteDate[0] + "-" + Item.boardWriteDate[1] + "-" + Item.boardWriteDate[2];
+  });
+
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
@@ -120,14 +125,14 @@ const AdminBoard = () => {
                   />
                 </TableCell>
                 <TableCell>{board.boardId}</TableCell>
-                <TableCell>{'카테고리(공지, 후기)'}</TableCell>
+                <TableCell>{board.boardTitle}</TableCell>
                 <TableCell>
-                  <Link to={`/admin/member/${board.boardId}`}>{board.boardTitle}</Link>
+                  <Link to={`/admin/member/${board.boardId}`}>{board.title}</Link>
                 </TableCell>
                 <TableCell>
                   <Link to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</Link>
                 </TableCell>
-                <TableCell>{board.boardWriteDate}</TableCell>
+                <TableCell>{`${board.boardWriteDate[0]}-${(board.boardWriteDate[1] < 10 ? '0' : '')}${board.boardWriteDate[1]}-${(board.boardWriteDate[2] < 10 ? '0' : '')}${board.boardWriteDate[2]}`}</TableCell>
                 <TableCell>{board.blacklist}</TableCell>
               </tr>
             ))}

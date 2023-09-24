@@ -27,6 +27,10 @@ public class QBoardImage extends EntityPathBase<BoardImage> {
 
     public final StringPath boardImagePath = createString("boardImagePath");
 
+    public final ArrayPath<byte[], Byte> data = createArray("data", byte[].class);
+
+    public final StringPath mimeType = createString("mimeType");
+
     public final StringPath originalboardImageName = createString("originalboardImageName");
 
     public QBoardImage(String variable) {

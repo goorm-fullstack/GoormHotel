@@ -73,13 +73,57 @@ const AdminComment = () => {
   const [checkedItems, setCheckedItems] = useState([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [reply, setReply] = useState([]);
+  const [board, setBoard] = useState([]);
 
   useEffect(() => {
-    axios.get('/reply/list').then((response) => {
-      setReply(response.data);
-      console.log('get 성공');
-    });
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('/reply/list');
+        const replyData = response.data;
+
+        // 게시물의 title을 가져오는 함수
+        const getBoardTitle = async (boardId) => {
+          try {
+            const titleResponse = await axios.get(`/boards/${boardId}`);
+            return titleResponse.data.title;
+          } catch (error) {
+            console.error('title을 가져오는 중 오류 발생', error);
+            return ''; // 오류 발생 시 빈 문자열 반환
+          }
+        };
+
+        //게시물의 게시판 이름을 가져오는 함수
+        const getBoardBoardTitle = async (boardId) => {
+          try {
+            const titleResponse = await axios.get(`/boards/${boardId}`);
+            return titleResponse.data.boardTitle;
+          } catch (error) {
+            console.error('title을 가져오는 중 오류 발생', error);
+            return ''; // 오류 발생 시 빈 문자열 반환
+          }
+        };
+
+        // 각 댓글의 title을 가져오고 데이터에 추가
+        const updatedReplyData = await Promise.all(
+            replyData.map(async (replyItem) => {
+              const title = await getBoardTitle(replyItem.boardId);
+              const boardTitle = await getBoardBoardTitle(replyItem.boardId);
+              return { ...replyItem, title: title, boardTitle: boardTitle};
+            })
+        );
+
+        setReply(updatedReplyData);
+        console.log('get 성공');
+      } catch (error) {
+        console.error('댓글 목록을 불러오는 중 오류 발생', error);
+      }
+    };
+
+    fetchData();
   }, []);
+
+
+  console.log(reply);
 
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
@@ -147,7 +191,7 @@ const AdminComment = () => {
               </TableCheckboxWrapper>
               <TableHeader>No.</TableHeader>
               <TableHeader>게시판</TableHeader>
-              <TableHeader>게시글</TableHeader>
+              <TableHeader>게시글 제목</TableHeader>
               <CommentTableHeader>댓글 내용</CommentTableHeader>
               <CommentTableHeader>작성자명(회원 ID)</CommentTableHeader>
               <TableHeader>작성일</TableHeader>
@@ -165,9 +209,9 @@ const AdminComment = () => {
                   />
                 </TableCell>
                 <TableCell>{reply.replyId}</TableCell>
-                <TableCell>{'카테고리(후기, 문의)'}</TableCell>
+                <TableCell>{reply.boardTitle}</TableCell>
                 <TableCell>
-                  <LinkStyle to="/">{reply.boardId}</LinkStyle>
+                  <LinkStyle to={`/board/${reply.boardId}/detail`}>{reply.title}</LinkStyle>
                 </TableCell>
                 <CommentTableCell>
                   <CommentText>{truncateString(reply.replyContent, 8)}</CommentText>
@@ -179,7 +223,7 @@ const AdminComment = () => {
                   {reply.replyWriter}
                   {/*<LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>*/}
                 </TableCell>
-                <TableCell>{reply.replyWriteDate}</TableCell>
+                <TableCell>{`${reply.replyWriteDate[0]}-${(reply.replyWriteDate[1] < 10 ? '0' : '')}${reply.replyWriteDate[1]}-${(reply.replyWriteDate[2] < 10 ? '0' : '')}${reply.replyWriteDate[2]}`}</TableCell>
               </tr>
             ))}
           </tbody>
