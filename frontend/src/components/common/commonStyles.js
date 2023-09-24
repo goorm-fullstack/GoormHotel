@@ -7,6 +7,10 @@ export const commonContainerStyle = styled.div`
   padding: 280px 40px 0;
 `;
 
+export const commonAdminContainer = styled(commonContainerStyle)`
+  padding-top: 200px;
+`;
+
 export const commonWrapperStyle = styled(commonContainerStyle)`
   padding: 0 40px;
 `;
@@ -19,8 +23,8 @@ export const commonContentsStyle = styled.div`
 export const PageTitle = styled.h2`
   color: ${(props) => props.theme.colors.black};
   font-weight: 500;
-  font-size: ${(props) => props.theme.font.big};
-  margin-bottom: 100px;
+  font-size: ${(props) => props.theme.font.sizexxl};
+  margin-bottom: 80px;
 `;
 
 export const ContentsTitle = styled.h3`
