@@ -7,8 +7,6 @@ import goormknights.hotel.member.model.Manager;
 import goormknights.hotel.member.repository.ManagerRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -54,16 +52,18 @@ public class AdminService {
     }
 
     // 매니저 로그인
-    public String adminLogin(String adminId, String rawPassword, HttpSession session) {
-        Manager manager = managerRepository.findByAdminId(adminId)
-                .orElseThrow(() -> new UsernameNotFoundException("해당되는 운영자가 없습니다"));
-
-        if (passwordEncoder.matches(rawPassword, manager.getPassword())) {
-            session.setAttribute("manager", manager);
-            return "로그인 완료";
-        } else {
-            throw new BadCredentialsException("비밀번호가 다릅니다");
+    public boolean loginManager(String username, String password, HttpSession session) {
+        Optional<Manager> managerOptional = managerRepository.findByAdminId(username);
+        if (managerOptional.isPresent()) {
+            Manager manager = managerOptional.get();
+            if (passwordEncoder.matches(password, manager.getPassword())) {
+                session.setAttribute("user", manager);
+                session.setAttribute("role", manager.getRole());
+                session.setAttribute("authorities", manager.getAuthorities());
+                return true;
+            }
         }
+        return false;
     }
 
 

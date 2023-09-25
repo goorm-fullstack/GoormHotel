@@ -29,7 +29,7 @@ dependencies {
 			'org.springframework.boot:spring-boot-starter-mustache',
 			'com.h2database:h2',
 			'com.querydsl:querydsl-jpa:5.0.0:jakarta',
-			'org.springframework.boot:spring-boot-starter-security',
+//			'org.springframework.boot:spring-boot-starter-security',
 			'org.springframework.boot:spring-boot-starter-thymeleaf',
 			'org.springframework.boot:spring-boot-starter-jdbc',
 			'org.springframework.security:spring-security-oauth2-client',
