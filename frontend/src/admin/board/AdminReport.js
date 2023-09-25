@@ -80,11 +80,13 @@ const AdminReport = () => {
         reportResult: item.reportResult.toString(),
       }));
       setReport(modifiedData);
+
       console.log('get 성공');
     });
   }, []);
 
   console.log(report);
+
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
@@ -170,7 +172,13 @@ const AdminReport = () => {
                 </TableCell>
                 <TableCell>{report.reportId}</TableCell>
                 <TableCell>
-                  <LinkStyle>{report.title}</LinkStyle>
+                  {report.replyId != null ? (
+                      <LinkStyle>{report.replyContent}</LinkStyle>
+                  ) : report.boardId != null ? (
+                      <LinkStyle>{report.title}</LinkStyle>
+                  ) : (
+                      report.reportContent
+                  )}
                 </TableCell>
                 <TableCell>
                   {report.reportWriter}
@@ -178,16 +186,17 @@ const AdminReport = () => {
                 </TableCell>
                 <TableCell>{report.reportReason}</TableCell>
                 <TableCell>{`${report.reportDate[0]}-${(report.reportDate[1] < 10 ? '0' : '')}${report.reportDate[1]}-${(report.reportDate[2] < 10 ? '0' : '')}${report.reportDate[2]}`}</TableCell>
-                {(() => {
-                  switch (report.reportCheck) {
-                    case 'false':
-                      return <TableCell>N</TableCell>;
-                    case 'true':
-                      return <TableCell>Y</TableCell>;
-                    default:
-                      return <TableCell>N</TableCell>;
-                  }
-                })()}
+                <TableCell>{report.reportResult}</TableCell>
+                {/*{(() => {*/}
+                {/*  switch (report.reportCheck) {*/}
+                {/*    case 'false':*/}
+                {/*      return <TableCell>N</TableCell>;*/}
+                {/*    case 'true':*/}
+                {/*      return <TableCell>Y</TableCell>;*/}
+                {/*    default:*/}
+                {/*      return <TableCell>N</TableCell>;*/}
+                {/*  }*/}
+                {/*})()}*/}
                 {(() => {
                   switch (report.reportResult) {
                     case 'false':

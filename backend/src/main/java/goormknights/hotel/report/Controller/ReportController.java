@@ -50,6 +50,7 @@ public class ReportController {
         return ResponseEntity.ok(report.toResponseReportDto());
     }
 
+    //신고 소프트딜리트
     @PutMapping("/softdelete/{reportId}")
     public ResponseEntity<Object> softdeleteReport(@PathVariable Long reportId) {
         Report report = reportService.softdeleteReport(reportId);
@@ -58,7 +59,7 @@ public class ReportController {
     }
 
 
-    // 신고 게시글 확인 완료
+    //신고 게시글 확인 완료
     @PutMapping("/check/{reportId}")
     public ResponseEntity<Object> check(@PathVariable Long reportId){
         reportService.check(reportId);

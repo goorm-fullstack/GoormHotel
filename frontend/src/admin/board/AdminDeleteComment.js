@@ -90,6 +90,32 @@ const AdminDeleteComment = () => {
     setSelectAllChecked(updatedCheckedItems.length === tableData.length);
   };
 
+  const unDeleteBtnClick = () => {
+    checkedItems.forEach((boardId) => {
+      axios.put(`/boards/undelete/${boardId}`)
+          .then((response) => {
+            console.log(`${boardId} 복원 성공`);
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.log(error.message);
+          })
+    })
+  }
+
+  const realDeleteBtnClick = () => {
+    checkedItems.forEach((boardId) => {
+      axios.delete(`/boards/${boardId}`)
+          .then((response) => {
+            console.log(`${boardId} 삭제 성공`);
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.log(error.message);
+          })
+    })
+  }
+
   return (
     <AdminLayout subMenus="board">
       <Container>
@@ -99,8 +125,8 @@ const AdminDeleteComment = () => {
             전체 <Num>{board.length}</Num> 건
           </Total>
           <BlackListBtn>
-            <Delete>복원</Delete>
-            <Add>영구삭제</Add>
+            <Delete onClick={unDeleteBtnClick}>복원</Delete>
+            <Add onClick={realDeleteBtnClick}>영구삭제</Add>
           </BlackListBtn>
         </ContentHeader>
         <Table>
@@ -121,14 +147,14 @@ const AdminDeleteComment = () => {
             {board.map((board) => (
               <tr key={board.boardId}>
                 <TableCell>
-                  {/*<TableCheckbox*/}
-                  {/*  type="checkbox"*/}
-                  {/*  checked={checkedItems.includes(board.boardId)}*/}
-                  {/*  onChange={() => handleCheckboxChange(board.boardId)}*/}
-                  {/*/>*/}
+                  <TableCheckbox
+                    type="checkbox"
+                    checked={checkedItems.includes(board.boardId)}
+                    onChange={() => handleCheckboxChange(board.boardId)}
+                  />
                 </TableCell>
                 <TableCell>{board.boardId}</TableCell>
-                <TableCell>{'카테고리(후기, 공지)'}</TableCell>
+                <TableCell>{`${board.boardTitle}`}</TableCell>
                 <TableCell>
                   <LinkStyle to={`/admin/member/${board.boardContent}`}>{board.boardContent}</LinkStyle>
                 </TableCell>

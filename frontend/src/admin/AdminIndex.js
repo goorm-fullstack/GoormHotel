@@ -2,6 +2,9 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import AdminHeader from './common/AdminHeader';
 import { commonAdminContainer, commonContentsStyle, PageTitle } from '../components/common/commonStyles';
+import {useEffect, useState} from "react";
+import axios from "axios";
+import item from "../components/Item";
 
 export const AdminContainer = styled(commonAdminContainer)``;
 
@@ -124,6 +127,29 @@ const LatestList = styled.ul`
 `;
 
 const AdminIndex = () => {
+  const [notice, setNotice] = useState([]);
+  useEffect(() => {
+    axios.get('/boards/find/boardTitle/공지사항').then((response) => {
+      setNotice(response.data);
+    })
+  }, []);
+  const [review, setReview] = useState([]);
+  useEffect(() => {
+    axios.get('/boards/find/boardTitle/이용후기').then((response) => {
+      setReview(response.data);
+    })
+  }, []);
+  const [qna, setQna] = useState([]);
+  useEffect(() => {
+    axios.get('/boards/find/boardTitle/문의하기').then((response) => {
+      setQna(response.data);
+    })
+  }, []);
+
+  console.log(notice);
+  console.log(review);
+  console.log(qna);
+
   return (
     <div>
       <AdminHeader />
@@ -137,24 +163,14 @@ const AdminIndex = () => {
                 공지사항<Link to={'/admin/board/1'}>자세히보기</Link>
               </h4>
               <LatestList>
-                <li>
-                  <p>
-                    <Link to="#">최근 글 제목최근 글 제목최근 글 제목최근 글 제목</Link>
-                  </p>{' '}
-                  <span>2023.09.24</span>
-                </li>
-                <li>
-                  <p>
-                    <Link to="#">최근 글 제목</Link>
-                  </p>{' '}
-                  <span>2023.09.24</span>
-                </li>
-                <li>
-                  <p>
-                    <Link to="#">최근 글 제목</Link>
-                  </p>{' '}
-                  <span>2023.09.24</span>
-                </li>
+                {notice.slice(0, 3).map((item, index) => (
+                    <li key={index}>
+                      <p>
+                        <Link to="#">{item.title}</Link>
+                      </p>
+                      <span>{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</span>
+                    </li>
+                ))}
               </LatestList>
             </li>
             <li>
@@ -162,24 +178,14 @@ const AdminIndex = () => {
                 문의하기<Link to={'/admin/board/1'}>자세히보기</Link>
               </h4>
               <LatestList>
-                <li>
-                  <p>
-                    <Link to="#">최근 글 제목</Link>
-                  </p>{' '}
-                  <span>2023.09.24</span>
-                </li>
-                <li>
-                  <p>
-                    <Link to="#">최근 글 제목</Link>
-                  </p>{' '}
-                  <span>2023.09.24</span>
-                </li>
-                <li>
-                  <p>
-                    <Link to="#">최근 글 제목</Link>
-                  </p>{' '}
-                  <span>2023.09.24</span>
-                </li>
+                {qna.slice(0, 3).map((item, index) => (
+                    <li key={index}>
+                      <p>
+                        <Link to="#">{item.title}</Link>
+                      </p>
+                      <span>{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</span>
+                    </li>
+                ))}
               </LatestList>
             </li>
             <li>
@@ -187,24 +193,14 @@ const AdminIndex = () => {
                 이용후기<Link to={'/admin/board/1'}>자세히보기</Link>
               </h4>
               <LatestList>
-                <li>
-                  <p>
-                    <Link to="#">최근 글 제목</Link>
-                  </p>{' '}
-                  <span>2023.09.24</span>
-                </li>
-                <li>
-                  <p>
-                    <Link to="#">최근 글 제목</Link>
-                  </p>{' '}
-                  <span>2023.09.24</span>
-                </li>
-                <li>
-                  <p>
-                    <Link to="#">최근 글 제목</Link>
-                  </p>{' '}
-                  <span>2023.09.24</span>
-                </li>
+                {review.slice(0, 3).map((item, index) => (
+                    <li key={index}>
+                      <p>
+                        <Link to="#">{item.title}</Link>
+                      </p>
+                      <span>{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</span>
+                    </li>
+                ))}
               </LatestList>
             </li>
           </Latest>
