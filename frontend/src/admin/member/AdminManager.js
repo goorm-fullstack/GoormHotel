@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
+import { PageTitle } from '../../components/common/commonStyles';
 import styled from 'styled-components';
 import {
+  Container,
   ContentHeader,
   Total,
   BlackListBtn,
@@ -15,19 +17,7 @@ import {
   Num,
 } from './AdminMember';
 import { InfoContainer, InfoWrapper, Label, ModifyBtnWrapper, ModifyBtn } from './AdminMemberDetail';
-
-const Title = styled.h1`
-  font-size: 36px;
-  font-weight: bold;
-  margin-bottom: 72px;
-`;
-
-const Container = styled.div`
-  width: 100%;
-  max-width: 1270px;
-  min-width: 760px;
-  margin: 0 auto;
-`;
+import Paging from '../../components/common/Paging';
 
 const Section = styled.section`
   margin-bottom: 60px;
@@ -154,15 +144,10 @@ const AdminManager = () => {
     },
   ];
 
-  const subMenus = [
-    { name: '전체 회원 관리', link: '/admin/member' },
-    { name: '부운영자 관리', link: '/admin/managers' },
-  ];
-
   return (
-    <AdminLayout title="회원관리" subMenus={subMenus}>
+    <AdminLayout subMenus="member">
       <Container>
-        <Title>부운영자 관리</Title>
+        <PageTitle>부운영자 관리</PageTitle>
         <Section>
           <SubTitle>부운영자 계정 등록</SubTitle>
           <InputWrapper>
@@ -222,6 +207,7 @@ const AdminManager = () => {
               ))}
             </tbody>
           </Table>
+          <Paging />
         </Section>
         <Section>
           <SubTitle>부운영자 계정 설정</SubTitle>

@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
+import { PageTitle } from '../../components/common/commonStyles';
 import {
   Container,
-  Title,
   ContentHeader,
   Total,
   BlackListBtn,
@@ -17,14 +17,8 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
-import axios from "axios";
-
-const subMenus = [
-  { name: '게시글 관리', link: '/admin/board' },
-  { name: '댓글 관리', link: '/admin/comments' },
-  { name: '삭제된 글 관리', link: '/admin/deleteComment' },
-  { name: '신고 관리', link: '/admin/report' },
-];
+import Paging from '../../components/common/Paging';
+import axios from 'axios';
 
 const memberData = [
   {
@@ -68,6 +62,11 @@ const AdminBoard = () => {
     });
   }, []);
 
+  let writeDate;
+  board.map((Item) => {
+    writeDate = Item.boardWriteDate[0] + "-" + Item.boardWriteDate[1] + "-" + Item.boardWriteDate[2];
+  });
+
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
@@ -88,9 +87,9 @@ const AdminBoard = () => {
   };
 
   return (
-    <AdminLayout title="게시판 관리" subMenus={subMenus}>
+    <AdminLayout subMenus="board">
       <Container>
-        <Title>게시글 관리</Title>
+        <PageTitle>게시글 관리</PageTitle>
         <ContentHeader>
           <Total>
             전체 <Num>{board.length}</Num> 건
@@ -126,19 +125,20 @@ const AdminBoard = () => {
                   />
                 </TableCell>
                 <TableCell>{board.boardId}</TableCell>
-                <TableCell>{"카테고리(공지, 후기)"}</TableCell>
+                <TableCell>{board.boardTitle}</TableCell>
                 <TableCell>
-                  <Link to={`/admin/member/${board.boardId}`}>{board.boardTitle}</Link>
+                  <Link to={`/admin/member/${board.boardId}`}>{board.title}</Link>
                 </TableCell>
                 <TableCell>
                   <Link to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</Link>
                 </TableCell>
-                <TableCell>{board.boardWriteDate}</TableCell>
+                <TableCell>{`${board.boardWriteDate[0]}-${(board.boardWriteDate[1] < 10 ? '0' : '')}${board.boardWriteDate[1]}-${(board.boardWriteDate[2] < 10 ? '0' : '')}${board.boardWriteDate[2]}`}</TableCell>
                 <TableCell>{board.blacklist}</TableCell>
               </tr>
             ))}
           </tbody>
         </Table>
+        <Paging />
       </Container>
     </AdminLayout>
   );

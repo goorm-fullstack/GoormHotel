@@ -38,13 +38,13 @@ public class Dining extends Item {
                 .spare(requestDiningDto.getSpare())
                 .spareAdult(requestDiningDto.getSpareAdult())
                 .spareChildren(requestDiningDto.getSpareChildren())
+                .capacity(requestDiningDto.getCapacity())
                 .build();
     }
 
     // 클라이언트에게 응답 시 ResponseDiningDto로 변경
     public ResponseDiningDto toResponseDiningDto(){
         return ResponseDiningDto.builder()
-                .thumbnailPath(this.getThumbnail().getFilePath())
                 .type(this.getType())
                 .useTime(this.getUseTime())
                 .price(this.getPrice())
@@ -55,6 +55,7 @@ public class Dining extends Item {
                 .spare(this.getSpare())
                 .spareAdult(this.getSpareAdult())
                 .spareChildren(this.getSpareChildren())
+                .capacity(this.getCapacity())
                 .build();
     }
 }

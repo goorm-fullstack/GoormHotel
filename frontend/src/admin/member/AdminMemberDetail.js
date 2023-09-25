@@ -1,20 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
+import { PageTitle } from '../../components/common/commonStyles';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-
-const Container = styled.div`
-  width: 100%;
-  max-width: 1270px;
-  min-width: 760px;
-  margin: 0 auto;
-`;
-
-const Title = styled.h1`
-  font-size: 36px;
-  font-weight: bold;
-  margin-bottom: 60px;
-`;
+import { Container } from './AdminMember';
 
 export const InfoContainer = styled.div`
   display: flex;
@@ -109,15 +98,10 @@ const AdminMemberDetail = () => {
   //   fetchData();
   // }, [memberId]);
 
-  const subMenus = [
-    { name: '전체 회원 관리', link: '/admin/member' },
-    { name: '부운영자 관리', link: '/admin/managers' },
-  ];
-
   return (
-    <AdminLayout title="회원관리" subMenus={subMenus}>
+    <AdminLayout subMenus="member">
       <Container>
-        <Title>회원 정보 상세</Title>
+        <PageTitle>회원 정보 상세</PageTitle>
         <InfoContainer>
           <InfoWrapper>
             <Label>회원 ID</Label>

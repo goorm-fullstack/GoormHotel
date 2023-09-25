@@ -1,22 +1,10 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { useNavigate, useParams } from 'react-router-dom';
+import { PageTitle } from '../../components/common/commonStyles';
 import styled from 'styled-components';
-import Privacy from './../../pages/agreement/Privacy';
 import Instance from '../../utils/api/axiosInstance';
-
-const Container = styled.div`
-  width: 100%;
-  max-width: 1270px;
-  min-width: 760px;
-  margin: 0 auto;
-`;
-
-const Title = styled.h1`
-  font-size: 36px;
-  font-weight: bold;
-  margin-bottom: 60px;
-`;
+import { Container } from '../member/AdminMember';
 
 const InfoContainer = styled.table`
   width: 100%;
@@ -153,32 +141,28 @@ const AdminChatDetail = () => {
   const navigation = useNavigate();
 
   const navigateToChatList = () => {
-    navigation("/admin/chat");
+    navigation('/admin/chat');
   };
-
-  const subMenus = [
-    { name: '채팅 관리', link: '/admin/chat' },
-    { name: '메일 작성', link: '/admin/mail' },
-  ];
 
   const webSocketURL = 'ws://127.0.0.1:8080/ws/chat';
   let ws = useRef(null);
 
-  useLayoutEffect(()=>{
-    Instance.get(`/chat/getPrevId/`+roomId)
-      .then((response) =>{
-        console.log("==============================");
-        console.log(response.data)
-        setChatRoomData(response.data)
-        setStatus(response.data.status)
-        console.log("==============================");
+  useLayoutEffect(() => {
+    Instance.get(`/chat/getPrevId/` + roomId)
+      .then((response) => {
+        console.log('==============================');
+        console.log(response.data);
+        setChatRoomData(response.data);
+        setStatus(response.data.status);
+        console.log('==============================');
         setChatData(response.data.chatMessages);
         setRecentTime(chatData[chatData.length-1].createTime)
         settingWebSocket(roomId);
-      }).catch((error) => {
-        console.log("에러 "+error);
       })
-  }, [])
+      .catch((error) => {
+        console.log('에러 ' + error);
+      });
+  }, []);
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -231,18 +215,18 @@ const AdminChatDetail = () => {
    }
     // 컴포넌트 언마운트 시 WebSocket 연결 닫기
     return () => {
-     console.log("Cleaning up WebSocket");
-     if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-       ws.current.close();
-     }
-     setSocketConnected(false);
-   };
- }
+      console.log('Cleaning up WebSocket');
+      if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+        ws.current.close();
+      }
+      setSocketConnected(false);
+    };
+  };
 
   // setChatData(p => [...p, { message: newChat, isUser: true }]); -> 권희준 멘트님 추천사항
   const handleInputKeyPress = (e) => {
     if (e.key === 'Enter' && newChat.trim() !== '' && socketConnected) {
-      setChatData(p => [...p, { message: newChat, sender: "admin", type: 'TALK' }]);
+      setChatData((p) => [...p, { message: newChat, sender: 'admin', type: 'TALK' }]);
       ws.current.send(
         JSON.stringify({
           type: 'TALK',
@@ -259,22 +243,22 @@ const AdminChatDetail = () => {
     e.preventDefault();
 
     if (newChat.trim() !== '') {
-      setChatData(p=> [...p, { message: newChat, sender: "admin", type: 'TALK' }]);
+      setChatData((p) => [...p, { message: newChat, sender: 'admin', type: 'TALK' }]);
       setNewChat('');
     }
   };
 
   const handleClosedClick = (e) => {
-    setStatus("종료");
-    Instance.get("/chat/closed/"+roomId).then((response)=>{
-      console.log(response)
-    })
-  }
+    setStatus('종료');
+    Instance.get('/chat/closed/' + roomId).then((response) => {
+      console.log(response);
+    });
+  };
 
   return (
-    <AdminLayout title="채팅/메일 관리" subMenus={subMenus}>
+    <AdminLayout subMenus="chat">
       <Container>
-        <Title>채팅 관리</Title>
+        <PageTitle>채팅 관리</PageTitle>
         <InfoContainer>
           <InfoWrapper>
             <Label>방 번호(회원 ID)</Label>

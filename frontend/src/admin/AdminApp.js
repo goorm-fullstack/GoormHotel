@@ -6,8 +6,8 @@ import AdminMemberDetail from './member/AdminMemberDetail';
 import AdminManager from './member/AdminManager';
 import AdminComment from './board/AdminComment';
 import AdminReport from './board/AdminReport';
-import AdminReservation from './reservation/reservation';
-import AdminReservationDetail from './reservation/reservationDetail';
+import AdminReservation from './reservation/AdminReservation';
+import AdminReservationDetail from './reservation/AdminReservationDetail';
 import AdminGiftCard from './item/AdminGiftCard';
 import AdminDetailGiftCard from './item/AdminDetailGiftCard';
 import AdminItemList from './item/AdminItemList';
@@ -20,6 +20,7 @@ import AdminDeleteComment from './board/AdminDeleteComment';
 import AdminChat from './chat/AdminChat';
 import AdminChatDetail from './chat/AdminChatDetail';
 import AdminMail from './chat/AdminMail';
+import AdminNews from './chat/AdminNews';
 import AdminIndex from './AdminIndex';
 
 const AdminApp = () => {
@@ -27,26 +28,27 @@ const AdminApp = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/admin" element={<AdminIndex />}></Route>
-        <Route path="/admin/reservation" element={<AdminReservation />}></Route>
-        <Route path="/admin/reservation/:reservationNumber" element={<AdminReservationDetail />}></Route>
+        <Route path="/admin/reservation/:page" element={<AdminReservation />}></Route>
+        <Route path="/admin/reservation/detail/:reservationNumber" element={<AdminReservationDetail />}></Route>
         <Route path="/admin/login" element={<AdminLogin />}></Route>
-        <Route path="/admin/member" element={<AdminMember />}></Route>
-        <Route path="/admin/member/:memberId" element={<AdminMemberDetail />}></Route>
-        <Route path="/admin/managers" element={<AdminManager />}></Route>
-        <Route path="/admin/comments" element={<AdminComment />}></Route>
-        <Route path="/admin/report" element={<AdminReport />}></Route>
-        <Route path="/admin/item/list/:page" element={<AdminItemList />}></Route>
-        <Route path="/admin/item/list/view/dining/:type/:name" element={<AdminDetailDining />}></Route>
-        <Route path="/admin/item/list/view/room/:type/:name" element={<AdminDetailRoom />}></Route>
-        <Route path="/admin/item/list/writeForm/room" element={<AdminWriteFormRoom />}></Route>
-        <Route path="/admin/item/list/writeForm/dining" element={<AdminWriteFormDining />}></Route>
-        <Route path="/admin/item/giftCard" element={<AdminGiftCard />}></Route>
-        <Route path="/admin/item/giftCard/view/:id" element={<AdminDetailGiftCard />}></Route>
-        <Route path="/admin/board" element={<AdminBoard />}></Route>
-        <Route path="/admin/deleteComment" element={<AdminDeleteComment />}></Route>
+        <Route path="/admin/member/:page" element={<AdminMember />}></Route>
+        <Route path="/admin/member/detail/:memberId" element={<AdminMemberDetail />}></Route>
+        <Route path="/admin/managers/:page" element={<AdminManager />}></Route>
+        <Route path="/admin/comments/:page" element={<AdminComment />}></Route>
+        <Route path="/admin/report/:page" element={<AdminReport />}></Route>
+        <Route path="/admin/item/:page" element={<AdminItemList />}></Route>
+        <Route path="/admin/item/detail/dining/:type/:name" element={<AdminDetailDining />}></Route>
+        <Route path="/admin/item/detail/room/:type/:name" element={<AdminDetailRoom />}></Route>
+        <Route path="/admin/item/add/room" element={<AdminWriteFormRoom />}></Route>
+        <Route path="/admin/item/add/dining" element={<AdminWriteFormDining />}></Route>
+        <Route path="/admin/giftcard/:page" element={<AdminGiftCard />}></Route>
+        <Route path="/admin/giftcard/detail/:id" element={<AdminDetailGiftCard />}></Route>
+        <Route path="/admin/board/:page" element={<AdminBoard />}></Route>
+        <Route path="/admin/deletepost/:page" element={<AdminDeleteComment />}></Route>
         <Route path="/admin/chat" element={<AdminChat />}></Route>
-        <Route path="/admin/chat/:roomId" element={<AdminChatDetail />}></Route>
+        <Route path="/admin/chat/detail/:roomId" element={<AdminChatDetail />}></Route>
         <Route path="/admin/mail" element={<AdminMail />}></Route>
+        <Route path="/admin/subscriber/:page" element={<AdminNews />}></Route>
       </Routes>
     </BrowserRouter>
   );

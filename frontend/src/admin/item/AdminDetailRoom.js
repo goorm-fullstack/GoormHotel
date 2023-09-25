@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { Container } from './AdminGiftCard';
-import { Title, SubmitButton } from './AdminGiftCard';
-import { Form, BoldTd, Input, TableTr, Table, TableTd } from './AdminDetailGiftCard';
+import { PageTitle } from '../../components/common/commonStyles';
+import { SubmitButton } from './AdminGiftCard';
+import { Form, BoldTd, Input, TableTr, TableTd } from './AdminDetailGiftCard';
 import { Image } from '../../components/WriteFormRoom';
 import { Select } from './AdminItemList';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Container, Table } from '../member/AdminMember';
 
 // 세부 타입 select
 const WriteFormSelect = styled(Select)`
@@ -71,11 +72,6 @@ const GreenP = styled.p`
   margin-left: 30px;
 `;
 
-const subMenus = [
-  { name: '판매 상품 관리', link: '/admin/item/list/1' },
-  { name: '상품권 관리', link: '/admin/item/giftCard' },
-];
-
 const AdminDetailRoom = () => {
   const [imgFile, setImgFile] = useState(''); // 이미지 상태관리
   const imgRef = useRef(); // 이미지 태그
@@ -136,9 +132,13 @@ const AdminDetailRoom = () => {
               'Content-Type': 'multipart/form-data',
             },
           });
-          window.location.href = '/admin/item/list/1';
+          window.location.href = '/admin/item/1';
         } catch (error) {
           console.error('Error:', error.message);
+          if (error.response.data.message.startsWith('Validation failed')) {
+            const errorMessage = error.response.data.errors[0].defaultMessage;
+            alert(errorMessage);
+          }
         }
       } else {
         alert('중복확인을 다시 시도해주세요.');
@@ -206,9 +206,9 @@ const AdminDetailRoom = () => {
   }
 
   return (
-    <AdminLayout title="상품관리" subMenus={subMenus}>
+    <AdminLayout subMenus="item">
       <Container>
-        <Title>객실 상세</Title>
+        <PageTitle>객실 상세</PageTitle>
         <Form onSubmit={handleSubmit} encType="multipart/form-data">
           {responseData && (
             <WriteFormTable>
@@ -236,7 +236,7 @@ const AdminDetailRoom = () => {
                 </WriteFormTd>
               </WriteFormTr>
               <WriteFormTr>
-                <WriteFormBoldTd>어른 추가 비용</WriteFormBoldTd>
+                <WriteFormBoldTd>성인 추가 비용</WriteFormBoldTd>
                 <WriteFormTd>
                   <Input type="text" name="priceAdult" defaultValue={responseData.priceAdult} onChange={handleChange} required />
                 </WriteFormTd>
@@ -254,7 +254,7 @@ const AdminDetailRoom = () => {
                 </WriteFormTd>
               </WriteFormTr>
               <WriteFormTr>
-                <WriteFormBoldTd>최대 숙박 가능 인원 수(어른)</WriteFormBoldTd>
+                <WriteFormBoldTd>최대 숙박 가능 인원 수(성인)</WriteFormBoldTd>
                 <WriteFormTd>
                   <Input type="text" name="spareAdult" defaultValue={responseData.spareAdult} onChange={handleChange} required />
                 </WriteFormTd>

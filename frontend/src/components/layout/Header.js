@@ -116,12 +116,12 @@ const Header = () => {
             <Link to="/facilities">부대시설</Link>
           </NavItem>
           <NavItem>
-            <Link to="/offers" state={{ state: null }}>
+            <Link to="/offers/1" state={{ state: null }}>
               스페셜오퍼
             </Link>
           </NavItem>
           <NavItem>
-            <Link to="/board/notice">고객지원</Link>
+            <Link to="/board/notice/1">고객지원</Link>
           </NavItem>
         </NavList>
         <BtnWrapper>

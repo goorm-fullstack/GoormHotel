@@ -95,7 +95,7 @@ const Mypage = () => {
               <ContentsTitleXSmall>예약 내역 확인</ContentsTitleXSmall>
               <p>
                 현재까지의 예약 내역을 확인할 수 있습니다.
-                <Link to="/reservation/history">자세히보기</Link>
+                <Link to="/myhistory/1">자세히보기</Link>
               </p>
             </div>
             <div>

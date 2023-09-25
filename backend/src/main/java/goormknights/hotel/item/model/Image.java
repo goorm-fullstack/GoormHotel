@@ -29,12 +29,21 @@ public class Image {
     private String filePath; // 서버의 이미지 경로
 
     @Column(nullable = false)
+    private String mimeType; // 이미지 mimeType
+
+    @Column(nullable = false)
+    @Lob
+    private byte[] data; // 이미지 바이트 정보
+
+    @Column(nullable = false)
     private boolean deleted = false; // soft delete 여부 구분
 
     @Builder(toBuilder = true)
-    public Image(String originFileName, String fileName, String filePath) {
+    public Image(String originFileName, String fileName, String filePath, String mimeType, byte[] data) {
         this.originFileName = originFileName;
         this.fileName = fileName;
         this.filePath = filePath;
+        this.mimeType = mimeType;
+        this.data = data;
     }
 }

@@ -1,20 +1,9 @@
 import React from 'react';
 import AdminLayout from '../common/AdminLayout';
+import { PageTitle } from '../../components/common/commonStyles';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-
-const Container = styled.div`
-  width: 100%;
-  max-width: 1270px;
-  min-width: 760px;
-  margin: 0 auto;
-`;
-
-const Title = styled.h1`
-  font-size: 36px;
-  font-weight: bold;
-  margin-bottom: 60px;
-`;
+import { Container } from '../member/AdminMember';
 
 const InfoContainer = styled.table`
   width: 100%;
@@ -114,15 +103,10 @@ const AllMember = styled.input`
 const AdminMail = () => {
   const { memberId } = useParams();
 
-  const subMenus = [
-    { name: '채팅 관리', link: '/admin/chat' },
-    { name: '메일 작성', link: '/admin/mail' },
-  ];
-
   return (
-    <AdminLayout title="채팅/메일 관리" subMenus={subMenus}>
+    <AdminLayout subMenus="chat">
       <Container>
-        <Title>메일 작성</Title>
+        <PageTitle>메일 작성</PageTitle>
         <InfoContainer>
           <InfoWrapper>
             <Label>

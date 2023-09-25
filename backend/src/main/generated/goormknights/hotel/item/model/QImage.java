@@ -19,6 +19,8 @@ public class QImage extends EntityPathBase<Image> {
 
     public static final QImage image = new QImage("image");
 
+    public final ArrayPath<byte[], Byte> data = createArray("data", byte[].class);
+
     public final BooleanPath deleted = createBoolean("deleted");
 
     public final StringPath fileName = createString("fileName");
@@ -26,6 +28,8 @@ public class QImage extends EntityPathBase<Image> {
     public final StringPath filePath = createString("filePath");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final StringPath mimeType = createString("mimeType");
 
     public final StringPath originFileName = createString("originFileName");
 

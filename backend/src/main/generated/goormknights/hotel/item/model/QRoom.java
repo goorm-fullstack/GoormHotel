@@ -26,7 +26,8 @@ public class QRoom extends EntityPathBase<Room> {
 
     public final StringPath bed = createString("bed");
 
-    public final NumberPath<Integer> capacity = createNumber("capacity", Integer.class);
+    //inherited
+    public final NumberPath<Integer> capacity;
 
     //inherited
     public final BooleanPath deleted;
@@ -83,6 +84,7 @@ public class QRoom extends EntityPathBase<Room> {
     public QRoom(Class<? extends Room> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this._super = new QItem(type, metadata, inits);
+        this.capacity = _super.capacity;
         this.deleted = _super.deleted;
         this.id = _super.id;
         this.name = _super.name;
