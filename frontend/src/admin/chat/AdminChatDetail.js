@@ -138,6 +138,7 @@ const AdminChatDetail = () => {
   const [chatRoomData, setChatRoomData] = useState({});
   const [recentTime, setRecentTime] = useState("");
   const [status, setStatus] = useState("");
+  const [status, setStatus] = useState('');
   const navigation = useNavigate();
 
   const navigateToChatList = () => {
@@ -285,23 +286,23 @@ const AdminChatDetail = () => {
           <InfoWrapper>
             <Data colSpan="2" className="chatWrapper">
               <ul className="chatLog" ref={chatContainerRef}>
-                {chatData.map((chat, index) => (
+                {chatData.map((chat, index) =>
                   chat.type === 'TALK' ? ( // chat.type이 'TALK'인 경우에만 출력
                     <li key={index}>
                       {chat.sender === 'admin' ? (
-                      <>
-                        <strong className="manager">관리자(관리자 ID) : </strong>
-                        <span>{chat.message}</span>
-                      </>
-                    ) : (
-                      <>
-                        <strong className="member">회원명(회원 ID) : </strong>
-                        <span>{chat.message}</span>
-                      </>
-                    )}
+                        <>
+                          <strong className="manager">관리자(관리자 ID) : </strong>
+                          <span>{chat.message}</span>
+                        </>
+                      ) : (
+                        <>
+                          <strong className="member">회원명(회원 ID) : </strong>
+                          <span>{chat.message}</span>
+                        </>
+                      )}
                     </li>
                   ) : null
-                ))}
+                )}
               </ul>
               <div className="writeWrapper" onSubmit={handleFormSubmit}>
                 <textarea
@@ -309,8 +310,7 @@ const AdminChatDetail = () => {
                   placeholder="메시지를 입력해 주세요"
                   value={newChat}
                   onChange={(e) => setNewChat(e.target.value)}
-                  onKeyDown={ handleInputKeyPress}
-                ></textarea>
+                  onKeyDown={handleInputKeyPress}></textarea>
                 <button type="submit">전송</button>
               </div>
             </Data>
