@@ -30,7 +30,7 @@ const ReserveDate = styled.div`
   }
 `;
 
-const CheckBtn = styled.button`
+export const CheckBtn = styled.button`
   border: 0;
   background-color: #fff;
   padding: 15px 0;
@@ -52,7 +52,7 @@ const Check = styled.div`
   }
 `;
 
-const CalendarSvg = styled.svg`
+export const CalendarSvg = styled.svg`
   fill: ${(props) => props.theme.colors.navy};
   position: relative;
   top: 2px;
@@ -94,11 +94,11 @@ const SelectLabel = styled.label`
   margin-top: 10px;
 `;
 
-const CalendarContainer = styled.div`
+export const CalendarContainer = styled.div`
   position: relative;
 `;
 
-const CalendarWrapper = styled.div`
+export const CalendarWrapper = styled.div`
   z-index: 10;
   position: absolute;
   top: 100%;

@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { SubmitButton } from '../admin/item/AdminGiftCard';
 import { TableTd, TableTr, Form, BoldTd, Input } from '../admin/item/AdminDetailGiftCard';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
@@ -19,35 +18,21 @@ import {
   TableCheckbox,
   Num,
 } from '../admin/member/AdminMember';
-import { commonAdminContents, PageTitle, commonTable, InputCheckbox, BtnWrapper, NormalBtn } from './common/commonStyles';
+import { commonAdminContents, PageTitle, commonTable, InputCheckbox, BtnWrapper, NormalBtn, SubmitBtn } from './common/commonStyles';
 import axios from 'axios';
 
-// 객실 등록 OR 다이닝 등록 버튼
-const TypeButton = styled(SubmitButton)`
-  margin-left: 30px;
-  &.active {
-    color: #ffffff;
-    background-color: #95846e;
-  }
-`;
-
-const TypeLink = styled(NavLink)`
-  &.active ${TypeButton} {
-    color: #ffffff;
-    background-color: #95846e;
-  }
-`;
+// const NormalBtn = styled(NavLink)`
+//   &.active ${TypeButton} {
+//     color: #ffffff;
+//     background-color: #95846e;
+//   }
+// `;
 
 // 이미지 미리보기
 const Image = styled.img`
   width: 300px;
   vertical-align: middle;
   margin-left: 50px;
-`;
-
-// 수정 버튼
-const WriteFormButton = styled(SubmitButton)`
-  margin-bottom: 60px;
 `;
 
 // 중복검사버튼
@@ -190,12 +175,8 @@ const WriteFormDining = () => {
       <PageTitle>다이닝 등록</PageTitle>
       <TableHeader>
         <div>
-          <TypeLink to="/admin/item/add/room">
-            <TypeButton type="button">객실 등록</TypeButton>
-          </TypeLink>
-          <TypeLink to="/admin/item/add/dining">
-            <TypeButton type="button">다이닝 등록</TypeButton>
-          </TypeLink>
+          <NormalBtn to="/admin/item/add/room">객실 등록</NormalBtn>
+          <NormalBtn to="/admin/item/add/dining">다이닝 등록</NormalBtn>
         </div>
       </TableHeader>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -284,7 +265,7 @@ const WriteFormDining = () => {
             </td>
           </tr>
         </Table>
-        <WriteFormButton type="submit">등록</WriteFormButton>
+        <SubmitBtn type="submit">등록</SubmitBtn>
       </form>
     </>
   );

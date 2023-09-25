@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel, NormalLinkBtn, SubmitBtn } from '../../components/common/commonStyles';
-import { GiftCardTable, TableTr, TableTh, TableListTr, TableTd, DetailLink, TopMenuOfTable } from './AdminGiftCard';
+import { GiftCardTable, TableTr, TableTh, TableListTr, TableTd, TopMenuOfTable } from './AdminGiftCard';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
@@ -171,21 +171,36 @@ const AdminItemList = ({ type, typeDetail, keyword }) => {
           </BtnWrapper>
         </TableHeader>
         <Table>
+          <colgroup>
+            <col width="80px" />
+            <col width="100px" />
+            <col width="180px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="150px" />
+          </colgroup>
           <thead>
             <tr>
               <th>
                 <InputCheckbox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
               </th>
               <th>번호</th>
-              <th>썸네일</th>
+              <th>이미지</th>
               <th>상품명</th>
-              <th>상품가격</th>
-              <th>상품타입</th>
-              <th>세부타입</th>
-              <th>남은 상품 수</th>
+              <th>종류</th>
+              <th>카테고리</th>
+              <th>상품가</th>
+              <th>재고</th>
             </tr>
           </thead>
           <tbody>
+            <tr>
+              <td colSpan="8" className="center empty">
+                등록된 상품이 없습니다.
+              </td>
+            </tr>
             {items.map((item, idx) => {
               const id = 'checkbox' + idx;
               return (
@@ -204,14 +219,14 @@ const AdminItemList = ({ type, typeDetail, keyword }) => {
                   </td>
                   <td>
                     {item.type === 'dining' ? (
-                      <DetailLink to={`/admin/item/detail/dining/${item.type}/${item.name}`}>{item.name}</DetailLink>
+                      <Link to={`/admin/item/detail/dining/${item.type}/${item.name}`}>{item.name}</Link>
                     ) : (
-                      <DetailLink to={`/admin/item/detail/room/${item.type}/${item.name}`}>{item.name}</DetailLink>
+                      <Link to={`/admin/item/detail/room/${item.type}/${item.name}`}>{item.name}</Link>
                     )}
                   </td>
-                  <td>{addComma(item.price)}</td>
                   <td>{item.type}</td>
                   <td>{item.typeDetail}</td>
+                  <td>{addComma(item.price)}</td>
                   <td>{item.spare}</td>
                 </tr>
               );

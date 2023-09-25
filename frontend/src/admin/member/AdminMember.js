@@ -114,7 +114,7 @@ const AdminMember = () => {
           </thead>
           <tbody>
             {memberData.length === 0 && (
-              <td colSpan="7" className="center">
+              <td colSpan="7" className="center empty">
                 등록된 회원이 없습니다.
               </td>
             )}

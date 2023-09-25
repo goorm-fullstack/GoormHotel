@@ -400,6 +400,10 @@ export const commonTable = styled.table`
     select {
       background-position: 96% center;
     }
+
+    &.empty {
+      padding: 19px 12px;
+    }
   }
   td.center {
     text-align: center;

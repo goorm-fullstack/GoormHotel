@@ -28,11 +28,11 @@ import {
 import { InfoContainer, InfoWrapper, Label, ModifyBtnWrapper, ModifyBtn } from './AdminMemberDetail';
 import Paging from '../../components/common/Paging';
 
-const Section = styled.section`
+export const Section = styled.section`
   margin-bottom: 60px;
 `;
 
-const InputWrapper = styled.div`
+export const InputWrapper = styled.div`
   width: 100%;
 
   form {
@@ -162,7 +162,7 @@ const AdminManager = () => {
             </thead>
             <tbody>
               {managerData.length === 0 && (
-                <td colSpan="7" className="center">
+                <td colSpan="7" className="center empty">
                   등록된 계정이 없습니다.
                 </td>
               )}
