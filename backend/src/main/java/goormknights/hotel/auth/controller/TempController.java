@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -48,16 +47,6 @@ public class TempController {
         return new ResponseEntity<>("어드민계정 가입 성공", HttpStatus.OK);
     }
 
-    @GetMapping("/loginForm")
-    public String loginForm() {
-        return "loginForm";
-    }
-
-    @GetMapping("/joinForm")
-    public String joinForm() {
-        return "joinForm";
-    }
-
     @PostMapping("/verify")
     public ResponseEntity<String> verifyCode(@RequestBody EmailVerificationRequest request) {
         boolean isVerified = memberService.verifyCode(request.getEmail(), request.getCode());
@@ -74,20 +63,11 @@ public class TempController {
         return "메인 페이지 입니다.";
     }
 
-//    @PreAuthorize("hasRole('ROLE_USER')") //Spring EL
-//    @GetMapping("/user")
-//    public String user(@AuthenticationPrincipal MemberPrincipal memberPrincipal){
-//        memberPrincipal.getMemberId(); // 나중에 이걸 가지고 유용히 써먹는다.
-//        return "유저 페이지 입니다.";
-//    }
-
-
     @GetMapping("/index")
     public String index(){
         return "index";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("/members/{memberId}")
     public void edit(@PathVariable Long memberId, @RequestBody @Valid MemberEdit request){
         memberService.edit(memberId, request);

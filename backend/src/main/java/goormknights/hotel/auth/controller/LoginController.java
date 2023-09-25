@@ -5,14 +5,10 @@ import goormknights.hotel.auth.dto.request.MemberLogin;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.member.service.AdminService;
 import goormknights.hotel.member.service.MemberService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +32,7 @@ public class LoginController {
     public ResponseEntity<?> loginMember(@RequestBody MemberLogin memberLogin, HttpSession session) {
         boolean success = memberService.loginMember(memberLogin.getMemberId(), memberLogin.getPassword(), session);
         if (success) {
-            return ResponseEntity.ok("Logged in successfully.");
+            return ResponseEntity.ok("로그인 성공");
         } else {
             return ResponseEntity.badRequest().body("Invalid username or password.");
         }
@@ -47,9 +43,9 @@ public class LoginController {
     public ResponseEntity<?> loginManager(@RequestBody ManagerLogin managerLogin, HttpSession session) {
         boolean success = adminService.loginManager(managerLogin.getAdminId(), managerLogin.getPassword(), session);
         if (success) {
-            String sessionId = session.getId();  // 세션 ID 가져오기
+            String sessionId = session.getId();
             log.info("세션"+sessionId);
-            return ResponseEntity.ok(Collections.singletonMap("sessionId", sessionId));  // 세션 ID를 응답에 추가
+            return ResponseEntity.ok(Collections.singletonMap("sessionId", sessionId));
         } else {
             return ResponseEntity.badRequest().body("Invalid username or password.");
         }
@@ -66,27 +62,4 @@ public class LoginController {
             return ResponseEntity.badRequest().body("Not logged in.");
         }
     }
-
-
-    @GetMapping("/getLoginInfo")
-    public String getLoginInfo(Authentication authentication, HttpServletRequest request) {
-        // 아이디 가져오기
-        String username = authentication.getName();
-        log.info("Username: " + username);
-
-        // 권한 가져오기
-        for (GrantedAuthority authority : authentication.getAuthorities()) {
-            log.info("Authority: " + authority.getAuthority());
-        }
-
-        // 쿠키 가져오기
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            log.info("Cookie Name: " + cookie.getName());
-            log.info("Cookie Value: " + cookie.getValue());
-        }
-
-        return "loginInfo";
-    }
-
 }

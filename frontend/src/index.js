@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components';
 import theme from './components/common/theme';
 import AdminApp from './admin/AdminApp';
 import axios from "axios";
+import {SessionProvider} from "./utils/api/AdminAuthCheck";
 
 axios.defaults.withCredentials = true;
 
@@ -13,7 +14,13 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const isAdminPage = window.location.pathname.includes('/admin');
 
-const AppToRender = isAdminPage ? <AdminApp /> : <App />;
+const AppToRender = isAdminPage ? (
+    <SessionProvider>
+        <AdminApp />
+    </SessionProvider>
+) : (
+    <App />
+);
 
 root.render(
   <ThemeProvider theme={theme}>

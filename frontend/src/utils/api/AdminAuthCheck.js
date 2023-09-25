@@ -1,37 +1,62 @@
 import {useNavigate} from "react-router-dom";
-import {useEffect} from "react";
+import {createContext, useContext, useEffect, useState} from "react";
 import Instance from "./axiosInstance";
 
-export const AdminAuthCheck = ({ requiredAuthorities, children }) => {
-  const navigate = useNavigate();
+// SessionContext 생성
+export const SessionContext = createContext(null);
+
+// SessionContext.Provider를 포함하는 컴포넌트
+export const SessionProvider = ({ children }) => {
+  const [sessionData, setSessionData] = useState(null);
 
   useEffect(() => {
-    const fetchSessionInfo = async () => {
+    const fetchSession = async () => {
       try {
         const response = await Instance.get('/api/session');
-        const { role, authorities } = response.data;
-        console.log('세션 가져오기', response.data, response)
-
-        // 역할이 'ADMIN'이거나 'MANAGER'인지 확인
-        if (role !== 'ADMIN' && role !== 'MANAGER') {
-          navigate('/admin/login');
-          console.log('어드민 매니저가 아님')
-          return;
-        }
-
-        // 필요한 권한이 있는지 확인
-        if (requiredAuthorities && !authorities.some(auth => requiredAuthorities.includes(auth))) {
-          navigate('/admin/unauthorized');
-        }
-
+        setSessionData(response.data);
       } catch (error) {
-        console.error("Failed to fetch session info:", error);
-        // navigate('/admin/login');
+        console.error('Failed to fetch session:', error);
       }
     };
 
-    fetchSessionInfo();
-  }, [requiredAuthorities, navigate]);
+    fetchSession();
+  }, []);
+
+  return (
+      <SessionContext.Provider value={{ sessionData, setSessionData }}>
+        {children}
+      </SessionContext.Provider>
+  );
+};
+
+// AdminAuthCheck 컴포넌트
+export const AdminAuthCheck = ({ requiredAuthorities, children }) => {
+  const navigate = useNavigate();
+  const { sessionData } = useContext(SessionContext);
+  useEffect(() => {
+    if (sessionData) {
+      const { role, authorities } = sessionData;
+
+      // Check role
+      if (role !== 'ADMIN' && role !== 'MANAGER') {
+        navigate('/admin/login');
+        return;
+      }
+
+      // Check authorities
+      if (requiredAuthorities && !authorities.some(authorities => requiredAuthorities.includes(authorities))) {
+        navigate('/admin');
+      }
+    }
+  }, [requiredAuthorities, sessionData, navigate]);
 
   return children;
+};
+
+export const useSession = () => {
+  const context = useContext(SessionContext);
+  if (!context) {
+    throw new Error('유저세션은 프로바이더를 통하여 사용되어야 합니다');
+  }
+  return context;
 };

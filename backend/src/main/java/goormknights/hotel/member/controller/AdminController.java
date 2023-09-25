@@ -25,11 +25,11 @@ public class AdminController {
     public ResponseEntity<?> validateSession(HttpSession session) {
         Object roleObj = session.getAttribute("role");
 
-        if (roleObj instanceof Role) {
-            Role role = (Role) roleObj;
-            String roleStr = role.name();  // ENUM의 경우 .name()을 사용해 문자열로 변환
+        if (roleObj instanceof Role role) {
+            String roleStr = role.name();
 
             if ("ADMIN".equals(roleStr) || "MANAGER".equals(roleStr)) {
+                log.info(roleStr);
                 return ResponseEntity.ok().body("세션 유효함");
             }
         }

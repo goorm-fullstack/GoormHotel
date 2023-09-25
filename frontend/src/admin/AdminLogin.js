@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import styled from 'styled-components';
 import adminLogo from '../images/common/logo_admin.png';
 import { Link, useNavigate } from 'react-router-dom';
 import Instance from '../utils/api/axiosInstance';
+import {SessionContext} from "../utils/api/AdminAuthCheck";
 
 const Header = styled.div`
   width: 100%;
@@ -76,25 +77,24 @@ const AdminLogin = () => {
   const [adminPassword, setAdminPassword] = useState('');
   const [rememberId, setRememberId] = useState(false);
 
+  const sessionContext = useContext(SessionContext);
+  const { setSessionData } = sessionContext || {};
+
   const handleLogin = async () => {
-    // 백엔드에 맞춰 JSON 형식으로 보내기
     const loginInfo = {
       adminId: adminId,
       password: adminPassword,
     };
 
     try {
-      // Content-Type을 'application/json'으로 설정
       const response = await Instance.post('/login/manager', loginInfo, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
       console.log("세션 응답 아이디: ", response.data);
-      // 백엔드 로직에 따라서 세션 정보 저장
       if (response.status === 200) {
-        sessionStorage.setItem('sessionId', response.data.sessionId);
-        console.log("세션: " + sessionStorage.getItem('sessionId'));
+        setSessionData(response.data);
         navigate('/admin');
       }
 

@@ -20,20 +20,28 @@ import AdminChat from './chat/AdminChat';
 import AdminChatDetail from './chat/AdminChatDetail';
 import AdminMail from './chat/AdminMail';
 import AdminIndex from "./AdminIndex";
-import RouteAuthCheck from "../utils/api/RouteAuthCheck";
 import Instance from "../utils/api/axiosInstance";
-import {useEffect} from "react";
-
-
-
+import {useContext, useEffect} from "react";
+import {SessionContext} from "../utils/api/AdminAuthCheck";
 
 const AdminApp = () => {
+  const sessionContext = useContext(SessionContext);
+
+  const { sessionData, setSessionData } = sessionContext || {};
+
   useEffect(() => {
     const checkSession = async () => {
       try {
         const response = await Instance.get('/api/session');
         if (response.status === 200) {
           console.log("세션 유효함");
+          console.log("Response Data:", response.data);
+          console.log("setSessionData:", setSessionData);
+          if (typeof setSessionData === "function") {
+            setSessionData(response.data);  // 세션 데이터 설정
+          } else {
+            console.error("setSessionData is not a function");
+          }
         }
       } catch (error) {
         console.log("세션 무효함", error);
@@ -41,12 +49,10 @@ const AdminApp = () => {
     };
 
     checkSession();
-  }, []);
+  }, [setSessionData]);
 
-  const adminOrManager = RouteAuthCheck(["ADMIN", "MANAGER"]);
-  const memberManage = RouteAuthCheck(["ADMIN", "MANAGER"], ["MemberManage"]);
-  const prodResManage = RouteAuthCheck(["ADMIN", "MANAGER"], ["ProdResManage"]);
-  const siteManage = RouteAuthCheck(["ADMIN", "MANAGER"], ["SiteManage"]);
+
+  const adminOrManager = sessionData ? ["ADMIN", "MANAGER"].includes(sessionData.role) : false;
 
   return (
     <BrowserRouter>
