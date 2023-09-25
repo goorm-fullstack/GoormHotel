@@ -26,7 +26,7 @@ public class QReply extends EntityPathBase<Reply> {
 
     public final StringPath replyContent = createString("replyContent");
 
-    public final BooleanPath replyDelete = createBoolean("replyDelete");
+    public final DateTimePath<java.time.LocalDateTime> replyDeleteTime = createDateTime("replyDeleteTime", java.time.LocalDateTime.class);
 
     public final NumberPath<Long> replyId = createNumber("replyId", Long.class);
 

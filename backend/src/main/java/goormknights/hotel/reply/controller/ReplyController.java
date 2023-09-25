@@ -5,6 +5,7 @@ import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.reply.model.Reply;
 import goormknights.hotel.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -30,11 +31,18 @@ public class ReplyController {
 
     //Read
     //모든 댓글 출력
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
     @GetMapping("/list")
     public ResponseEntity<List<ResponseReplyDto>> getAllBoards(@PageableDefault(size = 10, sort = "replyId", direction = Sort.Direction.DESC) Pageable pageable) {
-        List<ResponseReplyDto> replies = replyService.getAll(pageable);
+        Page<Reply> all = replyService.getAll(pageable);
+        Page<ResponseReplyDto> map = all.map(Reply::toResponseReplyDto);
+        int totalPages = all.getTotalPages();
+        long totalElements = all.getTotalElements();
 
-        return ResponseEntity.ok(replies);
+        return ResponseEntity.ok()
+                .header("TotalPages", String.valueOf(totalPages))
+                .header("TotalData", String.valueOf(totalElements))
+                .body(map.getContent());
     }
 
     //댓글 상세보기

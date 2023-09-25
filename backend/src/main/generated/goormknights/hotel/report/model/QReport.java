@@ -30,7 +30,7 @@ public class QReport extends EntityPathBase<Report> {
 
     public final DateTimePath<java.time.LocalDateTime> reportDate = createDateTime("reportDate", java.time.LocalDateTime.class);
 
-    public final BooleanPath reportDelete = createBoolean("reportDelete");
+    public final DateTimePath<java.time.LocalDateTime> reportDeleteTime = createDateTime("reportDeleteTime", java.time.LocalDateTime.class);
 
     public final NumberPath<Long> reportId = createNumber("reportId", Long.class);
 
