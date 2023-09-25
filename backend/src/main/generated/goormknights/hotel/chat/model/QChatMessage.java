@@ -19,7 +19,7 @@ public class QChatMessage extends EntityPathBase<ChatMessage> {
 
     public static final QChatMessage chatMessage = new QChatMessage("chatMessage");
 
-    public final DateTimePath<java.sql.Timestamp> createTime = createDateTime("createTime", java.sql.Timestamp.class);
+    public final StringPath createTime = createString("createTime");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 

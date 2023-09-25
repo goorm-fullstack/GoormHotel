@@ -251,7 +251,7 @@ const ReservationItem = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/specialOffer', {
+      .get('http://localhost:8080/category', {
         params: {
           type: selectedType,
           typeDetail: selectedCategory,
