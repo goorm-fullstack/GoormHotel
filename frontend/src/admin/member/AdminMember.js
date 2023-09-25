@@ -104,7 +104,7 @@ const AdminMember = () => {
               <th>
                 <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
               </th>
-              <th>No.</th>
+              <th>번호</th>
               <th>회원ID</th>
               <th>회원 이름</th>
               <th>회원등급</th>

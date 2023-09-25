@@ -172,8 +172,23 @@ export const commonButton = styled.button`
     height: 60px;
     line-height: 60px;
   }
+
   &.shadow {
     box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  &.mini {
+    width: 80px;
+    height: 32px;
+    line-height: 30px;
+    font-size: ${(props) => props.theme.font.sizexs};
+  }
+
+  &.header {
+    width: 140px;
+    height: 40px;
+    line-height: 40px;
+    font-size: ${(props) => props.theme.font.sizexs};
   }
 `;
 
@@ -207,23 +222,13 @@ export const NormalBtn = styled(commonButton)`
     color: ${(props) => props.theme.colors.goldhover};
   }
 
-  &.mini {
-    width: 80px;
-    height: 32px;
-    line-height: 30px;
-    font-size: ${(props) => props.theme.font.sizexs};
-  }
-
-  &.header {
-    width: 120px;
-    height: 40px;
-    line-height: 38px;
-    font-size: ${(props) => props.theme.font.sizexs};
-  }
-
   &.red {
     border-color: ${(props) => props.theme.colors.red};
     color: ${(props) => props.theme.colors.red};
+  }
+
+  &.header {
+    line-height: 38px;
   }
 `;
 
@@ -233,6 +238,11 @@ export const SubmitBtn = styled(commonButton)`
 
   &:hover {
     background-color: ${(props) => props.theme.colors.goldhover};
+  }
+
+  &.header {
+    width: 200px;
+    font-size: ${(props) => props.theme.font.sizes};
   }
 `;
 
@@ -308,6 +318,10 @@ export const AuthBtn = styled(commonButton)`
     background-color: ${(props) => props.theme.colors.charcoal};
     color: white;
   }
+`;
+
+export const MultiCheck = styled.div`
+  display: flex;
 `;
 
 export const commonTable = styled.table`
@@ -386,8 +400,13 @@ export const commonTable = styled.table`
     letter-spacing: -0.01em;
   }
 
-  a {
+  a,
+  button {
     text-decoration: underline;
     font-size: ${(props) => props.theme.font.sizes};
+  }
+
+  button {
+    background-color: transparent;
   }
 `;

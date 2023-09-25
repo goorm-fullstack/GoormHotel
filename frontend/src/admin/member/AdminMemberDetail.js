@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel, SubmitBtn } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel, SubmitBtn, LinkBtn } from '../../components/common/commonStyles';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Table } from './AdminMember';
@@ -170,8 +170,9 @@ const AdminMemberDetail = () => {
             </tr>
           </tbody>
         </Table>
-        <BtnWrapper className="mt40 center">
+        <BtnWrapper className="mt40 center double">
           <SubmitBtn type="submit">수정</SubmitBtn>
+          <LinkBtn to="/admin/member/1">취소</LinkBtn>
         </BtnWrapper>
       </Container>
     </AdminLayout>

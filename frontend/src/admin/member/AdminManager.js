@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
+import {
+  PageTitle,
+  InputCheckbox,
+  BtnWrapper,
+  NormalBtn,
+  CheckLabel,
+  ContentsTitleXSmall,
+  SubmitBtn,
+  MultiCheck,
+} from '../../components/common/commonStyles';
 import styled from 'styled-components';
 import {
   Container,
@@ -30,8 +39,21 @@ const SubTitle = styled.h2`
 `;
 
 const InputWrapper = styled.div`
-  display: flex;
-  gap: 14px;
+  width: 100%;
+
+  form {
+    display: flex;
+    column-gap: 10px;
+
+    input {
+      padding: 0 12px;
+    }
+
+    input,
+    button {
+      width: 17%;
+    }
+  }
 `;
 
 const Input = styled.input`
@@ -126,18 +148,20 @@ const AdminManager = () => {
       <Container>
         <PageTitle>부운영자 관리</PageTitle>
         <Section>
-          <SubTitle>부운영자 계정 등록</SubTitle>
+          <ContentsTitleXSmall>부운영자 계정 등록</ContentsTitleXSmall>
           <InputWrapper>
-            <Input placeholder="운영자 ID" />
-            <Input placeholder="운영자명" />
-            <Input placeholder="운영자 별명" />
-            <Input placeholder="접속 비밀번호" />
-            <Input placeholder="접속 비밀번호 확인" />
-            <AddBtn>부운영자 등록</AddBtn>
+            <form>
+              <input type="text" placeholder="운영자 ID" />
+              <input type="text" placeholder="운영자명" />
+              <input type="text" placeholder="운영자 별명" />
+              <input type="password" placeholder="접속 비밀번호" />
+              <input type="password" placeholder="접속 비밀번호 확인" />
+              <SubmitBtn className="header">부운영자 등록</SubmitBtn>
+            </form>
           </InputWrapper>
         </Section>
         <Section>
-          <SubTitle>부운영자 계정 목록</SubTitle>
+          <ContentsTitleXSmall>부운영자 계정 목록</ContentsTitleXSmall>
           <TableHeader>
             <p className="total">
               전체 <strong>{managerData.length}</strong> 건
@@ -148,23 +172,32 @@ const AdminManager = () => {
             </BtnWrapper>
           </TableHeader>
           <Table>
+            <colgroup>
+              <col width="80px" />
+              <col width="100px" />
+              <col width="200px" />
+              <col width="200px" />
+              <col width="200px" />
+              <col width="200px" />
+              <col width="150px" />
+            </colgroup>
             <thead>
               <tr>
                 <th>
                   <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
                 </th>
-                <th>No.</th>
+                <th>번호</th>
                 <th>운영자명</th>
                 <th>운영자 ID</th>
                 <th>운영자 별명</th>
-                <th>생성일</th>
+                <th>등록일</th>
                 <th>사용여부</th>
               </tr>
             </thead>
             <tbody>
               {managerData.length === 0 && (
                 <td colSpan="7" className="center">
-                  등록된 회원이 없습니다.
+                  등록된 계정이 없습니다.
                 </td>
               )}
               {managerData.map((item) => (
@@ -179,7 +212,7 @@ const AdminManager = () => {
                   <td className="center">{item.number}</td>
                   <td className="center">{item.name}</td>
                   <td className="center">
-                    <ManagerInfoBtn onClick={() => handleManagerClick(item)}>{item.memberId}</ManagerInfoBtn>
+                    <button onClick={() => handleManagerClick(item)}>{item.memberId}</button>
                   </td>
                   <td className="center">{item.nickname}</td>
                   <td className="center">{item.joinDate}</td>
@@ -191,7 +224,7 @@ const AdminManager = () => {
           <Paging />
         </Section>
         <Section>
-          <SubTitle>부운영자 계정 설정</SubTitle>
+          <ContentsTitleXSmall>부운영자 계정 설정</ContentsTitleXSmall>
           <Table className="horizontal">
             <colgroup>
               <col width="240px" />
@@ -246,18 +279,20 @@ const AdminManager = () => {
                 <tr>
                   <th>접근 권한</th>
                   <td>
-                    <CheckLabel>
-                      <InputCheckbox type="checkbox" placeholder="회원 관리" />
-                      회원관리
-                    </CheckLabel>
-                    <CheckLabel>
-                      <InputCheckbox type="checkbox" placeholder="회원 관리" />
-                      상품 및 예약 관리
-                    </CheckLabel>
-                    <CheckLabel>
-                      <InputCheckbox type="checkbox" placeholder="회원 관리" />
-                      사이트 관리
-                    </CheckLabel>
+                    <MultiCheck>
+                      <CheckLabel>
+                        <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                        회원관리
+                      </CheckLabel>
+                      <CheckLabel>
+                        <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                        상품 및 예약 관리
+                      </CheckLabel>
+                      <CheckLabel>
+                        <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                        사이트 관리
+                      </CheckLabel>
+                    </MultiCheck>
                   </td>
                 </tr>
               </tbody>
