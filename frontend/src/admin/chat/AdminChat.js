@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle } from '../../components/common/commonStyles';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import moment from "moment";
 import Instance from '../../utils/api/axiosInstance';
 import {
@@ -22,7 +22,9 @@ import {
 import Paging from '../../components/common/Paging';
 
 const AdminChat = () => {
+  const {page} = useParams()
   const [checkedItems, setCheckedItems] = useState([]);
+  const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [chatData, setChatData] = useState([
     {
       id: 3,
@@ -66,26 +68,46 @@ const AdminChat = () => {
   ]);
 
   useEffect(() => {
-    Instance.get('/chat/getLastMessage').then((response) => {
+    Instance.get(`/chat/getLastMessage?page=${page}`).then((response) => {
       console.log(response.data);
       setChatData(response.data);
     });
   }, []);
 
-  const handleCheckboxChange = (memberId) => {
+  const handleSelectAllChange = (e) => {
+    const checked = e.target.checked;
+    setSelectAllChecked(checked);
+    console.log("test")
+    console.log(chatData.chatMessages);
+    console.log("===============================")
+    if (checked) {
+      const allMemberIds = chatData.map((item) => item.chatMessages[0].roomId);
+      setCheckedItems(allMemberIds);
+    } else {
+      setCheckedItems([]);
+    }
+  };
+
+  const handleCheckboxChange = (id) => {
     setCheckedItems((prevItems) => {
-      if (prevItems.includes(memberId)) {
-        return prevItems.filter((item) => item !== memberId);
+      if (prevItems.includes(id)) {
+        return prevItems.filter((item) => item !== id);
       } else {
-        return [...prevItems, memberId];
+        return [...prevItems, id];
       }
     });
   };
 
-  const subMenus = [
-    { name: '채팅 관리', link: '/admin/chat' },
-    { name: '메일 작성', link: '/admin/mail' },
-  ];
+  const handleClosedClick = (e) => {
+    checkedItems.map((roomId, index) => {
+      Instance.get("/chat/closed/"+roomId).then((response)=>{
+        console.log(response)
+        // 닫은 방을 다시 열려면 사용자가 채팅을 해야합니다. 수동으로 전환하지 마세요.
+      })
+    })
+    window.location.reload();
+  }
+
 
   return (
     <AdminLayout subMenus="chat">
@@ -96,7 +118,7 @@ const AdminChat = () => {
             전체 <strong>{chatData.length}</strong> 건
           </Total>
           <BlackListBtn>
-            <Delete>채팅 상태 변경</Delete>
+            <Delete onClick={handleClosedClick}>채팅 상태 변경</Delete>
             <Delete>블랙리스트 해제</Delete>
             <Add>블랙리스트 추가</Add>
           </BlackListBtn>
@@ -113,7 +135,7 @@ const AdminChat = () => {
           <thead>
             <tr>
               <TableCheckboxWrapper>
-                <TableCheckbox type="checkbox" />
+                <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange}/>
               </TableCheckboxWrapper>
               <TableHeader>번호</TableHeader>
               <TableHeader>회원명(회원ID)</TableHeader>
@@ -123,37 +145,42 @@ const AdminChat = () => {
             </tr>
           </thead>
           <tbody>
-            {chatData.length === 0 && <TableCell colSpan="7">채팅 메시지 기록이 없습니다.</TableCell>}
-            {chatData.map((item, index) => (
-              <tr key={item.id}>
-                <TableCell>
-                  <TableCheckbox
-                    type="checkbox"
-                    checked={checkedItems.includes(item.chatMessages.memberId)}
-                    onChange={() => handleCheckboxChange(item.chatMessages.memberId)}
-                  />
-                </TableCell>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>
-                  {item.chatMessages.name}(
-                  <Link to={`/admin/member/${item.chatMessages[0].sender}`} className="memberId">
-                    {item.chatMessages[0].sender}
-                  </Link>
-                  )
-                </TableCell>
-                <TableCell className="lastChat">
-                  <p>
-                    <Link to={`/admin/chat/detail/${item.roomId}`}>{item.chatMessages[0].message}</Link>
-                  </p>
-                  <div className="allMessage">{item.chatMessages.message}</div>
-                </TableCell>
-                <TableCell>{item.chatMessages[0].createTime}</TableCell>
-                <TableCell>{item.status}</TableCell>
-              </tr>
-            ))}
+            {
+              chatData.length === 0 ? (
+                <TableCell colSpan="7">채팅 메시지 기록이 없습니다.</TableCell>
+              ) : (
+              chatData.map((item, index) => (
+                <tr key={item.id}>
+                  <TableCell>
+                    <TableCheckbox
+                      type="checkbox"
+                      checked={checkedItems.includes(item.chatMessages[0].roomId)}
+                      onChange={() => handleCheckboxChange(item.chatMessages[0].roomId)}
+                    />
+                    </TableCell>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>
+                      {item.chatMessages.name}(
+                      <Link to={`/admin/member/${item.chatMessages[0].sender}`} className="memberId">
+                        {item.chatMessages[0].sender}
+                      </Link>
+                      )
+                      </TableCell>
+                      <TableCell className="lastChat">
+                      <p>
+                        <Link to={`/admin/chat/detail/${item.roomId}`}>{item.chatMessages[0].message}</Link>
+                      </p>
+                      <div className="allMessage">{item.chatMessages.message}</div>
+                    </TableCell>
+                    <TableCell>{item.chatMessages[0].createTime}</TableCell>
+                  <TableCell>{item.status}</TableCell>
+                </tr>
+                ))
+              )
+            }
           </tbody>
         </Table>
-        <Paging />
+        <Paging url={"/admin/chat"}/>
       </Container>
     </AdminLayout>
   );

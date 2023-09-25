@@ -141,7 +141,7 @@ const AdminChatDetail = () => {
   const navigation = useNavigate();
 
   const navigateToChatList = () => {
-    navigation('/admin/chat');
+    navigation('/admin/chat/1');
   };
 
   const webSocketURL = 'ws://127.0.0.1:8080/ws/chat';
@@ -200,10 +200,8 @@ const AdminChatDetail = () => {
        const chatContent = parsedMessage.message;
        const chatRoomID = parsedMessage.roomId;
        const sender = parsedMessage.sender;
-       console.log("call this")
        // 메시지 발신자가 어드민이 아닌 경우에만 호출된다.
        if(chatRoomID === roomId && sender !== "admin") {
-         console.log("call");
          // 메시지를 처리하는 로직을 여기에 추가
          // 이전 채팅 데이터를 복사한 후 새 메시지를 추가
          setChatData((p) => [...p,{ message: chatContent, sender: sender, type: 'TALK' },]);
@@ -258,7 +256,7 @@ const AdminChatDetail = () => {
         <PageTitle>채팅 관리</PageTitle>
         <InfoContainer>
           <InfoWrapper>
-            <Label>방 번호(회원 ID)</Label>
+            <Label>방 번호(방 ID)</Label>
             <Data>({roomId})</Data>
           </InfoWrapper>
           <InfoWrapper>
@@ -283,7 +281,7 @@ const AdminChatDetail = () => {
             <Data colSpan="2" className="chatWrapper">
               <ul className="chatLog" ref={chatContainerRef}>
                 {chatData.map((chat, index) => (
-                  chat.type === 'TALK' ? ( // chat.type이 'TALK'인 경우에만 출력
+                  chat.messageType === 'TALK' ? ( // chat.type이 'TALK'인 경우에만 출력
                     <li key={index}>
                       {chat.sender === 'admin' ? (
                       <>

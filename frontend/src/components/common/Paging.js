@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 export const PageParam = styled.ul`
@@ -38,7 +38,7 @@ export const PageParam = styled.ul`
   }
 `;
 
-const Paging = () => {
+const Paging = ({url}) => {
   const location = useLocation();
   console.log(location.pathname);
 
@@ -47,14 +47,19 @@ const Paging = () => {
   const [totalPages, setTotalPages] = useState(0); // 전체 페이지 상태관리
 
   const currentPage = parseInt(page, 10); // 현재페이지
+  const navigation = useNavigate();
+
+  const navigateToChatList = (url) => {
+    navigation(url);
+  };
 
   // 이전 페이지 이동
   const previousPageChange = () => {
     let route = '';
     if (currentPage === 1) {
-      route = '/admin/item/list/1';
+      route = `${url}/1`;
     } else {
-      route = `/admin/item/list/${currentPage - 1}`;
+      route = `${url}/${currentPage - 1}`;
     }
     return route;
   };
@@ -63,9 +68,9 @@ const Paging = () => {
   const nextPageChange = () => {
     let route = '';
     if (currentPage === totalPages) {
-      route = `/admin/item/list/${currentPage}`;
+      route = `${url}/${currentPage}`;
     } else {
-      route = `/admin/item/list/${currentPage + 1}`;
+      route = `${url}/${currentPage + 1}`;
     }
     return route;
   };
@@ -89,7 +94,7 @@ const Paging = () => {
   for (let i = 1; i <= totalPages; i++) {
     listElements.push(
       <li key={i}>
-        <Link to={`/admin/item/list/${i}`}>{i}</Link>
+        <Link to={`${url}/${i}`}>{i}</Link>
       </li>
     );
   }

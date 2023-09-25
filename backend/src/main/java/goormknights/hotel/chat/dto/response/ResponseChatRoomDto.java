@@ -12,11 +12,11 @@ import java.util.List;
 public class ResponseChatRoomDto {
     private String roomId;
     private String name;
-    private List<ChatMessage> chatMessages;
+    private List<ResponseChatMessageDto> chatMessages;
     private Status status;
     private Timestamp timestamp;
 
-    public ResponseChatRoomDto(ChatRoomDto chatRoomDto, List<ChatMessage> chatMessages) {
+    public ResponseChatRoomDto(ChatRoomDto chatRoomDto, List<ResponseChatMessageDto> chatMessages) {
         this.roomId = chatRoomDto.getRoomId();
         this.name = chatRoomDto.getName();
         this.status = chatRoomDto.getStatus();
