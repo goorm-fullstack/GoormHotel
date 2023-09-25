@@ -143,9 +143,9 @@ const AdminChat = () => {
                 </TableCell>
                 <TableCell className="lastChat">
                   <p>
-                    <Link to={`/admin/chat/${item.roomId}`}>{item.chatMessages[0].message}</Link>
+                    <Link to={`/admin/chat/detail/${item.roomId}`}>{item.chatMessages[0].message}</Link>
                   </p>
-                  <div className="allMessage">{item.chatMessages[0].message}</div>
+                  <div className="allMessage">{item.chatMessages.message}</div>
                 </TableCell>
                 <TableCell>{item.chatMessages[0].createTime}</TableCell>
                 <TableCell>{item.status}</TableCell>

@@ -45,7 +45,7 @@ const AdminApp = () => {
         <Route path="/admin/giftcard/detail/:id" element={<AdminDetailGiftCard />}></Route>
         <Route path="/admin/board/:page" element={<AdminBoard />}></Route>
         <Route path="/admin/deletepost/:page" element={<AdminDeleteComment />}></Route>
-        <Route path="/admin/chat/:page" element={<AdminChat />}></Route>
+        <Route path="/admin/chat" element={<AdminChat />}></Route>
         <Route path="/admin/chat/detail/:roomId" element={<AdminChatDetail />}></Route>
         <Route path="/admin/mail" element={<AdminMail />}></Route>
         <Route path="/admin/subscriber/:page" element={<AdminNews />}></Route>
