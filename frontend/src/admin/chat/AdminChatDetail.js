@@ -136,6 +136,8 @@ const AdminChatDetail = () => {
   const chatContainerRef = useRef(null);
   const [newChat, setNewChat] = useState('');
   const [chatRoomData, setChatRoomData] = useState({});
+  const [recentTime, setRecentTime] = useState("");
+  const [status, setStatus] = useState("");
   const [status, setStatus] = useState('');
   const navigation = useNavigate();
 
@@ -155,6 +157,7 @@ const AdminChatDetail = () => {
         setStatus(response.data.status);
         console.log('==============================');
         setChatData(response.data.chatMessages);
+        setRecentTime(chatData[chatData.length-1].createTime)
         settingWebSocket(roomId);
       })
       .catch((error) => {
@@ -171,47 +174,46 @@ const AdminChatDetail = () => {
   const settingWebSocket = (roomId1) => {
     // 이전 상태(prevRoomId)를 이용하여 새로운 상태를 반환
     if (!ws.current) {
-      ws.current = new WebSocket(webSocketURL);
-      ws.current.onopen = () => {
-        setSocketConnected(true);
-        console.log('WebSocket connected');
+     ws.current = new WebSocket(webSocketURL);
+     ws.current.onopen = () => {
+       setSocketConnected(true);
+       console.log("WebSocket connected");
 
-        // WebSocket 연결이 성공하면 ENTER 메시지 전송
-        ws.current.send(
-          JSON.stringify({
-            type: 'ENTER',
-            roomId: roomId1, // 이전 상태를 사용
-            sender: 'admin',
-            message: '입장',
-          })
-        );
-      };
-      ws.current.onclose = (error) => {
-        console.log('disconnect from ' + webSocketURL);
-        console.log(error);
-      };
-      ws.current.onerror = (error) => {
-        console.log('connection error ' + webSocketURL);
-        console.log(error);
-      };
+       // WebSocket 연결이 성공하면 ENTER 메시지 전송
+       ws.current.send(
+         JSON.stringify({
+           type: "ENTER",
+           roomId: roomId1, // 이전 상태를 사용
+           sender: "admin",
+           message: "입장",
+         })
+       );
+     };
+     ws.current.onclose = (error) => {
+       console.log("disconnect from " + webSocketURL);
+       console.log(error);
+     };
+     ws.current.onerror = (error) => {
+       console.log("connection error " + webSocketURL);
+       console.log(error);
+     };
 
-      // 메시지 핸들러 설정
-      ws.current.onmessage = (event) => {
-        const message = event.data;
-        const parsedMessage = JSON.parse(message);
-        const chatContent = parsedMessage.message;
-        const chatRoomID = parsedMessage.roomId;
-        const sender = parsedMessage.sender;
-        console.log('caal thos');
-        // 메시지 발신자가 어드민이 아닌 경우에만 호출된다.
-        if (chatRoomID === roomId && sender !== 'admin') {
-          console.log('call');
-          // 메시지를 처리하는 로직을 여기에 추가
-          // 이전 채팅 데이터를 복사한 후 새 메시지를 추가
-          setChatData((p) => [...p, { message: chatContent, sender: sender, type: 'TALK' }]);
-        }
-      };
-    }
+     // 메시지 핸들러 설정
+     ws.current.onmessage = (event) => {
+       const message = event.data;
+       const parsedMessage = JSON.parse(message);
+       const chatContent = parsedMessage.message;
+       const chatRoomID = parsedMessage.roomId;
+       const sender = parsedMessage.sender;
+       // 메시지 발신자가 어드민이 아닌 경우에만 호출된다.
+       if(chatRoomID === roomId && sender !== "admin") {
+         console.log("call");
+         // 메시지를 처리하는 로직을 여기에 추가
+         // 이전 채팅 데이터를 복사한 후 새 메시지를 추가
+         setChatData((p) => [...p,{ message: chatContent, sender: sender, type: 'TALK' },]);
+       }
+     };
+   }
     // 컴포넌트 언마운트 시 WebSocket 연결 닫기
     return () => {
       console.log('Cleaning up WebSocket');
@@ -265,7 +267,7 @@ const AdminChatDetail = () => {
           </InfoWrapper>
           <InfoWrapper>
             <Label>최근 발송일</Label>
-            <Data>{chatRoomData.createTime}</Data>
+            <Data>{recentTime}</Data>
           </InfoWrapper>
           <InfoWrapper>
             <Label>상태</Label>

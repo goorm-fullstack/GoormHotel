@@ -3,6 +3,7 @@ import AdminLayout from '../common/AdminLayout';
 import { PageTitle } from '../../components/common/commonStyles';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import moment from "moment";
 import Instance from '../../utils/api/axiosInstance';
 import {
   Container,
@@ -81,7 +82,10 @@ const AdminChat = () => {
     });
   };
 
-  console.log(checkedItems);
+  const subMenus = [
+    { name: '채팅 관리', link: '/admin/chat' },
+    { name: '메일 작성', link: '/admin/mail' },
+  ];
 
   return (
     <AdminLayout subMenus="chat">
@@ -143,7 +147,7 @@ const AdminChat = () => {
                   </p>
                   <div className="allMessage">{item.chatMessages[0].message}</div>
                 </TableCell>
-                <TableCell>{item.timestamp}</TableCell>
+                <TableCell>{item.chatMessages[0].createTime}</TableCell>
                 <TableCell>{item.status}</TableCell>
               </tr>
             ))}
