@@ -82,19 +82,19 @@ const AdminDeleteComment = () => {
       <Container>
         <PageTitle>삭제된 글 관리</PageTitle>
         <TableHeader>
-          <Total>
-            전체 <Num>{board.length}</Num> 건
-          </Total>
-          <BlackListBtn>
-            <Delete>복원</Delete>
-            <Add>영구삭제</Add>
-          </BlackListBtn>
+          <p className="total">
+            전체 <strong>{board.length}</strong> 건
+          </p>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn className="header">복원</NormalBtn>
+            <NormalBtn className="header red">영구삭제</NormalBtn>
+          </BtnWrapper>
         </TableHeader>
         <Table>
           <thead>
             <tr>
               <th>
-                <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
+                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
               </th>
               <th>No.</th>
               <th>게시판</th>
@@ -108,11 +108,11 @@ const AdminDeleteComment = () => {
             {board.map((board) => (
               <tr key={board.boardId}>
                 <td>
-                  {/*<TableCheckbox*/}
-                  {/*  type="checkbox"*/}
-                  {/*  checked={checkedItems.includes(board.boardId)}*/}
-                  {/*  onChange={() => handleCheckboxChange(board.boardId)}*/}
-                  {/*/>*/}
+                  <InputCheckbox
+                    type="checkbox"
+                    checked={checkedItems.includes(board.boardId)}
+                    onChange={() => handleCheckboxChange(board.boardId)}
+                  />
                 </td>
                 <td>{board.boardId}</td>
                 <td>{'카테고리(후기, 공지)'}</td>

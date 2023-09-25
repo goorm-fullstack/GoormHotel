@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel, SubmitBtn } from '../../components/common/commonStyles';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Table } from './AdminMember';
@@ -114,7 +114,12 @@ const AdminMemberDetail = () => {
             <tr>
               <th>회원 등급</th>
               <td>
-                <input type="text" placeholder="등급1" name="memberGrade" value={formData.memberGrade} onChange={handleChange} />
+                <select>
+                  <option>Bronze</option>
+                  <option>Silver</option>
+                  <option>Gold</option>
+                </select>
+                {/* <input type="text" placeholder="회원등급" name="memberGrade" value={formData.memberGrade} onChange={handleChange} /> */}
               </td>
             </tr>
             <tr>
@@ -133,7 +138,7 @@ const AdminMemberDetail = () => {
               <th>이메일</th>
               <td>
                 <input type="email" placeholder="이메일" name="email" value={formData.email} onChange={handleChange} />
-                <EmailAuth>상태: 인증완료</EmailAuth>
+                <span className="mailcheck">상태 : 인증완료</span>
               </td>
             </tr>
             <tr>
@@ -145,7 +150,12 @@ const AdminMemberDetail = () => {
             <tr>
               <th>성별</th>
               <td>
-                <input type="text" placeholder="선택 안함" name="gender" value={formData.gender} onChange={handleChange} />
+                <select>
+                  <option>선택안함</option>
+                  <option>남성</option>
+                  <option>여성</option>
+                </select>
+                {/* <input type="text" placeholder="선택 안함" name="gender" value={formData.gender} onChange={handleChange} /> */}
               </td>
             </tr>
             <tr>
@@ -160,9 +170,9 @@ const AdminMemberDetail = () => {
             </tr>
           </tbody>
         </Table>
-        <ModifyBtnWrapper>
-          <ModifyBtn>수정</ModifyBtn>
-        </ModifyBtnWrapper>
+        <BtnWrapper className="mt40 center">
+          <SubmitBtn type="submit">수정</SubmitBtn>
+        </BtnWrapper>
       </Container>
     </AdminLayout>
   );

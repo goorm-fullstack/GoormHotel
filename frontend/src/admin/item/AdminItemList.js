@@ -6,20 +6,7 @@ import { GiftCardTable, TableTr, TableTh, TableListTr, TableTd, DetailLink, TopM
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
-import {
-  Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from '../member/AdminMember';
+import { Container, ContentHeader, Table, TableHeader } from '../member/AdminMember';
 import Paging from '../../components/common/Paging';
 
 // 전체 데이터 갯수 표시 태그
@@ -55,12 +42,6 @@ const DeleteButton = styled.button`
     border: 1px solid #d30a0a; // theme.colors.red
     color: #d30a0a; // theme.colors.red
   }
-`;
-
-// 체크박스
-const CheckBox = styled(TableCheckbox)`
-  margin: 0;
-  vertical-align: middle;
 `;
 
 // 최하단 페이징 링크
@@ -321,7 +302,7 @@ const AdminItemList = () => {
           <thead>
             <tr>
               <th>
-                <CheckBox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
+                <InputCheckbox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
               </th>
               <th>No.</th>
               <th>썸네일</th>
@@ -338,7 +319,7 @@ const AdminItemList = () => {
               return (
                 <tr key={idx}>
                   <td>
-                    <CheckBox
+                    <InputCheckbox
                       type="checkbox"
                       id={id}
                       ref={(el) => (inputRef.current[idx] = el)}

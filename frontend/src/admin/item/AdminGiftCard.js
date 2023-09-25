@@ -7,20 +7,7 @@ import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import 'moment/locale/ko';
 import { Link } from 'react-router-dom';
-import {
-  Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from '../member/AdminMember';
+import { Container, ContentHeader, Table, TableHeader, TableCheckbox } from '../member/AdminMember';
 import Paging from '../../components/common/Paging';
 
 const SubTitle = styled.p`
@@ -191,12 +178,6 @@ export const TableListTr = styled.tr`
   border-bottom: 1px solid #dddddd;
 `;
 
-// 체크 박스
-const CheckBox = styled(TableCheckbox)`
-  margin: 0;
-  vertical-align: middle;
-`;
-
 // 상품권 상세(상품권 이름)
 export const DetailLink = styled(Link)`
   text-decoration: none;
@@ -342,7 +323,7 @@ const AdminGiftCard = () => {
               <thead>
                 <tr>
                   <th>
-                    <CheckBox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
+                    <InputCheckbox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
                   </th>
                   <th>No.</th>
                   <th>상품권명</th>
@@ -359,7 +340,7 @@ const AdminGiftCard = () => {
                   return (
                     <tr>
                       <td>
-                        <CheckBox type="checkbox" id={id} ref={(el) => (inputRef.current[idx] = el)} />
+                        <InputCheckbox type="checkbox" id={id} ref={(el) => (inputRef.current[idx] = el)} />
                       </td>
                       <td>{idx + 1}</td>
                       <td>

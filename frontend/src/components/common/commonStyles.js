@@ -216,8 +216,8 @@ export const NormalBtn = styled(commonButton)`
 
   &.header {
     width: 120px;
-    height: 32px;
-    line-height: 30px;
+    height: 40px;
+    line-height: 38px;
     font-size: ${(props) => props.theme.font.sizexs};
   }
 
@@ -333,15 +333,23 @@ export const commonTable = styled.table`
     input[type='password'],
     input[type='email'],
     input[type='tel'],
-    input[type='date'] {
+    input[type='date'],
+    select {
       height: 36px;
+      min-width: 240px;
+      padding-left: 12px;
+    }
+
+    select {
+      background-position: 96% center;
     }
   }
   td.center {
     text-align: center;
   }
-  td a:hover {
-    color: ${(props) => props.theme.colors.goldhover};
+  tr:hover th,
+  tr:hover td {
+    background-color: ${(props) => props.theme.colors.graybg};
   }
 
   &.horizontal {
@@ -358,6 +366,9 @@ export const commonTable = styled.table`
     th {
       text-align: center;
     }
+    tr:hover td {
+      background-color: white;
+    }
   }
 
   .textover {
@@ -366,5 +377,17 @@ export const commonTable = styled.table`
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+  }
+
+  .mailcheck {
+    font-size: ${(props) => props.theme.font.sizexs};
+    color: ${(props) => props.theme.colors.graydark};
+    padding-left: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  a {
+    text-decoration: underline;
+    font-size: ${(props) => props.theme.font.sizes};
   }
 `;

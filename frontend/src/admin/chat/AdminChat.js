@@ -88,14 +88,14 @@ const AdminChat = () => {
       <Container>
         <PageTitle>채팅 관리</PageTitle>
         <TableHeader>
-          <Total>
+          <p className="total">
             전체 <strong>{chatData.length}</strong> 건
-          </Total>
-          <BlackListBtn>
-            <Delete>채팅 상태 변경</Delete>
-            <Delete>블랙리스트 해제</Delete>
-            <Add>블랙리스트 추가</Add>
-          </BlackListBtn>
+          </p>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn className="header">채팅 상태 변경</NormalBtn>
+            <NormalBtn className="header">블랙리스트 해제</NormalBtn>
+            <NormalBtn className="header red">블랙리스트 추가</NormalBtn>
+          </BtnWrapper>
         </TableHeader>
         <Table>
           <colgroup>
@@ -109,7 +109,7 @@ const AdminChat = () => {
           <thead>
             <tr>
               <th>
-                <TableCheckbox type="checkbox" />
+                <InputCheckbox type="checkbox" />
               </th>
               <th>번호</th>
               <th>회원명(회원ID)</th>
@@ -123,7 +123,7 @@ const AdminChat = () => {
             {chatData.map((item, index) => (
               <tr key={item.id}>
                 <td>
-                  <TableCheckbox
+                  <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(item.chatMessages.memberId)}
                     onChange={() => handleCheckboxChange(item.chatMessages.memberId)}

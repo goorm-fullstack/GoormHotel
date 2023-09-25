@@ -4,19 +4,8 @@ import Instance from '../../utils/api/axiosInstance';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
-import {
-  Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from '../member/AdminMember';
+import { PageTitle, BtnWrapper, NormalBtn, InputCheckbox } from '../../components/common/commonStyles';
+import { Container, Table, TableHeader } from '../member/AdminMember';
 import Paging from '../../components/common/Paging';
 
 export const Redo = styled.button`
@@ -87,19 +76,19 @@ const AdminReservation = () => {
       <Container>
         <PageTitle>예약 목록 </PageTitle>
         <TableHeader>
-          <Total>
-            전체 <Num>{totalCount}</Num> 건
-          </Total>
-          <BlackListBtn>
-            <Redo>재예약</Redo>
-            <Cancel>예약 취소</Cancel>
-          </BlackListBtn>
+          <p className="total">
+            전체 <strong>{totalCount}</strong> 건
+          </p>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn className="header">재예약</NormalBtn>
+            <NormalBtn className="header red">예약 취소</NormalBtn>
+          </BtnWrapper>
         </TableHeader>
         <Table>
           <thead>
             <tr>
               <th>
-                <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
+                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
               </th>
               <th>No.</th>
               <th>예약 번호</th>
@@ -113,7 +102,7 @@ const AdminReservation = () => {
             {reservationList.map((reservation, index) => (
               <tr key={index}>
                 <td>
-                  <TableCheckbox
+                  <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(reservation.id)}
                     onChange={() => handleCheckboxChange(reservation.id)}

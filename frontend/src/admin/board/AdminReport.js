@@ -113,19 +113,19 @@ const AdminReport = () => {
       <Container>
         <PageTitle>신고 관리</PageTitle>
         <TableHeader>
-          <Total>
-            전체 <Num>{reportData.length}</Num> 건
-          </Total>
-          <BlackListBtn>
-            <Delete>확인 완료</Delete>
-            <Add>블랙리스트 추가</Add>
-          </BlackListBtn>
+          <p className="total">
+            전체 <strong>{reportData.length}</strong> 건
+          </p>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn className="header">신고 확인 완료</NormalBtn>
+            <NormalBtn className="header red">블랙리스트 추가</NormalBtn>
+          </BtnWrapper>
         </TableHeader>
         <Table>
           <thead>
             <tr>
               <th>
-                <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
+                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
               </th>
               <th>No.</th>
               <th>신고된 글</th>
@@ -141,7 +141,7 @@ const AdminReport = () => {
             {reportData.map((item) => (
               <tr key={item.id}>
                 <td>
-                  <TableCheckbox
+                  <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(item.memberId)}
                     onChange={() => handleCheckboxChange(item.memberId)}

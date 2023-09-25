@@ -27,14 +27,13 @@ const AdminNews = () => {
       <Container>
         <PageTitle>구독자 관리</PageTitle>
         <TableHeader>
-          <Total>
+          <p className="total">
             전체 <strong>0</strong> 건
-          </Total>
-          <BlackListBtn>
-            <Delete>채팅 상태 변경</Delete>
-            <Delete>블랙리스트 해제</Delete>
-            <Add>블랙리스트 추가</Add>
-          </BlackListBtn>
+          </p>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn className="header">채팅 상태 변경</NormalBtn>
+            <NormalBtn className="header red">블랙리스트 추가</NormalBtn>
+          </BtnWrapper>
         </TableHeader>
         <Table>
           <colgroup>
@@ -48,7 +47,7 @@ const AdminNews = () => {
           <thead>
             <tr>
               <th>
-                <TableCheckbox type="checkbox" />
+                <InputCheckbox type="checkbox" />
               </th>
               <th>번호</th>
               <th>회원명(회원ID)</th>

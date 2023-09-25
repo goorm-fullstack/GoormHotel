@@ -19,6 +19,7 @@ import {
   TableCheckbox,
   Num,
 } from '../admin/member/AdminMember';
+import { commonAdminContents, PageTitle, commonTable, InputCheckbox, BtnWrapper, NormalBtn } from './common/commonStyles';
 import axios from 'axios';
 
 // 객실 등록 OR 다이닝 등록 버튼
@@ -186,8 +187,8 @@ const WriteFormDining = () => {
 
   return (
     <>
+      <PageTitle>다이닝 등록</PageTitle>
       <TableHeader>
-        <Title>다이닝 등록</Title>
         <div>
           <TypeLink to="/admin/item/add/room">
             <TypeButton type="button">객실 등록</TypeButton>

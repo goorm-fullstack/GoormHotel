@@ -123,19 +123,19 @@ const AdminComment = () => {
       <Container>
         <PageTitle>댓글 관리</PageTitle>
         <TableHeader>
-          <Total>
-            전체 <Num>{reply.length}</Num> 건
-          </Total>
-          <BlackListBtn>
-            <Delete>신고처리</Delete>
-            <Add>삭제</Add>
-          </BlackListBtn>
+          <p className="total">
+            전체 <strong>{reply.length}</strong> 건
+          </p>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn className="header">신고된 글로 이동</NormalBtn>
+            <NormalBtn className="header red">삭제</NormalBtn>
+          </BtnWrapper>
         </TableHeader>
         <Table>
           <thead>
             <tr>
               <th>
-                <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
+                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
               </th>
               <th>No.</th>
               <th>게시판</th>
@@ -150,7 +150,7 @@ const AdminComment = () => {
             {reply.map((reply) => (
               <tr key={reply.replyId}>
                 <td>
-                  <TableCheckbox
+                  <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(null)} //item.author.id
                     onChange={() => handleCheckboxChange(null)} //item.author.id
