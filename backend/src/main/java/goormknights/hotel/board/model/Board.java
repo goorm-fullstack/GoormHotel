@@ -36,6 +36,7 @@ public class Board {
     private String boardWriter;              //작성자
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "board_image_id")
     private BoardImage boardImage;       //이미지 저장
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
