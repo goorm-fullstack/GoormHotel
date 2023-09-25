@@ -9,11 +9,13 @@ import styled from 'styled-components';
 import { useParams } from 'react-router';
 import axios from 'axios';
 
+// 세부타입 선택
 const WriteFormSelect = styled(Select)`
   width: 200px;
   margin: 0;
 `;
 
+// form
 const WriteFormTable = styled(Table)``;
 
 const WriteFormTr = styled(TableTr)`
@@ -28,16 +30,19 @@ const WriteFormBoldTd = styled(BoldTd)`
   vertical-align: middle;
 `;
 
+// 이미지
 const ImageInput = styled(Input)`
   margin-top: 60px;
   height: 100px;
   border: none;
 `;
 
+// 등록 버튼
 const WriteFormButton = styled(SubmitButton)`
   margin-bottom: 60px;
 `;
 
+// 중복확인 버튼
 const DuplicateButton = styled.button`
   vertical-align: middle;
   margin-left: 50px;
@@ -52,12 +57,14 @@ const DuplicateButton = styled.button`
   }
 `;
 
+// 중복확인 시 경고 문구
 const RedP = styled.p`
   color: #ec5353;
   display: inline-block;
   margin-left: 30px;
 `;
 
+// 중복확인 시 성공 문구
 const GreenP = styled.p`
   color: #008000;
   display: inline-block;
@@ -133,6 +140,10 @@ const AdminDetailDining = () => {
           window.location.href = '/admin/item/list/1';
         } catch (error) {
           console.error('Error:', error.message);
+          if (error.response.data.message.startsWith('Validation failed')) {
+            const errorMessage = error.response.data.errors[0].defaultMessage;
+            alert(errorMessage);
+          }
         }
       } else {
         alert('중복확인을 다시 시도해주세요.');
@@ -233,7 +244,7 @@ const AdminDetailDining = () => {
                 </WriteFormTd>
               </WriteFormTr>
               <WriteFormTr>
-                <WriteFormBoldTd>어른 추가 비용</WriteFormBoldTd>
+                <WriteFormBoldTd>성인 추가 비용</WriteFormBoldTd>
                 <WriteFormTd>
                   <Input type="text" name="priceAdult" defaultValue={responseData.priceAdult} onChange={handleChange} required />
                 </WriteFormTd>
@@ -251,7 +262,7 @@ const AdminDetailDining = () => {
                 </WriteFormTd>
               </WriteFormTr>
               <WriteFormTr>
-                <WriteFormBoldTd>최대 숙박 가능 인원 수(어른)</WriteFormBoldTd>
+                <WriteFormBoldTd>최대 숙박 가능 인원 수(성인)</WriteFormBoldTd>
                 <WriteFormTd>
                   <Input type="text" name="spareAdult" defaultValue={responseData.spareAdult} onChange={handleChange} required />
                 </WriteFormTd>
@@ -260,6 +271,12 @@ const AdminDetailDining = () => {
                 <WriteFormBoldTd>최대 숙박 가능 인원 수(어린이)</WriteFormBoldTd>
                 <WriteFormTd>
                   <Input type="text" name="spareChildren" defaultValue={responseData.spareChildren} onChange={handleChange} required />
+                </WriteFormTd>
+              </WriteFormTr>
+              <WriteFormTr>
+                <WriteFormBoldTd>기준 인원</WriteFormBoldTd>
+                <WriteFormTd>
+                  <Input type="text" name="spareChildren" defaultValue={responseData.capacity} onChange={handleChange} required />
                 </WriteFormTd>
               </WriteFormTr>
               <WriteFormTr>

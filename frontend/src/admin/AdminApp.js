@@ -20,7 +20,7 @@ import AdminDeleteComment from './board/AdminDeleteComment';
 import AdminChat from './chat/AdminChat';
 import AdminChatDetail from './chat/AdminChatDetail';
 import AdminMail from './chat/AdminMail';
-import AdminIndex from "./AdminIndex";
+import AdminIndex from './AdminIndex';
 
 const AdminApp = () => {
   return (
@@ -45,7 +45,7 @@ const AdminApp = () => {
         <Route path="/admin/board" element={<AdminBoard />}></Route>
         <Route path="/admin/deleteComment" element={<AdminDeleteComment />}></Route>
         <Route path="/admin/chat" element={<AdminChat />}></Route>
-        <Route path="/admin/chat/:memberId" element={<AdminChatDetail />}></Route>
+        <Route path="/admin/chat/:roomId" element={<AdminChatDetail />}></Route>
         <Route path="/admin/mail" element={<AdminMail />}></Route>
       </Routes>
     </BrowserRouter>

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,12 +40,17 @@ public class DiningController {
      * @throws IOException
      */
     @PostMapping("/dining")
-    public ResponseEntity<Object> uploadDining(@Validated @ModelAttribute RequestDiningDto requestDiningDto, @RequestParam MultipartFile img) throws IOException {
+    public ResponseEntity<Object> uploadDining(@Validated @ModelAttribute RequestDiningDto requestDiningDto, @RequestParam MultipartFile img, BindingResult bindingResult) throws IOException {
 
-        RequestImageDto requestImageDto = imageService.convertToImageDto(img);
+        if(bindingResult.hasErrors()){
+            return ResponseEntity.badRequest().build();
+        }
+        else{
+            RequestImageDto requestImageDto = imageService.convertToImageDto(img);
 
-        diningService.saveDining(requestDiningDto, requestImageDto);
-        return ResponseEntity.ok().build();
+            diningService.saveDining(requestDiningDto, requestImageDto);
+            return ResponseEntity.ok().build();
+        }
     }
 
     /**
@@ -56,11 +62,15 @@ public class DiningController {
      * @throws IOException
      */
     @PutMapping("/dining/{diningName}")
-    public ResponseEntity<ResponseDiningDto> updateDining(@PathVariable String diningName, @Validated @ModelAttribute RequestDiningDto requestDiningDto, @RequestParam(required = false) MultipartFile img) throws IOException {
+    public ResponseEntity<ResponseDiningDto> updateDining(@PathVariable String diningName, @Validated @ModelAttribute RequestDiningDto requestDiningDto, @RequestParam(required = false) MultipartFile img, BindingResult bindingResult) throws IOException {
 
-        ResponseDiningDto responseDiningDto = diningService.modifyDining(diningName, requestDiningDto, img).toResponseDiningDto();
+        if(bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }else{
+            ResponseDiningDto responseDiningDto = diningService.modifyDining(diningName, requestDiningDto, img).toResponseDiningDto();
 
-        return ResponseEntity.ok(responseDiningDto);
+            return ResponseEntity.ok(responseDiningDto);
+        }
     }
 
     /**
@@ -96,6 +106,7 @@ public class DiningController {
      * 예) /dinings?size=20&page=1
      */
     @GetMapping
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
     public ResponseEntity<List<ResponseDiningDto>> findAllDining(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)Pageable pageable){
         Page<Dining> allDining = diningService.findAllDining(pageable);
         List<ResponseDiningDto> responseDtoList = diningService.toResponseDtoList(allDining);

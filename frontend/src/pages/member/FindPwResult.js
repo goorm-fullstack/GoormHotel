@@ -1,107 +1,62 @@
 import React from 'react';
 import { styled } from 'styled-components';
+import { BtnWrapper, SubmitBtn, PageTitle, commonContainerStyle } from '../../components/common/commonStyles';
 
-const Text = styled.p`
-  font-size: 16px;
-  font-weight: 400;
-  color: rgb(136, 136, 136);
-  line-height: 1.75;
-`;
+const Container = styled(commonContainerStyle)``;
 
-const Title = styled.p`
-  font-size: 36px;
-  font-weight: 500;
-  color: rgb(17, 17, 17);
-  line-height: 1.2;
-  text-align: left;
-`;
-
-const BoldText = styled.p`
-  margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: 400;
-  color: rgb(186, 160, 133);
-  line-height: 1.167;
-`;
-
-const InfoText = styled.p`
-  margin-bottom: 20px;
-  font-size: 16px;
-  font-weight: 400;
-  color: rgb(136, 136, 136);
-  line-height: 1.75;
-`;
-
-const FindPwResultInput = styled.input`
-  border: 1px solid rgb(221, 221, 221);
-  background-color: rgb(255, 255, 255);
-  width: 514px;
-  height: 64px;
-  &::placeholder {
-    font-size: 16px;
-    font-weight: 400;
-    color: rgb(136, 136, 136);
-    line-height: 1.75;
-    text-align: left;
-    padding-left: 1rem;
-  }
-`;
-
-const FindPwResultButton = styled.button`
-  color: #ffffff;
-  width: 510px;
-  height: 60px;
-  border: 1px solid rgb(186, 160, 133);
-  background-color: ${(props) => props.theme.colors.brown};
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.75;
+const ResultBox = styled.div`
   text-align: center;
-  &:hover {
-    background-color: #8a7057;
+
+  h3 {
+    font-size: ${(props) => props.theme.font.sizel};
+    color: ${(props) => props.theme.colors.goldhover};
+    margin-bottom: 20px;
   }
-`;
 
-const FindPwBox = styled.div`
-  width: 1180px;
-  height: 770px;
-  display: flex;
-  flex-direction: column;
-  gap: 154px;
-  margin: 0 auto;
-  margin-top: 160px;
-`;
+  p {
+    line-height: 1.6;
+    color: ${(props) => props.theme.colors.graylight};
+  }
 
-const ResetPwBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  text-align: center;
-`;
+  form {
+    width: 400px;
+    margin: 40px auto 0;
+  }
 
-const FindPwResultForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
+  input {
+    width: 100%;
+    height: 50px;
+    display: block;
+    margin-top: 10px;
+    padding-left: 12px;
+  }
+
+  input:first-child {
+    margin-top: 0;
+  }
 `;
 
 const FindPwResult = () => {
   return (
     <>
-      <FindPwBox>
-        <Title>비밀번호 찾기</Title>
-        <ResetPwBox>
-          <BoldText>비밀번호를 재설정해주세요.</BoldText>
-          <Text>새로 사용하실 비밀번호를 입력해주세요.</Text>
-          <InfoText>기존에 사용하시던 비밀번호는 사용할 수 없습니다.</InfoText>
-          <FindPwResultForm action="#" method="post">
-            <FindPwResultInput placeholder="비밀번호" name="#" required />
-            <FindPwResultInput placeholder="비밀번호 확인" name="#" required />
-            <FindPwResultButton>비밀번호 재설정</FindPwResultButton>
-          </FindPwResultForm>
-        </ResetPwBox>
-      </FindPwBox>
+      <Container>
+        <PageTitle>비밀번호 찾기</PageTitle>
+        <ResultBox>
+          <h3>비밀번호를 재설정해주세요.</h3>
+          <p>
+            새로 사용하실 비밀번호를 입력해주세요.
+            <br />
+            기존에 사용하시던 비밀번호는 사용할 수 없습니다.
+          </p>
+          <form action="#" method="post">
+            <input placeholder="비밀번호" name="#" required />
+            <input placeholder="비밀번호 확인" name="#" required />
+            <BtnWrapper className="mt20 full">
+              <SubmitBtn>비밀번호 재설정</SubmitBtn>
+            </BtnWrapper>
+          </form>
+        </ResultBox>
+      </Container>
     </>
   );
 };

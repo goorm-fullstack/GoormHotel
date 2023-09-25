@@ -6,11 +6,13 @@ import { NavLink } from 'react-router-dom';
 import { Select } from '../admin/item/AdminItemList';
 import axios from 'axios';
 
+// 테이블 상단
 const TopOfTable = styled.div`
   display: flex;
   justify-content: space-between;
 `;
 
+// 객실 등록 OR 다이닝 등록 버튼
 const TypeButton = styled(SubmitButton)`
   margin-left: 30px;
   &.active {
@@ -26,6 +28,7 @@ const TypeLink = styled(NavLink)`
   }
 `;
 
+// 테이블
 const WriteFormTable = styled(Table)``;
 
 const WriteFormTr = styled(TableTr)`
@@ -40,27 +43,32 @@ const WriteFormBoldTd = styled(BoldTd)`
   vertical-align: middle;
 `;
 
+// 이미지 미리보기
 const Image = styled.img`
   width: 300px;
   vertical-align: middle;
   margin-left: 50px;
 `;
 
+// 이미지 선택
 const ImageInput = styled(Input)`
   margin-top: 60px;
   height: 100px;
   border: none;
 `;
 
+// 세부타입 선택
 const WriteFormSelect = styled(Select)`
   width: 200px;
   margin: 0;
 `;
 
+// 수정 버튼
 const WriteFormButton = styled(SubmitButton)`
   margin-bottom: 60px;
 `;
 
+// 중복검사버튼
 const DuplicateButton = styled.button`
   vertical-align: middle;
   margin-left: 50px;
@@ -75,12 +83,14 @@ const DuplicateButton = styled.button`
   }
 `;
 
+// 중복검사 경고 문구
 const RedP = styled.p`
   color: #ec5353;
   display: inline-block;
   margin-left: 30px;
 `;
 
+// 중복검사 성공 문구
 const GreenP = styled.p`
   color: #008000;
   display: inline-block;
@@ -141,6 +151,10 @@ const WriteFormDining = () => {
           window.location.href = '/admin/item/list/1';
         } catch (error) {
           console.error('Error:', error.message);
+          if (error.response.data.message.startsWith('Validation failed')) {
+            const errorMessage = error.response.data.errors[0].defaultMessage;
+            alert(errorMessage);
+          }
         }
       } else {
         e.preventDefault();
@@ -176,6 +190,7 @@ const WriteFormDining = () => {
       }
     } catch (error) {
       setDuplicateMessage(error.response.data);
+      console.log(error.response.data);
       setIsConfirm(false);
     }
   };
@@ -227,7 +242,7 @@ const WriteFormDining = () => {
             </WriteFormTd>
           </WriteFormTr>
           <WriteFormTr>
-            <WriteFormBoldTd>어른 추가 비용</WriteFormBoldTd>
+            <WriteFormBoldTd>성인 추가 비용</WriteFormBoldTd>
             <WriteFormTd>
               <Input type="text" name="priceAdult" onChange={handleChange} value={formData.priceAdult} required />
             </WriteFormTd>
@@ -239,13 +254,13 @@ const WriteFormDining = () => {
             </WriteFormTd>
           </WriteFormTr>
           <WriteFormTr>
-            <WriteFormBoldTd>잔여 객실 수</WriteFormBoldTd>
+            <WriteFormBoldTd>잔여 다이닝 수</WriteFormBoldTd>
             <WriteFormTd>
               <Input type="text" name="spare" onChange={handleChange} value={formData.spare} required />
             </WriteFormTd>
           </WriteFormTr>
           <WriteFormTr>
-            <WriteFormBoldTd>최대 숙박 가능 인원 수(어른)</WriteFormBoldTd>
+            <WriteFormBoldTd>최대 숙박 가능 인원 수(성인)</WriteFormBoldTd>
             <WriteFormTd>
               <Input type="text" name="spareAdult" onChange={handleChange} value={formData.spareAdult} required />
             </WriteFormTd>
@@ -254,6 +269,12 @@ const WriteFormDining = () => {
             <WriteFormBoldTd>최대 숙박 가능 인원 수(어린이)</WriteFormBoldTd>
             <WriteFormTd>
               <Input type="text" name="spareChildren" onChange={handleChange} value={formData.spareChildren} required />
+            </WriteFormTd>
+          </WriteFormTr>
+          <WriteFormTr>
+            <WriteFormBoldTd>기준 인원</WriteFormBoldTd>
+            <WriteFormTd>
+              <Input type="text" name="capacity" onChange={handleChange} value={formData.capacity} required />
             </WriteFormTd>
           </WriteFormTr>
           <WriteFormTr>

@@ -1,32 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
+import { BtnWrapper, SubmitBtn, PageTitle, InputCheckbox, commonContainerStyle, LinkBtn, CheckLabel } from '../../components/common/commonStyles';
 import kakao from '../../images/icon/ico_kakao.png';
 import naver from '../../images/icon/ico_naver.png';
 import google from '../../images/icon/ico_google.png';
 
-const Container = styled.div`
-  width: 1180px;
-  margin: 0 auto;
-  padding-top: 280px;
-`;
+const Container = styled(commonContainerStyle)``;
 
 const Wrapper = styled.div`
   display: flex;
-  height: 440px;
-  align-items: center;
-`;
+  width: 100%;
 
-const Title = styled.h1`
-  font-size: 36px;
-  font-weight: bold;
-  margin-bottom: 100px;
+  & > div {
+    width: 50%;
+  }
 `;
 
 const LeftWrapper = styled.div`
-  width: 510px;
-  height: auto;
-  margin-right: 80px;
+  padding-right: 80px;
+  border-right: 1px solid ${(props) => props.theme.colors.grayborder};
 `;
 
 const ButtonWrapper = styled.div`
@@ -36,119 +29,66 @@ const ButtonWrapper = styled.div`
 `;
 
 const MemberBtn = styled.button`
-  background-color: ${({ isActive }) => (isActive ? '#FFFFFF' : '#DDDDDD')};
-  border: 1px solid ${({ isActive }) => (isActive ? '#BAA085' : '#DDDDDD')};
-  color: ${({ isActive }) => (isActive ? '#BAA085' : '#888888')};
-  padding: 10px 20px;
-  cursor: pointer;
+  background-color: ${({ isActive }) => (isActive ? '#FFFFFF' : '#f7f7f7')};
+  border: 1px solid ${({ isActive }) => (isActive ? '#baa085' : '#ddd')};
+  color: ${({ isActive }) => (isActive ? '#9c836a' : '#888')};
   width: 50%;
   height: 100%;
-  border-bottom: none;
+  border-bottom-color: ${({ isActive }) => (isActive ? 'transparent' : '#baa085')};
+  font-size: ${(props) => props.theme.font.sizes};
 `;
 
 const NonMemberBtn = styled(MemberBtn)``;
 
 const Input = styled.input`
   width: 100%;
-  height: 60px;
-  padding-left: 21px;
-  outline: none;
-`;
+  height: 50px;
+  padding-left: 18px;
 
-const PasswordInput = styled(Input)`
-  margin-top: 12px;
-`;
-
-const Form = styled.form``;
-
-const LoginBtn = styled.button`
-  width: 100%;
-  height: 60px;
-  background-color: #95846e;
-  color: #fff;
-  margin-top: 20px;
-
-  &:hover {
-    background-color: #8a7057;
-  }
-`;
-
-const RememberBtn = styled.button`
-  color: #888888;
-  float: left;
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-
-  input {
-    width: 16px;
-    height: 16px;
-    border: 1px solid #dddddd;
-    margin-right: 10px;
+  &.second {
+    margin-top: 10px;
   }
 `;
 
 const RememberAndFind = styled.div`
   display: flex;
   justify-content: space-between;
-  color: #888888;
-  font-size: 14px;
+  color: ${(props) => props.theme.colors.graylight};
+  font-size: ${(props) => props.theme.font.sizexs};
   align-items: center;
-  margin-top: 13px;
+  margin-top: 10px;
+  letter-spacing: -0.02em;
 `;
 
 const AuthWrapper = styled.div`
   display: flex;
-  gap: 28px;
+  justify-content: center;
+  gap: 0 18px;
   height: 50px;
-  width: 206px;
-  margin: 0 auto;
-  margin-top: 55px;
-`;
+  width: 100%;
+  margin-top: 50px;
 
-const AuthBtn = styled.button`
-  background-color: transparent;
-`;
-
-const CenterLine = styled.div`
-  width: 1px;
-  height: 100%;
-  background-color: #dddddd;
+  button {
+    width: 52px;
+    height: 52px;
+    background-color: transparent;
+  }
 `;
 
 const RightWrapper = styled.div`
-  width: 510px;
-  height: 100%;
-  margin-left: 80px;
-  display: flex;
-  flex-direction: column;
+  padding-left: 80px;
 `;
 
 const FirstText = styled.p`
-  font-size: 24px;
-  color: #baa085;
-  margin-top: 80px;
-  margin-bottom: 20px;
+  font-size: ${(props) => props.theme.font.sizel};
+  color: ${(props) => props.theme.colors.goldhover};
+  margin: 55px 0 20px;
 `;
 
 const SecondText = styled.p`
-  font-size: 16px;
-  color: #888888;
-  margin-bottom: 62px;
+  color: ${(props) => props.theme.colors.graylight};
+  margin-bottom: 60px;
   line-height: 1.6;
-`;
-
-const SignupBtn = styled(Link)`
-  width: 100%;
-  padding: 20px 0;
-  border: 1px solid #baa085;
-  color: #baa085;
-  text-align: center;
-
-  &:hover {
-    background-color: #95846e;
-    color: #fff;
-  }
 `;
 
 const Login = () => {
@@ -157,14 +97,14 @@ const Login = () => {
   const isReservation = queryParams.get('type') === 'reservation';
 
   const [isMemberActive, setIsMemberActive] = useState(!isReservation);
-  const [emailId, setEmailId] = useState('');
-  const [Password, setPassword] = useState('');
+  const [memberId, setMemberId] = useState('');
+  const [memberPassword, setPassword] = useState('');
   const [reservationNumber, setReservationNumber] = useState('');
   const [contactNumber, setContactNumber] = useState('');
   const [rememberId, setRememberId] = useState(false); //아이디 기억하기 상태
 
   const handleIdChange = (e) => {
-    setEmailId(e.target.value);
+    setMemberId(e.target.value);
   };
 
   const handlePwChange = (e) => {
@@ -201,7 +141,7 @@ const Login = () => {
   return (
     <>
       <Container>
-        <Title>로그인</Title>
+        <PageTitle>로그인</PageTitle>
         <Wrapper>
           <LeftWrapper>
             <ButtonWrapper>
@@ -213,47 +153,52 @@ const Login = () => {
               </NonMemberBtn>
             </ButtonWrapper>
             {isMemberActive ? (
-              <Form>
-                <Input placeholder="이메일 아이디" value={emailId} onChange={handleIdChange} />
-                <PasswordInput placeholder="비밀번호" value={Password} onChange={handlePwChange} />
-                <LoginBtn>로그인</LoginBtn>
-              </Form>
+              <form id="memberLogin">
+                  <Input placeholder="아이디" value={memberId} onChange={handleIdChange} />
+                  <Input className="second" placeholder="비밀번호" value={memberPassword} onChange={handlePwChange} />                
+                    <BtnWrapper className="mt20 full">
+                      <SubmitBtn type="submit">로그인</SubmitBtn>
+                    </BtnWrapper>
+              </form>
             ) : (
-              <Form>
+              <form>
                 <Input placeholder="예약번호" value={reservationNumber} onChange={handleReservationNumberChange}/>
-                <PasswordInput placeholder="연락처" value={contactNumber} onChange={handleContactNumberChange}/>
-                <LoginBtn>예약 확인</LoginBtn>
-              </Form>
+                <Input className="second" placeholder="연락처" value={contactNumber} onChange={handleContactNumberChange}/>
+                <BtnWrapper className="mt20 full">
+                  <SubmitBtn type="submit">예약 확인</SubmitBtn>
+                </BtnWrapper>
+              </form>
             )}
             {isMemberActive && (
               <RememberAndFind>
-                <RememberBtn>
-                  <input type="checkbox" checked={rememberId} onChange={handleRememberIdChange} />
-                  <span onClick={handleRememberIdChange}>아이디 기억하기</span>
-                </RememberBtn>
+                <CheckLabel for="rememberId">
+                  <InputCheckbox type="checkbox" id="rememberId" checked={rememberId} onChange={handleRememberIdChange} />
+                  아이디 기억하기
+                </CheckLabel>
                 <Link to="/findAccount">아이디/비밀번호 찾기</Link>
               </RememberAndFind>
             )}
             <AuthWrapper>
-              <AuthBtn>
+              <button type="button">
                 <img src={google} alt="authImg" />
-              </AuthBtn>
-              <AuthBtn>
+              </button>
+              <button type="button">
                 <img src={kakao} alt="authImg" />
-              </AuthBtn>
-              <AuthBtn>
+              </button>
+              <button type="button">
                 <img src={naver} alt="authImg" />
-              </AuthBtn>
+              </button>
             </AuthWrapper>
           </LeftWrapper>
-          <CenterLine />
           <RightWrapper>
             <FirstText>아직 회원이 아니신가요?</FirstText>
             <SecondText>
               회원이 되시면 구름 리워즈 멤버십 회원으로서
               <br />더 큰 혜택과 편리함을 누릴 수 있습니다.
             </SecondText>
-            <SignupBtn to="/signup">회원가입</SignupBtn>
+            <BtnWrapper className="full">
+              <LinkBtn to="/signup">회원가입</LinkBtn>
+            </BtnWrapper>
           </RightWrapper>
         </Wrapper>
       </Container>

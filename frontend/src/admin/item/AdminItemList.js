@@ -8,36 +8,42 @@ import { TableCheckbox } from '../member/AdminMember';
 import { PageParam } from '../board/AdminReport';
 import { NavLink } from 'react-router-dom';
 
+// 전체 데이터 갯수 표시 태그
 const TotalItem = styled.p`
   display: inline-block;
   margin-right: 100px;
 `;
 
+// 카테고리 셀렉트
 export const Select = styled.select`
   margin-left: 30px;
-  border: 1px solid #dddddd;
+  border: 1px solid #dddddd; // theme.colors.grayborder
 `;
 
+// 썸네일 표시
 const Image = styled.img`
   width: 60px;
   height: 60px;
   vertical-align: middle;
 `;
 
+// 상품 등록 버튼
 const InitButton = styled.button`
   &:hover {
-    background-color: #95846e;
+    background-color: #95846e; // theme.colors.
     color: #ffffff;
   }
 `;
 
+// 상품 삭제 버튼
 const DeleteButton = styled.button`
   &:hover {
-    border: 1px solid #d30a0a;
-    color: #d30a0a;
+    border: 1px solid #d30a0a; // theme.colors.red
+    color: #d30a0a; // theme.colors.red
   }
 `;
 
+// 체크박스
 const CheckBox = styled(TableCheckbox)`
   margin: 0;
   vertical-align: middle;
@@ -51,11 +57,18 @@ const CheckBoxTd = styled.td`
   width: 30px;
 `;
 
+// 최하단 페이징 링크
 const PageLink = styled(NavLink)`
   &.active {
-    color: #baa085;
+    color: #baa085; // theme.colors.gold
     text-decoration: underline;
   }
+`;
+
+// 상단 검색 input
+const SearchInput = styled.input`
+  height: 40px;
+  margin-left: 20px;
 `;
 
 const AdminItemList = () => {
@@ -104,21 +117,38 @@ const AdminItemList = () => {
     }
   };
 
+  const searchKeyword = useRef(); // 검색어 입력 input
+  let keyword = ''; // 검색어
+  let url = ''; // 상품 get 요청 url
+
   // type 변경
   const handleTypeChange = (e) => {
+    keyword = '';
+    searchKeyword.current.value = '';
     const selectedType = e.target.value;
     setType(selectedType);
   };
 
   // typeDetail 변경
   const handleTypeDetailChange = (e) => {
+    keyword = '';
+    searchKeyword.current.value = '';
     const selectedTypeDetail = e.target.value;
     setTypeDetail(selectedTypeDetail);
   };
 
+  // 검색 버튼 클릭 이벤트
+  const handleSearch = () => {
+    keyword = searchKeyword.current.value;
+    if (keyword === '') {
+      alert('검색어를 입력해주세요.');
+    } else {
+      handleLoadItems();
+    }
+  };
+
   //전체, 객실, 다이닝 상품 가져오는 로직
   const handleLoadItems = async () => {
-    let url = '';
     const currentPage = parseInt(page, 10);
     const selectedType = type;
     const selectedTypeDetail = typeDetail;
@@ -134,6 +164,10 @@ const AdminItemList = () => {
       url = `/category?typeDetail=${selectedTypeDetail}&page=${currentPage}`;
     } else {
       url = `/category?page=${currentPage}`;
+    }
+
+    if (keyword !== '') {
+      url += `&keyword=${keyword}`;
     }
 
     try {
@@ -256,6 +290,47 @@ const AdminItemList = () => {
     }
   };
 
+  // 숫자 포맷
+  const addComma = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
+  // 타입 선택에 따른 세부타입 변경
+  let detailTypeForType = [];
+  type === 'all'
+    ? detailTypeForType.push(
+        <>
+          <option value="all">전체</option>
+          <option value="deluxe">디럭스</option>
+          <option value="sweet">스위트</option>
+          <option value="family">패밀리</option>
+          <option value="poolVilla">풀 빌라</option>
+          <option value="restaurant">레스토랑</option>
+          <option value="roomService">룸서비스</option>
+          <option value="barRounge">바&라운지</option>
+          <option value="bakery">베이커리</option>
+        </>
+      )
+    : type === 'room'
+    ? detailTypeForType.push(
+        <>
+          <option value="all">전체</option>
+          <option value="deluxe">디럭스</option>
+          <option value="sweet">스위트</option>
+          <option value="family">패밀리</option>
+          <option value="poolVilla">풀 빌라</option>
+        </>
+      )
+    : detailTypeForType.push(
+        <>
+          <option value="all">전체</option>
+          <option value="restaurant">레스토랑</option>
+          <option value="roomService">룸서비스</option>
+          <option value="barRounge">바&라운지</option>
+          <option value="bakery">베이커리</option>
+        </>
+      );
+
   return (
     <AdminLayout title="상품관리" subMenus={subMenus}>
       <section>
@@ -269,16 +344,15 @@ const AdminItemList = () => {
               <option value="dining">다이닝</option>
             </Select>
             <Select name="typeDetail" value={typeDetail} onChange={handleTypeDetailChange}>
-              <option value="all">전체</option>
-              <option value="deluxe">디럭스</option>
-              <option value="sweet">스위트</option>
-              <option value="family">패밀리</option>
-              <option value="poolVilla">풀 빌라</option>
-              <option value="restaurant">레스토랑</option>
-              <option value="roomService">룸서비스</option>
-              <option value="barRounge">바&라운지</option>
-              <option value="bakery">베이커리</option>
+              {detailTypeForType}
             </Select>
+          </div>
+          <div>
+            <label htmlFor="search">상품 검색 :</label>
+            <SearchInput type="text" id="search" ref={searchKeyword} />
+            <InitButton type="button" onClick={handleSearch}>
+              검색
+            </InitButton>
           </div>
           <div>
             <Link to="/admin/item/list/writeForm/room">
@@ -328,7 +402,7 @@ const AdminItemList = () => {
                       <DetailLink to={`/admin/item/list/view/room/${item.type}/${item.name}`}>{item.name}</DetailLink>
                     )}
                   </TableTd>
-                  <TableTd>{item.price}</TableTd>
+                  <TableTd>{addComma(item.price)}</TableTd>
                   <TableTd>{item.type}</TableTd>
                   <TableTd>{item.typeDetail}</TableTd>
                   <TableTd>{item.spare}</TableTd>

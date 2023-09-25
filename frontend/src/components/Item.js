@@ -1,139 +1,186 @@
 import React from 'react';
 import item from '../images/item/item1.jpg';
 import { styled } from 'styled-components';
-import { commonSubTitleStyle } from './common/commonStyles';
-
-const SubTitle = styled.h2`
-  ${commonSubTitleStyle}
-`;
-
-const ProductInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 467px;
-  margin-bottom: 52px;
-  border: 1px solid #dddddd;
-`;
-
-const Info = styled.div`
-  background-color: ${(props) => props.theme.colors.lightGray};
-  height: 100%;
-  padding: 35px 46px 0 40px;
-`;
-
-const InfoTitle = styled.h1`
-  font-size: 18px;
-  color: ${(props) => props.theme.colors.charcoal};
-  margin-bottom: 30px;
-  font-weight: bold;
-`;
-
-const InfoWrapper = styled.div`
-  display: flex;
-  height: 127px;
-  font-size: 14px;
-`;
-
-const InfoLeft = styled.div`
-  color: #888888;
-  width: 160px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
-
-const InfoRight = styled.div`
-  width: 136px;
-  color: #666666;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
 
 const PaymentInfo = styled.div`
-  padding-bottom: 28px;
-  height: 71px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-bottom: 1px solid #dddddd;
-  margin-bottom: 28px;
-`;
+  line-height: 1.6;
+  margin-top: 24px;
 
-const PaymentPrice = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-  color: #888888;
-`;
-
-const DiscountPrice = styled.p`
-  color: #bb2525;
-`;
-
-const TotalPrice = styled.div`
-  display: flex;
-  height: 28px;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-  color: ${(props) => props.theme.colors.charcoal};
-  margin-bottom: 15px;
-`;
-
-const Price = styled.div`
-  font-size: 16px;
-  color: #95846e;
-
-  div {
-    font-size: 22px;
-    display: inline;
-    font-weight: bold;
+  table {
+    width: 100%;
   }
+
+  th,
+  td {
+    font-size: ${(props) => props.theme.font.sizexs};
+    color: ${(props) => props.theme.colors.graydark};
+    vertical-align: middle;
+  }
+
+  th {
+    text-align: left;
+  }
+
+  td {
+    text-align: right;
+  }
+
+  .discount td {
+    color: ${(props) => props.theme.colors.red};
+  }
+
+  .discount th,
+  .discount td {
+    padding-bottom: 16px;
+  }
+
+  .total th,
+  .total td {
+    border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
+    border-bottom: 1px solid ${(props) => props.theme.colors.graylightborder};
+    padding: 16px 0;
+    color: ${(props) => props.theme.colors.goldhover};
+
+    strong {
+      font-size: ${(props) => props.theme.font.sizesl};
+      font-weight: bold;
+      letter-spacing: -0.01em;
+    }
+  }
+
+  p {
+    text-align: right;
+    color: ${(props) => props.theme.colors.goldhover};
+    margin-top: 8px;
+    font-size: ${(props) => props.theme.font.sizexs};
+  }
+`;
+
+const SelectedItem = styled.div`
+  .imgwrap {
+    width: 100%;
+    height: 165px;
+    background-size: cover;
+  }
+
+  h4 {
+    font-weight: 500;
+    color: ${(props) => props.theme.colors.goldhover};
+    padding: 21px 20px;
+    border-top: 1px solid ${(props) => props.theme.colors.grayborder};
+    border-bottom: 1px solid ${(props) => props.theme.colors.grayborder};
+    margin-bottom: 20px;
+    background: white;
+    position: relative;
+  }
+
+  h5 {
+    font-size: ${(props) => props.theme.font.sizes};
+    color: ${(props) => props.theme.colors.blacklight};
+    font-weight: 500;
+    margin-top: 30px;
+    padding: 0 20px;
+  }
+
+  button {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+  }
+
+  p {
+    padding: 0 20px;
+    line-height: 1.5;
+    font-size: ${(props) => props.theme.font.sizes};
+    color: ${(props) => props.theme.colors.graydark};
+  }
+
+  table {
+    margin-top: 20px;
+    width: 100%;
+
+    th,
+    td {
+      line-height: 1.5;
+      font-size: ${(props) => props.theme.font.sizes};
+      color: ${(props) => props.theme.colors.graydark};
+    }
+
+    th {
+      padding-left: 20px;
+      text-align: left;
+    }
+
+    td {
+      padding-right: 20px;
+      text-align: right;
+    }
+  }
+`;
+
+const SelectItem = styled.div`
+  width: 100%;
+  height: 552px;
+  border: 1px solid ${(props) => props.theme.colors.grayborder};
+  border-radius: 5px;
+  background: ${(props) => props.theme.colors.graybg};
+  overflow: hidden;
 `;
 
 const Item = ({ selectedProduct }) => {
   return (
     <>
-      <ProductInfo>
-        <img src={item} alt="상품" />
-        <Info>
-          <InfoTitle>{selectedProduct.name}</InfoTitle>
-          <InfoWrapper>
-            <InfoLeft>
-              <p>상품 유형</p>
-              <p>상품 분류</p>
-              <p>기본 가격(1박/2인 기준)</p>
-              <p>어른 추가(1인)</p>
-              <p>어린이 추가(1인)</p>
-            </InfoLeft>
-            <InfoRight>
-              <p>{selectedProduct.type}</p>
-              <p>{selectedProduct.typeDetail}</p>
-              <p>{selectedProduct.price}원</p>
-              <p>{selectedProduct.priceAdult} 원/최대 1인</p>
-              <p>{selectedProduct.priceChildren} 원/최대 2인</p>
-            </InfoRight>
-          </InfoWrapper>
-        </Info>
-      </ProductInfo>
-      <SubTitle>결제 정보</SubTitle>
+      <SelectItem>
+        <SelectedItem>
+          <div className="imgwrap" style={{ backgroundImage: `url(${item})` }} alt="상품 이미지" />
+          <h4>{selectedProduct.name}</h4>
+          <p>{selectedProduct.type}</p>
+          <p>{selectedProduct.typeDetail}</p>
+          <p>성인 2</p>
+          <table>
+            <tr>
+              <th>기본가</th>
+              <td>{selectedProduct.price} 원</td>
+            </tr>
+          </table>
+          <h5>추가 인원 비용</h5>
+          <table>
+            <tr>
+              <th>성인</th>
+              <td>{selectedProduct.priceAdult} 원</td>
+              {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 
+
+                          예약 정보 입력 페이지에서 기준 인원 초과하여 인원 추가하는 경우 
+                          추가된 인원 수에 맞춰 위 계산법 적용됩니다. 이하 동일 */}
+            </tr>
+            <tr>
+              <th>어린이</th>
+              <td>{selectedProduct.priceChildren} 원</td>
+              {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 */}
+            </tr>
+          </table>
+        </SelectedItem>
+      </SelectItem>
+
       <PaymentInfo>
-        <PaymentPrice>
-          <p>총액</p>
-          <p>500,000 원</p>
-        </PaymentPrice>
-        <PaymentPrice>
-          <p>할인액</p>
-          <DiscountPrice>-200,000 원</DiscountPrice>
-        </PaymentPrice>
+        <table>
+          <tr>
+            <th>총액</th>
+            <td>500,000 원</td>
+          </tr>
+          <tr className="discount">
+            <th>할인액</th>
+            <td>-200,000 원</td>
+          </tr>
+          <tr className="total">
+            <th>최종금액</th>
+            <td>
+              <strong>300,000</strong> 원
+            </td>
+          </tr>
+        </table>
+        <p>⁕&nbsp;VAT 포함</p>
       </PaymentInfo>
-      <TotalPrice>
-        <p>최종금액(VAT)포함</p>
-        <Price>
-          <div>300,000</div> 원
-        </Price>
-      </TotalPrice>
     </>
   );
 };

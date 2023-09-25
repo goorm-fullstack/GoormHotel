@@ -1,10 +1,7 @@
 package goormknights.hotel.chat.model;
 
 import goormknights.hotel.chat.service.ChatService;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.socket.WebSocketSession;
@@ -20,12 +17,15 @@ public class ChatRoom {
     private String roomId;
     private String name;
     private Set<WebSocketSession> sessions = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.CONTINUE;//초기 방 상태
 
     @Builder
     public ChatRoom(String roomId, String name) {
         this.roomId = roomId;
         this.name = name;
     }
+    
 
     // 메시지가 전송되면 세션 리스트에 세션을 추가하고
     // 메시지를 입력하는 로직
@@ -33,10 +33,17 @@ public class ChatRoom {
     public void handlerActions(WebSocketSession session, ChatMessage chatMessage, ChatService chatService) {
         if(chatMessage.getType().equals(ChatMessage.MessageType.ENTER)) {//처음에 메시지를 보내면 타입을 ENTER로 보내고, ENTER타입이라면 세션을 소켓을 접속
             sessions.add(session);
-            if(!chatMessage.getSender().equals("admin"))
-                chatMessage.setMessage("관리자와 연결 중입니다. 잠시만 기다려주세요");
-            sendMessage(chatMessage, chatService);
+            if(!chatMessage.getSender().equals("admin")) {
+                chatMessage.setSender("admin");
+                chatMessage.setMessage("안녕하세요. 구름호텔에 오신것을 환영합니다.\n 무엇을 도와드릴까요?");
+                sendMessage(chatMessage, chatService);
+            }
         } else if (chatMessage.getType().equals(ChatMessage.MessageType.TALK)) {
+            if(!chatMessage.getSender().equals("admin")) {
+                if(status == Status.CLOSED) {
+                    status = Status.CONTINUE;
+                }
+            }
             chatMessage.setMessage(chatMessage.getMessage());
             sendMessage(chatMessage, chatService);
         }

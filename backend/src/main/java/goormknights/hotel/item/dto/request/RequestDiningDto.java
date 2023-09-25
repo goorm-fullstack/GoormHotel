@@ -4,6 +4,7 @@ import goormknights.hotel.item.model.Dining;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,13 +15,14 @@ import lombok.NoArgsConstructor;
 public class RequestDiningDto {
 
     @NotBlank
+    @Size(min = 1, max = 13, message = "상품명은 13자 이하이어야 합니다.")
     private String name; // 상품명
 
     @Positive
     private int price; // 기본 비용
 
     @Positive
-    private int priceAdult; // 어른 추가 비용
+    private int priceAdult; // 성인 추가 비용
 
     @PositiveOrZero
     private int priceChildren; // 어린이 추가 비용
@@ -43,13 +45,16 @@ public class RequestDiningDto {
     private int spare; // 잔여 객실 수
 
     @PositiveOrZero
-    private int spareAdult; // 최대 숙박 가능 인원 수(어른)
+    private int spareAdult; // 최대 숙박 가능 인원 수(성인)
 
     @PositiveOrZero
     private int spareChildren; // 최대 숙박 가능 인원 수(어린이)
 
+    @Positive
+    private int capacity; // 기준 인원
+
     @Builder(toBuilder = true)
-    public RequestDiningDto(String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, String useTime, int spare, int spareAdult, int spareChildren) {
+    public RequestDiningDto(String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, String useTime, int spare, int spareAdult, int spareChildren, int capacity) {
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;
@@ -60,6 +65,7 @@ public class RequestDiningDto {
         this.spare = spare;
         this.spareAdult = spareAdult;
         this.spareChildren = spareChildren;
+        this.capacity = capacity;
     }
 
 
@@ -76,6 +82,7 @@ public class RequestDiningDto {
                 .spare(spare)
                 .spareAdult(spareAdult)
                 .spareChildren(spareChildren)
+                .capacity(capacity)
                 .build();
     }
 }
