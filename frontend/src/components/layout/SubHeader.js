@@ -60,15 +60,15 @@ const contents = {
     nav: [
       {
         title: '공지사항',
-        linkto: '/board/notice',
+        linkto: '/board/notice/1',
       },
       {
         title: '문의하기',
-        linkto: '/board/qna',
+        linkto: '/board/qna/1',
       },
       {
         title: '이용후기',
-        linkto: '/board/review',
+        linkto: '/board/review/1',
       },
     ],
   },
@@ -82,6 +82,23 @@ const contents = {
       {
         title: '개인정보처리방침',
         linkto: '/privacy',
+      },
+    ],
+  },
+  facilities: {
+    pagetitle: '시설 소개',
+    nav: [
+      {
+        title: '객실',
+        linkto: '/rooms',
+      },
+      {
+        title: '다이닝',
+        linkto: '/dining',
+      },
+      {
+        title: '부대시설',
+        linkto: '/facilities',
       },
     ],
   },

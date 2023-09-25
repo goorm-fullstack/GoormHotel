@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
+import { PageTitle } from '../../components/common/commonStyles';
 import {
   Container,
-  Title,
   ContentHeader,
   Total,
   BlackListBtn,
@@ -17,6 +17,8 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
+import Paging from '../../components/common/Paging';
+import axios from "axios";
 
 const LinkStyle = styled(Link)`
   &:hover {
@@ -68,6 +70,22 @@ export const PageParam = styled.ul`
 const AdminReport = () => {
   const [checkedItems, setCheckedItems] = useState([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
+  const [report, setReport] = useState([]);
+  useEffect(() => {
+    axios.get('/report/list').then((response) => {
+      // 데이터를 가져올 때 reportCheck와 reportResult를 문자열로 처리
+      const modifiedData = response.data.map((item) => ({
+        ...item,
+        reportCheck: item.reportCheck.toString(),
+        reportResult: item.reportResult.toString(),
+      }));
+      setReport(modifiedData);
+
+      console.log('get 성공');
+    });
+  }, []);
+
+  console.log(report);
 
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
@@ -89,13 +107,6 @@ const AdminReport = () => {
   };
 
   console.log(checkedItems);
-
-  const subMenus = [
-    { name: '게시글 관리', link: '/admin/board' },
-    { name: '댓글 관리', link: '/admin/comments' },
-    { name: '삭제된 글 관리', link: '/admin/deleteComment' },
-    { name: '신고 관리', link: '/admin/report' },
-  ];
 
   const reportData = [
     {
@@ -119,12 +130,12 @@ const AdminReport = () => {
   ];
 
   return (
-    <AdminLayout title="게시판 관리" subMenus={subMenus}>
+    <AdminLayout subMenus="board">
       <Container>
-        <Title>신고 관리</Title>
+        <PageTitle>신고 관리</PageTitle>
         <ContentHeader>
           <Total>
-            전체 <Num>{reportData.length}</Num> 건
+            전체 <Num>{report.length}</Num> 건
           </Total>
           <BlackListBtn>
             <Delete>확인 완료</Delete>
@@ -147,73 +158,60 @@ const AdminReport = () => {
             </tr>
           </thead>
           <tbody>
-            {reportData.length === 0 && <TableCell colSpan="7">등록된 회원이 없습니다.</TableCell>}
-            {reportData.map((item) => (
-              <tr key={item.id}>
+            {report.length === 0 && <TableCell colSpan="7">등록된 회원이 없습니다.</TableCell>}
+            {report.map((report) => (
+              <tr key={report.reportId}>
                 <TableCell>
                   <TableCheckbox
                     type="checkbox"
-                    checked={checkedItems.includes(item.memberId)}
-                    onChange={() => handleCheckboxChange(item.memberId)}
+                    checked={checkedItems.includes(report.reportId)}
+                    onChange={() => handleCheckboxChange(report.reportId)}
+                    // checked={checkedItems.includes(item.memberId)}
+                    // onChange={() => handleCheckboxChange(item.memberId)}
                   />
                 </TableCell>
-                <TableCell>{item.id}</TableCell>
+                <TableCell>{report.reportId}</TableCell>
                 <TableCell>
-                  <LinkStyle>{item.reportedPost}</LinkStyle>
+                  {report.replyId != null ? (
+                      <LinkStyle>{report.replyContent}</LinkStyle>
+                  ) : report.boardId != null ? (
+                      <LinkStyle>{report.title}</LinkStyle>
+                  ) : (
+                      report.reportContent
+                  )}
                 </TableCell>
                 <TableCell>
-                  {item.author.name}
-                  <LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>
+                  {report.reportWriter}
+                  {/*<LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>*/}
                 </TableCell>
-                <TableCell>{item.reportReason}</TableCell>
-                <TableCell>{item.reportDate}</TableCell>
-                <TableCell>{item.confirmation}</TableCell>
-                <TableCell>{item.result}</TableCell>
+                <TableCell>{report.reportReason}</TableCell>
+                <TableCell>{`${report.reportDate[0]}-${(report.reportDate[1] < 10 ? '0' : '')}${report.reportDate[1]}-${(report.reportDate[2] < 10 ? '0' : '')}${report.reportDate[2]}`}</TableCell>
+                <TableCell>{report.reportResult}</TableCell>
+                {/*{(() => {*/}
+                {/*  switch (report.reportCheck) {*/}
+                {/*    case 'false':*/}
+                {/*      return <TableCell>N</TableCell>;*/}
+                {/*    case 'true':*/}
+                {/*      return <TableCell>Y</TableCell>;*/}
+                {/*    default:*/}
+                {/*      return <TableCell>N</TableCell>;*/}
+                {/*  }*/}
+                {/*})()}*/}
+                {(() => {
+                  switch (report.reportResult) {
+                    case 'false':
+                      return <TableCell>N</TableCell>;
+                    case 'true':
+                      return <TableCell>Y</TableCell>;
+                    default:
+                      return <TableCell>N</TableCell>;
+                  }
+                })()}
               </tr>
             ))}
           </tbody>
         </Table>
-
-        <PageParam>
-          <li className="sideParam">
-            <a href="/">«</a>
-          </li>
-          {/** loop */}
-          <li>
-            <a href="/">1</a>
-          </li>
-          <li>
-            <a href="/">2</a>
-          </li>
-          <li>
-            <a href="/">3</a>
-          </li>
-          <li>
-            <a href="/">4</a>
-          </li>
-          <li className="selected">
-            <a href="/">5</a>
-          </li>
-          <li>
-            <a href="/">6</a>
-          </li>
-          <li>
-            <a href="/">7</a>
-          </li>
-          <li>
-            <a href="/">8</a>
-          </li>
-          <li>
-            <a href="/">9</a>
-          </li>
-          <li>
-            <a href="/">10</a>
-          </li>
-          {/** // loop */}
-          <li className="sideParam">
-            <a href="/">»</a>
-          </li>
-        </PageParam>
+        <Paging />
       </Container>
     </AdminLayout>
   );

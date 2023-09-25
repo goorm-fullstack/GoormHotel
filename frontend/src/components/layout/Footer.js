@@ -263,7 +263,7 @@ const Footer = () => {
                 <Link to="/privacy">개인정보처리방침</Link>
               </li>
               <li>
-                <Link to="/board/qna">문의하기</Link>
+                <Link to="/board/qna/1">문의하기</Link>
               </li>
               <li>
                 <Link to="/sitemap">사이트맵</Link>

@@ -25,6 +25,9 @@ public class QDining extends EntityPathBase<Dining> {
     public final QItem _super;
 
     //inherited
+    public final NumberPath<Integer> capacity;
+
+    //inherited
     public final BooleanPath deleted;
 
     //inherited
@@ -81,6 +84,7 @@ public class QDining extends EntityPathBase<Dining> {
     public QDining(Class<? extends Dining> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this._super = new QItem(type, metadata, inits);
+        this.capacity = _super.capacity;
         this.deleted = _super.deleted;
         this.id = _super.id;
         this.name = _super.name;

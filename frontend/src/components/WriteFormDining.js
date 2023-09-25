@@ -1,9 +1,24 @@
 import React, { useRef, useState } from 'react';
-import { Title, SubmitButton } from '../admin/item/AdminGiftCard';
-import { TableTd, TableTr, Table, Form, BoldTd, Input } from '../admin/item/AdminDetailGiftCard';
+import { SubmitButton } from '../admin/item/AdminGiftCard';
+import { TableTd, TableTr, Form, BoldTd, Input } from '../admin/item/AdminDetailGiftCard';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import { Select } from '../admin/item/AdminItemList';
+import {
+  Container,
+  Title,
+  ContentHeader,
+  Total,
+  BlackListBtn,
+  Delete,
+  Add,
+  Table,
+  TableCheckboxWrapper,
+  TableHeader,
+  TableCell,
+  TableCheckbox,
+  Num,
+} from '../admin/member/AdminMember';
 import axios from 'axios';
 
 // 테이블 상단
@@ -148,9 +163,13 @@ const WriteFormDining = () => {
               'Content-Type': 'multipart/form-data',
             },
           });
-          window.location.href = '/admin/item/list/1';
+          window.location.href = '/admin/item/1';
         } catch (error) {
           console.error('Error:', error.message);
+          if (error.response.data.message.startsWith('Validation failed')) {
+            const errorMessage = error.response.data.errors[0].defaultMessage;
+            alert(errorMessage);
+          }
         }
       } else {
         e.preventDefault();
@@ -186,6 +205,7 @@ const WriteFormDining = () => {
       }
     } catch (error) {
       setDuplicateMessage(error.response.data);
+      console.log(error.response.data);
       setIsConfirm(false);
     }
   };
@@ -203,10 +223,10 @@ const WriteFormDining = () => {
       <TopOfTable>
         <Title>다이닝 등록</Title>
         <div>
-          <TypeLink to="/admin/item/list/writeForm/room">
+          <TypeLink to="/admin/item/add/room">
             <TypeButton type="button">객실 등록</TypeButton>
           </TypeLink>
-          <TypeLink to="/admin/item/list/writeForm/dining">
+          <TypeLink to="/admin/item/add/dining">
             <TypeButton type="button">다이닝 등록</TypeButton>
           </TypeLink>
         </div>
@@ -237,7 +257,7 @@ const WriteFormDining = () => {
             </WriteFormTd>
           </WriteFormTr>
           <WriteFormTr>
-            <WriteFormBoldTd>어른 추가 비용</WriteFormBoldTd>
+            <WriteFormBoldTd>성인 추가 비용</WriteFormBoldTd>
             <WriteFormTd>
               <Input type="text" name="priceAdult" onChange={handleChange} value={formData.priceAdult} required />
             </WriteFormTd>
@@ -255,7 +275,7 @@ const WriteFormDining = () => {
             </WriteFormTd>
           </WriteFormTr>
           <WriteFormTr>
-            <WriteFormBoldTd>최대 숙박 가능 인원 수(어른)</WriteFormBoldTd>
+            <WriteFormBoldTd>최대 숙박 가능 인원 수(성인)</WriteFormBoldTd>
             <WriteFormTd>
               <Input type="text" name="spareAdult" onChange={handleChange} value={formData.spareAdult} required />
             </WriteFormTd>

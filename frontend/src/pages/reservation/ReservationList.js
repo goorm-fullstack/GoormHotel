@@ -2,6 +2,7 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
 import { BoardList } from '../board/BoardList';
+import Paging from '../../components/common/Paging';
 
 const Container = styled(commonContainerStyle)``;
 
@@ -103,6 +104,7 @@ const ReservationList = () => {
             )}
           </tbody>
         </BoardList>
+        <Paging />
       </Container>
     </>
   );

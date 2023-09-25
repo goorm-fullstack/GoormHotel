@@ -16,4 +16,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     // 페이징
     Page<Room> findAllByType(String type, Pageable pageable);
+
+    // 해당 name이 존재하는지 여부 확인
+    boolean existsByName(String name);
 }

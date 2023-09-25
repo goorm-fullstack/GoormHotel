@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { commonAdminContents, PageTitle } from '../../components/common/commonStyles';
+import Paging from '../../components/common/Paging';
 
-export const Container = styled.div`
-  width: 100%;
-  max-width: 1270px;
-  min-width: 760px;
-  margin: 0 auto;
-`;
+export const Container = styled(commonAdminContents)``;
 
 export const Title = styled.h1`
   font-size: 36px;
@@ -158,15 +155,10 @@ const AdminMember = () => {
     },
   ];
 
-  const subMenus = [
-    { name: '전체 회원 관리', link: '/admin/member' },
-    { name: '부운영자 관리', link: '/admin/managers' },
-  ];
-
   return (
-    <AdminLayout title="회원관리" subMenus={subMenus}>
+    <AdminLayout subMenus="member">
       <Container>
-        <Title>전체 회원 관리</Title>
+        <PageTitle>전체 회원 관리</PageTitle>
         <ContentHeader>
           <Total>
             전체 <Num>{memberData.length}</Num> 건
@@ -213,6 +205,7 @@ const AdminMember = () => {
             ))}
           </tbody>
         </Table>
+        <Paging />
       </Container>
     </AdminLayout>
   );

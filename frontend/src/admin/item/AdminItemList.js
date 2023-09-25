@@ -1,12 +1,13 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { Title, GiftCardTable, TableTr, TableTh, TableListTr, TableTd, DetailLink, TopMenuOfTable } from './AdminGiftCard';
+import { PageTitle } from '../../components/common/commonStyles';
+import { GiftCardTable, TableTr, TableTh, TableListTr, TableTd, DetailLink, TopMenuOfTable } from './AdminGiftCard';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { TableCheckbox } from '../member/AdminMember';
-import { PageParam } from '../board/AdminReport';
 import { NavLink } from 'react-router-dom';
+import { Container, TableCheckbox } from '../member/AdminMember';
+import Paging from '../../components/common/Paging';
 
 // 전체 데이터 갯수 표시 태그
 const TotalItem = styled.p`
@@ -14,10 +15,10 @@ const TotalItem = styled.p`
   margin-right: 100px;
 `;
 
-// 카테고리
+// 카테고리 셀렉트
 export const Select = styled.select`
   margin-left: 30px;
-  border: 1px solid #dddddd;
+  border: 1px solid #dddddd; // theme.colors.grayborder
 `;
 
 // 썸네일 표시
@@ -30,7 +31,7 @@ const Image = styled.img`
 // 상품 등록 버튼
 const InitButton = styled.button`
   &:hover {
-    background-color: #95846e;
+    background-color: #95846e; // theme.colors.
     color: #ffffff;
   }
 `;
@@ -38,8 +39,8 @@ const InitButton = styled.button`
 // 상품 삭제 버튼
 const DeleteButton = styled.button`
   &:hover {
-    border: 1px solid #d30a0a;
-    color: #d30a0a;
+    border: 1px solid #d30a0a; // theme.colors.red
+    color: #d30a0a; // theme.colors.red
   }
 `;
 
@@ -60,7 +61,7 @@ const CheckBoxTd = styled.td`
 // 최하단 페이징 링크
 const PageLink = styled(NavLink)`
   &.active {
-    color: #baa085;
+    color: #baa085; // theme.colors.gold
     text-decoration: underline;
   }
 `;
@@ -74,10 +75,6 @@ const SearchInput = styled.input`
 const AdminItemList = () => {
   const { page } = useParams(); // url 파라미터
 
-  const subMenus = [
-    { name: '판매 상품 관리', link: `/admin/item/list/${page}` },
-    { name: '상품권 관리', link: '/admin/item/giftCard' },
-  ];
   const [type, setType] = useState('all'); // 타입 상태관리
   const [items, setItems] = useState([]); // get 요청으로 받아온 전체 데이터 상태관리
   const [typeDetail, setTypeDetail] = useState('all'); // 세부 타입 상태관리
@@ -183,16 +180,6 @@ const AdminItemList = () => {
     }
   };
 
-  // 총 페이지 수에 맞게 페이지 태그 생성
-  const listElements = [];
-  for (let i = 1; i <= totalPages; i++) {
-    listElements.push(
-      <li key={i}>
-        <PageLink to={`/admin/item/list/${i}`}>{i}</PageLink>
-      </li>
-    );
-  }
-
   //체크한 아이템 selectedItems 배열에 추가,해제하는 로직
   const handleCheckboxClick = (idx, itemName, type) => {
     const isSelected = selectedItems.some((item) => item.id === idx);
@@ -252,44 +239,6 @@ const AdminItemList = () => {
     fetchImageUrls();
   }, [items]);
 
-  const currentPage = parseInt(page, 10); // 현재페이지
-
-  // 이전 페이지 이동
-  const previousPageChange = () => {
-    let route = '';
-    if (currentPage === 1) {
-      route = '/admin/item/list/1';
-    } else {
-      route = `/admin/item/list/${currentPage - 1}`;
-    }
-    return route;
-  };
-
-  // 다음 페이지 이동
-  const nextPageChange = () => {
-    let route = '';
-    if (currentPage === totalPages) {
-      route = `/admin/item/list/${currentPage}`;
-    } else {
-      route = `/admin/item/list/${currentPage + 1}`;
-    }
-    return route;
-  };
-
-  // 첫 페이지에서 이전 페이지로 이동 시 발생 이벤트
-  const onClickFirstPage = () => {
-    if (currentPage === 1) {
-      alert('첫 번째 페이지입니다.');
-    }
-  };
-
-  // 마지막 페이지에서 다음 페이지로 이동 시 발생 이벤트
-  const onClickLastPage = () => {
-    if (currentPage === totalPages) {
-      alert('마지막 페이지입니다.');
-    }
-  };
-
   // 숫자 포맷
   const addComma = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -332,9 +281,9 @@ const AdminItemList = () => {
       );
 
   return (
-    <AdminLayout title="상품관리" subMenus={subMenus}>
-      <section>
-        <Title>판매 상품 관리</Title>
+    <AdminLayout subMenus="item">
+      <Container>
+        <PageTitle>판매 상품 관리</PageTitle>
         <TopMenuOfTable>
           <div>
             <TotalItem className="number-of-list">전체{totalData}건</TotalItem>
@@ -355,7 +304,7 @@ const AdminItemList = () => {
             </InitButton>
           </div>
           <div>
-            <Link to="/admin/item/list/writeForm/room">
+            <Link to="/admin/item/add/room">
               <InitButton type="button">상품등록</InitButton>
             </Link>
             <DeleteButton type="button" onClick={deleteButton}>
@@ -397,9 +346,9 @@ const AdminItemList = () => {
                   </TableTd>
                   <TableTd>
                     {item.type === 'dining' ? (
-                      <DetailLink to={`/admin/item/list/view/dining/${item.type}/${item.name}`}>{item.name}</DetailLink>
+                      <DetailLink to={`/admin/item/detail/dining/${item.type}/${item.name}`}>{item.name}</DetailLink>
                     ) : (
-                      <DetailLink to={`/admin/item/list/view/room/${item.type}/${item.name}`}>{item.name}</DetailLink>
+                      <DetailLink to={`/admin/item/detail/room/${item.type}/${item.name}`}>{item.name}</DetailLink>
                     )}
                   </TableTd>
                   <TableTd>{addComma(item.price)}</TableTd>
@@ -411,20 +360,8 @@ const AdminItemList = () => {
             })}
           </tbody>
         </GiftCardTable>
-        <PageParam>
-          <li className="sideParam">
-            <Link to={previousPageChange()} onClick={onClickFirstPage}>
-              «
-            </Link>
-          </li>
-          {listElements}
-          <li className="sideParam">
-            <Link to={nextPageChange()} onClick={onClickLastPage}>
-              »
-            </Link>
-          </li>
-        </PageParam>
-      </section>
+        <Paging />
+      </Container>
     </AdminLayout>
   );
 };

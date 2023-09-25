@@ -57,6 +57,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final EnumPath<goormknights.hotel.global.entity.Role> role = createEnum("role", goormknights.hotel.global.entity.Role.class);
 
+    public final StringPath roomId = createString("roomId");
+
     public final DateTimePath<java.time.LocalDateTime> signupDate = createDateTime("signupDate", java.time.LocalDateTime.class);
 
     //inherited

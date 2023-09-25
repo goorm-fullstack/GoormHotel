@@ -16,6 +16,7 @@ Content-Type: application/json
   "email": "yss1902@naver.com",
   "code": "1Xh43N76"
 }
+
 ### password 찾기
 POST http://localhost:8080/findpassword
 Content-Type: application/json

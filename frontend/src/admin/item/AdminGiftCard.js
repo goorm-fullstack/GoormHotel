@@ -1,26 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
+import { PageTitle } from '../../components/common/commonStyles';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import 'moment/locale/ko';
 import { Link } from 'react-router-dom';
-import { TableCheckbox } from '../member/AdminMember';
-
-export const Container = styled.div`
-  width: 100%;
-  max-width: 1270px;
-  min-width: 760px;
-  margin-left: 50px;
-`;
-
-export const Title = styled.h1`
-  font-size: 36px;
-  font-weight: 500;
-  color: rgb(17, 17, 17);
-  margin-bottom: 60px;
-`;
+import { Container, TableCheckbox } from '../member/AdminMember';
+import Paging from '../../components/common/Paging';
 
 const SubTitle = styled.p`
   font-size: 18px;
@@ -219,11 +207,6 @@ export const DetailLink = styled(Link)`
   }
 `;
 
-const subMenus = [
-  { name: '판매 상품 관리', link: '/admin/item/list/1' },
-  { name: '상품권 관리', link: '/admin/item/giftCard' },
-];
-
 const checkboxList = [
   {
     name: '[추석맞이] 100,000원 상품권',
@@ -293,10 +276,10 @@ const AdminGiftCard = () => {
   };
 
   return (
-    <AdminLayout title="상품관리" subMenus={subMenus}>
+    <AdminLayout subMenus="item">
       <Container>
         <div>
-          <Title>상품권 관리</Title>
+          <PageTitle>상품권 관리</PageTitle>
           <GiftCardBox>
             <SubTitle>상품권 발행</SubTitle>
             <GiftCardForm action="#" method="post">
@@ -394,6 +377,7 @@ const AdminGiftCard = () => {
                 })}
               </tbody>
             </GiftCardTable>
+            <Paging />
           </div>
         </div>
       </Container>
