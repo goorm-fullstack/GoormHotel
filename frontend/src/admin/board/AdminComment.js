@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
 import {
   Container,
   ContentHeader,
@@ -19,14 +19,6 @@ import {
 } from '../member/AdminMember';
 import axios, { get } from 'axios';
 import Paging from '../../components/common/Paging';
-
-const CommentTableHeader = styled(TableHeader)`
-  width: 15%;
-`;
-
-const CommentTableCell = styled(TableCell)`
-  position: relative;
-`;
 
 const ModalContainer = styled.div`
   display: none;
@@ -105,11 +97,11 @@ const AdminComment = () => {
 
         // 각 댓글의 title을 가져오고 데이터에 추가
         const updatedReplyData = await Promise.all(
-            replyData.map(async (replyItem) => {
-              const title = await getBoardTitle(replyItem.boardId);
-              const boardTitle = await getBoardBoardTitle(replyItem.boardId);
-              return { ...replyItem, title: title, boardTitle: boardTitle};
-            })
+          replyData.map(async (replyItem) => {
+            const title = await getBoardTitle(replyItem.boardId);
+            const boardTitle = await getBoardBoardTitle(replyItem.boardId);
+            return { ...replyItem, title: title, boardTitle: boardTitle };
+          })
         );
 
         setReply(updatedReplyData);
@@ -121,7 +113,6 @@ const AdminComment = () => {
 
     fetchData();
   }, []);
-
 
   console.log(reply);
 
@@ -174,56 +165,58 @@ const AdminComment = () => {
     <AdminLayout subMenus="board">
       <Container>
         <PageTitle>댓글 관리</PageTitle>
-        <ContentHeader>
-          <Total>
-            전체 <Num>{reply.length}</Num> 건
-          </Total>
-          <BlackListBtn>
-            <Delete>신고처리</Delete>
-            <Add>삭제</Add>
-          </BlackListBtn>
-        </ContentHeader>
+        <TableHeader>
+          <p className="total">
+            전체 <strong>{reply.length}</strong> 건
+          </p>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn className="header">신고된 글로 이동</NormalBtn>
+            <NormalBtn className="header red">삭제</NormalBtn>
+          </BtnWrapper>
+        </TableHeader>
         <Table>
           <thead>
             <tr>
-              <TableCheckboxWrapper>
-                <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
-              </TableCheckboxWrapper>
-              <TableHeader>No.</TableHeader>
-              <TableHeader>게시판</TableHeader>
-              <TableHeader>게시글 제목</TableHeader>
-              <CommentTableHeader>댓글 내용</CommentTableHeader>
-              <CommentTableHeader>작성자명(회원 ID)</CommentTableHeader>
-              <TableHeader>작성일</TableHeader>
+              <th>
+                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
+              </th>
+              <th>No.</th>
+              <th>게시판</th>
+              <th>게시글 제목</th>
+              <th>댓글 내용</th>
+              <th>작성자명(회원 ID)</th>
+              <th>작성일</th>
             </tr>
           </thead>
           <tbody>
-            {reply.length === 0 && <TableCell colSpan="7">등록된 댓글이 없습니다.</TableCell>}
+            {reply.length === 0 && <td colSpan="7">등록된 댓글이 없습니다.</td>}
             {reply.map((reply) => (
               <tr key={reply.replyId}>
-                <TableCell>
-                  <TableCheckbox
+                <td>
+                  <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(null)} //item.author.id
                     onChange={() => handleCheckboxChange(null)} //item.author.id
                   />
-                </TableCell>
-                <TableCell>{reply.replyId}</TableCell>
-                <TableCell>{reply.boardTitle}</TableCell>
-                <TableCell>
+                </td>
+                <td>{reply.replyId}</td>
+                <td>{reply.boardTitle}</td>
+                <td>
                   <LinkStyle to={`/board/${reply.boardId}/detail`}>{reply.title}</LinkStyle>
-                </TableCell>
-                <CommentTableCell>
+                </td>
+                <td>
                   <CommentText>{truncateString(reply.replyContent, 8)}</CommentText>
                   <ModalContainer>
                     <ModalContent>{reply.replyContent}</ModalContent>
                   </ModalContainer>
-                </CommentTableCell>
-                <TableCell>
+                </td>
+                <td>
                   {reply.replyWriter}
                   {/*<LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>*/}
-                </TableCell>
-                <TableCell>{`${reply.replyWriteDate[0]}-${(reply.replyWriteDate[1] < 10 ? '0' : '')}${reply.replyWriteDate[1]}-${(reply.replyWriteDate[2] < 10 ? '0' : '')}${reply.replyWriteDate[2]}`}</TableCell>
+                </td>
+                <td>{`${reply.replyWriteDate[0]}-${reply.replyWriteDate[1] < 10 ? '0' : ''}${reply.replyWriteDate[1]}-${
+                  reply.replyWriteDate[2] < 10 ? '0' : ''
+                }${reply.replyWriteDate[2]}`}</td>
               </tr>
             ))}
           </tbody>

@@ -1,12 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
 import { GiftCardTable, TableTr, TableTh, TableListTr, TableTd, DetailLink, TopMenuOfTable } from './AdminGiftCard';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
-import { Container, TableCheckbox } from '../member/AdminMember';
+import { Container, ContentHeader, Table, TableHeader } from '../member/AdminMember';
 import Paging from '../../components/common/Paging';
 
 // 전체 데이터 갯수 표시 태그
@@ -42,20 +42,6 @@ const DeleteButton = styled.button`
     border: 1px solid #d30a0a; // theme.colors.red
     color: #d30a0a; // theme.colors.red
   }
-`;
-
-// 체크박스
-const CheckBox = styled(TableCheckbox)`
-  margin: 0;
-  vertical-align: middle;
-`;
-
-const CheckBoxTh = styled.th`
-  width: 30px;
-`;
-
-const CheckBoxTd = styled.td`
-  width: 30px;
 `;
 
 // 최하단 페이징 링크
@@ -284,7 +270,7 @@ const AdminItemList = () => {
     <AdminLayout subMenus="item">
       <Container>
         <PageTitle>판매 상품 관리</PageTitle>
-        <TopMenuOfTable>
+        <TableHeader>
           <div>
             <TotalItem className="number-of-list">전체{totalData}건</TotalItem>
             <Select name="type" value={type} onChange={handleTypeChange}>
@@ -311,55 +297,55 @@ const AdminItemList = () => {
               선택삭제
             </DeleteButton>
           </div>
-        </TopMenuOfTable>
-        <GiftCardTable>
+        </TableHeader>
+        <Table>
           <thead>
-            <TableTr>
-              <CheckBoxTh>
-                <CheckBox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
-              </CheckBoxTh>
-              <TableTh>No.</TableTh>
-              <TableTh>썸네일</TableTh>
-              <TableTh>상품명</TableTh>
-              <TableTh>상품가격</TableTh>
-              <TableTh>상품타입</TableTh>
-              <TableTh>세부타입</TableTh>
-              <TableTh>남은 상품 수</TableTh>
-            </TableTr>
+            <tr>
+              <th>
+                <InputCheckbox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
+              </th>
+              <th>No.</th>
+              <th>썸네일</th>
+              <th>상품명</th>
+              <th>상품가격</th>
+              <th>상품타입</th>
+              <th>세부타입</th>
+              <th>남은 상품 수</th>
+            </tr>
           </thead>
           <tbody>
             {items.map((item, idx) => {
               const id = 'checkbox' + idx;
               return (
-                <TableListTr key={idx}>
-                  <CheckBoxTd>
-                    <CheckBox
+                <tr key={idx}>
+                  <td>
+                    <InputCheckbox
                       type="checkbox"
                       id={id}
                       ref={(el) => (inputRef.current[idx] = el)}
                       onClick={() => handleCheckboxClick(idx, item.name, item.type)}
                     />
-                  </CheckBoxTd>
-                  <TableTd>{idx + 1}</TableTd>
-                  <TableTd>
+                  </td>
+                  <td>{idx + 1}</td>
+                  <td>
                     <Image src={imageUrls[idx] || ''} className="image" />
-                  </TableTd>
-                  <TableTd>
+                  </td>
+                  <td>
                     {item.type === 'dining' ? (
                       <DetailLink to={`/admin/item/detail/dining/${item.type}/${item.name}`}>{item.name}</DetailLink>
                     ) : (
                       <DetailLink to={`/admin/item/detail/room/${item.type}/${item.name}`}>{item.name}</DetailLink>
                     )}
-                  </TableTd>
-                  <TableTd>{addComma(item.price)}</TableTd>
-                  <TableTd>{item.type}</TableTd>
-                  <TableTd>{item.typeDetail}</TableTd>
-                  <TableTd>{item.spare}</TableTd>
-                </TableListTr>
+                  </td>
+                  <td>{addComma(item.price)}</td>
+                  <td>{item.type}</td>
+                  <td>{item.typeDetail}</td>
+                  <td>{item.spare}</td>
+                </tr>
               );
             })}
           </tbody>
-        </GiftCardTable>
+        </Table>
         <Paging />
       </Container>
     </AdminLayout>

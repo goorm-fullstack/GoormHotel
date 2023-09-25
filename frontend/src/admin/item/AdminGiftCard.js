@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import 'moment/locale/ko';
 import { Link } from 'react-router-dom';
-import { Container, TableCheckbox } from '../member/AdminMember';
+import { Container, ContentHeader, Table, TableHeader, TableCheckbox } from '../member/AdminMember';
 import Paging from '../../components/common/Paging';
 
 const SubTitle = styled.p`
@@ -178,27 +178,6 @@ export const TableListTr = styled.tr`
   border-bottom: 1px solid #dddddd;
 `;
 
-// export const InputLabel = styled.label`
-//   display: inline-block;
-//   width: 20px;
-//   height: 20px;
-//   border: 1px solid rgb(221, 221, 221);
-//   vertical-align: text-bottom;
-// `;
-
-// export const CheckBoxInput = styled.input`
-//   &:checked + ${InputLabel}:after {
-//     content: '\\2714';
-//     font-size: 12px;
-//   }
-// `;
-
-// 체크 박스
-const CheckBox = styled(TableCheckbox)`
-  margin: 0;
-  vertical-align: middle;
-`;
-
 // 상품권 상세(상품권 이름)
 export const DetailLink = styled(Link)`
   text-decoration: none;
@@ -317,7 +296,7 @@ const AdminGiftCard = () => {
           </GiftCardBox>
           <div>
             <SubTitle>상품권 목록</SubTitle>
-            <TopMenuOfTable>
+            <TableHeader>
               <p className="number-of-list">전체{length}건</p>
               <div>
                 {avaliableClick ? (
@@ -339,44 +318,44 @@ const AdminGiftCard = () => {
                   </button>
                 )}
               </div>
-            </TopMenuOfTable>
-            <GiftCardTable>
+            </TableHeader>
+            <Table>
               <thead>
-                <TableTr>
-                  <TableTh>
-                    <CheckBox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
-                  </TableTh>
-                  <TableTh>No.</TableTh>
-                  <TableTh>상품권명</TableTh>
-                  <TableTh>상품권번호</TableTh>
-                  <TableTh>상품권 금액</TableTh>
-                  <TableTh>발행일</TableTh>
-                  <TableTh>사용기한</TableTh>
-                  <TableTh>사용여부</TableTh>
-                </TableTr>
+                <tr>
+                  <th>
+                    <InputCheckbox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
+                  </th>
+                  <th>No.</th>
+                  <th>상품권명</th>
+                  <th>상품권번호</th>
+                  <th>상품권 금액</th>
+                  <th>발행일</th>
+                  <th>사용기한</th>
+                  <th>사용여부</th>
+                </tr>
               </thead>
               <tbody>
                 {checkboxList.map((item, idx) => {
                   const id = 'checkbox' + idx;
                   return (
-                    <TableListTr>
-                      <TableTd>
-                        <CheckBox type="checkbox" id={id} ref={(el) => (inputRef.current[idx] = el)} />
-                      </TableTd>
-                      <TableTd>{idx + 1}</TableTd>
-                      <TableTd>
+                    <tr>
+                      <td>
+                        <InputCheckbox type="checkbox" id={id} ref={(el) => (inputRef.current[idx] = el)} />
+                      </td>
+                      <td>{idx + 1}</td>
+                      <td>
                         <DetailLink to={`view/${idx}`}>{item.name}</DetailLink>
-                      </TableTd>
-                      <TableTd>{item.number}</TableTd>
-                      <TableTd>{item.price}</TableTd>
-                      <TableTd>{item.startDate}</TableTd>
-                      <TableTd>{item.endDate}</TableTd>
-                      <TableTd>{item.isUsed}</TableTd>
-                    </TableListTr>
+                      </td>
+                      <td>{item.number}</td>
+                      <td>{item.price}</td>
+                      <td>{item.startDate}</td>
+                      <td>{item.endDate}</td>
+                      <td>{item.isUsed}</td>
+                    </tr>
                   );
                 })}
               </tbody>
-            </GiftCardTable>
+            </Table>
             <Paging />
           </div>
         </div>

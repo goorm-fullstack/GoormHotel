@@ -1,10 +1,23 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { useNavigate, useParams } from 'react-router-dom';
-import { PageTitle } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
+import {
+  Container,
+  ContentHeader,
+  Total,
+  BlackListBtn,
+  Delete,
+  Add,
+  Table,
+  TableCheckboxWrapper,
+  TableHeader,
+  TableCell,
+  TableCheckbox,
+  Num,
+} from '../member/AdminMember';
 import styled from 'styled-components';
 import Instance from '../../utils/api/axiosInstance';
-import { Container } from '../member/AdminMember';
 
 const InfoContainer = styled.table`
   width: 100%;

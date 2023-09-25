@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import moment from "moment";
+import moment from 'moment';
 import Instance from '../../utils/api/axiosInstance';
 import {
   Container,
@@ -91,16 +91,16 @@ const AdminChat = () => {
     <AdminLayout subMenus="chat">
       <Container>
         <PageTitle>채팅 관리</PageTitle>
-        <ContentHeader>
-          <Total>
+        <TableHeader>
+          <p className="total">
             전체 <strong>{chatData.length}</strong> 건
-          </Total>
-          <BlackListBtn>
-            <Delete>채팅 상태 변경</Delete>
-            <Delete>블랙리스트 해제</Delete>
-            <Add>블랙리스트 추가</Add>
-          </BlackListBtn>
-        </ContentHeader>
+          </p>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn className="header">채팅 상태 변경</NormalBtn>
+            <NormalBtn className="header">블랙리스트 해제</NormalBtn>
+            <NormalBtn className="header red">블랙리스트 추가</NormalBtn>
+          </BtnWrapper>
+        </TableHeader>
         <Table>
           <colgroup>
             <col style={{ width: '100px' }} />
@@ -112,43 +112,43 @@ const AdminChat = () => {
           </colgroup>
           <thead>
             <tr>
-              <TableCheckboxWrapper>
-                <TableCheckbox type="checkbox" />
-              </TableCheckboxWrapper>
-              <TableHeader>번호</TableHeader>
-              <TableHeader>회원명(회원ID)</TableHeader>
-              <TableHeader>최근 메시지</TableHeader>
-              <TableHeader>최근 발송일</TableHeader>
-              <TableHeader>상태</TableHeader>
+              <th>
+                <InputCheckbox type="checkbox" />
+              </th>
+              <th>번호</th>
+              <th>회원명(회원ID)</th>
+              <th>최근 메시지</th>
+              <th>최근 발송일</th>
+              <th>상태</th>
             </tr>
           </thead>
           <tbody>
-            {chatData.length === 0 && <TableCell colSpan="7">채팅 메시지 기록이 없습니다.</TableCell>}
+            {chatData.length === 0 && <td colSpan="7">채팅 메시지 기록이 없습니다.</td>}
             {chatData.map((item, index) => (
               <tr key={item.id}>
-                <TableCell>
-                  <TableCheckbox
+                <td>
+                  <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(item.chatMessages.memberId)}
                     onChange={() => handleCheckboxChange(item.chatMessages.memberId)}
                   />
-                </TableCell>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>
+                </td>
+                <td>{index + 1}</td>
+                <td>
                   {item.chatMessages.name}(
                   <Link to={`/admin/member/${item.chatMessages[0].sender}`} className="memberId">
                     {item.chatMessages[0].sender}
                   </Link>
                   )
-                </TableCell>
-                <TableCell className="lastChat">
+                </td>
+                <td className="lastChat">
                   <p>
                     <Link to={`/admin/chat/detail/${item.roomId}`}>{item.chatMessages[0].message}</Link>
                   </p>
                   <div className="allMessage">{item.chatMessages.message}</div>
-                </TableCell>
-                <TableCell>{item.chatMessages[0].createTime}</TableCell>
-                <TableCell>{item.status}</TableCell>
+                </td>
+                <td>{item.chatMessages[0].createTime}</td>
+                <td>{item.status}</td>
               </tr>
             ))}
           </tbody>
