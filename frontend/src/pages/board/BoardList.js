@@ -89,7 +89,6 @@ const WriteBtnWrapper = styled(BtnWrapper)`
 const CustomerSupport = () => {
   const board = useParams().board;
   const [boards, setBoard] = useState([]);
-  const [boardImages, setBoardImages] = useState([]); // 추가: boardImages 상태 추가
 
   useEffect(() => {
     let boardTitle = '';
@@ -105,17 +104,14 @@ const CustomerSupport = () => {
       axios.get(`/boards/find/boardTitle/${boardTitle}`).then((response) => {
         setBoard(response.data);
         console.log('게시물 정보 get 성공');
-      });
 
-      // 이미지 정보 가져오기
-      // axios.get(`/boards/image/${board.boardId}`).then((response) => {
-      //   setBoardImages(response.data);
-      //   console.log('이미지 정보 get 성공');
-      // });
+      });
     }
   }, [board]);
 
   console.log(boards);
+
+
 
   let writeDate;
   let newMonth;
@@ -159,24 +155,24 @@ const CustomerSupport = () => {
                         return (
                           <BoardGallery>
                               {/** loop */}
-                            {boards.map((board) => (
-                              <li>
-                                <div className="thumbnail">
-                                  <a href={`/board/${board.id}/detail`}>
-                                    <img src="#"/>
-                                  </a>
-                                </div>
-                                <p className="title">
-                                  <a href={`/board/` + board.boardId + `/detail`}>{board.title}</a>
-                                </p>
-                                <p className="writer">{board.boardWriter}</p>
-                                <p className="date">{`${board.boardWriteDate[0]}-${(board.boardWriteDate[1] < 10 ? '0' : '')}${board.boardWriteDate[1]}-${(board.boardWriteDate[2] < 10 ? '0' : '')}${board.boardWriteDate[2]}`}</p>
-                              </li>
+                            {boards.map((item) => (
+                                <li key={item.boardId}>
+                                  <div className="thumbnail">
+                                    <a href={`/board/${item.boardTitle}/detail/${item.title}?boardId=${item.boardId}`}>
+                                        <img src="" />
+                                    </a>
+                                  </div>
+                                  <p className="title">
+                                    <a href={`/board/${item.boardTitle}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
+                                  </p>
+                                  <p className="writer">{item.boardWriter}</p>
+                                  <p className="date">{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</p>
+                                </li>
                             ))}
                             <li>
                               <div className="thumbnail">
                                 <a href={`/board/` + board + `/detail`}>
-                                  <img src="#" />
+                                  <img src="" />
                                 </a>
                               </div>
                               <p className="title textover">
@@ -236,13 +232,13 @@ const CustomerSupport = () => {
                                     </thead>
                                     <tbody>
                                     {/** loop */}
-                                    {boards.map((board) => (
-                                        <tr key={board.boardId}>
-                                            <td className="center">{board.boardId}</td>
+                                    {boards.map((item) => (
+                                        <tr key={item.boardId}>
+                                            <td className="center">{item.boardId}</td>
                                             <td>
-                                                <a href={`/board/${board.boardId}/detail`}>{board.title}</a>
+                                                <a href={`/board/${item.boardTitle}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
                                             </td>
-                                            <td className="center">{`${board.boardWriteDate[0]}-${(board.boardWriteDate[1] < 10 ? '0' : '')}${board.boardWriteDate[1]}-${(board.boardWriteDate[2] < 10 ? '0' : '')}${board.boardWriteDate[2]}`}</td>
+                                            <td className="center">{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</td>
                                         </tr>
                                     ))}
                                     <tr>

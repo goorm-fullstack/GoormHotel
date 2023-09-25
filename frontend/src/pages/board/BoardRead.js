@@ -65,13 +65,18 @@ const TableRead = styled.table`
 
 const BoardRead = () => {
   const board = useParams().board;
+  const loc = useLocation();
+  const searchParams = new URLSearchParams(loc.search);
+  const boardId = searchParams.get('boardId');
   const [boardData, setBoardData] = useState(null);
 
   useEffect(() => {
-    axios.get(`/boards/${board}`).then((response) => {
+    axios.get(`/boards/${boardId}`).then((response) => {
       setBoardData(response.data);
     });
   }, []);
+
+  console.log(boardData);
 
   let listlink;
   if (boardData) {
@@ -116,7 +121,7 @@ const BoardRead = () => {
                     return (
                         <p>
                           <span>{boardData.boardWriter}</span>
-                          <span>{`${boardData.boardWriteDate[0]}-${(boardData.boardWriteDate[1] < 10 ? '0' : '')}${boardData.boardWriteDate[1]}-${(boardData.boardWriteDate[2] < 10 ? '0' : '')}${boardData.boardWriteDate[2]}`}</span>
+                          <span>{`${boardData.boardWriteDate[0]}.${(boardData.boardWriteDate[1] < 10 ? '0' : '')}${boardData.boardWriteDate[1]}.${(boardData.boardWriteDate[2] < 10 ? '0' : '')}${boardData.boardWriteDate[2]}`}</span>
                         </p>
                     );
                   }

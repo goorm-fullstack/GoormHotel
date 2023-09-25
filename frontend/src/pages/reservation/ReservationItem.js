@@ -70,7 +70,7 @@ const RoomItem = styled.li`
 const RoomItemInfo = styled.div`
   width:100%;
   padding: 30px;
-  letter-spacing; -0.02em;
+  letter-spacing: -0.02em;
 
   h4 {
     font-size: ${(props) => props.theme.font.sizem};
