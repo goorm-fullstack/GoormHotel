@@ -2,6 +2,8 @@ package goormknights.hotel.reply.repository;
 
 import goormknights.hotel.board.model.Board;
 import goormknights.hotel.reply.model.Reply;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -17,4 +19,7 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
     //게시글 번호로 댓글 찾기
     List<Reply> findByBoard(Board board);
+
+    Page<Reply> findAll(Pageable pageable);
+
 }

@@ -335,7 +335,7 @@ const Home = () => {
             </RoomItem>
           </ItemList>
           <BtnWrapper className="center">
-            <MoreLink to="/offers?type=rooms">자세히보기</MoreLink>
+            <MoreLink to="/offers/1?type=rooms">자세히보기</MoreLink>
           </BtnWrapper>
         </Wrapper>
         <Wrapper>
@@ -366,7 +366,7 @@ const Home = () => {
             </DiningItem>
           </ItemList>
           <BtnWrapper className="center">
-            <MoreLink to="/offers?type=dining">자세히보기</MoreLink>
+            <MoreLink to="/offers/1?type=dining">자세히보기</MoreLink>
           </BtnWrapper>
         </Wrapper>
       </IndexOffers>

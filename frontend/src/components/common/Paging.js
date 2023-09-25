@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 export const PageParam = styled.ul`
@@ -11,14 +12,14 @@ export const PageParam = styled.ul`
   }
   li a {
     display: inline-block;
-    padding: 0 8px;
+    padding: 0 7px;
     border-radius: 100%;
-    height: 1.6rem;
-    line-height: 1.3rem;
-    color: #666;
+    height: ${(props) => props.theme.font.sizel};
+    line-height: ${(props) => props.theme.font.sizesl};
+    color: ${(props) => props.theme.colors.graydark};
   }
   li.selected a {
-    color: #baa085;
+    color: ${(props) => props.theme.colors.goldhover};
     text-decoration: underline;
   }
   li a:hover {
@@ -28,8 +29,9 @@ export const PageParam = styled.ul`
     margin: 0 8px;
   }
   li.sideParam a {
-    border: 1px solid #baa085;
-    color: #baa085;
+    width: ${(props) => props.theme.font.sizel};
+    border: 1px solid ${(props) => props.theme.colors.gold};
+    color: ${(props) => props.theme.colors.goldhover};
   }
   li.sideParam a:hover {
     text-decoration: none;
@@ -37,45 +39,73 @@ export const PageParam = styled.ul`
 `;
 
 const Paging = () => {
+  const location = useLocation();
+  console.log(location.pathname);
+
+  const { page } = useParams(); // url 파라미터
+  console.log(page);
+  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 상태관리
+
+  const currentPage = parseInt(page, 10); // 현재페이지
+
+  // 이전 페이지 이동
+  const previousPageChange = () => {
+    let route = '';
+    if (currentPage === 1) {
+      route = '/admin/item/list/1';
+    } else {
+      route = `/admin/item/list/${currentPage - 1}`;
+    }
+    return route;
+  };
+
+  // 다음 페이지 이동
+  const nextPageChange = () => {
+    let route = '';
+    if (currentPage === totalPages) {
+      route = `/admin/item/list/${currentPage}`;
+    } else {
+      route = `/admin/item/list/${currentPage + 1}`;
+    }
+    return route;
+  };
+
+  // 첫 페이지에서 이전 페이지로 이동 시 발생 이벤트
+  const onClickFirstPage = () => {
+    if (currentPage === 1) {
+      alert('첫 번째 페이지입니다.');
+    }
+  };
+
+  // 마지막 페이지에서 다음 페이지로 이동 시 발생 이벤트
+  const onClickLastPage = () => {
+    if (currentPage === totalPages) {
+      alert('마지막 페이지입니다.');
+    }
+  };
+
+  // 총 페이지 수에 맞게 페이지 태그 생성
+  const listElements = [];
+  for (let i = 1; i <= totalPages; i++) {
+    listElements.push(
+      <li key={i}>
+        <Link to={`/admin/item/list/${i}`}>{i}</Link>
+      </li>
+    );
+  }
+
   return (
     <PageParam>
       <li className="sideParam">
-        <a href="#">«</a>
+        <Link to={previousPageChange()} onClick={onClickFirstPage}>
+          «
+        </Link>
       </li>
-      {/** loop */}
-      <li>
-        <a href="#">1</a>
-      </li>
-      <li>
-        <a href="#">2</a>
-      </li>
-      <li>
-        <a href="#">3</a>
-      </li>
-      <li>
-        <a href="#">4</a>
-      </li>
-      <li className="selected">
-        <a href="#">5</a>
-      </li>
-      <li>
-        <a href="#">6</a>
-      </li>
-      <li>
-        <a href="#">7</a>
-      </li>
-      <li>
-        <a href="#">8</a>
-      </li>
-      <li>
-        <a href="#">9</a>
-      </li>
-      <li>
-        <a href="#">10</a>
-      </li>
-      {/** // loop */}
+      {listElements}
       <li className="sideParam">
-        <a href="#">»</a>
+        <Link to={nextPageChange()} onClick={onClickLastPage}>
+          »
+        </Link>
       </li>
     </PageParam>
   );

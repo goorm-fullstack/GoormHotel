@@ -69,10 +69,10 @@ const Sitemap = () => {
           </ul>
           <ul>
             <SubTitle>
-              <SiteMapLink to="/offers">스페셜오퍼</SiteMapLink>
+              <SiteMapLink to="/offers/1">스페셜오퍼</SiteMapLink>
             </SubTitle>
             <List>
-              <SiteMapLink to="/offers">스페셜오퍼</SiteMapLink>
+              <SiteMapLink to="/offers/1">스페셜오퍼</SiteMapLink>
             </List>
             <List>
               <SiteMapLink to="/login?type=reservation">예약확인</SiteMapLink>
@@ -80,16 +80,16 @@ const Sitemap = () => {
           </ul>
           <ul>
             <SubTitle>
-              <SiteMapLink to="/board/notice">고객지원</SiteMapLink>
+              <SiteMapLink to="/board/notice/1">고객지원</SiteMapLink>
             </SubTitle>
             <List>
-              <SiteMapLink to="/board/notice">공지사항</SiteMapLink>
+              <SiteMapLink to="/board/notice/1">공지사항</SiteMapLink>
             </List>
             <List>
-              <SiteMapLink to="/board/qna">문의하기</SiteMapLink>
+              <SiteMapLink to="/board/qna/1">문의하기</SiteMapLink>
             </List>
             <List>
-              <SiteMapLink to="/board/review">이용후기</SiteMapLink>
+              <SiteMapLink to="/board/review/1">이용후기</SiteMapLink>
             </List>
           </ul>
           <ul>

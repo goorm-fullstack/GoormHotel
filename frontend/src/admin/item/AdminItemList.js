@@ -1,18 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { Title, GiftCardTable, TableTr, TableTh, TableListTr, TableTd, DetailLink, TopMenuOfTable } from './AdminGiftCard';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, NormalLinkBtn } from '../../components/common/commonStyles';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { TableCheckbox } from '../member/AdminMember';
-import { PageParam } from '../board/AdminReport';
-import { NavLink } from 'react-router-dom';
-
-// 전체 데이터 갯수 표시 태그
-const TotalItem = styled.p`
-  display: inline-block;
-  margin-right: 100px;
-`;
+import { Container, Table, TableHeader } from '../member/AdminMember';
+import Paging from '../../components/common/Paging';
+import Search from '../../components/common/Search';
 
 // 카테고리 셀렉트
 export const Select = styled.select`
@@ -27,60 +21,34 @@ const Image = styled.img`
   vertical-align: middle;
 `;
 
-// 상품 등록 버튼
-const InitButton = styled.button`
-  &:hover {
-    background-color: #95846e; // theme.colors.
-    color: #ffffff;
-  }
-`;
-
-// 상품 삭제 버튼
-const DeleteButton = styled.button`
-  &:hover {
-    border: 1px solid #d30a0a; // theme.colors.red
-    color: #d30a0a; // theme.colors.red
-  }
-`;
-
-// 체크박스
-const CheckBox = styled(TableCheckbox)`
-  margin: 0;
-  vertical-align: middle;
-`;
-
-const CheckBoxTh = styled.th`
-  width: 30px;
-`;
-
-const CheckBoxTd = styled.td`
-  width: 30px;
-`;
-
-// 최하단 페이징 링크
-const PageLink = styled(NavLink)`
-  &.active {
-    color: #baa085; // theme.colors.gold
-    text-decoration: underline;
-  }
-`;
-
-// 상단 검색 input
-const SearchInput = styled.input`
-  height: 40px;
-  margin-left: 20px;
-`;
-
 const AdminItemList = () => {
+  // 대분류, 소분류 지정 배열
+  const typeDetailArray = [
+    [{ type: 'all', typeDetail: '카테고리', value: 'all' }],
+    [
+      { type: 'room', typeDetail: '전체', value: 'all' },
+      { type: 'room', typeDetail: '디럭스', value: 'deluxe' },
+      { type: 'room', typeDetail: '스위트', value: 'sweet' },
+      { type: 'room', typeDetail: '패밀리', value: 'family' },
+      { type: 'room', typeDetail: '풀 빌라', value: 'poolvilla' },
+    ],
+    [
+      { type: 'dining', typeDetail: '전체', value: 'all' },
+      { type: 'dining', typeDetail: '레스토랑', value: 'restaurant' },
+      { type: 'dining', typeDetail: '룸서비스', value: 'roomService' },
+      { type: 'dining', typeDetail: '바&라운지', value: 'barRounge' },
+      { type: 'dining', typeDetail: '베이커리', value: 'bakery' },
+    ],
+  ];
+
+  const typeArray = [[{ type: '전체', value: 'all' }], [{ type: '객실', value: 'room' }], [{ type: '다이닝', value: 'dining' }]];
+
+  let { searchJsx, url } = Search('/category', typeArray, typeDetailArray); // Search컴포넌트에서 값 받아와서 사용
+  console.log(url);
   const { page } = useParams(); // url 파라미터
 
-  const subMenus = [
-    { name: '판매 상품 관리', link: `/admin/item/list/${page}` },
-    { name: '상품권 관리', link: '/admin/item/giftCard' },
-  ];
-  const [type, setType] = useState('all'); // 타입 상태관리
   const [items, setItems] = useState([]); // get 요청으로 받아온 전체 데이터 상태관리
-  const [typeDetail, setTypeDetail] = useState('all'); // 세부 타입 상태관리
+
   const [selectedItems, setSelectedItems] = useState([]); // 선택된 상품 상태관리
   const [totalPages, setTotalPages] = useState(0); // 전체 페이지 상태관리
   const [totalData, setTotalData] = useState(0); // 전체 데이터 수 상태관리
@@ -94,6 +62,21 @@ const AdminItemList = () => {
     inputRef.current.forEach((checkbox) => {
       checkbox.checked = e.target.checked;
     });
+  };
+
+  // 전체, 객실, 다이닝 상품 가져오는 로직
+  const handleLoadItems = async () => {
+    try {
+      const response = await axios.get(url);
+      const data = response.data;
+      const totalPages = parseInt(response.headers['totalpages'], 10);
+      const totalData = parseInt(response.headers['totaldata'], 10);
+      setItems(data);
+      setTotalPages(totalPages);
+      setTotalData(totalData);
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
   };
 
   // 삭제 버튼 클릭 이벤트
@@ -116,82 +99,6 @@ const AdminItemList = () => {
       return;
     }
   };
-
-  const searchKeyword = useRef(); // 검색어 입력 input
-  let keyword = ''; // 검색어
-  let url = ''; // 상품 get 요청 url
-
-  // type 변경
-  const handleTypeChange = (e) => {
-    keyword = '';
-    searchKeyword.current.value = '';
-    const selectedType = e.target.value;
-    setType(selectedType);
-  };
-
-  // typeDetail 변경
-  const handleTypeDetailChange = (e) => {
-    keyword = '';
-    searchKeyword.current.value = '';
-    const selectedTypeDetail = e.target.value;
-    setTypeDetail(selectedTypeDetail);
-  };
-
-  // 검색 버튼 클릭 이벤트
-  const handleSearch = () => {
-    keyword = searchKeyword.current.value;
-    if (keyword === '') {
-      alert('검색어를 입력해주세요.');
-    } else {
-      handleLoadItems();
-    }
-  };
-
-  //전체, 객실, 다이닝 상품 가져오는 로직
-  const handleLoadItems = async () => {
-    const currentPage = parseInt(page, 10);
-    const selectedType = type;
-    const selectedTypeDetail = typeDetail;
-
-    // 타입과 세부타입에 따라 요청 api url 변경
-    if (selectedType === 'all' && selectedTypeDetail === 'all') {
-      url = `/category?page=${currentPage}`;
-    } else if (selectedType !== 'all' && selectedTypeDetail !== 'all') {
-      url = `/category?type=${selectedType}&typeDetail=${selectedTypeDetail}&page=${currentPage}`;
-    } else if (selectedType !== 'all' && selectedTypeDetail === 'all') {
-      url = `/category?type=${selectedType}&page=${currentPage}`;
-    } else if (selectedType === 'all' && selectedTypeDetail !== 'all') {
-      url = `/category?typeDetail=${selectedTypeDetail}&page=${currentPage}`;
-    } else {
-      url = `/category?page=${currentPage}`;
-    }
-
-    if (keyword !== '') {
-      url += `&keyword=${keyword}`;
-    }
-
-    try {
-      const response = await axios.get(url);
-      const data = response.data;
-      const totalPages = parseInt(response.headers['totalpages'], 10);
-      const totalData = parseInt(response.headers['totaldata'], 10);
-      setItems(data);
-      setTotalPages(totalPages);
-      setTotalData(totalData);
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
-  };
-
-  // 총 페이지 수에 맞게 페이지 태그 생성
-  const listElements = [];
-  for (let i = 1; i <= totalPages; i++) {
-    listElements.push(
-      <li key={i}>
-        <PageLink to={`/admin/item/list/${i}`}>{i}</PageLink>
-      </li>
-    );
-  }
 
   //체크한 아이템 selectedItems 배열에 추가,해제하는 로직
   const handleCheckboxClick = (idx, itemName, type) => {
@@ -229,7 +136,7 @@ const AdminItemList = () => {
 
   useEffect(() => {
     handleLoadItems();
-  }, [page, type, typeDetail]);
+  }, [page, url]);
 
   const [imageUrls, setImageUrls] = useState([]);
 
@@ -252,179 +159,101 @@ const AdminItemList = () => {
     fetchImageUrls();
   }, [items]);
 
-  const currentPage = parseInt(page, 10); // 현재페이지
-
-  // 이전 페이지 이동
-  const previousPageChange = () => {
-    let route = '';
-    if (currentPage === 1) {
-      route = '/admin/item/list/1';
-    } else {
-      route = `/admin/item/list/${currentPage - 1}`;
-    }
-    return route;
-  };
-
-  // 다음 페이지 이동
-  const nextPageChange = () => {
-    let route = '';
-    if (currentPage === totalPages) {
-      route = `/admin/item/list/${currentPage}`;
-    } else {
-      route = `/admin/item/list/${currentPage + 1}`;
-    }
-    return route;
-  };
-
-  // 첫 페이지에서 이전 페이지로 이동 시 발생 이벤트
-  const onClickFirstPage = () => {
-    if (currentPage === 1) {
-      alert('첫 번째 페이지입니다.');
-    }
-  };
-
-  // 마지막 페이지에서 다음 페이지로 이동 시 발생 이벤트
-  const onClickLastPage = () => {
-    if (currentPage === totalPages) {
-      alert('마지막 페이지입니다.');
-    }
-  };
-
   // 숫자 포맷
   const addComma = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
 
-  // 타입 선택에 따른 세부타입 변경
-  let detailTypeForType = [];
-  type === 'all'
-    ? detailTypeForType.push(
-        <>
-          <option value="all">전체</option>
-          <option value="deluxe">디럭스</option>
-          <option value="sweet">스위트</option>
-          <option value="family">패밀리</option>
-          <option value="poolVilla">풀 빌라</option>
-          <option value="restaurant">레스토랑</option>
-          <option value="roomService">룸서비스</option>
-          <option value="barRounge">바&라운지</option>
-          <option value="bakery">베이커리</option>
-        </>
-      )
-    : type === 'room'
-    ? detailTypeForType.push(
-        <>
-          <option value="all">전체</option>
-          <option value="deluxe">디럭스</option>
-          <option value="sweet">스위트</option>
-          <option value="family">패밀리</option>
-          <option value="poolVilla">풀 빌라</option>
-        </>
-      )
-    : detailTypeForType.push(
-        <>
-          <option value="all">전체</option>
-          <option value="restaurant">레스토랑</option>
-          <option value="roomService">룸서비스</option>
-          <option value="barRounge">바&라운지</option>
-          <option value="bakery">베이커리</option>
-        </>
-      );
-
   return (
-    <AdminLayout title="상품관리" subMenus={subMenus}>
-      <section>
-        <Title>판매 상품 관리</Title>
-        <TopMenuOfTable>
+    <AdminLayout subMenus="item">
+      <Container>
+        <PageTitle>판매 상품 관리</PageTitle>
+        <TableHeader>
           <div>
-            <TotalItem className="number-of-list">전체{totalData}건</TotalItem>
-            <Select name="type" value={type} onChange={handleTypeChange}>
-              <option value="all">전체</option>
-              <option value="room">객실</option>
-              <option value="dining">다이닝</option>
-            </Select>
-            <Select name="typeDetail" value={typeDetail} onChange={handleTypeDetailChange}>
-              {detailTypeForType}
-            </Select>
+            <p className="total number-of-list">
+              전체 <strong>{totalData}</strong> 건
+            </p>
           </div>
-          <div>
-            <label htmlFor="search">상품 검색 :</label>
-            <SearchInput type="text" id="search" ref={searchKeyword} />
-            <InitButton type="button" onClick={handleSearch}>
-              검색
-            </InitButton>
-          </div>
-          <div>
-            <Link to="/admin/item/list/writeForm/room">
-              <InitButton type="button">상품등록</InitButton>
-            </Link>
-            <DeleteButton type="button" onClick={deleteButton}>
+          <BtnWrapper className="flexgap right">
+            <NormalLinkBtn className="header" to="/admin/item/add/room">
+              객실 상품 등록
+            </NormalLinkBtn>
+            <NormalLinkBtn className="header" to="/admin/item/add/dining">
+              다이닝 상품 등록
+            </NormalLinkBtn>
+            <NormalBtn className="header red" type="button" onClick={deleteButton}>
               선택삭제
-            </DeleteButton>
-          </div>
-        </TopMenuOfTable>
-        <GiftCardTable>
+            </NormalBtn>
+          </BtnWrapper>
+        </TableHeader>
+        <Table>
+          <colgroup>
+            <col width="80px" />
+            <col width="100px" />
+            <col width="180px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="150px" />
+          </colgroup>
           <thead>
-            <TableTr>
-              <CheckBoxTh>
-                <CheckBox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
-              </CheckBoxTh>
-              <TableTh>No.</TableTh>
-              <TableTh>썸네일</TableTh>
-              <TableTh>상품명</TableTh>
-              <TableTh>상품가격</TableTh>
-              <TableTh>상품타입</TableTh>
-              <TableTh>세부타입</TableTh>
-              <TableTh>남은 상품 수</TableTh>
-            </TableTr>
+            <tr>
+              <th>
+                <InputCheckbox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
+              </th>
+              <th>번호</th>
+              <th>이미지</th>
+              <th>상품명</th>
+              <th>종류</th>
+              <th>카테고리</th>
+              <th>상품가</th>
+              <th>재고</th>
+            </tr>
           </thead>
           <tbody>
+            {items.length === 0 && (
+              <tr>
+                <td colSpan="8" className="center empty">
+                  등록된 상품이 없습니다.
+                </td>
+              </tr>
+            )}
             {items.map((item, idx) => {
               const id = 'checkbox' + idx;
               return (
-                <TableListTr key={idx}>
-                  <CheckBoxTd>
-                    <CheckBox
+                <tr key={idx}>
+                  <td>
+                    <InputCheckbox
                       type="checkbox"
                       id={id}
                       ref={(el) => (inputRef.current[idx] = el)}
                       onClick={() => handleCheckboxClick(idx, item.name, item.type)}
                     />
-                  </CheckBoxTd>
-                  <TableTd>{idx + 1}</TableTd>
-                  <TableTd>
+                  </td>
+                  <td>{idx + 1}</td>
+                  <td>
                     <Image src={imageUrls[idx] || ''} className="image" />
-                  </TableTd>
-                  <TableTd>
+                  </td>
+                  <td>
                     {item.type === 'dining' ? (
-                      <DetailLink to={`/admin/item/list/view/dining/${item.type}/${item.name}`}>{item.name}</DetailLink>
+                      <Link to={`/admin/item/detail/dining/${item.type}/${item.name}`}>{item.name}</Link>
                     ) : (
-                      <DetailLink to={`/admin/item/list/view/room/${item.type}/${item.name}`}>{item.name}</DetailLink>
+                      <Link to={`/admin/item/detail/room/${item.type}/${item.name}`}>{item.name}</Link>
                     )}
-                  </TableTd>
-                  <TableTd>{addComma(item.price)}</TableTd>
-                  <TableTd>{item.type}</TableTd>
-                  <TableTd>{item.typeDetail}</TableTd>
-                  <TableTd>{item.spare}</TableTd>
-                </TableListTr>
+                  </td>
+                  <td>{item.type}</td>
+                  <td>{item.typeDetail}</td>
+                  <td>{addComma(item.price)}</td>
+                  <td>{item.spare}</td>
+                </tr>
               );
             })}
           </tbody>
-        </GiftCardTable>
-        <PageParam>
-          <li className="sideParam">
-            <Link to={previousPageChange()} onClick={onClickFirstPage}>
-              «
-            </Link>
-          </li>
-          {listElements}
-          <li className="sideParam">
-            <Link to={nextPageChange()} onClick={onClickLastPage}>
-              »
-            </Link>
-          </li>
-        </PageParam>
-      </section>
+        </Table>
+        <Paging />
+        {searchJsx}
+      </Container>
     </AdminLayout>
   );
 };

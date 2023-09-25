@@ -68,7 +68,7 @@ const RoomItem = styled.li`
 `;
 
 const RoomItemInfo = styled.div`
-  width:100%;
+  width: 100%;
   padding: 30px;
   letter-spacing: -0.02em;
 
@@ -115,7 +115,8 @@ const RoomItemInfo = styled.div`
     width: 100%;
   }
 
-  th, td {
+  th,
+  td {
     color: ${(props) => props.theme.colors.graydark};
     font-size: ${(props) => props.theme.font.sizexs};
     line-height: 1.5;

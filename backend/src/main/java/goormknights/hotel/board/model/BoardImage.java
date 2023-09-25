@@ -31,11 +31,20 @@ public class BoardImage {
     //@Builder.Default
     private Boolean boardImageDelete = false;       //사진 softdelete
 
+    @Column(nullable = false)
+    private String mimeType;        //이미지 mimeType
+
+    @Column(nullable = false)
+    @Lob
+    private byte[] data;
+
     @Builder(toBuilder = true)
-    public BoardImage(String originalboardImageName, String boardImageName, String boardImagePath) {
+    public BoardImage(String originalboardImageName, String boardImageName, String boardImagePath, String mimeType, byte[] data) {
         this.originalboardImageName = originalboardImageName;
         this.boardImageName = boardImageName;
         this.boardImagePath = boardImagePath;
+        this.mimeType = mimeType;
+        this.data = data;
     }
 
 }
