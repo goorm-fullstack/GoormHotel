@@ -138,7 +138,6 @@ const AdminChatDetail = () => {
   const [chatRoomData, setChatRoomData] = useState({});
   const [recentTime, setRecentTime] = useState("");
   const [status, setStatus] = useState("");
-  const [status, setStatus] = useState('');
   const navigation = useNavigate();
 
   const navigateToChatList = () => {
@@ -151,16 +150,12 @@ const AdminChatDetail = () => {
   useLayoutEffect(() => {
     Instance.get(`/chat/getPrevId/` + roomId)
       .then((response) => {
-        console.log('==============================');
-        console.log(response.data);
+        settingWebSocket(roomId);
         setChatRoomData(response.data);
         setStatus(response.data.status);
-        console.log('==============================');
         setChatData(response.data.chatMessages);
-        setRecentTime(chatData[chatData.length-1].createTime)
-        settingWebSocket(roomId);
-      })
-      .catch((error) => {
+        setRecentTime(response.data.chatMessages[response.data.chatMessages.length-1].createTime);
+      }).catch((error) => {
         console.log('에러 ' + error);
       });
   }, []);
@@ -205,6 +200,7 @@ const AdminChatDetail = () => {
        const chatContent = parsedMessage.message;
        const chatRoomID = parsedMessage.roomId;
        const sender = parsedMessage.sender;
+       console.log("call this")
        // 메시지 발신자가 어드민이 아닌 경우에만 호출된다.
        if(chatRoomID === roomId && sender !== "admin") {
          console.log("call");
@@ -216,47 +212,47 @@ const AdminChatDetail = () => {
    }
     // 컴포넌트 언마운트 시 WebSocket 연결 닫기
     return () => {
-      console.log('Cleaning up WebSocket');
+      console.log("Cleaning up WebSocket");
       if (ws.current && ws.current.readyState === WebSocket.OPEN) {
         ws.current.close();
       }
       setSocketConnected(false);
     };
-  };
+  }
+ 
+   // setChatData(p => [...p, { message: newChat, isUser: true }]); -> 권희준 멘트님 추천사항
+   const handleInputKeyPress = (e) => {
+     if (e.key === 'Enter' && newChat.trim() !== '' && socketConnected) {
+       setChatData(p => [...p, { message: newChat, sender: "admin", type: 'TALK' }]);
+       ws.current.send(
+         JSON.stringify({
+           type: 'TALK',
+           roomId: roomId,
+           sender: 'admin',
+           message: newChat,
+         })
+       );
+       setNewChat('');
+     }
+   };
+ 
+   const handleFormSubmit = (e) => {
+     e.preventDefault();
+ 
+     if (newChat.trim() !== '') {
+       setChatData(p=> [...p, { message: newChat, sender: "admin", type: 'TALK' }]);
+       setNewChat('');
+     }
+   };
+ 
+   const handleClosedClick = (e) => {
+     setStatus("CLOSED");
+     Instance.get("/chat/closed/"+roomId).then((response)=>{
+       console.log(response)
+     })
+   }
 
-  // setChatData(p => [...p, { message: newChat, isUser: true }]); -> 권희준 멘트님 추천사항
-  const handleInputKeyPress = (e) => {
-    if (e.key === 'Enter' && newChat.trim() !== '' && socketConnected) {
-      setChatData((p) => [...p, { message: newChat, sender: 'admin', type: 'TALK' }]);
-      ws.current.send(
-        JSON.stringify({
-          type: 'TALK',
-          roomId: roomId,
-          sender: 'admin',
-          message: newChat,
-        })
-      );
-      setNewChat('');
-    }
-  };
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-
-    if (newChat.trim() !== '') {
-      setChatData((p) => [...p, { message: newChat, sender: 'admin', type: 'TALK' }]);
-      setNewChat('');
-    }
-  };
-
-  const handleClosedClick = (e) => {
-    setStatus('종료');
-    Instance.get('/chat/closed/' + roomId).then((response) => {
-      console.log(response);
-    });
-  };
-
-  return (
+   return (
     <AdminLayout subMenus="chat">
       <Container>
         <PageTitle>채팅 관리</PageTitle>
@@ -286,23 +282,23 @@ const AdminChatDetail = () => {
           <InfoWrapper>
             <Data colSpan="2" className="chatWrapper">
               <ul className="chatLog" ref={chatContainerRef}>
-                {chatData.map((chat, index) =>
+                {chatData.map((chat, index) => (
                   chat.type === 'TALK' ? ( // chat.type이 'TALK'인 경우에만 출력
                     <li key={index}>
                       {chat.sender === 'admin' ? (
-                        <>
-                          <strong className="manager">관리자(관리자 ID) : </strong>
-                          <span>{chat.message}</span>
-                        </>
-                      ) : (
-                        <>
-                          <strong className="member">회원명(회원 ID) : </strong>
-                          <span>{chat.message}</span>
-                        </>
-                      )}
+                      <>
+                        <strong className="manager">관리자(관리자 ID) : </strong>
+                        <span>{chat.message}</span>
+                      </>
+                    ) : (
+                      <>
+                        <strong className="member">회원명(회원 ID) : </strong>
+                        <span>{chat.message}</span>
+                      </>
+                    )}
                     </li>
                   ) : null
-                )}
+                ))}
               </ul>
               <div className="writeWrapper" onSubmit={handleFormSubmit}>
                 <textarea
@@ -310,7 +306,8 @@ const AdminChatDetail = () => {
                   placeholder="메시지를 입력해 주세요"
                   value={newChat}
                   onChange={(e) => setNewChat(e.target.value)}
-                  onKeyDown={handleInputKeyPress}></textarea>
+                  onKeyDown={ handleInputKeyPress}
+                ></textarea>
                 <button type="submit">전송</button>
               </div>
             </Data>
