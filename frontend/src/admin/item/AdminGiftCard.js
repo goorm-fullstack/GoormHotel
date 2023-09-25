@@ -325,7 +325,7 @@ const AdminGiftCard = () => {
                   <th>
                     <InputCheckbox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
                   </th>
-                  <th>No.</th>
+                  <th>번호</th>
                   <th>상품권명</th>
                   <th>상품권번호</th>
                   <th>상품권 금액</th>

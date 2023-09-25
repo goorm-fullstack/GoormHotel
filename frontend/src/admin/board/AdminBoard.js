@@ -95,8 +95,8 @@ const AdminBoard = () => {
             전체 <strong>{board.length}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
-            <NormalBtn className="header">블랙리스트 해제</NormalBtn>
-            <NormalBtn className="header red">블랙리스트 추가</NormalBtn>
+            <NormalBtn className="header">신고된 글로 이동</NormalBtn>
+            <NormalBtn className="header red">삭제</NormalBtn>
           </BtnWrapper>
         </TableHeader>
         <Table>
@@ -105,7 +105,7 @@ const AdminBoard = () => {
               <th>
                 <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
               </th>
-              <th>No.</th>
+              <th>번호</th>
               <th>게시판</th>
               <th>제목</th>
               <th>작성자</th>

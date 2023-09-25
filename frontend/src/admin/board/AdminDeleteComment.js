@@ -133,7 +133,7 @@ const AdminDeleteComment = () => {
               <th>
                 <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
               </th>
-              <th>No.</th>
+              <th>번호</th>
               <th>게시판</th>
               <th>삭제된 글</th>
               <th>작성자 명(회원 Id)</th>

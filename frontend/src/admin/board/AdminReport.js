@@ -144,7 +144,7 @@ const AdminReport = () => {
               <th>
                 <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
               </th>
-              <th>No.</th>
+              <th>번호</th>
               <th>신고된 글</th>
               <th>작성자 명</th>
               <th>신고사유</th>

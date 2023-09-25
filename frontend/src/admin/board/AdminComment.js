@@ -180,7 +180,7 @@ const AdminComment = () => {
               <th>
                 <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
               </th>
-              <th>No.</th>
+              <th>번호</th>
               <th>게시판</th>
               <th>게시글 제목</th>
               <th>댓글 내용</th>

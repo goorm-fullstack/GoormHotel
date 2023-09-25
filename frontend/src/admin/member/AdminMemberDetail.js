@@ -1,57 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel, SubmitBtn, LinkBtn } from '../../components/common/commonStyles';
+import { PageTitle, BtnWrapper, SubmitBtn, LinkBtn } from '../../components/common/commonStyles';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Table } from './AdminMember';
-
-export const InfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-top: 1px solid #dddddd;
-`;
-
-export const tr = styled.div`
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #dddddd;
-`;
-
-export const Data = styled.div`
-  flex-grow: 1;
-  padding: 20px 0 23px 20px;
-`;
-
-export const Input = styled.input`
-  width: 200px;
-  height: 40px;
-  font-size: 15px;
-  border: 1px solid #dddddd;
-  margin-left: 20px;
-  outline: none;
-`;
-
-const EmailAuth = styled.p`
-  font-size: 15px;
-  color: #666666;
-  margin-left: 12px;
-`;
-
-export const ModifyBtnWrapper = styled.div`
-  text-align: center;
-`;
-
-export const ModifyBtn = styled.button`
-  width: 200px;
-  height: 40px;
-  background-color: #95846e;
-  color: #ffffff;
-  margin: 40px auto 80px;
-
-  &:hover {
-    background-color: #8a7057;
-  }
-`;
 
 const AdminMemberDetail = () => {
   const { memberId } = useParams();

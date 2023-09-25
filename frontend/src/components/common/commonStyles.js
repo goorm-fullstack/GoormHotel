@@ -155,8 +155,23 @@ export const commonLinkBtn = styled(Link)`
     height: 60px;
     line-height: 58px;
   }
+
   &.shadow {
     box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  &.mini {
+    width: 80px;
+    height: 32px;
+    line-height: 30px;
+    font-size: ${(props) => props.theme.font.sizexs};
+  }
+
+  &.header {
+    width: 140px;
+    height: 40px;
+    line-height: 40px;
+    font-size: ${(props) => props.theme.font.sizexs};
   }
 `;
 
@@ -190,6 +205,10 @@ export const commonButton = styled.button`
     line-height: 40px;
     font-size: ${(props) => props.theme.font.sizexs};
   }
+
+  &.search {
+    width: 80px !important;
+  }
 `;
 
 export const LinkBtn = styled(commonLinkBtn)`
@@ -212,6 +231,27 @@ export const SubmitLinkBtn = styled(commonLinkBtn)`
 `;
 
 export const NormalBtn = styled(commonButton)`
+  background: white;
+  border: 1px solid ${(props) => props.theme.colors.grayborder};
+  color: ${(props) => props.theme.colors.graylight};
+  line-height: 40px;
+
+  &:hover {
+    border-color: ${(props) => props.theme.colors.gold};
+    color: ${(props) => props.theme.colors.goldhover};
+  }
+
+  &.red {
+    border-color: ${(props) => props.theme.colors.red};
+    color: ${(props) => props.theme.colors.red};
+  }
+
+  &.header {
+    line-height: 38px;
+  }
+`;
+
+export const NormalLinkBtn = styled(commonLinkBtn)`
   background: white;
   border: 1px solid ${(props) => props.theme.colors.grayborder};
   color: ${(props) => props.theme.colors.graylight};
@@ -322,6 +362,9 @@ export const AuthBtn = styled(commonButton)`
 
 export const MultiCheck = styled.div`
   display: flex;
+  column-gap: 16px;
+  align-items: center;
+  padding: 9px 0;
 `;
 
 export const commonTable = styled.table`
@@ -379,6 +422,7 @@ export const commonTable = styled.table`
     }
     th {
       text-align: center;
+      vertical-align: middle;
     }
     tr:hover td {
       background-color: white;

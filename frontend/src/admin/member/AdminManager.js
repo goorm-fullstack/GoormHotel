@@ -32,12 +32,6 @@ const Section = styled.section`
   margin-bottom: 60px;
 `;
 
-const SubTitle = styled.h2`
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 30px;
-`;
-
 const InputWrapper = styled.div`
   width: 100%;
 
@@ -53,34 +47,6 @@ const InputWrapper = styled.div`
     button {
       width: 17%;
     }
-  }
-`;
-
-const Input = styled.input`
-  font-size: 15px;
-  border: 1px solid #dddddd;
-  width: 200px;
-  height: 40px;
-  outline: none;
-`;
-
-const AddBtn = styled.button`
-  background-color: #95846e;
-  width: 200px;
-  height: 40px;
-  text-align: center;
-  color: #ffffff;
-
-  &:hover {
-    background-color: #8a7057;
-  }
-`;
-
-const ManagerInfoBtn = styled.button`
-  background-color: transparent;
-
-  &:hover {
-    text-decoration: underline;
   }
 `;
 
@@ -269,7 +235,7 @@ const AdminManager = () => {
                   <th>접속 비밀번호</th>
                   <td>
                     <input
-                      type="text"
+                      type="password"
                       placeholder="접속 비밀번호"
                       defaultValue={selectedManager.password}
                       onChange={(e) => handleInputChange('password', e.target.value)}
@@ -319,37 +285,39 @@ const AdminManager = () => {
                 <tr>
                   <th>접속 비밀번호</th>
                   <td>
-                    <input type="text" placeholder="접속 비밀번호" />
+                    <input type="password" placeholder="접속 비밀번호" />
                   </td>
                 </tr>
                 <tr>
                   <th>접속 비밀번호 확인</th>
                   <td>
-                    <input type="text" placeholder="접속 비밀번호 확인" />
+                    <input type="password" placeholder="접속 비밀번호 확인" />
                   </td>
                 </tr>
                 <tr>
                   <th>접근 권한</th>
                   <td>
-                    <CheckLabel>
-                      <InputCheckbox type="checkbox" placeholder="회원 관리" />
-                      회원관리
-                    </CheckLabel>
-                    <CheckLabel>
-                      <InputCheckbox type="checkbox" placeholder="회원 관리" />
-                      상품 및 예약 관리
-                    </CheckLabel>
-                    <CheckLabel>
-                      <InputCheckbox type="checkbox" placeholder="회원 관리" />
-                      사이트 관리
-                    </CheckLabel>
+                    <MultiCheck>
+                      <CheckLabel>
+                        <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                        회원관리
+                      </CheckLabel>
+                      <CheckLabel>
+                        <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                        상품 및 예약 관리
+                      </CheckLabel>
+                      <CheckLabel>
+                        <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                        사이트 관리
+                      </CheckLabel>
+                    </MultiCheck>
                   </td>
                 </tr>
               </tbody>
             )}
           </Table>
-          <BtnWrapper>
-            <ModifyBtn>수정</ModifyBtn>
+          <BtnWrapper className="mt40 center">
+            <SubmitBtn>수정</SubmitBtn>
           </BtnWrapper>
         </Section>
       </Container>

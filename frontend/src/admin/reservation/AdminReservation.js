@@ -90,7 +90,7 @@ const AdminReservation = () => {
               <th>
                 <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
               </th>
-              <th>No.</th>
+              <th>번호</th>
               <th>예약 번호</th>
               <th>예약자명(회원 ID)</th>
               <th>체크인</th>
