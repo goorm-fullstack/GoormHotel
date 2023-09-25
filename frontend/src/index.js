@@ -7,6 +7,7 @@ import theme from './components/common/theme';
 import AdminApp from './admin/AdminApp';
 import axios from "axios";
 import {SessionProvider} from "./utils/api/AdminAuthCheck";
+import {BrowserRouter} from "react-router-dom";
 
 axios.defaults.withCredentials = true;
 
@@ -23,8 +24,10 @@ const AppToRender = isAdminPage ? (
 );
 
 root.render(
-  <ThemeProvider theme={theme}>
-    <GlobalStyle />
-    {AppToRender}
-  </ThemeProvider>
+    <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <BrowserRouter>
+            {AppToRender}
+        </BrowserRouter>
+    </ThemeProvider>
 );

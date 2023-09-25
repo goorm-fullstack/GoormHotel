@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {Route, Routes, useLocation} from 'react-router-dom';
 import AdminLogin from './AdminLogin';
 import AdminMember from './member/AdminMember';
 import AdminMemberDetail from './member/AdminMemberDetail';
@@ -23,11 +23,21 @@ import AdminIndex from "./AdminIndex";
 import Instance from "../utils/api/axiosInstance";
 import {useContext, useEffect} from "react";
 import {SessionContext} from "../utils/api/AdminAuthCheck";
+import {fetchSessionInfo} from "../utils/api/fetchSessionInfo";
 
 const AdminApp = () => {
   const sessionContext = useContext(SessionContext);
-
   const { sessionData, setSessionData } = sessionContext || {};
+
+  const location = useLocation();
+
+  useEffect(() => {
+    fetchSessionInfo()
+        .then((result) => {
+        })
+        .catch((error) => {
+        });
+  }, [location]);
 
   useEffect(() => {
     const checkSession = async () => {
@@ -36,9 +46,12 @@ const AdminApp = () => {
         if (response.status === 200) {
           console.log("세션 유효함");
           console.log("Response Data:", response.data);
+          console.log("Response:", response);
           console.log("setSessionData:", setSessionData);
+          console.log("sessionData.authorities:",sessionData.authorities);
+          console.log("sessionData.authorities:",setSessionData.authorities);
           if (typeof setSessionData === "function") {
-            setSessionData(response.data);  // 세션 데이터 설정
+            setSessionData(response.data);
           } else {
             console.error("setSessionData is not a function");
           }
@@ -55,7 +68,6 @@ const AdminApp = () => {
   const adminOrManager = sessionData ? ["ADMIN", "MANAGER"].includes(sessionData.role) : false;
 
   return (
-    <BrowserRouter>
       <Routes>
         {adminOrManager && <Route path="/admin" element={<AdminIndex />}></Route>}
         <Route path="/admin/reservation" element={<AdminReservation />}></Route>
@@ -79,7 +91,6 @@ const AdminApp = () => {
         <Route path="/admin/chat/:memberId" element={<AdminChatDetail />}></Route>
         <Route path="/admin/mail" element={<AdminMail />}></Route>
       </Routes>
-    </BrowserRouter>
   );
 };
 

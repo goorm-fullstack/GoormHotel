@@ -51,5 +51,4 @@ public class Manager implements Serializable {
         this.updatedAt = LocalDateTime.now();
         this.authorities = authorities;
     }
-
 }

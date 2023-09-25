@@ -108,8 +108,8 @@ const AdminManager = () => {
   const [adminNickname, setAdminNickname] = useState("");
   const [password, setPassword] = useState("");
 
-  console.log(checkedItems);
-  console.log(selectedManager);
+  console.log('checkedItems', checkedItems);
+  console.log('selectedManager', selectedManager);
 
     const handleCheckboxChange = (memberId) => {
       const updatedCheckedItems = checkedItems.includes(memberId) ? checkedItems.filter((id) => id !== memberId) : [...checkedItems, memberId];

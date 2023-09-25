@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -33,8 +35,21 @@ public class AdminController {
                 return ResponseEntity.ok().body("세션 유효함");
             }
         }
-
         return ResponseEntity.status(401).body("세션 무효함");
+    }
+
+    @GetMapping("/sessionInfo")
+    public ResponseEntity<?> getSessionInfo(HttpSession session) {
+        Map<String, Object> sessionAttributes = new HashMap<>();
+        Enumeration<String> attributeNames = session.getAttributeNames();
+
+        while (attributeNames.hasMoreElements()) {
+            String key = attributeNames.nextElement();
+            Object value = session.getAttribute(key);
+            sessionAttributes.put(key, value);
+        }
+
+        return ResponseEntity.ok(sessionAttributes);
     }
 
 
