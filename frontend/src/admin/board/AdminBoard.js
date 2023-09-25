@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle } from '../../components/common/commonStyles';
@@ -20,70 +20,46 @@ import {
 import Paging from '../../components/common/Paging';
 import axios from 'axios';
 
-const memberData = [
-  {
-    id: 1,
-    number: 1,
-    grade: 'Gold',
-    memberId: 'user001',
-    name: '홍길동',
-    joinDate: '2023.09.01',
-    blacklist: 'N',
-  },
-  {
-    id: 2,
-    number: 2,
-    grade: 'Silver',
-    memberId: 'user002',
-    name: '김철수',
-    joinDate: '2023.09.01',
-    blacklist: 'Y',
-  },
-  {
-    id: 3,
-    number: 3,
-    grade: 'Bronze',
-    memberId: 'user003',
-    name: '이영희',
-    joinDate: '2023.09.01',
-    blacklist: 'N',
-  },
-];
-
 const AdminBoard = () => {
+  const { page } = useParams();
   const [checkedItems, setCheckedItems] = useState([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
+  const [totalPage, setTotalPage] = useState(0);
+  const [totalBoard, setTotalBoard] = useState(0);
 
   const [board, setBoard] = useState([]);
+  // 전체 게시글 목록 조회
   useEffect(() => {
-    axios.get('/boards/list').then((response) => {
+    const currentPage = parseInt(page, 10);
+    axios.get(`/boards/list?page=${currentPage}`).then((response) => {
+      const totalPages = parseInt(response.headers['totalpages'], 10);
+      const totalData = parseInt(response.headers['totaldata'], 10);
       setBoard(response.data);
+      setTotalPage(totalPages);
+      setTotalBoard(totalData);
       console.log('get 성공');
     });
   }, []);
 
-  let writeDate;
-  board.map((Item) => {
-    writeDate = Item.boardWriteDate[0] + "-" + Item.boardWriteDate[1] + "-" + Item.boardWriteDate[2];
-  });
-
+  // 전체 선택
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
 
     if (checked) {
-      const allMemberIds = memberData.map((item) => item.memberId);
+      const allMemberIds = board.map((item) => item.boardId);
       setCheckedItems(allMemberIds);
     } else {
       setCheckedItems([]);
     }
   };
 
-  const handleCheckboxChange = (memberId) => {
-    const updatedCheckedItems = checkedItems.includes(memberId) ? checkedItems.filter((id) => id !== memberId) : [...checkedItems, memberId];
+  // 하나씩 선택해서 전부 선택시 맨 위에 체크되도록 하는 기능
+  const handleCheckboxChange = (boardId) => {
+    const updatedCheckedItems = checkedItems.includes(boardId) ? checkedItems.filter((id) => id !== boardId) : [...checkedItems, boardId];
 
     setCheckedItems(updatedCheckedItems);
-    setSelectAllChecked(updatedCheckedItems.length === memberData.length);
+    setSelectAllChecked(updatedCheckedItems.length === board.length);
   };
 
   return (
@@ -92,7 +68,7 @@ const AdminBoard = () => {
         <PageTitle>게시글 관리</PageTitle>
         <ContentHeader>
           <Total>
-            전체 <Num>{board.length}</Num> 건
+            전체 <Num>{totalBoard}</Num> 건
           </Total>
           <BlackListBtn>
             <Delete>블랙리스트 해제</Delete>
@@ -115,7 +91,7 @@ const AdminBoard = () => {
           </thead>
           <tbody>
             {board.length === 0 && <TableCell colSpan="7">등록된 회원이 없습니다.</TableCell>}
-            {board.map((board) => (
+            {board.map((board, idx) => (
               <tr key={board.boardId}>
                 <TableCell>
                   <TableCheckbox
@@ -124,7 +100,7 @@ const AdminBoard = () => {
                     onChange={() => handleCheckboxChange(board.boardId)}
                   />
                 </TableCell>
-                <TableCell>{board.boardId}</TableCell>
+                <TableCell>{idx + 1}</TableCell>
                 <TableCell>{board.boardTitle}</TableCell>
                 <TableCell>
                   <Link to={`/admin/member/${board.boardId}`}>{board.title}</Link>
@@ -132,7 +108,9 @@ const AdminBoard = () => {
                 <TableCell>
                   <Link to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</Link>
                 </TableCell>
-                <TableCell>{`${board.boardWriteDate[0]}-${(board.boardWriteDate[1] < 10 ? '0' : '')}${board.boardWriteDate[1]}-${(board.boardWriteDate[2] < 10 ? '0' : '')}${board.boardWriteDate[2]}`}</TableCell>
+                <TableCell>{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
+                  board.boardWriteDate[2] < 10 ? '0' : ''
+                }${board.boardWriteDate[2]}`}</TableCell>
                 <TableCell>{board.blacklist}</TableCell>
               </tr>
             ))}
