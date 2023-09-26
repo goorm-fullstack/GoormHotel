@@ -7,53 +7,8 @@ import axios from 'axios';
 import { Image } from '../../components/WriteFormRoom';
 import TextEditor from '../../components/common/TextEditor';
 
-export const Container = styled(commonContainerStyle)``;
+const Container = styled(commonContainerStyle)``;
 const Table = styled(commonTable)``;
-
-const TableWrite = styled.table`
-  border-bottom: 1px solid ${(props) => props.theme.colors.charcoal};
-  width: 100%;
-
-  th {
-    font-weight: 500;
-    background: ${(props) => props.theme.colors.graybg};
-    color: ${(props) => props.theme.colors.charcoal};
-    vertical-align: top;
-  }
-  th,
-  td {
-    border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
-    padding: 20px 12px;
-  }
-  td {
-    color: ${(props) => props.theme.colors.graydark};
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-  .contents td {
-    padding: 0;
-  }
-  .contents textarea {
-    width: 100%;
-    min-height: 300px;
-    resize: none;
-    border: 0;
-  }
-  tr:first-child th,
-  tr:first-child td {
-    border-top-color: ${(props) => props.theme.colors.charcoal};
-  }
-  input {
-    height: 36px;
-  }
-  input[type='file'] {
-    padding: 0;
-    border: 0;
-  }
-  input.title {
-    width: 80%;
-  }
-`;
 
 const BoardWrite = () => {
   const board = useParams().board;
