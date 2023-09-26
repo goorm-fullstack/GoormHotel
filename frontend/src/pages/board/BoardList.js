@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'; // Remove duplicate import
 import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn } from '../../components/common/commonStyles';
 import SubHeader from '../../components/layout/SubHeader';
 import Paging from '../../components/common/Paging';
-import axios from "axios";
+import axios from 'axios';
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -89,6 +89,7 @@ const WriteBtnWrapper = styled(BtnWrapper)`
 const CustomerSupport = () => {
   const board = useParams().board;
   const [boards, setBoard] = useState([]);
+  const [boardImages, setBoardImages] = useState([]); // 추가: boardImages 상태 추가
 
   useEffect(() => {
     let boardTitle = '';
@@ -104,8 +105,13 @@ const CustomerSupport = () => {
       axios.get(`/boards/find/boardTitle/${boardTitle}`).then((response) => {
         setBoard(response.data);
         console.log('게시물 정보 get 성공');
-
       });
+
+      // 이미지 정보 가져오기
+      // axios.get(`/boards/image/${board.boardId}`).then((response) => {
+      //   setBoardImages(response.data);
+      //   console.log('이미지 정보 get 성공');
+      // });
     }
   }, [board]);
 
@@ -117,11 +123,11 @@ const CustomerSupport = () => {
   let newMonth;
   boards.map((Item) => {
     if (Item.boardWriteDate[1].length === 1) {
-      newMonth = "0" + Item.boardWriteDate[1];
+      newMonth = '0' + Item.boardWriteDate[1];
     } else {
       newMonth = Item.boardWriteDate[1];
     }
-    writeDate = Item.boardWriteDate[0] + "-" + newMonth + "-" + Item.boardWriteDate[2];
+    writeDate = Item.boardWriteDate[0] + '.' + newMonth + '.' + Item.boardWriteDate[2];
   });
 
     return (

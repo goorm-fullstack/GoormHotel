@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
 import {
   Container,
   ContentHeader,
@@ -41,6 +41,11 @@ const AdminBoard = () => {
     });
   }, []);
 
+  let writeDate;
+  board.map((Item) => {
+    writeDate = Item.boardWriteDate[0] + '-' + Item.boardWriteDate[1] + '-' + Item.boardWriteDate[2];
+  });
+
   // 전체 선택
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
@@ -66,52 +71,52 @@ const AdminBoard = () => {
     <AdminLayout subMenus="board">
       <Container>
         <PageTitle>게시글 관리</PageTitle>
-        <ContentHeader>
-          <Total>
-            전체 <Num>{totalBoard}</Num> 건
-          </Total>
-          <BlackListBtn>
-            <Delete>블랙리스트 해제</Delete>
-            <Add>블랙리스트 추가</Add>
-          </BlackListBtn>
-        </ContentHeader>
+        <TableHeader>
+          <p className="total">
+            전체 <strong>{board.length}</strong> 건
+          </p>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn className="header">신고된 글로 이동</NormalBtn>
+            <NormalBtn className="header red">삭제</NormalBtn>
+          </BtnWrapper>
+        </TableHeader>
         <Table>
           <thead>
             <tr>
-              <TableCheckboxWrapper>
-                <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
-              </TableCheckboxWrapper>
-              <TableHeader>No.</TableHeader>
-              <TableHeader>게시판</TableHeader>
-              <TableHeader>제목</TableHeader>
-              <TableHeader>작성자</TableHeader>
-              <TableHeader>작성일</TableHeader>
-              <TableHeader>블랙리스트</TableHeader>
+              <th>
+                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
+              </th>
+              <th>번호</th>
+              <th>게시판</th>
+              <th>제목</th>
+              <th>작성자</th>
+              <th>작성일</th>
+              <th>블랙리스트</th>
             </tr>
           </thead>
           <tbody>
-            {board.length === 0 && <TableCell colSpan="7">등록된 회원이 없습니다.</TableCell>}
+            {board.length === 0 && <td colSpan="7">등록된 회원이 없습니다.</td>}
             {board.map((board, idx) => (
               <tr key={board.boardId}>
-                <TableCell>
-                  <TableCheckbox
+                <td>
+                  <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(board.boardId)}
                     onChange={() => handleCheckboxChange(board.boardId)}
                   />
-                </TableCell>
-                <TableCell>{idx + 1}</TableCell>
-                <TableCell>{board.boardTitle}</TableCell>
-                <TableCell>
+                </td>
+                <td>{idx + 1}</td>
+                <td>{board.boardTitle}</td>
+                <td>
                   <Link to={`/admin/member/${board.boardId}`}>{board.title}</Link>
-                </TableCell>
-                <TableCell>
+                </td>
+                <td>
                   <Link to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</Link>
-                </TableCell>
-                <TableCell>{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
+                </td>
+                <td>{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
                   board.boardWriteDate[2] < 10 ? '0' : ''
-                }${board.boardWriteDate[2]}`}</TableCell>
-                <TableCell>{board.blacklist}</TableCell>
+                }${board.boardWriteDate[2]}`}</td>
+                <td>{board.blacklist}</td>
               </tr>
             ))}
           </tbody>

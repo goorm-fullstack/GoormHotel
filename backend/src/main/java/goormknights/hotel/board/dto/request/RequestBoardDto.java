@@ -15,8 +15,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class RequestBoardDto {
 
-    private Long boardId;
-
     private String title;  //제목
 
     private String boardContent;    //내용
@@ -35,7 +33,6 @@ public class RequestBoardDto {
 
     public Board toEntity() {
         return Board.builder()
-                .boardId(boardId)
                 .title(title)
                 .boardContent(boardContent)
                 .boardWriter(boardWriter)

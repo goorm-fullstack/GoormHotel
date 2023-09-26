@@ -68,7 +68,7 @@ const RoomItem = styled.li`
 `;
 
 const RoomItemInfo = styled.div`
-  width:100%;
+  width: 100%;
   padding: 30px;
   letter-spacing: -0.02em;
 
@@ -115,7 +115,8 @@ const RoomItemInfo = styled.div`
     width: 100%;
   }
 
-  th, td {
+  th,
+  td {
     color: ${(props) => props.theme.colors.graydark};
     font-size: ${(props) => props.theme.font.sizexs};
     line-height: 1.5;
@@ -221,68 +222,121 @@ const SelectItem = styled.div`
   overflow: hidden;
 `;
 
-const ReservationItem = () => {
-  const productTypes = [
-    {
-      name: '전체',
-      id: 'all',
-    },
-    {
-      name: '객실',
-      id: 'room',
-    },
-    {
-      name: '다이닝',
-      id: 'dining',
-    },
-  ];
+const productCategories = [
+  { korean: '디럭스', english: 'deluxe' },
+  { korean: '스위트', english: 'sweet' },
+  { korean: '패밀리', english: 'family' },
+  { korean: '풀 빌라', english: 'poolVilla' },
+];
 
+const diningCategories = [
+  { korean: '레스토랑', english: 'restaurant' },
+  { korean: '룸서비스', english: 'roomService' },
+  { korean: '바&라운지', english: 'barRounge' },
+  { korean: '베이커리', english: 'bakery' },
+];
+const productTypes = [
+  {
+    name: '전체',
+    id: 'all',
+  },
+  {
+    name: '객실',
+    id: 'room',
+  },
+  {
+    name: '다이닝',
+    id: 'dining',
+  },
+];
+
+const ReservationItem = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const location = useLocation();
-  // const { reservationData } = location.state;
-  const [selectedType, setSelectedType] = useState('room');
-  const [selectedCategory, setSelectedCategory] = useState('deluxe');
+  const { reservationData } = location.state;
+  const [selectedType, setSelectedType] = useState(["room"]);
+  const [selectedCategory, setSelectedCategory] = useState(productCategories[0].english); 
   const [products, setProducts] = useState([]);
+  const [imageUrls, setImageUrls] = useState([]);
+  console.log(reservationData);
 
-  console.log(selectedProduct);
+  // 서버에 저장된 이미지 요청
+  useEffect(() => {
+    const fetchImageUrls = async () => {
+      const urls = await Promise.all(
+        products.map(async (item) => {
+          const response = await axios.get(`/image/${item.name}`, { responseType: 'arraybuffer' });
+          const blob = new Blob([response.data], { type: response.headers['content-type'] });
+          return URL.createObjectURL(blob);
+        })
+      );
+      setImageUrls(urls);
+    };
 
-  const productCategories = ['전체', '디럭스', '패밀리', '스위트', '풀 빌라'];
+    fetchImageUrls();
+  }, [products]);
 
   useEffect(() => {
-    axios
-      .get('http://localhost:8080/specialOffer', {
-        params: {
-          type: selectedType,
-          typeDetail: selectedCategory,
-        },
-      })
-      .then((response) => {
+    if (selectedType.includes('all')) {
+      axios.get('/category')
+      .then(response => {
         setProducts(response.data);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       });
+    } else {
+      axios.get('/category', {
+        params: {
+          type: selectedType[0],
+          typeDetail: selectedCategory
+        }
+      })
+      .then(response => {
+        setProducts(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    }
   }, [selectedType, selectedCategory]);
 
-  const handleReservationClick = (productInfo) => {
-    setSelectedProduct(productInfo);
+  const handleReservationClick = (productInfo, imageUrl) => {
+    setSelectedProduct({ ...productInfo, imageUrl });
   };
 
   const handleDeleteClick = () => {
     setSelectedProduct(null);
   };
 
-  const handleTypeChange = (event) => {
-    const selectedValue = event.target.value;
-    const selectedTypeObject = productTypes.find((item) => item.english === selectedValue);
-
-    if (selectedTypeObject) {
-      setSelectedType(selectedTypeObject.english);
-    }
-  };
-
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
+  };
+
+  const handleTypeChange = (e) => {
+    const value = e.target.value;
+    console.log(value);
+
+    if (value === 'all') {
+      if (selectedType.includes('all')) {
+        setSelectedType([]);
+      } else {
+        setSelectedType(['all', 'room', 'dining']);
+      }
+    } else {
+      setSelectedType((prevSelected) => {
+        if (prevSelected.includes(value)) {
+          return prevSelected.filter(type => type !== value && type !== 'all');
+        } else {
+          const updatedSelected = [...prevSelected, value];
+          if (updatedSelected.includes('room') && updatedSelected.includes('dining')) {
+            return ['all', 'room', 'dining'];
+          } else {
+            return updatedSelected.filter(type => type !== 'all');
+          }
+        }
+      });
+    }
   };
 
   return (
@@ -291,12 +345,12 @@ const ReservationItem = () => {
         <PageTitle>스페셜오퍼</PageTitle>
         <Wrapper>
           <Left>
-            <ContentsTitleXSmall>예약 상품 선택</ContentsTitleXSmall>
+          <ContentsTitleXSmall>예약 상품 선택</ContentsTitleXSmall>
             <SelectWrapper>
               <div className="typewrapper">
                 {productTypes.map((type, index) => (
                   <CheckLabel for={type.id}>
-                    <InputCheckbox type="checkbox" id={type.id} key={index} onChange={handleTypeChange} value={selectedType} />
+                    <InputCheckbox type="checkbox" id={type.id} key={index} onChange={handleTypeChange} value={type.id} checked={selectedType.includes(type.id)}/>
                     {type.name}
                   </CheckLabel>
                 ))}
@@ -306,18 +360,31 @@ const ReservationItem = () => {
                   전체 <strong>0</strong> 개
                 </p>
                 <select id="productType" value={selectedCategory} onChange={handleCategoryChange}>
-                  {productCategories.map((category, index) => (
-                    <option key={index} value={category}>
-                      {category}
-                    </option>
+                {selectedType.includes('room')
+                  ? productCategories.map((category, index) => (
+                      <option key={index} value={category.english}>
+                        {category.korean}
+                      </option>
+                    ))
+                  : diningCategories.map((category, index) => (
+                      <option key={index} value={category.english}>
+                        {category.korean}
+                      </option>
                   ))}
+                  {selectedType.includes('all') && (
+                    [...diningCategories, ...productCategories].map((category, index) => (
+                      <option key={index} value={category.english}>
+                        {category.korean}
+                      </option>
+                    ))
+                  )}
                 </select>
               </div>
             </SelectWrapper>
             <RoomItemWrapper>
               {products.map((product, index) => (
                 <RoomItem key={index}>
-                  <div className="imgwrap" style={{ backgroundImage: `url(${product.thumbnailPath})` }} alt="상품 이미지" />
+                  <div className="imgwrap" style={{ backgroundImage: `url(${imageUrls[index] || ''})` }} alt="상품 이미지" />
                   <RoomItemInfo>
                     <h4>{product.name}</h4>
                     <p>
@@ -340,7 +407,7 @@ const ReservationItem = () => {
                       </tr>
                     </table>
                     <BtnWrapper className="full mt30">
-                      <NormalBtn onClick={() => handleReservationClick(product)}>상품 담기(예약)</NormalBtn>
+                      <NormalBtn onClick={() => handleReservationClick(product, imageUrls[index])}>상품 담기(예약)</NormalBtn>
                     </BtnWrapper>
                   </RoomItemInfo>
                 </RoomItem>
@@ -355,7 +422,7 @@ const ReservationItem = () => {
                 if (selectedProduct) {
                   return (
                     <SelectedItem>
-                      <div className="imgwrap" style={{ backgroundImage: `url(${selectedProduct.thumbnailPath})` }} alt="상품 이미지" />
+                      <div className="imgwrap" style={{ backgroundImage: `url(${selectedProduct.imageUrl})` }} alt="상품 이미지" />
                       <h4>
                         {selectedProduct.name}
                         <CircleCloseBtn onClick={handleDeleteClick}></CircleCloseBtn>
@@ -419,8 +486,7 @@ const ReservationItem = () => {
               })()}
             </SelectItem>
             <BtnWrapper className="full mt20">
-              <SubmitLinkBtn className="shadow" to="/offers/step2">
-                {/*  state={{ reservationData: reservationData, selectedProduct: selectedProduct }} */}
+              <SubmitLinkBtn className="shadow" to="/offers/step2" state={{ reservationData: reservationData, selectedProduct: selectedProduct }}>
                 예약 정보 입력하기
               </SubmitLinkBtn>
             </BtnWrapper>

@@ -8,6 +8,9 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @Entity
@@ -22,6 +25,5 @@ public class ChatMessage {
     private String roomId;
     private String sender;
     private String message;
-    @CreationTimestamp
-    private Timestamp createTime;
+    private String createTime = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 }

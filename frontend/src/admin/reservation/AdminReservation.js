@@ -4,19 +4,8 @@ import Instance from '../../utils/api/axiosInstance';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
-import {
-  Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from '../member/AdminMember';
+import { PageTitle, BtnWrapper, NormalBtn, InputCheckbox } from '../../components/common/commonStyles';
+import { Container, Table, TableHeader } from '../member/AdminMember';
 import Paging from '../../components/common/Paging';
 
 export const Redo = styled.button`
@@ -86,47 +75,47 @@ const AdminReservation = () => {
     <AdminLayout subMenus="reservation">
       <Container>
         <PageTitle>예약 목록 </PageTitle>
-        <ContentHeader>
-          <Total>
-            전체 <Num>{totalCount}</Num> 건
-          </Total>
-          <BlackListBtn>
-            <Redo>재예약</Redo>
-            <Cancel>예약 취소</Cancel>
-          </BlackListBtn>
-        </ContentHeader>
+        <TableHeader>
+          <p className="total">
+            전체 <strong>{totalCount}</strong> 건
+          </p>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn className="header">재예약</NormalBtn>
+            <NormalBtn className="header red">예약 취소</NormalBtn>
+          </BtnWrapper>
+        </TableHeader>
         <Table>
           <thead>
             <tr>
-              <TableCheckboxWrapper>
-                <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
-              </TableCheckboxWrapper>
-              <TableHeader>No.</TableHeader>
-              <TableHeader>예약 번호</TableHeader>
-              <TableHeader>예약자명(회원 ID)</TableHeader>
-              <TableHeader>체크인</TableHeader>
-              <TableHeader>체크아웃</TableHeader>
-              <TableHeader>예약일</TableHeader>
+              <th>
+                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
+              </th>
+              <th>번호</th>
+              <th>예약 번호</th>
+              <th>예약자명(회원 ID)</th>
+              <th>체크인</th>
+              <th>체크아웃</th>
+              <th>예약일</th>
             </tr>
           </thead>
           <tbody>
             {reservationList.map((reservation, index) => (
               <tr key={index}>
-                <TableCell>
-                  <TableCheckbox
+                <td>
+                  <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(reservation.id)}
                     onChange={() => handleCheckboxChange(reservation.id)}
                   />
-                </TableCell>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>
+                </td>
+                <td>{index + 1}</td>
+                <td>
                   <Link to={`/admin/reservation/${reservation.reservationNumber}`}>{reservation.reservationNumber}</Link>
-                </TableCell>
-                <TableCell>{reservation.member.name}</TableCell>
-                <TableCell>{checkIn}</TableCell>
-                <TableCell>{checkOut}</TableCell>
-                <TableCell>{orderDate}</TableCell>
+                </td>
+                <td>{reservation.member.name}</td>
+                <td>{checkIn}</td>
+                <td>{checkOut}</td>
+                <td>{orderDate}</td>
               </tr>
             ))}
           </tbody>
