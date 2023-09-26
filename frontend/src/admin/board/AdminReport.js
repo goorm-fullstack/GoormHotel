@@ -78,6 +78,9 @@ const AdminReport = () => {
       setReport(modifiedData);
 
       console.log('get 성공');
+    })
+    .catch((error) => {
+      console.error(error);
     });
   }, []);
 

@@ -5,6 +5,7 @@ import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn } from '../../comp
 import SubHeader from '../../components/layout/SubHeader';
 import Paging from '../../components/common/Paging';
 import axios from 'axios';
+import Instance from '../../utils/api/axiosInstance';
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -79,6 +80,7 @@ const BoardGallery = styled.ul`
       object-fit: cover;
     }
   }
+
   li .writer {
     margin: 6px 0 2px;
   }
@@ -96,10 +98,11 @@ const WriteBtnWrapper = styled(BtnWrapper)`
 
 const CustomerSupport = () => {
   const board = useParams().board;
-  const [boards, setBoards] = useState([]);
-  const [boardImages, setBoardImages] = useState([]); // 추가: boardImages 상태 추가
+  const [boards, setBoard] = useState([]);
+  const [imageUrl, setImageUrl] = useState([]);
 
   useEffect(() => {
+    // board 값이 변경될 때마다 데이터를 다시 불러옴
     let boardTitle = '';
     if (board === 'notice') {
       boardTitle = '공지사항';
@@ -109,21 +112,38 @@ const CustomerSupport = () => {
       boardTitle = '이용후기';
     }
     if (boardTitle !== '') {
-      // 게시물 정보 가져오기
-      axios.get(`/boards/find/boardTitle/${boardTitle}`).then((response) => {
-        setBoards(response.data);
-        console.log('게시물 정보 get 성공');
-      });
+      axios
+        .get(`/boards/find/boardTitle/${boardTitle}`)
+        .then((response) => {
+          setBoard(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
 
-      // 이미지 정보 가져오기
-      // axios.get(`/boards/image/${board.boardId}`).then((response) => {
-      //   setBoardImages(response.data);
-      //   console.log('이미지 정보 get 성공');
-      // });
+      setImageUrl([]);
     }
   }, [board]);
 
-  console.log(boards);
+  useEffect(() => {
+    boards.map((board) => {
+      GetImageUrl(board.boardId);
+    });
+  }, [boards]);
+
+  const GetImageUrl = (boardId) => {
+    Instance.get(`/boards/image/${boardId}`, {
+      responseType: 'arraybuffer',
+    }).then((response) => {
+      const blob = new Blob([response.data], {
+        type: response.headers['content-type'],
+      });
+      let image = { boardId: boardId, imageUrl: URL.createObjectURL(blob) };
+      setImageUrl((prevImages) => [...prevImages, image]);
+    });
+  };
+
+  console.log(imageUrl);
 
   let writeDate;
   let newMonth;
@@ -133,7 +153,7 @@ const CustomerSupport = () => {
     } else {
       newMonth = Item.boardWriteDate[1];
     }
-    writeDate = Item.boardWriteDate[0] + '-' + newMonth + '-' + Item.boardWriteDate[2];
+    writeDate = Item.boardWriteDate[0] + '.' + newMonth + '.' + Item.boardWriteDate[2];
   });
 
   return (
@@ -167,70 +187,24 @@ const CustomerSupport = () => {
               return (
                 <BoardGallery>
                   {/** loop */}
-                  {boards.map((board) => (
-                    <li>
+                  {boards.map((item) => (
+                    <li key={item.boardId}>
                       <div className="thumbnail">
-                        <a href={`/board/${board.id}/detail`}>
-                          <img src="#" />
+                        <a href={`/board/${item.boardTitle}/detail/${item.title}?boardId=${item.boardId}`}>
+                          {imageUrl.find((image) => image.boardId === item.boardId) && (
+                            <img src={imageUrl.find((image) => image.boardId === item.boardId).imageUrl} alt={`Image for ${item.title}`} />
+                          )}
                         </a>
                       </div>
                       <p className="title">
-                        <a href={`/board/` + board.boardId + `/detail`}>{board.title}</a>
+                        <a href={`/board/${item.boardTitle}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
                       </p>
-                      <p className="writer">{board.boardWriter}</p>
-                      <p className="date">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
-                        board.boardWriteDate[2] < 10 ? '0' : ''
-                      }${board.boardWriteDate[2]}`}</p>
+                      <p className="writer">{item.boardWriter}</p>
+                      <p className="date">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
+                        item.boardWriteDate[2] < 10 ? '0' : ''
+                      }${item.boardWriteDate[2]}`}</p>
                     </li>
                   ))}
-                  <li>
-                    <div className="thumbnail">
-                      <a href={`/board/` + board + `/detail/123`}>
-                        <img src="" />
-                      </a>
-                    </div>
-                    <p className="title textover">
-                      <a href={`/board/` + board + `/detail/123`}>제목입니다.</a>
-                    </p>
-                    <p className="writer">작성자명</p>
-                    <p className="date">2023-09-13</p>
-                  </li>
-                  <li>
-                    <div className="thumbnail">
-                      <a href={`/board/` + board + `/detail/123`}>
-                        <img src="" />
-                      </a>
-                    </div>
-                    <p className="title textover">
-                      <a href={`/board/` + board + `/detail/123`}>제목입니다.</a>
-                    </p>
-                    <p className="writer">작성자명</p>
-                    <p className="date">2023-09-13</p>
-                  </li>
-                  <li>
-                    <div className="thumbnail">
-                      <a href={`/board/` + board + `/detail/123`}>
-                        <img src="" />
-                      </a>
-                    </div>
-                    <p className="title textover">
-                      <a href={`/board/` + board + `/detail/123`}>제목입니다.</a>
-                    </p>
-                    <p className="writer">작성자명</p>
-                    <p className="date">2023-09-13</p>
-                  </li>
-                  <li>
-                    <div className="thumbnail">
-                      <a href={`/board/` + board + `/detail/123`}>
-                        <img src="" />
-                      </a>
-                    </div>
-                    <p className="title textover">
-                      <a href={`/board/` + board + `/detail/123`}>제목입니다.</a>
-                    </p>
-                    <p className="writer">작성자명</p>
-                    <p className="date">2023-09-13</p>
-                  </li>
                   {/** // loop */}
                 </BoardGallery>
               );
@@ -245,33 +219,19 @@ const CustomerSupport = () => {
                     </tr>
                   </thead>
                   <tbody>
+                    {boards.length === 0 && <td colSpan="7">등록된 게시글이 없습니다.</td>}
                     {/** loop */}
-                    {boards.map((board) => (
-                      <tr key={board.boardId}>
-                        <td className="center">{board.boardId}</td>
+                    {boards.map((item, index) => (
+                      <tr key={item.boardId}>
+                        <td className="center">{index + 1}</td>
                         <td>
-                          <a href={`/board/${board.boardId}/detail`}>{board.title}</a>
+                          <a href={`/board/${item.boardTitle}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
                         </td>
-                        <td className="center">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
-                          board.boardWriteDate[2] < 10 ? '0' : ''
-                        }${board.boardWriteDate[2]}`}</td>
+                        <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
+                          item.boardWriteDate[2] < 10 ? '0' : ''
+                        }${item.boardWriteDate[2]}`}</td>
                       </tr>
                     ))}
-                    <tr>
-                      <td className="center">2</td>
-                      <td>
-                        <a href={`/board/` + board + `/detail`}>일반 글 제목입니다.</a>
-                      </td>
-                      <td className="center">2023-09-13</td>
-                    </tr>
-                    <tr>
-                      <td className="center">1</td>
-                      <td>
-                        <IsReply>답글</IsReply>
-                        <a href={`/board/` + board + `/detail`}>답글 제목입니다.</a>
-                      </td>
-                      <td className="center">2023-09-13</td>
-                    </tr>
                     {/** // loop */}
                   </tbody>
                 </BoardList>

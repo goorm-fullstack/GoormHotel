@@ -1,64 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { Link, useParams } from 'react-router-dom';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
 import {
   Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
   Table,
-  TableCheckboxWrapper,
   TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
+
 } from '../member/AdminMember';
 import Paging from '../../components/common/Paging';
 import axios from 'axios';
 
-const memberData = [
-  {
-    id: 1,
-    number: 1,
-    grade: 'Gold',
-    memberId: 'user001',
-    name: '홍길동',
-    joinDate: '2023.09.01',
-    blacklist: 'N',
-  },
-  {
-    id: 2,
-    number: 2,
-    grade: 'Silver',
-    memberId: 'user002',
-    name: '김철수',
-    joinDate: '2023.09.01',
-    blacklist: 'Y',
-  },
-  {
-    id: 3,
-    number: 3,
-    grade: 'Bronze',
-    memberId: 'user003',
-    name: '이영희',
-    joinDate: '2023.09.01',
-    blacklist: 'N',
-  },
-];
-
 const AdminBoard = () => {
+  const { page } = useParams();
   const [checkedItems, setCheckedItems] = useState([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
+  const [totalPage, setTotalPage] = useState(0);
+  const [totalBoard, setTotalBoard] = useState(0);
 
   const [board, setBoard] = useState([]);
+  // 전체 게시글 목록 조회
   useEffect(() => {
-    axios.get('/boards/list').then((response) => {
+    const currentPage = parseInt(page, 10);
+    axios.get(`/boards/list?page=${currentPage}`).then((response) => {
+      const totalPages = parseInt(response.headers['totalpages'], 10);
+      const totalData = parseInt(response.headers['totaldata'], 10);
       setBoard(response.data);
+      setTotalPage(totalPages);
+      setTotalBoard(totalData);
       console.log('get 성공');
+    })
+    .catch((error) => {
+      console.error(error);
     });
   }, []);
 
@@ -67,24 +40,34 @@ const AdminBoard = () => {
     writeDate = Item.boardWriteDate[0] + '-' + Item.boardWriteDate[1] + '-' + Item.boardWriteDate[2];
   });
 
+  // 전체 선택
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
 
     if (checked) {
-      const allMemberIds = memberData.map((item) => item.memberId);
+      const allMemberIds = board.map((item) => item.boardId);
       setCheckedItems(allMemberIds);
     } else {
       setCheckedItems([]);
     }
   };
 
-  const handleCheckboxChange = (memberId) => {
-    const updatedCheckedItems = checkedItems.includes(memberId) ? checkedItems.filter((id) => id !== memberId) : [...checkedItems, memberId];
+  // 하나씩 선택해서 전부 선택시 맨 위에 체크되도록 하는 기능
+  const handleCheckboxChange = (boardId) => {
+    const updatedCheckedItems = checkedItems.includes(boardId) ? checkedItems.filter((id) => id !== boardId) : [...checkedItems, boardId];
 
     setCheckedItems(updatedCheckedItems);
-    setSelectAllChecked(updatedCheckedItems.length === memberData.length);
+    setSelectAllChecked(updatedCheckedItems.length === board.length);
   };
+
+  const ReportBoard = (id) => {
+
+  }
+
+  const DeleteBoard = (id) => {
+
+  }
 
   return (
     <AdminLayout subMenus="board">
@@ -95,8 +78,8 @@ const AdminBoard = () => {
             전체 <strong>{board.length}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
-            <NormalBtn className="header">신고된 글로 이동</NormalBtn>
-            <NormalBtn className="header red">삭제</NormalBtn>
+            <NormalBtn className="header" onClick={ReportBoard}>신고된 글로 이동</NormalBtn>
+            <NormalBtn className="header red" onClick={DeleteBoard}>삭제</NormalBtn>
           </BtnWrapper>
         </TableHeader>
         <Table>
@@ -114,29 +97,25 @@ const AdminBoard = () => {
             </tr>
           </thead>
           <tbody>
-            {board.length === 0 && (
-              <td colSpan="7" className="center empty">
-                등록된 글이 없습니다.
-              </td>
-            )}
-            {board.map((board) => (
+            {board.length === 0 && <td colSpan="7">등록된 게시글이 없습니다.</td>}
+            {board.map((board, idx) => (
               <tr key={board.boardId}>
-                <td>
+                <td className='center'>
                   <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(board.boardId)}
                     onChange={() => handleCheckboxChange(board.boardId)}
                   />
                 </td>
-                <td>{board.boardId}</td>
-                <td>{board.boardTitle}</td>
-                <td>
+                <td className='center'>{idx + 1}</td>
+                <td className='center'>{board.boardTitle}</td>
+                <td className='center'>
                   <Link to={`/admin/member/${board.boardId}`}>{board.title}</Link>
                 </td>
-                <td>
+                <td className='center'>
                   <Link to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</Link>
                 </td>
-                <td>{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
+                <td className='center'>{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
                   board.boardWriteDate[2] < 10 ? '0' : ''
                 }${board.boardWriteDate[2]}`}</td>
                 <td>{board.blacklist}</td>
