@@ -8,20 +8,6 @@ import { PageTitle, BtnWrapper, NormalBtn, InputCheckbox } from '../../component
 import { Container, Table, TableHeader } from '../member/AdminMember';
 import Paging from '../../components/common/Paging';
 
-export const Redo = styled.button`
-  width: 120px;
-  height: 100%;
-  text-align: center;
-  color: #666666;
-  border: 1px solid #dddddd;
-  background-color: transparent;
-`;
-
-export const Cancel = styled(Redo)`
-  border-color: #d30a0a;
-  color: #d30a0a;
-`;
-
 const AdminReservation = () => {
   const [reservationList, setReservationList] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -80,11 +66,20 @@ const AdminReservation = () => {
             전체 <strong>{totalCount}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
-            <NormalBtn className="header">재예약</NormalBtn>
-            <NormalBtn className="header red">예약 취소</NormalBtn>
+            <NormalBtn className="header">선택 재예약</NormalBtn>
+            <NormalBtn className="header red">선택 예약 취소</NormalBtn>
           </BtnWrapper>
         </TableHeader>
         <Table>
+          <colgroup>
+            <col width="80px" />
+            <col width="100px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="150px" />
+          </colgroup>
           <thead>
             <tr>
               <th>
@@ -96,9 +91,15 @@ const AdminReservation = () => {
               <th>체크인</th>
               <th>체크아웃</th>
               <th>예약일</th>
+              <th>상태</th>
             </tr>
           </thead>
           <tbody>
+            <tr>
+              <td colSpan="8" className="center empty">
+                등록된 예약 건이 없습니다.
+              </td>
+            </tr>
             {reservationList.map((reservation, index) => (
               <tr key={index}>
                 <td>

@@ -268,7 +268,7 @@ const Home = () => {
         <ReserveContainer>
           <Reservation />
           <BtnWrapper className="searchbtnwrap">
-            <ReservationButton to="/offers" onClick={() => handleReservation()}>
+            <ReservationButton to="/offers/1" onClick={() => handleReservation()}>
               {/* state={{ reservationData: reservationData }} */}
               상품 검색
             </ReservationButton>

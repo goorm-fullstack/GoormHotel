@@ -56,7 +56,11 @@ const AdminNews = () => {
               <th>상태</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody>
+            <td colSpan="6" className="center empty">
+              등록된 구독자가 없습니다.
+            </td>
+          </tbody>
         </Table>
         <Paging />
       </Container>

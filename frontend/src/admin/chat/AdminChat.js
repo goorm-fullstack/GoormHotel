@@ -123,7 +123,11 @@ const AdminChat = () => {
             </tr>
           </thead>
           <tbody>
-            {chatData.length === 0 && <td colSpan="7">채팅 메시지 기록이 없습니다.</td>}
+            {chatData.length === 0 && (
+              <td colSpan="6" className="center empty">
+                채팅 메시지 기록이 없습니다.
+              </td>
+            )}
             {chatData.map((item, index) => (
               <tr key={item.id}>
                 <td>

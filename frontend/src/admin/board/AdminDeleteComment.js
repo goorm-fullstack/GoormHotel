@@ -141,7 +141,11 @@ const AdminDeleteComment = () => {
             </tr>
           </thead>
           <tbody>
-            {board.length === 0 && <td colSpan="6">등록된 글이 없습니다.</td>}
+            {board.length === 0 && (
+              <td colSpan="6" className="center empty">
+                삭제된 글이 없습니다.
+              </td>
+            )}
             {board.map((board) => (
               <tr key={board.boardId}>
                 <td>

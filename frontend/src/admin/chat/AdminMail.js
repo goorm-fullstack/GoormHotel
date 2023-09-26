@@ -62,45 +62,49 @@ const AdminMail = () => {
       <Container>
         <PageTitle>메일 작성</PageTitle>
         <Table className="horizontal">
-          <tr>
-            <th>
-              받는사람{' '}
-              <label>
-                <AllMember type="checkbox" /> 모든 회원
-              </label>{' '}
-            </th>
-            <td>
-              <input type="text" />
-            </td>
-          </tr>
-          <tr>
-            <th>참조</th>
-            <td>
-              <input type="text" />
-            </td>
-          </tr>
-          <tr>
-            <th>제목</th>
-            <td>
-              <input type="text" />
-            </td>
-          </tr>
-          <tr>
-            <th>파일첨부</th>
-            <td>
-              <input type="file" />
-            </td>
-          </tr>
-          <tr>
-            <td colSpan="2" className="center">
-              내용 작성
-            </td>
-          </tr>
-          <tr>
-            <td colSpan="2" className="writeWrapper">
-              <textarea></textarea>
-            </td>
-          </tr>
+          <colgroup>
+            <col width="240px" />
+            <col width="auto" />
+          </colgroup>
+          <tbody>
+            <tr>
+              <th>받는사람</th>
+              <td>
+                <input type="text" />{' '}
+                <label>
+                  <AllMember type="checkbox" /> 모든 회원
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <th>참조</th>
+              <td>
+                <input type="text" />
+              </td>
+            </tr>
+            <tr>
+              <th>제목</th>
+              <td>
+                <input type="text" />
+              </td>
+            </tr>
+            <tr>
+              <th>파일첨부</th>
+              <td>
+                <input type="file" />
+              </td>
+            </tr>
+            <tr>
+              <td colSpan="2" className="center">
+                내용 작성
+              </td>
+            </tr>
+            <tr>
+              <td colSpan="2" className="writeWrapper">
+                <textarea></textarea>
+              </td>
+            </tr>
+          </tbody>
         </Table>
         <ModifyBtnWrapper>
           <ModifyBtn>전송</ModifyBtn>
