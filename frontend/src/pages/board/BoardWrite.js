@@ -1,13 +1,14 @@
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom'; // useHistory 추가
-import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn, SubmitBtn } from '../../components/common/commonStyles';
+import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn, SubmitBtn, commonTable } from '../../components/common/commonStyles';
 import SubHeader from '../../components/layout/SubHeader';
 import axios from 'axios';
 import { Image } from '../../components/WriteFormRoom';
 import TextEditor from '../../components/common/TextEditor';
 
 export const Container = styled(commonContainerStyle)``;
+const Table = styled(commonTable)``;
 
 const TableWrite = styled.table`
   border-bottom: 1px solid ${(props) => props.theme.colors.charcoal};
@@ -148,15 +149,15 @@ const BoardWrite = () => {
         })()}
         <div>
           <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <TableWrite>
+            <Table className="horizontal">
               <tr>
-                <th width="160px">제목</th>
+                <th width="240px">제목</th>
                 <td>
-                  <input type="text" className="title" name="title" value={formData.title} onChange={handleChange} required />
+                  <input type="text" className="title long" name="title" value={formData.title} onChange={handleChange} required />
                 </td>
               </tr>
               <tr>
-                <th width="160px">분류</th>
+                <th width="240px">분류</th>
                 <td>
                   {(() => {
                     switch (board) {
@@ -199,7 +200,7 @@ const BoardWrite = () => {
                   <TextEditor name="boardContent" value={formData.boardContent} onChange={handleChange} required />
                 </td>
               </tr>
-              <tr>
+              <tr className="conbtm">
                 <th>첨부파일</th>
                 <td>
                   <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required />
@@ -212,7 +213,7 @@ const BoardWrite = () => {
               {/*    <input type="password" name=/>*/}
               {/*  </td>*/}
               {/*</tr>*/}
-            </TableWrite>
+            </Table>
             <BtnWrapper className="center double mt40">
               <SubmitBtn type="submit">작성하기</SubmitBtn>
               <LinkBtn onClick={() => navigate(-1)}>취소</LinkBtn>
