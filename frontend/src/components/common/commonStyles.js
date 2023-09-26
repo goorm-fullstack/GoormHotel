@@ -483,8 +483,13 @@ export const commonTable = styled.table`
   }
 
   &.userpage {
-    td a {
-      text-decoration: none;
+    th,
+    td {
+      padding: 19px 12px;
+
+      a {
+        text-decoration: none;
+      }
     }
   }
 `;

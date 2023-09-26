@@ -240,6 +240,8 @@ const CustomerSupport = () => {
                         <td className="center">{index + 1}</td>
                         <td>{/* 카테고리 분류 위치 */}</td>
                         <td>
+                          <IsReply>답글</IsReply>
+                          {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
                           <a href={`/board/${item.boardTitle}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
                         </td>
                         <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
