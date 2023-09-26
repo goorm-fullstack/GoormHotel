@@ -111,16 +111,16 @@ const AdminSubScribe = () => {
               ) : (
                 subScribeData.map((item, index) => (
                 <tr key={item.id}>
-                  <td>
+                  <td style={{textAlign : "center"}}>
                     <InputCheckbox
                       type="checkbox"
                       checked={checkedItems.includes(item.id)}
                       onChange={() => handleCheckboxChange(item.id)}
                     />
                     </td>
-                    <td>{item.id}</td>
-                    <td className="lastChat">{item.emailAddress}</td>
-                    <td>{item.isSubScribe}</td>
+                    <td style={{textAlign : "center"}}>{item.id}</td>
+                    <td style={{textAlign : "center"}} className="lastChat">{item.emailAddress}</td>
+                    <td style={{textAlign : "center"}}>{item.isSubScribe}</td>
                 </tr>
                 ))
               )

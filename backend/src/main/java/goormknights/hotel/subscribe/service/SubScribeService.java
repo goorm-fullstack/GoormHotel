@@ -23,7 +23,7 @@ public class SubScribeService {
     }
 
     public List<ResponseSubScribeDto> getAllSubScribe() {
-        return subScribeRepository.findAll().stream().map(SubScribe::toDto).toList();
+        return subScribeRepository.findByIsSubScribe().stream().map(SubScribe::toDto).toList();
     }
 
     public void unSubscribe(Long id) {

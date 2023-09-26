@@ -136,29 +136,29 @@ const AdminChat = () => {
               ) : (
               chatData.map((item, index) => (
                 <tr key={item.id}>
-                  <td>
+                  <td style={{textAlign : "center"}}>
                     <InputCheckbox
                       type="checkbox"
                       checked={checkedItems.includes(item.chatMessages[0].roomId)}
                       onChange={() => handleCheckboxChange(item.chatMessages[0].roomId)}
                     />
                     </td>
-                    <td>{index + 1}</td>
-                    <td>
+                    <td style={{textAlign : "center"}}>{index + 1}</td>
+                    <td style={{textAlign : "center"}}>
                       {item.chatMessages.name}(
                       <Link to={`/admin/member/${item.chatMessages[0].sender}`} className="memberId">
                         {item.chatMessages[0].sender}
                       </Link>
                       )
                       </td>
-                      <td className="lastChat">
+                      <td style={{textAlign : "center"}} className="lastChat">
                       <p>
                         <Link to={`/admin/chat/detail/${item.roomId}`}>{item.chatMessages[0].message}</Link>
                       </p>
                       <div className="allMessage">{item.chatMessages.message}</div>
                     </td>
-                    <td>{item.chatMessages[0].createTime}</td>
-                  <td>{item.status}</td>
+                    <td style={{textAlign : "center"}}>{item.chatMessages[0].createTime}</td>
+                    <td style={{textAlign : "center"}}>{item.status}</td>
                 </tr>
                 ))
               )
