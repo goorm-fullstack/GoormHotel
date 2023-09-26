@@ -68,8 +68,16 @@ const BoardGallery = styled.ul`
 
   li .thumbnail {
     background: ${(props) => props.theme.colors.graybg};
-    min-height: 240px;
+    height: 240px;
     margin-bottom: 16px;
+
+    img {
+      min-width: 100%;
+      max-width: 100%;
+      min-height: 100%;
+      max-height: 100%;
+      object-fit: cover;
+    }
   }
   li .writer {
     margin: 6px 0 2px;
@@ -177,48 +185,48 @@ const CustomerSupport = () => {
                   ))}
                   <li>
                     <div className="thumbnail">
-                      <a href={`/board/` + board + `/detail`}>
-                        <img src="#" />
+                      <a href={`/board/` + board + `/detail/123`}>
+                        <img src="" />
                       </a>
                     </div>
                     <p className="title textover">
-                      <a href={`/board/` + board + `/detail`}>제목입니다.</a>
+                      <a href={`/board/` + board + `/detail/123`}>제목입니다.</a>
                     </p>
                     <p className="writer">작성자명</p>
                     <p className="date">2023-09-13</p>
                   </li>
                   <li>
                     <div className="thumbnail">
-                      <a href={`/board/` + board + `/detail`}>
+                      <a href={`/board/` + board + `/detail/123`}>
                         <img src="" />
                       </a>
                     </div>
                     <p className="title textover">
-                      <a href={`/board/` + board + `/detail`}>제목입니다.</a>
+                      <a href={`/board/` + board + `/detail/123`}>제목입니다.</a>
                     </p>
                     <p className="writer">작성자명</p>
                     <p className="date">2023-09-13</p>
                   </li>
                   <li>
                     <div className="thumbnail">
-                      <a href={`/board/` + board + `/detail`}>
+                      <a href={`/board/` + board + `/detail/123`}>
                         <img src="" />
                       </a>
                     </div>
                     <p className="title textover">
-                      <a href={`/board/` + board + `/detail`}>제목입니다.</a>
+                      <a href={`/board/` + board + `/detail/123`}>제목입니다.</a>
                     </p>
                     <p className="writer">작성자명</p>
                     <p className="date">2023-09-13</p>
                   </li>
                   <li>
                     <div className="thumbnail">
-                      <a href={`/board/` + board + `/detail`}>
+                      <a href={`/board/` + board + `/detail/123`}>
                         <img src="" />
                       </a>
                     </div>
                     <p className="title textover">
-                      <a href={`/board/` + board + `/detail`}>제목입니다.</a>
+                      <a href={`/board/` + board + `/detail/123`}>제목입니다.</a>
                     </p>
                     <p className="writer">작성자명</p>
                     <p className="date">2023-09-13</p>

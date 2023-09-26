@@ -3,6 +3,7 @@ import { styled } from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn, SubmitBtn } from '../../components/common/commonStyles';
 import SubHeader from '../../components/layout/SubHeader';
+import TextEditor from '../../components/common/TextEditor';
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -84,8 +85,8 @@ const BoardWrite = () => {
               </td>
             </tr>
             <tr className="contents">
-              <td colSpan="2">
-                <textarea>에디터 연결? 일단은 textarea입니다.</textarea>
+              <td colSpan="2" className="writeWrapper">
+                <TextEditor />
               </td>
             </tr>
             <tr>

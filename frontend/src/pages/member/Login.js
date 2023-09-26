@@ -93,7 +93,7 @@ const SecondText = styled.p`
 
 const Login = () => {
   const location = useLocation();
-  const queryParams = new URLSearchParams(location.search); 
+  const queryParams = new URLSearchParams(location.search);
   const isReservation = queryParams.get('type') === 'reservation';
 
   const [isMemberActive, setIsMemberActive] = useState(!isReservation);
@@ -137,7 +137,6 @@ const Login = () => {
     }
   }, [isReservation]);
 
-
   return (
     <>
       <Container>
@@ -154,16 +153,16 @@ const Login = () => {
             </ButtonWrapper>
             {isMemberActive ? (
               <form id="memberLogin">
-                  <Input placeholder="아이디" value={memberId} onChange={handleIdChange} />
-                  <Input className="second" placeholder="비밀번호" value={memberPassword} onChange={handlePwChange} />                
-                    <BtnWrapper className="mt20 full">
-                      <SubmitBtn type="submit">로그인</SubmitBtn>
-                    </BtnWrapper>
+                <Input placeholder="아이디" value={memberId} onChange={handleIdChange} />
+                <Input className="second" placeholder="비밀번호" value={memberPassword} onChange={handlePwChange} />
+                <BtnWrapper className="mt20 full">
+                  <SubmitBtn type="submit">로그인</SubmitBtn>
+                </BtnWrapper>
               </form>
             ) : (
               <form>
-                <Input placeholder="예약번호" value={reservationNumber} onChange={handleReservationNumberChange}/>
-                <Input className="second" placeholder="연락처" value={contactNumber} onChange={handleContactNumberChange}/>
+                <Input placeholder="예약번호" value={reservationNumber} onChange={handleReservationNumberChange} />
+                <Input className="second" placeholder="연락처" value={contactNumber} onChange={handleContactNumberChange} />
                 <BtnWrapper className="mt20 full">
                   <SubmitBtn type="submit">예약 확인</SubmitBtn>
                 </BtnWrapper>
@@ -175,7 +174,7 @@ const Login = () => {
                   <InputCheckbox type="checkbox" id="rememberId" checked={rememberId} onChange={handleRememberIdChange} />
                   아이디 기억하기
                 </CheckLabel>
-                <Link to="/findAccount">아이디/비밀번호 찾기</Link>
+                <Link to="/findidpw">아이디/비밀번호 찾기</Link>
               </RememberAndFind>
             )}
             <AuthWrapper>
