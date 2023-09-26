@@ -1,5 +1,6 @@
 package goormknights.hotel.member.service;
 
+import goormknights.hotel.auth.dto.request.ManagerLogin;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.member.dto.request.AdminSignup;
@@ -10,7 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -42,28 +44,40 @@ public class AdminService {
         managerRepository.save(manager);
     }
 
-    // 매니저 권한 업데이트
-    public void updateManagerAuth(String adminId, List<String> newAuthorities) {
-        Manager manager = managerRepository.findByAdminId(adminId)
-                .orElseThrow(() -> new RuntimeException("Manager not found"));
-
-        manager.setAuthorities(newAuthorities);
-        managerRepository.save(manager);
-    }
-
     // 매니저 로그인
-    public boolean loginManager(String username, String password, HttpSession session) {
-        Optional<Manager> managerOptional = managerRepository.findByAdminId(username);
-        if (managerOptional.isPresent()) {
-            Manager manager = managerOptional.get();
-            if (passwordEncoder.matches(password, manager.getPassword())) {
-                session.setAttribute("user", manager);
+    public Map<String, Object> managerLogin(ManagerLogin managerLogin, HttpSession session) {
+        HashMap<String, Object> response = new HashMap<>();
+        Optional<Manager> adminOptional = managerRepository.findByAdminId(managerLogin.getAdminId());
+        if (adminOptional.isPresent()) {
+            Manager manager = adminOptional.get();
+            if (passwordEncoder.matches(managerLogin.getPassword(), manager.getPassword())) {
+                session.setAttribute("admin", manager);
                 session.setAttribute("role", manager.getRole());
                 session.setAttribute("authorities", manager.getAuthorities());
-                return true;
+                response.put("status", "success");
+                response.put("role", manager.getRole().getKey());
+                response.put("authorities", manager.getAuthorities());
+            } else {
+                response.put("status", "fail");
             }
+        } else {
+            response.put("status", "fail");
         }
-        return false;
+        return response;
+    }
+
+    // 어드민 세션 체크
+    public Map<String, Object> checkAdmin(HttpSession session) {
+        HashMap<String, Object> response = new HashMap<>();
+        Manager admin = (Manager) session.getAttribute("admin");
+        if (admin != null) {
+            response.put("status", "success");
+            response.put("role", session.getAttribute("role"));
+            response.put("authorities", session.getAttribute("authorities"));
+        } else {
+            response.put("status", "fail");
+        }
+        return response;
     }
 
 

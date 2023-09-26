@@ -119,11 +119,12 @@ const Login = () => {
         },
       });
       console.log("세션 응답 아이디: ", response.data);
-      if (response.status === 200) {
+      if (response.data.status === 'success') {
         alert('로그인 성공');
-        const sessionId = response.data.sessionId;
-        localStorage.setItem('sessionId', sessionId);
+        localStorage.setItem('role', response.data.role);
         window.location.href = '/'
+      } else {
+        alert('로그인 실패');
       }
 
     } catch (error) {

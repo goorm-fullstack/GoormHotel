@@ -1,5 +1,6 @@
 package goormknights.hotel.member.service;
 
+import goormknights.hotel.auth.dto.request.MemberLogin;
 import goormknights.hotel.auth.service.RedisUtil;
 import goormknights.hotel.email.model.EmailMessage;
 import goormknights.hotel.email.repository.EmailSender;
@@ -21,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -151,18 +154,38 @@ public class MemberService {
 
 
     // 로그인
-    public boolean loginMember(String username, String password, HttpSession session) {
-        Optional<Member> memberOptional = memberRepository.findByMemberId(username);
+    public Map<String, Object> memberLogin(MemberLogin memberLogin, HttpSession session) {
+        HashMap<String, Object> response = new HashMap<>();
+        Optional<Member> memberOptional = memberRepository.findByMemberId(memberLogin.getMemberId());
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
-            if (passwordEncoder.matches(password, member.getPassword())) {
-                session.setAttribute("user", member);
+            if (passwordEncoder.matches(memberLogin.getPassword(), member.getPassword())) {
+                session.setAttribute("member", member);
                 session.setAttribute("role", member.getRole());
-                return true;
+                response.put("status", "success");
+                response.put("role", member.getRole().getKey());
+            } else {
+                response.put("status", "fail");
             }
+        } else {
+            response.put("status", "fail");
         }
-        return false;
+        return response;
     }
+
+    // 멤버 세션체크
+    public Map<String, Object> checkMember(HttpSession session) {
+        HashMap<String, Object> response = new HashMap<>();
+        Member member = (Member) session.getAttribute("member");
+        if (member != null) {
+            response.put("status", "success");
+            response.put("role", member.getRole().getKey());
+        } else {
+            response.put("status", "fail");
+        }
+        return response;
+    }
+
 
 
     // ======================= 위까지 민종님 작업물 ============================

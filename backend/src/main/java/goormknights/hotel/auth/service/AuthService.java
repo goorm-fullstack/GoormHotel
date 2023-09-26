@@ -15,6 +15,7 @@ public class AuthService {
 
     private final ManagerRepository managerRepository;
 
+    // 로그아웃
     public void logout(HttpSession session) {
         session.invalidate();
     }
