@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { NavLink, useLocation, useParams } from 'react-router-dom';
 import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn } from '../../components/common/commonStyles';
 import SubHeader from '../../components/layout/SubHeader';
-import axios from "axios";
+import axios from 'axios';
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -82,13 +82,13 @@ const BoardRead = () => {
   if (boardData) {
     switch (boardData.boardTitle) {
       case '문의하기':
-        listlink = '/board/qna';
+        listlink = '/board/qna/1';
         break;
       case '공지사항':
-        listlink = '/board/notice';
+        listlink = '/board/notice/1';
         break;
       case '이용후기':
-        listlink = '/board/review';
+        listlink = '/board/review/1';
         break;
     }
   }
@@ -114,15 +114,20 @@ const BoardRead = () => {
             <tr>
               <td className="titlew">
                 {/* 수정된 부분: boardData가 null인 경우에 대비하여 조건부 렌더링 */}
-                <p className="title">{boardData ? boardData.title : ''}</p>
+                <p className="title">
+                  <span>[카테고리]</span>
+                  {boardData ? boardData.title : ''}
+                </p>
                 {(() => {
                   // board가 'notice'가 아니고 boardData가 존재하는 경우에만 렌더링
                   if (board !== 'notice' && boardData) {
                     return (
-                        <p>
-                          <span>{boardData.boardWriter}</span>
-                          <span>{`${boardData.boardWriteDate[0]}.${(boardData.boardWriteDate[1] < 10 ? '0' : '')}${boardData.boardWriteDate[1]}.${(boardData.boardWriteDate[2] < 10 ? '0' : '')}${boardData.boardWriteDate[2]}`}</span>
-                        </p>
+                      <p>
+                        <span>{boardData.boardWriter}</span>
+                        <span>{`${boardData.boardWriteDate[0]}.${boardData.boardWriteDate[1] < 10 ? '0' : ''}${boardData.boardWriteDate[1]}.${
+                          boardData.boardWriteDate[2] < 10 ? '0' : ''
+                        }${boardData.boardWriteDate[2]}`}</span>
+                      </p>
                     );
                   }
                 })()}
