@@ -102,7 +102,7 @@ const AdminSubScribe = () => {
           </thead>
           <tbody>
             {subScribeData.length === 0 ? (
-              <td colSpan="4">채팅 메시지 기록이 없습니다.</td>
+              <td colSpan="4">등록된 구독자가 없습니다.</td>
             ) : (
               subScribeData.map((item, index) => (
                 <tr key={item.id}>
@@ -110,7 +110,9 @@ const AdminSubScribe = () => {
                     <InputCheckbox type="checkbox" checked={checkedItems.includes(item.id)} onChange={() => handleCheckboxChange(item.id)} />
                   </td>
                   <td className="center">{item.id}</td>
-                  <td className="center lastChat">{item.emailAddress}</td>
+                  <td className="center lastChat">
+                    <Link to={`/admin/mail?mailto=${item.emailAddress}`}>{item.emailAddress}</Link>
+                  </td>
                   <td className="center">{item.isSubScribe}</td>
                 </tr>
               ))

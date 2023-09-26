@@ -82,6 +82,17 @@ input {
 	padding: 0 8px;
 	font: inherit;
 	font-size: 15px;
+
+	&.long {
+		width: 80%;
+	}
+}
+
+input[type="file"] {
+	border: 0;
+	padding: 0;
+	height: 36px;
+	line-height: 36px;
 }
 
 select {

@@ -365,6 +365,10 @@ export const MultiCheck = styled.div`
   column-gap: 16px;
   align-items: center;
   padding: 9px 0;
+
+  &.fit {
+    padding: 0;
+  }
 `;
 
 export const commonTable = styled.table`
@@ -424,12 +428,32 @@ export const commonTable = styled.table`
     td {
       padding-top: 9px;
       padding-bottom: 9px;
+
+      &.header {
+        background-color: ${(props) => props.theme.colors.graybg};
+        border-top-color: ${(props) => props.theme.colors.grayborder};
+        font-weight: 500;
+        color: ${(props) => props.theme.colors.charcoal};
+      }
+
+      &.text {
+        padding: 16.5px 12px;
+      }
+
+      &.writeWrapper {
+        padding: 0;
+        border-top-color: ${(props) => props.theme.colors.grayborder};
+      }
     }
     th {
       text-align: center;
     }
     tr:hover td {
       background-color: white;
+
+      &.header {
+        background-color: ${(props) => props.theme.colors.graybg};
+      }
     }
   }
 
