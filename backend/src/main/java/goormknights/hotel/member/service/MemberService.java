@@ -155,7 +155,7 @@ public class MemberService {
         Optional<Member> memberOptional = memberRepository.findByMemberId(username);
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
-            if (member.getPassword().equals(password)) {
+            if (passwordEncoder.matches(password, member.getPassword())) {
                 session.setAttribute("user", member);
                 session.setAttribute("role", member.getRole());
                 return true;

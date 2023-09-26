@@ -53,6 +53,12 @@ const AdminLogin = () => {
   const [adminPassword, setAdminPassword] = useState('');
   const [rememberId, setRememberId] = useState(false);
 
+  const navigateToAdminHome = () => {
+    console.log('navigateToAdminHome 함수 호출');
+    navigate('/admin');
+    console.log('navigateToAdminHome 함수 호출 후');
+  };
+
   const handleLogin = async () => {
 
     const loginInfo = {
@@ -68,10 +74,17 @@ const AdminLogin = () => {
       });
       console.log("세션 응답 아이디: ", response.data);
 
+      console.log('navigate 함수 호출 전');
+
       if (response.status === 200) {
-        sessionStorage.setItem('sessionId', response.data.sessionId);
-        console.log("세션: " + sessionStorage.getItem('sessionId'));
-        navigate('/admin');
+        console.log('로그인 성공');
+        const sessionId = response.data.sessionId;
+        localStorage.setItem('sessionId', sessionId);
+        navigateToAdminHome();
+        console.log("navigateToAdminHome실행 후 세션값: ", response.data);
+        console.log("sessionId: ", sessionId);
+      } else {
+        console.log('call')
       }
 
     } catch (error) {
@@ -112,7 +125,7 @@ const AdminLogin = () => {
         </form>
         <div>
           <CheckLabel>
-            <InputCheckbox type="checkbox" checked={handleRememberIdChange} />
+            <InputCheckbox type="checkbox" checked={rememberId} onChange={handleRememberIdChange} />
             아이디 기억하기
           </CheckLabel>
         </div>

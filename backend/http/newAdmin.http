@@ -3,7 +3,7 @@ POST http://localhost:8080/auth/adminsignup
 Content-Type: application/json
 
 {
-  "adminId": "yss1902admin",
+  "adminId": "admin1",
   "password": "1234",
   "adminName": "김영한",
   "adminNickname": "호랑이",
@@ -15,7 +15,7 @@ POST http://localhost:8080/login/manager
 Content-Type: application/json
 
 {
-  "adminId": "yss1902admin",
+  "adminId": "admin23",
   "password": "1234"
 }
 

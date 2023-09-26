@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link, useLocation } from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import { BtnWrapper, SubmitBtn, PageTitle, InputCheckbox, commonContainerStyle, LinkBtn, CheckLabel } from '../../components/common/commonStyles';
 import kakao from '../../images/icon/ico_kakao.png';
 import naver from '../../images/icon/ico_naver.png';
 import google from '../../images/icon/ico_google.png';
+import Instance from "../../utils/api/axiosInstance";
 
 const Container = styled(commonContainerStyle)``;
 
@@ -93,6 +94,7 @@ const SecondText = styled.p`
 
 const Login = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search); 
   const isReservation = queryParams.get('type') === 'reservation';
 
@@ -102,6 +104,32 @@ const Login = () => {
   const [reservationNumber, setReservationNumber] = useState('');
   const [contactNumber, setContactNumber] = useState('');
   const [rememberId, setRememberId] = useState(false); //아이디 기억하기 상태
+
+  const handleLogin = async () => {
+
+    const loginInfo = {
+      memberId: memberId,
+      password: memberPassword,
+    };
+
+    try {
+      const response = await Instance.post('/login/member', loginInfo, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log("세션 응답 아이디: ", response.data);
+      if (response.status === 200) {
+        alert('로그인 성공');
+        const sessionId = response.data.sessionId;
+        localStorage.setItem('sessionId', sessionId);
+        window.location.href = '/'
+      }
+
+    } catch (error) {
+      alert('아이디 혹은 비밀번호가 올바르지 않습니다');
+    }
+  };
 
   const handleIdChange = (e) => {
     setMemberId(e.target.value);
@@ -155,9 +183,9 @@ const Login = () => {
             {isMemberActive ? (
               <form id="memberLogin">
                   <Input placeholder="아이디" value={memberId} onChange={handleIdChange} />
-                  <Input className="second" placeholder="비밀번호" value={memberPassword} onChange={handlePwChange} />                
+                  <Input className="second" placeholder="비밀번호" value={memberPassword} onChange={handlePwChange} />
                     <BtnWrapper className="mt20 full">
-                      <SubmitBtn type="submit">로그인</SubmitBtn>
+                      <SubmitBtn type="submit" onClick={handleLogin}>로그인</SubmitBtn>
                     </BtnWrapper>
               </form>
             ) : (
@@ -171,7 +199,7 @@ const Login = () => {
             )}
             {isMemberActive && (
               <RememberAndFind>
-                <CheckLabel for="rememberId">
+                <CheckLabel htmlFor="rememberId">
                   <InputCheckbox type="checkbox" id="rememberId" checked={rememberId} onChange={handleRememberIdChange} />
                   아이디 기억하기
                 </CheckLabel>
