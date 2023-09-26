@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import adminLogo from '../images/common/logo_admin.png';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { commonAdminContainer, PageTitle, SubmitBtn, BtnWrapper, CheckLabel, InputCheckbox } from '../components/common/commonStyles';
 import { Container } from './common/AdminHeader';
+import Instance from "../utils/api/axiosInstance";
 
 const LoginContainer = styled.div`
   width: 100%;
@@ -47,9 +48,36 @@ const ShareID = styled.div`
 `;
 
 const AdminLogin = () => {
+  const navigate = useNavigate();
   const [adminId, setAdminId] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
   const [rememberId, setRememberId] = useState(false);
+
+  const handleLogin = async () => {
+
+    const loginInfo = {
+      adminId: adminId,
+      password: adminPassword,
+    };
+
+    try {
+      const response = await Instance.post('/login/manager', loginInfo, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log("세션 응답 아이디: ", response.data);
+
+      if (response.status === 200) {
+        sessionStorage.setItem('sessionId', response.data.sessionId);
+        console.log("세션: " + sessionStorage.getItem('sessionId'));
+        navigate('/admin');
+      }
+
+    } catch (error) {
+      alert('아이디 혹은 비밀번호가 올바르지 않습니다');
+    }
+  };
 
   const handleRememberIdChange = () => {
     setRememberId(!rememberId);
@@ -79,7 +107,7 @@ const AdminLogin = () => {
           <input placeholder="아이디" type="text" value={adminId} onChange={handleIdChange} />
           <input placeholder="비밀번호" type="password" value={adminPassword} onChange={handlePwChange} />
           <BtnWrapper className="full mt20">
-            <SubmitBtn>로그인</SubmitBtn>
+            <SubmitBtn onClick={handleLogin}>로그인</SubmitBtn>
           </BtnWrapper>
         </form>
         <div>
