@@ -57,7 +57,7 @@ const checkboxList = [
     price: '100,000',
     startDate: '2023.09.07',
     endDate: '2023.09.07',
-    isUsed: 'N',
+    isUsed: '사용',
   },
   {
     name: '[추석맞이] 100,000원 상품권',
@@ -65,7 +65,7 @@ const checkboxList = [
     price: '100,000',
     startDate: '2023.09.07',
     endDate: '2023.09.07',
-    isUsed: 'N',
+    isUsed: '미사용',
   },
 ];
 
@@ -111,29 +111,41 @@ const AdminGiftCard = () => {
         <Section>
           <ContentsTitleXSmall>상품권 목록</ContentsTitleXSmall>
           <TableHeader>
-            <p className="number-of-list">전체{length}건</p>
+            <p className="total number-of-list">
+              전체 <strong>{length}</strong> 건
+            </p>
             <BtnWrapper className="flexgap right">
               {avaliableClick ? (
                 <NormalBtn className="header" type="button" onClick={handleAvaliableClicked}>
-                  사용가능
+                  상품권 사용 가능
                 </NormalBtn>
               ) : (
                 <NormalBtn className="header" type="button" onClick={handleAvaliableClicked}>
-                  사용가능
+                  상품권 사용 가능
                 </NormalBtn>
               )}
               {unAvaliableClick ? (
                 <NormalBtn className="header red" type="button" onClick={handleUnAvaliableClicked}>
-                  사용불가
+                  상품권 사용 중지
                 </NormalBtn>
               ) : (
                 <NormalBtn className="header red" type="button" onClick={handleUnAvaliableClicked}>
-                  사용불가
+                  상품권 사용 중지
                 </NormalBtn>
               )}
             </BtnWrapper>
           </TableHeader>
           <Table>
+            <colgroup>
+              <col width="80px" />
+              <col width="90px" />
+              <col width="200px" />
+              <col width="200px" />
+              <col width="180px" />
+              <col width="180px" />
+              <col width="180px" />
+              <col width="100px" />
+            </colgroup>
             <thead>
               <tr>
                 <th>
@@ -145,26 +157,35 @@ const AdminGiftCard = () => {
                 <th>상품권 금액</th>
                 <th>발행일</th>
                 <th>사용기한</th>
-                <th>사용여부</th>
+                <th>상태</th>
               </tr>
             </thead>
             <tbody>
+              <tr>
+                <td colSpan="8" className="center empty">
+                  등록된 상품권이 없습니다.
+                </td>
+              </tr>
               {checkboxList.map((item, idx) => {
                 const id = 'checkbox' + idx;
                 return (
                   <tr>
-                    <td>
+                    <td className="center">
                       <InputCheckbox type="checkbox" id={id} ref={(el) => (inputRef.current[idx] = el)} />
                     </td>
-                    <td>{idx + 1}</td>
-                    <td>{item.name}</td>
-                    <td>
-                      <Link to={`/admin/giftcard/detail/${idx}`}>{item.number}</Link>
+                    <td className="center">{idx + 1}</td>
+                    <td className="center">
+                      <p className="textover">{item.name}</p>
                     </td>
-                    <td>{item.price}</td>
-                    <td>{item.startDate}</td>
-                    <td>{item.endDate}</td>
-                    <td>{item.isUsed}</td>
+                    <td className="center">
+                      <p>
+                        <Link to={`/admin/giftcard/detail/${idx}`}>{item.number}</Link>
+                      </p>
+                    </td>
+                    <td className="center">{item.price}</td>
+                    <td className="center">{item.startDate}</td>
+                    <td className="center">{item.endDate}</td>
+                    <td className="center">{item.isUsed}</td>
                   </tr>
                 );
               })}

@@ -254,7 +254,7 @@ const Home = () => {
     rooms: 1,
     adults: 1,
     children: 0,
-    nights: 0
+    nights: 0,
   });
 
   const updateReservationData = (newData) => {
@@ -271,28 +271,28 @@ const Home = () => {
     if (activeIndex !== 4) {
       setActiveIndex(activeIndex + 1);
     }
-  }
+  };
   const sliderRef = useRef(null);
 
   useEffect(() => {
     if (activeIndex === 4) {
-      if (sliderRef.current) {  
+      if (sliderRef.current) {
         setTimeout(() => {
-          sliderRef.current.style.transition = "none";
+          sliderRef.current.style.transition = 'none';
           setActiveIndex(1);
         }, 500);
         setTimeout(() => {
-          sliderRef.current.style.transition = "all 500ms ease-in-out";
+          sliderRef.current.style.transition = 'all 500ms ease-in-out';
         }, 600);
       }
     } else if (activeIndex === 0) {
       if (sliderRef.current) {
         setTimeout(() => {
-          sliderRef.current.style.transition = "none";
+          sliderRef.current.style.transition = 'none';
           setActiveIndex(3);
         }, 500);
         setTimeout(() => {
-          sliderRef.current.style.transition = "all 500ms ease-in-out";
+          sliderRef.current.style.transition = 'all 500ms ease-in-out';
         }, 600);
       }
     }
@@ -305,7 +305,7 @@ const Home = () => {
         <ReserveContainer>
           <Reservation updateReservationData={updateReservationData} />
           <BtnWrapper className="searchbtnwrap">
-            <ReservationButton to="/offers" state={{ reservationData: reservationData }}>
+            <ReservationButton to="/offers/1" state={{ reservationData: reservationData }}>
               상품 검색
             </ReservationButton>
           </BtnWrapper>
@@ -373,10 +373,10 @@ const Home = () => {
       <IndexFacilities>
         <FacilitiesContainer>
           <ImageSlider>
-            <ImageContainer style={{transform: `translateX(-${activeIndex * 100}%)`}} ref={sliderRef}>
-                {copiedArr.map((image, index) => (
-                  <Image key={index} src={image} alt={`Image ${index}`} />
-                ))}
+            <ImageContainer style={{ transform: `translateX(-${activeIndex * 100}%)` }} ref={sliderRef}>
+              {copiedArr.map((image, index) => (
+                <Image key={index} src={image} alt={`Image ${index}`} />
+              ))}
             </ImageContainer>
             <ButtonContainer>
               <PrevButton onClick={handlePrev}>

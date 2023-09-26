@@ -381,6 +381,7 @@ export const commonTable = styled.table`
   th,
   td {
     padding: 16.5px 12px;
+    vertical-align: middle;
   }
   td {
     border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
@@ -426,7 +427,6 @@ export const commonTable = styled.table`
     }
     th {
       text-align: center;
-      vertical-align: middle;
     }
     tr:hover td {
       background-color: white;

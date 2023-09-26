@@ -189,7 +189,11 @@ const AdminComment = () => {
             </tr>
           </thead>
           <tbody>
-            {reply.length === 0 && <td colSpan="7">등록된 댓글이 없습니다.</td>}
+            {reply.length === 0 && (
+              <td colSpan="7" className="center empty">
+                등록된 댓글이 없습니다.
+              </td>
+            )}
             {reply.map((reply) => (
               <tr key={reply.replyId}>
                 <td>

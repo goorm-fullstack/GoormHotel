@@ -114,7 +114,11 @@ const AdminBoard = () => {
             </tr>
           </thead>
           <tbody>
-            {board.length === 0 && <td colSpan="7">등록된 글이 없습니다.</td>}
+            {board.length === 0 && (
+              <td colSpan="7" className="center empty">
+                등록된 글이 없습니다.
+              </td>
+            )}
             {board.map((board) => (
               <tr key={board.boardId}>
                 <td>
