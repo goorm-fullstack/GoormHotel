@@ -136,6 +136,36 @@ const BoardRead = () => {
             <tr className="contents">
               <td>{boardData && boardData.boardContent ? boardData.boardContent : ''}</td>
             </tr>
+            <tr className="commentwrite">
+              <td></td>
+            </tr>
+            <tr className="commentslist">
+              <td>
+                <ul>
+                  <li>
+                    <p>
+                      이름이름
+                      <span className="date">2023.09.01</span>
+                    </p>
+                    <p>댓글 내용내용</p>
+                  </li>
+                  <li>
+                    <p>
+                      이름이름
+                      <span className="date">2023.09.01</span>
+                    </p>
+                    <p>댓글 내용내용</p>
+                  </li>
+                  <li>
+                    <p>
+                      이름이름
+                      <span className="date">2023.09.01</span>
+                    </p>
+                    <p>댓글 내용내용</p>
+                  </li>
+                </ul>
+              </td>
+            </tr>
           </TableRead>
           <BtnWrapper className="center mt40">
             <LinkBtn to={listlink}>목록</LinkBtn>
