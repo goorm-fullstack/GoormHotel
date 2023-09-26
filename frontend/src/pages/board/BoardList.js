@@ -215,7 +215,7 @@ const CustomerSupport = () => {
                         );
                       } else {
                             return (
-                                <Table className="userPage">
+                                <Table className="userpage">
                                     <colgroup>
                                         <col width="110px" />
                                         <col width="180px" />
@@ -224,9 +224,10 @@ const CustomerSupport = () => {
                                     </colgroup>
                                     <thead>
                                     <tr>
-                                        <th width="110px">번호</th>
+                                        <th>번호</th>
+                                        <th>카테고리</th>
                                         <th>제목</th>
-                                        <th width="180px">등록일</th>
+                                        <th>등록일</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -235,9 +236,9 @@ const CustomerSupport = () => {
                                     {boards.map((item, index) => (
                                         <tr key={item.boardId}>
                                           <td className="center">{index + 1}</td>
-                                            <td>{/* 카테고리 분류 위치 */}</td>
+                                            <td className='center'>{item.category}</td>
                                             <td>
-                                                <IsReply>답글</IsReply>
+                                                {/* <IsReply>답글</IsReply> */}
                                                 {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
                                                 <a href={`/board/${item.boardTitle}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
                                             </td>
