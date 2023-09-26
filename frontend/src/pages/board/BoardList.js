@@ -83,7 +83,7 @@ const CustomerSupport = () => {
       axios
         .get(`/boards/find/boardTitle/${boardTitle}`)
         .then((response) => {
-          setBoard(response.data);
+          setBoard(response.data || []);
         })
         .catch((error) => {
           console.error(error);

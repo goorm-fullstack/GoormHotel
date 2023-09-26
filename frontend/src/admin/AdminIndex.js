@@ -130,7 +130,7 @@ const AdminIndex = () => {
   const [notice, setNotice] = useState([]);
   useEffect(() => {
     axios.get('/boards/find/boardTitle/공지사항').then((response) => {
-      setNotice(response.data);
+      setNotice(response.data || []);
     })
     .catch((error) => {
       console.error(error);
@@ -139,7 +139,7 @@ const AdminIndex = () => {
   const [review, setReview] = useState([]);
   useEffect(() => {
     axios.get('/boards/find/boardTitle/이용후기').then((response) => {
-      setReview(response.data);
+      setReview(response.data || []);
     })
     .catch((error) => {
       console.error(error);
@@ -148,7 +148,7 @@ const AdminIndex = () => {
   const [qna, setQna] = useState([]);
   useEffect(() => {
     axios.get('/boards/find/boardTitle/문의하기').then((response) => {
-      setQna(response.data);
+      setQna(response.data || []);
     })
     .catch((e) => {
       console.error(e);

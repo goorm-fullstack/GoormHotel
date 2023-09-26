@@ -1,6 +1,6 @@
 import React from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel, MultiCheck, SubmitBtn } from '../../components/common/commonStyles';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import {
@@ -17,6 +17,7 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
+import TextEditor from '../../components/common/TextEditor';
 
 const ModifyBtnWrapper = styled.div`
   text-align: center;
@@ -60,29 +61,25 @@ const AdminBoardWrite = () => {
   return (
     <AdminLayout subMenus="chat">
       <Container>
-        <PageTitle>메일 작성</PageTitle>
+        <PageTitle>게시글 작성</PageTitle>
         <Table className="horizontal">
-          <tr>
-            <th>
-              받는사람{' '}
-              <label>
-                <AllMember type="checkbox" /> 모든 회원
-              </label>{' '}
-            </th>
-            <td>
-              <input type="text" />
-            </td>
-          </tr>
-          <tr>
-            <th>참조</th>
-            <td>
-              <input type="text" />
-            </td>
-          </tr>
           <tr>
             <th>제목</th>
             <td>
-              <input type="text" />
+              <MultiCheck className="fit">
+                <input type="text" className="long" />
+                <CheckLabel>
+                  <InputCheckbox type="checkbox" /> 답글
+                </CheckLabel>
+              </MultiCheck>
+            </td>
+          </tr>
+          <tr>
+            <th>분류</th>
+            <td>
+              <select>
+                <option>값값</option>
+              </select>
             </td>
           </tr>
           <tr>
@@ -92,19 +89,14 @@ const AdminBoardWrite = () => {
             </td>
           </tr>
           <tr>
-            <td colSpan="2" className="center">
-              내용 작성
-            </td>
-          </tr>
-          <tr>
             <td colSpan="2" className="writeWrapper">
-              <textarea></textarea>
+              <TextEditor />
             </td>
           </tr>
         </Table>
-        <ModifyBtnWrapper>
-          <ModifyBtn>전송</ModifyBtn>
-        </ModifyBtnWrapper>
+        <BtnWrapper className="center mt40">
+          <SubmitBtn>작성하기</SubmitBtn>
+        </BtnWrapper>
       </Container>
     </AdminLayout>
   );
