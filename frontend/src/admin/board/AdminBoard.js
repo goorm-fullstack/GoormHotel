@@ -1,21 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
 import {
   Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
   Table,
-  TableCheckboxWrapper,
   TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
+
 } from '../member/AdminMember';
 import Paging from '../../components/common/Paging';
 import axios from 'axios';
@@ -38,6 +29,9 @@ const AdminBoard = () => {
       setTotalPage(totalPages);
       setTotalBoard(totalData);
       console.log('get 성공');
+    })
+    .catch((error) => {
+      console.error(error);
     });
   }, []);
 
@@ -98,22 +92,22 @@ const AdminBoard = () => {
             {board.length === 0 && <td colSpan="7">등록된 회원이 없습니다.</td>}
             {board.map((board, idx) => (
               <tr key={board.boardId}>
-                <td>
+                <td className='center'>
                   <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(board.boardId)}
                     onChange={() => handleCheckboxChange(board.boardId)}
                   />
                 </td>
-                <td>{idx + 1}</td>
-                <td>{board.boardTitle}</td>
-                <td>
+                <td className='center'>{idx + 1}</td>
+                <td className='center'>{board.boardTitle}</td>
+                <td className='center'>
                   <Link to={`/admin/member/${board.boardId}`}>{board.title}</Link>
                 </td>
-                <td>
+                <td className='center'>
                   <Link to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</Link>
                 </td>
-                <td>{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
+                <td className='center'>{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
                   board.boardWriteDate[2] < 10 ? '0' : ''
                 }${board.boardWriteDate[2]}`}</td>
                 <td>{board.blacklist}</td>

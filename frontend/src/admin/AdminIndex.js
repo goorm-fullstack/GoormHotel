@@ -132,17 +132,26 @@ const AdminIndex = () => {
     axios.get('/boards/find/boardTitle/공지사항').then((response) => {
       setNotice(response.data);
     })
+    .catch((error) => {
+      console.error(error);
+    })
   }, []);
   const [review, setReview] = useState([]);
   useEffect(() => {
     axios.get('/boards/find/boardTitle/이용후기').then((response) => {
       setReview(response.data);
     })
+    .catch((error) => {
+      console.error(error);
+    })
   }, []);
   const [qna, setQna] = useState([]);
   useEffect(() => {
     axios.get('/boards/find/boardTitle/문의하기').then((response) => {
       setQna(response.data);
+    })
+    .catch((e) => {
+      console.error(e);
     })
   }, []);
 

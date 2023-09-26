@@ -105,7 +105,7 @@ const BoardWrite = () => {
       e.preventDefault();
 
       const form = new FormData();
-      form.append('img', imgRef.current.files[0]);
+      form.append('multipartFile', imgRef.current.files[0]);
 
       Object.keys(formData).forEach((key) => { // Object.keys 수정
         form.append(key, formData[key]);

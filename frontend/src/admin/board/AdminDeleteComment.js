@@ -55,6 +55,9 @@ const AdminDeleteComment = () => {
     axios.get('/boards/deleted').then((response) => {
       setBoard(response.data);
       console.log('get 성공');
+    })
+    .catch((error) => {
+      console.error(error);
     });
   }, []);
 
