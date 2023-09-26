@@ -481,4 +481,10 @@ export const commonTable = styled.table`
   button {
     background-color: transparent;
   }
+
+  &.userpage {
+    td a {
+      text-decoration: none;
+    }
+  }
 `;

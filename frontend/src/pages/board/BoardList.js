@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { useParams } from 'react-router-dom'; // Remove duplicate import
-import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn } from '../../components/common/commonStyles';
+import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn, commonTable } from '../../components/common/commonStyles';
 import SubHeader from '../../components/layout/SubHeader';
 import Paging from '../../components/common/Paging';
 import axios from 'axios';
 import Instance from '../../utils/api/axiosInstance';
+import Search from '../../components/common/Search';
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -95,6 +96,8 @@ const WriteBtnWrapper = styled(BtnWrapper)`
   margin-top: -70px;
   margin-bottom: 20px;
 `;
+
+const Table = styled(commonTable)``;
 
 const CustomerSupport = () => {
   const board = useParams().board;
@@ -197,7 +200,7 @@ const CustomerSupport = () => {
                         </a>
                       </div>
                       <p className="title">
-                        <a href={`/board/${item.boardTitle}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
+                        <a href={`/board/${item.boardTitle}/detail/${item.title}?boardId=${item.boardId}`}>[카테고리위치여기] {item.title}</a>
                       </p>
                       <p className="writer">{item.boardWriter}</p>
                       <p className="date">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
@@ -210,20 +213,32 @@ const CustomerSupport = () => {
               );
             } else {
               return (
-                <BoardList>
+                <Table className="userpage">
+                  <colgroup>
+                    <col width="110px" />
+                    <col width="180px" />
+                    <col width="auto" />
+                    <col width="180px" />
+                  </colgroup>
                   <thead>
                     <tr>
-                      <th width="110px">번호</th>
+                      <th>번호</th>
+                      <th>분류</th>
                       <th>제목</th>
-                      <th width="180px">등록일</th>
+                      <th>작성일</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {boards.length === 0 && <td colSpan="7">등록된 게시글이 없습니다.</td>}
+                    {boards.length === 0 && (
+                      <td colSpan="4" className="center empty">
+                        등록된 게시글이 없습니다.
+                      </td>
+                    )}
                     {/** loop */}
                     {boards.map((item, index) => (
                       <tr key={item.boardId}>
                         <td className="center">{index + 1}</td>
+                        <td>{/* 카테고리 분류 위치 */}</td>
                         <td>
                           <a href={`/board/${item.boardTitle}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
                         </td>
@@ -234,12 +249,13 @@ const CustomerSupport = () => {
                     ))}
                     {/** // loop */}
                   </tbody>
-                </BoardList>
+                </Table>
               );
             }
           })()}
         </div>
         <Paging />
+        {/* <Search /> */}
       </Container>
     </>
   );
