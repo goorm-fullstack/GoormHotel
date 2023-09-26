@@ -194,7 +194,7 @@ const CustomerSupport = () => {
                               {boards.map((item) => (
                                 <li key={item.boardId}>
                                   <div className="thumbnail">
-                                    <a href={`/board/${item.boardTitle}/detail/${item.title}?boardId=${item.boardId}`}>
+                                    <a href={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>
                                     {imageUrl.find((image) => image.boardId === item.boardId) && (
                                         <img
                                           src={imageUrl.find((image) => image.boardId === item.boardId).imageUrl}
@@ -204,7 +204,7 @@ const CustomerSupport = () => {
                                     </a>
                                   </div>
                                   <p className="title">
-                                    <a href={`/board/${item.boardTitle}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
+                                    <a href={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
                                   </p>
                                   <p className="writer">{item.boardWriter}</p>
                                   <p className="date">{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</p>
@@ -240,7 +240,7 @@ const CustomerSupport = () => {
                                             <td>
                                                 {/* <IsReply>답글</IsReply> */}
                                                 {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
-                                                <a href={`/board/${item.boardTitle}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
+                                                <a href={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
                                             </td>
                                           <td className="center">{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</td>
                                         </tr>
