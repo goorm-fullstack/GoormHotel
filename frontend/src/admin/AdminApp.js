@@ -22,6 +22,7 @@ import AdminChatDetail from './chat/AdminChatDetail';
 import AdminMail from './chat/AdminMail';
 import AdminNews from './chat/AdminNews';
 import AdminIndex from './AdminIndex';
+import AdminSubScribe from './chat/AdminSubScribe';
 
 const AdminApp = () => {
   return (
@@ -48,7 +49,7 @@ const AdminApp = () => {
         <Route path="/admin/chat/:page" element={<AdminChat />}></Route>
         <Route path="/admin/chat/detail/:roomId" element={<AdminChatDetail />}></Route>
         <Route path="/admin/mail" element={<AdminMail />}></Route>
-        <Route path="/admin/subscriber/:page" element={<AdminNews />}></Route>
+        <Route path="/admin/subscriber/:page" element={<AdminSubScribe />}></Route>
       </Routes>
     </BrowserRouter>
   );
