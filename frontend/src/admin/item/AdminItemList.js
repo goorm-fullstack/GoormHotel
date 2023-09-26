@@ -1,14 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel, NormalLinkBtn, SubmitBtn } from '../../components/common/commonStyles';
-import { GiftCardTable, TableTr, TableTh, TableListTr, TableTd, TopMenuOfTable } from './AdminGiftCard';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, NormalLinkBtn } from '../../components/common/commonStyles';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { NavLink } from 'react-router-dom';
-import { Container, ContentHeader, Table, TableHeader } from '../member/AdminMember';
+import { Container, Table, TableHeader } from '../member/AdminMember';
 import Paging from '../../components/common/Paging';
-import SearchHeader from '../../components/common/Search';
+import Search from '../../components/common/Search';
 
 // 카테고리 셀렉트
 export const Select = styled.select`
@@ -23,7 +21,30 @@ const Image = styled.img`
   vertical-align: middle;
 `;
 
-const AdminItemList = ({ type, typeDetail, keyword }) => {
+const AdminItemList = () => {
+  // 대분류, 소분류 지정 배열
+  const typeDetailArray = [
+    [{ type: 'all', typeDetail: '카테고리', value: 'all' }],
+    [
+      { type: 'room', typeDetail: '전체', value: 'all' },
+      { type: 'room', typeDetail: '디럭스', value: 'deluxe' },
+      { type: 'room', typeDetail: '스위트', value: 'sweet' },
+      { type: 'room', typeDetail: '패밀리', value: 'family' },
+      { type: 'room', typeDetail: '풀 빌라', value: 'poolvilla' },
+    ],
+    [
+      { type: 'dining', typeDetail: '전체', value: 'all' },
+      { type: 'dining', typeDetail: '레스토랑', value: 'restaurant' },
+      { type: 'dining', typeDetail: '룸서비스', value: 'roomService' },
+      { type: 'dining', typeDetail: '바&라운지', value: 'barRounge' },
+      { type: 'dining', typeDetail: '베이커리', value: 'bakery' },
+    ],
+  ];
+
+  const typeArray = [[{ type: '전체', value: 'all' }], [{ type: '객실', value: 'room' }], [{ type: '다이닝', value: 'dining' }]];
+
+  let { searchJsx, url } = Search('/category', typeArray, typeDetailArray); // Search컴포넌트에서 값 받아와서 사용
+  console.log(url);
   const { page } = useParams(); // url 파라미터
 
   const [items, setItems] = useState([]); // get 요청으로 받아온 전체 데이터 상태관리
@@ -33,7 +54,6 @@ const AdminItemList = ({ type, typeDetail, keyword }) => {
   const [totalData, setTotalData] = useState(0); // 전체 데이터 수 상태관리
 
   let itemsToDelete = [];
-  let url = ''; // 상품 get 요청 url
 
   // 체크박스 전체 선택 or 해체 기능
   const inputRef = useRef([]);
@@ -44,12 +64,8 @@ const AdminItemList = ({ type, typeDetail, keyword }) => {
     });
   };
 
-  //전체, 객실, 다이닝 상품 가져오는 로직
+  // 전체, 객실, 다이닝 상품 가져오는 로직
   const handleLoadItems = async () => {
-    const currentPage = parseInt(page, 10);
-    const selectedType = type;
-    const selectedTypeDetail = typeDetail;
-
     try {
       const response = await axios.get(url);
       const data = response.data;
@@ -120,7 +136,7 @@ const AdminItemList = ({ type, typeDetail, keyword }) => {
 
   useEffect(() => {
     handleLoadItems();
-  }, [page, type, typeDetail]);
+  }, [page, url]);
 
   const [imageUrls, setImageUrls] = useState([]);
 
@@ -196,11 +212,13 @@ const AdminItemList = ({ type, typeDetail, keyword }) => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td colSpan="8" className="center empty">
-                등록된 상품이 없습니다.
-              </td>
-            </tr>
+            {items.length === 0 && (
+              <tr>
+                <td colSpan="8" className="center empty">
+                  등록된 상품이 없습니다.
+                </td>
+              </tr>
+            )}
             {items.map((item, idx) => {
               const id = 'checkbox' + idx;
               return (
@@ -234,7 +252,7 @@ const AdminItemList = ({ type, typeDetail, keyword }) => {
           </tbody>
         </Table>
         <Paging />
-        <SearchHeader />
+        {searchJsx}
       </Container>
     </AdminLayout>
   );

@@ -142,24 +142,20 @@ const ReservationPage = () => {
   const userLoggedIn = false;
   const [selectedOption, setSelectedOption] = useState('');
   const location = useLocation();
-  // const { reservationData, selectedProduct } = location.state;
+  const { reservationData, selectedProduct } = location.state;
   const navigate = useNavigate();
   const [nights, setNights] = useState(1);
 
-  const selectedProduct = {};
-  const checkInDate = {};
-  const checkOutDate = {};
-  const rooms = {};
-  const adults = {};
-  const children = {};
+  console.log(reservationData);
+  console.log(selectedProduct);
 
   const [formData, setFormData] = useState({
-    // checkIn: reservationData?.checkInDate || '',
-    // checkOut: reservationData?.checkOutDate || '',
-    // count: reservationData?.rooms || 1,
-    // adult: reservationData?.adults || 1,
-    // children: reservationData?.children || 0,
-    // stay: reservationData?.nights,
+    checkIn: reservationData?.checkInDate || '',
+    checkOut: reservationData?.checkOutDate || '',
+    count: reservationData?.rooms || 1,
+    adult: reservationData?.adults || 1,
+    children: reservationData?.children || 0,
+    stay: reservationData?.nights,
     name: '',
     phone: '',
     email: '',
@@ -169,14 +165,14 @@ const ReservationPage = () => {
     totalPrice: '12345',
   });
 
-  const reservationData = {
-    checkInDate,
-    checkOutDate,
-    rooms,
-    adults,
-    children,
-    nights,
-  };
+  // const reservationData = {
+  //   checkInDate,
+  //   checkOutDate,
+  //   rooms,
+  //   adults,
+  //   children,
+  //   nights,
+  // };
 
   useEffect(() => {
     setFormData((prevData) => ({
@@ -259,6 +255,10 @@ const ReservationPage = () => {
     }
   };
 
+  const updateReservationData = (newData) => {
+    setFormData(newData);
+  };
+
   return (
     <div>
       <Container>
@@ -268,7 +268,7 @@ const ReservationPage = () => {
             <Section>
               <ContentsTitleXSmall>상품 상세 설정</ContentsTitleXSmall>
               <OptionWrap>
-                <Reservation />
+                <Reservation updateReservationData={updateReservationData} />
               </OptionWrap>
             </Section>
 

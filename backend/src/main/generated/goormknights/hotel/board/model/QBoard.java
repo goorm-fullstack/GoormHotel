@@ -24,7 +24,7 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final StringPath boardContent = createString("boardContent");
 
-    public final BooleanPath boardDelete = createBoolean("boardDelete");
+    public final DateTimePath<java.time.LocalDateTime> boardDeleteTime = createDateTime("boardDeleteTime", java.time.LocalDateTime.class);
 
     public final NumberPath<Long> boardId = createNumber("boardId", Long.class);
 
