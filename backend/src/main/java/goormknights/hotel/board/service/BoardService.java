@@ -9,8 +9,15 @@ import goormknights.hotel.board.repository.BoardRepository;
 import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.reply.model.Reply;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,12 +30,19 @@ public class BoardService {
     private final BoardImageService boardImageService;
 
     //게시물 작성
-    public String create(RequestBoardDto requestBoardDto, RequestImageDto requestImageDto) {
-        Board board = requestBoardDto.toEntity().toBuilder()
-                .boardImage(requestImageDto.toEntity())
-                .build();
+    public String create(RequestBoardDto requestBoardDto, MultipartFile multipartFile) throws IOException {
+        Board board;
+        RequestImageDto requestImageDto;
+        if(multipartFile == null){
+            board = requestBoardDto.toEntity();
+        }else{
+            requestImageDto = boardImageService.requestImageDto(multipartFile);
+            board = requestBoardDto.toEntity().toBuilder()
+                    .boardImage(requestImageDto.toEntity())
+                    .build();
+        }
 
-        return boardRepository.save(board).getBoardTitle();
+        return boardRepository.save(board).getTitle();
     }
 
     //게시물 인덱스 번호로 찾기
@@ -54,88 +68,163 @@ public class BoardService {
     }
 
     //게시물 작성자 이름으로 찾기
-    public List<ResponseBoardDto> findByBoardWriter(String boardWriter, boolean bool){
-        List<Board> byBoardWriter = boardRepository.findByBoardWriterAndBoardDelete(boardWriter, bool);
+    public List<ResponseBoardDto> findByBoardWriter(String boardWriter, Pageable pageable){
+        List<Board> byBoardWriter = boardRepository.findAllByBoardWriter(boardWriter, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
-
         for (Board board : byBoardWriter) {
-            response.add(board.toResponseBoardDto());
+            if(board.getBoardDeleteTime()==null){
+                response.add(board.toResponseBoardDto());
+            }
         }
 
         return response;
     }
 
     //제목 또는 내용으로 게시물 조회
-    public List<ResponseBoardDto> findByTitleOrContent(String keyword, boolean bool){
-        List<Board> boards = boardRepository.findByTitleOrContent(keyword, bool);
+    public List<ResponseBoardDto> findByTitleOrContent(String keyword, Pageable pageable){
+        List<Board> boards = boardRepository.findByTitleOrContent(keyword, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
-            response.add(board.toResponseBoardDto());
+            if(board.getBoardDeleteTime()==null){
+                response.add(board.toResponseBoardDto());
+            }
         }
 
         return response;
     }
 
     //제목으로 게시물 조회
-    public List<ResponseBoardDto> findByTitle(String keyword, boolean bool){
-        List<Board> boards = boardRepository.findByBoardTitleContainingAndBoardDelete(keyword, bool);
+    public List<ResponseBoardDto> findByTitle(String keyword,  Pageable pageable){
+        List<Board> boards = boardRepository.findAllByTitleContaining(keyword, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
-            response.add(board.toResponseBoardDto());
+            if(board.getBoardDeleteTime()==null){
+                response.add(board.toResponseBoardDto());
+            }
         }
 
         return response;
     }
 
     //내용으로 게시물 조회
-    public List<ResponseBoardDto> findByContent(String keyword, boolean bool){
-        List<Board> boards = boardRepository.findByBoardContentContainingAndBoardDelete(keyword, bool);
+    public List<ResponseBoardDto> findByContent(String keyword, Pageable pageable){
+        List<Board> boards = boardRepository.findAllByBoardContentContaining(keyword, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
-            response.add(board.toResponseBoardDto());
+            if(board.getBoardDeleteTime()==null){
+                response.add(board.toResponseBoardDto());
+            }
         }
 
         return response;
     }
 
     //삭제된 게시물만 조회
-    public List<ResponseBoardDto> findAllBoardDelete(Boolean bool){
-        List<Board> boardDelete = boardRepository.findAllByBoardDelete(bool);
+    public List<ResponseBoardDto> findAllBoardDelete(Pageable pageable){
+        Page<Board> boardDelete = boardRepository.findAll(pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boardDelete){
-            response.add(board.toResponseBoardDto());
+            if(board.getBoardDeleteTime()!=null){
+                response.add(board.toResponseBoardDto());
+            }
         }
 
         return response;
     }
 
-    //게시물 삭제
+    //게시물 영구 삭제
     public void deleteById(Long boardId){
         boardRepository.deleteById(boardId);
     }
 
     //모든 게시물 조회
-    public List<ResponseBoardDto> getAllBoards(boolean bool) {
-        List<Board> all = boardRepository.findAllByBoardDelete(bool);
-        List<ResponseBoardDto> response = new ArrayList<>();
+    public Page<Board> findAllBoards(Pageable pageable) {
+        Page<Board> all = boardRepository.findAll(pageable);
+        List<Board> list = new ArrayList<>();
         for (Board board : all) {
-            ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
-            List<ResponseReplyDto> list = board.getReplies().stream().map(Reply::toResponseReplyDto).toList();
-            responseBoardDto.setReply(list);
-            response.add(responseBoardDto);
+            if(board.getBoardDeleteTime() == null){
+                list.add(board);
+            }
         }
-        return response;
+        return new PageImpl<>(list, pageable, list.size());
     }
 
     // 게시물 수정
-    public Board updateBoard(Long boardId, RequestBoardDto requestBoardDto, boolean bool) {
-        Board beforeBoard = boardRepository.findByBoardIdAndBoardDelete(boardId, bool);
-        Board afterBoard = beforeBoard.updateBoard(boardId, requestBoardDto);
+    public Board updateBoard(Long boardId, RequestBoardDto requestBoardDto, MultipartFile multipartFile, boolean bool) throws IOException {
+        Board beforeBoard = boardRepository.findByBoardId(boardId);
+        RequestImageDto requestImageDto;
+        if(multipartFile == null) {
+            requestImageDto = RequestImageDto.builder()
+                    .boardImageName(beforeBoard.getBoardImage().getBoardImageName())
+                    .boardImagePath(beforeBoard.getBoardImage().getBoardImagePath())
+                    .mimeType(beforeBoard.getBoardImage().getMimeType())
+                    .data(beforeBoard.getBoardImage().getData())
+                    .originalboardImageName(beforeBoard.getBoardImage().getOriginalboardImageName())
+                    .build();
+        }else{
+            requestImageDto = boardImageService.requestImageDto(multipartFile);
+        }
+        Board afterBoard = beforeBoard.updateBoard(beforeBoard, requestBoardDto, requestImageDto);
 
         return boardRepository.save(afterBoard);
     }
+
+    //게시판으로 게시물 찾기
+    public List<ResponseBoardDto> getAllByboardTitle(String boardTitle, Pageable pageable) {
+        List<Board> allByBoardTitle = boardRepository.findAllByBoardTitle(boardTitle, pageable);
+        List<ResponseBoardDto> response = new ArrayList<>();
+
+        for (Board board : allByBoardTitle) {
+            if(board.getBoardDeleteTime()==null){
+                ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
+                response.add(responseBoardDto);
+            }
+        }
+
+        return response;
+    }
+
+    //게시판-카테고리로 게시물 찾기
+    public List<ResponseBoardDto> getAllByCategory(String category, Pageable pageable){
+        List<Board> allByCataegory = boardRepository.findAllByCategory(category, pageable);
+        List<ResponseBoardDto> response = new ArrayList<>();
+
+        for(Board board : allByCataegory){
+            if(board.getBoardDeleteTime()==null){
+                ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
+                response.add(responseBoardDto);
+            }
+        }
+
+        return response;
+    }
+
+    //삭제 게시물 복원
+    public Board undeleted(Long boardId){
+        Board board = boardRepository.findByBoardId(boardId);
+        if (board != null) {
+            board.setBoardDeleteTime(null);
+        }
+
+        return boardRepository.save(board);
+    }
+
+    //게시물 소프트딜리트
+    public Board softdeleteBoard(Long boardId) {
+        Board board = boardRepository.findByBoardId(boardId);
+
+        String datePattern = "yyyy-MM-dd'T'HH:mm:ss";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(datePattern);
+        String now = LocalDateTime.now().format(formatter);
+        LocalDateTime boardDeleteTime = LocalDateTime.parse(now, formatter);
+        board.setBoardDeleteTime(boardDeleteTime);
+
+        return boardRepository.save(board);
+
+    }
+
 }

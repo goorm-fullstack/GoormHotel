@@ -7,6 +7,18 @@ export const commonContainerStyle = styled.div`
   padding: 280px 40px 0;
 `;
 
+export const commonAdminContainer = styled(commonContainerStyle)`
+  padding-top: 200px;
+  padding-bottom: 100px;
+`;
+
+export const commonAdminContents = styled.div`
+  width: 100%;
+  max-width: ${(props) => props.theme.wrapper.minwidth};
+  min-width: 760px;
+  margin: 0 auto;
+`;
+
 export const commonWrapperStyle = styled(commonContainerStyle)`
   padding: 0 40px;
 `;
@@ -19,8 +31,8 @@ export const commonContentsStyle = styled.div`
 export const PageTitle = styled.h2`
   color: ${(props) => props.theme.colors.black};
   font-weight: 500;
-  font-size: ${(props) => props.theme.font.big};
-  margin-bottom: 100px;
+  font-size: ${(props) => props.theme.font.sizexxl};
+  margin-bottom: 80px;
 `;
 
 export const ContentsTitle = styled.h3`
@@ -105,6 +117,9 @@ export const BtnWrapper = styled.div`
   &.mt20 {
     margin-top: 20px;
   }
+  &.mt10 {
+    margin-top: 20px;
+  }
 
   &.double > button,
   &.double > a {
@@ -140,8 +155,23 @@ export const commonLinkBtn = styled(Link)`
     height: 60px;
     line-height: 58px;
   }
+
   &.shadow {
     box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  &.mini {
+    width: 80px;
+    height: 32px;
+    line-height: 30px;
+    font-size: ${(props) => props.theme.font.sizexs};
+  }
+
+  &.header {
+    width: 140px;
+    height: 40px;
+    line-height: 40px;
+    font-size: ${(props) => props.theme.font.sizexs};
   }
 `;
 
@@ -157,8 +187,27 @@ export const commonButton = styled.button`
     height: 60px;
     line-height: 60px;
   }
+
   &.shadow {
     box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  &.mini {
+    width: 80px;
+    height: 32px;
+    line-height: 30px;
+    font-size: ${(props) => props.theme.font.sizexs};
+  }
+
+  &.header {
+    width: 140px;
+    height: 40px;
+    line-height: 40px;
+    font-size: ${(props) => props.theme.font.sizexs};
+  }
+
+  &.search {
+    width: 80px !important;
   }
 `;
 
@@ -192,11 +241,34 @@ export const NormalBtn = styled(commonButton)`
     color: ${(props) => props.theme.colors.goldhover};
   }
 
-  &.mini {
-    width: 80px;
-    height: 32px;
-    line-height: 30px;
-    font-size: ${(props) => props.theme.font.sizexs};
+  &.red {
+    border-color: ${(props) => props.theme.colors.red};
+    color: ${(props) => props.theme.colors.red};
+  }
+
+  &.header {
+    line-height: 38px;
+  }
+`;
+
+export const NormalLinkBtn = styled(commonLinkBtn)`
+  background: white;
+  border: 1px solid ${(props) => props.theme.colors.grayborder};
+  color: ${(props) => props.theme.colors.graylight};
+  line-height: 40px;
+
+  &:hover {
+    border-color: ${(props) => props.theme.colors.gold};
+    color: ${(props) => props.theme.colors.goldhover};
+  }
+
+  &.red {
+    border-color: ${(props) => props.theme.colors.red};
+    color: ${(props) => props.theme.colors.red};
+  }
+
+  &.header {
+    line-height: 38px;
   }
 `;
 
@@ -206,6 +278,11 @@ export const SubmitBtn = styled(commonButton)`
 
   &:hover {
     background-color: ${(props) => props.theme.colors.goldhover};
+  }
+
+  &.header {
+    width: 200px;
+    font-size: ${(props) => props.theme.font.sizes};
   }
 `;
 
@@ -280,5 +357,143 @@ export const AuthBtn = styled(commonButton)`
   &:hover {
     background-color: ${(props) => props.theme.colors.charcoal};
     color: white;
+  }
+`;
+
+export const MultiCheck = styled.div`
+  display: flex;
+  column-gap: 16px;
+  align-items: center;
+  padding: 9px 0;
+
+  &.fit {
+    padding: 0;
+  }
+`;
+
+export const commonTable = styled.table`
+  width: 100%;
+  border-bottom: 1px solid ${(props) => props.theme.colors.charcoal};
+
+  th {
+    border-top: 1px solid ${(props) => props.theme.colors.charcoal};
+    border-bottom: 1px solid ${(props) => props.theme.colors.graylightborder};
+    font-weight: 500;
+    background: ${(props) => props.theme.colors.graybg};
+    color: ${(props) => props.theme.colors.charcoal};
+  }
+  th,
+  td {
+    padding: 16.5px 12px;
+    vertical-align: middle;
+  }
+  td {
+    border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
+    color: ${(props) => props.theme.colors.blacklight};
+
+    input[type='text'],
+    input[type='password'],
+    input[type='email'],
+    input[type='tel'],
+    input[type='date'],
+    select {
+      height: 36px;
+      min-width: 240px;
+      padding-left: 12px;
+    }
+
+    select {
+      background-position: 96% center;
+    }
+
+    &.empty {
+      padding: 19px 12px;
+    }
+  }
+  td.center {
+    text-align: center;
+  }
+  tr:hover th,
+  tr:hover td {
+    background-color: ${(props) => props.theme.colors.graybg};
+  }
+
+  &.horizontal {
+    tr:last-child th {
+      border-bottom-color: ${(props) => props.theme.colors.charcoal};
+    }
+    tr:first-child td {
+      border-top-color: ${(props) => props.theme.colors.charcoal};
+    }
+    tr.conbtm th,
+    tr.conbtm td {
+      border-top-color: ${(props) => props.theme.colors.graylightborder};
+    }
+    td {
+      padding-top: 9px;
+      padding-bottom: 9px;
+
+      &.header {
+        background-color: ${(props) => props.theme.colors.graybg};
+        border-top-color: ${(props) => props.theme.colors.grayborder};
+        font-weight: 500;
+        color: ${(props) => props.theme.colors.charcoal};
+      }
+
+      &.text {
+        padding: 16.5px 12px;
+      }
+
+      &.writeWrapper {
+        padding: 0;
+        border-top-color: ${(props) => props.theme.colors.grayborder};
+      }
+    }
+    th {
+      text-align: center;
+    }
+    tr:hover td {
+      background-color: white;
+
+      &.header {
+        background-color: ${(props) => props.theme.colors.graybg};
+      }
+    }
+  }
+
+  .textover {
+    width: 100%;
+    max-width: 250px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .mailcheck {
+    font-size: ${(props) => props.theme.font.sizexs};
+    color: ${(props) => props.theme.colors.graydark};
+    padding-left: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  a,
+  button {
+    text-decoration: underline;
+    font-size: ${(props) => props.theme.font.sizes};
+  }
+
+  button {
+    background-color: transparent;
+  }
+
+  &.userpage {
+    th,
+    td {
+      padding: 19px 12px;
+
+      a {
+        text-decoration: none;
+      }
+    }
   }
 `;

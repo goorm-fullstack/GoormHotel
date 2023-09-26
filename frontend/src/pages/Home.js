@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { commonWrapperStyle, MoreLink, BtnWrapper } from '../components/common/commonStyles';
@@ -10,13 +10,13 @@ import dining01 from '../images/dining/Bakery.jpg';
 import dining02 from '../images/dining/Bar.jpg';
 import dining03 from '../images/dining/Restaurant.jpg';
 import dining04 from '../images/dining/RoomService.jpg';
-import Deluxe from '../images/room/Deluxe.jpg';
+import deluxe from '../images/room/Deluxe.jpg';
 import Family from '../images/room/Family.jpg';
 import Suite from '../images/room/Suite.jpg';
 import slideBtn from '../images/icon/ico_slide_btn.png';
 
 const diningImages = [dining01, dining02, dining03, dining04];
-const images = [spaImg, dining01, Deluxe];
+const images = [spaImg, dining01, deluxe];
 
 const SlideWrapper = styled.article`
   width: 100%;
@@ -243,33 +243,69 @@ const ReservationButton = styled(Link)`
 `;
 
 const Home = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(1);
+  const SLIDE_NUM = images.length;
+  const beforeSlide = images[SLIDE_NUM - 1];
+  const afterSlide = images[0];
+  let copiedArr = [beforeSlide, ...images, afterSlide];
+  const [reservationData, setReservationData] = useState({
+    checkInDate: '',
+    checkOutDate: '',
+    rooms: 1,
+    adults: 1,
+    children: 0,
+    nights: 0,
+  });
 
-  const handleNext = () => {
-    setActiveIndex((prevIndex) => (prevIndex + 1) % images.length);
+  const updateReservationData = (newData) => {
+    setReservationData(newData);
   };
 
   const handlePrev = () => {
-    setActiveIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+    if (activeIndex !== 0) {
+      setActiveIndex(activeIndex - 1);
+    }
   };
 
+  const handleNext = () => {
+    if (activeIndex !== 4) {
+      setActiveIndex(activeIndex + 1);
+    }
+  };
   const sliderRef = useRef(null);
 
-  const sliderStyle = {
-    transform: `translateX(-${activeIndex * sliderRef.current?.offsetWidth}px)`,
-  };
-
-  const handleReservation = () => {};
+  useEffect(() => {
+    if (activeIndex === 4) {
+      if (sliderRef.current) {
+        setTimeout(() => {
+          sliderRef.current.style.transition = 'none';
+          setActiveIndex(1);
+        }, 500);
+        setTimeout(() => {
+          sliderRef.current.style.transition = 'all 500ms ease-in-out';
+        }, 600);
+      }
+    } else if (activeIndex === 0) {
+      if (sliderRef.current) {
+        setTimeout(() => {
+          sliderRef.current.style.transition = 'none';
+          setActiveIndex(3);
+        }, 500);
+        setTimeout(() => {
+          sliderRef.current.style.transition = 'all 500ms ease-in-out';
+        }, 600);
+      }
+    }
+  }, [activeIndex]);
 
   return (
     <>
       <SlideWrapper>
         <Slide />
         <ReserveContainer>
-          <Reservation />
+          <Reservation updateReservationData={updateReservationData} />
           <BtnWrapper className="searchbtnwrap">
-            <ReservationButton to="/offers" onClick={() => handleReservation()}>
-              {/* state={{ reservationData: reservationData }} */}
+            <ReservationButton to="/offers/1" state={{ reservationData: reservationData }}>
               상품 검색
             </ReservationButton>
           </BtnWrapper>
@@ -283,7 +319,7 @@ const Home = () => {
           <IndexDesc>환상적인 서울 도심의 파노라믹뷰를 만나보세요.</IndexDesc>
           <ItemList>
             <RoomItem>
-              <img src={Deluxe} alt="객실" />
+              <img src={deluxe} alt="객실" />
               <ItemTitle>디럭스</ItemTitle>
               <ItemDesc>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</ItemDesc>
             </RoomItem>
@@ -299,7 +335,7 @@ const Home = () => {
             </RoomItem>
           </ItemList>
           <BtnWrapper className="center">
-            <MoreLink to="/offers?type=rooms">자세히보기</MoreLink>
+            <MoreLink to="/offers/1?type=rooms">자세히보기</MoreLink>
           </BtnWrapper>
         </Wrapper>
         <Wrapper>
@@ -330,15 +366,15 @@ const Home = () => {
             </DiningItem>
           </ItemList>
           <BtnWrapper className="center">
-            <MoreLink to="/offers?type=dining">자세히보기</MoreLink>
+            <MoreLink to="/offers/1?type=dining">자세히보기</MoreLink>
           </BtnWrapper>
         </Wrapper>
       </IndexOffers>
       <IndexFacilities>
         <FacilitiesContainer>
           <ImageSlider>
-            <ImageContainer style={sliderStyle} ref={sliderRef}>
-              {images.map((image, index) => (
+            <ImageContainer style={{ transform: `translateX(-${activeIndex * 100}%)` }} ref={sliderRef}>
+              {copiedArr.map((image, index) => (
                 <Image key={index} src={image} alt={`Image ${index}`} />
               ))}
             </ImageContainer>

@@ -6,12 +6,14 @@ import Bar from '../../images/dining/Bar.jpg';
 import Restaurant from '../../images/dining/Restaurant.jpg';
 import RoomService from '../../images/dining/RoomService.jpg';
 import { styled } from 'styled-components';
+import SubHeader from '../../components/layout/SubHeader';
 
 export const Container = styled(commonContainerStyle)``;
 
 const Dining = () => {
   return (
     <>
+      <SubHeader kind="facilities" />
       <Container>
         <PageTitle>다이닝</PageTitle>
         <Item>

@@ -25,6 +25,10 @@ public class QChatRoomDto extends EntityPathBase<ChatRoomDto> {
 
     public final StringPath roomId = createString("roomId");
 
+    public final EnumPath<Status> status = createEnum("status", Status.class);
+
+    public final DateTimePath<java.sql.Timestamp> timestamp = createDateTime("timestamp", java.sql.Timestamp.class);
+
     public QChatRoomDto(String variable) {
         super(ChatRoomDto.class, forVariable(variable));
     }

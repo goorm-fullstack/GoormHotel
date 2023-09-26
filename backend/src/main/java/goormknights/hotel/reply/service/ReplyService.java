@@ -7,8 +7,13 @@ import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.reply.model.Reply;
 import goormknights.hotel.reply.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +29,7 @@ public class ReplyService {
     public Reply create(RequestReplyDto requestReplyDto){
 
         Long boardId = requestReplyDto.getBoardId();
-        Board byBoardId = boardRepository.findByBoardIdAndBoardDelete(boardId, false);
+        Board byBoardId = boardRepository.findByBoardId(boardId);
 
         Reply reply = requestReplyDto.toEntity();
         reply.setBoard(byBoardId);
@@ -37,15 +42,15 @@ public class ReplyService {
 
     //Read
     //댓글 전부 찾기
-    public List<ResponseReplyDto> getAll(){
-        List<Reply> replies = replyRepository.findAll();
-        List<ResponseReplyDto> response = new ArrayList<>();
-
-        for(Reply reply : replies){
-            response.add(reply.toResponseReplyDto());
+    public Page<Reply> getAll(Pageable pageable){
+        Page<Reply> all = replyRepository.findAll(pageable);
+        List<Reply> list = new ArrayList<>();
+        for (Reply reply : all) {
+            if(reply.getReplyDeleteTime() == null){
+                list.add(reply);
+            }
         }
-
-        return response;
+        return new PageImpl<>(list, pageable, list.size());
     }
 
     //댓글 내용으로 찾기
@@ -54,7 +59,9 @@ public class ReplyService {
         List<ResponseReplyDto> response = new ArrayList<>();
 
         for (Reply reply : replies){
-            response.add(reply.toResponseReplyDto());
+            if(reply.getReplyDeleteTime()==null){
+                response.add(reply.toResponseReplyDto());
+            }
         }
 
         return response;
@@ -62,12 +69,14 @@ public class ReplyService {
 
     //boardId로 댓글 찾기
     public List<ResponseReplyDto> findByBoardId(Long boardId){
-        Board BoardId = boardRepository.findByBoardIdAndBoardDelete(boardId, false);
+        Board BoardId = boardRepository.findByBoardId(boardId);
         List<Reply> replies = replyRepository.findByBoard(BoardId);
         List<ResponseReplyDto> response = new ArrayList<>();
 
         for(Reply reply : replies){
-            response.add(reply.toResponseReplyDto());
+            if(reply.getReplyDeleteTime()==null){
+                response.add(reply.toResponseReplyDto());
+            }
         }
         return response;
     }
@@ -83,15 +92,38 @@ public class ReplyService {
     //댓글 내용 수정하기
     public Reply updateReply(Long replyId, RequestReplyDto requestReplyDto){
         Reply beforeReply = replyRepository.findByReplyId(replyId);
-        Reply afterReply = beforeReply.updateReply(replyId, requestReplyDto);
+        Reply afterReply = beforeReply.updateReply(beforeReply, requestReplyDto);
 
         return replyRepository.save(afterReply);
     }
 
 
     //Delete
-    //댓글 삭제
+    //댓글 완전 삭제
     public void deleteById(Long replyId){
         replyRepository.deleteById(replyId);
     }
+
+    //삭제 댓글 복원
+    public Reply undeleted(Long replyId){
+        Reply reply = replyRepository.findByReplyId(replyId);
+        if(reply!=null){
+            reply.setReplyDeleteTime(null);
+        }
+        return replyRepository.save(reply);
+    }
+
+    //댓글 소프트딜리트
+    public Reply softdeleteReply(Long replyId) {
+        Reply reply = replyRepository.findByReplyId(replyId);
+
+        String datePattern = "yyyy-MM-dd'T'HH:mm:ss";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(datePattern);
+        String now = LocalDateTime.now().format(formatter);
+        LocalDateTime replyDeleteTime = LocalDateTime.parse(now, formatter);
+        reply.setReplyDeleteTime(replyDeleteTime);
+
+        return replyRepository.save(reply);
+    }
+
 }

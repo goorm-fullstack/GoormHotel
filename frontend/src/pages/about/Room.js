@@ -5,6 +5,7 @@ import Family from '../../images/room/Family.jpg';
 import Suite from '../../images/room/Suite.jpg';
 import Villa from '../../images/room/Villa.jpg';
 import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
+import SubHeader from '../../components/layout/SubHeader';
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -66,6 +67,7 @@ export const Location = styled.p`
 const Room = () => {
   return (
     <>
+      <SubHeader kind="facilities" />
       <Container>
         <PageTitle>객실</PageTitle>
         <Item>

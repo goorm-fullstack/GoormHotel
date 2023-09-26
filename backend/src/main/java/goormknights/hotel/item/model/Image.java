@@ -33,7 +33,7 @@ public class Image {
 
     @Column(nullable = false)
     @Lob
-    private byte[] data;
+    private byte[] data; // 이미지 바이트 정보
 
     @Column(nullable = false)
     private boolean deleted = false; // soft delete 여부 구분

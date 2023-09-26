@@ -1,12 +1,15 @@
 package goormknights.hotel.board.controller;
 
 import goormknights.hotel.board.dto.request.RequestBoardDto;
-import goormknights.hotel.board.dto.request.RequestImageDto;
 import goormknights.hotel.board.dto.response.ResponseBoardDto;
 import goormknights.hotel.board.model.Board;
 import goormknights.hotel.board.service.BoardImageService;
 import goormknights.hotel.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,11 +26,18 @@ public class BoardController {
     private final BoardImageService boardImageService;
 
     // 모든 게시물 조회
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
     @GetMapping("/list")
-    public ResponseEntity<List<ResponseBoardDto>> getAllBoards() {
-        List<ResponseBoardDto> boards = boardService.getAllBoards(false);
+    public ResponseEntity<List<ResponseBoardDto>> getAllBoards(@PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Board> allBoards = boardService.findAllBoards(pageable);
+        Page<ResponseBoardDto> map = allBoards.map(Board::toResponseBoardDto);
 
-        return ResponseEntity.ok(boards);
+        int totalPages = allBoards.getTotalPages();
+        long totalElements = allBoards.getTotalElements();
+        return ResponseEntity.ok()
+                .header("TotalPages", String.valueOf(totalPages))
+                .header("TotalData", String.valueOf(totalElements))
+                .body(map.getContent());
     }
 
     // 게시물 상세 조회
@@ -40,30 +50,28 @@ public class BoardController {
 
     // 게시물 작성
     @PostMapping("/writeform")
-    public ResponseEntity<Object> createBoard(@ModelAttribute RequestBoardDto requestBoardDto, @RequestParam MultipartFile multipartFile) throws IOException {
-        RequestImageDto requestImageDto = boardImageService.requestImageDto(multipartFile);
-
-        boardService.create(requestBoardDto, requestImageDto);
+    public ResponseEntity<Object> createBoard(@ModelAttribute RequestBoardDto requestBoardDto, @RequestParam(required = false) MultipartFile multipartFile) throws IOException {
+        boardService.create(requestBoardDto, multipartFile);
         return ResponseEntity.ok().build();
     }
 
     // 게시물 수정
     @PutMapping("/{boardId}")
-    public ResponseEntity<ResponseBoardDto> updateBoard(@PathVariable Long boardId, @RequestBody RequestBoardDto requestBoardDto) {
-        Board board = boardService.updateBoard(boardId, requestBoardDto, false);
+    public ResponseEntity<ResponseBoardDto> updateBoard(@PathVariable Long boardId, @ModelAttribute RequestBoardDto requestBoardDto, @RequestParam(required = false) MultipartFile multipartFile) throws IOException {
+        boardService.updateBoard(boardId, requestBoardDto, multipartFile, false);
 
-        return ResponseEntity.ok(board.toResponseBoardDto());
+        return ResponseEntity.ok().build();
     }
 
     // 삭제된 게시물 전체 조회
     @GetMapping("/deleted")
-    public ResponseEntity<List<ResponseBoardDto>> getDeletedBoards() {
-        List<ResponseBoardDto> deletedBoards = boardService.findAllBoardDelete(true);
+    public ResponseEntity<List<ResponseBoardDto>> getDeletedBoards(@PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
+        List<ResponseBoardDto> deletedBoards = boardService.findAllBoardDelete(pageable);
 
         return ResponseEntity.ok(deletedBoards);
     }
 
-    // 게시물 삭제
+    // 게시물 영구 삭제
     @DeleteMapping("/{boardId}")
     public void deleteBoard(@PathVariable Long boardId) {
         boardService.deleteById(boardId);
@@ -71,33 +79,65 @@ public class BoardController {
 
     //작성자로 게시물 조회
     @GetMapping("/find/writer/{boardWriter}")
-    public ResponseEntity<List<ResponseBoardDto>> findByBoardWriter(@PathVariable String boardWriter) {
-        List<ResponseBoardDto> byBoardWriter = boardService.findByBoardWriter(boardWriter, false);
+    public ResponseEntity<List<ResponseBoardDto>> findByBoardWriter(@PathVariable String boardWriter, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
+        List<ResponseBoardDto> byBoardWriter = boardService.findByBoardWriter(boardWriter, pageable);
 
         return ResponseEntity.ok(byBoardWriter);
     }
 
     //내용으로 게시물 조회
     @GetMapping("/find/content/{boardContent}")
-    public ResponseEntity<List<ResponseBoardDto>> findByBoardContent(@PathVariable String boardContent) {
-        List<ResponseBoardDto> content = boardService.findByContent(boardContent, false);
+    public ResponseEntity<List<ResponseBoardDto>> findByBoardContent(@PathVariable String boardContent, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
+        List<ResponseBoardDto> content = boardService.findByContent(boardContent, pageable);
 
         return ResponseEntity.ok(content);
     }
 
     //내용, 제목으로 게시물 조회
     @GetMapping("/find/{keyword}")
-    public ResponseEntity<List<ResponseBoardDto>> findByBoardTitleOrContent(@PathVariable String keyword){
-        List<ResponseBoardDto> byTitleOrContent = boardService.findByTitleOrContent(keyword, false);
+    public ResponseEntity<List<ResponseBoardDto>> findBytitleOrContent(@PathVariable String keyword, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable){
+        List<ResponseBoardDto> byTitleOrContent = boardService.findByTitleOrContent(keyword, pageable);
 
         return ResponseEntity.ok(byTitleOrContent);
     }
 
     //제목으로 게시물 조회
-    @GetMapping("/find/title/{boardTitle}")
-    public ResponseEntity<List<ResponseBoardDto>> findByBoardTitle(@PathVariable String boardTitle) {
-        List<ResponseBoardDto> Titles = boardService.findByTitle(boardTitle, false);
+    @GetMapping("/find/title/{title}")
+    public ResponseEntity<List<ResponseBoardDto>> findBytitle(@PathVariable String title, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
+        List<ResponseBoardDto> Titles = boardService.findByTitle(title, pageable);
 
         return ResponseEntity.ok(Titles);
+    }
+
+    //게시판으로 찾기
+    @GetMapping("/find/boardTitle/{boardTitle}")
+    public ResponseEntity<List<ResponseBoardDto>> findByboardTitle(@PathVariable String boardTitle, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable){
+        List<ResponseBoardDto> boardTitles = boardService.getAllByboardTitle(boardTitle, pageable);
+
+        return ResponseEntity.ok(boardTitles);
+    }
+
+    //게시판-카테고리로 찾기
+    @GetMapping("/find/category/{category}")
+    public ResponseEntity<List<ResponseBoardDto>> findByCategory(@PathVariable String category, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable){
+        List<ResponseBoardDto> allByCategory = boardService.getAllByCategory(category, pageable);
+
+        return ResponseEntity.ok(allByCategory);
+    }
+
+    //게시물 소프트딜리트
+    @PutMapping("/softdelete/{boardId}")
+    public ResponseEntity<Object> softdeleteBoard(@PathVariable Long boardId) {
+        Board board = boardService.softdeleteBoard(boardId);
+
+        return ResponseEntity.ok(board.toResponseBoardDto());
+    }
+
+    //삭제된 게시물 복원
+    @PutMapping("/undelete/{boardId}")
+    public ResponseEntity<ResponseBoardDto> undeleted(@PathVariable Long boardId) {
+        Board board = boardService.undeleted(boardId);
+
+        return ResponseEntity.ok(board.toResponseBoardDto());
     }
 }

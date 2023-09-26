@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import goormknights.hotel.chat.model.ChatMessage;
 import goormknights.hotel.chat.model.ChatRoom;
 import goormknights.hotel.chat.model.ChatRoomDto;
+import goormknights.hotel.chat.model.Status;
 import goormknights.hotel.chat.repository.ChatMessageRepository;
 import goormknights.hotel.chat.repository.ChatRoomRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -17,6 +19,7 @@ import java.sql.Timestamp;
 import java.util.*;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ChatService {
     private final ObjectMapper objectMapper;
@@ -63,7 +66,7 @@ public class ChatService {
         List<ChatMessage> result = new ArrayList<>();
 
         for(ChatRoom chatRoom : allRoom) {
-            List<ChatMessage> orderMessage = chatMessageRepository.findByRoomIdOrderByCreateTimeDesc(chatRoom.getRoomId());
+            List<ChatMessage> orderMessage = chatMessageRepository.findByRoomIdOrderByIdDesc(chatRoom.getRoomId());
             if(!orderMessage.isEmpty()) {
                 ChatMessage lastMessage = orderMessage.get(0);
                 result.add(lastMessage);
@@ -75,5 +78,15 @@ public class ChatService {
 
     public List<ChatMessage> findPrevMessage(String roomId) {
         return chatMessageRepository.findByRoomId(roomId);
+    }
+
+    public void setStatus(String roomId, Status status) {
+        ChatRoomDto chatRoomDto = chatRoomRepository.findByRoomId(roomId).orElseThrow();
+        chatRoomDto.setStatus(status);
+    }
+
+    public void closed(String roomId) {
+        ChatRoomDto chatRoomDto = chatRoomRepository.findByRoomId(roomId).orElseThrow();
+        chatRoomDto.setStatus(Status.CLOSED);
     }
 }

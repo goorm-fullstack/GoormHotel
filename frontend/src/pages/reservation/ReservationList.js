@@ -1,44 +1,10 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
-import { BoardList } from '../board/BoardList';
+import { commonContainerStyle, PageTitle, commonTable } from '../../components/common/commonStyles';
+import Paging from '../../components/common/Paging';
 
 const Container = styled(commonContainerStyle)``;
-
-const ReservationTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-`;
-
-const TableHeaderRow = styled.tr`
-  background-color: ${(props) => props.theme.colors.lightGray};
-`;
-
-const TableHeaderCell = styled.th`
-  padding: 20px;
-  border-top: 1px solid #dddddd;
-`;
-
-const TableDataRow = styled.tr``;
-
-const TableDataCell = styled.td`
-  padding: 10px;
-  border-bottom: 1px solid #dddddd;
-  text-align: center;
-  height: 60px;
-  vertical-align: middle;
-`;
-
-const PriceCell = styled(TableDataCell)`
-  text-align: right;
-`;
-
-const NoReservationsMessage = styled.p`
-  font-size: 16px;
-  text-align: center;
-  padding: 16px;
-  color: #666;
-`;
+const Table = styled(commonTable)``;
 
 const ReservationList = () => {
   const reservations = [
@@ -65,7 +31,7 @@ const ReservationList = () => {
     <>
       <Container>
         <PageTitle>예약 목록</PageTitle>
-        <BoardList>
+        <Table className="userpage">
           <thead>
             <tr>
               <th width="110px">번호</th>
@@ -89,7 +55,7 @@ const ReservationList = () => {
                 <tr key={index}>
                   <td className="center">{index + 1}</td>
                   <td className="center">
-                    <a href={`/reservation/:number`}>{reservation.reservationNumber}</a>
+                    <a href={`/reservation/${reservation.reservationNumber}`}>{reservation.reservationNumber}</a>
                   </td>
                   <td className="center">
                     <p className="textover">{reservation.productName}</p>
@@ -102,7 +68,8 @@ const ReservationList = () => {
               ))
             )}
           </tbody>
-        </BoardList>
+        </Table>
+        <Paging />
       </Container>
     </>
   );

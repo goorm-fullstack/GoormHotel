@@ -30,7 +30,7 @@ const ReserveDate = styled.div`
   }
 `;
 
-const CheckBtn = styled.button`
+export const CheckBtn = styled.button`
   border: 0;
   background-color: #fff;
   padding: 15px 0;
@@ -52,7 +52,7 @@ const Check = styled.div`
   }
 `;
 
-const CalendarSvg = styled.svg`
+export const CalendarSvg = styled.svg`
   fill: ${(props) => props.theme.colors.navy};
   position: relative;
   top: 2px;
@@ -94,11 +94,11 @@ const SelectLabel = styled.label`
   margin-top: 10px;
 `;
 
-const CalendarContainer = styled.div`
+export const CalendarContainer = styled.div`
   position: relative;
 `;
 
-const CalendarWrapper = styled.div`
+export const CalendarWrapper = styled.div`
   z-index: 10;
   position: absolute;
   top: 100%;
@@ -220,7 +220,7 @@ export const StyledCalendar = styled(Calendar)`
   }
 `;
 
-const Reservation = () => {
+const Reservation = ({ updateReservationData }) => {
   const [checkInValue, setCheckInValue] = useState(new Date());
   const [checkOutValue, setCheckOutValue] = useState(new Date());
   const [checkInDate, setCheckInDate] = useState('');
@@ -233,6 +233,14 @@ const Reservation = () => {
   const [children, setChildren] = useState(0);
   const [nights, setNights] = useState(0);
 
+  useEffect(() => {
+    const checkInMoment = moment(checkInValue);
+    const checkOutMoment = moment(checkOutValue);
+  
+    const nightsDifference = checkOutMoment.diff(checkInMoment, 'days');
+    setNights(nightsDifference);
+  }, [checkInValue, checkOutValue]);
+
   const reservationData = {
     checkInDate,
     checkOutDate,
@@ -241,6 +249,19 @@ const Reservation = () => {
     children,
     nights,
   };
+
+  useEffect(() => {
+    const updatedData = {
+      checkInDate,
+      checkOutDate,
+      rooms,
+      adults,
+      children,
+      nights,
+    };
+  
+    updateReservationData(updatedData);
+  }, [checkInDate, checkOutDate, rooms, adults, children, nights]);
 
   useEffect(() => {
     const nightsDifference = moment(checkOutValue).diff(moment(checkInValue), 'days');
@@ -291,9 +312,16 @@ const Reservation = () => {
     const formattedDate = moment(selectedDate).format('YYYY.MM.DD');
     const dayOfWeek = moment(selectedDate).format('ddd');
     setCheckInDate(`${formattedDate} (${dayOfWeek})`);
-  };
+
+    const checkOutDate = new Date(checkOutValue);
+    const timeDifference = checkOutDate.getTime() - selectedDate.getTime();
+    const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
+
+    setNights(daysDifference);
+};
 
   const handleCheckOutDateChange = (selectedDate) => {
+    selectedDate.setHours(12, 0, 0, 0);
     setCheckOutValue(selectedDate);
     setCheckOutOpen(false);
     const formattedDate = moment(selectedDate).format('YYYY.MM.DD');

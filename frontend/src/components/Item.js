@@ -128,27 +128,26 @@ const SelectItem = styled.div`
 `;
 
 const Item = ({ selectedProduct }) => {
-  const selectedProductTest = {};
   return (
     <>
       <SelectItem>
         <SelectedItem>
           <div className="imgwrap" style={{ backgroundImage: `url(${item})` }} alt="상품 이미지" />
-          <h4>{selectedProductTest.name}</h4>
-          <p>{selectedProductTest.type}</p>
-          <p>{selectedProductTest.typeDetail}</p>
+          <h4>{selectedProduct.name}</h4>
+          <p>{selectedProduct.type}</p>
+          <p>{selectedProduct.typeDetail}</p>
           <p>성인 2</p>
           <table>
             <tr>
               <th>기본가</th>
-              <td>{selectedProductTest.price} 원</td>
+              <td>{selectedProduct.price} 원</td>
             </tr>
           </table>
           <h5>추가 인원 비용</h5>
           <table>
             <tr>
               <th>성인</th>
-              <td>{selectedProductTest.priceAdult} 원</td>
+              <td>{selectedProduct.priceAdult} 원</td>
               {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 
 
                           예약 정보 입력 페이지에서 기준 인원 초과하여 인원 추가하는 경우 
@@ -156,7 +155,7 @@ const Item = ({ selectedProduct }) => {
             </tr>
             <tr>
               <th>어린이</th>
-              <td>{selectedProductTest.priceChildren} 원</td>
+              <td>{selectedProduct.priceChildren} 원</td>
               {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 */}
             </tr>
           </table>

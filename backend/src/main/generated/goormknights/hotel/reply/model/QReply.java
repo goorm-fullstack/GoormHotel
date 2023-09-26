@@ -26,11 +26,15 @@ public class QReply extends EntityPathBase<Reply> {
 
     public final StringPath replyContent = createString("replyContent");
 
+    public final DateTimePath<java.time.LocalDateTime> replyDeleteTime = createDateTime("replyDeleteTime", java.time.LocalDateTime.class);
+
     public final NumberPath<Long> replyId = createNumber("replyId", Long.class);
 
     public final DateTimePath<java.time.LocalDateTime> replyWriteDate = createDateTime("replyWriteDate", java.time.LocalDateTime.class);
 
     public final StringPath replyWriter = createString("replyWriter");
+
+    public final ListPath<goormknights.hotel.report.model.Report, goormknights.hotel.report.model.QReport> report = this.<goormknights.hotel.report.model.Report, goormknights.hotel.report.model.QReport>createList("report", goormknights.hotel.report.model.Report.class, goormknights.hotel.report.model.QReport.class, PathInits.DIRECT2);
 
     public QReply(String variable) {
         this(Reply.class, forVariable(variable), INITS);
