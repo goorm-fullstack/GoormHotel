@@ -137,7 +137,18 @@ const BoardRead = () => {
               <td>{boardData && boardData.boardContent ? boardData.boardContent : ''}</td>
             </tr>
             <tr className="commentwrite">
-              <td></td>
+              <td>
+                <div>
+                  <form>
+                    <div>
+                      <input type="text" placeholder="작성자명" />
+                      <input type="password" placeholder="식별 비밀번호?" />
+                    </div>
+                    <textarea></textarea>
+                    <button type="submit">등록</button>
+                  </form>
+                </div>
+              </td>
             </tr>
             <tr className="commentslist">
               <td>
@@ -146,6 +157,9 @@ const BoardRead = () => {
                     <p>
                       이름이름
                       <span className="date">2023.09.01</span>
+                      <button type="button">수정</button>
+                      {/** 수정 버튼 클릭하면 상단 등록 폼으로 현재 댓글 정보가 전달 -> 상단 댓글 등록 버튼 누르면 수정사항 반영 */}
+                      <button type="button">삭제</button>
                     </p>
                     <p>댓글 내용내용</p>
                   </li>
@@ -153,6 +167,8 @@ const BoardRead = () => {
                     <p>
                       이름이름
                       <span className="date">2023.09.01</span>
+                      <button type="button">수정</button>
+                      <button type="button">삭제</button>
                     </p>
                     <p>댓글 내용내용</p>
                   </li>
@@ -160,6 +176,8 @@ const BoardRead = () => {
                     <p>
                       이름이름
                       <span className="date">2023.09.01</span>
+                      <button type="button">수정</button>
+                      <button type="button">삭제</button>
                     </p>
                     <p>댓글 내용내용</p>
                   </li>
