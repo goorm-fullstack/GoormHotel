@@ -19,7 +19,7 @@ const AdminSubScribe = () => {
     {
       id: 2,
       emailAddress: 'test2@test.com',
-      isSubScribe: '구독 정지',
+      isSubScribe: '수신거부',
     },
     {
       id: 3,

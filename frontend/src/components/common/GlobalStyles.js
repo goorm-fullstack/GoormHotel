@@ -84,7 +84,7 @@ input {
 	font-size: 15px;
 
 	&.long {
-		width: 80%;
+		width: 60%;
 	}
 }
 

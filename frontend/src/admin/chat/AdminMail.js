@@ -22,7 +22,10 @@ const AdminMail = () => {
                 <MultiCheck className="fit">
                   <input type="text" className="long" />{' '}
                   <CheckLabel>
-                    <InputCheckbox type="checkbox" /> 모든 회원
+                    <InputCheckbox type="checkbox" /> 전체 회원
+                  </CheckLabel>
+                  <CheckLabel>
+                    <InputCheckbox type="checkbox" /> 전체 구독자
                   </CheckLabel>
                 </MultiCheck>
               </td>
