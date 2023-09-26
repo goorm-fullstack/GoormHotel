@@ -21,7 +21,6 @@ import AdminDeleteComment from './board/AdminDeleteComment';
 import AdminChat from './chat/AdminChat';
 import AdminChatDetail from './chat/AdminChatDetail';
 import AdminMail from './chat/AdminMail';
-import AdminNews from './chat/AdminNews';
 import AdminIndex from './AdminIndex';
 import AdminSubScribe from './chat/AdminSubScribe';
 

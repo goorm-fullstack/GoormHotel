@@ -1,23 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
-import styled from 'styled-components';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn  } from '../../components/common/commonStyles';
 import { Link, useParams } from 'react-router-dom';
-import moment from "moment";
 import Instance from '../../utils/api/axiosInstance';
 import {
   Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
   Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
+  TableHeader
 } from '../member/AdminMember';
 import Paging from '../../components/common/Paging';
 
@@ -89,15 +78,15 @@ const AdminSubScribe = () => {
     <AdminLayout subMenus="chat">
       <Container>
         <PageTitle>채팅 관리</PageTitle>
-        <ContentHeader>
-          <Total>
+        <TableHeader>
+          <p className='total'>
             전체 <strong>{subScribeData.length}</strong> 건
-          </Total>
-          <BlackListBtn>
-            <Delete onClick={handleClosedClick}>구독 상태 변경</Delete>
-            <Add>블랙리스트 추가</Add>
-          </BlackListBtn>
-        </ContentHeader>
+          </p>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn className="header" onClick={handleClosedClick}>구독 상태 변경</NormalBtn>
+            <NormalBtn className="header red">블랙리스트 추가</NormalBtn>
+          </BtnWrapper>
+        </TableHeader>
         <Table>
           <colgroup>
             <col style={{ width: '100px' }} />
@@ -107,31 +96,31 @@ const AdminSubScribe = () => {
           </colgroup>
           <thead>
             <tr>
-              <TableCheckboxWrapper>
-                <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange}/>
-              </TableCheckboxWrapper>
-              <TableHeader>번호</TableHeader>
-              <TableHeader>이메일</TableHeader>
-              <TableHeader>구독 상태</TableHeader>
+              <th>
+                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange}/>
+              </th>
+              <th>번호</th>
+              <th>이메일</th>
+              <th>구독 상태</th>
             </tr>
           </thead>
           <tbody>
             {
               subScribeData.length === 0 ? (
-                <TableCell colSpan="7">채팅 메시지 기록이 없습니다.</TableCell>
+                <td colSpan="7">채팅 메시지 기록이 없습니다.</td>
               ) : (
                 subScribeData.map((item, index) => (
                 <tr key={item.id}>
-                  <TableCell>
-                    <TableCheckbox
+                  <td>
+                    <InputCheckbox
                       type="checkbox"
                       checked={checkedItems.includes(item.id)}
                       onChange={() => handleCheckboxChange(item.id)}
                     />
-                    </TableCell>
-                    <TableCell>{item.id}</TableCell>
-                    <TableCell className="lastChat">{item.emailAddress}</TableCell>
-                    <TableCell>{item.isSubScribe}</TableCell>
+                    </td>
+                    <td>{item.id}</td>
+                    <td className="lastChat">{item.emailAddress}</td>
+                    <td>{item.isSubScribe}</td>
                 </tr>
                 ))
               )
