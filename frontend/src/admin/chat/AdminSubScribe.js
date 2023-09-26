@@ -18,33 +18,29 @@ const AdminSubScribe = () => {
     {
       id: 1,
       emailAddress: "test1@test.com",
-      isSubScribe: 'true',
+      isSubScribe: 'Y',
     },
     {
       id: 2,
       emailAddress: "test2@test.com",
-      isSubScribe: 'true',
+      isSubScribe: 'Y',
     },
     {
       id: 3,
       emailAddress: "test3@test.com",
-      isSubScribe: 'true',
+      isSubScribe: 'Y',
     },
   ]);
 
-  // useEffect(() => {
-  //   Instance.get(`/subscribe?page=${page}`).then((response) => {
-  //     console.log(response.data);
-  //     setChatData(response.data);
-  //   });
-  // }, []);
+  useEffect(() => {
+    Instance.get(`/subscribe?page=${page}`).then((response) => {
+      setSubScribeData(response.data);
+    });
+  }, []);
 
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
-    console.log("test")
-    console.log(subScribeData.chatMessages);
-    console.log("===============================")
     if (checked) {
       const allMemberIds = subScribeData.map((item) => item.id);
       setCheckedItems(allMemberIds);
@@ -64,27 +60,25 @@ const AdminSubScribe = () => {
   };
 
   const handleClosedClick = (e) => {
-    checkedItems.map((roomId, index) => {
-      Instance.get("/chat/closed/"+roomId).then((response)=>{
-        console.log(response)
+    console.log(checkedItems)
+    checkedItems.map((id, index) => {
+      Instance.post("/subscribe/cancel/"+id).then(()=>{
         // 닫은 방을 다시 열려면 사용자가 채팅을 해야합니다. 수동으로 전환하지 마세요.
       })
     })
-    window.location.reload();
   }
 
 
   return (
     <AdminLayout subMenus="chat">
       <Container>
-        <PageTitle>채팅 관리</PageTitle>
+        <PageTitle>구독자 관리</PageTitle>
         <TableHeader>
           <p className='total'>
             전체 <strong>{subScribeData.length}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
             <NormalBtn className="header" onClick={handleClosedClick}>구독 상태 변경</NormalBtn>
-            <NormalBtn className="header red">블랙리스트 추가</NormalBtn>
           </BtnWrapper>
         </TableHeader>
         <Table>
@@ -107,7 +101,7 @@ const AdminSubScribe = () => {
           <tbody>
             {
               subScribeData.length === 0 ? (
-                <td colSpan="7">채팅 메시지 기록이 없습니다.</td>
+                <td colSpan="7">현재 구독자가 없습니다.</td>
               ) : (
                 subScribeData.map((item, index) => (
                 <tr key={item.id}>
@@ -120,7 +114,7 @@ const AdminSubScribe = () => {
                     </td>
                     <td style={{textAlign : "center"}}>{item.id}</td>
                     <td style={{textAlign : "center"}} className="lastChat">{item.emailAddress}</td>
-                    <td style={{textAlign : "center"}}>{item.isSubScribe}</td>
+                    <td style={{textAlign : "center"}}>{item.isSubscribe}</td>
                 </tr>
                 ))
               )

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class RequestSubScribe {
 
     private String emailAddress;
-    private boolean isSubscribe = true;
+    private String isSubscribe = "Y";
 
     public SubScribe toEntity() {
         return SubScribe.builder()

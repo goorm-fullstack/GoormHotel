@@ -54,7 +54,6 @@ const AdminChat = () => {
 
   useEffect(() => {
     Instance.get(`/chat/getLastMessage?page=${page}`).then((response) => {
-      console.log(response.data);
       setChatData(response.data);
     });
   }, []);
@@ -62,9 +61,6 @@ const AdminChat = () => {
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
-    console.log("test")
-    console.log(chatData.chatMessages);
-    console.log("===============================")
     if (checked) {
       const allMemberIds = chatData.map((item) => item.chatMessages[0].roomId);
       setCheckedItems(allMemberIds);
