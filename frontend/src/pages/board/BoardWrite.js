@@ -148,42 +148,44 @@ const BoardWrite = () => {
         })()}
         <div>
           <form onSubmit={handleSubmit} encType="multipart/form-data">
-            {(() => {
-              switch (board) {
-                case 'notice':
-                  return (
-                    <select name="category" value={formData.category} onChange={handleChange}>
-                      <option value="">선택</option>
-                      <option value="공지">공지</option>
-                      <option value="이벤트">이벤트</option>
-                    </select>
-                  );
-                case 'qna':
-                  return (
-                    <select name="category" value={formData.category} onChange={handleChange}>
-                      <option value="">선택</option>
-                      <option value="문의1">문의1</option>
-                      <option value="문의2">문의2</option>
-                    </select>
-                  );
-                case 'review':
-                  return (
-                    <select name="category" value={formData.category} onChange={handleChange}>
-                      <option value="">선택</option>
-                      <option value="다이닝">다이닝</option>
-                      <option value="룸">룸</option>
-                    </select>
-                  );
-                default:
-                  return <PageTitle>고객지원</PageTitle>;
-              }
-            })()}
-
             <TableWrite>
               <tr>
                 <th width="160px">제목</th>
                 <td>
                   <input type="text" className="title" name="title" value={formData.title} onChange={handleChange} required />
+                </td>
+              </tr>
+              <tr>
+                <th width="160px">분류</th>
+                <td>
+                  {(() => {
+                    switch (board) {
+                      // case 'notice': {/** 사용자 페이지에서 공지사항 작성 안함 */}
+                      //   return (
+                      //     <select name="category" value={formData.category} onChange={handleChange}>
+                      //       <option value="">선택</option>
+                      //       <option value="공지">공지</option>
+                      //       <option value="이벤트">이벤트</option>
+                      //     </select>
+                      //   );
+                      case 'qna':
+                        return (
+                          <select name="category" value={formData.category} onChange={handleChange}>
+                            <option value="문의1">문의1</option>
+                            <option value="문의2">문의2</option>
+                          </select>
+                        );
+                      case 'review':
+                        return (
+                          <select name="category" value={formData.category} onChange={handleChange}>
+                            <option value="객실">객실</option>
+                            <option value="다이닝">다이닝</option>
+                          </select>
+                        );
+                      default:
+                        return;
+                    }
+                  })()}
                 </td>
               </tr>
               <tr>
@@ -197,11 +199,6 @@ const BoardWrite = () => {
                   <TextEditor name="boardContent" value={formData.boardContent} onChange={handleChange} required />
                 </td>
               </tr>
-              {/*<tr className="contents">*/}
-              {/*  <td colSpan="2">*/}
-              {/*    <textarea name="boardContent" value={formData.boardContent} onChange={handleChange} required>에디터 연결? 일단은 textarea입니다.</textarea>*/}
-              {/*  </td>*/}
-              {/*</tr>*/}
               <tr>
                 <th>첨부파일</th>
                 <td>
@@ -217,7 +214,7 @@ const BoardWrite = () => {
               {/*</tr>*/}
             </TableWrite>
             <BtnWrapper className="center double mt40">
-              <SubmitBtn type="submit">등록하기</SubmitBtn>
+              <SubmitBtn type="submit">작성하기</SubmitBtn>
               <LinkBtn onClick={() => navigate(-1)}>취소</LinkBtn>
             </BtnWrapper>
           </form>
