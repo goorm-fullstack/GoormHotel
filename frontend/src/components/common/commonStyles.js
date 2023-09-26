@@ -377,7 +377,7 @@ export const commonTable = styled.table`
 
   th {
     border-top: 1px solid ${(props) => props.theme.colors.charcoal};
-    border-bottom: 1px solid ${(props) => props.theme.colors.grayborder};
+    border-bottom: 1px solid ${(props) => props.theme.colors.graylightborder};
     font-weight: 500;
     background: ${(props) => props.theme.colors.graybg};
     color: ${(props) => props.theme.colors.charcoal};
@@ -424,6 +424,10 @@ export const commonTable = styled.table`
     }
     tr:first-child td {
       border-top-color: ${(props) => props.theme.colors.charcoal};
+    }
+    tr.conbtm th,
+    tr.conbtm td {
+      border-top-color: ${(props) => props.theme.colors.graylightborder};
     }
     td {
       padding-top: 9px;
@@ -480,5 +484,16 @@ export const commonTable = styled.table`
 
   button {
     background-color: transparent;
+  }
+
+  &.userpage {
+    th,
+    td {
+      padding: 19px 12px;
+
+      a {
+        text-decoration: none;
+      }
+    }
   }
 `;

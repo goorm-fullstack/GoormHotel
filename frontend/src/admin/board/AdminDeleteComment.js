@@ -52,13 +52,15 @@ const AdminDeleteComment = () => {
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [board, setBoard] = useState([]);
   useEffect(() => {
-    axios.get('/boards/deleted').then((response) => {
-      setBoard(response.data);
-      console.log('get 성공');
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+    axios
+      .get('/boards/deleted')
+      .then((response) => {
+        setBoard(response.data);
+        console.log('get 성공');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   let writeDate;
@@ -139,7 +141,7 @@ const AdminDeleteComment = () => {
               <th>번호</th>
               <th>게시판</th>
               <th>삭제된 글</th>
-              <th>작성자 명(회원 Id)</th>
+              <th>작성자 명(회원 ID)</th> {/** 회원 ID의 ID는 대문자로 통일합시다. */}
               <th>삭제일</th>
             </tr>
           </thead>

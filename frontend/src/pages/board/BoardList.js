@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { useParams } from 'react-router-dom'; // Remove duplicate import
-import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn } from '../../components/common/commonStyles';
+import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn, commonTable } from '../../components/common/commonStyles';
 import SubHeader from '../../components/layout/SubHeader';
 import Paging from '../../components/common/Paging';
 import axios from 'axios';
 import Instance from '../../utils/api/axiosInstance';
+import Search from '../../components/common/Search';
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -80,7 +81,7 @@ const BoardGallery = styled.ul`
       object-fit: cover;
     }
   }
-  
+
   li .writer {
     margin: 6px 0 2px;
   }
@@ -89,13 +90,14 @@ const BoardGallery = styled.ul`
     font-size: ${(props) => props.theme.font.sizexs};
     color: ${(props) => props.theme.colors.graylight};
   }
-
 `;
 
 const WriteBtnWrapper = styled(BtnWrapper)`
   margin-top: -70px;
   margin-bottom: 20px;
 `;
+
+const Table = styled(commonTable)``;
 
 const CustomerSupport = () => {
   const board = useParams().board;
@@ -113,12 +115,14 @@ const CustomerSupport = () => {
       boardTitle = '이용후기';
     }
     if (boardTitle !== '') {
-      axios.get(`/boards/find/boardTitle/${boardTitle}`).then((response) => {
-        setBoard(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      axios
+        .get(`/boards/find/boardTitle/${boardTitle}`)
+        .then((response) => {
+          setBoard(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
 
       setImageUrl([]);
     }
@@ -127,20 +131,20 @@ const CustomerSupport = () => {
   useEffect(() => {
     boards.map((board) => {
       GetImageUrl(board.boardId);
-    })
-  }, [boards])
+    });
+  }, [boards]);
 
   const GetImageUrl = (boardId) => {
     Instance.get(`/boards/image/${boardId}`, {
-      responseType: 'arraybuffer'
+      responseType: 'arraybuffer',
     }).then((response) => {
       const blob = new Blob([response.data], {
-        type: response.headers['content-type']
+        type: response.headers['content-type'],
       });
       let image = { boardId: boardId, imageUrl: URL.createObjectURL(blob) };
       setImageUrl((prevImages) => [...prevImages, image]);
     });
-  }
+  };
 
   console.log(imageUrl);
 
@@ -211,7 +215,13 @@ const CustomerSupport = () => {
                         );
                       } else {
                             return (
-                                <BoardList>
+                                <Table className="userPage">
+                                    <colgroup>
+                                        <col width="110px" />
+                                        <col width="180px" />
+                                        <col width="auto" />
+                                        <col width="180px" />
+                                    </colgroup>
                                     <thead>
                                     <tr>
                                         <th width="110px">번호</th>
@@ -225,15 +235,18 @@ const CustomerSupport = () => {
                                     {boards.map((item, index) => (
                                         <tr key={item.boardId}>
                                           <td className="center">{index + 1}</td>
-                                          <td>
-                                            <a href={`/board/${item.boardTitle}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
-                                          </td>
+                                            <td>{/* 카테고리 분류 위치 */}</td>
+                                            <td>
+                                                <IsReply>답글</IsReply>
+                                                {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
+                                                <a href={`/board/${item.boardTitle}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
+                                            </td>
                                           <td className="center">{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</td>
                                         </tr>
                                     ))}
                                     {/** // loop */}
                                     </tbody>
-                                </BoardList>
+                                </Table>
                             );
                         }
                     })()}

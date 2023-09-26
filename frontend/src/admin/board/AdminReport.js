@@ -137,7 +137,7 @@ const AdminReport = () => {
             전체 <strong>{report.length}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
-            <NormalBtn className="header">신고 확인 완료</NormalBtn>
+            <NormalBtn className="header">확인(이상 없음)</NormalBtn>
             <NormalBtn className="header red">블랙리스트 추가</NormalBtn>
           </BtnWrapper>
         </TableHeader>
