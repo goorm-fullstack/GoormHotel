@@ -5,6 +5,7 @@ import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn, SubmitBtn } from 
 import SubHeader from '../../components/layout/SubHeader';
 import axios from "axios";
 import {Image} from "../../components/WriteFormRoom";
+import TextEditor from '../../components/common/TextEditor';
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -191,10 +192,15 @@ const BoardWrite = () => {
                 </td>
               </tr>
               <tr className="contents">
-                <td colSpan="2">
-                  <textarea name="boardContent" value={formData.boardContent} onChange={handleChange} required>에디터 연결? 일단은 textarea입니다.</textarea>
+                <td colSpan="2" className="writeWrapper">
+                  <TextEditor name="boardContent" value={formData.boardContent} onChange={handleChange} required/>
                 </td>
               </tr>
+              {/*<tr className="contents">*/}
+              {/*  <td colSpan="2">*/}
+              {/*    <textarea name="boardContent" value={formData.boardContent} onChange={handleChange} required>에디터 연결? 일단은 textarea입니다.</textarea>*/}
+              {/*  </td>*/}
+              {/*</tr>*/}
               <tr>
                 <th>첨부파일</th>
                 <td>

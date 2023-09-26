@@ -69,9 +69,18 @@ const BoardGallery = styled.ul`
 
   li .thumbnail {
     background: ${(props) => props.theme.colors.graybg};
-    min-height: 240px;
+    height: 240px;
     margin-bottom: 16px;
+
+    img {
+      min-width: 100%;
+      max-width: 100%;
+      min-height: 100%;
+      max-height: 100%;
+      object-fit: cover;
+    }
   }
+  
   li .writer {
     margin: 6px 0 2px;
   }

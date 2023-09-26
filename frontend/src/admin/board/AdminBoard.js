@@ -61,6 +61,14 @@ const AdminBoard = () => {
     setSelectAllChecked(updatedCheckedItems.length === board.length);
   };
 
+  const ReportBoard = (id) => {
+
+  }
+
+  const DeleteBoard = (id) => {
+
+  }
+
   return (
     <AdminLayout subMenus="board">
       <Container>
@@ -70,8 +78,8 @@ const AdminBoard = () => {
             전체 <strong>{board.length}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
-            <NormalBtn className="header">신고된 글로 이동</NormalBtn>
-            <NormalBtn className="header red">삭제</NormalBtn>
+            <NormalBtn className="header" onClick={ReportBoard}>신고된 글로 이동</NormalBtn>
+            <NormalBtn className="header red" onClick={DeleteBoard}>삭제</NormalBtn>
           </BtnWrapper>
         </TableHeader>
         <Table>
