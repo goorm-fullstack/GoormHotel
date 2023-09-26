@@ -118,7 +118,7 @@ const BoardWrite = () => {
             'Content-Type': 'multipart/form-data',
           },
         });
-        window.location.href = `/board/${board}`;
+        window.location.href = `/board/${board}/1`;
       } catch (e) {
         console.error('Error: ', e.message);
         if (e.response.data.message.startsWith('Validation failed')) {

@@ -186,6 +186,7 @@ const CustomerSupport = () => {
                         return (
                           <BoardGallery>
                               {/** loop */}
+                              {boards.length === 0 && <td colSpan="7" className='center'>등록된 게시글이 없습니다.</td>}
                               {boards.map((item) => (
                                 <li key={item.boardId}>
                                   <div className="thumbnail">
@@ -219,7 +220,7 @@ const CustomerSupport = () => {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {boards.length === 0 && <td colSpan="7">등록된 게시글이 없습니다.</td>}
+                                    {boards.length === 0 && <td colSpan="7" className='center'>등록된 게시글이 없습니다.</td>}
                                     {/** loop */}
                                     {boards.map((item, index) => (
                                         <tr key={item.boardId}>

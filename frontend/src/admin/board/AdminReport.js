@@ -158,13 +158,13 @@ const AdminReport = () => {
           </thead>
           <tbody>
             {report.length === 0 && (
-              <td colSpan="8" className="center empty">
+              <td colSpan="8" className="center empty" className='center'>
                 신고된 글이 없습니다.
               </td>
             )}
             {report.map((report) => (
               <tr key={report.reportId}>
-                <td>
+                <td className='center'>
                   <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(report.reportId)}
@@ -173,8 +173,8 @@ const AdminReport = () => {
                     // onChange={() => handleCheckboxChange(item.memberId)}
                   />
                 </td>
-                <td>{report.reportId}</td>
-                <td>
+                <td className='center'>{report.reportId}</td>
+                <td className='center'>
                   {report.replyId != null ? (
                     <LinkStyle>{report.replyContent}</LinkStyle>
                   ) : report.boardId != null ? (
@@ -183,15 +183,15 @@ const AdminReport = () => {
                     report.reportContent
                   )}
                 </td>
-                <td>
+                <td className='center'>
                   {report.reportWriter}
                   {/*<LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>*/}
                 </td>
-                <td>{report.reportReason}</td>
-                <td>{`${report.reportDate[0]}-${report.reportDate[1] < 10 ? '0' : ''}${report.reportDate[1]}-${report.reportDate[2] < 10 ? '0' : ''}${
+                <td className='center'>{report.reportReason}</td>
+                <td className='center'>{`${report.reportDate[0]}.${report.reportDate[1] < 10 ? '0' : ''}${report.reportDate[1]}.${report.reportDate[2] < 10 ? '0' : ''}${
                   report.reportDate[2]
                 }`}</td>
-                <td>{report.reportResult}</td>
+                <td className='center'>{report.reportResult}</td>
                 {/*{(() => {*/}
                 {/*  switch (report.reportCheck) {*/}
                 {/*    case 'false':*/}
@@ -205,11 +205,11 @@ const AdminReport = () => {
                 {(() => {
                   switch (report.reportResult) {
                     case 'false':
-                      return <td>N</td>;
+                      return <td className='center'>N</td>;
                     case 'true':
-                      return <td>Y</td>;
+                      return <td className='center'>Y</td>;
                     default:
-                      return <td>N</td>;
+                      return <td className='center'>N</td>;
                   }
                 })()}
               </tr>

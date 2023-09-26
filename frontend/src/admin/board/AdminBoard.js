@@ -61,13 +61,34 @@ const AdminBoard = () => {
     setSelectAllChecked(updatedCheckedItems.length === board.length);
   };
 
-  const ReportBoard = (id) => {
+  const DeleteBoard = () => {
+    checkedItems.forEach((boardId) => {
+      axios.put(`/boards/softdelete/${boardId}`)
+      .then((response) => {
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+    });
+  };
 
-  }
-
-  const DeleteBoard = (id) => {
-
-  }
+  const ReportBoard = () => {
+    checkedItems.forEach((boardId) => {
+      const data = {
+        boardId: boardId,
+        reportWriter: "관리자",
+        reportReason: "관리자 임의 배정",
+      };
+      axios.post(`/report/writeform`, data)
+      .then((response) => {
+        window.location.reload();
+      })
+      .catch( (error) => {
+        console.error(error.message);
+      });
+    });
+  };
 
   return (
     <AdminLayout subMenus="board">
@@ -97,7 +118,7 @@ const AdminBoard = () => {
             </tr>
           </thead>
           <tbody>
-            {board.length === 0 && <td colSpan="7">등록된 게시글이 없습니다.</td>}
+            {board.length === 0 && <td colSpan="7" className='center'>등록된 게시글이 없습니다.</td>}
             {board.map((board, idx) => (
               <tr key={board.boardId}>
                 <td className='center'>

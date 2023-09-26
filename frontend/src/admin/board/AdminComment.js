@@ -239,32 +239,32 @@ const AdminComment = () => {
             </tr>
           </thead>
           <tbody>
-            {reply.length === 0 && <td colSpan="7">등록된 댓글이 없습니다.</td>}
+            {reply.length === 0 && <td colSpan="7" className='center'>등록된 댓글이 없습니다.</td>}
             {reply.map((reply, idx) => (
               <tr key={reply.replyId}>
-                <td>
+                <td className='center'>
                   <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(reply.replyId)}
                     onChange={() => handleCheckboxChange(reply.replyId)}
                   />
                 </td>
-                <td>{idx + 1}</td>
-                <td>{reply.boardTitle}</td>
-                <td>
+                <td className='center'>{idx + 1}</td>
+                <td className='center'>{reply.boardTitle}</td>
+                <td className='center'>
                   <LinkStyle to={`/board/${reply.boardId}/detail`}>{reply.title}</LinkStyle>
                 </td>
-                <td>
+                <td className='center'>
                   <CommentText>{truncateString(reply.replyContent, 8)}</CommentText>
                   <ModalContainer>
                     <ModalContent>{reply.replyContent}</ModalContent>
                   </ModalContainer>
                 </td>
-                <td>
+                <td className='center'>
                   {reply.replyWriter}
                   {/*<LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>*/}
                 </td>
-                <td>{`${reply.replyWriteDate[0]}-${reply.replyWriteDate[1] < 10 ? '0' : ''}${reply.replyWriteDate[1]}-${
+                <td className='center'>{`${reply.replyWriteDate[0]}.${reply.replyWriteDate[1] < 10 ? '0' : ''}${reply.replyWriteDate[1]}.${
                   reply.replyWriteDate[2] < 10 ? '0' : ''
                 }${reply.replyWriteDate[2]}`}</td>
               </tr>

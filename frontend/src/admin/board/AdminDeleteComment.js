@@ -151,23 +151,23 @@ const AdminDeleteComment = () => {
             )}
             {board.map((board) => (
               <tr key={board.boardId}>
-                <td>
+                <td className='center'>
                   <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(board.boardId)}
                     onChange={() => handleCheckboxChange(board.boardId)}
                   />
                 </td>
-                <td>{board.boardId}</td>
-                <td>{`${board.boardTitle}`}</td>
-                <td>
+                <td className='center'>{board.boardId}</td>
+                <td className='center'>{`${board.boardTitle}`}</td>
+                <td className='center'>
                   <LinkStyle to={`/admin/member/${board.boardContent}`}>{board.boardContent}</LinkStyle>
                 </td>
-                <td>
+                <td className='center'>
                   {board.boardWriter}
                   <LinkStyle to={`/admin/member/${board.boardWriter}`}>({board.boardWriter})</LinkStyle>
                 </td>
-                <td>{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
+                <td className='center'>{`${board.boardWriteDate[0]}.${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}.${
                   board.boardWriteDate[2] < 10 ? '0' : ''
                 }${board.boardWriteDate[2]}`}</td>
               </tr>

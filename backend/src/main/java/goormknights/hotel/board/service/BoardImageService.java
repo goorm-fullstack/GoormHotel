@@ -36,10 +36,11 @@ public class BoardImageService {
         int sec = localDateTime.getSecond();
         int mil = localDateTime.get(ChronoField.MILLI_OF_SECOND);
 
-        String absolutePath = "D:\\동규\\boardImageTest";      //파일을 저장할 경로 지정
+        String absolutePath = new File("").getAbsolutePath() + "\\";      //파일을 저장할 경로 지정
         String newFileName = "img" + hour+min+sec+mil;
         String fileExtension = '.' + boardImage.getOriginalFilename().replaceAll("^.*\\\\.(.*)$", "$1");
         String path = "images\\" + year + "\\" + month + "\\" + day;
+        System.out.println("저장 경로: " + absolutePath);
 
         File file = new File(absolutePath);
         if (!file.exists()) file.mkdirs();
