@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
 import {
   Container,
   ContentHeader,
@@ -19,14 +19,6 @@ import {
 } from '../member/AdminMember';
 import Paging from '../../components/common/Paging';
 import axios from 'axios';
-
-const TableHeaderStyle = styled(TableHeader)`
-  width: 20%;
-`;
-
-const WriterTableHeader = styled(TableHeader)`
-  width: 15%;
-`;
 
 const LinkStyle = styled(Link)`
   &:hover {
@@ -68,7 +60,7 @@ const AdminDeleteComment = () => {
 
   let writeDate;
   board.map((Item) => {
-    writeDate = Item.boardWriteDate[0] + "-" + Item.boardWriteDate[1] + "-" + Item.boardWriteDate[2];
+    writeDate = Item.boardWriteDate[0] + '-' + Item.boardWriteDate[1] + '-' + Item.boardWriteDate[2];
   });
 
   const handleSelectAllChange = (e) => {
@@ -92,77 +84,85 @@ const AdminDeleteComment = () => {
 
   const unDeleteBtnClick = () => {
     checkedItems.forEach((boardId) => {
-      axios.put(`/boards/undelete/${boardId}`)
-          .then((response) => {
-            console.log(`${boardId} 복원 성공`);
-            window.location.reload();
-          })
-          .catch((error) => {
-            console.log(error.message);
-          })
-    })
-  }
+      axios
+        .put(`/boards/undelete/${boardId}`)
+        .then((response) => {
+          console.log(`${boardId} 복원 성공`);
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    });
+  };
 
   const realDeleteBtnClick = () => {
     checkedItems.forEach((boardId) => {
-      axios.delete(`/boards/${boardId}`)
-          .then((response) => {
-            console.log(`${boardId} 삭제 성공`);
-            window.location.reload();
-          })
-          .catch((error) => {
-            console.log(error.message);
-          })
-    })
-  }
+      axios
+        .delete(`/boards/${boardId}`)
+        .then((response) => {
+          console.log(`${boardId} 삭제 성공`);
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    });
+  };
 
   return (
     <AdminLayout subMenus="board">
       <Container>
         <PageTitle>삭제된 글 관리</PageTitle>
-        <ContentHeader>
-          <Total>
-            전체 <Num>{board.length}</Num> 건
-          </Total>
-          <BlackListBtn>
-            <Delete onClick={unDeleteBtnClick}>복원</Delete>
-            <Add onClick={realDeleteBtnClick}>영구삭제</Add>
-          </BlackListBtn>
-        </ContentHeader>
+        <TableHeader>
+          <p className="total">
+            전체 <strong>{board.length}</strong> 건
+          </p>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn type="button" className="header" onClick={unDeleteBtnClick}>
+              복원
+            </NormalBtn>
+            <NormalBtn type="button" className="header red" onClick={realDeleteBtnClick}>
+              영구삭제
+            </NormalBtn>
+          </BtnWrapper>
+        </TableHeader>
         <Table>
           <thead>
             <tr>
-              <TableCheckboxWrapper>
-                <TableCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
-              </TableCheckboxWrapper>
-              <TableHeader>No.</TableHeader>
-              <TableHeader>게시판</TableHeader>
-              <TableHeaderStyle>삭제된 글</TableHeaderStyle>
-              <WriterTableHeader>작성자 명(회원 Id)</WriterTableHeader>
-              <TableHeader>삭제일</TableHeader>
+              <th>
+                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
+              </th>
+              <th>번호</th>
+              <th>게시판</th>
+              <th>삭제된 글</th>
+              <th>작성자 명(회원 Id)</th>
+              <th>삭제일</th>
             </tr>
           </thead>
           <tbody>
-            {board.length === 0 && <TableCell colSpan="7">등록된 회원이 없습니다.</TableCell>}
+            {board.length === 0 && <td colSpan="6">등록된 글이 없습니다.</td>}
             {board.map((board) => (
               <tr key={board.boardId}>
-                <TableCell>
-                  <TableCheckbox
+                <td>
+                  <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(board.boardId)}
                     onChange={() => handleCheckboxChange(board.boardId)}
                   />
-                </TableCell>
-                <TableCell>{board.boardId}</TableCell>
-                <TableCell>{`${board.boardTitle}`}</TableCell>
-                <TableCell>
+                </td>
+                <td>{board.boardId}</td>
+                <td>{`${board.boardTitle}`}</td>
+                <td>
                   <LinkStyle to={`/admin/member/${board.boardContent}`}>{board.boardContent}</LinkStyle>
-                </TableCell>
-                <TableCell>
+                </td>
+                <td>
                   {board.boardWriter}
                   <LinkStyle to={`/admin/member/${board.boardWriter}`}>({board.boardWriter})</LinkStyle>
-                </TableCell>
-                <TableCell>{`${board.boardWriteDate[0]}-${(board.boardWriteDate[1] < 10 ? '0' : '')}${board.boardWriteDate[1]}-${(board.boardWriteDate[2] < 10 ? '0' : '')}${board.boardWriteDate[2]}`}</TableCell>
+                </td>
+                <td>{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
+                  board.boardWriteDate[2] < 10 ? '0' : ''
+                }${board.boardWriteDate[2]}`}</td>
               </tr>
             ))}
           </tbody>

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { BtnWrapper, SubmitBtn, PageTitle, InputCheckbox, commonContainerStyle, LinkBtn, CheckLabel } from '../../components/common/commonStyles';
 import kakao from '../../images/icon/ico_kakao.png';
 import naver from '../../images/icon/ico_naver.png';
@@ -45,7 +45,7 @@ const Input = styled.input`
   height: 50px;
   padding-left: 18px;
 
-  &.password {
+  &.second {
     margin-top: 10px;
   }
 `;
@@ -92,10 +92,16 @@ const SecondText = styled.p`
 `;
 
 const Login = () => {
-  const [isMemberActive, setIsMemberActive] = useState(true);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search); 
+  const isReservation = queryParams.get('type') === 'reservation';
+
+  const [isMemberActive, setIsMemberActive] = useState(!isReservation);
   const [memberId, setMemberId] = useState('');
   const [memberPassword, setPassword] = useState('');
-  const [rememberId, setRememberId] = useState(false);
+  const [reservationNumber, setReservationNumber] = useState('');
+  const [contactNumber, setContactNumber] = useState('');
+  const [rememberId, setRememberId] = useState(false); //아이디 기억하기 상태
 
   const handleIdChange = (e) => {
     setMemberId(e.target.value);
@@ -103,6 +109,14 @@ const Login = () => {
 
   const handlePwChange = (e) => {
     setPassword(e.target.value);
+  };
+
+  const handleReservationNumberChange = (e) => {
+    setReservationNumber(e.target.value);
+  };
+
+  const handleContactNumberChange = (e) => {
+    setContactNumber(e.target.value);
   };
 
   const handleMemberClick = () => {
@@ -117,7 +131,12 @@ const Login = () => {
     setRememberId(!rememberId);
   };
 
-  console.log(rememberId);
+  useEffect(() => {
+    if (isReservation) {
+      setIsMemberActive(false);
+    }
+  }, [isReservation]);
+
 
   return (
     <>
@@ -133,22 +152,32 @@ const Login = () => {
                 비회원(예약확인)
               </NonMemberBtn>
             </ButtonWrapper>
-            <div>
+            {isMemberActive ? (
               <form id="memberLogin">
-                <Input placeholder="아이디" value={memberId} onChange={handleIdChange} />
-                <Input className="password" placeholder="비밀번호" value={memberPassword} onChange={handlePwChange} />
+                  <Input placeholder="아이디" value={memberId} onChange={handleIdChange} />
+                  <Input className="second" placeholder="비밀번호" value={memberPassword} onChange={handlePwChange} />                
+                    <BtnWrapper className="mt20 full">
+                      <SubmitBtn type="submit">로그인</SubmitBtn>
+                    </BtnWrapper>
+              </form>
+            ) : (
+              <form>
+                <Input placeholder="예약번호" value={reservationNumber} onChange={handleReservationNumberChange}/>
+                <Input className="second" placeholder="연락처" value={contactNumber} onChange={handleContactNumberChange}/>
                 <BtnWrapper className="mt20 full">
-                  <SubmitBtn type="submit">로그인</SubmitBtn>
+                  <SubmitBtn type="submit">예약 확인</SubmitBtn>
                 </BtnWrapper>
               </form>
-            </div>
-            <RememberAndFind>
-              <CheckLabel for="rememberId">
-                <InputCheckbox type="checkbox" id="rememberId" checked={rememberId} onChange={handleRememberIdChange} />
-                아이디 기억하기
-              </CheckLabel>
-              <Link to="/findidpw">아이디/비밀번호 찾기</Link>
-            </RememberAndFind>
+            )}
+            {isMemberActive && (
+              <RememberAndFind>
+                <CheckLabel for="rememberId">
+                  <InputCheckbox type="checkbox" id="rememberId" checked={rememberId} onChange={handleRememberIdChange} />
+                  아이디 기억하기
+                </CheckLabel>
+                <Link to="/findAccount">아이디/비밀번호 찾기</Link>
+              </RememberAndFind>
+            )}
             <AuthWrapper>
               <button type="button">
                 <img src={google} alt="authImg" />

@@ -54,7 +54,7 @@ const AllMember = styled.input`
   }
 `;
 
-const AdminMail = () => {
+const AdminBoardWrite = () => {
   const { memberId } = useParams();
 
   return (
@@ -110,4 +110,4 @@ const AdminMail = () => {
   );
 };
 
-export default AdminMail;
+export default AdminBoardWrite;

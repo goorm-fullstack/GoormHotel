@@ -84,7 +84,7 @@ const FloatingBtn = styled.button`
 function App() {
   const [showChat, setShowChat] = useState(false);
   const [showFloatingButtons, setShowFloatingButtons] = useState(false);
-
+  
   const openChat = () => {
     setShowChat(!showChat);
   };

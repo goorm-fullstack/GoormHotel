@@ -155,8 +155,23 @@ export const commonLinkBtn = styled(Link)`
     height: 60px;
     line-height: 58px;
   }
+
   &.shadow {
     box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  &.mini {
+    width: 80px;
+    height: 32px;
+    line-height: 30px;
+    font-size: ${(props) => props.theme.font.sizexs};
+  }
+
+  &.header {
+    width: 140px;
+    height: 40px;
+    line-height: 40px;
+    font-size: ${(props) => props.theme.font.sizexs};
   }
 `;
 
@@ -172,8 +187,27 @@ export const commonButton = styled.button`
     height: 60px;
     line-height: 60px;
   }
+
   &.shadow {
     box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  &.mini {
+    width: 80px;
+    height: 32px;
+    line-height: 30px;
+    font-size: ${(props) => props.theme.font.sizexs};
+  }
+
+  &.header {
+    width: 140px;
+    height: 40px;
+    line-height: 40px;
+    font-size: ${(props) => props.theme.font.sizexs};
+  }
+
+  &.search {
+    width: 80px !important;
   }
 `;
 
@@ -207,11 +241,34 @@ export const NormalBtn = styled(commonButton)`
     color: ${(props) => props.theme.colors.goldhover};
   }
 
-  &.mini {
-    width: 80px;
-    height: 32px;
-    line-height: 30px;
-    font-size: ${(props) => props.theme.font.sizexs};
+  &.red {
+    border-color: ${(props) => props.theme.colors.red};
+    color: ${(props) => props.theme.colors.red};
+  }
+
+  &.header {
+    line-height: 38px;
+  }
+`;
+
+export const NormalLinkBtn = styled(commonLinkBtn)`
+  background: white;
+  border: 1px solid ${(props) => props.theme.colors.grayborder};
+  color: ${(props) => props.theme.colors.graylight};
+  line-height: 40px;
+
+  &:hover {
+    border-color: ${(props) => props.theme.colors.gold};
+    color: ${(props) => props.theme.colors.goldhover};
+  }
+
+  &.red {
+    border-color: ${(props) => props.theme.colors.red};
+    color: ${(props) => props.theme.colors.red};
+  }
+
+  &.header {
+    line-height: 38px;
   }
 `;
 
@@ -221,6 +278,11 @@ export const SubmitBtn = styled(commonButton)`
 
   &:hover {
     background-color: ${(props) => props.theme.colors.goldhover};
+  }
+
+  &.header {
+    width: 200px;
+    font-size: ${(props) => props.theme.font.sizes};
   }
 `;
 
@@ -295,5 +357,104 @@ export const AuthBtn = styled(commonButton)`
   &:hover {
     background-color: ${(props) => props.theme.colors.charcoal};
     color: white;
+  }
+`;
+
+export const MultiCheck = styled.div`
+  display: flex;
+  column-gap: 16px;
+  align-items: center;
+  padding: 9px 0;
+`;
+
+export const commonTable = styled.table`
+  width: 100%;
+  border-bottom: 1px solid ${(props) => props.theme.colors.charcoal};
+
+  th {
+    border-top: 1px solid ${(props) => props.theme.colors.charcoal};
+    border-bottom: 1px solid ${(props) => props.theme.colors.grayborder};
+    font-weight: 500;
+    background: ${(props) => props.theme.colors.graybg};
+    color: ${(props) => props.theme.colors.charcoal};
+  }
+  th,
+  td {
+    padding: 16.5px 12px;
+  }
+  td {
+    border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
+    color: ${(props) => props.theme.colors.blacklight};
+
+    input[type='text'],
+    input[type='password'],
+    input[type='email'],
+    input[type='tel'],
+    input[type='date'],
+    select {
+      height: 36px;
+      min-width: 240px;
+      padding-left: 12px;
+    }
+
+    select {
+      background-position: 96% center;
+    }
+
+    &.empty {
+      padding: 19px 12px;
+    }
+  }
+  td.center {
+    text-align: center;
+  }
+  tr:hover th,
+  tr:hover td {
+    background-color: ${(props) => props.theme.colors.graybg};
+  }
+
+  &.horizontal {
+    tr:last-child th {
+      border-bottom-color: ${(props) => props.theme.colors.charcoal};
+    }
+    tr:first-child td {
+      border-top-color: ${(props) => props.theme.colors.charcoal};
+    }
+    td {
+      padding-top: 9px;
+      padding-bottom: 9px;
+    }
+    th {
+      text-align: center;
+      vertical-align: middle;
+    }
+    tr:hover td {
+      background-color: white;
+    }
+  }
+
+  .textover {
+    width: 100%;
+    max-width: 250px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .mailcheck {
+    font-size: ${(props) => props.theme.font.sizexs};
+    color: ${(props) => props.theme.colors.graydark};
+    padding-left: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  a,
+  button {
+    text-decoration: underline;
+    font-size: ${(props) => props.theme.font.sizes};
+  }
+
+  button {
+    background-color: transparent;
   }
 `;

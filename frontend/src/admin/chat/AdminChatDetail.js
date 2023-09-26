@@ -1,10 +1,23 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { useNavigate, useParams } from 'react-router-dom';
-import { PageTitle } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
+import {
+  Container,
+  ContentHeader,
+  Total,
+  BlackListBtn,
+  Delete,
+  Add,
+  Table,
+  TableCheckboxWrapper,
+  TableHeader,
+  TableCell,
+  TableCheckbox,
+  Num,
+} from '../member/AdminMember';
 import styled from 'styled-components';
 import Instance from '../../utils/api/axiosInstance';
-import { Container } from '../member/AdminMember';
 
 const InfoContainer = styled.table`
   width: 100%;
@@ -169,29 +182,29 @@ const AdminChatDetail = () => {
   const settingWebSocket = (roomId1) => {
     // 이전 상태(prevRoomId)를 이용하여 새로운 상태를 반환
     if (!ws.current) {
-     ws.current = new WebSocket(webSocketURL);
-     ws.current.onopen = () => {
-       setSocketConnected(true);
-       console.log("WebSocket connected");
+      ws.current = new WebSocket(webSocketURL);
+      ws.current.onopen = () => {
+        setSocketConnected(true);
+        console.log('WebSocket connected');
 
-       // WebSocket 연결이 성공하면 ENTER 메시지 전송
-       ws.current.send(
-         JSON.stringify({
-           type: "ENTER",
-           roomId: roomId1, // 이전 상태를 사용
-           sender: "admin",
-           message: "입장",
-         })
-       );
-     };
-     ws.current.onclose = (error) => {
-       console.log("disconnect from " + webSocketURL);
-       console.log(error);
-     };
-     ws.current.onerror = (error) => {
-       console.log("connection error " + webSocketURL);
-       console.log(error);
-     };
+        // WebSocket 연결이 성공하면 ENTER 메시지 전송
+        ws.current.send(
+          JSON.stringify({
+            type: 'ENTER',
+            roomId: roomId1, // 이전 상태를 사용
+            sender: 'admin',
+            message: '입장',
+          })
+        );
+      };
+      ws.current.onclose = (error) => {
+        console.log('disconnect from ' + webSocketURL);
+        console.log(error);
+      };
+      ws.current.onerror = (error) => {
+        console.log('connection error ' + webSocketURL);
+        console.log(error);
+      };
 
      // 메시지 핸들러 설정
      ws.current.onmessage = (event) => {
