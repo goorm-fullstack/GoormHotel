@@ -97,7 +97,7 @@ const AdminBoard = () => {
             </tr>
           </thead>
           <tbody>
-            {board.length === 0 && <td colSpan="7">등록된 회원이 없습니다.</td>}
+            {board.length === 0 && <td colSpan="7">등록된 게시글이 없습니다.</td>}
             {board.map((board, idx) => (
               <tr key={board.boardId}>
                 <td className='center'>
