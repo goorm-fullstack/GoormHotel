@@ -11,6 +11,7 @@ const DateButton = styled(CheckBtn)`
   font-size: ${(props) => props.theme.font.sizes};
   height: 40px;
   line-height: 40px;
+  text-decoration: none !important;
 `;
 
 const DateBtn = () => {
@@ -40,6 +41,7 @@ const DateBtn = () => {
     // 현재 날짜보다 이전인 경우에만 true를 반환
     return moment(date).isBefore(moment(), 'day');
   };
+
   return (
     <>
       <DateButton onClick={handleSelectDateToggle}>
