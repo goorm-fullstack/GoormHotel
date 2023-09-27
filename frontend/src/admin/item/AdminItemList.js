@@ -7,6 +7,7 @@ import axios from 'axios';
 import { Container, Table, TableHeader } from '../member/AdminMember';
 import Paging from '../../components/common/Paging';
 import Search from '../../components/common/Search';
+import { numberWithCommas } from '../../utils/function/comma';
 
 // 카테고리 셀렉트
 export const Select = styled.select`
@@ -159,11 +160,6 @@ const AdminItemList = () => {
     fetchImageUrls();
   }, [items]);
 
-  // 숫자 포맷
-  const addComma = (number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  };
-
   return (
     <AdminLayout subMenus="item">
       <Container>
@@ -244,7 +240,7 @@ const AdminItemList = () => {
                   </td>
                   <td>{item.type}</td>
                   <td>{item.typeDetail}</td>
-                  <td>{addComma(item.price)}</td>
+                  <td>{numberWithCommas(item.price)}</td>
                   <td>{item.spare}</td>
                 </tr>
               );
