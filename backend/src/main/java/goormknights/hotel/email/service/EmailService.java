@@ -2,6 +2,7 @@ package goormknights.hotel.email.service;
 
 import goormknights.hotel.auth.service.RedisUtil;
 import goormknights.hotel.email.model.EmailMessage;
+import goormknights.hotel.email.model.MultipleEmail;
 import goormknights.hotel.email.repository.EmailSender;
 import goormknights.hotel.member.service.VerificationService;
 import jakarta.mail.MessagingException;
@@ -60,6 +61,30 @@ public class EmailService implements EmailSender {
         }
         javaMailSender.send(message);
     }
+
+    // JSON을 통해 메일 내용을 오브젝트로 받아와서 사용하는 경우에 사용합니다.
+    // 다수의 이메일이 메일을 보내는 로직입니다.
+    public void sendMail(MultipleEmail emailMessage){
+        Context context = new Context();
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = null;
+        try {
+            for(String sender : emailMessage.getTo()) {
+                helper = new MimeMessageHelper(message, true, "UTF-8");
+                helper.setSubject(emailMessage.getSubject()); // (민종) getTitle -> getSubject
+                helper.setTo(emailMessage.getTo());
+                context.setVariable("message", emailMessage.getMessage());
+                String html = templateEngine.process("mail", context);
+                helper.setText(html, true);
+                helper.addInline("logo", new ClassPathResource("/static/images/common/logo.png"));
+                helper.addInline("check", new ClassPathResource("/static/images/mail/ico_check.png"));
+                javaMailSender.send(message);
+            }
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     /**
      *
