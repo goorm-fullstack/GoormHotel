@@ -8,6 +8,7 @@ import owlImg from '../../images/common/social_owl.png';
 import instagramImgHover from '../../images/common/social_instagram_hover.png';
 import youtubeImgHover from '../../images/common/social_youtube_hover.png';
 import owlImgHover from '../../images/common/social_owl_hover.png';
+import Instance from '../../utils/api/axiosInstance';
 
 const Container = styled.div`
   margin-top: 150px;
@@ -175,6 +176,14 @@ const Footer = () => {
     event.preventDefault();
   };
 
+  const handleSubScribeBtnClick = () => {
+    if(email !== '') {
+      Instance.post("/subscribe", {emailAddress : email}).then(() => {
+        console.log("구독신청 완료");
+      })
+    }
+  }
+
   return (
     <Container>
       <NewsLetterContainer>
@@ -193,7 +202,7 @@ const Footer = () => {
               </Terms>
             </div>
             <BtnWrapper className="right">
-              <SubscribeBtn type="submit">구독 신청하기</SubscribeBtn>
+              <SubscribeBtn type="submit" onClick={handleSubScribeBtnClick}>구독 신청하기</SubscribeBtn>
             </BtnWrapper>
           </form>
         </NewsLetterWrapper>

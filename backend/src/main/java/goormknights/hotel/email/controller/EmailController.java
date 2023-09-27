@@ -3,6 +3,7 @@ package goormknights.hotel.email.controller;
 import goormknights.hotel.email.dto.request.EmailPostDto;
 import goormknights.hotel.email.dto.response.EmailResponseDto;
 import goormknights.hotel.email.model.EmailMessage;
+import goormknights.hotel.email.model.MultipleEmail;
 import goormknights.hotel.email.service.EmailService;
 import goormknights.hotel.member.dto.request.FindPasswordRequest;
 import goormknights.hotel.member.service.VerificationService;
@@ -23,8 +24,8 @@ public class EmailController {
     private final VerificationService verificationService;
 
     @PostMapping("/subscribe")
-    public goormknights.hotel.global.dto.ResponseEntity<String> sendSubscribeEmail(@RequestParam String email) throws MessagingException {
-        emailService.sendSubscribe(email, "newsletter");
+    public goormknights.hotel.global.dto.ResponseEntity<String> sendSubscribeEmail(@RequestBody Map<String, String> email) throws MessagingException {
+        emailService.sendSubscribe(email.get("email"), "newsletter");
         return new goormknights.hotel.global.dto.ResponseEntity<>(HttpStatus.OK.value(), "메일 전송이 완료되었습니다.");
     }
 
@@ -88,5 +89,10 @@ public class EmailController {
         }
     }
 
+    @PostMapping("/multiple")
+    public ResponseEntity<String> sendMailToManyPerson(@RequestBody MultipleEmail multipleEmail) {
+        emailService.sendMail(multipleEmail);
 
+        return ResponseEntity.ok("메일을 성공적으로 전송했습니다.");
+    }
 }

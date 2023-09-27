@@ -54,7 +54,6 @@ const AdminChat = () => {
 
   useEffect(() => {
     Instance.get(`/chat/getLastMessage?page=${page}`).then((response) => {
-      console.log(response.data);
       setChatData(response.data);
     });
   }, []);
@@ -62,9 +61,6 @@ const AdminChat = () => {
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
-    console.log('test');
-    console.log(chatData.chatMessages);
-    console.log('===============================');
     if (checked) {
       const allMemberIds = chatData.map((item) => item.chatMessages[0].roomId);
       setCheckedItems(allMemberIds);
@@ -138,29 +134,29 @@ const AdminChat = () => {
             ) : (
               chatData.map((item, index) => (
                 <tr key={item.id}>
-                  <td>
+                  <td style={{textAlign : "center"}}>
                     <InputCheckbox
                       type="checkbox"
                       checked={checkedItems.includes(item.chatMessages[0].roomId)}
                       onChange={() => handleCheckboxChange(item.chatMessages[0].roomId)}
                     />
-                  </td>
-                  <td>{index + 1}</td>
-                  <td>
-                    {item.chatMessages.name}(
-                    <Link to={`/admin/member/${item.chatMessages[0].sender}`} className="memberId">
-                      {item.chatMessages[0].sender}
-                    </Link>
-                    )
-                  </td>
-                  <td className="lastChat">
-                    <p>
-                      <Link to={`/admin/chat/detail/${item.roomId}`}>{item.chatMessages[0].message}</Link>
-                    </p>
-                    <div className="allMessage">{item.chatMessages.message}</div>
-                  </td>
-                  <td>{item.chatMessages[0].createTime}</td>
-                  <td>{item.status}</td>
+                    </td>
+                    <td style={{textAlign : "center"}}>{index + 1}</td>
+                    <td style={{textAlign : "center"}}>
+                      {item.chatMessages.name}(
+                      <Link to={`/admin/member/${item.chatMessages[0].sender}`} className="memberId">
+                        {item.chatMessages[0].sender}
+                      </Link>
+                      )
+                      </td>
+                      <td style={{textAlign : "center"}} className="lastChat">
+                      <p>
+                        <Link to={`/admin/chat/detail/${item.roomId}`}>{item.chatMessages[0].message}</Link>
+                      </p>
+                      <div className="allMessage">{item.chatMessages.message}</div>
+                    </td>
+                    <td style={{textAlign : "center"}}>{item.chatMessages[0].createTime}</td>
+                    <td style={{textAlign : "center"}}>{item.status}</td>
                 </tr>
               ))
             )}

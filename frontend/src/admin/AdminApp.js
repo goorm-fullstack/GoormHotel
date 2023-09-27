@@ -50,6 +50,7 @@ const AdminApp = () => {
         <Route path="/admin/chat/:page" element={<AdminChat />}></Route>
         <Route path="/admin/chat/detail/:roomId" element={<AdminChatDetail />}></Route>
         <Route path="/admin/mail" element={<AdminMail />}></Route>
+        <Route path="/admin/mail/:receiver" element={<AdminMail />}></Route>
         <Route path="/admin/subscriber/:page" element={<AdminSubScribe />}></Route>
       </Routes>
     </BrowserRouter>
