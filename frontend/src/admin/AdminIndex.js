@@ -130,19 +130,28 @@ const AdminIndex = () => {
   const [notice, setNotice] = useState([]);
   useEffect(() => {
     axios.get('/boards/find/boardTitle/공지사항').then((response) => {
-      setNotice(response.data);
+      setNotice(response.data || []);
+    })
+    .catch((error) => {
+      console.error(error);
     })
   }, []);
   const [review, setReview] = useState([]);
   useEffect(() => {
     axios.get('/boards/find/boardTitle/이용후기').then((response) => {
-      setReview(response.data);
+      setReview(response.data || []);
+    })
+    .catch((error) => {
+      console.error(error);
     })
   }, []);
   const [qna, setQna] = useState([]);
   useEffect(() => {
     axios.get('/boards/find/boardTitle/문의하기').then((response) => {
-      setQna(response.data);
+      setQna(response.data || []);
+    })
+    .catch((e) => {
+      console.error(e);
     })
   }, []);
 
@@ -164,12 +173,14 @@ const AdminIndex = () => {
               </h4>
               <LatestList>
                 {notice.slice(0, 3).map((item, index) => (
-                    <li key={index}>
-                      <p>
-                        <Link to="#">{item.title}</Link>
-                      </p>
-                      <span>{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</span>
-                    </li>
+                    item && (
+                        <li key={index}>
+                          <p>
+                            <Link to={`/board/notice/detail/${item.title}`}>{item.title}</Link>
+                          </p>
+                          <span>{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</span>
+                        </li>
+                    )
                 ))}
               </LatestList>
             </li>
@@ -179,12 +190,14 @@ const AdminIndex = () => {
               </h4>
               <LatestList>
                 {qna.slice(0, 3).map((item, index) => (
-                    <li key={index}>
-                      <p>
-                        <Link to="#">{item.title}</Link>
-                      </p>
-                      <span>{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</span>
-                    </li>
+                    item && (
+                        <li key={index}>
+                          <p>
+                            <Link to="#">{item.title}</Link>
+                          </p>
+                          <span>{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</span>
+                        </li>
+                    )
                 ))}
               </LatestList>
             </li>
@@ -194,12 +207,14 @@ const AdminIndex = () => {
               </h4>
               <LatestList>
                 {review.slice(0, 3).map((item, index) => (
-                    <li key={index}>
-                      <p>
-                        <Link to="#">{item.title}</Link>
-                      </p>
-                      <span>{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</span>
-                    </li>
+                    item && (
+                        <li key={index}>
+                          <p>
+                            <Link to="#">{item.title}</Link>
+                          </p>
+                          <span>{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</span>
+                        </li>
+                    )
                 ))}
               </LatestList>
             </li>

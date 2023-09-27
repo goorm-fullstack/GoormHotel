@@ -52,10 +52,15 @@ const AdminDeleteComment = () => {
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [board, setBoard] = useState([]);
   useEffect(() => {
-    axios.get('/boards/deleted').then((response) => {
-      setBoard(response.data);
-      console.log('get 성공');
-    });
+    axios
+      .get('/boards/deleted')
+      .then((response) => {
+        setBoard(response.data);
+        console.log('get 성공');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   let writeDate;
@@ -136,31 +141,35 @@ const AdminDeleteComment = () => {
               <th>번호</th>
               <th>게시판</th>
               <th>삭제된 글</th>
-              <th>작성자 명(회원 Id)</th>
+              <th>작성자 명(회원 ID)</th> {/** 회원 ID의 ID는 대문자로 통일합시다. */}
               <th>삭제일</th>
             </tr>
           </thead>
           <tbody>
-            {board.length === 0 && <td colSpan="6">등록된 글이 없습니다.</td>}
+            {board.length === 0 && (
+              <td colSpan="6" className="center empty">
+                삭제된 글이 없습니다.
+              </td>
+            )}
             {board.map((board) => (
               <tr key={board.boardId}>
-                <td>
+                <td className='center'>
                   <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(board.boardId)}
                     onChange={() => handleCheckboxChange(board.boardId)}
                   />
                 </td>
-                <td>{board.boardId}</td>
-                <td>{`${board.boardTitle}`}</td>
-                <td>
+                <td className='center'>{board.boardId}</td>
+                <td className='center'>{`${board.boardTitle}`}</td>
+                <td className='center'>
                   <LinkStyle to={`/admin/member/${board.boardContent}`}>{board.boardContent}</LinkStyle>
                 </td>
-                <td>
+                <td className='center'>
                   {board.boardWriter}
                   <LinkStyle to={`/admin/member/${board.boardWriter}`}>({board.boardWriter})</LinkStyle>
                 </td>
-                <td>{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
+                <td className='center'>{`${board.boardWriteDate[0]}.${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}.${
                   board.boardWriteDate[2] < 10 ? '0' : ''
                 }${board.boardWriteDate[2]}`}</td>
               </tr>

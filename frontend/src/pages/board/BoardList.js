@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { useParams } from 'react-router-dom'; // Remove duplicate import
-import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn } from '../../components/common/commonStyles';
+import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn, commonTable } from '../../components/common/commonStyles';
 import SubHeader from '../../components/layout/SubHeader';
 import Paging from '../../components/common/Paging';
 import axios from 'axios';
+import Instance from '../../utils/api/axiosInstance';
+import Search from '../../components/common/Search';
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -21,41 +23,6 @@ const IsReply = styled.span`
   vertical-align: middle;
 `;
 
-export const BoardList = styled.table`
-  width: 100%;
-  border-bottom: 1px solid ${(props) => props.theme.colors.charcoal};
-
-  th {
-    border-top: 1px solid ${(props) => props.theme.colors.charcoal};
-    border-bottom: 1px solid ${(props) => props.theme.colors.grayborder};
-    font-weight: 500;
-    background: ${(props) => props.theme.colors.graybg};
-    color: ${(props) => props.theme.colors.charcoal};
-  }
-  th,
-  td {
-    padding: 21.5px 12px;
-  }
-  td {
-    border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
-    color: ${(props) => props.theme.colors.blacklight};
-  }
-  td.center {
-    text-align: center;
-  }
-  td a:hover {
-    color: ${(props) => props.theme.colors.goldhover};
-  }
-
-  .textover {
-    width: 100%;
-    max-width: 250px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-`;
-
 const BoardGallery = styled.ul`
   display: flex;
   flex-wrap: wrap;
@@ -68,9 +35,18 @@ const BoardGallery = styled.ul`
 
   li .thumbnail {
     background: ${(props) => props.theme.colors.graybg};
-    min-height: 240px;
+    height: 240px;
     margin-bottom: 16px;
+
+    img {
+      min-width: 100%;
+      max-width: 100%;
+      min-height: 100%;
+      max-height: 100%;
+      object-fit: cover;
+    }
   }
+
   li .writer {
     margin: 6px 0 2px;
   }
@@ -86,12 +62,15 @@ const WriteBtnWrapper = styled(BtnWrapper)`
   margin-bottom: 20px;
 `;
 
+const Table = styled(commonTable)``;
+
 const CustomerSupport = () => {
   const board = useParams().board;
-  const [boards, setBoards] = useState([]);
-  const [boardImages, setBoardImages] = useState([]); // 추가: boardImages 상태 추가
+  const [boards, setBoard] = useState([]);
+  const [imageUrl, setImageUrl] = useState([]);
 
   useEffect(() => {
+    // board 값이 변경될 때마다 데이터를 다시 불러옴
     let boardTitle = '';
     if (board === 'notice') {
       boardTitle = '공지사항';
@@ -101,21 +80,38 @@ const CustomerSupport = () => {
       boardTitle = '이용후기';
     }
     if (boardTitle !== '') {
-      // 게시물 정보 가져오기
-      axios.get(`/boards/find/boardTitle/${boardTitle}`).then((response) => {
-        setBoards(response.data);
-        console.log('게시물 정보 get 성공');
-      });
+      axios
+        .get(`/boards/find/boardTitle/${boardTitle}`)
+        .then((response) => {
+          setBoard(response.data || []);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
 
-      // 이미지 정보 가져오기
-      // axios.get(`/boards/image/${board.boardId}`).then((response) => {
-      //   setBoardImages(response.data);
-      //   console.log('이미지 정보 get 성공');
-      // });
+      setImageUrl([]);
     }
   }, [board]);
 
-  console.log(boards);
+  useEffect(() => {
+    boards.map((board) => {
+      GetImageUrl(board.boardId);
+    });
+  }, [boards]);
+
+  const GetImageUrl = (boardId) => {
+    Instance.get(`/boards/image/${boardId}`, {
+      responseType: 'arraybuffer',
+    }).then((response) => {
+      const blob = new Blob([response.data], {
+        type: response.headers['content-type'],
+      });
+      let image = { boardId: boardId, imageUrl: URL.createObjectURL(blob) };
+      setImageUrl((prevImages) => [...prevImages, image]);
+    });
+  };
+
+  console.log(imageUrl);
 
   let writeDate;
   let newMonth;
@@ -125,156 +121,106 @@ const CustomerSupport = () => {
     } else {
       newMonth = Item.boardWriteDate[1];
     }
-    writeDate = Item.boardWriteDate[0] + '-' + newMonth + '-' + Item.boardWriteDate[2];
+    writeDate = Item.boardWriteDate[0] + '.' + newMonth + '.' + Item.boardWriteDate[2];
   });
 
-  return (
-    <>
-      <SubHeader kind="board" />
-      <Container>
-        {(() => {
-          switch (board) {
-            case 'notice':
-              return <PageTitle>공지사항</PageTitle>;
-            case 'qna':
-              return <PageTitle>문의하기</PageTitle>;
-            case 'review':
-              return <PageTitle>이용후기</PageTitle>;
-            default:
-              return <PageTitle>고객지원</PageTitle>;
-          }
-        })()}
-        <div>
-          {(() => {
-            if (board != 'notice') {
-              return (
-                <WriteBtnWrapper className="right">
-                  <LinkBtn to={`/board/` + board + `/write`}>작성하기</LinkBtn>
-                </WriteBtnWrapper>
-              );
-            }
-          })()}
-          {(() => {
-            if (board === 'review') {
-              return (
-                <BoardGallery>
-                  {/** loop */}
-                  {boards.map((board) => (
-                    <li>
-                      <div className="thumbnail">
-                        <a href={`/board/${board.id}/detail`}>
-                          <img src="#" />
-                        </a>
-                      </div>
-                      <p className="title">
-                        <a href={`/board/` + board.boardId + `/detail`}>{board.title}</a>
-                      </p>
-                      <p className="writer">{board.boardWriter}</p>
-                      <p className="date">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
-                        board.boardWriteDate[2] < 10 ? '0' : ''
-                      }${board.boardWriteDate[2]}`}</p>
-                    </li>
-                  ))}
-                  <li>
-                    <div className="thumbnail">
-                      <a href={`/board/` + board + `/detail`}>
-                        <img src="#" />
-                      </a>
-                    </div>
-                    <p className="title textover">
-                      <a href={`/board/` + board + `/detail`}>제목입니다.</a>
-                    </p>
-                    <p className="writer">작성자명</p>
-                    <p className="date">2023-09-13</p>
-                  </li>
-                  <li>
-                    <div className="thumbnail">
-                      <a href={`/board/` + board + `/detail`}>
-                        <img src="" />
-                      </a>
-                    </div>
-                    <p className="title textover">
-                      <a href={`/board/` + board + `/detail`}>제목입니다.</a>
-                    </p>
-                    <p className="writer">작성자명</p>
-                    <p className="date">2023-09-13</p>
-                  </li>
-                  <li>
-                    <div className="thumbnail">
-                      <a href={`/board/` + board + `/detail`}>
-                        <img src="" />
-                      </a>
-                    </div>
-                    <p className="title textover">
-                      <a href={`/board/` + board + `/detail`}>제목입니다.</a>
-                    </p>
-                    <p className="writer">작성자명</p>
-                    <p className="date">2023-09-13</p>
-                  </li>
-                  <li>
-                    <div className="thumbnail">
-                      <a href={`/board/` + board + `/detail`}>
-                        <img src="" />
-                      </a>
-                    </div>
-                    <p className="title textover">
-                      <a href={`/board/` + board + `/detail`}>제목입니다.</a>
-                    </p>
-                    <p className="writer">작성자명</p>
-                    <p className="date">2023-09-13</p>
-                  </li>
-                  {/** // loop */}
-                </BoardGallery>
-              );
-            } else {
-              return (
-                <BoardList>
-                  <thead>
-                    <tr>
-                      <th width="110px">번호</th>
-                      <th>제목</th>
-                      <th width="180px">등록일</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {/** loop */}
-                    {boards.map((board) => (
-                      <tr key={board.boardId}>
-                        <td className="center">{board.boardId}</td>
-                        <td>
-                          <a href={`/board/${board.boardId}/detail`}>{board.title}</a>
-                        </td>
-                        <td className="center">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
-                          board.boardWriteDate[2] < 10 ? '0' : ''
-                        }${board.boardWriteDate[2]}`}</td>
-                      </tr>
-                    ))}
-                    <tr>
-                      <td className="center">2</td>
-                      <td>
-                        <a href={`/board/` + board + `/detail`}>일반 글 제목입니다.</a>
-                      </td>
-                      <td className="center">2023-09-13</td>
-                    </tr>
-                    <tr>
-                      <td className="center">1</td>
-                      <td>
-                        <IsReply>답글</IsReply>
-                        <a href={`/board/` + board + `/detail`}>답글 제목입니다.</a>
-                      </td>
-                      <td className="center">2023-09-13</td>
-                    </tr>
-                    {/** // loop */}
-                  </tbody>
-                </BoardList>
-              );
-            }
-          })()}
-        </div>
-        <Paging />
-      </Container>
-    </>
-  );
+    return (
+        <>
+            <SubHeader kind="board" />
+            <Container>
+              {(() => {
+                switch (board) {
+                  case 'notice':
+                    return <PageTitle>공지사항</PageTitle>;
+                  case 'qna':
+                    return <PageTitle>문의하기</PageTitle>;
+                  case 'review':
+                    return <PageTitle>이용후기</PageTitle>;
+                  default:
+                    return <PageTitle>고객지원</PageTitle>;
+                }
+              })()}
+                <div>
+                    {(() => {
+                        if (board != 'notice') {
+                          return (
+                              <WriteBtnWrapper className="right">
+                                <LinkBtn to={`/board/` + board + `/write`}>작성하기</LinkBtn>
+                              </WriteBtnWrapper>
+                          );
+                        }
+                    })()}
+                    {(() => {
+                      if (board === 'review') {
+                        return (
+                          <BoardGallery>
+                              {/** loop */}
+                              {boards.length === 0 && <td colSpan="7" className='center'>등록된 게시글이 없습니다.</td>}
+                              {boards.map((item) => (
+                                <li key={item.boardId}>
+                                  <div className="thumbnail">
+                                    <a href={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>
+                                    {imageUrl.find((image) => image.boardId === item.boardId) && (
+                                        <img
+                                          src={imageUrl.find((image) => image.boardId === item.boardId).imageUrl}
+                                          alt={`Image for ${item.title}`}
+                                        />
+                                      )}
+                                    </a>
+                                  </div>
+                                  <p className="title">
+                                    <a href={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
+                                  </p>
+                                  <p className="writer">{item.boardWriter}</p>
+                                  <p className="date">{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</p>
+                                </li>
+                              ))}
+                              {/** // loop */}
+                          </BoardGallery>
+                        );
+                      } else {
+                            return (
+                                <Table className="userpage">
+                                    <colgroup>
+                                        <col width="110px" />
+                                        <col width="180px" />
+                                        <col width="auto" />
+                                        <col width="180px" />
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>번호</th>
+                                        <th>카테고리</th>
+                                        <th>제목</th>
+                                        <th>등록일</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {boards.length === 0 && <td colSpan="7" className='center'>등록된 게시글이 없습니다.</td>}
+                                    {/** loop */}
+                                    {boards.map((item, index) => (
+                                        <tr key={item.boardId}>
+                                          <td className="center">{index + 1}</td>
+                                            <td className='center'>{item.category}</td>
+                                            <td>
+                                                {/* <IsReply>답글</IsReply> */}
+                                                {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
+                                                <a href={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
+                                            </td>
+                                          <td className="center">{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</td>
+                                        </tr>
+                                    ))}
+                                    {/** // loop */}
+                                    </tbody>
+                                </Table>
+                            );
+                        }
+                    })()}
+                </div>
+                <Paging />
+            </Container>
+        </>
+    );
 };
 
 export default CustomerSupport;

@@ -365,6 +365,10 @@ export const MultiCheck = styled.div`
   column-gap: 16px;
   align-items: center;
   padding: 9px 0;
+
+  &.fit {
+    padding: 0;
+  }
 `;
 
 export const commonTable = styled.table`
@@ -373,7 +377,7 @@ export const commonTable = styled.table`
 
   th {
     border-top: 1px solid ${(props) => props.theme.colors.charcoal};
-    border-bottom: 1px solid ${(props) => props.theme.colors.grayborder};
+    border-bottom: 1px solid ${(props) => props.theme.colors.graylightborder};
     font-weight: 500;
     background: ${(props) => props.theme.colors.graybg};
     color: ${(props) => props.theme.colors.charcoal};
@@ -381,6 +385,7 @@ export const commonTable = styled.table`
   th,
   td {
     padding: 16.5px 12px;
+    vertical-align: middle;
   }
   td {
     border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
@@ -420,16 +425,39 @@ export const commonTable = styled.table`
     tr:first-child td {
       border-top-color: ${(props) => props.theme.colors.charcoal};
     }
+    tr.conbtm th,
+    tr.conbtm td {
+      border-top-color: ${(props) => props.theme.colors.graylightborder};
+    }
     td {
       padding-top: 9px;
       padding-bottom: 9px;
+
+      &.header {
+        background-color: ${(props) => props.theme.colors.graybg};
+        border-top-color: ${(props) => props.theme.colors.grayborder};
+        font-weight: 500;
+        color: ${(props) => props.theme.colors.charcoal};
+      }
+
+      &.text {
+        padding: 16.5px 12px;
+      }
+
+      &.writeWrapper {
+        padding: 0;
+        border-top-color: ${(props) => props.theme.colors.grayborder};
+      }
     }
     th {
       text-align: center;
-      vertical-align: middle;
     }
     tr:hover td {
       background-color: white;
+
+      &.header {
+        background-color: ${(props) => props.theme.colors.graybg};
+      }
     }
   }
 
@@ -456,5 +484,16 @@ export const commonTable = styled.table`
 
   button {
     background-color: transparent;
+  }
+
+  &.userpage {
+    th,
+    td {
+      padding: 19px 12px;
+
+      a {
+        text-decoration: none;
+      }
+    }
   }
 `;

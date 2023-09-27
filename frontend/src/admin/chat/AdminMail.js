@@ -46,7 +46,7 @@ const AdminMail = () => {
       console.log("전송 완료");
     })
   }
-
+  
   return (
     <AdminLayout subMenus="chat">
       <Container>

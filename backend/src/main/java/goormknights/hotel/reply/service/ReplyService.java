@@ -8,6 +8,7 @@ import goormknights.hotel.reply.model.Reply;
 import goormknights.hotel.reply.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -41,28 +42,15 @@ public class ReplyService {
 
     //Read
     //댓글 전부 찾기
-    public List<ResponseReplyDto> getAll(Pageable pageable){
+    public Page<Reply> getAll(Pageable pageable){
         Page<Reply> all = replyRepository.findAll(pageable);
-        List<ResponseReplyDto> response = new ArrayList<>();
-//        for (Board board : all) {
-//            ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
-//            List<ResponseReportDto> reportList = board.getReport().stream().map(Report::toResponseReportDto).toList();
-//            List<ResponseReplyDto> replyList = board.getReplies().stream().map(Reply::toResponseReplyDto).toList();
-//            responseBoardDto.setReply(replyList);
-//            responseBoardDto.setReport(reportList);
-//            response.add(responseBoardDto);
-//        }
-
-        for(Reply reply : all){
-            if(reply.getReplyDeleteTime()==null){
-                response.add(reply.toResponseReplyDto());
+        List<Reply> list = new ArrayList<>();
+        for (Reply reply : all) {
+            if(reply.getReplyDeleteTime() == null){
+                list.add(reply);
             }
-//            ResponseReplyDto responseReplyDto = reply.toResponseReplyDto();
-//            List<ResponseReportDto> list = reply.getReport().stream().map(Report::toResponseReportDto).toList();
-//            responseReplyDto.setReport(list);
         }
-
-        return response;
+        return new PageImpl<>(list, pageable, list.size());
     }
 
     //댓글 내용으로 찾기

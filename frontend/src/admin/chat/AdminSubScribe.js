@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn  } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../components/common/commonStyles';
 import { Link, useParams } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
-import {
-  Container,
-  Table,
-  TableHeader
-} from '../member/AdminMember';
+import { Container, Table, TableHeader } from '../member/AdminMember';
 import Paging from '../../components/common/Paging';
 
 const AdminSubScribe = () => {
-  const {page} = useParams()
+  const { page } = useParams();
   const [checkedItems, setCheckedItems] = useState([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [subScribeData, setSubScribeData] = useState([
@@ -63,18 +59,17 @@ const AdminSubScribe = () => {
     console.log(checkedItems)
     checkedItems.map((id, index) => {
       Instance.post("/subscribe/cancel/"+id).then(()=>{
-        // 닫은 방을 다시 열려면 사용자가 채팅을 해야합니다. 수동으로 전환하지 마세요.
+        // 구독해지용
       })
     })
   }
-
 
   return (
     <AdminLayout subMenus="chat">
       <Container>
         <PageTitle>구독자 관리</PageTitle>
         <TableHeader>
-          <p className='total'>
+          <p className="total">
             전체 <strong>{subScribeData.length}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
@@ -83,19 +78,19 @@ const AdminSubScribe = () => {
         </TableHeader>
         <Table>
           <colgroup>
+            <col style={{ width: '80px' }} />
             <col style={{ width: '100px' }} />
-            <col style={{ width: '270px' }} />
-            <col style={{ width: '360px' }} />
             <col style={{ width: 'auto' }} />
+            <col style={{ width: '200px' }} />
           </colgroup>
           <thead>
             <tr>
               <th>
-                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange}/>
+                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
               </th>
               <th>번호</th>
-              <th>이메일</th>
-              <th>구독 상태</th>
+              <th>구독자 이메일</th>
+              <th>상태</th>
             </tr>
           </thead>
           <tbody>
@@ -113,15 +108,16 @@ const AdminSubScribe = () => {
                     />
                     </td>
                     <td style={{textAlign : "center"}}>{item.id}</td>
-                    <td style={{textAlign : "center"}} className="lastChat">{item.emailAddress}</td>
+                    <td style={{textAlign : "center"}} className="lastChat">
+                      <Link to={`/admin/mail?mailto=${item.emailAddress}`}>{item.emailAddress}</Link>
+                    </td>
                     <td style={{textAlign : "center"}}>{item.isSubscribe}</td>
                 </tr>
-                ))
-              )
-            }
+              ))
+            )}
           </tbody>
         </Table>
-        <Paging/>
+        <Paging />
       </Container>
     </AdminLayout>
   );

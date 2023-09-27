@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { NavLink, useLocation, useParams } from 'react-router-dom';
 import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn } from '../../components/common/commonStyles';
 import SubHeader from '../../components/layout/SubHeader';
-import axios from "axios";
+import axios from 'axios';
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -65,25 +65,30 @@ const TableRead = styled.table`
 
 const BoardRead = () => {
   const board = useParams().board;
+  const loc = useLocation();
+  const searchParams = new URLSearchParams(loc.search);
+  const boardId = searchParams.get('boardId');
   const [boardData, setBoardData] = useState(null);
 
   useEffect(() => {
-    axios.get(`/boards/${board}`).then((response) => {
+    axios.get(`/boards/${boardId}`).then((response) => {
       setBoardData(response.data);
     });
   }, []);
+
+  console.log(boardData);
 
   let listlink;
   if (boardData) {
     switch (boardData.boardTitle) {
       case '문의하기':
-        listlink = '/board/qna';
+        listlink = '/board/qna/1';
         break;
       case '공지사항':
-        listlink = '/board/notice';
+        listlink = '/board/notice/1';
         break;
       case '이용후기':
-        listlink = '/board/review';
+        listlink = '/board/review/1';
         break;
     }
   }
@@ -109,15 +114,20 @@ const BoardRead = () => {
             <tr>
               <td className="titlew">
                 {/* 수정된 부분: boardData가 null인 경우에 대비하여 조건부 렌더링 */}
-                <p className="title">{boardData ? boardData.title : ''}</p>
+                <p className="title">
+                  <span>[카테고리]</span>
+                  {boardData ? boardData.title : ''}
+                </p>
                 {(() => {
                   // board가 'notice'가 아니고 boardData가 존재하는 경우에만 렌더링
                   if (board !== 'notice' && boardData) {
                     return (
-                        <p>
-                          <span>{boardData.boardWriter}</span>
-                          <span>{`${boardData.boardWriteDate[0]}-${(boardData.boardWriteDate[1] < 10 ? '0' : '')}${boardData.boardWriteDate[1]}-${(boardData.boardWriteDate[2] < 10 ? '0' : '')}${boardData.boardWriteDate[2]}`}</span>
-                        </p>
+                      <p>
+                        <span>{boardData.boardWriter}</span>
+                        <span>{`${boardData.boardWriteDate[0]}.${boardData.boardWriteDate[1] < 10 ? '0' : ''}${boardData.boardWriteDate[1]}.${
+                          boardData.boardWriteDate[2] < 10 ? '0' : ''
+                        }${boardData.boardWriteDate[2]}`}</span>
+                      </p>
                     );
                   }
                 })()}
@@ -125,6 +135,54 @@ const BoardRead = () => {
             </tr>
             <tr className="contents">
               <td>{boardData && boardData.boardContent ? boardData.boardContent : ''}</td>
+            </tr>
+            <tr className="commentwrite">
+              <td>
+                <div>
+                  <form>
+                    <div>
+                      <input type="text" placeholder="작성자명" />
+                      <input type="password" placeholder="식별 비밀번호?" />
+                    </div>
+                    <textarea></textarea>
+                    <button type="submit">등록</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+            <tr className="commentslist">
+              <td>
+                <ul>
+                  <li>
+                    <p>
+                      이름이름
+                      <span className="date">2023.09.01</span>
+                      <button type="button">수정</button>
+                      {/** 수정 버튼 클릭하면 상단 등록 폼으로 현재 댓글 정보가 전달 -> 상단 댓글 등록 버튼 누르면 수정사항 반영 */}
+                      <button type="button">삭제</button>
+                    </p>
+                    <p>댓글 내용내용</p>
+                  </li>
+                  <li>
+                    <p>
+                      이름이름
+                      <span className="date">2023.09.01</span>
+                      <button type="button">수정</button>
+                      <button type="button">삭제</button>
+                    </p>
+                    <p>댓글 내용내용</p>
+                  </li>
+                  <li>
+                    <p>
+                      이름이름
+                      <span className="date">2023.09.01</span>
+                      <button type="button">수정</button>
+                      <button type="button">삭제</button>
+                    </p>
+                    <p>댓글 내용내용</p>
+                  </li>
+                </ul>
+              </td>
             </tr>
           </TableRead>
           <BtnWrapper className="center mt40">
