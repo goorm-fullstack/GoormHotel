@@ -2,12 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
-import {
-  Container,
-  Table,
-  TableHeader,
-
-} from '../member/AdminMember';
+import { Container, Table, TableHeader } from '../member/AdminMember';
 import Paging from '../../components/common/Paging';
 import axios from 'axios';
 
@@ -22,17 +17,19 @@ const AdminBoard = () => {
   // 전체 게시글 목록 조회
   useEffect(() => {
     const currentPage = parseInt(page, 10);
-    axios.get(`/boards/list?page=${currentPage}`).then((response) => {
-      const totalPages = parseInt(response.headers['totalpages'], 10);
-      const totalData = parseInt(response.headers['totaldata'], 10);
-      setBoard(response.data);
-      setTotalPage(totalPages);
-      setTotalBoard(totalData);
-      console.log('get 성공');
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+    axios
+      .get(`/boards/list?page=${currentPage}`)
+      .then((response) => {
+        const totalPages = parseInt(response.headers['totalpages'], 10);
+        const totalData = parseInt(response.headers['totaldata'], 10);
+        setBoard(response.data);
+        setTotalPage(totalPages);
+        setTotalBoard(totalData);
+        console.log('get 성공');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   let writeDate;
@@ -63,13 +60,14 @@ const AdminBoard = () => {
 
   const DeleteBoard = () => {
     checkedItems.forEach((boardId) => {
-      axios.put(`/boards/softdelete/${boardId}`)
-      .then((response) => {
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.error(error.message);
-      });
+      axios
+        .put(`/boards/softdelete/${boardId}`)
+        .then((response) => {
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
     });
   };
 
@@ -77,16 +75,17 @@ const AdminBoard = () => {
     checkedItems.forEach((boardId) => {
       const data = {
         boardId: boardId,
-        reportWriter: "관리자",
-        reportReason: "관리자 임의 배정",
+        reportWriter: '관리자',
+        reportReason: '관리자 임의 배정',
       };
-      axios.post(`/report/writeform`, data)
-      .then((response) => {
-        window.location.reload();
-      })
-      .catch( (error) => {
-        console.error(error.message);
-      });
+      axios
+        .post(`/report/writeform`, data)
+        .then((response) => {
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
     });
   };
 
@@ -99,8 +98,12 @@ const AdminBoard = () => {
             전체 <strong>{board.length}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
-            <NormalBtn className="header" onClick={ReportBoard}>신고된 글로 이동</NormalBtn>
-            <NormalBtn className="header red" onClick={DeleteBoard}>삭제</NormalBtn>
+            <NormalBtn className="header" onClick={ReportBoard}>
+              신고된 글로 이동
+            </NormalBtn>
+            <NormalBtn className="header red" onClick={DeleteBoard}>
+              삭제
+            </NormalBtn>
           </BtnWrapper>
         </TableHeader>
         <Table>
@@ -118,25 +121,29 @@ const AdminBoard = () => {
             </tr>
           </thead>
           <tbody>
-            {board.length === 0 && <td colSpan="7" className='center'>등록된 게시글이 없습니다.</td>}
+            {board.length === 0 && (
+              <td colSpan="7" className="center">
+                등록된 게시글이 없습니다.
+              </td>
+            )}
             {board.map((board, idx) => (
               <tr key={board.boardId}>
-                <td className='center'>
+                <td className="center">
                   <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(board.boardId)}
                     onChange={() => handleCheckboxChange(board.boardId)}
                   />
                 </td>
-                <td className='center'>{idx + 1}</td>
-                <td className='center'>{board.boardTitle}</td>
-                <td className='center'>
+                <td className="center">{idx + 1}</td>
+                <td className="center">{board.boardTitle}</td>
+                <td className="center">
                   <Link to={`/admin/member/${board.boardId}`}>{board.title}</Link>
                 </td>
-                <td className='center'>
+                <td className="center">
                   <Link to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</Link>
                 </td>
-                <td className='center'>{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
+                <td className="center">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
                   board.boardWriteDate[2] < 10 ? '0' : ''
                 }${board.boardWriteDate[2]}`}</td>
                 <td>{board.blacklist}</td>

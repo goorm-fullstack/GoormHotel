@@ -112,7 +112,7 @@ const BoardWrite = () => {
                 </td>
               </tr>
               <tr>
-                <th width="240px">분류</th>
+                <th width="240px">카테고리</th>
                 <td>
                   {(() => {
                     switch (board) {

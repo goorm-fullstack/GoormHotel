@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { BtnWrapper, SubmitBtn } from '../../components/common/commonStyles';
+import { BtnWrapper, SubmitBtn } from './commonStyles';
 import { CheckBtn, StyledCalendar, CalendarSvg, CalendarContainer, CalendarWrapper } from '../Reservation';
 import moment from 'moment';
 

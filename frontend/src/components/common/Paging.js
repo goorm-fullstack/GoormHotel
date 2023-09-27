@@ -10,6 +10,7 @@ export const PageParam = styled.ul`
     display: inline-block;
     margin: 0 2px;
   }
+
   li a {
     display: inline-block;
     padding: 0 7px;
@@ -38,7 +39,7 @@ export const PageParam = styled.ul`
   }
 `;
 
-const Paging = ({url}) => {
+const Paging = ({ url }) => {
   const location = useLocation();
   console.log(location.pathname);
 

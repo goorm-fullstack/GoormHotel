@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { BtnWrapper, SubmitBtn } from '../../components/common/commonStyles';
+import { BtnWrapper, SubmitBtn } from './commonStyles';
 
 const SearchHeader = styled.div`
   display: flex;

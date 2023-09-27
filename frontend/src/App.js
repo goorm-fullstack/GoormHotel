@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { styled } from 'styled-components';
-import Header from './components/layout/Header';
-import Footer from './components/layout/Footer';
+import Header from './components/layout/Header/Header';
+import Footer from './components/layout/Footer/Footer';
 import Home from './pages/Home';
 import Room from './pages/about/Room';
 import Dining from './pages/about/Dining';
@@ -84,7 +84,7 @@ const FloatingBtn = styled.button`
 function App() {
   const [showChat, setShowChat] = useState(false);
   const [showFloatingButtons, setShowFloatingButtons] = useState(false);
-  
+
   const openChat = () => {
     setShowChat(!showChat);
   };
