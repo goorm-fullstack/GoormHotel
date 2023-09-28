@@ -1,11 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, CheckLabel, MultiCheck, SubmitBtn } from '../../Style/commonStyles';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
 import { useParams } from 'react-router-dom';
 import { Container, Table } from '../member/AdminMember';
+import Instance from '../../utils/api/axiosInstance';
 
 const AdminMail = () => {
+  const {receiver} = useParams();
+  const [receiverValue, setReceiverValue] = useState('');
+  const [isReadOnly, setIsReadOnly] = useState(false);
+  const [subscribe, setSubScribe] = useState([]);
+  const [members, setMembers] = useState([]);
+  useEffect(() => {
+    if(receiver !== undefined) {
+      console.log(receiver)
+      setReceiverValue(receiver)
+      console.log("call")
+      setIsReadOnly(true)
+    }
+  }, []);
+
+
+  // 전체 구독자 조회
+  const getAllSubscribe = () => {
+    Instance.get("/subscribe").then((response) =>{
+      setSubScribe(response.data);
+    })
+  }
+
+  // 전체 멤버 조회
+  const getAllMembers = () => {
+    Instance.get("/member/list").then((response) => {
+      setMembers(response.data);
+    })
+  }
+
+  const handleBtnClick = () => {
+    let data = {
+      to : subscribe + members,
+      message : "",
+      subject : ""
+    };
+    Instance.post("/api/mail/multiple", data).then(()=>{
+      console.log("전송 완료");
+    })
+  }
+  
   return (
     <AdminLayout subMenus="chat">
       <Container>
@@ -20,7 +61,7 @@ const AdminMail = () => {
               <th>받는사람</th>
               <td>
                 <MultiCheck className="fit">
-                  <input type="text" className="long" />{' '}
+                  <input type="text" className="long" onChange={(e) => setReceiverValue(e.target.value)} value={receiverValue} readOnly={isReadOnly}/>
                   <CheckLabel>
                     <InputCheckbox type="checkbox" /> 전체 회원
                   </CheckLabel>
@@ -56,7 +97,7 @@ const AdminMail = () => {
           </tbody>
         </Table>
         <BtnWrapper className="mt40 center">
-          <SubmitBtn>보내기</SubmitBtn>
+          <SubmitBtn onClick={handleBtnClick}>보내기</SubmitBtn>
         </BtnWrapper>
       </Container>
     </AdminLayout>

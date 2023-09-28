@@ -8,7 +8,7 @@ public class ResponseSubScribeDto {
 
     private Long id;
     private String emailAddress;
-    private boolean isSubscribe;
+    private String isSubscribe;
 
     public ResponseSubScribeDto(SubScribe subScribe) {
         this.id = subScribe.getId();

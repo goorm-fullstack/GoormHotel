@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import * as S from './Style';
 import { Link } from 'react-router-dom';
 import { BtnWrapper, MoreBtn } from '../../../Style/commonStyles';
+import Instance from '../../../utils/api/axiosInstance';
 
 const handleSubmit = (event: any) => {
   event.preventDefault();
@@ -10,6 +11,13 @@ const handleSubmit = (event: any) => {
 const Footer = () => {
   const [email, setEmail] = useState('');
 
+  const handleSubScribeBtnClick = () => {
+    if (email !== '') {
+      Instance.post('/subscribe', { emailAddress: email }).then(() => {
+        console.log('구독신청 완료');
+      });
+    }
+  };
   return (
     <S.Footer>
       <div className="subscription">
@@ -23,7 +31,9 @@ const Footer = () => {
               </p>
             </div>
             <BtnWrapper className="right">
-              <MoreBtn type="submit">구독 신청하기</MoreBtn>
+              <MoreBtn type="submit" onClick={handleSubScribeBtnClick}>
+                구독 신청하기
+              </MoreBtn>
             </BtnWrapper>
           </form>
         </S.Inner>

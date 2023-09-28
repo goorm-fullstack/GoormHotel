@@ -15,6 +15,7 @@ const AdminSubScribe = () => {
       id: 1,
       emailAddress: 'test1@test.com',
       isSubScribe: '구독중',
+      // 구독 상태: 구독중 또는 수신거부로 표시(UX 고려)
     },
     {
       id: 2,
@@ -28,19 +29,15 @@ const AdminSubScribe = () => {
     },
   ]);
 
-  // useEffect(() => {
-  //   Instance.get(`/subscribe?page=${page}`).then((response) => {
-  //     console.log(response.data);
-  //     setChatData(response.data);
-  //   });
-  // }, []);
+  useEffect(() => {
+    Instance.get(`/subscribe?page=${page}`).then((response) => {
+      setSubScribeData(response.data);
+    });
+  }, []);
 
   const handleSelectAllChange = (e) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
-    console.log('test');
-    console.log(subScribeData.chatMessages);
-    console.log('===============================');
     if (checked) {
       const allMemberIds = subScribeData.map((item) => item.id);
       setCheckedItems(allMemberIds);
@@ -60,13 +57,12 @@ const AdminSubScribe = () => {
   };
 
   const handleClosedClick = (e) => {
-    checkedItems.map((roomId, index) => {
-      Instance.get('/chat/closed/' + roomId).then((response) => {
-        console.log(response);
-        // 닫은 방을 다시 열려면 사용자가 채팅을 해야합니다. 수동으로 전환하지 마세요.
+    console.log(checkedItems);
+    checkedItems.map((id, index) => {
+      Instance.post('/subscribe/cancel/' + id).then(() => {
+        // 구독해지용
       });
     });
-    window.location.reload();
   };
 
   return (
@@ -79,6 +75,7 @@ const AdminSubScribe = () => {
           </p>
           <BtnWrapper className="flexgap right">
             <NormalBtn className="header red" onClick={handleClosedClick}>
+              {/* * 상태 변경 버튼 붉은 색 */}
               구독 상태 변경
             </NormalBtn>
           </BtnWrapper>
@@ -102,18 +99,20 @@ const AdminSubScribe = () => {
           </thead>
           <tbody>
             {subScribeData.length === 0 ? (
-              <td colSpan="4">등록된 구독자가 없습니다.</td>
+              // empty td의 colspan 개수는 테이블 행의 모든 td 수와 일치해야 합니다.
+              <td colSpan="4">현재 구독자가 없습니다.</td>
             ) : (
               subScribeData.map((item, index) => (
                 <tr key={item.id}>
+                  {/* 테이블 스타일이 통합되어 있으며 td 클래스명에 center 입력 시 중앙정렬됩니다. inline 스타일 적용 시 추후 스타일 변경할 때 개별적으로 스타일이 적용되므로 통합된 스타일 규칙 따라주세요. */}
                   <td className="center">
                     <InputCheckbox type="checkbox" checked={checkedItems.includes(item.id)} onChange={() => handleCheckboxChange(item.id)} />
                   </td>
                   <td className="center">{item.id}</td>
-                  <td className="center lastChat">
+                  <td className="lastChat center">
                     <Link to={`/admin/mail?mailto=${item.emailAddress}`}>{item.emailAddress}</Link>
                   </td>
-                  <td className="center">{item.isSubScribe}</td>
+                  <td className="center">{item.isSubscribe}</td>
                 </tr>
               ))
             )}
