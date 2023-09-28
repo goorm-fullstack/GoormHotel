@@ -4,7 +4,7 @@ import moment from 'moment';
 import Item from '../../components/Item/Item';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Reservation from '../../components/Reservation';
+import Reservation from '../../components/Reservation/Reservation';
 import {
   commonContainerStyle,
   PageTitle,

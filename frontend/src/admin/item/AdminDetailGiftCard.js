@@ -19,7 +19,7 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
-import DateBtn from '../../components/common/DateButton.ts/DateButton';
+import DateBtn from '../../components/common/DateButton/DateButton';
 
 const giftCard = [
   {

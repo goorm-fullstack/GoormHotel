@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { CheckBtn, StyledCalendar, CalendarSvg, CalendarContainer, CalendarWrapper } from '../../Reservation';
+import { CheckBtn } from '../../Reservation/Style';
 
 export const DateButton = styled(CheckBtn)`
   border: 1px solid ${(props) => props.theme.colors.grayborder};

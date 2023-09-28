@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
-import Reservation from '../../components/Reservation';
+import Reservation from '../../components/Reservation/Reservation';
 import Product from '../../components/Item/Item';
 import { commonContainerStyle, PageTitle, ContentsTitleXSmall } from '../../Style/commonStyles';
 import { Wrapper, Left, Right, Section, OptionWrap, CouponInfo } from './ReservationPage';

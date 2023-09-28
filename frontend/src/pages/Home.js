@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { commonWrapperStyle, MoreLink, BtnWrapper } from '../Style/commonStyles';
 import Slide from '../components/Slide';
-import Reservation from '../components/Reservation';
+import Reservation from '../components/Reservation/Reservation';
 import spaImg from '../images/main/spa.jpg';
 import KakaoMap from '../utils/KakaoMap';
 import dining01 from '../images/dining/Bakery.jpg';

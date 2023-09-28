@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import { Container, ContentHeader, Table, TableHeader, TableCheckbox } from '../member/AdminMember';
 import { InputWrapper, Section } from '../member/AdminManager';
 import Paging from '../../components/common/Paging/Paging';
-import DateBtn from '../../components/common/DateButton.ts/DateButton';
+import DateBtn from '../../components/common/DateButton/DateButton';
 
 // // 사용가능, 사용불가능
 // export const FilterButton = styled.button``;
