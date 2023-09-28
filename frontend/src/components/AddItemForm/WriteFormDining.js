@@ -1,68 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { TableTd, TableTr, Form, BoldTd, Input } from '../admin/item/AdminDetailGiftCard';
-import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
-import { Select } from '../admin/item/AdminItemList';
-import {
-  Container,
-  Title,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from '../admin/member/AdminMember';
-import { commonAdminContents, PageTitle, commonTable, InputCheckbox, BtnWrapper, NormalBtn, SubmitBtn } from '../Style/commonStyles';
+import * as S from './Style';
+import { Table, TableHeader } from '../../admin/member/AdminMember';
+import { PageTitle, NormalBtn, SubmitBtn, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
 import axios from 'axios';
-
-// const NormalBtn = styled(NavLink)`
-//   &.active ${TypeButton} {
-//     color: #ffffff;
-//     background-color: #95846e;
-//   }
-// `;
-
-// 이미지 미리보기
-const Image = styled.img`
-  width: 300px;
-  vertical-align: middle;
-  margin-left: 50px;
-`;
-
-// 중복검사버튼
-const DuplicateButton = styled.button`
-  vertical-align: middle;
-  margin-left: 50px;
-  width: 100px;
-  height: 40px;
-  color: #95846e;
-  background-color: #ffffff;
-  border: 1px solid rgb(186, 160, 133);
-  &:hover {
-    color: #ffffff;
-    background-color: #95846e;
-  }
-`;
-
-// 중복검사 경고 문구
-const RedP = styled.p`
-  color: #ec5353;
-  display: inline-block;
-  margin-left: 30px;
-`;
-
-// 중복검사 성공 문구
-const GreenP = styled.p`
-  color: #008000;
-  display: inline-block;
-  margin-left: 30px;
-`;
 
 const WriteFormDining = () => {
   const [imgFile, setImgFile] = useState(''); // 이미지 상태 관리
@@ -165,19 +105,23 @@ const WriteFormDining = () => {
   // 중복 확인 메시지에 따라 태그 결정
   let responseMessege;
   if (duplicateMessage === '중복된 상품명입니다.' || duplicateMessage === '상품명은 공백일 수 없습니다.') {
-    responseMessege = <RedP>{duplicateMessage}</RedP>;
+    responseMessege = <S.RedP>{duplicateMessage}</S.RedP>;
   } else {
-    responseMessege = <GreenP>{duplicateMessage}</GreenP>;
+    responseMessege = <S.GreenP>{duplicateMessage}</S.GreenP>;
   }
 
   return (
     <>
       <PageTitle>다이닝 등록</PageTitle>
       <TableHeader>
-        <div>
-          <NormalBtn to="/admin/item/add/room">객실 등록</NormalBtn>
-          <NormalBtn to="/admin/item/add/dining">다이닝 등록</NormalBtn>
-        </div>
+        <BtnWrapper className="flexgap right">
+          <LinkBtn to="/admin/item/add/room" className="header">
+            객실 등록
+          </LinkBtn>
+          <LinkBtn to="/admin/item/add/dining" className="header">
+            다이닝 등록
+          </LinkBtn>
+        </BtnWrapper>
       </TableHeader>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <Table className="horizontal">
@@ -185,16 +129,16 @@ const WriteFormDining = () => {
             <th>썸네일</th>
             <td>
               <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required />
-              {imgFile ? <Image src={imgFile} alt="프로필 이미지" /> : <Image style={{ display: 'none' }}></Image>}
+              {imgFile ? <S.Image src={imgFile} alt="프로필 이미지" /> : <S.Image style={{ display: 'none' }} />}
             </td>
           </tr>
           <tr>
             <th>상품명</th>
             <td>
               <input type="text" name="name" value={formData.name} onChange={handleChange} ref={nameRef} required />
-              <DuplicateButton type="button" onClick={handleDuplicate}>
+              <S.DuplicateButton type="button" onClick={handleDuplicate}>
                 중복확인
-              </DuplicateButton>
+              </S.DuplicateButton>
               {responseMessege}
             </td>
           </tr>

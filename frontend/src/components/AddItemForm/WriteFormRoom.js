@@ -1,75 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { TableTd, TableTr, Form, BoldTd, input } from '../admin/item/AdminDetailGiftCard';
-import styled from 'styled-components';
+import * as S from './Style';
 import { NavLink } from 'react-router-dom';
-import { Select } from '../admin/item/AdminItemList';
-import {
-  Container,
-  Title,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from '../admin/member/AdminMember';
-import { commonAdminContents, PageTitle, commonTable, inputCheckbox, BtnWrapper, NormalBtn, SubmitBtn } from '../Style/commonStyles';
+import { Table, TableHeader } from '../../admin/member/AdminMember';
+import { PageTitle, NormalBtn, SubmitBtn } from '../../Style/commonStyles';
 import axios from 'axios';
-
-// const TypeLink = styled(NavLink)`
-//   &.active ${TypeButton} {
-//     color: #ffffff;
-//     background-color: #95846e;
-//   }
-// `;
-
-// 이미지 미리보기
-export const Image = styled.img`
-  width: 300px;
-  height: 100px;
-  vertical-align: middle;
-  margin-left: 50px;
-`;
-
-// 세부타입 선택
-const WriteFormSelect = styled(Select)`
-  width: 200px;
-  margin: 0;
-`;
-
-// 중복검사버튼
-const DuplicateButton = styled.button`
-  vertical-align: middle;
-  margin-left: 50px;
-  width: 100px;
-  height: 40px;
-  color: #95846e;
-  background-color: #ffffff;
-  border: 1px solid rgb(186, 160, 133);
-  &:hover {
-    color: #ffffff;
-    background-color: #95846e;
-  }
-`;
-
-// 중복검사 경고 문구
-const RedP = styled.p`
-  color: #ec5353;
-  display: inline-block;
-  margin-left: 30px;
-`;
-
-// 중복검사 성공 문구
-const GreenP = styled.p`
-  color: #008000;
-  display: inline-block;
-  margin-left: 30px;
-`;
 
 const WriteFormRoom = () => {
   const [imgFile, setImgFile] = useState(''); // 이미지 상태 관리
@@ -171,9 +105,9 @@ const WriteFormRoom = () => {
   // 중복검사 메시지에 따른 태그 결정
   let responseMessege = [];
   if (duplicateMessage === '중복된 상품명입니다.' || duplicateMessage === '상품명은 공백일 수 없습니다.') {
-    responseMessege = <RedP>{duplicateMessage}</RedP>;
+    responseMessege = <S.RedP>{duplicateMessage}</S.RedP>;
   } else {
-    responseMessege = <GreenP>{duplicateMessage}</GreenP>;
+    responseMessege = <S.GreenP>{duplicateMessage}</S.GreenP>;
   }
 
   return (
@@ -191,16 +125,16 @@ const WriteFormRoom = () => {
             <th>썸네일</th>
             <td>
               <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required />
-              {imgFile ? <Image src={imgFile} alt="프로필 이미지" /> : <Image style={{ display: 'none' }} />}
+              {imgFile ? <S.Image src={imgFile} alt="프로필 이미지" /> : <S.Image style={{ display: 'none' }} />}
             </td>
           </tr>
           <tr>
             <th>상품명</th>
             <td>
               <input type="text" name="name" value={formData.name} onChange={handleChange} ref={nameRef} required />
-              <DuplicateButton type="button" onClick={handleDuplicate}>
+              <S.DuplicateButton type="button" onClick={handleDuplicate}>
                 중복확인
-              </DuplicateButton>
+              </S.DuplicateButton>
               {responseMessege}
             </td>
           </tr>
@@ -249,24 +183,24 @@ const WriteFormRoom = () => {
           <tr>
             <th>세부 타입</th>
             <td>
-              <WriteFormSelect name="typeDetail" value={formData.typeDetail} onChange={handleChange}>
+              <S.WriteFormSelect name="typeDetail" value={formData.typeDetail} onChange={handleChange}>
                 <option value="">선택</option>
                 <option value="deluxe">디럭스</option>
                 <option value="sweet">스위트</option>
                 <option value="family">패밀리</option>
                 <option value="poolVilla">풀 빌라</option>
-              </WriteFormSelect>
+              </S.WriteFormSelect>
             </td>
           </tr>
           <tr>
             <th>침대 타입</th>
             <td>
-              <WriteFormSelect name="bed" value={formData.bed} onChange={handleChange}>
+              <S.WriteFormSelect name="bed" value={formData.bed} onChange={handleChange}>
                 <option value="">선택</option>
                 <option value="single">싱글</option>
                 <option value="double">더블/트윈</option>
                 <option value="king">킹</option>
-              </WriteFormSelect>
+              </S.WriteFormSelect>
             </td>
           </tr>
           <tr>

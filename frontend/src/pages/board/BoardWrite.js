@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom'; // useHistory 추가
 import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn, SubmitBtn, commonTable } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
-import { Image } from '../../components/WriteFormRoom';
+import { Image } from '../../components/AddItemForm/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
 
 const Container = styled(commonContainerStyle)``;

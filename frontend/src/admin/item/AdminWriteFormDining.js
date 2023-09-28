@@ -1,6 +1,6 @@
 import React from 'react';
 import AdminLayout from '../common/AdminLayout';
-import WriteFormDining from '../../components/WriteFormDining';
+import WriteFormDining from '../../components/AddItemForm/WriteFormDining';
 import { Container } from '../member/AdminMember';
 
 const AdminWriteFormDining = () => {

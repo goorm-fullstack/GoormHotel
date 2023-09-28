@@ -1,6 +1,6 @@
 import React from 'react';
 import AdminLayout from '../common/AdminLayout';
-import WriteFormRoom from '../../components/WriteFormRoom';
+import WriteFormRoom from '../../components/AddItemForm/WriteFormRoom';
 import { Container } from '../member/AdminMember';
 
 const AdminWriteFormRoom = () => {

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, inputCheckbox, BtnWrapper, NormalBtn, CheckLabel, SubmitBtn } from '../../Style/commonStyles';
-import { Image } from '../../components/WriteFormRoom';
+import { Image } from '../../components/AddItemForm/Style';
 import { Select } from './AdminItemList';
 import styled from 'styled-components';
 import { useParams } from 'react-router';
