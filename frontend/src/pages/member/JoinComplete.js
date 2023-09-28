@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { BtnWrapper, SubmitBtn, PageTitle, LinkBtn, commonContainerStyle } from '../../components/common/commonStyles';
+import { BtnWrapper, SubmitBtn, PageTitle, LinkBtn, commonContainerStyle } from '../../Style/commonStyles';
 
 const Container = styled(commonContainerStyle)``;
 

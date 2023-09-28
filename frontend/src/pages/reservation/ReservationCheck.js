@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import Reservation from '../../components/Reservation';
-import Product from '../../components/Item';
-import { commonContainerStyle, PageTitle, ContentsTitleXSmall } from '../../components/common/commonStyles';
+import Product from '../../components/Item/Item';
+import { commonContainerStyle, PageTitle, ContentsTitleXSmall } from '../../Style/commonStyles';
 import { Wrapper, Left, Right, Section, OptionWrap, CouponInfo } from './ReservationPage';
 
 const Container = styled(commonContainerStyle)`

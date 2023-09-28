@@ -4,8 +4,8 @@ import Deluxe from '../../images/room/Deluxe.jpg';
 import Family from '../../images/room/Family.jpg';
 import Suite from '../../images/room/Suite.jpg';
 import Villa from '../../images/room/Villa.jpg';
-import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
-import SubHeader from '../../components/layout/SubHeader';
+import { commonContainerStyle, PageTitle } from '../../Style/commonStyles';
+import SubHeader from '../../components/layout/SubHeader/SubHeader';
 
 export const Container = styled(commonContainerStyle)``;
 

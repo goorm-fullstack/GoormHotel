@@ -1,19 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { styled } from 'styled-components';
-import { BtnWrapper, SubmitBtn } from './commonStyles';
-
-const SearchHeader = styled.div`
-  display: flex;
-  padding: 20px 0;
-  margin-top: 40px;
-  justify-content: center;
-  column-gap: 10px;
-
-  select {
-    width: 120px;
-  }
-`;
+import * as S from './Style';
+import { BtnWrapper, SubmitBtn } from '../../../Style/commonStyles';
 
 // endPoint = api의 엔드포인트
 const Search = (endPoint, typeArray, typeDetailArray) => {
@@ -105,7 +93,7 @@ const Search = (endPoint, typeArray, typeDetailArray) => {
 
   return {
     searchJsx: (
-      <SearchHeader>
+      <S.SearchHeader>
         <select name="type" value={type} onChange={handleTypeChange}>
           {typeArray.map((item, index) => {
             return item.map((obj, idx) => (
@@ -124,7 +112,7 @@ const Search = (endPoint, typeArray, typeDetailArray) => {
             검색
           </SubmitBtn>
         </BtnWrapper>
-      </SearchHeader>
+      </S.SearchHeader>
     ),
     url: currentUrl,
   };

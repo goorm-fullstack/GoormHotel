@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { commonAdminContents, PageTitle, commonTable, InputCheckbox, BtnWrapper, NormalBtn } from '../../components/common/commonStyles';
-import Paging from '../../components/common/Paging';
+import { commonAdminContents, PageTitle, commonTable, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
+import Paging from '../../components/common/Paging/Paging';
 
 export const Container = styled(commonAdminContents)``;
 

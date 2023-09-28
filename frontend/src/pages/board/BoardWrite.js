@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom'; // useHistory 추가
-import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn, SubmitBtn, commonTable } from '../../components/common/commonStyles';
-import SubHeader from '../../components/layout/SubHeader';
+import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn, SubmitBtn, commonTable } from '../../Style/commonStyles';
+import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
 import { Image } from '../../components/WriteFormRoom';
-import TextEditor from '../../components/common/TextEditor';
+import TextEditor from '../../components/common/TextEditor/TextEditor';
 
 const Container = styled(commonContainerStyle)``;
 const Table = styled(commonTable)``;

@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import AdminHeader from './common/AdminHeader';
-import { commonAdminContainer, commonContentsStyle, PageTitle } from '../components/common/commonStyles';
-import {useEffect, useState} from "react";
-import axios from "axios";
-import item from "../components/Item";
+import { commonAdminContainer, commonContentsStyle, PageTitle } from '../Style/commonStyles';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export const AdminContainer = styled(commonAdminContainer)``;
 
@@ -129,30 +128,36 @@ const LatestList = styled.ul`
 const AdminIndex = () => {
   const [notice, setNotice] = useState([]);
   useEffect(() => {
-    axios.get('/boards/find/boardTitle/공지사항').then((response) => {
-      setNotice(response.data || []);
-    })
-    .catch((error) => {
-      console.error(error);
-    })
+    axios
+      .get('/boards/find/boardTitle/공지사항')
+      .then((response) => {
+        setNotice(response.data || []);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
   const [review, setReview] = useState([]);
   useEffect(() => {
-    axios.get('/boards/find/boardTitle/이용후기').then((response) => {
-      setReview(response.data || []);
-    })
-    .catch((error) => {
-      console.error(error);
-    })
+    axios
+      .get('/boards/find/boardTitle/이용후기')
+      .then((response) => {
+        setReview(response.data || []);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
   const [qna, setQna] = useState([]);
   useEffect(() => {
-    axios.get('/boards/find/boardTitle/문의하기').then((response) => {
-      setQna(response.data || []);
-    })
-    .catch((e) => {
-      console.error(e);
-    })
+    axios
+      .get('/boards/find/boardTitle/문의하기')
+      .then((response) => {
+        setQna(response.data || []);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   }, []);
 
   console.log(notice);
@@ -172,16 +177,19 @@ const AdminIndex = () => {
                 공지사항<Link to={'/admin/board/1'}>자세히보기</Link>
               </h4>
               <LatestList>
-                {notice.slice(0, 3).map((item, index) => (
+                {notice.slice(0, 3).map(
+                  (item, index) =>
                     item && (
-                        <li key={index}>
-                          <p>
-                            <Link to={`/board/notice/detail/${item.title}`}>{item.title}</Link>
-                          </p>
-                          <span>{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</span>
-                        </li>
+                      <li key={index}>
+                        <p>
+                          <Link to={`/board/notice/detail/${item.title}`}>{item.title}</Link>
+                        </p>
+                        <span>{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
+                          item.boardWriteDate[2] < 10 ? '0' : ''
+                        }${item.boardWriteDate[2]}`}</span>
+                      </li>
                     )
-                ))}
+                )}
               </LatestList>
             </li>
             <li>
@@ -189,16 +197,19 @@ const AdminIndex = () => {
                 문의하기<Link to={'/admin/board/1'}>자세히보기</Link>
               </h4>
               <LatestList>
-                {qna.slice(0, 3).map((item, index) => (
+                {qna.slice(0, 3).map(
+                  (item, index) =>
                     item && (
-                        <li key={index}>
-                          <p>
-                            <Link to="#">{item.title}</Link>
-                          </p>
-                          <span>{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</span>
-                        </li>
+                      <li key={index}>
+                        <p>
+                          <Link to="#">{item.title}</Link>
+                        </p>
+                        <span>{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
+                          item.boardWriteDate[2] < 10 ? '0' : ''
+                        }${item.boardWriteDate[2]}`}</span>
+                      </li>
                     )
-                ))}
+                )}
               </LatestList>
             </li>
             <li>
@@ -206,16 +217,19 @@ const AdminIndex = () => {
                 이용후기<Link to={'/admin/board/1'}>자세히보기</Link>
               </h4>
               <LatestList>
-                {review.slice(0, 3).map((item, index) => (
+                {review.slice(0, 3).map(
+                  (item, index) =>
                     item && (
-                        <li key={index}>
-                          <p>
-                            <Link to="#">{item.title}</Link>
-                          </p>
-                          <span>{`${item.boardWriteDate[0]}.${(item.boardWriteDate[1] < 10 ? '0' : '')}${item.boardWriteDate[1]}.${(item.boardWriteDate[2] < 10 ? '0' : '')}${item.boardWriteDate[2]}`}</span>
-                        </li>
+                      <li key={index}>
+                        <p>
+                          <Link to="#">{item.title}</Link>
+                        </p>
+                        <span>{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
+                          item.boardWriteDate[2] < 10 ? '0' : ''
+                        }${item.boardWriteDate[2]}`}</span>
+                      </li>
                     )
-                ))}
+                )}
               </LatestList>
             </li>
           </Latest>

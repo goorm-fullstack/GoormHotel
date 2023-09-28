@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { useParams } from 'react-router-dom'; // Remove duplicate import
-import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn, commonTable } from '../../components/common/commonStyles';
-import SubHeader from '../../components/layout/SubHeader';
-import Paging from '../../components/common/Paging';
+import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn, commonTable } from '../../Style/commonStyles';
+import SubHeader from '../../components/layout/SubHeader/SubHeader';
+import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
 import Instance from '../../utils/api/axiosInstance';
-import Search from '../../components/common/Search';
+import Search from '../../components/common/Search/Search';
 
 export const Container = styled(commonContainerStyle)``;
 

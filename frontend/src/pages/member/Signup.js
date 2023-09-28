@@ -11,9 +11,9 @@ import {
   SubmitBtn,
   Auth,
   RequiredTitle,
-} from '../../components/common/commonStyles';
-import AgreementContents from '../../components/AgreementCon';
-import PrivacyContents from '../../components/PrivacyCon';
+} from '../../Style/commonStyles';
+import AgreementContents from '../../components/Agreement/AgreementCon';
+import PrivacyContents from '../../components/Agreement/PrivacyCon';
 
 const Container = styled(commonContainerStyle)``;
 

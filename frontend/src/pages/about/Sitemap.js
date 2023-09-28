@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
+import { commonContainerStyle, PageTitle } from '../../Style/commonStyles';
 
 const Container = styled(commonContainerStyle)``;
 

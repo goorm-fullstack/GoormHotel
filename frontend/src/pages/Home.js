@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { commonWrapperStyle, MoreLink, BtnWrapper } from '../components/common/commonStyles';
+import { commonWrapperStyle, MoreLink, BtnWrapper } from '../Style/commonStyles';
 import Slide from '../components/Slide';
 import Reservation from '../components/Reservation';
 import spaImg from '../images/main/spa.jpg';

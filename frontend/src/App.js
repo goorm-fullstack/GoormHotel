@@ -9,7 +9,7 @@ import Dining from './pages/about/Dining';
 import About from './pages/about/About';
 import Mypage from './pages/member/Mypage';
 import ReservationPage from './pages/reservation/ReservationPage';
-import ChatModal from './components/layout/ChatModal';
+import ChatModal from './components/layout/ChatModal/ChatModal';
 import ReservationCheck from './pages/reservation/ReservationCheck';
 import ReservationItem from './pages/reservation/ReservationItem';
 import ReservationList from './pages/reservation/ReservationList';

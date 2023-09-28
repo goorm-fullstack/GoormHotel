@@ -13,8 +13,8 @@ import {
   BtnWrapper,
   SubmitLinkBtn,
   CircleCloseBtn,
-} from '../../components/common/commonStyles';
-import Paging from '../../components/common/Paging';
+} from '../../Style/commonStyles';
+import Paging from '../../components/common/Paging/Paging';
 
 const Container = styled(commonContainerStyle)``;
 
@@ -254,8 +254,8 @@ const ReservationItem = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const location = useLocation();
   const { reservationData } = location.state;
-  const [selectedType, setSelectedType] = useState(["room"]);
-  const [selectedCategory, setSelectedCategory] = useState(productCategories[0].english); 
+  const [selectedType, setSelectedType] = useState(['room']);
+  const [selectedCategory, setSelectedCategory] = useState(productCategories[0].english);
   const [products, setProducts] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
   console.log(reservationData);
@@ -278,26 +278,28 @@ const ReservationItem = () => {
 
   useEffect(() => {
     if (selectedType.includes('all')) {
-      axios.get('/category')
-      .then(response => {
-        setProducts(response.data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
+      axios
+        .get('/category')
+        .then((response) => {
+          setProducts(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     } else {
-      axios.get('/category', {
-        params: {
-          type: selectedType[0],
-          typeDetail: selectedCategory
-        }
-      })
-      .then(response => {
-        setProducts(response.data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
+      axios
+        .get('/category', {
+          params: {
+            type: selectedType[0],
+            typeDetail: selectedCategory,
+          },
+        })
+        .then((response) => {
+          setProducts(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   }, [selectedType, selectedCategory]);
 
@@ -326,13 +328,13 @@ const ReservationItem = () => {
     } else {
       setSelectedType((prevSelected) => {
         if (prevSelected.includes(value)) {
-          return prevSelected.filter(type => type !== value && type !== 'all');
+          return prevSelected.filter((type) => type !== value && type !== 'all');
         } else {
           const updatedSelected = [...prevSelected, value];
           if (updatedSelected.includes('room') && updatedSelected.includes('dining')) {
             return ['all', 'room', 'dining'];
           } else {
-            return updatedSelected.filter(type => type !== 'all');
+            return updatedSelected.filter((type) => type !== 'all');
           }
         }
       });
@@ -345,12 +347,19 @@ const ReservationItem = () => {
         <PageTitle>스페셜오퍼</PageTitle>
         <Wrapper>
           <Left>
-          <ContentsTitleXSmall>예약 상품 선택</ContentsTitleXSmall>
+            <ContentsTitleXSmall>예약 상품 선택</ContentsTitleXSmall>
             <SelectWrapper>
               <div className="typewrapper">
                 {productTypes.map((type, index) => (
                   <CheckLabel for={type.id}>
-                    <InputCheckbox type="checkbox" id={type.id} key={index} onChange={handleTypeChange} value={type.id} checked={selectedType.includes(type.id)}/>
+                    <InputCheckbox
+                      type="checkbox"
+                      id={type.id}
+                      key={index}
+                      onChange={handleTypeChange}
+                      value={type.id}
+                      checked={selectedType.includes(type.id)}
+                    />
                     {type.name}
                   </CheckLabel>
                 ))}
@@ -360,24 +369,23 @@ const ReservationItem = () => {
                   전체 <strong>0</strong> 개
                 </p>
                 <select id="productType" value={selectedCategory} onChange={handleCategoryChange}>
-                {selectedType.includes('room')
-                  ? productCategories.map((category, index) => (
-                      <option key={index} value={category.english}>
-                        {category.korean}
-                      </option>
-                    ))
-                  : diningCategories.map((category, index) => (
-                      <option key={index} value={category.english}>
-                        {category.korean}
-                      </option>
-                  ))}
-                  {selectedType.includes('all') && (
+                  {selectedType.includes('room')
+                    ? productCategories.map((category, index) => (
+                        <option key={index} value={category.english}>
+                          {category.korean}
+                        </option>
+                      ))
+                    : diningCategories.map((category, index) => (
+                        <option key={index} value={category.english}>
+                          {category.korean}
+                        </option>
+                      ))}
+                  {selectedType.includes('all') &&
                     [...diningCategories, ...productCategories].map((category, index) => (
                       <option key={index} value={category.english}>
                         {category.korean}
                       </option>
-                    ))
-                  )}
+                    ))}
                 </select>
               </div>
             </SelectWrapper>

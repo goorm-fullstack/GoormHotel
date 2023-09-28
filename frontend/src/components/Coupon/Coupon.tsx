@@ -1,92 +1,14 @@
 import React from 'react';
-import { styled } from 'styled-components';
+import * as S from './Style';
 
-const CouponWrapper = styled.div`
-  width: 100%;
-  background-color: ${(props) => props.theme.colors.graybg};
-  height: 200px;
-  position: relative;
-  display: flex;
-  margin-bottom: 10px;
-  padding: 0 70px;
-  overflow: hidden;
-  align-items: center;
-  gap: 0 30px;
+type CouponProps = {
+  grade: string;
+};
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 40px;
-    height: 40px;
-    background-color: white;
-    border-radius: 50%;
-  }
-
-  &::before {
-    left: 0;
-    transform: translate(-50%, -50%);
-  }
-
-  &::after {
-    right: 0;
-    transform: translate(50%, -50%);
-  }
-`;
-
-const GradeIcon = styled.svg`
-  width: 110px;
-
-  &.bronze path {
-    fill: url('#gradient1');
-  }
-  &.silver path {
-    fill: url('#gradient2');
-  }
-  &.gold path {
-    fill: url('#gradient3');
-  }
-`;
-
-const CounponInfo = styled.div`
-  width: 230px;
-  line-height: 1.5;
-`;
-
-const CouponTitle = styled.p`
-  font-size: ${(props) => props.theme.font.sizexs};
-  text-transform: capitalize;
-
-  &.bronze {
-    color: ${(props) => props.theme.memberColors.bronze};
-  }
-  &.silver {
-    color: ${(props) => props.theme.memberColors.silver};
-  }
-  &.gold {
-    color: ${(props) => props.theme.memberColors.gold};
-  }
-`;
-
-const CouponName = styled.p`
-  font-size: ${(props) => props.theme.font.sizel};
-  color: ${(props) => props.theme.colors.charcoal};
-  margin-bottom: 10px;
-`;
-
-const PublishDate = styled.p`
-  font-size: ${(props) => props.theme.font.sizexs};
-  color: ${(props) => props.theme.colors.graylight};
-`;
-
-const DateOfUse = styled(PublishDate)`
-  width: 232px;
-`;
-const Coupon = ({ grade }) => {
+const Coupon = ({ grade }: CouponProps) => {
   return (
-    <CouponWrapper>
-      <GradeIcon className={grade} data-name="Layer 1" id="Layer_1" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+    <S.CouponWrapper>
+      <svg className={grade} data-name="Layer 1" id="Layer_1" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#493323" />
@@ -131,14 +53,14 @@ const Coupon = ({ grade }) => {
         <path d="M52.82,14.83a1.28,1.28,0,1,0-1.28,1.28A1.28,1.28,0,0,0,52.82,14.83Z" />
         <path d="M27.77,90.12a1.29,1.29,0,1,0-1.28,1.28A1.28,1.28,0,0,0,27.77,90.12Z" />
         <path d="M98.91,14.83a1.28,1.28,0,1,0-1.28,1.28A1.28,1.28,0,0,0,98.91,14.83Z" />
-      </GradeIcon>
-      <CounponInfo>
-        <CouponTitle className={grade}>{grade} 등급 혜택</CouponTitle>
-        <CouponName>객실 5% 할인 쿠폰</CouponName>
-        <PublishDate>발행일: 2023-08-01</PublishDate>
-        <DateOfUse>사용기한: 2023-08-01~2023-08-31</DateOfUse>
-      </CounponInfo>
-    </CouponWrapper>
+      </svg>
+      <div className="couponinfo">
+        <p className={`${grade} ctitle`}>{grade} 등급 혜택</p>
+        <p className="cname">객실 5% 할인 쿠폰</p>
+        <p className="publish">발행일: 2023-08-01</p>
+        <p className="publish use">사용기한: 2023-08-01~2023-08-31</p>
+      </div>
+    </S.CouponWrapper>
   );
 };
 export default Coupon;

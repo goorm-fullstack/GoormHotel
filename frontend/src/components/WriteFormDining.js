@@ -18,7 +18,7 @@ import {
   TableCheckbox,
   Num,
 } from '../admin/member/AdminMember';
-import { commonAdminContents, PageTitle, commonTable, InputCheckbox, BtnWrapper, NormalBtn, SubmitBtn } from './common/commonStyles';
+import { commonAdminContents, PageTitle, commonTable, InputCheckbox, BtnWrapper, NormalBtn, SubmitBtn } from '../Style/commonStyles';
 import axios from 'axios';
 
 // const NormalBtn = styled(NavLink)`

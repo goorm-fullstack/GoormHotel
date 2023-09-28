@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { commonContainerStyle, PageTitle, ContentsTitleXSmall, AuthBtn, Auth, BtnWrapper, SubmitBtn } from '../../components/common/commonStyles';
-import Coupon from '../../components/Coupon';
+import { commonContainerStyle, PageTitle, ContentsTitleXSmall, AuthBtn, Auth, BtnWrapper, SubmitBtn } from '../../Style/commonStyles';
+import Coupon from '../../components/Coupon/Coupon';
 import { Link } from 'react-router-dom';
 
 const Container = styled(commonContainerStyle)``;

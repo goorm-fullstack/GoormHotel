@@ -6,7 +6,7 @@ import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle } from '../../components/common/commonStyles';
+import { PageTitle } from '../../Style/commonStyles';
 import { Container } from '../member/AdminMember';
 import { numberWithCommas } from '../../utils/function/comma';
 

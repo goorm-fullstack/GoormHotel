@@ -1,12 +1,12 @@
 import React from 'react';
-import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
+import { commonContainerStyle, PageTitle } from '../../Style/commonStyles';
 import { Item, Info, Name, Description, Detail, Location, ImgWrapper } from './Room';
 import Bakery from '../../images/dining/Bakery.jpg';
 import Bar from '../../images/dining/Bar.jpg';
 import Restaurant from '../../images/dining/Restaurant.jpg';
 import RoomService from '../../images/dining/RoomService.jpg';
 import { styled } from 'styled-components';
-import SubHeader from '../../components/layout/SubHeader';
+import SubHeader from '../../components/layout/SubHeader/SubHeader';
 
 export const Container = styled(commonContainerStyle)``;
 

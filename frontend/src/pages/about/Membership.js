@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
+import { commonContainerStyle, PageTitle } from '../../Style/commonStyles';
 
 const ImageBorder = styled.div`
   background-color: ${(props) => props.theme.colors.graybg};

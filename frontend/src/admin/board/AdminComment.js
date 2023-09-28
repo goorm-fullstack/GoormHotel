@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../Style/commonStyles';
 import {
   Container,
   ContentHeader,
@@ -18,7 +18,7 @@ import {
   Num,
 } from '../member/AdminMember';
 import axios, { get } from 'axios';
-import Paging from '../../components/common/Paging';
+import Paging from '../../components/common/Paging/Paging';
 
 const ModalContainer = styled.div`
   display: none;
@@ -216,12 +216,16 @@ const AdminComment = () => {
       <Container>
         <PageTitle>댓글 관리</PageTitle>
         <TableHeader>
-          <p className={"total"}>
+          <p className={'total'}>
             전체 <strong>{totalReply}</strong> 건
           </p>
-            <BtnWrapper className="flexgap right">
-            <NormalBtn className="header" onClick={handleReport}>신고처리</NormalBtn>
-            <NormalBtn className="header red" onClick={handleDeleteItems}>삭제</NormalBtn>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn className="header" onClick={handleReport}>
+              신고처리
+            </NormalBtn>
+            <NormalBtn className="header red" onClick={handleDeleteItems}>
+              삭제
+            </NormalBtn>
           </BtnWrapper>
         </TableHeader>
         <Table>
@@ -239,32 +243,36 @@ const AdminComment = () => {
             </tr>
           </thead>
           <tbody>
-            {reply.length === 0 && <td colSpan="7" className='center'>등록된 댓글이 없습니다.</td>}
+            {reply.length === 0 && (
+              <td colSpan="7" className="center">
+                등록된 댓글이 없습니다.
+              </td>
+            )}
             {reply.map((reply, idx) => (
               <tr key={reply.replyId}>
-                <td className='center'>
+                <td className="center">
                   <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(reply.replyId)}
                     onChange={() => handleCheckboxChange(reply.replyId)}
                   />
                 </td>
-                <td className='center'>{idx + 1}</td>
-                <td className='center'>{reply.boardTitle}</td>
-                <td className='center'>
+                <td className="center">{idx + 1}</td>
+                <td className="center">{reply.boardTitle}</td>
+                <td className="center">
                   <LinkStyle to={`/board/${reply.boardId}/detail`}>{reply.title}</LinkStyle>
                 </td>
-                <td className='center'>
+                <td className="center">
                   <CommentText>{truncateString(reply.replyContent, 8)}</CommentText>
                   <ModalContainer>
                     <ModalContent>{reply.replyContent}</ModalContent>
                   </ModalContainer>
                 </td>
-                <td className='center'>
+                <td className="center">
                   {reply.replyWriter}
                   {/*<LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>*/}
                 </td>
-                <td className='center'>{`${reply.replyWriteDate[0]}.${reply.replyWriteDate[1] < 10 ? '0' : ''}${reply.replyWriteDate[1]}.${
+                <td className="center">{`${reply.replyWriteDate[0]}.${reply.replyWriteDate[1] < 10 ? '0' : ''}${reply.replyWriteDate[1]}.${
                   reply.replyWriteDate[2] < 10 ? '0' : ''
                 }${reply.replyWriteDate[2]}`}</td>
               </tr>

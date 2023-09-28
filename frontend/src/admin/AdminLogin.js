@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import adminLogo from '../images/common/logo_admin.png';
 import { Link } from 'react-router-dom';
-import { commonAdminContainer, PageTitle, SubmitBtn, BtnWrapper, CheckLabel, InputCheckbox } from '../components/common/commonStyles';
+import { commonAdminContainer, PageTitle, SubmitBtn, BtnWrapper, CheckLabel, InputCheckbox } from '../Style/commonStyles';
 import { Container } from './common/AdminHeader';
 
 const LoginContainer = styled.div`

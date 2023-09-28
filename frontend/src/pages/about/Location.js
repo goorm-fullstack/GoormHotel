@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { PageTitle, ContentsTitleSmall, commonContainerStyle } from '../../components/common/commonStyles';
-import SubHeader from '../../components/layout/SubHeader';
+import { PageTitle, ContentsTitleSmall, commonContainerStyle } from '../../Style/commonStyles';
+import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import KakaoMap from '../../utils/KakaoMap';
 import ico_bus from '../../images/icon/ico_bus.png';
 import ico_train from '../../images/icon/ico_train.png';

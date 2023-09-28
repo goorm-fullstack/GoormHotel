@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { commonWrapperStyle } from '../../common/commonStyles';
+import { commonWrapperStyle } from '../../../Style/commonStyles';
 import instagramImg from '../../../images/common/social_instagram.png';
 import youtubeImg from '../../../images/common/social_youtube.png';
 import owlImg from '../../../images/common/social_owl.png';

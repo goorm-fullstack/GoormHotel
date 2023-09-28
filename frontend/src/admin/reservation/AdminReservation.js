@@ -4,9 +4,9 @@ import Instance from '../../utils/api/axiosInstance';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, BtnWrapper, NormalBtn, InputCheckbox } from '../../components/common/commonStyles';
+import { PageTitle, BtnWrapper, NormalBtn, InputCheckbox } from '../../Style/commonStyles';
 import { Container, Table, TableHeader } from '../member/AdminMember';
-import Paging from '../../components/common/Paging';
+import Paging from '../../components/common/Paging/Paging';
 
 const AdminReservation = () => {
   const [reservationList, setReservationList] = useState([]);

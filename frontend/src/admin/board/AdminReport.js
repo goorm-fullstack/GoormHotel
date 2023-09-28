@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../Style/commonStyles';
 import {
   Container,
   ContentHeader,
@@ -17,7 +17,7 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
-import Paging from '../../components/common/Paging';
+import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
 
 const LinkStyle = styled(Link)`
@@ -68,20 +68,22 @@ const AdminReport = () => {
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [report, setReport] = useState([]);
   useEffect(() => {
-    axios.get('/report/list').then((response) => {
-      // 데이터를 가져올 때 reportCheck와 reportResult를 문자열로 처리
-      const modifiedData = response.data.map((item) => ({
-        ...item,
-        reportCheck: item.reportCheck.toString(),
-        reportResult: item.reportResult.toString(),
-      }));
-      setReport(modifiedData);
+    axios
+      .get('/report/list')
+      .then((response) => {
+        // 데이터를 가져올 때 reportCheck와 reportResult를 문자열로 처리
+        const modifiedData = response.data.map((item) => ({
+          ...item,
+          reportCheck: item.reportCheck.toString(),
+          reportResult: item.reportResult.toString(),
+        }));
+        setReport(modifiedData);
 
-      console.log('get 성공');
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+        console.log('get 성공');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   console.log(report);
@@ -158,13 +160,13 @@ const AdminReport = () => {
           </thead>
           <tbody>
             {report.length === 0 && (
-              <td colSpan="8" className="center empty" className='center'>
+              <td colSpan="8" className="center empty" className="center">
                 신고된 글이 없습니다.
               </td>
             )}
             {report.map((report) => (
               <tr key={report.reportId}>
-                <td className='center'>
+                <td className="center">
                   <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(report.reportId)}
@@ -173,8 +175,8 @@ const AdminReport = () => {
                     // onChange={() => handleCheckboxChange(item.memberId)}
                   />
                 </td>
-                <td className='center'>{report.reportId}</td>
-                <td className='center'>
+                <td className="center">{report.reportId}</td>
+                <td className="center">
                   {report.replyId != null ? (
                     <LinkStyle>{report.replyContent}</LinkStyle>
                   ) : report.boardId != null ? (
@@ -183,15 +185,15 @@ const AdminReport = () => {
                     report.reportContent
                   )}
                 </td>
-                <td className='center'>
+                <td className="center">
                   {report.reportWriter}
                   {/*<LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>*/}
                 </td>
-                <td className='center'>{report.reportReason}</td>
-                <td className='center'>{`${report.reportDate[0]}.${report.reportDate[1] < 10 ? '0' : ''}${report.reportDate[1]}.${report.reportDate[2] < 10 ? '0' : ''}${
-                  report.reportDate[2]
-                }`}</td>
-                <td className='center'>{report.reportResult}</td>
+                <td className="center">{report.reportReason}</td>
+                <td className="center">{`${report.reportDate[0]}.${report.reportDate[1] < 10 ? '0' : ''}${report.reportDate[1]}.${
+                  report.reportDate[2] < 10 ? '0' : ''
+                }${report.reportDate[2]}`}</td>
+                <td className="center">{report.reportResult}</td>
                 {/*{(() => {*/}
                 {/*  switch (report.reportCheck) {*/}
                 {/*    case 'false':*/}
@@ -205,11 +207,11 @@ const AdminReport = () => {
                 {(() => {
                   switch (report.reportResult) {
                     case 'false':
-                      return <td className='center'>N</td>;
+                      return <td className="center">N</td>;
                     case 'true':
-                      return <td className='center'>Y</td>;
+                      return <td className="center">Y</td>;
                     default:
-                      return <td className='center'>N</td>;
+                      return <td className="center">N</td>;
                   }
                 })()}
               </tr>

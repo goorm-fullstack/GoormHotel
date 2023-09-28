@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as S from './Style';
 import { Link } from 'react-router-dom';
-import { BtnWrapper, MoreBtn } from '../../common/commonStyles';
+import { BtnWrapper, MoreBtn } from '../../../Style/commonStyles';
 
 const handleSubmit = (event: any) => {
   event.preventDefault();

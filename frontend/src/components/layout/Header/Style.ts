@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { SubmitLinkBtn } from '../../common/commonStyles';
+import { SubmitLinkBtn } from '../../../Style/commonStyles';
 
 export const Header = styled.header`
   position: fixed;

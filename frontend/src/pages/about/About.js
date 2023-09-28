@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { BtnWrapper, MoreLink, PageTitle, ContentsTitle, commonContainerStyle } from '../../components/common/commonStyles';
-import SubHeader from '../../components/layout/SubHeader';
+import { BtnWrapper, MoreLink, PageTitle, ContentsTitle, commonContainerStyle } from '../../Style/commonStyles';
+import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import diningImg from '../../images/about/dining.jpg';
 import facilitiesImg from '../../images/about/facilities.jpg';
 import membershipImg from '../../images/about/membership.jpg';

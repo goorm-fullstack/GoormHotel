@@ -2,7 +2,7 @@ import React from 'react';
 import * as S from './Style';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../../../images/common/logo.png';
-import { BtnWrapper } from '../../common/commonStyles';
+import { BtnWrapper } from '../../../Style/commonStyles';
 
 const Header = () => {
   const location = useLocation().pathname;

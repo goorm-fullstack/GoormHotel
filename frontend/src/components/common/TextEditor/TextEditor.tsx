@@ -1,31 +1,12 @@
 import React, { Component } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { styled } from 'styled-components';
-
-const EditorWrapper = styled.div`
-  .ck.ck-toolbar {
-    border-right: 0;
-    border-left: 0;
-    border-top: 0;
-  }
-
-  .ck.ck-editor__editable_inline {
-    border-left: 0;
-    border-right: 0;
-    height: 400px;
-    border-bottom: 0;
-  }
-
-  .ck.ck-editor__main > .ck-editor__editable:not(.ck-focused) {
-    border-top-color: ${(props) => props.theme.colors.grayborder};
-  }
-`;
+import * as S from './Style';
 
 class TextEditor extends Component {
   render() {
     return (
-      <EditorWrapper>
+      <S.EditorWrapper>
         <CKEditor
           editor={ClassicEditor}
           data=""
@@ -44,7 +25,7 @@ class TextEditor extends Component {
             console.log('Focus.', editor);
           }}
         />
-      </EditorWrapper>
+      </S.EditorWrapper>
     );
   }
 }

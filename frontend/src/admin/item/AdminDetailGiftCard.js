@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, inputCheckbox, BtnWrapper, NormalBtn, CheckLabel, SubmitBtn, LinkBtn } from '../../components/common/commonStyles';
+import { PageTitle, inputCheckbox, BtnWrapper, NormalBtn, CheckLabel, SubmitBtn, LinkBtn } from '../../Style/commonStyles';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import 'moment/locale/ko';
@@ -19,7 +19,7 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
-import DateBtn from '../../components/common/DateButton';
+import DateBtn from '../../components/common/DateButton.ts/DateButton';
 
 const giftCard = [
   {

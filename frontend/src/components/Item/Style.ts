@@ -1,8 +1,7 @@
-import React from 'react';
-import item from '../images/item/item1.jpg';
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 
-const PaymentInfo = styled.div`
+export const PaymentInfo = styled.div`
+  // 결제 정보
   line-height: 1.6;
   margin-top: 24px;
 
@@ -26,6 +25,7 @@ const PaymentInfo = styled.div`
   }
 
   .discount td {
+    // 할인액
     color: ${(props) => props.theme.colors.red};
   }
 
@@ -36,6 +36,7 @@ const PaymentInfo = styled.div`
 
   .total th,
   .total td {
+    // 최종금액
     border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
     border-bottom: 1px solid ${(props) => props.theme.colors.graylightborder};
     padding: 16px 0;
@@ -49,6 +50,7 @@ const PaymentInfo = styled.div`
   }
 
   p {
+    // VAT
     text-align: right;
     color: ${(props) => props.theme.colors.goldhover};
     margin-top: 8px;
@@ -56,7 +58,8 @@ const PaymentInfo = styled.div`
   }
 `;
 
-const SelectedItem = styled.div`
+export const SelectedItem = styled.div`
+  // 스페셜 오퍼 선택된 상품 상품 개요
   .imgwrap {
     width: 100%;
     height: 165px;
@@ -64,6 +67,7 @@ const SelectedItem = styled.div`
   }
 
   h4 {
+    // 상품명
     font-weight: 500;
     color: ${(props) => props.theme.colors.goldhover};
     padding: 21px 20px;
@@ -83,12 +87,14 @@ const SelectedItem = styled.div`
   }
 
   button {
+    // 상품 선택 해제 버튼
     position: absolute;
     top: 16px;
     right: 20px;
   }
 
   p {
+    // 상품 상세 정보
     padding: 0 20px;
     line-height: 1.5;
     font-size: ${(props) => props.theme.font.sizes};
@@ -96,6 +102,7 @@ const SelectedItem = styled.div`
   }
 
   table {
+    // 추가 비용
     margin-top: 20px;
     width: 100%;
 
@@ -118,7 +125,8 @@ const SelectedItem = styled.div`
   }
 `;
 
-const SelectItem = styled.div`
+export const SelectItem = styled.div`
+  // 스펠셜오퍼 상품 개요 컨테이너
   width: 100%;
   height: 552px;
   border: 1px solid ${(props) => props.theme.colors.grayborder};
@@ -126,63 +134,3 @@ const SelectItem = styled.div`
   background: ${(props) => props.theme.colors.graybg};
   overflow: hidden;
 `;
-
-const Item = ({ selectedProduct }) => {
-  return (
-    <>
-      <SelectItem>
-        <SelectedItem>
-          <div className="imgwrap" style={{ backgroundImage: `url(${item})` }} alt="상품 이미지" />
-          <h4>{selectedProduct.name}</h4>
-          <p>{selectedProduct.type}</p>
-          <p>{selectedProduct.typeDetail}</p>
-          <p>성인 2</p>
-          <table>
-            <tr>
-              <th>기본가</th>
-              <td>{selectedProduct.price} 원</td>
-            </tr>
-          </table>
-          <h5>추가 인원 비용</h5>
-          <table>
-            <tr>
-              <th>성인</th>
-              <td>{selectedProduct.priceAdult} 원</td>
-              {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 
-
-                          예약 정보 입력 페이지에서 기준 인원 초과하여 인원 추가하는 경우 
-                          추가된 인원 수에 맞춰 위 계산법 적용됩니다. 이하 동일 */}
-            </tr>
-            <tr>
-              <th>어린이</th>
-              <td>{selectedProduct.priceChildren} 원</td>
-              {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 */}
-            </tr>
-          </table>
-        </SelectedItem>
-      </SelectItem>
-
-      <PaymentInfo>
-        <table>
-          <tr>
-            <th>총액</th>
-            <td>500,000 원</td>
-          </tr>
-          <tr className="discount">
-            <th>할인액</th>
-            <td>-200,000 원</td>
-          </tr>
-          <tr className="total">
-            <th>최종금액</th>
-            <td>
-              <strong>300,000</strong> 원
-            </td>
-          </tr>
-        </table>
-        <p>⁕&nbsp;VAT 포함</p>
-      </PaymentInfo>
-    </>
-  );
-};
-
-export default Item;

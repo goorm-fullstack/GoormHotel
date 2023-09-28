@@ -1,47 +1,9 @@
 import React, { useState } from 'react';
-import { styled } from 'styled-components';
+import * as S from './Style';
 import { NavLink } from 'react-router-dom';
+import { StringLiteral } from '@babel/types';
 
-export const SubHeaderWrapper = styled.div`
-  height: 70px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid ${(props) => props.theme.colors.grayborder};
-  position: fixed;
-  width: 100%;
-  min-width: ${(props) => props.theme.wrapper.minwidth};
-  background-color: white;
-  z-index: 99;
-  padding: 0 40px;
-  top: 120px;
-
-  h2 {
-    /* GNB 기준 페이지명 */
-    font-size: ${(props) => props.theme.font.sizem};
-    font-weight: 500;
-    width: 191px;
-    margin-right: 45px;
-  }
-
-  ul {
-    display: flex;
-    align-items: center;
-    gap: 0 40px;
-  }
-
-  li a {
-    /* 하위 페이지명 */
-    font-size: ${(props) => props.theme.font.sizes};
-    color: ${(props) => props.theme.colors.graylight};
-  }
-
-  li a:hover,
-  li a.active {
-    color: ${(props) => props.theme.colors.goldhover};
-  }
-`;
-
-const contents = {
+const SubHeaderData = {
   about: {
     pagetitle: '구름호텔 소개',
     nav: [
@@ -104,20 +66,25 @@ const contents = {
   },
 };
 
-const SubHeader = ({ kind }) => {
+type SubHeaderProps = {
+  kind: string;
+};
+
+const SubHeader = ({ kind }: SubHeaderProps) => {
   return (
-    <SubHeaderWrapper>
-      <h2>{contents[kind].pagetitle}</h2>
+    <S.SubHeader>
+      <h2>{SubHeaderData.facilities.pagetitle}</h2>
+      {/* kind 값으로 참조하는 방법 여쭤보기: 기존 형태(js) SubHeaderData[kind].pagetitle */}
       <ul>
-        {contents[kind].nav.map((nav) => (
+        {SubHeaderData.facilities.nav.map((nav) => (
           <li>
-            <NavLink to={nav.linkto} $activeClassName="active">
+            <NavLink to={nav.linkto} className={({ isActive }) => (isActive ? 'active' : '')}>
               {nav.title}
             </NavLink>
           </li>
         ))}
       </ul>
-    </SubHeaderWrapper>
+    </S.SubHeader>
   );
 };
 

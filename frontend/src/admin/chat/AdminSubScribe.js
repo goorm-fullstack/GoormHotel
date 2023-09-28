@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
 import { Link, useParams } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
 import { Container, Table, TableHeader } from '../member/AdminMember';
-import Paging from '../../components/common/Paging';
+import Paging from '../../components/common/Paging/Paging';
 
 const AdminSubScribe = () => {
   const { page } = useParams();

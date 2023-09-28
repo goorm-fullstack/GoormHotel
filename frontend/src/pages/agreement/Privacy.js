@@ -1,9 +1,9 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { NavLink } from 'react-router-dom';
-import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
-import SubHeader from '../../components/layout/SubHeader';
-import PrivacyContents from '../../components/PrivacyCon';
+import { commonContainerStyle, PageTitle } from '../../Style/commonStyles';
+import SubHeader from '../../components/layout/SubHeader/SubHeader';
+import PrivacyContents from '../../components/Agreement/PrivacyCon';
 
 const Container = styled(commonContainerStyle)``;
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import moment from 'moment';
-import Item from '../../components/Item';
+import Item from '../../components/Item/Item';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Reservation from '../../components/Reservation';
@@ -16,9 +16,9 @@ import {
   NormalBtn,
   CheckLabel,
   RequiredTitle,
-} from '../../components/common/commonStyles';
-import PrivacyContents from '../../components/PrivacyCon';
-import PaymentAgree from '../../components/PayAgree';
+} from '../../Style/commonStyles';
+import PrivacyContents from '../../components/Agreement/PrivacyCon';
+import PaymentAgree from '../../components/Agreement/PayAgree';
 import { AgreementText } from '../member/Signup';
 
 const Container = styled(commonContainerStyle)``;

@@ -1,12 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, NormalLinkBtn } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, NormalLinkBtn } from '../../Style/commonStyles';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Table, TableHeader } from '../member/AdminMember';
-import Paging from '../../components/common/Paging';
-import Search from '../../components/common/Search';
+import Paging from '../../components/common/Paging/Paging';
+import Search from '../../components/common/Search/Search';
 
 // 카테고리 셀렉트
 export const Select = styled.select`

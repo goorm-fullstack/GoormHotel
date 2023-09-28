@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel, ContentsTitleXSmall, SubmitBtn } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel, ContentsTitleXSmall, SubmitBtn } from '../../Style/commonStyles';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
@@ -9,8 +9,8 @@ import 'moment/locale/ko';
 import { Link } from 'react-router-dom';
 import { Container, ContentHeader, Table, TableHeader, TableCheckbox } from '../member/AdminMember';
 import { InputWrapper, Section } from '../member/AdminManager';
-import Paging from '../../components/common/Paging';
-import DateBtn from '../../components/common/DateButton';
+import Paging from '../../components/common/Paging/Paging';
+import DateBtn from '../../components/common/DateButton.ts/DateButton';
 
 // // 사용가능, 사용불가능
 // export const FilterButton = styled.button``;

@@ -1,18 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useParams, useLocation } from 'react-router-dom';
-import { styled } from 'styled-components';
-import { BtnWrapper, SubmitBtn } from './commonStyles';
-import { CheckBtn, StyledCalendar, CalendarSvg, CalendarContainer, CalendarWrapper } from '../Reservation';
+import * as S from './Style';
+import { StyledCalendar, CalendarSvg, CalendarContainer, CalendarWrapper } from '../../Reservation';
 import moment from 'moment';
-
-const DateButton = styled(CheckBtn)`
-  border: 1px solid ${(props) => props.theme.colors.grayborder};
-  padding: 0 12px;
-  font-size: ${(props) => props.theme.font.sizes};
-  height: 40px;
-  line-height: 40px;
-  text-decoration: none !important;
-`;
 
 const DateBtn = () => {
   const [selectValue, setSelectValue] = useState(new Date());
@@ -44,7 +33,7 @@ const DateBtn = () => {
 
   return (
     <>
-      <DateButton onClick={handleSelectDateToggle}>
+      <S.DateButton onClick={handleSelectDateToggle}>
         {selectDate}
         <CalendarSvg viewBox="0 0 32 32" width="18" height="18">
           <g xmlns="http://www.w3.org/2000/svg" id="calendar_1_">
@@ -60,7 +49,7 @@ const DateBtn = () => {
             <rect x="21" y="12" width="4" height="3" />
           </g>
         </CalendarSvg>
-      </DateButton>
+      </S.DateButton>
       <CalendarContainer>
         <CalendarWrapper open={calendarOpen}>
           <StyledCalendar
