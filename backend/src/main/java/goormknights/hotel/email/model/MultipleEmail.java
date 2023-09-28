@@ -1,12 +1,11 @@
 package goormknights.hotel.email.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 다수의 사용자에게 메일을 전송하는 엔티티
+ */
 @Data
 public class MultipleEmail {
     private List<String> to;

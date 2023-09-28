@@ -71,14 +71,14 @@ public class EmailService implements EmailSender {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = null;
         try {
-            for(String sender : emailMessage.getTo()) {
+            for(String sender : emailMessage.getTo()) {// 수신자 배열에서 수신자 정보를 출력하는 코드
                 helper = new MimeMessageHelper(message, true, "UTF-8");
                 helper.setSubject(emailMessage.getSubject()); // (민종) getTitle -> getSubject
                 helper.setTo(sender);
                 context.setVariable("message", emailMessage.getMessage());
-                String html = templateEngine.process("mail", context);
+                String html = templateEngine.process("AdminMail", context);
                 helper.setText(html, true);
-                if(multipartFile != null) {
+                if(multipartFile != null) {// 첨부 파일이 있는지 보고, 있으면 전송
                     helper.addAttachment(multipartFile.getOriginalFilename(), multipartFile);
                 }
                 helper.addInline("logo", new ClassPathResource("/static/images/common/logo.png"));

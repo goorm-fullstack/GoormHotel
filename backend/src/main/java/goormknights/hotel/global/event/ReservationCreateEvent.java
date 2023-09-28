@@ -7,6 +7,9 @@ import org.springframework.context.ApplicationEvent;
 
 import java.time.Clock;
 
+/**
+ * 예약 생성시 발생하는 이벤트
+ */
 public class ReservationCreateEvent extends ApplicationEvent {
     private final Reservation reservation;
 

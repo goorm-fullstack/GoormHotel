@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
+/**
+ * 예약 이벤트 리스너
+ */
 @Component
 @RequiredArgsConstructor
 public class ReservationEventListener {

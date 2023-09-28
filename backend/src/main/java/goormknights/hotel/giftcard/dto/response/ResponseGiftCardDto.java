@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 상품권 응답용 엔티티
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
