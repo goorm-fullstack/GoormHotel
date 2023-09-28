@@ -23,6 +23,18 @@ const EditorWrapper = styled.div`
 `;
 
 class TextEditor extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      editorData: '', // 에디터 데이터를 이 상태에 저장
+    };
+  }
+
+  handleEditorChange = (event, editor) => {
+    const data = editor.getData();
+    this.setState({ editorData: data });
+  };
+
   render() {
     return (
       <EditorWrapper>
