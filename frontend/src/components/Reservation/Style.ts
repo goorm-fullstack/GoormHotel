@@ -92,18 +92,18 @@ export const SelectLabel = styled.label`
 
 export const CalendarContainer = styled.div`
   position: relative;
-`;
 
-export const CalendarWrapper = styled.div`
-  z-index: 10;
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translate(-50%, 0);
-  display: block;
+  .calwrap {
+    z-index: 10;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    display: block;
 
-  &[data-isopen='false'] {
-    display: none;
+    &[data-isopen='false'] {
+      display: none;
+    }
   }
 `;
 

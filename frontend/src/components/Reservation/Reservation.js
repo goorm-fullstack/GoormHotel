@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './Style';
-import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import 'moment/locale/ko';
@@ -142,7 +141,7 @@ const Reservation = ({ updateReservationData }) => {
       <S.ReserveDate className="reservedate">
         <S.Check>
           <p>체크인</p>
-          <S.CheckBtn onClick={handleCheckInToggle}>
+          <S.CheckBtn type="button" onClick={handleCheckInToggle}>
             {checkInDate}
             {/* {formData.checkIn} */}
             <S.CalendarSvg viewBox="0 0 32 32" width="18" height="18">
@@ -161,13 +160,13 @@ const Reservation = ({ updateReservationData }) => {
             </S.CalendarSvg>
           </S.CheckBtn>
           <S.CalendarContainer>
-            <S.CalendarWrapper data-isopen={checkInOpen}>
+            <div className="calwrap" data-isopen={checkInOpen}>
               <S.StyledCalendar
                 tileDisabled={({ date }) => isDateDisabled(date)}
                 onChange={handleCheckInDateChange}
                 value={reservationData ? reservationData.checkInDate : checkInValue}
                 formatDay={(locale, date) => moment(date).format('DD')}></S.StyledCalendar>
-            </S.CalendarWrapper>
+            </div>
           </S.CalendarContainer>
         </S.Check>
         <p className="stay">{nights}박</p>
@@ -192,13 +191,13 @@ const Reservation = ({ updateReservationData }) => {
             </S.CalendarSvg>
           </S.CheckBtn>
           <S.CalendarContainer>
-            <S.CalendarWrapper data-isopen={checkOutOpen}>
+            <div className="calwrap" data-isopen={checkOutOpen}>
               <S.StyledCalendar
                 tileDisabled={({ date }) => isDateDisabled(date)}
                 onChange={handleCheckOutDateChange}
                 value={reservationData ? reservationData.checkOutDate : checkOutValue}
                 formatDay={(locale, date) => moment(date).format('DD')}></S.StyledCalendar>
-            </S.CalendarWrapper>
+            </div>
           </S.CalendarContainer>
         </S.Check>
       </S.ReserveDate>

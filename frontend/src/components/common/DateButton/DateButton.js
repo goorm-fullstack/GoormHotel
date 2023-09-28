@@ -51,13 +51,13 @@ const DateBtn = () => {
         </R.CalendarSvg>
       </S.DateButton>
       <R.CalendarContainer>
-        <R.CalendarWrapper data-isopen={calendarOpen}>
+        <div className="calwrap" data-isopen={calendarOpen}>
           <R.StyledCalendar
             tileDisabled={({ date }) => isDateDisabled(date)}
             onChange={handleCheckInDateChange}
             value={selectValue}
             formatDay={(locale, date) => moment(date).format('DD')}></R.StyledCalendar>
-        </R.CalendarWrapper>
+        </div>
       </R.CalendarContainer>
     </>
   );

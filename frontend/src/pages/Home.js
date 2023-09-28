@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { commonWrapperStyle, MoreLink, BtnWrapper } from '../Style/commonStyles';
-import Slide from '../components/Slide';
+import Slide from '../components/Slide/Slide';
 import Reservation from '../components/Reservation/Reservation';
 import spaImg from '../images/main/spa.jpg';
 import KakaoMap from '../utils/KakaoMap';
