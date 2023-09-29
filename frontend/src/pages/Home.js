@@ -5,7 +5,7 @@ import { commonWrapperStyle, MoreLink, BtnWrapper } from '../Style/commonStyles'
 import Slide from '../components/Slide/Slide';
 import Reservation from '../components/Reservation/Reservation';
 import spaImg from '../images/main/spa.jpg';
-import KakaoMap from '../utils/KakaoMap';
+import KakaoMap from '../utils/api/KakaoMap';
 import dining01 from '../images/dining/Bakery.jpg';
 import dining02 from '../images/dining/Bar.jpg';
 import dining03 from '../images/dining/Restaurant.jpg';
