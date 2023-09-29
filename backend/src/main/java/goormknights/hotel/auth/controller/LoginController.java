@@ -9,17 +9,16 @@ import goormknights.hotel.member.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/login")
 @RequiredArgsConstructor
 public class LoginController {
@@ -31,15 +30,26 @@ public class LoginController {
 
     // 회원 로그인
     @PostMapping("/member")
-    public Map<String, Object> memberLogin(@RequestBody MemberLogin memberLogin, HttpSession session) {
-        return memberService.memberLogin(memberLogin, session);
+    public ResponseEntity<Map<String, Object>> memberLogin(@RequestBody MemberLogin memberLogin, HttpSession session) {
+        try {
+            return memberService.memberLogin(memberLogin, session);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
-
 
     // 관리자 로그인
     @PostMapping("/manager")
-    public Map<String, Object> adminLogin(@RequestBody ManagerLogin managerLogin, HttpSession session) {
-        return adminService.managerLogin(managerLogin, session);
+    public ResponseEntity<Map<String, Object>> adminLogin(@RequestBody ManagerLogin managerLogin, HttpSession session) {
+        try {
+            return adminService.managerLogin(managerLogin, session);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     // 로그아웃

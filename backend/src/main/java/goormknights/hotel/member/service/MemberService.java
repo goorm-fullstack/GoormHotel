@@ -18,6 +18,8 @@ import goormknights.hotel.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -153,24 +155,32 @@ public class MemberService {
     }
 
 
-    // 로그인
-    public Map<String, Object> memberLogin(MemberLogin memberLogin, HttpSession session) {
+    // 멤버 로그인
+    public ResponseEntity<Map<String, Object>> memberLogin(MemberLogin memberLogin, HttpSession session) {
         HashMap<String, Object> response = new HashMap<>();
         Optional<Member> memberOptional = memberRepository.findByMemberId(memberLogin.getMemberId());
+
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
+
             if (passwordEncoder.matches(memberLogin.getPassword(), member.getPassword())) {
+                session.setMaxInactiveInterval(60 * 60 * 12);
                 session.setAttribute("member", member);
                 session.setAttribute("role", member.getRole());
+                session.setAttribute("sessionId", session.getId());
                 response.put("status", "success");
                 response.put("role", member.getRole().getKey());
+                response.put("sessionId", session.getId());
+                response.put("memberId", member.getMemberId());
+                return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
                 response.put("status", "fail");
+                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
             }
         } else {
             response.put("status", "fail");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
-        return response;
     }
 
     // 멤버 세션체크

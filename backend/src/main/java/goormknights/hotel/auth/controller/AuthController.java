@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -28,17 +29,39 @@ public class AuthController {
     private final AdminService adminService;
     private final VerificationService verificationService;
 
-    // 어드민 세션 체크
-    @GetMapping("/adminCheck")
-    public Map<String, Object> checkAdmin(HttpSession session) {
-        return adminService.checkAdmin(session);
+//    // 어드민 세션 체크
+//    @GetMapping("/adminCheck")
+//    public Map<String, Object> checkAdmin(HttpSession session) {
+//        return adminService.checkAdmin(session);
+//    }
+//
+//    // 멤버 세션 체크
+//    @GetMapping("/memberCheck")
+//    public Map<String, Object> checkMember(HttpSession session) {
+//        return memberService.checkMember(session);
+//    }
+
+
+    @GetMapping("/session/check")
+    public ResponseEntity<Map<String, Object>> checkSession(HttpSession session) {
+        HashMap<String, Object> response = new HashMap<>();
+
+        // 세션 검증 로직. 세션에 'userType'과 'role'이 저장되어 있을 것으로 가정
+        Object userType = session.getAttribute("userType");
+        Object role = session.getAttribute("role");
+
+        if (userType != null) {
+            response.put("isSessionValid", true);
+            response.put("userType", userType);
+            response.put("role", role);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            response.put("isSessionValid", false);
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
     }
 
-    // 멤버 세션 체크
-    @GetMapping("/memberCheck")
-    public Map<String, Object> checkMember(HttpSession session) {
-        return memberService.checkMember(session);
-    }
+
 
 
 

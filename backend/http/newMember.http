@@ -12,7 +12,7 @@ Content-Type: application/json
   "privacyCheck": true,
   "birth": "1999-01-01",
   "gender": "남성",
-  "code": "yG48p0N6"
+  "code": "4R5jdK5U"
 }
 
 ### 회원가입코드
@@ -24,7 +24,7 @@ Content-Type: application/json
 }
 
 ### 로그인
-POST http://localhost:8080/login
+POST http://localhost:8080/login/member
 Content-Type: application/json
 
 {

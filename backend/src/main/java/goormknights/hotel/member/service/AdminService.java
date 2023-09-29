@@ -8,6 +8,8 @@ import goormknights.hotel.member.model.Manager;
 import goormknights.hotel.member.repository.ManagerRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,25 +47,34 @@ public class AdminService {
     }
 
     // 매니저 로그인
-    public Map<String, Object> managerLogin(ManagerLogin managerLogin, HttpSession session) {
+    public ResponseEntity<Map<String, Object>> managerLogin(ManagerLogin managerLogin, HttpSession session) {
         HashMap<String, Object> response = new HashMap<>();
         Optional<Manager> adminOptional = managerRepository.findByAdminId(managerLogin.getAdminId());
+
         if (adminOptional.isPresent()) {
             Manager manager = adminOptional.get();
+
             if (passwordEncoder.matches(managerLogin.getPassword(), manager.getPassword())) {
+                session.setMaxInactiveInterval(60 * 60 * 12);
                 session.setAttribute("admin", manager);
                 session.setAttribute("role", manager.getRole());
+                session.setAttribute("sessionId", session.getId());
                 session.setAttribute("authorities", manager.getAuthorities());
                 response.put("status", "success");
                 response.put("role", manager.getRole().getKey());
+                response.put("sessionId", session.getId());
+                response.put("adminId", manager.getAdminId());
                 response.put("authorities", manager.getAuthorities());
+
+                return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
                 response.put("status", "fail");
+                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
             }
         } else {
             response.put("status", "fail");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
-        return response;
     }
 
     // 어드민 세션 체크

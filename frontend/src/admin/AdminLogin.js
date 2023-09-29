@@ -68,19 +68,23 @@ const AdminLogin = () => {
       });
       console.log("세션 응답 아이디: ", response.data);
 
-      if (response.data.status === 'success') {
+      if (response.status === 200) {
+        const {sessionId, adminId} = response.data;
         alert('로그인 성공');
+        localStorage.setItem('sessionId', sessionId);
+        localStorage.setItem('adminId', adminId);
         localStorage.setItem('role', response.data.role);
         localStorage.setItem('authorities', JSON.stringify(response.data.authorities));
         window.location.href = '/'
-      } else {
-        alert('로그인 실패');
       }
-
     } catch (error) {
-      alert('아이디 혹은 비밀번호가 올바르지 않습니다');
+      if (error.response) {
+        if (error.response.status === 401 || error.response.status === 404) {
+          alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+        }
+      }
     }
-  };
+  }
 
   const handleRememberIdChange = () => {
     setRememberId(!rememberId);
