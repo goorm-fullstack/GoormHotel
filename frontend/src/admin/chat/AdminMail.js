@@ -5,6 +5,7 @@ import TextEditor from '../../components/common/TextEditor';
 import { useParams } from 'react-router-dom';
 import { Container, Table } from '../member/AdminMember';
 import Instance from '../../utils/api/axiosInstance';
+import UploadAdapter from '../../utils/adaptor/UploadAdaptor';
 
 const AdminMail = () => {
   const {receiver} = useParams();
@@ -130,7 +131,7 @@ const AdminMail = () => {
               </tr>
               <tr>
                 <td colSpan="2" className="writeWrapper">
-                  <TextEditor setValue = {setMessage} name="message" required/>
+                  <TextEditor extra setValue = {setMessage} name="message" required/>
                 </td>
               </tr>
             </tbody>

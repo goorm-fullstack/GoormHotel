@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { styled } from 'styled-components';
+import UploadAdapter from '../../utils/adaptor/UploadAdaptor';
 
 const EditorWrapper = styled.div`
   .ck.ck-toolbar {
@@ -33,21 +34,33 @@ class TextEditor extends Component {
   handleEditorChange = (event, editor) => {
     const data = editor.getData();
     this.setState({ editorData: data });
+    console.log(data);
     this.props.setMessage(data);
   };
 
   render() {
+    // Custom Upload Adapter Plugin function
+    function MyCustomUploadAdapterPlugin(editor) {
+	    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+		    // Create new object and pass server url
+		    return new UploadAdapter(loader);
+	    };
+    }
     return (
       <EditorWrapper>
         <CKEditor
           editor={ClassicEditor}
           data=""
+          config={{
+            extraPlugins : [MyCustomUploadAdapterPlugin]
+          }}
           onReady={(editor) => {
             // You can store the "editor" and use when it is needed.
           }}
           onChange={(event, editor) => {
             const data = editor.getData();
             this.props.setValue(data);
+            console.log(data);
           }}
           onBlur={(event, editor) => {
           }}
