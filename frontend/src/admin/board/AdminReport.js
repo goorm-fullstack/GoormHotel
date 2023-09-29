@@ -160,7 +160,7 @@ const AdminReport = () => {
           </thead>
           <tbody>
             {report.length === 0 && (
-              <td colSpan="8" className="center empty" className="center">
+              <td colSpan="8" className="center empty">
                 신고된 글이 없습니다.
               </td>
             )}

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, BtnWrapper, SubmitBtn, LinkBtn } from '../../Style/commonStyles';
 import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { Container, Table } from './AdminMember';
 
 const AdminMemberDetail = () => {
@@ -21,7 +20,7 @@ const AdminMemberDetail = () => {
 
   console.log(formData);
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,

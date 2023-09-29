@@ -55,11 +55,11 @@ const AdminLogin = () => {
     setRememberId(!rememberId);
   };
 
-  const handleIdChange = (e) => {
+  const handleIdChange = (e: any) => {
     setAdminId(e.target.value);
   };
 
-  const handlePwChange = (e) => {
+  const handlePwChange = (e: any) => {
     setAdminPassword(e.target.value);
   };
 
@@ -84,7 +84,8 @@ const AdminLogin = () => {
         </form>
         <div>
           <CheckLabel>
-            <InputCheckbox type="checkbox" checked={handleRememberIdChange} />
+            <InputCheckbox type="checkbox" />
+            {/* checked={handleRememberIdChange} */}
             아이디 기억하기
           </CheckLabel>
         </div>

@@ -1,25 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, inputCheckbox, BtnWrapper, NormalBtn, CheckLabel, SubmitBtn } from '../../Style/commonStyles';
+import { PageTitle, SubmitBtn } from '../../Style/commonStyles';
 import { Image } from '../../components/AddItemForm/Style';
 import { Select } from './AdminItemList';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import {
-  Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from '../member/AdminMember';
+import { Container, Table } from '../member/AdminMember';
 
 // 세부 타입 select
 const WriteFormSelect = styled(Select)`

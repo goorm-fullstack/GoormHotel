@@ -1,24 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, inputCheckbox, BtnWrapper, NormalBtn, CheckLabel, SubmitBtn, LinkBtn } from '../../Style/commonStyles';
+import { PageTitle, BtnWrapper, SubmitBtn, LinkBtn } from '../../Style/commonStyles';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import 'moment/locale/ko';
-import {
-  Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from '../member/AdminMember';
+import { Container, Table } from '../member/AdminMember';
 import DateBtn from '../../components/common/DateButton/DateButton';
 
 const giftCard = [
