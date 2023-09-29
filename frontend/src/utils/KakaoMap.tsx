@@ -2,12 +2,16 @@ import React, { useEffect } from 'react';
 import { styled } from 'styled-components';
 
 const MapContainer = styled.div`
-  width: ${(props) => props.width || '100%'};
-  height: ${(props) => props.height || '480px'};
   border: 1px solid ${(props) => props.theme.colors.grayborder};
 `;
 
-const KakaoMap = ({ width, height }) => {
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
+
+const KakaoMap = () => {
   useEffect(() => {
     window.kakao.maps.load(() => {
       const container = document.getElementById('map');
@@ -26,7 +30,7 @@ const KakaoMap = ({ width, height }) => {
     });
   }, []);
 
-  return <MapContainer id="map" width={width} height={height} />;
+  return <MapContainer id="map" style={{ width: '100%', height: '480px' }} />;
 };
 
 export default KakaoMap;

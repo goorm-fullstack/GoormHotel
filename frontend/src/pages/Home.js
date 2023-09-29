@@ -404,7 +404,7 @@ const Home = () => {
           <IndexTitle>LOCATION</IndexTitle>
           <IndexDesc>구름 호텔로 오시는 방법을 안내해드립니다.</IndexDesc>
           <MapWrapper>
-            <KakaoMap width="1180px" height="480px" />
+            <KakaoMap />
             <MapAddress>
               <p>위치 : 경기도 성남시 분당구 판교로 242 PDC A동 902호</p>
               <ContactInfo>
