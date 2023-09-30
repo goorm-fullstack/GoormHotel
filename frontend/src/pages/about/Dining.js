@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
 import { Item, Info, Name, Description, Detail, Location, ImgWrapper } from './Room';
 import Bakery from '../../images/dining/Bakery.jpg';
@@ -7,10 +7,27 @@ import Restaurant from '../../images/dining/Restaurant.jpg';
 import RoomService from '../../images/dining/RoomService.jpg';
 import { styled } from 'styled-components';
 import SubHeader from '../../components/layout/SubHeader';
+import axios from 'axios';
 
 export const Container = styled(commonContainerStyle)``;
 
 const Dining = () => {
+  const [items, setItems] = useState([]);
+
+  const handleItems = async () => {
+    try {
+      const response = await axios.get('/rooms/all');
+      const data = response.data;
+      setItems(data);
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  };
+
+  useEffect(() => {
+    handleItems();
+  });
+
   return (
     <>
       <SubHeader kind="facilities" />

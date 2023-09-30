@@ -92,6 +92,15 @@ public class RoomService {
     }
 
     /**
+     * 객실 전체 조회
+     * @return 전체 객실 조회
+     */
+    public List<ResponseRoomDto> findAllWithoutPage(){
+        List<Room> all = roomRepository.findAll();
+        return all.stream().map(Room::toResponseRoomDto).toList();
+    }
+
+    /**
      * 페이징된 객실 엔티티 리스트를 Dto로 변환
      * @param roomPage - 페이징된 엔티티 리스트
      * @return Dto로 바꾼다

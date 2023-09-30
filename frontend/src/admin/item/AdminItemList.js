@@ -215,36 +215,37 @@ const AdminItemList = () => {
                 </td>
               </tr>
             )}
-            {items.map((item, idx) => {
-              const id = 'checkbox' + idx;
-              return (
-                <tr key={idx}>
-                  <td>
-                    <InputCheckbox
-                      type="checkbox"
-                      id={id}
-                      ref={(el) => (inputRef.current[idx] = el)}
-                      onClick={() => handleCheckboxClick(idx, item.name, item.type)}
-                    />
-                  </td>
-                  <td>{idx + 1}</td>
-                  <td>
-                    <Image src={imageUrls[idx] || ''} className="image" />
-                  </td>
-                  <td>
-                    {item.type === 'dining' ? (
-                      <Link to={`/admin/item/detail/dining/${item.type}/${item.name}`}>{item.name}</Link>
-                    ) : (
-                      <Link to={`/admin/item/detail/room/${item.type}/${item.name}`}>{item.name}</Link>
-                    )}
-                  </td>
-                  <td>{item.type}</td>
-                  <td>{item.typeDetail}</td>
-                  <td>{numberWithCommas(item.price)}</td>
-                  <td>{item.spare}</td>
-                </tr>
-              );
-            })}
+            {items &&
+              items.map((item, idx) => {
+                const id = 'checkbox' + idx;
+                return (
+                  <tr key={idx}>
+                    <td>
+                      <InputCheckbox
+                        type="checkbox"
+                        id={id}
+                        ref={(el) => (inputRef.current[idx] = el)}
+                        onClick={() => handleCheckboxClick(idx, item.name, item.type)}
+                      />
+                    </td>
+                    <td>{totalData - idx}</td>
+                    <td>
+                      <Image src={imageUrls[idx] || ''} className="image" />
+                    </td>
+                    <td>
+                      {item.type === 'dining' ? (
+                        <Link to={`/admin/item/detail/dining/${item.type}/${item.name}`}>{item.name}</Link>
+                      ) : (
+                        <Link to={`/admin/item/detail/room/${item.type}/${item.name}`}>{item.name}</Link>
+                      )}
+                    </td>
+                    <td>{item.type}</td>
+                    <td>{item.typeDetail}</td>
+                    <td>{numberWithCommas(item.price)}</td>
+                    <td>{item.spare}</td>
+                  </tr>
+                );
+              })}
           </tbody>
         </Table>
         <Paging />

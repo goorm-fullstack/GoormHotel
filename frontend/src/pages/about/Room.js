@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import Deluxe from '../../images/room/Deluxe.jpg';
 import Family from '../../images/room/Family.jpg';
@@ -6,6 +6,7 @@ import Suite from '../../images/room/Suite.jpg';
 import Villa from '../../images/room/Villa.jpg';
 import { commonContainerStyle, PageTitle } from '../../components/common/commonStyles';
 import SubHeader from '../../components/layout/SubHeader';
+import axios from 'axios';
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -65,6 +66,22 @@ export const Location = styled.p`
 `;
 
 const Room = () => {
+  const [items, setItems] = useState([]);
+
+  const handleItems = async () => {
+    try {
+      const response = await axios.get('/rooms/all');
+      const data = response.data;
+      setItems(data);
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  };
+
+  useEffect(() => {
+    handleItems();
+  });
+
   return (
     <>
       <SubHeader kind="facilities" />

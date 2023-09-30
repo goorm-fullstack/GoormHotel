@@ -29,11 +29,18 @@ public class QRoom extends EntityPathBase<Room> {
     //inherited
     public final NumberPath<Integer> capacity;
 
+    public final StringPath checkIn = createString("checkIn");
+
+    public final StringPath checkOut = createString("checkOut");
+
     //inherited
     public final BooleanPath deleted;
 
     //inherited
     public final NumberPath<Long> id;
+
+    //inherited
+    public final StringPath location;
 
     //inherited
     public final StringPath name;
@@ -87,6 +94,7 @@ public class QRoom extends EntityPathBase<Room> {
         this.capacity = _super.capacity;
         this.deleted = _super.deleted;
         this.id = _super.id;
+        this.location = _super.location;
         this.name = _super.name;
         this.price = _super.price;
         this.priceAdult = _super.priceAdult;

@@ -53,8 +53,17 @@ public class RequestRoomDto {
     @Positive
     private int capacity; // 숙박 인원 기준
 
+    @NotBlank
+    private String location; // 위치
+
+    @NotBlank
+    private String checkIn; // 체크인
+
+    @NotBlank
+    private String checkOut; // 체크아웃
+
     @Builder(toBuilder = true)
-    public RequestRoomDto(String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, String bed, int spare, int spareAdult, int spareChildren, int capacity) {
+    public RequestRoomDto(String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, String bed, int spare, int spareAdult, int spareChildren, int capacity, String location, String checkIn, String checkOut) {
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;
@@ -66,6 +75,9 @@ public class RequestRoomDto {
         this.spareAdult = spareAdult;
         this.spareChildren = spareChildren;
         this.capacity = capacity;
+        this.location = location;
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
     }
 
     // RequestRoomDto 엔티티화
@@ -82,6 +94,9 @@ public class RequestRoomDto {
                 .spareChildren(spareChildren)
                 .capacity(capacity)
                 .typeDetail(typeDetail)
+                .location(location)
+                .checkIn(checkIn)
+                .checkOut(checkOut)
                 .build();
     }
 }

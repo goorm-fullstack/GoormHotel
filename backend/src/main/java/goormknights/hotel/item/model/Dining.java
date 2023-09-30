@@ -39,6 +39,7 @@ public class Dining extends Item {
                 .spareAdult(requestDiningDto.getSpareAdult())
                 .spareChildren(requestDiningDto.getSpareChildren())
                 .capacity(requestDiningDto.getCapacity())
+                .location(requestDiningDto.getLocation())
                 .build();
     }
 
@@ -56,6 +57,7 @@ public class Dining extends Item {
                 .spareAdult(this.getSpareAdult())
                 .spareChildren(this.getSpareChildren())
                 .capacity(this.getCapacity())
+                .location(this.getLocation())
                 .build();
     }
 }

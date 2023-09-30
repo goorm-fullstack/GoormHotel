@@ -62,6 +62,9 @@ public abstract class Item {
     private String typeDetail;
 
     @Column(nullable = false)
+    private String location; // 위치
+
+    @Column(nullable = false)
     @Builder.Default
     private boolean deleted = false; // soft delete 여부 구분
 }
