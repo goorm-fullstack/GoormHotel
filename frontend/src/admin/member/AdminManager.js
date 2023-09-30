@@ -1,15 +1,6 @@
 import React, { useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import {
-  PageTitle,
-  InputCheckbox,
-  BtnWrapper,
-  NormalBtn,
-  CheckLabel,
-  ContentsTitleXSmall,
-  SubmitBtn,
-  MultiCheck,
-} from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel, ContentsTitleXSmall, SubmitBtn, MultiCheck } from '../../Style/commonStyles';
 import styled from 'styled-components';
 import {
   Container,
@@ -26,7 +17,7 @@ import {
   Num,
 } from './AdminMember';
 import { InfoContainer, InfoWrapper, Label, ModifyBtnWrapper, ModifyBtn } from './AdminMemberDetail';
-import Paging from '../../components/common/Paging';
+import Paging from '../../components/common/Paging/Paging';
 
 export const Section = styled.section`
   margin-bottom: 60px;

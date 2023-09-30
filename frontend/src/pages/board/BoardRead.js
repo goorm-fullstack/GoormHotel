@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { NavLink, useLocation, useParams } from 'react-router-dom';
-import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn } from '../../components/common/commonStyles';
-import SubHeader from '../../components/layout/SubHeader';
+import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
+import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
 
 export const Container = styled(commonContainerStyle)``;

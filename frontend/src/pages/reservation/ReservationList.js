@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { commonContainerStyle, PageTitle, commonTable } from '../../components/common/commonStyles';
-import Paging from '../../components/common/Paging';
+import { commonContainerStyle, PageTitle, commonTable } from '../../Style/commonStyles';
+import Paging from '../../components/common/Paging/Paging';
 
 const Container = styled(commonContainerStyle)``;
 const Table = styled(commonTable)``;
