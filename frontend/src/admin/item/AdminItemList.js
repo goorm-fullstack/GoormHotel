@@ -54,7 +54,7 @@ const AdminItemList = () => {
     [{ type: "다이닝", value: "dining" }],
   ];
 
-  let { searchJsx, url } = Search("/category", typeArray, typeDetailArray); // Search컴포넌트에서 값 받아와서 사용
+  const { searchJsx, url } = Search("/category", typeArray, typeDetailArray); // Search컴포넌트에서 값 받아와서 사용
   console.log(url);
   const { page } = useParams(); // url 파라미터
 

@@ -26,10 +26,9 @@ public class ResponseDiningDto {
      */
     private String typeDetail;
     private String useTime; // 이용 시간(ex. 아침, 점심, 저녁)
-    private String location; // 위치
 
     @Builder
-    public ResponseDiningDto(String name, int price, int priceAdult, int priceChildren, int spare, int spareAdult, int spareChildren, int capacity, String type, String typeDetail, String useTime, String location) {
+    public ResponseDiningDto(String name, int price, int priceAdult, int priceChildren, int spare, int spareAdult, int spareChildren, int capacity, String type, String typeDetail, String useTime) {
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;
@@ -41,6 +40,5 @@ public class ResponseDiningDto {
         this.type = type;
         this.typeDetail = typeDetail;
         this.useTime = useTime;
-        this.location = location;
     }
 }

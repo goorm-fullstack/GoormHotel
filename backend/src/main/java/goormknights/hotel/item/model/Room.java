@@ -24,12 +24,6 @@ public class Room extends Item{
     @Column(nullable = false)
     private String bed; // 침대 타입(ex. 싱글, 더블/트윈, 킹)
 
-    @Column(nullable = false)
-    private String checkIn; // 체크인
-
-    @Column(nullable = false)
-    private String checkOut; // 체크아웃
-
     // 클라이언트에게 응답 시 ResponseRoomDto로 변경
     public ResponseRoomDto toResponseRoomDto(){
         return ResponseRoomDto.builder()
@@ -44,9 +38,6 @@ public class Room extends Item{
                 .price(this.getPrice())
                 .priceChildren(this.getPriceChildren())
                 .typeDetail(this.getTypeDetail())
-                .location(this.getLocation())
-                .checkIn(this.getCheckIn())
-                .checkOut(this.getCheckOut())
                 .build();
     }
 
@@ -65,9 +56,6 @@ public class Room extends Item{
                 .spare(requestRoomDto.getSpare())
                 .bed(requestRoomDto.getBed())
                 .capacity(requestRoomDto.getCapacity())
-                .location(requestRoomDto.getLocation())
-                .checkIn(requestRoomDto.getCheckIn())
-                .checkOut(requestRoomDto.getCheckOut())
                 .build();
     }
 }
