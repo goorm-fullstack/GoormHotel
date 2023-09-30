@@ -54,37 +54,30 @@ const AdminLogin = () => {
   const [rememberId, setRememberId] = useState(false);
 
   const handleLogin = async () => {
-
     const loginInfo = {
       adminId: adminId,
       password: adminPassword,
     };
-
+    console.log("Sending the following loginInfo:", JSON.stringify(loginInfo));
     try {
       const response = await Instance.post('/login/manager', loginInfo, {
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
       });
-      console.log("세션 응답 아이디: ", response.data);
 
       if (response.status === 200) {
-        const {sessionId, adminId} = response.data;
         alert('로그인 성공');
-        localStorage.setItem('sessionId', sessionId);
-        localStorage.setItem('adminId', adminId);
-        localStorage.setItem('role', response.data.role);
-        localStorage.setItem('authorities', JSON.stringify(response.data.authorities));
-        window.location.href = '/'
+        window.location.href = '/';
+      } else {
+        throw new Error('Unauthorized');
       }
+
     } catch (error) {
-      if (error.response) {
-        if (error.response.status === 401 || error.response.status === 404) {
-          alert('아이디 또는 비밀번호가 일치하지 않습니다.');
-        }
-      }
+      alert('아이디 또는 비밀번호가 일치하지 않습니다.');
     }
-  }
+  };
 
   const handleRememberIdChange = () => {
     setRememberId(!rememberId);

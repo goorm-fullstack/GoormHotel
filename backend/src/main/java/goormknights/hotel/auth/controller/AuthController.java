@@ -1,12 +1,15 @@
 package goormknights.hotel.auth.controller;
 
+import goormknights.hotel.auth.service.AuthService;
 import goormknights.hotel.member.dto.request.FindMemberIdRequest;
 import goormknights.hotel.member.dto.request.FindPasswordRequest;
 import goormknights.hotel.member.dto.request.ResetPasswordRequest;
 import goormknights.hotel.member.exception.MemberNotFound;
-import goormknights.hotel.member.service.AdminService;
+import goormknights.hotel.member.model.Manager;
+import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.service.MemberService;
 import goormknights.hotel.member.service.VerificationService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,56 +20,30 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
 
     private final MemberService memberService;
-    private final AdminService adminService;
+    private final AuthService authService;
     private final VerificationService verificationService;
 
-//    // 어드민 세션 체크
-//    @GetMapping("/adminCheck")
-//    public Map<String, Object> checkAdmin(HttpSession session) {
-//        return adminService.checkAdmin(session);
-//    }
-//
-//    // 멤버 세션 체크
-//    @GetMapping("/memberCheck")
-//    public Map<String, Object> checkMember(HttpSession session) {
-//        return memberService.checkMember(session);
-//    }
-
-
-    @GetMapping("/session/check")
-    public ResponseEntity<Map<String, Object>> checkSession(HttpSession session) {
-        HashMap<String, Object> response = new HashMap<>();
-
-        // 세션 검증 로직. 세션에 'userType'과 'role'이 저장되어 있을 것으로 가정
-        Object userType = session.getAttribute("userType");
-        Object role = session.getAttribute("role");
-
-        if (userType != null) {
-            response.put("isSessionValid", true);
-            response.put("userType", userType);
-            response.put("role", role);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } else {
-            response.put("isSessionValid", false);
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    @GetMapping("/checkAuth")
+    public ResponseEntity<?> checkPermission(HttpServletRequest request) {
+        HttpSession session = request.getSession(false); // 세션 가져오기, 없으면 null 반환
+        if (session != null) {
+            if (session.getAttribute("member") != null) {
+                Member member = (Member) session.getAttribute("member");
+                return new ResponseEntity<>(member.getRole(), HttpStatus.OK); // 회원 역할 반환
+            }
+            else if (session.getAttribute("manager") != null) {
+                Manager manager = (Manager) session.getAttribute("manager");
+                return new ResponseEntity<>(manager.getAuth(), HttpStatus.OK); // 매니저 권한 반환
+            }
         }
+        return new ResponseEntity<>("접근 권한 없음", HttpStatus.FORBIDDEN);
     }
-
-
-
-
-
-
-
 
     // 아이디 찾기
     @PostMapping("/findMemberId")

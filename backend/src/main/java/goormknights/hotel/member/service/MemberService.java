@@ -1,6 +1,5 @@
 package goormknights.hotel.member.service;
 
-import goormknights.hotel.auth.dto.request.MemberLogin;
 import goormknights.hotel.auth.service.RedisUtil;
 import goormknights.hotel.email.model.EmailMessage;
 import goormknights.hotel.email.repository.EmailSender;
@@ -15,11 +14,12 @@ import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.model.MemberEditor;
 import goormknights.hotel.member.repository.MemberRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -156,31 +156,16 @@ public class MemberService {
 
 
     // 멤버 로그인
-    public ResponseEntity<Map<String, Object>> memberLogin(MemberLogin memberLogin, HttpSession session) {
-        HashMap<String, Object> response = new HashMap<>();
-        Optional<Member> memberOptional = memberRepository.findByMemberId(memberLogin.getMemberId());
-
-        if (memberOptional.isPresent()) {
-            Member member = memberOptional.get();
-
-            if (passwordEncoder.matches(memberLogin.getPassword(), member.getPassword())) {
-                session.setMaxInactiveInterval(60 * 60 * 12);
-                session.setAttribute("member", member);
-                session.setAttribute("role", member.getRole());
-                session.setAttribute("sessionId", session.getId());
-                response.put("status", "success");
-                response.put("role", member.getRole().getKey());
-                response.put("sessionId", session.getId());
-                response.put("memberId", member.getMemberId());
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            } else {
-                response.put("status", "fail");
-                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-            }
-        } else {
-            response.put("status", "fail");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    public boolean memberLogin(String memberId, String password, HttpServletRequest request, HttpServletResponse response) {
+        Optional<Member> optionalMember = memberRepository.findByMemberId(memberId);
+        if (optionalMember.isPresent() && passwordEncoder.matches(password, optionalMember.get().getPassword())) {
+            HttpSession session = request.getSession();
+            session.setAttribute("member", optionalMember.get());
+            Cookie cookie = new Cookie("JSESSIONID", session.getId());
+            response.addCookie(cookie);
+            return true;
         }
+        return false;
     }
 
     // 멤버 세션체크

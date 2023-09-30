@@ -1,15 +1,16 @@
 package goormknights.hotel.member.service;
 
-import goormknights.hotel.auth.dto.request.ManagerLogin;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.member.dto.request.AdminSignup;
 import goormknights.hotel.member.model.Manager;
 import goormknights.hotel.member.repository.ManagerRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AdminService {
@@ -39,7 +41,7 @@ public class AdminService {
                 .password(encryptedPassword)
                 .adminName(adminSignup.getAdminName())
                 .adminNickname(adminSignup.getAdminNickname())
-                .authorities(adminSignup.getAuthorities())
+                .auth(adminSignup.getAuth())
                 .role(Role.MANAGER)
                 .isActive(false)
                 .build();
@@ -47,34 +49,30 @@ public class AdminService {
     }
 
     // 매니저 로그인
-    public ResponseEntity<Map<String, Object>> managerLogin(ManagerLogin managerLogin, HttpSession session) {
-        HashMap<String, Object> response = new HashMap<>();
-        Optional<Manager> adminOptional = managerRepository.findByAdminId(managerLogin.getAdminId());
-
-        if (adminOptional.isPresent()) {
-            Manager manager = adminOptional.get();
-
-            if (passwordEncoder.matches(managerLogin.getPassword(), manager.getPassword())) {
-                session.setMaxInactiveInterval(60 * 60 * 12);
-                session.setAttribute("admin", manager);
-                session.setAttribute("role", manager.getRole());
-                session.setAttribute("sessionId", session.getId());
-                session.setAttribute("authorities", manager.getAuthorities());
-                response.put("status", "success");
-                response.put("role", manager.getRole().getKey());
-                response.put("sessionId", session.getId());
-                response.put("adminId", manager.getAdminId());
-                response.put("authorities", manager.getAuthorities());
-
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            } else {
-                response.put("status", "fail");
-                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-            }
-        } else {
-            response.put("status", "fail");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    public boolean ManagerLogin(String adminId, String password, HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("manager") != null) {
+            // 이미 로그인한 상태
+            return false;
         }
+
+        Optional<Manager> optionalManager = managerRepository.findByAdminId(adminId);
+        if (optionalManager.isPresent() && passwordEncoder.matches(password, optionalManager.get().getPassword())) {
+            session = request.getSession();
+            session.setAttribute("manager", optionalManager.get());
+            session.setAttribute("auth", optionalManager.get().getAuth()); // A, B, C
+            Cookie cookie = new Cookie("JSESSIONID", session.getId());
+            cookie.setMaxAge(10);
+            cookie.setPath("/");
+            response.addHeader("Access-Control-Allow-Origin", "*");
+            response.addHeader("Access-Control-Allow-Credentials", "true");
+            response.addCookie(cookie);
+            log.info("쿠키 이름: " + cookie.getName());
+            log.info("쿠키 값: " + cookie.getValue());
+            log.info("리스폰스 헤더값: " + response.getHeaderNames());
+            return true;
+        }
+        return false;
     }
 
     // 어드민 세션 체크

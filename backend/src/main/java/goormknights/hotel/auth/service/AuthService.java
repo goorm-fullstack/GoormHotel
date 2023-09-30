@@ -1,13 +1,10 @@
 package goormknights.hotel.auth.service;
 
-import goormknights.hotel.member.model.Manager;
 import goormknights.hotel.member.repository.ManagerRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,15 +17,16 @@ public class AuthService {
         session.invalidate();
     }
 
-    public void updateAuthorities(String adminId, List<String> newAuthorities, HttpSession session) {
-        Optional<Manager> managerOptional = managerRepository.findByAdminId(adminId);
-        if (managerOptional.isPresent()) {
-            Manager manager = managerOptional.get();
-            manager.setAuthorities(newAuthorities);
-            managerRepository.save(manager);
-
-            session.setAttribute("authorities", newAuthorities);
+    // 권한 확인
+    public String checkAuth(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            Object authObj = session.getAttribute("auth");
+            if (authObj != null) {
+                return (String) authObj;
+            }
         }
+        return null;
     }
 
 
