@@ -7,7 +7,9 @@ import axios from 'axios';
 import { Container, Table, TableHeader } from '../member/AdminMember';
 import { numberWithCommas } from '../../utils/function/comma';
 import Paging from '../../components/common/Paging/Paging';
-import Search from '../../components/common/Search/Search';
+import Search, { Type, TypeDetail } from '../../components/common/Search/Search';
+import { RoomData } from '../../pages/about/Room';
+import { DiningData } from '../../pages/about/Dining';
 
 // 카테고리 셀렉트
 export const Select = styled.select`
@@ -22,9 +24,15 @@ const Image = styled.img`
   vertical-align: middle;
 `;
 
+// 체크박스 선택 시 저장할 객체 타입
+interface SelectItem{
+  name: string;
+  type: string;
+}
+
 const AdminItemList = () => {
   // 대분류, 소분류 지정 배열
-  const typeDetailArray = [
+  const typeDetailArray: TypeDetail[][] = [
     [{ type: 'all', typeDetail: '카테고리', value: 'all' }],
     [
       { type: 'room', typeDetail: '전체', value: 'all' },
@@ -41,26 +49,21 @@ const AdminItemList = () => {
       { type: 'dining', typeDetail: '베이커리', value: 'bakery' },
     ],
   ];
-
-  const typeArray = [[{ type: '전체', value: 'all' }], [{ type: '객실', value: 'room' }], [{ type: '다이닝', value: 'dining' }]];
+  const typeArray: Type[][] = [[{ type: '전체', value: 'all' }], [{ type: '객실', value: 'room' }], [{ type: '다이닝', value: 'dining' }]];
 
   const { searchJsx, url } = Search('/category', typeArray, typeDetailArray); // Search컴포넌트에서 값 받아와서 사용
-  console.log(url);
-  const { page } = useParams(); // url 파라미터
-
-  const [items, setItems] = useState([]); // get 요청으로 받아온 전체 데이터 상태관리
-
-  const [selectedItems, setSelectedItems] = useState([]); // 선택된 상품 상태관리
-  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 상태관리
-  const [totalData, setTotalData] = useState(0); // 전체 데이터 수 상태관리
-
-  let itemsToDelete = [];
+  const { page } = useParams<{page: string}>(); // url 파라미터
+  const [items, setItems] = useState<(RoomData | DiningData)[]>([]); // get 요청으로 받아온 전체 데이터 상태관리
+  const [selectedItems, setSelectedItems] = useState<SelectItem[]>([]); // 선택된 상품 상태관리
+  const [totalPages, setTotalPages] = useState<number>(0); // 전체 페이지 상태관리
+  const [totalData, setTotalData] = useState<number>(0); // 전체 데이터 수 상태관리
+  const [imageUrls, setImageUrls] = useState<string[]>([]); // 이미지 데이터 상태관리
 
   // 체크박스 전체 선택 or 해체 기능
-  const inputRef = useRef([]);
+  const inputRef = useRef<HTMLInputElement[]>([]);
 
-  const handleAllChecked = (e) => {
-    inputRef.current.forEach((checkbox) => {
+  const handleAllChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+    inputRef.current.forEach((checkbox: HTMLInputElement) => {
       checkbox.checked = e.target.checked;
     });
   };
@@ -76,41 +79,37 @@ const AdminItemList = () => {
       setTotalPages(totalPages);
       setTotalData(totalData);
     } catch (error) {
-      console.error('Error:', error.message);
+      if (error instanceof Error) {
+        console.error('Error:', error.message);
+      } else {
+        console.error('An unknown error occurred.');
+      }
     }
   };
 
   // 삭제 버튼 클릭 이벤트
   const deleteButton = () => {
-    itemsToDelete = [];
-
-    inputRef.current.forEach((checkbox) => {
-      if (checkbox.checked) {
-        const itemName = checkbox.parentNode.nextSibling.nextSibling.nextSibling.innerText;
-        itemsToDelete.push(itemName);
-      }
-    });
-
     //삭제 확인
-    let isConfirm = window.confirm('삭제하시겠습니까?');
+    const isConfirm: boolean = window.confirm('삭제하시겠습니까?');
     if (isConfirm) {
       // 삭제
-      handleDeleteItems(itemsToDelete);
+      handleDeleteItems();
+      window.location.reload();
     } else {
       return;
     }
   };
 
   //체크한 아이템 selectedItems 배열에 추가,해제하는 로직
-  const handleCheckboxClick = (idx, itemName, type) => {
-    const isSelected = selectedItems.some((item) => item.id === idx);
+  const handleCheckboxClick = (itemName: string, type: string) => {
+    const isSelected: boolean = selectedItems.some((item: SelectItem) => item.name === itemName);
 
     if (isSelected) {
       // 이미 선택된 경우, 해당 아이템을 제거
-      setSelectedItems((prevItems) => prevItems.filter((item) => item.id !== idx));
+      setSelectedItems((prevItems) => prevItems.filter((item: SelectItem) => item.name !== itemName));
     } else {
       // 선택되지 않은 경우, 아이템을 추가
-      setSelectedItems((prevItems) => [...prevItems, { id: idx, name: itemName, type: type }]);
+      setSelectedItems((prevItems) => [...prevItems, { name: itemName, type: type }]);
     }
   };
   // type에 따라서 삭제요청
@@ -138,8 +137,6 @@ const AdminItemList = () => {
   useEffect(() => {
     handleLoadItems();
   }, [page, url]);
-
-  const [imageUrls, setImageUrls] = useState([]);
 
   // 서버에 저장된 이미지 요청
   useEffect(() => {
@@ -200,7 +197,7 @@ const AdminItemList = () => {
           <thead>
             <tr>
               <th>
-                <InputCheckbox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
+                <InputCheckbox type="checkbox" id="all-select-label" onChange={handleAllChecked} />
               </th>
               <th>번호</th>
               <th>이미지</th>
@@ -214,22 +211,22 @@ const AdminItemList = () => {
           <tbody>
             {items.length === 0 && (
               <tr>
-                <td colSpan="8" className="center empty">
+                <td colSpan={8} className="center empty">
                   등록된 상품이 없습니다.
                 </td>
               </tr>
             )}
             {items &&
-              items.map((item, idx) => {
-                const id = 'checkbox' + idx;
+              items.map((item: RoomData | DiningData, idx: number) => {
+                const id: string = 'checkbox' + idx;
                 return (
                   <tr key={idx}>
                     <td className="center">
                       <InputCheckbox
                         type="checkbox"
                         id={id}
-                        ref={(el) => (inputRef.current[idx] = el)}
-                        onClick={() => handleCheckboxClick(idx, item.name, item.type)}
+                        ref={(el: HTMLInputElement) => (inputRef.current[idx] = el)}
+                        onClick={() => handleCheckboxClick(item.name, item.type)}
                       />
                     </td>
                     <td className="center">{totalData - idx}</td>

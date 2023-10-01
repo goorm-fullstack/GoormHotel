@@ -8,7 +8,7 @@ import SubHeader from '../../components/layout/SubHeader/SubHeader';
 export const Container = styled(commonContainerStyle)``;
 
 // 다이닝 데이터
-interface DiningData{
+export interface DiningData{
   name:string;
   price:number;
   priceAdult:number;

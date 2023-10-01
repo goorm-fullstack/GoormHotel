@@ -3,50 +3,71 @@ import { useParams } from 'react-router-dom';
 import * as S from './Style';
 import { BtnWrapper, SubmitBtn } from '../../../Style/commonStyles';
 
-// endPoint = api의 엔드포인트
-const Search = (endPoint, typeArray, typeDetailArray) => {
-  const { page } = useParams(); // url 파라미터
-  console.log(page);
-  const [currentUrl, setCurrentUrl] = useState('');
-  const [type, setType] = useState('all'); // 타입 상태관리
-  const [typeDetail, setTypeDetail] = useState('all'); // 세부 타입 상태관리
-  const searchKeyword = useRef(); // 검색어 입력 input
-  const [detailTypeForType, setDetailTypeForType] = useState([]);
+// 대분류 배열 타입
+export interface Type{
+  type: string;
+  value: string;
+}
 
-  let keyword = ''; // 검색어
+// 소분류 배열 타입
+export interface TypeDetail{
+  type: string;
+  typeDetail: string;
+  value: string;
+}
+
+// endPoint = api의 엔드포인트
+const Search = (endPoint: string, typeArray: Type[][], typeDetailArray: TypeDetail[][]) => {
+  const { page } = useParams<{page: string}>(); // url 파라미터
+  const [currentUrl, setCurrentUrl] = useState<string>('');
+  const [type, setType] = useState<string>('all'); // 타입 상태관리
+  const [typeDetail, setTypeDetail] = useState<string>('all'); // 세부 타입 상태관리
+  const searchKeyword = useRef<HTMLInputElement>(null); // 검색어 입력 input
+  const [detailTypeForType, setDetailTypeForType] = useState<JSX.Element[]>([]); // 대분류에 따라 소분류 상태관리
+  const [keyword, setKeyword] = useState<string>(''); // 검색어 상태관리
 
   // type 변경
-  const handleTypeChange = (e) => {
-    keyword = '';
-    searchKeyword.current.value = '';
+  const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if(searchKeyword.current){
+      searchKeyword.current.value = '';
+    }
+    setKeyword('');
     const selectedType = e.target.value;
     setType(selectedType);
   };
 
   // typeDetail 변경
-  const handleTypeDetailChange = (e) => {
-    keyword = '';
-    searchKeyword.current.value = '';
+  const handleTypeDetailChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if(searchKeyword.current){
+      searchKeyword.current.value = '';
+    }
+    setKeyword('');
     const selectedTypeDetail = e.target.value;
     setTypeDetail(selectedTypeDetail);
   };
 
+  // 검색어 입력
+  const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if(searchKeyword.current){
+      setKeyword(searchKeyword.current.value);
+    }
+  }
+
   // 검색 버튼 클릭 이벤트
   const handleSearch = () => {
-    keyword = searchKeyword.current.value;
-    if (keyword === '') {
+    if (!keyword.trim()) {
       alert('검색어를 입력해주세요.');
     } else {
       handleLoadUrl();
     }
   };
 
-  const selectedType = type;
-  const selectedTypeDetail = typeDetail;
+  const selectedType: string = type;
+  const selectedTypeDetail: string = typeDetail;
   // type, typeDetail, keyword에 따라 url 생성
   const handleLoadUrl = async () => {
-    const currentPage = parseInt(page, 10);
-    let url = '';
+    const currentPage: number = parseInt(page ? page : '1', 10);
+    let url: string = '';
 
     // 타입과 세부타입에 따라 요청 api url 변경
     if (selectedType === 'all' && selectedTypeDetail === 'all') {
@@ -62,6 +83,7 @@ const Search = (endPoint, typeArray, typeDetailArray) => {
     }
 
     if (keyword !== '') {
+      console.log(keyword);
       url += `&keyword=${keyword}`;
     }
 
@@ -71,9 +93,9 @@ const Search = (endPoint, typeArray, typeDetailArray) => {
   // page, type, typeDetail, keyword가 변할 때 마다 실행
   useEffect(() => {
     handleLoadUrl();
-  }, [page, type, typeDetail, keyword]);
+  }, [page, type, typeDetail]);
 
-  const generateOptions = (item, selectedType) => {
+  const generateOptions = (item: TypeDetail, selectedType: string) => {
     if (item.type === selectedType) {
       return (
         <option key={item.value} value={item.value}>
@@ -85,8 +107,8 @@ const Search = (endPoint, typeArray, typeDetailArray) => {
 
   // 타입 선택에 따른 세부타입 변경
   useEffect(() => {
-    const updatedDetailTypeForType = [];
-    let selectedType = type;
+    const updatedDetailTypeForType: any[] = [];
+    const selectedType: string = type;
     typeDetailArray.forEach((array) => array.forEach((item) => updatedDetailTypeForType.push(generateOptions(item, selectedType))));
     setDetailTypeForType(updatedDetailTypeForType);
   }, [type]);
@@ -107,7 +129,7 @@ const Search = (endPoint, typeArray, typeDetailArray) => {
           {detailTypeForType}
         </select>
         <BtnWrapper className="flexgap right">
-          <input type="text" id="search" ref={searchKeyword} placeholder="제목+내용" />
+          <input type="text" id="search" ref={searchKeyword} placeholder="제목+내용" onChange={handleKeywordChange} />
           <SubmitBtn type="button" className="header search" onClick={handleSearch}>
             검색
           </SubmitBtn>

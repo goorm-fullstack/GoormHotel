@@ -62,7 +62,7 @@ export const Location = styled.p`
 `;
 
 // 객실 데이터
-interface RoomData{
+export interface RoomData{
   name:string;
   price:number;
   priceAdult:number;
