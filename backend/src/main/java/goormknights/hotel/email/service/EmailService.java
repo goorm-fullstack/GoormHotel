@@ -75,6 +75,9 @@ public class EmailService implements EmailSender {
                 helper = new MimeMessageHelper(message, true, "UTF-8");
                 helper.setSubject(emailMessage.getSubject()); // (민종) getTitle -> getSubject
                 helper.setTo(sender);
+                if(!emailMessage.getCarbonCopy().isEmpty()) {
+                    helper.setCc(emailMessage.getCarbonCopy());
+                }
                 context.setVariable("message", emailMessage.getMessage());
                 String html = templateEngine.process("AdminMail", context);
                 helper.setText(html, true);
@@ -82,7 +85,6 @@ public class EmailService implements EmailSender {
                     helper.addAttachment(multipartFile.getOriginalFilename(), multipartFile);
                 }
                 helper.addInline("logo", new ClassPathResource("/static/images/common/logo.png"));
-                helper.addInline("check", new ClassPathResource("/static/images/mail/ico_check.png"));
                 javaMailSender.send(message);
             }
         } catch (MessagingException e) {

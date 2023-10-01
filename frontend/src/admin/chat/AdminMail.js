@@ -14,6 +14,7 @@ const AdminMail = () => {
   const [subscribe, setSubScribe] = useState([]);
   const [members, setMembers] = useState([]);
   const [subject, setSubject] = useState('');
+  const [carbonCopy, setCarbonCopy] = useState('');
   const fileRef = useRef();
   const [file, setFile] = useState();
   const [message, setMessage] = useState('');
@@ -63,6 +64,7 @@ const AdminMail = () => {
 
     data = Array.from(new Set(data));//중복을 제거
     //setReceiverList(data);//최종 결과
+    console.log(data);
     return data;
   }
 
@@ -71,7 +73,9 @@ const AdminMail = () => {
   const handleSubmit= () => {
     const form = new FormData();
     const receiverData = splitComma();
+    console.log(receiverData);
     form.append('multipartFile', fileRef.current.files[0]);
+    form.append('carbonCopy', carbonCopy);
     form.append('to', receiverData);
     form.append('message', message);
     form.append('subject', subject)
@@ -114,7 +118,7 @@ const AdminMail = () => {
               <tr>
                 <th>참조</th>
                 <td>
-                  <input type="text" className="long" />
+                  <input type="text" className="long" name="carbonCopy" value = {carbonCopy} onChange={(e)=> setCarbonCopy(e.target.value)} />
                 </td>
               </tr>
               <tr>

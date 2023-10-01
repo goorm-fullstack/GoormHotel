@@ -1,27 +1,13 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { useNavigate, useParams } from 'react-router-dom';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
-import {
-  Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from '../member/AdminMember';
+import { PageTitle} from '../../components/common/commonStyles';
+import {Container} from '../member/AdminMember';
 import styled from 'styled-components';
 import Instance from '../../utils/api/axiosInstance';
 
 const InfoContainer = styled.table`
   width: 100%;
-
   th,
   td {
     border-top: 1px solid #ddd;
@@ -217,7 +203,7 @@ const AdminChatDetail = () => {
        if(chatRoomID === roomId && sender !== "admin") {
          // 메시지를 처리하는 로직을 여기에 추가
          // 이전 채팅 데이터를 복사한 후 새 메시지를 추가
-         setChatData((p) => [...p,{ message: chatContent, sender: sender, type: 'TALK' },]);
+         setChatData((p) => [...p, { message: chatContent, sender: sender, type: 'TALK' },]);
        }
      };
    }
