@@ -13,6 +13,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
@@ -64,20 +65,26 @@ public class EmailService implements EmailSender {
 
     // JSON을 통해 메일 내용을 오브젝트로 받아와서 사용하는 경우에 사용합니다.
     // 다수의 이메일이 메일을 보내는 로직입니다.
-    public void sendMail(MultipleEmail emailMessage){
+    // 첨부파일이 작성될 수도 있습니다.
+    public void sendMail(MultipleEmail emailMessage, MultipartFile multipartFile){
         Context context = new Context();
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = null;
         try {
-            for(String sender : emailMessage.getTo()) {
+            for(String sender : emailMessage.getTo()) {// 수신자 배열에서 수신자 정보를 출력하는 코드
                 helper = new MimeMessageHelper(message, true, "UTF-8");
                 helper.setSubject(emailMessage.getSubject()); // (민종) getTitle -> getSubject
-                helper.setTo(emailMessage.getTo());
+                helper.setTo(sender);
+                if(!emailMessage.getCarbonCopy().isEmpty()) {
+                    helper.setCc(emailMessage.getCarbonCopy());
+                }
                 context.setVariable("message", emailMessage.getMessage());
-                String html = templateEngine.process("mail", context);
+                String html = templateEngine.process("AdminMail", context);
                 helper.setText(html, true);
+                if(multipartFile != null) {// 첨부 파일이 있는지 보고, 있으면 전송
+                    helper.addAttachment(multipartFile.getOriginalFilename(), multipartFile);
+                }
                 helper.addInline("logo", new ClassPathResource("/static/images/common/logo.png"));
-                helper.addInline("check", new ClassPathResource("/static/images/mail/ico_check.png"));
                 javaMailSender.send(message);
             }
         } catch (MessagingException e) {

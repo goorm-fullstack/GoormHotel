@@ -8,10 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 import java.util.List;
 
+/**
+ * 스케쥴러 핸들러
+ */
 @Component
 @RequiredArgsConstructor
 public class ScheduleTask {

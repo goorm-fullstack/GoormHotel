@@ -15,6 +15,10 @@ import java.util.List;
 public class GiftCardController {
     private final GiftCardService giftCardService;
 
+    /**
+     *
+     * @return 전체 상품권 목록
+     */
     @GetMapping("/list")
     public List<ResponseGiftCardDto> getAllGiftCard() {
         return giftCardService.getGiftCardList();
