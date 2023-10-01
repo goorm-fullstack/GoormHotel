@@ -1,12 +1,19 @@
-import React, { useRef, useState, useEffect } from 'react';
-import styled from 'styled-components';
-import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, NormalLinkBtn } from '../../components/common/commonStyles';
-import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
-import { Container, Table, TableHeader } from '../member/AdminMember';
-import Paging from '../../components/common/Paging';
-import Search from '../../components/common/Search';
+import React, { useRef, useState, useEffect } from "react";
+import styled from "styled-components";
+import AdminLayout from "../common/AdminLayout";
+import {
+  PageTitle,
+  InputCheckbox,
+  BtnWrapper,
+  NormalBtn,
+  NormalLinkBtn,
+} from "../../Style/commonStyles";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
+import { Container, Table, TableHeader } from "../member/AdminMember";
+import { numberWithCommas } from "../../utils/function/comma";
+import Paging from "../../components/common/Paging/Paging";
+import Search from "../../components/common/Search/Search";
 
 // 카테고리 셀렉트
 export const Select = styled.select`
@@ -24,26 +31,30 @@ const Image = styled.img`
 const AdminItemList = () => {
   // 대분류, 소분류 지정 배열
   const typeDetailArray = [
-    [{ type: 'all', typeDetail: '카테고리', value: 'all' }],
+    [{ type: "all", typeDetail: "카테고리", value: "all" }],
     [
-      { type: 'room', typeDetail: '전체', value: 'all' },
-      { type: 'room', typeDetail: '디럭스', value: 'deluxe' },
-      { type: 'room', typeDetail: '스위트', value: 'sweet' },
-      { type: 'room', typeDetail: '패밀리', value: 'family' },
-      { type: 'room', typeDetail: '풀 빌라', value: 'poolvilla' },
+      { type: "room", typeDetail: "전체", value: "all" },
+      { type: "room", typeDetail: "디럭스", value: "deluxe" },
+      { type: "room", typeDetail: "스위트", value: "sweet" },
+      { type: "room", typeDetail: "패밀리", value: "family" },
+      { type: "room", typeDetail: "풀 빌라", value: "poolvilla" },
     ],
     [
-      { type: 'dining', typeDetail: '전체', value: 'all' },
-      { type: 'dining', typeDetail: '레스토랑', value: 'restaurant' },
-      { type: 'dining', typeDetail: '룸서비스', value: 'roomService' },
-      { type: 'dining', typeDetail: '바&라운지', value: 'barRounge' },
-      { type: 'dining', typeDetail: '베이커리', value: 'bakery' },
+      { type: "dining", typeDetail: "전체", value: "all" },
+      { type: "dining", typeDetail: "레스토랑", value: "restaurant" },
+      { type: "dining", typeDetail: "룸서비스", value: "roomService" },
+      { type: "dining", typeDetail: "바&라운지", value: "barRounge" },
+      { type: "dining", typeDetail: "베이커리", value: "bakery" },
     ],
   ];
 
-  const typeArray = [[{ type: '전체', value: 'all' }], [{ type: '객실', value: 'room' }], [{ type: '다이닝', value: 'dining' }]];
+  const typeArray = [
+    [{ type: "전체", value: "all" }],
+    [{ type: "객실", value: "room" }],
+    [{ type: "다이닝", value: "dining" }],
+  ];
 
-  let { searchJsx, url } = Search('/category', typeArray, typeDetailArray); // Search컴포넌트에서 값 받아와서 사용
+  const { searchJsx, url } = Search("/category", typeArray, typeDetailArray); // Search컴포넌트에서 값 받아와서 사용
   console.log(url);
   const { page } = useParams(); // url 파라미터
 
@@ -69,13 +80,13 @@ const AdminItemList = () => {
     try {
       const response = await axios.get(url);
       const data = response.data;
-      const totalPages = parseInt(response.headers['totalpages'], 10);
-      const totalData = parseInt(response.headers['totaldata'], 10);
+      const totalPages = parseInt(response.headers["totalpages"], 10);
+      const totalData = parseInt(response.headers["totaldata"], 10);
       setItems(data);
       setTotalPages(totalPages);
       setTotalData(totalData);
     } catch (error) {
-      console.error('Error:', error.message);
+      console.error("Error:", error.message);
     }
   };
 
@@ -85,13 +96,14 @@ const AdminItemList = () => {
 
     inputRef.current.forEach((checkbox) => {
       if (checkbox.checked) {
-        const itemName = checkbox.parentNode.nextSibling.nextSibling.nextSibling.innerText;
+        const itemName =
+          checkbox.parentNode.nextSibling.nextSibling.nextSibling.innerText;
         itemsToDelete.push(itemName);
       }
     });
 
     //삭제 확인
-    let isConfirm = window.confirm('삭제하시겠습니까?');
+    let isConfirm = window.confirm("삭제하시겠습니까?");
     if (isConfirm) {
       // 삭제
       handleDeleteItems(itemsToDelete);
@@ -106,31 +118,41 @@ const AdminItemList = () => {
 
     if (isSelected) {
       // 이미 선택된 경우, 해당 아이템을 제거
-      setSelectedItems((prevItems) => prevItems.filter((item) => item.id !== idx));
+      setSelectedItems((prevItems) =>
+        prevItems.filter((item) => item.id !== idx)
+      );
     } else {
       // 선택되지 않은 경우, 아이템을 추가
-      setSelectedItems((prevItems) => [...prevItems, { id: idx, name: itemName, type: type }]);
+      setSelectedItems((prevItems) => [
+        ...prevItems,
+        { id: idx, name: itemName, type: type },
+      ]);
     }
   };
   // type에 따라서 삭제요청
   const handleDeleteItems = () => {
     const deletions = selectedItems.map((item) => {
-      const url = item.type === 'room' ? `/rooms/room/${encodeURIComponent(item.name)}` : `/dinings/dining/${encodeURIComponent(item.name)}`;
+      const url =
+        item.type === "room"
+          ? `/rooms/room/${encodeURIComponent(item.name)}`
+          : `/dinings/dining/${encodeURIComponent(item.name)}`;
 
       return axios.delete(url);
     });
 
     Promise.all(deletions)
       .then((responses) => {
-        const successfulDeletions = responses.filter((response) => response.status === 200);
+        const successfulDeletions = responses.filter(
+          (response) => response.status === 200
+        );
         if (successfulDeletions.length === deletions.length) {
           setSelectedItems([]); // 모든 항목이 성공적으로 삭제된 경우 selectedItems를 초기화합니다.
         } else {
-          throw new Error('모든 항목을 삭제하지 못했습니다.');
+          throw new Error("모든 항목을 삭제하지 못했습니다.");
         }
       })
       .catch((error) => {
-        console.error('Error:', error.message);
+        console.error("Error:", error.message);
       });
   };
 
@@ -145,10 +167,14 @@ const AdminItemList = () => {
     const fetchImageUrls = async () => {
       const urls = await Promise.all(
         items.map(async (item) => {
-          const response = await axios.get(`/image/${item.name}`, { responseType: 'arraybuffer' });
+          const response = await axios.get(`/image/${item.name}`, {
+            responseType: "arraybuffer",
+          });
           console.log(response);
-          const blob = new Blob([response.data], { type: response.headers['content-type'] });
-          console.log('blob = ', blob);
+          const blob = new Blob([response.data], {
+            type: response.headers["content-type"],
+          });
+          console.log("blob = ", blob);
           return URL.createObjectURL(blob);
         })
       );
@@ -158,11 +184,6 @@ const AdminItemList = () => {
 
     fetchImageUrls();
   }, [items]);
-
-  // 숫자 포맷
-  const addComma = (number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  };
 
   return (
     <AdminLayout subMenus="item">
@@ -181,7 +202,11 @@ const AdminItemList = () => {
             <NormalLinkBtn className="header" to="/admin/item/add/dining">
               다이닝 상품 등록
             </NormalLinkBtn>
-            <NormalBtn className="header red" type="button" onClick={deleteButton}>
+            <NormalBtn
+              className="header red"
+              type="button"
+              onClick={deleteButton}
+            >
               선택삭제
             </NormalBtn>
           </BtnWrapper>
@@ -200,7 +225,11 @@ const AdminItemList = () => {
           <thead>
             <tr>
               <th>
-                <InputCheckbox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
+                <InputCheckbox
+                  type="checkbox"
+                  id="all-select-label"
+                  onClick={handleAllChecked}
+                />
               </th>
               <th>번호</th>
               <th>이미지</th>
@@ -219,36 +248,47 @@ const AdminItemList = () => {
                 </td>
               </tr>
             )}
-            {items.map((item, idx) => {
-              const id = 'checkbox' + idx;
-              return (
-                <tr key={idx}>
-                  <td>
-                    <InputCheckbox
-                      type="checkbox"
-                      id={id}
-                      ref={(el) => (inputRef.current[idx] = el)}
-                      onClick={() => handleCheckboxClick(idx, item.name, item.type)}
-                    />
-                  </td>
-                  <td>{idx + 1}</td>
-                  <td>
-                    <Image src={imageUrls[idx] || ''} className="image" />
-                  </td>
-                  <td>
-                    {item.type === 'dining' ? (
-                      <Link to={`/admin/item/detail/dining/${item.type}/${item.name}`}>{item.name}</Link>
-                    ) : (
-                      <Link to={`/admin/item/detail/room/${item.type}/${item.name}`}>{item.name}</Link>
-                    )}
-                  </td>
-                  <td>{item.type}</td>
-                  <td>{item.typeDetail}</td>
-                  <td>{addComma(item.price)}</td>
-                  <td>{item.spare}</td>
-                </tr>
-              );
-            })}
+            {items &&
+              items.map((item, idx) => {
+                const id = "checkbox" + idx;
+                return (
+                  <tr key={idx}>
+                    <td>
+                      <InputCheckbox
+                        type="checkbox"
+                        id={id}
+                        ref={(el) => (inputRef.current[idx] = el)}
+                        onClick={() =>
+                          handleCheckboxClick(idx, item.name, item.type)
+                        }
+                      />
+                    </td>
+                    <td>{totalData - idx}</td>
+                    <td>
+                      <Image src={imageUrls[idx] || ""} className="image" />
+                    </td>
+                    <td>
+                      {item.type === "dining" ? (
+                        <Link
+                          to={`/admin/item/detail/dining/${item.type}/${item.name}`}
+                        >
+                          {item.name}
+                        </Link>
+                      ) : (
+                        <Link
+                          to={`/admin/item/detail/room/${item.type}/${item.name}`}
+                        >
+                          {item.name}
+                        </Link>
+                      )}
+                    </td>
+                    <td>{item.type}</td>
+                    <td>{item.typeDetail}</td>
+                    <td>{numberWithCommas(item.price)}</td>
+                    <td>{item.spare}</td>
+                  </tr>
+                );
+              })}
           </tbody>
         </Table>
         <Paging />

@@ -1,54 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel, ContentsTitleXSmall, SubmitBtn } from '../../components/common/commonStyles';
-import Calendar from 'react-calendar';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, ContentsTitleXSmall, SubmitBtn } from '../../Style/commonStyles';
 import 'react-calendar/dist/Calendar.css';
-import moment from 'moment';
 import 'moment/locale/ko';
 import { Link } from 'react-router-dom';
-import { Container, ContentHeader, Table, TableHeader, TableCheckbox } from '../member/AdminMember';
+import { Container, Table, TableHeader } from '../member/AdminMember';
 import { InputWrapper, Section } from '../member/AdminManager';
-import Paging from '../../components/common/Paging';
-import DateBtn from '../../components/common/DateButton';
-
-// // 사용가능, 사용불가능
-// export const FilterButton = styled.button``;
-
-// // 테이블 상단
-// export const TopMenuOfTable = styled.div`
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: space-between;
-//   margin-bottom: 40px;
-//   height: 40px;
-//   & p {
-//     font-size: 15px;
-//     font-weight: 500;
-//     vertical-align: text-bottom;
-//     color: rgb(68, 68, 68);
-//   }
-//   & button {
-//     width: 120px;
-//     border: 1px solid rgb(221, 221, 221);
-//     background-color: rgb(255, 255, 255);
-//     height: 40px;
-//     margin-left: 10px;
-//     font-size: 15px;
-//     color: rgb(102, 102, 102);
-//     line-height: 1.2;
-//   }
-//   & ${FilterButton} {
-//     width: 120px;
-//     background-color: rgb(255, 255, 255);
-//     height: 40px;
-//     margin-left: 10px;
-//     font-size: 15px;
-//     line-height: 1.2;
-//     border: 1px solid #d30a0a;
-//     color: #d30a0a;
-//   }
-// `;
+import Paging from '../../components/common/Paging/Paging';
+import DateBtn from '../../components/common/DateButton/DateButton';
 
 const checkboxList = [
   {

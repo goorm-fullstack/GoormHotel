@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../components/common/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../Style/commonStyles';
 import {
   Container,
   ContentHeader,
@@ -17,7 +17,7 @@ import {
   TableCheckbox,
   Num,
 } from '../member/AdminMember';
-import Paging from '../../components/common/Paging';
+import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
 
 const LinkStyle = styled(Link)`
@@ -153,23 +153,23 @@ const AdminDeleteComment = () => {
             )}
             {board.map((board) => (
               <tr key={board.boardId}>
-                <td className='center'>
+                <td className="center">
                   <InputCheckbox
                     type="checkbox"
                     checked={checkedItems.includes(board.boardId)}
                     onChange={() => handleCheckboxChange(board.boardId)}
                   />
                 </td>
-                <td className='center'>{board.boardId}</td>
-                <td className='center'>{`${board.boardTitle}`}</td>
-                <td className='center'>
+                <td className="center">{board.boardId}</td>
+                <td className="center">{`${board.boardTitle}`}</td>
+                <td className="center">
                   <LinkStyle to={`/admin/member/${board.boardContent}`}>{board.boardContent}</LinkStyle>
                 </td>
-                <td className='center'>
+                <td className="center">
                   {board.boardWriter}
                   <LinkStyle to={`/admin/member/${board.boardWriter}`}>({board.boardWriter})</LinkStyle>
                 </td>
-                <td className='center'>{`${board.boardWriteDate[0]}.${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}.${
+                <td className="center">{`${board.boardWriteDate[0]}.${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}.${
                   board.boardWriteDate[2] < 10 ? '0' : ''
                 }${board.boardWriteDate[2]}`}</td>
               </tr>

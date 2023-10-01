@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { commonWrapperStyle, MoreLink, BtnWrapper } from '../components/common/commonStyles';
-import Slide from '../components/Slide';
-import Reservation from '../components/Reservation';
+import { commonWrapperStyle, MoreLink, BtnWrapper } from '../Style/commonStyles';
+import Slide from '../components/Slide/Slide';
+import Reservation from '../components/Reservation/Reservation';
 import spaImg from '../images/main/spa.jpg';
-import KakaoMap from '../utils/KakaoMap';
+import KakaoMap from '../utils/api/KakaoMap';
 import dining01 from '../images/dining/Bakery.jpg';
 import dining02 from '../images/dining/Bar.jpg';
 import dining03 from '../images/dining/Restaurant.jpg';
@@ -404,7 +404,7 @@ const Home = () => {
           <IndexTitle>LOCATION</IndexTitle>
           <IndexDesc>구름 호텔로 오시는 방법을 안내해드립니다.</IndexDesc>
           <MapWrapper>
-            <KakaoMap width="1180px" height="480px" />
+            <KakaoMap />
             <MapAddress>
               <p>위치 : 경기도 성남시 분당구 판교로 242 PDC A동 902호</p>
               <ContactInfo>

@@ -120,6 +120,16 @@ public class DiningController {
                 .body(responseDtoList);
     }
 
+    /**
+     * 전체 다이닝 조회
+     * @return 전체 다이닝
+     */
+    @GetMapping("/all")
+    public ResponseEntity<List<ResponseDiningDto>> findAll(){
+        List<ResponseDiningDto> all = diningService.findAll();
+        return ResponseEntity.ok(all);
+    }
+
     @GetMapping("/check")
     public ResponseEntity<String> existsByDiningName(@RequestParam String diningName){
         log.info("diningName={}", diningName);
