@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MemberEventListener {
     private ApplicationEventPublisher eventPublisher;
-
     public MemberEventListener(ApplicationEventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
     }

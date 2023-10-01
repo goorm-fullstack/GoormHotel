@@ -23,6 +23,10 @@ public class GiftCardService {
     private final GiftCardRepository giftCardRepository;
     private final MemberRepository memberRepository;
 
+    /**
+     * 상품권 생성 로직
+     * @param giftCardDto -> 실제로 사용할 수 없다.
+     */
     public void createGiftCard(RequestGiftCardDto giftCardDto) {
         giftCardRepository.save(giftCardDto.toEntity());
     }
