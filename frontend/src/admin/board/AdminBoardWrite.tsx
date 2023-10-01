@@ -7,6 +7,10 @@ import { Container, Table } from '../member/AdminMember';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
 
 const AdminBoardWrite = () => {
+  // 나중에 적딩히 변경해서 사용해주세요
+  const setValue = () => {
+
+  }
   return (
     <AdminLayout subMenus="chat">
       <Container>
@@ -40,7 +44,7 @@ const AdminBoardWrite = () => {
             </tr>
             <tr>
               <td colSpan={2} className="writeWrapper">
-                <TextEditor />
+                <TextEditor setValue = {setValue}/>
               </td>
             </tr>
           </tbody>

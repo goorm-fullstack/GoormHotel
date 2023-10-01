@@ -1,10 +1,10 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { useNavigate, useParams } from 'react-router-dom';
-import { PageTitle} from '../../components/common/commonStyles';
 import {Container} from '../member/AdminMember';
 import styled from 'styled-components';
 import Instance from '../../utils/api/axiosInstance';
+import {PageTitle} from '../../Style/commonStyles';
 
 const InfoContainer = styled.table`
   width: 100%;
