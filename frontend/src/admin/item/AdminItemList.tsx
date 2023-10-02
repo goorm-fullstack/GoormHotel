@@ -8,8 +8,6 @@ import { Container, Table, TableHeader } from '../member/AdminMember';
 import { numberWithCommas } from '../../utils/function/comma';
 import Paging from '../../components/common/Paging/Paging';
 import Search, { Type, TypeDetail } from '../../components/common/Search/Search';
-import { RoomData } from '../../pages/about/Room';
-import { DiningData } from '../../pages/about/Dining';
 
 // 카테고리 셀렉트
 export const Select = styled.select`
@@ -28,6 +26,34 @@ const Image = styled.img`
 interface SelectItem{
   name: string;
   type: string;
+}
+
+export interface RoomData{
+  name: string;
+  price: number;
+  priceAdult: number;
+  priceChildren: number;
+  spare: number;
+  spareAdult: number;
+  spareChildren: number;
+  type: string;
+  typeDetail: string;
+  bed: string;
+  capacity: number;
+}
+
+export interface DiningData{
+  name: string;
+  price: number;
+  priceAdult: number;
+  priceChildren: number;
+  spare: number;
+  spareAdult: number;
+  spareChildren: number;
+  type: string;
+  typeDetail: string;
+  useTime: string;
+  capacity: number;
 }
 
 const AdminItemList = () => {
@@ -219,6 +245,11 @@ const AdminItemList = () => {
             {items &&
               items.map((item: RoomData | DiningData, idx: number) => {
                 const id: string = 'checkbox' + idx;
+                const matchedTypeDetail = typeDetailArray.find((typeDetails) => {
+                  return typeDetails.some((typeDetail) => typeDetail.value === item.typeDetail);
+                });
+                const displayedTypeDetail = matchedTypeDetail?.find((typeDetail) => {return item.typeDetail === typeDetail.value});
+
                 return (
                   <tr key={idx}>
                     <td className="center">
@@ -240,8 +271,8 @@ const AdminItemList = () => {
                         <Link to={`/admin/item/detail/room/${item.type}/${item.name}`}>{item.name}</Link>
                       )}
                     </td>
-                    <td className="center">{item.type}</td>
-                    <td className="center">{item.typeDetail}</td>
+                    <td className="center">{item.type === 'dining' ? '다이닝' : '객실'}</td>
+                    <td className="center">{displayedTypeDetail?.typeDetail}</td>
                     <td className="center">{numberWithCommas(item.price)}</td>
                     <td className="center">{item.spare}</td>
                   </tr>

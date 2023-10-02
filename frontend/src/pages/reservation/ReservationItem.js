@@ -254,8 +254,8 @@ const productTypes = [
 const ReservationItem = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const location = useLocation();
-  const { reservationData } = location.state;
-  console.log(location.state);
+  console.log(location);
+  const reservationData = location.state ? location.state.reservationData : null;
   const [selectedType, setSelectedType] = useState(['room']);
   const [selectedCategory, setSelectedCategory] = useState(productCategories[0].english);
   const [products, setProducts] = useState([]);
@@ -281,7 +281,9 @@ const ReservationItem = () => {
       setImageUrls(urls);
     };
 
-    fetchImageUrls();
+    if (products.length > 0) {
+      fetchImageUrls();
+    }
   }, [products]);
 
   useEffect(() => {
@@ -457,7 +459,7 @@ const ReservationItem = () => {
                   </RoomItem>
                 ))}
             </RoomItemWrapper>
-            <Paging />
+            <Paging totalPage={totalPage} />
           </Left>
           <Right>
             <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>

@@ -1,25 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, inputCheckbox, BtnWrapper, NormalBtn, CheckLabel, SubmitBtn } from '../../Style/commonStyles';
+import { PageTitle, SubmitBtn } from '../../Style/commonStyles';
 import { Image } from '../../components/AddItemForm/Style';
-import { Select } from './AdminItemList';
+import { DiningData, Select } from './AdminItemList';
 import styled from 'styled-components';
 import { useParams } from 'react-router';
 import axios from 'axios';
 import {
-  Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
+  Container, 
+  Table
 } from '../member/AdminMember';
+import { DiningForm } from '../../components/AddItemForm/WriteFormDining';
 
 // 세부타입 선택
 const WriteFormSelect = styled(Select)`
@@ -57,17 +48,20 @@ const GreenP = styled.p`
 `;
 
 const AdminDetailDining = () => {
-  const [imgFile, setImgFile] = useState(''); // 이미지 상태관리
-  const imgRef = useRef(); // 이미지 태그
-  const { type, name } = useParams(); // url 파라미터
-  const [responseData, setResponseData] = useState({}); // get 요청으로 받아온 데이터 상태관리
-  const [duplicateMessage, setDuplicateMessage] = useState(''); // 중복검사 메시지 상태관리
-  const [isConfirm, setIsConfirm] = useState(true); // 중복검사 정상 실행 여부 상태관리
-  const [responseObject, setResponseObject] = useState({}); // form 데이터 상태관리
+  const [imgFile, setImgFile] = useState<string>(''); // 이미지 상태관리
+  const imgRef = useRef<HTMLInputElement>(null); // 이미지 태그
+  const { type, name } = useParams<{type: string, name: string}>(); // url 파라미터
+  const [responseData, setResponseData] = useState<DiningData>(); // get 요청으로 받아온 데이터 상태관리
+  const [duplicateMessage, setDuplicateMessage] = useState<string>(''); // 중복검사 메시지 상태관리
+  const [isConfirm, setIsConfirm] = useState<boolean>(true); // 중복검사 정상 실행 여부 상태관리
+  const [responseObject, setResponseObject] = useState<DiningForm>({}); // form 데이터 상태관리
+  const [imageUrls, setImageUrls] = useState<string[]>([]); // 현재 데이터의 이미지 정보 상태관리
+  const nameRef = useRef<HTMLInputElement>(null); // 상품 이름 입력 input 태그
 
   // 해당 상품의 데이터 get 요청
   useEffect(() => {
-    axios.get(`/dinings/${type}/${encodeURIComponent(name)}`).then((response) => {
+    const nameParam: string = name ? name : '';
+    axios.get(`/dinings/${type}/${encodeURIComponent(nameParam)}`).then((response) => {
       setResponseData(response.data);
       console.log('get 성공');
     });
@@ -75,17 +69,19 @@ const AdminDetailDining = () => {
 
   // 이미지 업로드 input의 onChange(이미지 미리보기)
   const saveImgFile = () => {
-    const file = imgRef.current.files[0];
+    const file = imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '';
     const reader = new FileReader();
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(file as Blob);
     reader.onloadend = () => {
-      setImgFile(reader.result);
+      setImgFile(reader.result as string);
     };
-    imgRef.current.src = imgFile;
+    if(imgRef.current){
+      imgRef.current.src = imgFile;
+    }
   };
 
   // input 입력 시 form 데이터 업데이트
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setResponseObject((prevData) => ({
       ...prevData,
@@ -94,17 +90,14 @@ const AdminDetailDining = () => {
   };
 
   // 수정 api 요청
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const confirmed = window.confirm('수정하시겠습니까?');
+    const confirmed: boolean = window.confirm('수정하시겠습니까?');
 
     if (confirmed) {
       if (isConfirm) {
         const form = new FormData();
-        console.log(imgRef.current.files);
-        if (imgRef.current && imgRef.current.files.length !== 0) {
-          form.append('img', imgRef.current.files[0]);
-        }
+        form.append('img', imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '');
 
         Object.keys(responseObject).forEach((key) => {
           form.append(key, responseObject[key]);
@@ -112,17 +105,22 @@ const AdminDetailDining = () => {
         });
 
         try {
-          await axios.put(`/dinings/${type}/${encodeURIComponent(name)}`, form, {
+          const nameParam: string = name ? name : '';
+          await axios.put(`/dinings/${type}/${encodeURIComponent(nameParam)}`, form, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
           });
           window.location.href = '/admin/item/1';
         } catch (error) {
-          console.error('Error:', error.message);
-          if (error.response.data.message.startsWith('Validation failed')) {
-            const errorMessage = error.response.data.errors[0].defaultMessage;
-            alert(errorMessage);
+          if (axios.isAxiosError(error)) {
+            console.error('Error:', error.message);
+            if (error.response?.data.message.startsWith('Validation failed')) {
+              const errorMessage = error.response.data.errors[0].defaultMessage;
+              alert(errorMessage);
+            }
+          } else {
+            console.error('An unknown error occurred.');
           }
         }
       } else {
@@ -131,16 +129,13 @@ const AdminDetailDining = () => {
     }
   };
 
-  const [imageUrls, setImageUrls] = useState([]); // 현재 데이터의 이미지 정보 상태관리
-
   // 이미지 정보 받기 api 요청
   useEffect(() => {
-    console.log(responseData);
     // 단일 항목에 대한 이미지 URL을 가져옵니다
-    const item = responseData;
+    const item = responseData ? responseData : null;
     const fetchImageUrl = async () => {
       try {
-        const response = await axios.get(`/image/${item.name}`, {
+        const response = await axios.get(`/image/${item?.name}`, {
           responseType: 'arraybuffer',
         });
 
@@ -154,22 +149,18 @@ const AdminDetailDining = () => {
       }
     };
 
-    if (Object.keys(responseData).length > 0) {
-      fetchImageUrl();
-    }
+    fetchImageUrl();
     console.log('get data to responseObject = ', responseObject);
   }, [responseData]);
-
-  const nameRef = useRef(); // 상품 이름 입력 input 태그
 
   // 중복검사 api 요청
   const handleDuplicate = async () => {
     try {
-      const url = `/dinings/check?diningName=${nameRef.current.value}`;
-      if (nameRef.current.value === '') {
+      const url = `/dinings/check?diningName=${nameRef.current?.value}`;
+      if (nameRef.current?.value === '') {
         setDuplicateMessage('상품명은 공백일 수 없습니다.');
         setIsConfirm(false);
-      } else if (nameRef.current.value === responseData.name) {
+      } else if (nameRef.current?.value === responseData?.name) {
         setDuplicateMessage('사용 가능한 상품명입니다.');
         setIsConfirm(true);
       } else {
@@ -180,8 +171,11 @@ const AdminDetailDining = () => {
       }
       console.log('responseObject = ', responseObject);
     } catch (error) {
-      setDuplicateMessage(error.response.data);
-      setIsConfirm(false);
+      if(axios.isAxiosError(error)){
+        setDuplicateMessage(error.response?.data);
+        console.log(error.response?.data);
+        setIsConfirm(false);
+      }
     }
   };
 

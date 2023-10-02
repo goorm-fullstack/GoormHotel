@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { styled } from 'styled-components';
-import axios from 'axios';
 import { commonContainerStyle, PageTitle } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
+import Deluxe from '../../images/room/Deluxe.jpg';
+import Family from '../../images/room/Family.jpg';
+import Suite from '../../images/room/Suite.jpg';
+import Villa from '../../images/room/Villa.jpg';
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -61,85 +64,18 @@ export const Location = styled.p`
   color: ${(props) => props.theme.colors.goldhover};
 `;
 
-// 객실 데이터
-export interface RoomData{
-  name:string;
-  price:number;
-  priceAdult:number;
-  priceChildren:number;
-  type:string;
-  typeDetail:string;
-  bed:string;
-  spare:number;
-  spareAdult:number;
-  spareChildren:number;
-  capacity:number;
-}
-
 const Room = () => {
-  const [items, setItems] = useState<Array<RoomData>>([]);
-  const [imageUrls, setImageUrls] = useState<Array<string>>([]);
-
-  // 객실 리스트 조회
-  const handleItems = async () => {
-    try {
-      const response = await axios.get('/rooms/all');
-      const data = response.data;
-      setItems(data);
-    } catch (error: any) {
-      console.error('Error:', error.message);
-    }
-  };
-
-  useEffect(() => {
-    handleItems();
-  },[]);
-
-  // 객실 리스트의 이미지 가져오기
-  useEffect(() => {
-    const fetchImageUrls = async () => {
-      const urls = await Promise.all(
-        items.map(async (item:RoomData) => {
-          const response = await axios.get(`/image/${item.name}`, {
-            responseType: "arraybuffer",
-          });
-          console.log(response);
-          const blob = new Blob([response.data], {
-            type: response.headers["content-type"],
-          });
-          console.log("blob = ", blob);
-          return URL.createObjectURL(blob);
-        })
-      );
-      setImageUrls(urls);
-      console.log(urls);
-    };
-
-    fetchImageUrls();
-  }, [items]);
-
-  console.log(items);
 
   return (
     <>
       <SubHeader kind="facilities" />
       <Container>
-        <PageTitle>객실</PageTitle>
+      <PageTitle>객실</PageTitle>
         <Item>
-          {items.length === 0 &&
-            <li>
-              <Info>
-                <div>등록된 상품이 없습니다.</div>
-              </Info>
-            </li>
-          }
-          {items &&
-          items.map((item:RoomData, index:number) => {
-            return(
-          <li key={index}>
-            <ImgWrapper style={{ backgroundImage: `url(${imageUrls[index]})` }}></ImgWrapper>
+          <li>
+            <ImgWrapper style={{ backgroundImage: `url(${Deluxe})` }}></ImgWrapper>
             <Info>
-              <Name>{item.name}</Name>
+              <Name>디럭스</Name>
               <Description>
                 우아한 인테리어와 현대적 세련미가 조화롭게 어우러진 디럭스 룸은 초고층 객실에서 바라보는 서울 도심의 파노라믹뷰와 최상의 휴식을
                 제공합니다.
@@ -151,12 +87,91 @@ const Room = () => {
                 </tr>
                 <tr>
                   <th>투숙인원</th>
-                  <td>{item.capacity}명</td>
+                  <td>2명</td>
+                </tr>
+                <tr>
+                  <th>체크인/체크아웃</th>
+                  <td>15:00/11:00</td>
                 </tr>
               </Detail>
+              <Location>•&nbsp;&nbsp;위치 : 본관</Location>
             </Info>
-          </li>)
-          })}
+          </li>
+          <li>
+            <ImgWrapper style={{ backgroundImage: `url(${Suite})` }}></ImgWrapper>
+            <Info>
+              <Name>스위트</Name>
+              <Description>
+                스위트 룸은 넓은 공간과 세련된 디자인의 응접실 및 다이닝 룸을 갖춘 객실입니다. 대형 창문을 통해 펼쳐지는 아름다운 서울의 전망과 함께
+                세심한 서비스를 느껴보세요.
+              </Description>
+              <Detail>
+                <tr>
+                  <th>침대타입</th>
+                  <td>더블/트윈</td>
+                </tr>
+                <tr>
+                  <th>투숙인원</th>
+                  <td>2명</td>
+                </tr>
+                <tr>
+                  <th>체크인/체크아웃</th>
+                  <td>15:00/11:00</td>
+                </tr>
+              </Detail>
+              <Location>•&nbsp;&nbsp;위치 : 본관</Location>
+            </Info>
+          </li>
+          <li>
+            <ImgWrapper style={{ backgroundImage: `url(${Family})` }}></ImgWrapper>
+            <Info>
+              <Name>패밀리</Name>
+              <Description>
+                패밀리 룸은 일반 객실보다 더욱 넓고 쾌적한 공간을 제공하는 객실입니다. 침실과 응접실이 분리되어 있어 편안함과 안정된 휴식을 누리실 수
+                있습니다.
+              </Description>
+              <Detail>
+                <tr>
+                  <th>침대타입</th>
+                  <td>더블/트윈</td>
+                </tr>
+                <tr>
+                  <th>투숙인원</th>
+                  <td>2명</td>
+                </tr>
+                <tr>
+                  <th>체크인/체크아웃</th>
+                  <td>15:00/11:00</td>
+                </tr>
+              </Detail>
+              <Location>•&nbsp;&nbsp;위치 : 본관</Location>
+            </Info>
+          </li>
+          <li>
+            <ImgWrapper style={{ backgroundImage: `url(${Villa})` }}></ImgWrapper>
+            <Info>
+              <Name>풀 빌라</Name>
+              <Description>
+                숲 속의 별장에서 내려다 보이는 한강 전망이 이국적인 분위기를 물씬 자아내며, 독립된 공간에서 편안한 휴식을 원하는 분들께 사랑 받는
+                장소입니다.
+              </Description>
+              <Detail>
+                <tr>
+                  <th>침대타입</th>
+                  <td>더블/트윈</td>
+                </tr>
+                <tr>
+                  <th>투숙인원</th>
+                  <td>2명</td>
+                </tr>
+                <tr>
+                  <th>체크인/체크아웃</th>
+                  <td>15:00/11:00</td>
+                </tr>
+              </Detail>
+              <Location>•&nbsp;&nbsp;위치 : 별채</Location>
+            </Info>
+          </li>
         </Item>
       </Container>
     </>

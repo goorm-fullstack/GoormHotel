@@ -1,13 +1,13 @@
 import React from 'react';
-import item from '../../images/item/item1.jpg';
 import * as S from './Style';
 
 const Item = ({ selectedProduct }: any) => {
+  console.log(selectedProduct.imageUrl);
   return (
     <>
       <S.SelectItem>
         <S.SelectedItem>
-          <div className="imgwrap" style={{ backgroundImage: `url(${item})` }} />
+          <div className="imgwrap" style={{ backgroundImage: `url(${selectedProduct.imageUrl})` }} />
           <h4>{selectedProduct.name}</h4>
           <p>{selectedProduct.type}</p>
           <p>{selectedProduct.typeDetail}</p>
