@@ -100,8 +100,7 @@ const Dining = () => {
             </Info>
           </li>
           )
-        })
-}
+        })}
         </Item>
       </Container>
     </>
