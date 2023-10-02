@@ -67,16 +67,16 @@ const SubHeaderData = {
 };
 
 type SubHeaderProps = {
-  kind: string;
+  kind: 'facilities' | 'agreement' | 'board' | 'about';
 };
 
 const SubHeader = ({ kind }: SubHeaderProps) => {
   return (
     <S.SubHeader>
-      <h2>{SubHeaderData.facilities.pagetitle}</h2>
-      {/* kind 값으로 참조하는 방법 여쭤보기: 기존 형태(js) SubHeaderData[kind].pagetitle */}
+      <h2>{SubHeaderData[kind].pagetitle}</h2>
+      {/** 경규님 짱!bbb */}
       <ul>
-        {SubHeaderData.facilities.nav.map((nav) => (
+        {SubHeaderData[kind].nav.map((nav) => (
           <li>
             <NavLink to={nav.linkto} className={({ isActive }) => (isActive ? 'active' : '')}>
               {nav.title}
