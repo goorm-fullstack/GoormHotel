@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import * as S from './Style';
 import { Table, TableHeader } from '../../admin/member/AdminMember';
-import { PageTitle, NormalBtn, SubmitBtn, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
+import { PageTitle, SubmitBtn, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
 import axios from 'axios';
 
 export type DiningForm = {

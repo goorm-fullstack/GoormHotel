@@ -16,6 +16,7 @@ import {
 } from '../../Style/commonStyles';
 import Paging from '../../components/common/Paging/Paging';
 import { numberWithCommas } from '../../utils/function/comma';
+import { DiningData, RoomData } from '../../admin/item/AdminItemList';
 
 const Container = styled(commonContainerStyle)``;
 
@@ -236,6 +237,7 @@ const diningCategories = [
   { korean: '바&라운지', english: 'barRounge' },
   { korean: '베이커리', english: 'bakery' },
 ];
+
 const productTypes = [
   {
     name: '전체',
@@ -251,18 +253,49 @@ const productTypes = [
   },
 ];
 
+type ProductType1 = {
+  imageUrl: string;
+  name: string;
+  price: number;
+  priceAdult: number;
+  priceChildren: number;
+  spare: number;
+  spareAdult: number;
+  spareChildren: number;
+  type: string;
+  typeDetail: string;
+  bed: string;
+  capacity: number;
+}
+
+type ProductType2 = {
+  imageUrl: string;
+  name: string;
+  price: number;
+  priceAdult: number;
+  priceChildren: number;
+  spare: number;
+  spareAdult: number;
+  spareChildren: number;
+  type: string;
+  typeDetail: string;
+  useTime: string;
+  capacity: number;
+}
+
+type SelectProduct = ProductType1 | ProductType2;
+
 const ReservationItem = () => {
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState<SelectProduct | null>();
   const location = useLocation();
-  console.log(location);
   const reservationData = location.state ? location.state.reservationData : null;
-  const [selectedType, setSelectedType] = useState(['room']);
-  const [selectedCategory, setSelectedCategory] = useState(productCategories[0].english);
-  const [products, setProducts] = useState([]);
-  const [imageUrls, setImageUrls] = useState([]);
-  const [totalData, setTotalData] = useState(0);
-  const [totalPage, setTotalPage] = useState(0);
-  const page = useParams();
+  const [selectedType, setSelectedType] = useState<string[]>(['room']);
+  const [selectedCategory, setSelectedCategory] = useState<string>(productCategories[0].english);
+  const [products, setProducts] = useState<(RoomData | DiningData)[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [totalData, setTotalData] = useState<number>(0);
+  const [totalPage, setTotalPage] = useState<number>(0);
+  const {page} = useParams<{page: string}>();
 
   // 서버에 저장된 이미지 요청
   useEffect(() => {
@@ -287,7 +320,7 @@ const ReservationItem = () => {
   }, [products]);
 
   useEffect(() => {
-    const currentPage = parseInt(page, 10);
+    const currentPage: number = parseInt(page ? page : '1', 10);
     if (selectedType.includes('all')) {
       axios
         .get(`/category?page=${currentPage}`, {
@@ -327,7 +360,7 @@ const ReservationItem = () => {
     }
   }, [selectedType, selectedCategory]);
 
-  const handleReservationClick = (productInfo, imageUrl) => {
+  const handleReservationClick = (productInfo: RoomData | DiningData, imageUrl: string) => {
     setSelectedProduct({ ...productInfo, imageUrl });
   };
 
@@ -335,12 +368,12 @@ const ReservationItem = () => {
     setSelectedProduct(null);
   };
 
-  const handleCategoryChange = (event) => {
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(event.target.value);
   };
 
-  const handleTypeChange = (e) => {
-    const value = e.target.value;
+  const handleTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value: string = e.target.value;
     console.log(value);
 
     if (value === 'all') {
@@ -364,9 +397,8 @@ const ReservationItem = () => {
       });
     }
   };
-  console.log(selectedCategory);
 
-  const nameOfTypeDetail = (product) => {
+  const nameOfTypeDetail = (product: RoomData | DiningData) => {
     const foundCategory = [...diningCategories, ...productCategories].find((category) => product.typeDetail.includes(category.english));
     return foundCategory ? foundCategory.korean : 'none';
   };
@@ -381,7 +413,7 @@ const ReservationItem = () => {
             <SelectWrapper>
               <div className="typewrapper">
                 {productTypes.map((type, index) => (
-                  <CheckLabel for={type.id}>
+                  <CheckLabel htmlFor={type.id}>
                     <InputCheckbox
                       type="checkbox"
                       id={type.id}
@@ -429,7 +461,6 @@ const ReservationItem = () => {
                       style={{
                         backgroundImage: `url(${imageUrls[index] || ''})`,
                       }}
-                      alt="상품 이미지"
                     />
                     <RoomItemInfo>
                       <h4>{product.name}</h4>
@@ -473,7 +504,6 @@ const ReservationItem = () => {
                         style={{
                           backgroundImage: `url(${selectedProduct.imageUrl})`,
                         }}
-                        alt="상품 이미지"
                       />
                       <h4>
                         {selectedProduct.name}
