@@ -339,7 +339,6 @@ const ReservationItem = () => {
           console.error(error);
         });
     } else {
-      console.log('실행');
       axios
         .get(`/category?page=${currentPage}`, {
           params: {
