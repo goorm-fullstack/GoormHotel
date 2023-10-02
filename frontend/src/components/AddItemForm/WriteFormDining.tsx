@@ -4,10 +4,14 @@ import { Table, TableHeader } from '../../admin/member/AdminMember';
 import { PageTitle, NormalBtn, SubmitBtn, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
 import axios from 'axios';
 
+export type DiningForm = {
+  [key: string]: string;
+}
+
 const WriteFormDining = () => {
-  const [imgFile, setImgFile] = useState(''); // 이미지 상태 관리
-  const imgRef = useRef(); // 이미지 태그
-  const [formData, setFormData] = useState({
+  const [imgFile, setImgFile] = useState<string>(''); // 이미지 상태 관리
+  const imgRef = useRef<HTMLInputElement>(null); // 이미지 태그
+  const [formData, setFormData] = useState<DiningForm>({
     // form 데이터 상태 관리
     name: '',
     price: '',
@@ -19,12 +23,13 @@ const WriteFormDining = () => {
     spare: '',
     spareAdult: '',
     spareChildren: '',
+    capacity: '',
   });
-  const [duplicateMessage, setDuplicateMessage] = useState(''); // 중복검사 메시지 상태 관리
-  const [isConfirm, setIsConfirm] = useState(false); // 중복검사 정상 실행 여부 상태 관리
+  const [duplicateMessage, setDuplicateMessage] = useState<string>(''); // 중복검사 메시지 상태 관리
+  const [isConfirm, setIsConfirm] = useState<boolean>(false); // 중복검사 정상 실행 여부 상태 관리
 
   // input 값 입력 시 formData의 값 업데이트
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -33,8 +38,8 @@ const WriteFormDining = () => {
   };
 
   // api 상품 등록 요청
-  const handleSubmit = async (e) => {
-    const confirmed = window.confirm('등록하시겠습니까?');
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const confirmed: boolean = window.confirm('등록하시겠습니까?');
 
     // 등록 여부 확인과 중복검사 실행 여부 확인
     if (confirmed) {
@@ -42,7 +47,9 @@ const WriteFormDining = () => {
         e.preventDefault();
 
         const form = new FormData();
-        form.append('img', imgRef.current.files[0]);
+        if(imgRef.current && imgRef.current.files){
+          form.append('img', imgRef.current.files[0]);
+        }
 
         Object.keys(formData).forEach((key) => {
           form.append(key, formData[key]);
@@ -57,10 +64,14 @@ const WriteFormDining = () => {
           });
           window.location.href = '/admin/item/1';
         } catch (error) {
-          console.error('Error:', error.message);
-          if (error.response.data.message.startsWith('Validation failed')) {
-            const errorMessage = error.response.data.errors[0].defaultMessage;
-            alert(errorMessage);
+          if (axios.isAxiosError(error)) {
+            console.error('Error:', error.message);
+            if (error.response?.data.message.startsWith('Validation failed')) {
+              const errorMessage = error.response.data.errors[0].defaultMessage;
+              alert(errorMessage);
+            }
+          } else {
+            console.error('An unknown error occurred.');
           }
         }
       } else {
@@ -72,21 +83,24 @@ const WriteFormDining = () => {
 
   // 이미지 업로드 input의 onChange(이미지 미리보기)
   const saveImgFile = () => {
-    const file = imgRef.current.files[0];
+    let file: File | null = null;
+    if(imgRef.current && imgRef.current.files){
+      file = imgRef.current.files[0];
+    }
     const reader = new FileReader();
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(file as Blob);
     reader.onloadend = () => {
-      setImgFile(reader.result);
+      setImgFile(reader.result as string);
     };
   };
 
-  const nameRef = useRef(); // 상품 이름 입력하는 input 태그
+  const nameRef = useRef<HTMLInputElement>(null); // 상품 이름 입력하는 input 태그
 
   // 중복 확인 api 요청
   const handleDuplicate = async () => {
     try {
-      const url = `/dinings/check?diningName=${nameRef.current.value}`;
-      if (nameRef.current.value === '') {
+      const url = `/dinings/check?diningName=${nameRef.current?.value}`;
+      if (nameRef.current?.value === '') {
         setDuplicateMessage('상품명은 공백일 수 없습니다.');
         setIsConfirm(false);
       } else {
@@ -96,9 +110,11 @@ const WriteFormDining = () => {
         setIsConfirm(true);
       }
     } catch (error) {
-      setDuplicateMessage(error.response.data);
-      console.log(error.response.data);
-      setIsConfirm(false);
+      if(axios.isAxiosError(error)){
+        setDuplicateMessage(error.response?.data);
+        console.log(error.response?.data);
+        setIsConfirm(false);
+      }
     }
   };
 

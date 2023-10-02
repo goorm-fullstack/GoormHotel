@@ -183,13 +183,13 @@ const AdminDetailRoom = () => {
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           {responseData && (
             <Table>
-              <form>
+              <tr>
                 <th>썸네일</th>
                 <td>
                   <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
                   {imgFile ? <Image src={imgFile} alt="프로필 이미지" /> : <Image src={imageUrls[0] || ''} alt="프로필 이미지"></Image>}
                 </td>
-              </form>
+              </tr>
               <tr>
                 <th>상품명</th>
                 <td>
