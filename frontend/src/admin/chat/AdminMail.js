@@ -36,18 +36,38 @@ const AdminMail = () => {
     };
   };
 
-  // 전체 구독자 조회
-  const getAllSubscribe = () => {
-    Instance.get("/subscribe").then((response) =>{
-      setSubScribe(response.data);
-    })
-  }
-
   // 전체 멤버 조회
   const getAllMembers = () => {
     Instance.get("/member/list").then((response) => {
       setMembers(response.data);
     })
+  }
+
+  const handleClickSubScribe = (checked) => {
+    if(checked) {
+      Instance.get("/subscribe").then((response) =>{
+        setSubScribe(response.data);
+        console.log(response.data);
+      })
+    } else {
+      setSubScribe([]);
+    }
+  }
+
+  const handleClickMembers = (checked) => {
+    if(checked) {
+      Instance.get("/member/list").then((response) =>{
+        const members = response.data;
+        const membersEmail = [];
+        for(var i = 0; i < members.length; i++) {
+          membersEmail.append(members[i].email);
+        }
+        setMembers(membersEmail);//전체 멤버에 대한 메일 주소 저장
+        console.log(membersEmail);//테스트 코드
+      })
+    } else {
+      setMembers([]);
+    }
   }
 
   // Input에 들어온 데이터를 ","를 기준으로 자르자
@@ -107,10 +127,10 @@ const AdminMail = () => {
                   <MultiCheck className="fit">
                     <input type="text" className="long" onChange={(e) => setReceiverValue(e.target.value)} value={receiverValue} required/>
                     <CheckLabel>
-                      <InputCheckbox type="checkbox" /> 전체 회원
+                      <InputCheckbox type="checkbox" onChange={e => {handleClickMembers(e.target.checked)}}/> 전체 회원
                     </CheckLabel>
                     <CheckLabel>
-                      <InputCheckbox type="checkbox" /> 전체 구독자
+                      <InputCheckbox type="checkbox" onChange={e => {handleClickSubScribe(e.target.checked)}}/> 전체 구독자
                     </CheckLabel>
                   </MultiCheck>
                 </td>
