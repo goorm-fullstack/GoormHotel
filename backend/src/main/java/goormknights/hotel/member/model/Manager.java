@@ -1,13 +1,11 @@
 package goormknights.hotel.member.model;
 
-import goormknights.hotel.global.entity.Auth;
 import goormknights.hotel.global.entity.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,16 +31,14 @@ public class Manager implements Serializable {
 
     private LocalDateTime updatedAt;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    private Set<Auth> auth;
+    private String auth;
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.MANAGER;
 
     @Builder
     public Manager(String adminId, String adminName, String password, String adminNickname, Boolean isActive,
-                   Role role, LocalDateTime createdAt, LocalDateTime updatedAt, Set<Auth> auth){
+                   Role role, LocalDateTime createdAt, LocalDateTime updatedAt, String auth){
         this.adminId = adminId;
         this.adminName = adminName;
         this.password = password;

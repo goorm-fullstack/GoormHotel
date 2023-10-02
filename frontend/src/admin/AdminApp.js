@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AdminLogin from './AdminLogin';
 import AdminMember from './member/AdminMember';
@@ -23,8 +23,42 @@ import AdminChatDetail from './chat/AdminChatDetail';
 import AdminMail from './chat/AdminMail';
 import AdminNews from './chat/AdminNews';
 import AdminIndex from './AdminIndex';
+import Instance from "../utils/api/axiosInstance";
+import {useAuth} from "../utils/api/AuthContext";
 
 const AdminApp = () => {
+  const { setAuthState } = useAuth();
+
+  // 쿠키를 파싱하는 함수
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  useEffect(() => {
+    // 쿠키에서 값을 가져옵니다.
+    const adminId = getCookie("adminId");
+    const role = getCookie("role");
+    const auth = getCookie("auth");
+
+    // 가져온 값이 있다면 상태를 설정합니다.
+    if (adminId && role && auth) {
+      setAuthState({ adminId, role, auth });
+    } else {
+      // 원래대로 서버에서 상태를 가져올 수도 있습니다.
+      Instance.get('/api/adminCheck').then(response => {
+        setAuthState({
+          adminId: response.data.adminId,
+          role: response.data.role,
+          auth: response.data.auth
+        });
+      }).catch(error => {
+        console.error("로그인 상태를 가져오지 못했습니다.", error);
+      });
+    }
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>

@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components';
 import theme from './components/common/theme';
 import AdminApp from './admin/AdminApp';
 import axios from "axios";
+import {AuthProvider} from "./utils/api/AuthContext";
 
 // Global axios defaults
 axios.defaults.withCredentials = true;
@@ -19,6 +20,8 @@ const AppToRender = isAdminPage ? <AdminApp /> : <App />;
 root.render(
     <ThemeProvider theme={theme}>
         <GlobalStyle />
-        {AppToRender}
+            <AuthProvider>
+                {AppToRender}
+            </AuthProvider>
     </ThemeProvider>
 );

@@ -1,15 +1,13 @@
 package goormknights.hotel.auth.controller;
 
 import goormknights.hotel.auth.service.AuthService;
+import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.member.dto.request.FindMemberIdRequest;
 import goormknights.hotel.member.dto.request.FindPasswordRequest;
 import goormknights.hotel.member.dto.request.ResetPasswordRequest;
 import goormknights.hotel.member.exception.MemberNotFound;
-import goormknights.hotel.member.model.Manager;
-import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.service.MemberService;
 import goormknights.hotel.member.service.VerificationService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -29,20 +30,22 @@ public class AuthController {
     private final AuthService authService;
     private final VerificationService verificationService;
 
-    @GetMapping("/checkAuth")
-    public ResponseEntity<?> checkPermission(HttpServletRequest request) {
-        HttpSession session = request.getSession(false); // 세션 가져오기, 없으면 null 반환
-        if (session != null) {
-            if (session.getAttribute("member") != null) {
-                Member member = (Member) session.getAttribute("member");
-                return new ResponseEntity<>(member.getRole(), HttpStatus.OK); // 회원 역할 반환
-            }
-            else if (session.getAttribute("manager") != null) {
-                Manager manager = (Manager) session.getAttribute("manager");
-                return new ResponseEntity<>(manager.getAuth(), HttpStatus.OK); // 매니저 권한 반환
-            }
+    // 역할 체크
+    @GetMapping("/api/adminCheck")
+    public ResponseEntity<?> checkRole(HttpSession session) {
+        Map<String, Object> userInfo = new HashMap<>();
+        Role role = (Role) session.getAttribute("role");
+        String adminId = (String) session.getAttribute("adminId");
+        String auth = (String) session.getAttribute("auth");
+
+        if (role != null && adminId != null && auth != null) {
+            userInfo.put("role", role);
+            userInfo.put("adminId", adminId);
+            userInfo.put("auth", auth);
+            return ResponseEntity.ok(userInfo);
+        } else {
+            return ResponseEntity.badRequest().body("Not logged in.");
         }
-        return new ResponseEntity<>("접근 권한 없음", HttpStatus.FORBIDDEN);
     }
 
     // 아이디 찾기

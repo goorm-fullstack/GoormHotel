@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import adminLogo from '../../images/common/logo_admin.png';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import Instance from "../../utils/api/axiosInstance";
+import {useAuth} from "../../utils/api/AuthContext";
 
 export const Container = styled.header`
   width: 100%;
@@ -57,7 +59,7 @@ const ManagerId = styled.li`
   column-gap: 8px;
 `;
 
-const LogoutBtn = styled.button`
+const LoginBtn = styled.button`
   border: 1px solid white;
   border-radius: 30px;
   height: 32px;
@@ -75,6 +77,29 @@ const LogoutBtn = styled.button`
 `;
 
 const AdminHeader = () => {
+  const { authState, setAuthState } = useAuth();
+  const isLoggedIn = authState.adminId !== '';
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    navigate('/admin/login');
+  };
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await Instance.get('/login/logout');
+      if (response.status === 200) {
+        setAuthState({ role: '', adminId: '', auth: '' });
+        alert('로그아웃 되었습니다')
+        navigate('/admin')
+      }
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+    }
+  };
+
   return (
     <Container>
       <HeaderLink>
@@ -118,8 +143,10 @@ const AdminHeader = () => {
               />
             </g>
           </svg>
-          <span>관리자(admin)</span>
-          <LogoutBtn type="button">로그아웃</LogoutBtn>
+          <span>{`유저: ${authState.adminId}, 역할: ${authState.role}, 권한: ${authState.auth}`}</span>
+          <LoginBtn type="button" onClick={isLoggedIn ? handleLogout : handleLogin}>
+            {isLoggedIn ? '로그아웃' : '로그인'}
+          </LoginBtn>
         </ManagerId>
       </HeaderRight>
     </Container>

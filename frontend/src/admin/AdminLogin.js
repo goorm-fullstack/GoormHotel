@@ -53,7 +53,8 @@ const AdminLogin = () => {
   const [adminPassword, setAdminPassword] = useState('');
   const [rememberId, setRememberId] = useState(false);
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     const loginInfo = {
       adminId: adminId,
       password: adminPassword,
@@ -69,13 +70,12 @@ const AdminLogin = () => {
 
       if (response.status === 200) {
         alert('로그인 성공');
-        window.location.href = '/';
+        window.location.href = '/admin'
       } else {
-        throw new Error('Unauthorized');
+        alert('아이디 또는 비밀번호가 일치하지 않습니다.');
       }
-
     } catch (error) {
-      alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+      alert('아이디 또는 비밀번호가 일치하지 않습니다. 또는 서버 오류가 발생했습니다.');
     }
   };
 

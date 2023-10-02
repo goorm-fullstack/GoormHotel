@@ -7,7 +7,7 @@ Content-Type: application/json
   "password": "123",
   "adminName": "김영한",
   "adminNickname": "호랑이",
-  "authorities": ["MemberManage", "SITE_MANAGE"]
+  "auth": "AUTH_A-AUTH_C"
 }
 
 ### 운영자 로그인

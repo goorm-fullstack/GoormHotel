@@ -3,7 +3,6 @@ package goormknights.hotel.auth.controller;
 import goormknights.hotel.auth.dto.request.ManagerLogin;
 import goormknights.hotel.auth.dto.request.MemberLogin;
 import goormknights.hotel.auth.service.AuthService;
-import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.member.service.AdminService;
 import goormknights.hotel.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -57,14 +56,4 @@ public class LoginController {
         return new ResponseEntity<>("No session found", HttpStatus.BAD_REQUEST);
     }
 
-    // 역할 체크
-    @GetMapping("/checkRole")
-    public ResponseEntity<?> checkRole(HttpSession session) {
-        Role role = (Role) session.getAttribute("role");
-        if (role != null) {
-            return ResponseEntity.ok(role);
-        } else {
-            return ResponseEntity.badRequest().body("Not logged in.");
-        }
-    }
 }

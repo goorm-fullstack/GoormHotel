@@ -59,14 +59,26 @@ public class AdminService {
         Optional<Manager> optionalManager = managerRepository.findByAdminId(adminId);
         if (optionalManager.isPresent() && passwordEncoder.matches(password, optionalManager.get().getPassword())) {
             session = request.getSession();
-            session.setAttribute("manager", optionalManager.get());
-            session.setAttribute("auth", optionalManager.get().getAuth()); // A, B, C
+            session.setAttribute("adminId", optionalManager.get().getAdminId());
+            session.setAttribute("role", optionalManager.get().getRole());
+            session.setAttribute("auth", optionalManager.get().getAuth());
+
             Cookie cookie = new Cookie("JSESSIONID", session.getId());
+            Cookie adminIdCookie = new Cookie("adminId", optionalManager.get().getAdminId());
+            Cookie roleCookie = new Cookie("role", optionalManager.get().getRole().toString());
+            Cookie authCookie = new Cookie("auth", optionalManager.get().getAuth());
             cookie.setMaxAge(10);
+            adminIdCookie.setMaxAge(10);
+            roleCookie.setMaxAge(10);
+            authCookie.setMaxAge(10);
             cookie.setPath("/");
-            response.addHeader("Access-Control-Allow-Origin", "*");
-            response.addHeader("Access-Control-Allow-Credentials", "true");
+            adminIdCookie.setPath("/");
+            roleCookie.setPath("/");
+            authCookie.setPath("/");
             response.addCookie(cookie);
+            response.addCookie(adminIdCookie);
+            response.addCookie(roleCookie);
+            response.addCookie(authCookie);
             log.info("쿠키 이름: " + cookie.getName());
             log.info("쿠키 값: " + cookie.getValue());
             log.info("리스폰스 헤더값: " + response.getHeaderNames());
