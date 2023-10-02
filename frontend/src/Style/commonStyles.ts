@@ -478,7 +478,7 @@ export const commonTable = styled.table`
 
   a,
   button {
-    text-decoration: underline;
+    // text-decoration: underline;
     font-size: ${(props) => props.theme.font.sizes};
   }
 

@@ -1,14 +1,17 @@
 import React, { useRef, useState } from 'react';
 import * as S from './Style';
-import { NavLink } from 'react-router-dom';
 import { Table, TableHeader } from '../../admin/member/AdminMember';
-import { PageTitle, NormalBtn, SubmitBtn } from '../../Style/commonStyles';
+import { PageTitle, SubmitBtn, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
 import axios from 'axios';
 
+export type RoomForm = {
+  [key: string]: string;
+}
+
 const WriteFormRoom = () => {
-  const [imgFile, setImgFile] = useState(''); // 이미지 상태 관리
-  const imgRef = useRef(); // 이미지 태그
-  const [formData, setFormData] = useState({
+  const [imgFile, setImgFile] = useState<string>(''); // 이미지 상태 관리
+  const imgRef = useRef<HTMLInputElement>(null); // 이미지 태그
+  const [formData, setFormData] = useState<RoomForm>({
     // form 데이터 상태 관리
     name: '',
     price: '',
@@ -22,21 +25,21 @@ const WriteFormRoom = () => {
     spareChildren: '',
     capacity: '',
   });
-  const [duplicateMessage, setDuplicateMessage] = useState(''); // 중복검사 메시지 상태 관리
-  const [isConfirm, setIsConfirm] = useState(false); // 중복검사 정상 실행 여부 상태관리
+  const [duplicateMessage, setDuplicateMessage] = useState<string>(''); // 중복검사 메시지 상태 관리
+  const [isConfirm, setIsConfirm] = useState<boolean>(false); // 중복검사 정상 실행 여부 상태관리
 
   // 이미지 업로드 input의 onChange
   const saveImgFile = () => {
-    const file = imgRef.current.files[0];
+    const file = imgRef.current && imgRef.current.files ? imgRef.current.files[0] : null;
     const reader = new FileReader();
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(file as Blob);
     reader.onloadend = () => {
-      setImgFile(reader.result);
+      setImgFile(reader.result as string);
     };
   };
 
   // input에 입력 시 formData 업데이트
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -45,15 +48,15 @@ const WriteFormRoom = () => {
   };
 
   // 등록 api 요청
-  const handleSubmit = async (e) => {
-    const confirmed = window.confirm('등록하시겠습니까?');
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const confirmed: boolean = window.confirm('등록하시겠습니까?');
 
     if (confirmed) {
       if (isConfirm) {
         e.preventDefault();
 
         const form = new FormData();
-        form.append('img', imgRef.current.files[0]);
+        form.append('img', imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '');
 
         Object.keys(formData).forEach((key) => {
           form.append(key, formData[key]);
@@ -67,10 +70,14 @@ const WriteFormRoom = () => {
           });
           window.location.href = '/admin/item/1';
         } catch (error) {
-          console.error('Error:', error.message);
-          if (error.response.data.message.startsWith('Validation failed')) {
-            const errorMessage = error.response.data.errors[0].defaultMessage;
-            alert(errorMessage);
+          if (axios.isAxiosError(error)) {
+            console.error('Error:', error.message);
+            if (error.response?.data.message.startsWith('Validation failed')) {
+              const errorMessage = error.response.data.errors[0].defaultMessage;
+              alert(errorMessage);
+            }
+          } else {
+            console.error('An unknown error occurred.');
           }
         }
       } else {
@@ -80,13 +87,13 @@ const WriteFormRoom = () => {
     }
   };
 
-  const nameRef = useRef(); // 상품 이름 입력 input 태그
+  const nameRef = useRef<HTMLInputElement>(null); // 상품 이름 입력 input 태그
 
   // 중복검사 api 요청
   const handleDuplicate = async () => {
     try {
-      const url = `/rooms/check?roomName=${nameRef.current.value}`;
-      if (nameRef.current.value === '') {
+      const url: string = `/rooms/check?roomName=${nameRef.current?.value}`;
+      if (nameRef.current?.value === '') {
         setDuplicateMessage('상품명은 공백일 수 없습니다.');
         setIsConfirm(false);
       } else {
@@ -96,14 +103,16 @@ const WriteFormRoom = () => {
         setIsConfirm(true);
       }
     } catch (error) {
-      setDuplicateMessage(error.response.data);
-      setIsConfirm(false);
-      console.log(error.response);
+      if(axios.isAxiosError(error)){
+        setDuplicateMessage(error.response?.data);
+        console.log(error.response?.data);
+        setIsConfirm(false);
+      }
     }
   };
 
   // 중복검사 메시지에 따른 태그 결정
-  let responseMessege = [];
+  let responseMessege;
   if (duplicateMessage === '중복된 상품명입니다.' || duplicateMessage === '상품명은 공백일 수 없습니다.') {
     responseMessege = <S.RedP>{duplicateMessage}</S.RedP>;
   } else {
@@ -114,10 +123,14 @@ const WriteFormRoom = () => {
     <>
       <PageTitle>객실 등록</PageTitle>
       <TableHeader>
-        <div>
-          <NormalBtn to="/admin/item/add/room">객실 등록</NormalBtn>
-          <NormalBtn to="/admin/item/add/dining">다이닝 등록</NormalBtn>
-        </div>
+      <BtnWrapper className="flexgap right">
+          <LinkBtn to="/admin/item/add/room" className="header">
+            객실 등록
+          </LinkBtn>
+          <LinkBtn to="/admin/item/add/dining" className="header">
+            다이닝 등록
+          </LinkBtn>
+        </BtnWrapper>
       </TableHeader>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <Table className="horizontal">
