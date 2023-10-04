@@ -1,5 +1,6 @@
 package goormknights.hotel.giftcard.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import goormknights.hotel.reservation.model.Reservation;
 import goormknights.hotel.giftcard.dto.request.RequestGiftCardDto;
 import goormknights.hotel.giftcard.dto.response.ResponseGiftCardDto;
@@ -10,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -19,15 +22,15 @@ public class GiftCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     private String uuid;
     private int money;//현재 잔액
-
     @ManyToOne
     private Member member;
-
     private char isZeroMoney = 'N';//만약 잔액이 0라면 사용불가능하도록 표시하자
     private String title;//상품권 이름
+    @JsonFormat(pattern = "yyyy.MM.dd")
+    private LocalDate issueDate = LocalDate.now();//발행일
+    private int expire = 365;//만료일
 
     @ManyToOne
     private Reservation reservation;    // 사용된 예약 건
@@ -35,11 +38,28 @@ public class GiftCard {
     public GiftCard(String uuid, int money) {
         this.uuid = uuid;
         this.money = money;
+        this.title = money+"원 상품권";
+    }
+
+    @Override
+    public String toString() {
+        return "GiftCard{" +
+                "id=" + id +
+                ", uuid='" + uuid + '\'' +
+                ", money=" + money +
+                ", member=" + member +
+                ", isZeroMoney=" + isZeroMoney +
+                ", title='" + title + '\'' +
+                ", issueDate=" + issueDate +
+                ", expire=" + expire +
+                ", reservation=" + reservation +
+                '}';
     }
 
     @Builder
     public GiftCard(
             int id,
+            String title,
             String uuid,
             int money,
             Member member,
@@ -50,7 +70,9 @@ public class GiftCard {
         this.money = money;
         this.member = member;
         this.isZeroMoney = isZeroMoney;
-        this.title = money+"원권 상품권";
+        this.title = title;
+        this.issueDate = LocalDate.now();
+        this.expire = 365;
     }
 
     public void setMember(Member member) {
@@ -77,5 +99,13 @@ public class GiftCard {
 
     public RequestGiftCardDto toRequestDto() {
         return new RequestGiftCardDto(this);
+    }
+
+    public void changeUsableState() {
+        isZeroMoney = 'N';
+    }
+
+    public void changeUnusableState() {
+        isZeroMoney = 'Y';
     }
 }
