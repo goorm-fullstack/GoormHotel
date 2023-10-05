@@ -34,9 +34,6 @@ public class QDining extends EntityPathBase<Dining> {
     public final NumberPath<Long> id;
 
     //inherited
-    public final StringPath location;
-
-    //inherited
     public final StringPath name;
 
     //inherited
@@ -90,7 +87,6 @@ public class QDining extends EntityPathBase<Dining> {
         this.capacity = _super.capacity;
         this.deleted = _super.deleted;
         this.id = _super.id;
-        this.location = _super.location;
         this.name = _super.name;
         this.price = _super.price;
         this.priceAdult = _super.priceAdult;

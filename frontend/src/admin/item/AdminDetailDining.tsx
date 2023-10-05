@@ -2,19 +2,23 @@ import React, { useState, useRef, useEffect } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, SubmitBtn } from '../../Style/commonStyles';
 import { Image } from '../../components/AddItemForm/Style';
-import { Select } from './AdminItemList';
+import { DiningData, Select } from './AdminItemList';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import axios from 'axios';
-import { Container, Table } from '../member/AdminMember';
+import {
+  Container, 
+  Table
+} from '../member/AdminMember';
+import { DiningForm } from '../../components/AddItemForm/WriteFormDining';
 
-// 세부 타입 select
+// 세부타입 선택
 const WriteFormSelect = styled(Select)`
   width: 200px;
   margin: 0;
 `;
 
-// 중복검사 버튼
+// 중복확인 버튼
 const DuplicateButton = styled.button`
   vertical-align: middle;
   margin-left: 50px;
@@ -29,32 +33,35 @@ const DuplicateButton = styled.button`
   }
 `;
 
-// 중복검사 경고 문구
+// 중복확인 시 경고 문구
 const RedP = styled.p`
   color: #ec5353;
   display: inline-block;
   margin-left: 30px;
 `;
 
-// 중복검사 성공 문구
+// 중복확인 시 성공 문구
 const GreenP = styled.p`
   color: #008000;
   display: inline-block;
   margin-left: 30px;
 `;
 
-const AdminDetailRoom = () => {
-  const [imgFile, setImgFile] = useState(''); // 이미지 상태관리
-  const imgRef = useRef(); // 이미지 태그
-  const { type, name } = useParams(); // url 파라미터
-  const [responseData, setResponseData] = useState({}); // get 요청으로 받은 데이터 상태관리
-  const [duplicateMessage, setDuplicateMessage] = useState(''); // 중복검사 메시지 상태관리
-  const [isConfirm, setIsConfirm] = useState(true); // 중복검사 정상 실행 여부 상태관리
-  const [responseObject, setResponseObject] = useState({}); // form 데이터 상태관리
+const AdminDetailDining = () => {
+  const [imgFile, setImgFile] = useState<string>(''); // 이미지 상태관리
+  const imgRef = useRef<HTMLInputElement>(null); // 이미지 태그
+  const { type, name } = useParams<{type: string, name: string}>(); // url 파라미터
+  const [responseData, setResponseData] = useState<DiningData>(); // get 요청으로 받아온 데이터 상태관리
+  const [duplicateMessage, setDuplicateMessage] = useState<string>(''); // 중복검사 메시지 상태관리
+  const [isConfirm, setIsConfirm] = useState<boolean>(true); // 중복검사 정상 실행 여부 상태관리
+  const [responseObject, setResponseObject] = useState<DiningForm>({}); // form 데이터 상태관리
+  const [imageUrls, setImageUrls] = useState<string[]>([]); // 현재 데이터의 이미지 정보 상태관리
+  const nameRef = useRef<HTMLInputElement>(null); // 상품 이름 입력 input 태그
 
-  // 현재 데이터 get 요청
+  // 해당 상품의 데이터 get 요청
   useEffect(() => {
-    axios.get(`/rooms/${type}/${encodeURIComponent(name)}`).then((response) => {
+    const nameParam: string = name ? name : '';
+    axios.get(`/dinings/${type}/${encodeURIComponent(nameParam)}`).then((response) => {
       setResponseData(response.data);
       console.log('get 성공');
     });
@@ -62,17 +69,19 @@ const AdminDetailRoom = () => {
 
   // 이미지 업로드 input의 onChange(이미지 미리보기)
   const saveImgFile = () => {
-    const file = imgRef.current.files[0];
+    const file = imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '';
     const reader = new FileReader();
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(file as Blob);
     reader.onloadend = () => {
-      setImgFile(reader.result);
+      setImgFile(reader.result as string);
     };
-    imgRef.current.src = imgFile;
+    if(imgRef.current){
+      imgRef.current.src = imgFile;
+    }
   };
 
-  // input 값 입력시 form 데이터 업데이트
-  const handleChange = (e) => {
+  // input 입력 시 form 데이터 업데이트
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setResponseObject((prevData) => ({
       ...prevData,
@@ -81,16 +90,14 @@ const AdminDetailRoom = () => {
   };
 
   // 수정 api 요청
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const confirmed = window.confirm('수정하시겠습니까?');
+    const confirmed: boolean = window.confirm('수정하시겠습니까?');
+
     if (confirmed) {
       if (isConfirm) {
         const form = new FormData();
-        console.log(imgRef.current.files);
-        if (imgRef.current && imgRef.current.files.length !== 0) {
-          form.append('img', imgRef.current.files[0]);
-        }
+        form.append('img', imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '');
 
         Object.keys(responseObject).forEach((key) => {
           form.append(key, responseObject[key]);
@@ -98,17 +105,22 @@ const AdminDetailRoom = () => {
         });
 
         try {
-          await axios.put(`/rooms/${type}/${encodeURIComponent(name)}`, form, {
+          const nameParam: string = name ? name : '';
+          await axios.put(`/dinings/${type}/${encodeURIComponent(nameParam)}`, form, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
           });
           window.location.href = '/admin/item/1';
         } catch (error) {
-          console.error('Error:', error.message);
-          if (error.response.data.message.startsWith('Validation failed')) {
-            const errorMessage = error.response.data.errors[0].defaultMessage;
-            alert(errorMessage);
+          if (axios.isAxiosError(error)) {
+            console.error('Error:', error.message);
+            if (error.response?.data.message.startsWith('Validation failed')) {
+              const errorMessage = error.response.data.errors[0].defaultMessage;
+              alert(errorMessage);
+            }
+          } else {
+            console.error('An unknown error occurred.');
           }
         }
       } else {
@@ -117,23 +129,21 @@ const AdminDetailRoom = () => {
     }
   };
 
-  const [imageUrls, setImageUrls] = useState([]); // 현재 데이터의 이미지 상태 관리
-
-  // 이미지 데이터 api 요청
+  // 이미지 정보 받기 api 요청
   useEffect(() => {
     // 단일 항목에 대한 이미지 URL을 가져옵니다
-    const item = responseData;
+    const item = responseData ? responseData : null;
     const fetchImageUrl = async () => {
       try {
-        const response = await axios.get(`/image/${item.name}`, {
+        const response = await axios.get(`/image/${item?.name}`, {
           responseType: 'arraybuffer',
         });
 
         const blob = new Blob([response.data], { type: response.headers['content-type'] });
         const imageUrl = URL.createObjectURL(blob);
         setImageUrls([imageUrl]); // 이미지 URL을 상태에 설정
-        console.log(responseData);
-        setResponseObject(JSON.parse(JSON.stringify(responseData))); // 현재 데이터 form 데이터에 깊은 복사
+        console.log('생성 성공');
+        setResponseObject(JSON.parse(JSON.stringify(responseData))); // 현재 데이터 깊은 복사
       } catch (error) {
         console.error('이미지 URL을 가져오는 중 오류가 발생했습니다:', error);
       }
@@ -143,17 +153,14 @@ const AdminDetailRoom = () => {
     console.log('get data to responseObject = ', responseObject);
   }, [responseData]);
 
-  const nameRef = useRef(); // 상품명 입력하는 input 태그
-
   // 중복검사 api 요청
-  const handleDuplicate = async (e) => {
-    e.preventDefault();
+  const handleDuplicate = async () => {
     try {
-      const url = `/rooms/check?roomName=${nameRef.current.value}`;
-      if (nameRef.current.value === '') {
+      const url = `/dinings/check?diningName=${nameRef.current?.value}`;
+      if (nameRef.current?.value === '') {
         setDuplicateMessage('상품명은 공백일 수 없습니다.');
         setIsConfirm(false);
-      } else if (nameRef.current.value === responseData.name) {
+      } else if (nameRef.current?.value === responseData?.name) {
         setDuplicateMessage('사용 가능한 상품명입니다.');
         setIsConfirm(true);
       } else {
@@ -164,11 +171,15 @@ const AdminDetailRoom = () => {
       }
       console.log('responseObject = ', responseObject);
     } catch (error) {
-      setDuplicateMessage(error.response.data);
-      setIsConfirm(false);
+      if(axios.isAxiosError(error)){
+        setDuplicateMessage(error.response?.data);
+        console.log(error.response?.data);
+        setIsConfirm(false);
+      }
     }
   };
 
+  // 중복검사 메시지에 따라 메시지 태그 결정
   let responseMessege;
   if (duplicateMessage === '중복된 상품명입니다.' || duplicateMessage === '상품명은 공백일 수 없습니다.') {
     responseMessege = <RedP>{duplicateMessage}</RedP>;
@@ -179,17 +190,17 @@ const AdminDetailRoom = () => {
   return (
     <AdminLayout subMenus="item">
       <Container>
-        <PageTitle>객실 상세</PageTitle>
+        <PageTitle>다이닝 상세</PageTitle>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           {responseData && (
             <Table>
-              <form>
+              <tr>
                 <th>썸네일</th>
                 <td>
                   <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
-                  {imgFile ? <Image src={imgFile} alt="프로필 이미지" /> : <Image src={imageUrls[0] || ''} alt="프로필 이미지"></Image>}
+                  {imgFile ? <Image src={imgFile} alt="프로필 이미지" /> : <Image src={imageUrls[0]} alt="프로필 이미지" />}
                 </td>
-              </form>
+              </tr>
               <tr>
                 <th>상품명</th>
                 <td>
@@ -237,9 +248,15 @@ const AdminDetailRoom = () => {
                 </td>
               </tr>
               <tr>
+                <th>기준 인원</th>
+                <td>
+                  <input type="text" name="spareChildren" defaultValue={responseData.capacity} onChange={handleChange} required />
+                </td>
+              </tr>
+              <tr>
                 <th>상품 타입</th>
                 <td>
-                  <input type="text" name="type" defaultValue={responseData.type} readOnly />
+                  <input type="text" value="dining" readOnly />
                 </td>
               </tr>
               <tr>
@@ -252,28 +269,17 @@ const AdminDetailRoom = () => {
                     onChange={handleChange}
                     required>
                     <option value="">선택</option>
-                    <option value="deluxe">디럭스</option>
-                    <option value="sweet">스위트</option>
-                    <option value="family">패밀리</option>
-                    <option value="poolVilla">풀 빌라</option>
+                    <option value="restaurant">레스토랑</option>
+                    <option value="roomService">룸서비스</option>
+                    <option value="barRounge">바&라운지</option>
+                    <option value="bakery">베이커리</option>
                   </WriteFormSelect>
                 </td>
               </tr>
               <tr>
-                <th>침대 타입</th>
+                <th>이용 가능 시간</th>
                 <td>
-                  <WriteFormSelect name="bed" key={responseData.bed} defaultValue={responseData.bed} onChange={handleChange} required>
-                    <option value="">선택</option>
-                    <option value="single">싱글</option>
-                    <option value="double">더블/트윈</option>
-                    <option value="king">킹</option>
-                  </WriteFormSelect>
-                </td>
-              </tr>
-              <tr>
-                <th>숙박 인원 기준</th>
-                <td>
-                  <input type="text" name="capacity" defaultValue={responseData.capacity} onChange={handleChange} required />
+                  <input type="text" name="useTime" defaultValue={responseData.useTime} onChange={handleChange} required />
                 </td>
               </tr>
             </Table>
@@ -285,4 +291,4 @@ const AdminDetailRoom = () => {
   );
 };
 
-export default AdminDetailRoom;
+export default AdminDetailDining;
