@@ -4,9 +4,6 @@ import { NavLink, useLocation, useParams } from 'react-router-dom';
 import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
-import Instance from "../../utils/api/axiosInstance";
-import { Image } from "../../components/AddItemForm/Style";
-import {arrayBuffer} from "stream/consumers";
 
 export const Container = styled(commonContainerStyle)``;
 
