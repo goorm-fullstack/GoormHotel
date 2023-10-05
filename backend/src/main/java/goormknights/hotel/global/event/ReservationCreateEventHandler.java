@@ -16,6 +16,9 @@ public class ReservationCreateEventHandler implements ApplicationListener<Reserv
     private final CouponRepository couponRepository;
     private final MemberRepository memberRepository;
 
+    /**
+     * 예약이 생성될 때, 사용자가 예약한 횟수에 따라서 등급을 변환해주는 로직
+     */
     @Override
     @Transactional
     public void onApplicationEvent(ReservationCreateEvent event) {

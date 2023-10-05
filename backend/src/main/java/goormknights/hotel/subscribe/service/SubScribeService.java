@@ -25,6 +25,10 @@ public class SubScribeService {
         subScribeRepository.save(subScribe.toEntity());
     }
 
+    /**
+     *
+     * @return 구독중인 전체 사용자 데이터
+     */
     public List<ResponseSubScribeDto> getAllSubScribe(Pageable pageable) {
         Page<SubScribe> all = subScribeRepository.findAllByIsSubscribe(pageable,"Y");
         List<ResponseSubScribeDto> result = new ArrayList<>();
@@ -34,9 +38,17 @@ public class SubScribeService {
         return result;
     }
 
+    /**
+     *
+     * @param id - 구독 취소할 엔티티 ID
+     */
     public void unSubscribe(Long id) {
         SubScribe findSubscribe = subScribeRepository.findById(id).orElseThrow(()-> new NoSuchElementException("구독하지 않은 사용자입니다"));
         findSubscribe.cancelSubscribe();
         subScribeRepository.save(findSubscribe);
+    }
+
+    public Long calcSubscribePageCount() {
+        return (subScribeRepository.count() / 10);
     }
 }

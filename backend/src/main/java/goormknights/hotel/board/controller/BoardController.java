@@ -64,11 +64,17 @@ public class BoardController {
     }
 
     // 삭제된 게시물 전체 조회
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
     @GetMapping("/deleted")
     public ResponseEntity<List<ResponseBoardDto>> getDeletedBoards(@PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
-        List<ResponseBoardDto> deletedBoards = boardService.findAllBoardDelete(pageable);
+        Page<ResponseBoardDto> allBoardDelete = boardService.findAllBoardDelete(pageable);
 
-        return ResponseEntity.ok(deletedBoards);
+        int totalPages = allBoardDelete.getTotalPages();
+        long totalElements = allBoardDelete.getTotalElements();
+        return ResponseEntity.ok()
+                .header("TotalPages", String.valueOf(totalPages))
+                .header("TotalData", String.valueOf(totalElements))
+                .body(allBoardDelete.getContent());
     }
 
     // 게시물 영구 삭제

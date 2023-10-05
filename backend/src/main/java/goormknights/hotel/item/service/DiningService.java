@@ -93,6 +93,11 @@ public class DiningService {
         return diningRepository.findAll(pageable);
     }
 
+    public List<ResponseDiningDto> findAll(){
+        List<Dining> all = diningRepository.findAll();
+        return all.stream().map(Dining::toResponseDiningDto).toList();
+    }
+
     /**
      * 페이징된 엔티티 리스트 responseDto로 변환
      * @param pagingDiningList - 페이징된 엔티티 리스트

@@ -118,6 +118,16 @@ public class RoomController {
                 .body(responseDtoList);
     }
 
+    /**
+     * 전체 객실 조회
+     * @return 전체 객실
+     */
+    @GetMapping("/all")
+    public ResponseEntity<List<ResponseRoomDto>> findAll(){
+        List<ResponseRoomDto> allWithoutPage = roomService.findAllWithoutPage();
+        return ResponseEntity.ok(allWithoutPage);
+    }
+
     @GetMapping("/check")
     public ResponseEntity<String> existsByRoomName(@RequestParam String roomName){
         log.info("roomName={}", roomName);

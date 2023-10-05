@@ -70,7 +70,7 @@ public class Reply {
                 .replyWriteDate(replyWriteDate)
                 .replyWriter(replyWriter)
                 .report(report.stream().map(Report::toResponseReportDto).toList())
-                .replyDeleteTime(replyDeleteTime)
+                .responseBoardDto(board.toResponseBoardDto())
                 .build();
     }
 
@@ -82,7 +82,6 @@ public class Reply {
                 .replyWriteDate(requestReplyDto.getReplyWriteDate())
                 .board(reply.getBoard())
                 .report(reply.getReport())
-                .replyDeleteTime(reply.getReplyDeleteTime())
                 .build();
     }
 }

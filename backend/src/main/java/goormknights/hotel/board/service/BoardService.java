@@ -123,17 +123,22 @@ public class BoardService {
     }
 
     //삭제된 게시물만 조회
-    public List<ResponseBoardDto> findAllBoardDelete(Pageable pageable){
-        Page<Board> boardDelete = boardRepository.findAll(pageable);
-        List<ResponseBoardDto> response = new ArrayList<>();
-
-        for (Board board : boardDelete){
-            if(board.getBoardDeleteTime()!=null){
-                response.add(board.toResponseBoardDto());
+    public Page<ResponseBoardDto> findAllBoardDelete(Pageable pageable){
+        Page<Board> all = boardRepository.findAll(pageable);
+        List<ResponseBoardDto> list = new ArrayList<>();
+        for (Board board : all) {
+            if(board.getBoardDeleteTime() != null){
+                list.add(board.toResponseBoardDto());
             }
         }
-
-        return response;
+        return new PageImpl<>(list, pageable, list.size());
+//        List<ResponseBoardDto> response = new ArrayList<>();
+//
+//        for (Board board : boardDelete){
+//            if(board.getBoardDeleteTime()!=null){
+//                response.add(board.toResponseBoardDto());
+//            }
+//        }
     }
 
     //게시물 영구 삭제
