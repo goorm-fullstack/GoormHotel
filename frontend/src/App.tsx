@@ -168,7 +168,6 @@ function App() {
           <Route path="/admin/chat/:page" element={<AdminChat />} />
           <Route path="/admin/chat/detail/:roomId" element={<AdminChatDetail />} />
           <Route path="/admin/mail" element={<AdminMail />} />
-          <Route path="/admin/mail/:receiver" element={<AdminMail />} />
           <Route path="/admin/subscriber/:page" element={<AdminSubScribe />} />
         </Routes>
       </>
