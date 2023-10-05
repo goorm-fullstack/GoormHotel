@@ -144,6 +144,43 @@ const BoardRead = () => {
     }
   }, [boardData]);
 
+  const [comments, setComments] = useState([]); // 댓글 목록을 저장할 상태
+  const [newComment, setNewComment] = useState(''); // 새로운 댓글 내용을 저장할 상태
+  const [replyWriter, setReplyWriter] = useState('');
+  const [replyContent, setReplyContent] = useState('');
+
+  // 댓글 불러오기
+  const fetchComments = async (boardId:number) => {
+    try {
+      const response = await axios.get(`/reply/boardId/${boardId}`);
+      setComments(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchComments(boardId);
+  }, [boardId]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // 새로운 댓글을 서버에 제출
+    try {
+      const response = await axios.post('/reply/writeform', {
+        boardId: boardId,
+        replyContent: replyContent,
+        replyWriter: replyWriter
+      });
+      fetchComments(boardId);
+      setReplyWriter('');
+      setReplyContent('');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
       <>
         <SubHeader kind="board" />
@@ -188,12 +225,22 @@ const BoardRead = () => {
               <tr className="commentwrite">
                 <td>
                   <div>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                       <div>
-                        <input type="text" placeholder="작성자명" />
-                        <input type="password" placeholder="식별 비밀번호?" />
+                        <input
+                            type="text"
+                            placeholder="작성자명"
+                            name="replyWriter"
+                            value={replyWriter} // 상태에서 작성자명 가져오기
+                            onChange={(e) => setReplyWriter(e.target.value)} // 입력 값이 변경될 때 상태 업데이트
+                        />
+                        {/*<input type="password" placeholder="식별 비밀번호?" />*/}
                       </div>
-                      <textarea></textarea>
+                      <textarea
+                          name="replyContent"
+                          value={replyContent}
+                          onChange={(e) => setReplyContent(e.target.value)}
+                      ></textarea>
                       <button type="submit">등록</button>
                     </form>
                   </div>
