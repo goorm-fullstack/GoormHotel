@@ -175,6 +175,16 @@ export const commonLinkBtn = styled(Link)`
   }
 `;
 
+export const CloseButton = styled.button`0
+  border: 1px solid #ddd;
+  background: white;
+  color: #666;
+  padding: 6px 16px;
+  margin-left: 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+`
+
 export const commonButton = styled.button`
   font-size: ${(props) => props.theme.font.sizes};
   width: 200px;

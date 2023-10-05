@@ -1,138 +1,22 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { useNavigate, useParams } from 'react-router-dom';
-import {Container} from '../member/AdminMember';
-import styled from 'styled-components';
+import * as S from "./style";
 import Instance from '../../utils/api/axiosInstance';
-import {PageTitle} from '../../Style/commonStyles';
+import { PageTitle, BtnWrapper, CloseButton, NormalBtn } from '../../Style/commonStyles';
+import { Container, Table, TableHeader } from '../member/AdminMember';
 
-const InfoContainer = styled.table`
-  width: 100%;
-  th,
-  td {
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    font-size: 15px;
-  }
-`;
-
-const InfoWrapper = styled.tr``;
-
-const Label = styled.th`
-  width: 240px;
-  font-weight: 500;
-  background-color: #f7f7f7;
-  padding: 21.5px 40px;
-  text-align: left;
-  color: #111;
-
-  &.center {
-    text-align: center;
-  }
-`;
-
-const Data = styled.td`
-  padding: 10px 20px;
-  color: #444;
-
-  &.chatWrapper {
-    padding: 0;
-    background: #f7f7f7;
-  }
-  .chatLog {
-    max-height: 380px;
-    overflow-y: scroll;
-    padding: 40px 0;
-    line-height: 1.7;
-    background: white;
-    border-bottom: 1px solid #ddd;
-  }
-
-  .chatLog li {
-    max-width: 734px;
-    margin: 0 auto;
-  }
-
-  .chatLog storng {
-    font-weight: 500;
-    color: #111;
-  }
-
-  .chatLog span {
-    color: #444;
-  }
-
-  .chatLog storng.manager {
-    color: #baa085;
-  }
-
-  .writeWrapper {
-    display: flex;
-    max-width: 750px;
-    margin: 0 auto;
-    padding: 20px 0;
-    gap: 0 10px;
-  }
-
-  textarea {
-    border: 1px solid #ddd;
-    width: 100%;
-    max-width: 640px;
-    resize: none;
-    height: 80px;
-    border-radius: 3px;
-    padding: 10px;
-  }
-
-  button[type='submit'] {
-    width: 100px;
-    border-radius: 3px;
-    background: #baa085;
-    color: white;
-  }
-
-  button[type='submit']:hover {
-    background: #95846e;
-  }
-
-  .chatClose {
-    border: 1px solid #ddd;
-    background: white;
-    color: #666;
-    padding: 6px 16px;
-    margin-left: 8px;
-    border-radius: 4px;
-    font-size: 0.875rem;
-  }
-
-  .chatClose:hover {
-    background: #f7f7f7;
-  }
-`;
-
-const ModifyBtnWrapper = styled.div`
-  text-align: center;
-`;
-
-const ModifyBtn = styled.button`
-  width: 200px;
-  height: 45px;
-  border: 1px solid #baa085;
-  color: #baa085;
-  margin: 40px auto 0;
-  background: white;
-
-  &:hover {
-    background: #baa085;
-    color: white;
-  }
-`;
+interface ChatMessage{
+  sender : string;
+  message : string;
+  type : string;
+}
 
 const AdminChatDetail = () => {
-  const { roomId } = useParams();
+  const { roomId } = useParams<string>();
   const [socketConnected, setSocketConnected] = useState(false);
-  const [chatData, setChatData] = useState([]);
-  const chatContainerRef = useRef(null);
+  const [chatData, setChatData] = useState<ChatMessage[]>([]);
+  const chatContainerRef = useRef<HTMLUListElement>(null);
   const [newChat, setNewChat] = useState('');
   const [chatRoomData, setChatRoomData] = useState({});
   const [recentTime, setRecentTime] = useState('');
@@ -144,12 +28,14 @@ const AdminChatDetail = () => {
   };
 
   const webSocketURL = 'ws://127.0.0.1:8080/ws/chat';
-  let ws = useRef(null);
+  let ws = useRef<WebSocket | null>(null);
 
   useLayoutEffect(() => {
     Instance.get(`/chat/getPrevId/` + roomId)
       .then((response) => {
-        settingWebSocket(roomId);
+        if(roomId !== undefined) {
+          settingWebSocket(roomId);
+        }
         setChatRoomData(response.data);
         setStatus(response.data.status);
         setChatData(response.data.chatMessages);
@@ -166,7 +52,7 @@ const AdminChatDetail = () => {
     }
   }, [chatData]);
 
-  const settingWebSocket = (roomId1) => {
+  const settingWebSocket = (roomId1:string) => {
     // 이전 상태(prevRoomId)를 이용하여 새로운 상태를 반환
     if (!ws.current) {
       ws.current = new WebSocket(webSocketURL);
@@ -175,7 +61,7 @@ const AdminChatDetail = () => {
         console.log('WebSocket connected');
 
         // WebSocket 연결이 성공하면 ENTER 메시지 전송
-        ws.current.send(
+        ws.current?.send(
           JSON.stringify({
             type: 'ENTER',
             roomId: roomId1, // 이전 상태를 사용
@@ -219,10 +105,10 @@ const AdminChatDetail = () => {
   };
 
   // setChatData(p => [...p, { message: newChat, isUser: true }]); -> 권희준 멘트님 추천사항
-  const handleInputKeyPress = (e) => {
+  const handleInputKeyPress = (e : React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && newChat.trim() !== '' && socketConnected) {
       setChatData((p) => [...p, { message: newChat, sender: 'admin', type: 'TALK' }]);
-      ws.current.send(
+      ws.current?.send(
         JSON.stringify({
           type: 'TALK',
           roomId: roomId,
@@ -234,7 +120,7 @@ const AdminChatDetail = () => {
     }
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = (e : React.FormEvent<HTMLDivElement>) => {
     e.preventDefault();
 
     if (newChat.trim() !== '') {
@@ -243,7 +129,7 @@ const AdminChatDetail = () => {
     }
   };
 
-  const handleClosedClick = (e) => {
+  const handleClosedClick = (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setStatus('CLOSED');
     Instance.get('/chat/closed/' + roomId).then((response) => {
       console.log(response);
@@ -254,34 +140,39 @@ const AdminChatDetail = () => {
     <AdminLayout subMenus="chat">
       <Container>
         <PageTitle>채팅 관리</PageTitle>
-        <InfoContainer>
-          <InfoWrapper>
-            <Label>방 번호(방 ID)</Label>
-            <Data>({roomId})</Data>
-          </InfoWrapper>
-          <InfoWrapper>
-            <Label>최근 발송일</Label>
-            <Data>{recentTime}</Data>
-          </InfoWrapper>
-          <InfoWrapper>
-            <Label>상태</Label>
-            <Data>
+        <Table className="horizontal">
+          <colgroup>
+            <col width="240px" />
+            <col width="auto" />
+          </colgroup>
+          <tbody>
+            <tr>
+              <th>회원 아이디(회원 ID)</th>
+              <td>({roomId})</td>
+            </tr>
+          <tr>
+            <th>최근 발송일</th>
+            <td>{recentTime}</td>
+          </tr>
+          <tr>
+            <th>상태</th>
+            <td>
               {status}
-              <button type="button" className="chatClose" onClick={handleClosedClick}>
+              <CloseButton type="button" className="chatClose" onClick={handleClosedClick}>
                 종료
-              </button>
-            </Data>
-          </InfoWrapper>
-          <InfoWrapper>
-            <Label colSpan="2" className="center">
+              </CloseButton>
+            </td>
+          </tr>
+          <tr>
+            <th colSpan={2} className="center">
               채팅 기록
-            </Label>
-          </InfoWrapper>
-          <InfoWrapper>
-            <Data colSpan="2" className="chatWrapper">
+            </th>
+          </tr>
+          <tr>
+            <S.ChatWrapper colSpan={2} className="writeWrapper">
               <ul className="chatLog" ref={chatContainerRef}>
                 {chatData.map((chat, index) =>
-                  chat.messageType === 'TALK' ? ( // chat.type이 'TALK'인 경우에만 출력
+                  chat.type === 'TALK' ? ( // chat.type이 'TALK'인 경우에만 출력
                     <li key={index}>
                       {chat.sender === 'admin' ? (
                         <>
@@ -290,7 +181,7 @@ const AdminChatDetail = () => {
                         </>
                       ) : (
                         <>
-                          <strong className="member">회원명(회원 ID) : </strong>
+                          <strong className="member">{chat.sender}(회원 ID) : </strong>
                           <span>{chat.message}</span>
                         </>
                       )}
@@ -300,19 +191,19 @@ const AdminChatDetail = () => {
               </ul>
               <div className="writeWrapper" onSubmit={handleFormSubmit}>
                 <textarea
-                  type="text"
                   placeholder="메시지를 입력해 주세요"
                   value={newChat}
                   onChange={(e) => setNewChat(e.target.value)}
                   onKeyDown={handleInputKeyPress}></textarea>
                 <button type="submit">전송</button>
               </div>
-            </Data>
-          </InfoWrapper>
-        </InfoContainer>
-        <ModifyBtnWrapper>
-          <ModifyBtn onClick={navigateToChatList}>목록</ModifyBtn>
-        </ModifyBtnWrapper>
+            </S.ChatWrapper>
+          </tr>
+          </tbody>
+        </Table>
+        <BtnWrapper className = "center mt40">
+          <NormalBtn onClick={navigateToChatList}>목록</NormalBtn>
+        </BtnWrapper>
       </Container>
     </AdminLayout>
   );

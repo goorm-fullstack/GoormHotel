@@ -41,4 +41,11 @@ public class SubScribeController {
         emailService.sendSubscribe(requestSubScribe.getEmailAddress(), "newsletter");
         return ResponseEntity.ok(requestSubScribe);
     }
+
+    // 전체 구독자 페이지 수 구하기
+    @GetMapping("/count")
+    public ResponseEntity<Long> getCount() {
+        Long count = subScribeService.calcSubscribePageCount();
+        return ResponseEntity.ok(count);
+    }
 }

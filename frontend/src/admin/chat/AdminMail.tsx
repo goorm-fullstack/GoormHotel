@@ -1,66 +1,76 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, CheckLabel, MultiCheck, SubmitBtn } from '../../Style/commonStyles';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Container, Table } from '../member/AdminMember';
 import Instance from '../../utils/api/axiosInstance';
-import UploadAdapter from '../../utils/adaptor/UploadAdaptor';
+import queryString from 'query-string';
 
 const AdminMail = () => {
-  const {receiver} = useParams();
-  const [receiverValue, setReceiverValue] = useState('');
-  const [receiverList, setReceiverList] = useState([]);
+  const location = useLocation();
+  const queryParams = queryString.parse(location.search);
+  const [receiverValue, setReceiverValue] = useState<string>('');
   const [subscribe, setSubScribe] = useState([]);
   const [members, setMembers] = useState([]);
   const [subject, setSubject] = useState('');
   const [carbonCopy, setCarbonCopy] = useState('');
-  const fileRef = useRef();
-  const [file, setFile] = useState();
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [file, setFile] = useState('');
   const [message, setMessage] = useState('');
+  const mailto = queryParams.mailto;
   
+  console.log(mailto)
 
   useEffect(() => {
-    if(receiver !== undefined) {
-      setReceiverValue(receiver)
+    if(mailto !== null && typeof mailto !== 'undefined') {
+      if (!Array.isArray(mailto)) {
+        setReceiverValue(mailto); // 여기서는 배열의 첫 번째 값을 사용하거나 원하는 로직을 추가할 수 있습니다.
+      }
+      console.log(mailto);
     }
   }, []);
 
   //이미지 업로드 input의 onChange
   const saveFile = () => {
-    const file = fileRef.current.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setFile(reader.result);
+    if(fileRef.current !== null && fileRef.current.files !== null) {
+      const file = fileRef.current.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        if(reader !== undefined && reader !=null) {
+          setFile(reader.result as string);
+        }
+      }
     };
-  };
-
-  // 전체 구독자 조회
-  const getAllSubscribe = () => {
-    
   }
 
-  // 전체 멤버 조회
-  const getAllMembers = () => {
-    Instance.get("/member/list").then((response) => {
-      setMembers(response.data);
-    })
-  }
-
-  const handleClickSubScribe = (checked) => {
+  // 전체 구독자 버튼 클릭
+  const handleClickSubScribe = (checked : boolean) => {
     if(checked) {
       Instance.get("/subscribe").then((response) =>{
         setSubScribe(response.data);
         console.log(response.data);
       })
     } else {
-      setSubScribe('');
+      setSubScribe([]);
+    }
+  }
+
+  // 전체 회원 버튼 클릭
+  const handleClickMember = (checked : boolean) => {
+    if(checked) {
+      Instance.get("/member").then((response) =>{
+        setMembers(response.data);
+        console.log(response.data);
+      })
+    } else {
+      setMembers([]);
     }
   }
 
   // Input에 들어온 데이터를 ","를 기준으로 자르자
-  const splitComma = () => {
+  const splitComma = () : string[] => {
     let data = receiverValue.split(",");
 
     if(members.length !== 0 || members !== undefined) {
@@ -83,9 +93,11 @@ const AdminMail = () => {
     const form = new FormData();
     const receiverData = splitComma();
     console.log(receiverData);
-    form.append('multipartFile', fileRef.current.files[0]);
+    if(fileRef.current !== null && fileRef.current.files !== null) {
+      form.append('multipartFile', fileRef.current.files[0]);
+    }
     form.append('carbonCopy', carbonCopy);
-    form.append('to', receiverData);
+    form.append('to', receiverData.join(","));
     form.append('message', message);
     form.append('subject', subject)
 
@@ -116,7 +128,7 @@ const AdminMail = () => {
                   <MultiCheck className="fit">
                     <input type="text" className="long" onChange={(e) => setReceiverValue(e.target.value)} value={receiverValue} required/>
                     <CheckLabel>
-                      <InputCheckbox type="checkbox" /> 전체 회원
+                      <InputCheckbox type="checkbox" onChange={e => handleClickMember(e.target.checked)}/> 전체 회원
                     </CheckLabel>
                     <CheckLabel>
                       <InputCheckbox type="checkbox" onChange={e => {handleClickSubScribe(e.target.checked)}}/> 전체 구독자
@@ -143,8 +155,8 @@ const AdminMail = () => {
                 </td>
               </tr>
               <tr>
-                <td colSpan="2" className="writeWrapper">
-                  <TextEditor extra setValue = {setMessage} name="message" required/>
+                <td colSpan={2} className="writeWrapper">
+                  <TextEditor setValue = {setMessage}/>
                 </td>
               </tr>
             </tbody>

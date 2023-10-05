@@ -9,12 +9,12 @@ import java.util.List;
  */
 @Data
 public class MultipleEmail {
-    private List<String> to;//수신자
+    private String to;//수신자
     private String message;//메시지
     private String subject;//제목
     private String carbonCopy;//참조
 
-    public MultipleEmail(List<String> to, String message, String subject, String carbonCopy) {
+    public MultipleEmail(String to, String message, String subject, String carbonCopy) {
         this.to = to;
         this.message = message;
         this.subject = subject;
