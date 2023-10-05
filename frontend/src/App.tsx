@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { styled } from 'styled-components';
 import Header from './components/layout/Header/Header';
@@ -52,6 +52,8 @@ import AdminChatDetail from './admin/chat/AdminChatDetail';
 import AdminMail from './admin/chat/AdminMail';
 import AdminIndex from './admin/AdminIndex';
 import AdminSubScribe from './admin/chat/AdminSubScribe';
+import {useAuth} from "./utils/api/AuthContext";
+import Instance from "./utils/api/axiosInstance";
 
 const AppContainer = styled.div`
   width: 100%;
@@ -104,10 +106,12 @@ const FloatingBtn = styled.button<{ $show: boolean }>`
   }
 `;
 
-function App() {
+const App: React.FC = () => {
+  const { setAuthState } = useAuth();
   const [showChat, setShowChat] = useState<boolean>(false);
   const [showFloatingButtons, setShowFloatingButtons] = useState<boolean>(false);
   const [isAdminPage, setIsAdminPage] = useState<boolean>(false);
+  const [isLogined, setIsLogined] = useState<boolean>(false);
   const location = useLocation();
 
   const openChat = () => {
@@ -141,10 +145,58 @@ function App() {
     setIsAdminPage(isAdmin);
   }, [location.pathname]);
 
+  // 쿠키를 파싱하는 함수
+  function getCookie(name: string): string | undefined {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(';').shift();
+  }
+
+  // Auth쪽 대시로 분리
+  const splitDashLine = (str: string | undefined): string[] => {
+    if(str !== undefined) {
+      const data = str.split("-");
+      return data;
+    } else {
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    // 쿠키에서 값을 가져옵니다.
+    const adminId = getCookie("adminId");
+    const role = getCookie("role");
+    const auth = getCookie("auth");
+
+    // 로컬 스토리지에 정보를 저장한다.
+    localStorage.setItem("adminId", adminId || '');
+    localStorage.setItem("role", role || '');
+    localStorage.setItem("auth", splitDashLine(auth).join(','));
+
+    // 가져온 값이 있다면 상태를 설정합니다.
+    if (adminId && role && auth) {
+      setAuthState({ adminId, role, auth });
+      setIsLogined(true);
+    } else {
+      // 원래대로 서버에서 상태를 가져올 수도 있습니다.
+      Instance.get('/api/adminCheck').then(response => {
+        setAuthState({
+          adminId: response.data.adminId,
+          role: response.data.role,
+          auth: response.data.auth
+        });
+      }).catch(error => {
+        console.error("로그인 상태를 가져오지 못했습니다.", error);
+      });
+    }
+  }, []);
+
   if (isAdminPage) {
     return (
       <>
         <Routes>
+          {isLogined ? (
+              <>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<AdminIndex />} />
           <Route path="/admin/reservation/:page" element={<AdminReservation />} />
@@ -169,6 +221,13 @@ function App() {
           <Route path="/admin/chat/detail/:roomId" element={<AdminChatDetail />} />
           <Route path="/admin/mail" element={<AdminMail />} />
           <Route path="/admin/subscriber/:page" element={<AdminSubScribe />} />
+              </>
+          ) : (
+              <>
+                {/* 로그인이 되어있지 않을 때의 라우트 */}
+                <Route path="/admin/*" element={<AdminLogin />} />
+              </>
+          )}
         </Routes>
       </>
     );

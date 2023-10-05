@@ -1,9 +1,40 @@
 import React from 'react';
 import * as S from './Style';
 import adminLogo from '../../images/common/logo_admin.png';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import {useAuth} from "../../utils/api/AuthContext";
+import Instance from "../../utils/api/axiosInstance";
 
-const AdminHeader = () => {
+const AdminHeader: React.FC = () => {
+  const { authState, setAuthState } = useAuth();
+  const isLoggedIn = authState.adminId !== '';
+  const navigate = useNavigate();
+
+  const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    navigate('/admin/login');
+  };
+
+  const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    try {
+      const response = await Instance.get('/login/logout');
+      if (response.status === 200) {
+        setAuthState({ role: '', adminId: '', auth: '' });
+        alert('로그아웃 되었습니다');
+        navigate('/admin');
+      }
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+    }
+  };
+
+  const handleLogoutUseLocalStorge = () => {
+    localStorage.clear();
+    alert('로그아웃 되었습니다');
+    window.location.href = '/admin';
+  };
+
   return (
     <S.AdminHeader>
       <h1>
