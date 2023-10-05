@@ -60,7 +60,6 @@ const AppContainer = styled.div`
 
 const FloatingWrapper = styled.div`
   position: fixed;
-  top: 81vh;
   bottom: 40px;
   right: 40px;
   z-index: 99;
@@ -86,8 +85,8 @@ const FloatingBtn = styled.button<{ $show: boolean }>`
   &.chatBtn {
     background-color: white;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    margin-bottom: 20px;
-    transform: ${(props) => (props.$show ? 'translate(0, 0)' : 'translate(0, 80px)')};
+    margin-bottom: 16px;
+    transform: ${(props) => (props.$show ? 'translate(0, 0)' : 'translate(0, 16px)')};
   }
 
   &.chatBtn svg {
@@ -97,7 +96,7 @@ const FloatingBtn = styled.button<{ $show: boolean }>`
   }
 
   &:hover {
-    transform: ${(props) => (props.$show ? 'scale(1.1)' : 'translate(0, 80px) scale(1.1)')};
+    transform: ${(props) => (props.$show ? 'scale(1.1)' : 'translate(0, 16px) scale(1.1)')};
   }
 
   &.scrolltop {
