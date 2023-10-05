@@ -1,51 +1,9 @@
 import React, { useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel, ContentsTitleXSmall, SubmitBtn, MultiCheck } from '../../Style/commonStyles';
-import styled from 'styled-components';
-import {
-  Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from './AdminMember';
-import { InfoContainer, InfoWrapper, Label, ModifyBtnWrapper, ModifyBtn } from './AdminMemberDetail';
+import * as S from './Style';
+import { Container, Table, TableHeader } from './Style';
 import Paging from '../../components/common/Paging/Paging';
-
-export const Section = styled.section`
-  margin-bottom: 60px;
-`;
-
-export const InputWrapper = styled.div`
-  width: 100%;
-
-  form {
-    display: flex;
-    column-gap: 10px;
-
-    input {
-      padding: 0 12px;
-    }
-
-    input,
-    button {
-      width: 17%;
-    }
-  }
-
-  &.giftcard {
-    form input {
-      width: calc((100% - 17%) / 3);
-    }
-  }
-`;
 
 const AdminManager = () => {
   const [checkedItems, setCheckedItems] = useState([]);
@@ -110,9 +68,9 @@ const AdminManager = () => {
     <AdminLayout subMenus="member">
       <Container>
         <PageTitle>부운영자 관리</PageTitle>
-        <Section>
+        <S.Section>
           <ContentsTitleXSmall>부운영자 계정 등록</ContentsTitleXSmall>
-          <InputWrapper>
+          <S.InputWrapper>
             <form>
               <input type="text" placeholder="운영자 ID" />
               <input type="text" placeholder="운영자명" />
@@ -121,17 +79,17 @@ const AdminManager = () => {
               <input type="password" placeholder="접속 비밀번호 확인" />
               <SubmitBtn className="header">부운영자 등록</SubmitBtn>
             </form>
-          </InputWrapper>
-        </Section>
-        <Section>
+          </S.InputWrapper>
+        </S.Section>
+        <S.Section>
           <ContentsTitleXSmall>부운영자 계정 목록</ContentsTitleXSmall>
           <TableHeader>
             <p className="total">
               전체 <strong>{managerData.length}</strong> 건
             </p>
             <BtnWrapper className="flexgap right">
-              <NormalBtn className="header">사용함</NormalBtn>
-              <NormalBtn className="header red">사용안함</NormalBtn>
+              <NormalBtn className="header">계정 사용 가능</NormalBtn>
+              <NormalBtn className="header red">계정 사용 정지</NormalBtn>
             </BtnWrapper>
           </TableHeader>
           <Table>
@@ -185,8 +143,8 @@ const AdminManager = () => {
             </tbody>
           </Table>
           <Paging />
-        </Section>
-        <Section>
+        </S.Section>
+        <S.Section>
           <ContentsTitleXSmall>부운영자 계정 설정</ContentsTitleXSmall>
           <Table className="horizontal">
             <colgroup>
@@ -316,7 +274,7 @@ const AdminManager = () => {
           <BtnWrapper className="mt40 center">
             <SubmitBtn>수정</SubmitBtn>
           </BtnWrapper>
-        </Section>
+        </S.Section>
       </Container>
     </AdminLayout>
   );

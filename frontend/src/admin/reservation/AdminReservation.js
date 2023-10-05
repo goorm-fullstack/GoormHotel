@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, BtnWrapper, NormalBtn, InputCheckbox } from '../../Style/commonStyles';
-import { Container, Table, TableHeader } from '../member/AdminMember';
+import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
 
 const AdminReservation = () => {

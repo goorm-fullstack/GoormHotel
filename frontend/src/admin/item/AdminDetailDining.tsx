@@ -5,7 +5,7 @@ import { DiningData } from './AdminItemList';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Table } from '../member/AdminMember';
+import { Container, Table } from '../member/Style';
 import { DiningForm } from '../../components/AddItemForm/WriteFormDining';
 
 const AdminDetailDining = () => {

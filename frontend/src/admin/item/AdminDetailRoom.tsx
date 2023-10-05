@@ -5,7 +5,7 @@ import { RoomData } from './AdminItemList';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Table } from '../member/AdminMember';
+import { Container, Table } from '../member/Style';
 import { RoomForm } from '../../components/AddItemForm/WriteFormRoom';
 
 const AdminDetailRoom = () => {

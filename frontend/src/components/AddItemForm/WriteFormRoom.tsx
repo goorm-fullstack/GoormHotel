@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table } from '../../admin/member/AdminMember';
+import { Table } from '../../admin/member/Style';
 import { PageTitle, SubmitBtn, BtnWrapper, NormalBtn, GreenP, RedP, SelectImage } from '../../Style/commonStyles';
 import axios from 'axios';
 

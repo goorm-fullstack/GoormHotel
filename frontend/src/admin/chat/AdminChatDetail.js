@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import * as S from './Style';
 import Instance from '../../utils/api/axiosInstance';
 import { PageTitle, BtnWrapper, LinkBtn, NormalBtn } from '../../Style/commonStyles';
-import { Container, Table, TableHeader } from '../member/AdminMember';
+import { Container, Table, TableHeader } from '../member/Style';
 
 const AdminChatDetail = () => {
   const { roomId } = useParams();

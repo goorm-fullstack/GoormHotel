@@ -4,8 +4,8 @@ import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, ContentsTitleXSmall, S
 import 'react-calendar/dist/Calendar.css';
 import 'moment/locale/ko';
 import { Link, useParams } from 'react-router-dom';
-import { Container, Table, TableHeader } from '../member/AdminMember';
-import { InputWrapper, Section } from '../member/AdminManager';
+import { Container, Table, TableHeader } from '../member/Style';
+import { InputWrapper, Section } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
 import Instance from '../../utils/api/axiosInstance';
 

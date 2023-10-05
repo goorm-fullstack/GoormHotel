@@ -1,7 +1,7 @@
 import React from 'react';
 import AdminLayout from '../common/AdminLayout';
 import WriteFormRoom from '../../components/AddItemForm/WriteFormRoom';
-import { Container } from '../member/AdminMember';
+import { Container } from '../member/Style';
 
 const AdminWriteFormRoom = () => {
   return (

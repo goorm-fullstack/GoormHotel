@@ -4,7 +4,7 @@ import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, NormalLinkBtn } from '../../Style/commonStyles';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Table, TableHeader } from '../member/AdminMember';
+import { Container, Table, TableHeader } from '../member/Style';
 import { numberWithCommas } from '../../utils/function/comma';
 import Paging from '../../components/common/Paging/Paging';
 import Search, { Type, TypeDetail } from '../../components/common/Search/Search';
