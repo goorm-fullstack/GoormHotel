@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import * as S from './Style';
 import { useNavigate } from 'react-router-dom';
-import { Table, TableHeader } from '../../admin/member/AdminMember';
-import { PageTitle, SubmitBtn, BtnWrapper, LinkBtn, NormalLinkBtn, NormalBtn } from '../../Style/commonStyles';
+import { Table } from '../../admin/member/AdminMember';
+import { PageTitle, SubmitBtn, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
 import axios from 'axios';
 
 export type RoomForm = {
@@ -157,7 +157,9 @@ const WriteFormRoom = () => {
               <th>상품 분류</th>
               <td>
                 <select onChange={(e) => handleChangeSelect(e.target.value)}>
-                  <option value="/admin/item/add/room">객실</option>
+                  <option value="/admin/item/add/room" selected>
+                    객실
+                  </option>
                   <option value="/admin/item/add/dining">다이닝</option>
                 </select>
               </td>
