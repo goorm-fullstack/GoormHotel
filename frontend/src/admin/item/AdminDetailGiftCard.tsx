@@ -8,24 +8,43 @@ import DateBtn from '../../components/common/DateButton/DateButton';
 import Instance from '../../utils/api/axiosInstance';
 import { useParams } from 'react-router-dom';
 
+interface Member {
+  name : string;
+}
+
+interface GiftCard {
+  id : number;
+  uuid : string;
+  title : string;
+  money : number;
+  isZeroMoney : string;
+  issueDate  : string;
+  expire : number;
+  member : Member;
+}
+
 const AdminDetailGiftCard = () => {
-  const [giftcard, setGiftCard] = useState({
-    id : "",
-    title : "",
-    uuid : "",
-    money : 0,
-    member : {},
-    isZeroMoney : 'Y',
-    issueDate : "",
-    expire : 0,
-  });
+  const [giftcard, setGiftCard] = useState<GiftCard>();
   const {id} = useParams();
 
   useEffect(() => {
     Instance.get("/api/giftcard/"+id).then((response) =>{
-      setGiftCard(response.data);
+      console.log(response.data);
+      setGiftCard(response.data.message);
     })
   }, []);
+
+  const calcExpireDate = (day : string, expire : number) => {
+    const issueDate = new Date(day);
+    const expireDate = new Date(issueDate.setDate(issueDate.getDate() + expire));
+
+    const year = expireDate.getFullYear();
+    const month = String(expireDate.getMonth() + 1).padStart(2, '0');
+    const day1 = String(expireDate.getDate()).padStart(2, '0');
+    
+    const formattedExpireDate = `${year}.${month}.${day1}`;
+    return formattedExpireDate;
+  }
 
   return (
     <AdminLayout subMenus="item">
@@ -38,40 +57,46 @@ const AdminDetailGiftCard = () => {
               <col width="auto" />
             </colgroup>
             <tbody>
-                  <tr>
-                    <th>상품권명</th>
-                    <td>
-                      <input type="text" value={giftcard.title} required />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>상품권번호</th>
-                    <td>
-                      <input type="text" value={giftcard.uuid} required />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>상품권 금액</th>
-                    <td>
-                      <input type="text" value={giftcard.money} required />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>발행일</th>
-                    <td>{giftcard.issueDate}</td>
-                  </tr>
-                  <tr>
-                    <th>사용기한</th>
-                    <td>
-                      <DateBtn />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>사용여부</th>
-                    <td>
-                      <input type="text" value={giftcard.isZeroMoney} required />
-                    </td>
-                  </tr>
+                  {giftcard !== undefined ? (
+                    <>
+                      <tr>
+                        <th>상품권명</th>
+                        <td>
+                          <input type="text" value={giftcard.title} required />
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>상품권번호</th>
+                        <td>
+                          <input type="text" value={giftcard.uuid} required />
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>상품권 금액</th>
+                        <td>
+                          <input type="text" value={giftcard.money} required />
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>발행일</th>
+                        <td>{giftcard.issueDate}</td>
+                      </tr>
+                      <tr>
+                        <th>사용기한</th>
+                        <td>
+                          {calcExpireDate(giftcard.issueDate, giftcard.expire)}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>사용여부</th>
+                        <td>
+                          <input type="text" value={giftcard.isZeroMoney} required />
+                        </td>
+                      </tr>
+                    </>
+                  ) : (
+                    <></>
+                  )}
                 </tbody>
           </Table>
           <BtnWrapper className="mt40 center double">
