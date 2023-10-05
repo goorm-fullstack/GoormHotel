@@ -200,6 +200,16 @@ export const commonLinkBtn = styled(Link)`
   }
 `;
 
+export const CloseButton = styled.button`0
+  border: 1px solid #ddd;
+  background: white;
+  color: #666;
+  padding: 6px 16px;
+  margin-left: 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+`
+
 export const commonButton = styled.button`
   // button 태그 버튼 공통 스타일: 클릭 후 액션이 필요할 때 사용
   // 이하 a 태그와 유사

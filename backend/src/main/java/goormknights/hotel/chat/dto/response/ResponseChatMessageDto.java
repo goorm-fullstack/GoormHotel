@@ -11,7 +11,7 @@ public class ResponseChatMessageDto {
     private String sender;
     private String message;
     private String createTime;
-    private MessageType messageType;
+    private MessageType type;
 
     public ResponseChatMessageDto(ChatMessage chatMessage) {
         this.id = chatMessage.getId();
@@ -19,7 +19,7 @@ public class ResponseChatMessageDto {
         this.sender = chatMessage.getSender();
         this.message = chatMessage.getMessage();
         this.createTime = chatMessage.getCreateTime();
-        this.messageType = chatMessage.getType();
+        this.type = chatMessage.getType();
     }
 
     public ResponseChatMessageDto toEntity(ChatMessage chatMessage) {

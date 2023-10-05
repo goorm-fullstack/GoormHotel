@@ -76,6 +76,10 @@ public class ChatService {
         return result;
     }
 
+    public Long calcRoomPageCount() {
+        return (long) (chatRooms.size()/10);
+    }
+
     public List<ChatMessage> findPrevMessage(String roomId) {
         return chatMessageRepository.findByRoomId(roomId);
     }

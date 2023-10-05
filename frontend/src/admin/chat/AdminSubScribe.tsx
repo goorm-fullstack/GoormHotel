@@ -6,37 +6,47 @@ import Instance from '../../utils/api/axiosInstance';
 import { Container, Table, TableHeader } from '../member/AdminMember';
 import Paging from '../../components/common/Paging/Paging';
 
+interface Subscribe {
+  id : number;
+  emailAddress : string;
+  isSubscribe : string;
+}
+
 const AdminSubScribe = () => {
   const { page } = useParams();
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
+  const [count, setCount] = useState(1);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
-  const [subScribeData, setSubScribeData] = useState([
+  const [subScribeData, setSubScribeData] = useState<Subscribe[]>([
     {
       id: 1,
       emailAddress: 'test1@test.com',
-      isSubScribe: '구독중',
+      isSubscribe: '구독중',
       // 구독 상태: 구독중 또는 수신거부로 표시(UX 고려)
     },
     {
       id: 2,
       emailAddress: 'test2@test.com',
-      isSubScribe: '수신거부',
+      isSubscribe: '수신거부',
     },
     {
       id: 3,
       emailAddress: 'test3@test.com',
-      isSubScribe: '구독중',
+      isSubscribe: '구독중',
     },
   ]);
-  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     Instance.get(`/subscribe?page=${page}`).then((response) => {
       setSubScribeData(response.data);
     });
+
+    Instance.get("/subscribe/count").then((response) => {
+      setCount(response.data);//페이지 수 가져오기
+    })
   }, []);
 
-  const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSelectAllChange = (e : React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
     if (checked) {
@@ -47,7 +57,7 @@ const AdminSubScribe = () => {
     }
   };
 
-  const handleCheckboxChange = (id: number) => {
+  const handleCheckboxChange = (id : number) => {
     setCheckedItems((prevItems) => {
       if (prevItems.includes(id)) {
         return prevItems.filter((item) => item !== id);
@@ -57,7 +67,7 @@ const AdminSubScribe = () => {
     });
   };
 
-  const handleClosedClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClosedClick = (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     console.log(checkedItems);
     checkedItems.map((id, index) => {
       Instance.post('/subscribe/cancel/' + id).then(() => {
@@ -113,13 +123,13 @@ const AdminSubScribe = () => {
                   <td className="lastChat center">
                     <Link to={`/admin/mail?mailto=${item.emailAddress}`}>{item.emailAddress}</Link>
                   </td>
-                  <td className="center">{item.isSubScribe}</td>
+                  <td className="center">{item.isSubscribe}</td>
                 </tr>
               ))
             )}
           </tbody>
         </Table>
-        <Paging totalPage={totalPages} />
+        <Paging totalPage={count}/>
       </Container>
     </AdminLayout>
   );

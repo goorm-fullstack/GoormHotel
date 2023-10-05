@@ -47,6 +47,12 @@ public class ChatController {
         return ResponseEntity.ok(lastMessage);
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<Long> getCount() {
+        Long count = chatService.calcRoomPageCount();
+        return ResponseEntity.ok(count);
+    }
+
     // 웹소켓은 세션 연결이 유지되지 않고 양쪽에서 연결을 종료하면 세션이 정리된다.
     // 따라서 다음 연결이 들어오면 이전 방 넘버가 있는지 확인하고 있다면 그 방번호로
     // 메시지를 검색해서 현재 채팅창에 이전 메시지를 넣어둔다.

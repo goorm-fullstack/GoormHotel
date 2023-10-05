@@ -47,4 +47,8 @@ public class SubScribeService {
         findSubscribe.cancelSubscribe();
         subScribeRepository.save(findSubscribe);
     }
+
+    public Long calcSubscribePageCount() {
+        return (subScribeRepository.count() / 10);
+    }
 }

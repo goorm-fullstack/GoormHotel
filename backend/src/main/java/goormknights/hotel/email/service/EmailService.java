@@ -70,8 +70,9 @@ public class EmailService implements EmailSender {
         Context context = new Context();
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = null;
+        String[] senders = emailMessage.getTo().split(",");
         try {
-            for(String sender : emailMessage.getTo()) {// 수신자 배열에서 수신자 정보를 출력하는 코드
+            for(String sender : senders) {// 수신자 배열에서 수신자 정보를 출력하는 코드
                 helper = new MimeMessageHelper(message, true, "UTF-8");
                 helper.setSubject(emailMessage.getSubject()); // (민종) getTitle -> getSubject
                 helper.setTo(sender);
