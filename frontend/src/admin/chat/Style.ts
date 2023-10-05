@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const ChatWrapper = styled.div`
+export const ChatWrapper = styled.td`
   padding: 0;
   background: ${(props) => props.theme.colors.graybg};
 
