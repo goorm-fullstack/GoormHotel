@@ -74,6 +74,7 @@ const SubHeader = ({ kind }: SubHeaderProps) => {
   return (
       <S.SubHeader>
         <h2>{SubHeaderData[kind].pagetitle}</h2>
+        {/** 경규님 짱!bbb */}
         <ul>
           {SubHeaderData[kind].nav.map((nav, index) => (
               <li key={index}>
