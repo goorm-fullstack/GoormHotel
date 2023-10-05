@@ -1,132 +1,10 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { useNavigate, useParams } from 'react-router-dom';
-import {Container} from '../member/AdminMember';
-import styled from 'styled-components';
+import * as S from './Style';
 import Instance from '../../utils/api/axiosInstance';
-import {PageTitle} from '../../Style/commonStyles';
-
-const InfoContainer = styled.table`
-  width: 100%;
-  th,
-  td {
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    font-size: 15px;
-  }
-`;
-
-const InfoWrapper = styled.tr``;
-
-const Label = styled.th`
-  width: 240px;
-  font-weight: 500;
-  background-color: #f7f7f7;
-  padding: 21.5px 40px;
-  text-align: left;
-  color: #111;
-
-  &.center {
-    text-align: center;
-  }
-`;
-
-const Data = styled.td`
-  padding: 10px 20px;
-  color: #444;
-
-  &.chatWrapper {
-    padding: 0;
-    background: #f7f7f7;
-  }
-  .chatLog {
-    max-height: 380px;
-    overflow-y: scroll;
-    padding: 40px 0;
-    line-height: 1.7;
-    background: white;
-    border-bottom: 1px solid #ddd;
-  }
-
-  .chatLog li {
-    max-width: 734px;
-    margin: 0 auto;
-  }
-
-  .chatLog storng {
-    font-weight: 500;
-    color: #111;
-  }
-
-  .chatLog span {
-    color: #444;
-  }
-
-  .chatLog storng.manager {
-    color: #baa085;
-  }
-
-  .writeWrapper {
-    display: flex;
-    max-width: 750px;
-    margin: 0 auto;
-    padding: 20px 0;
-    gap: 0 10px;
-  }
-
-  textarea {
-    border: 1px solid #ddd;
-    width: 100%;
-    max-width: 640px;
-    resize: none;
-    height: 80px;
-    border-radius: 3px;
-    padding: 10px;
-  }
-
-  button[type='submit'] {
-    width: 100px;
-    border-radius: 3px;
-    background: #baa085;
-    color: white;
-  }
-
-  button[type='submit']:hover {
-    background: #95846e;
-  }
-
-  .chatClose {
-    border: 1px solid #ddd;
-    background: white;
-    color: #666;
-    padding: 6px 16px;
-    margin-left: 8px;
-    border-radius: 4px;
-    font-size: 0.875rem;
-  }
-
-  .chatClose:hover {
-    background: #f7f7f7;
-  }
-`;
-
-const ModifyBtnWrapper = styled.div`
-  text-align: center;
-`;
-
-const ModifyBtn = styled.button`
-  width: 200px;
-  height: 45px;
-  border: 1px solid #baa085;
-  color: #baa085;
-  margin: 40px auto 0;
-  background: white;
-
-  &:hover {
-    background: #baa085;
-    color: white;
-  }
-`;
+import { PageTitle, BtnWrapper, LinkBtn, NormalBtn } from '../../Style/commonStyles';
+import { Container, Table, TableHeader } from '../member/AdminMember';
 
 const AdminChatDetail = () => {
   const { roomId } = useParams<{roomId: string}>();
@@ -201,10 +79,10 @@ const AdminChatDetail = () => {
         const chatRoomID = parsedMessage.roomId;
         const sender = parsedMessage.sender;
         // 메시지 발신자가 어드민이 아닌 경우에만 호출된다.
-        if(chatRoomID === roomId && sender !== "admin") {
+        if (chatRoomID === roomId && sender !== 'admin') {
           // 메시지를 처리하는 로직을 여기에 추가
           // 이전 채팅 데이터를 복사한 후 새 메시지를 추가
-          setChatData((p) => [...p, { message: chatContent, sender: sender, type: 'TALK' },]);
+          setChatData((p) => [...p, { message: chatContent, sender: sender, type: 'TALK' }]);
         }
       };
     }
@@ -254,65 +132,69 @@ const AdminChatDetail = () => {
     <AdminLayout subMenus="chat">
       <Container>
         <PageTitle>채팅 관리</PageTitle>
-        <InfoContainer>
-          <InfoWrapper>
-            <Label>방 번호(방 ID)</Label>
-            <Data>({roomId})</Data>
-          </InfoWrapper>
-          <InfoWrapper>
-            <Label>최근 발송일</Label>
-            <Data>{recentTime}</Data>
-          </InfoWrapper>
-          <InfoWrapper>
-            <Label>상태</Label>
-            <Data>
-              {status}
-              <button type="button" className="chatClose" onClick={handleClosedClick}>
-                종료
-              </button>
-            </Data>
-          </InfoWrapper>
-          <InfoWrapper>
-            <Label colSpan="2" className="center">
-              채팅 기록
-            </Label>
-          </InfoWrapper>
-          <InfoWrapper>
-            <Data colSpan="2" className="chatWrapper">
-              <ul className="chatLog" ref={chatContainerRef}>
-                {chatData.map((chat, index) =>
-                  chat.messageType === 'TALK' ? ( // chat.type이 'TALK'인 경우에만 출력
-                    <li key={index}>
-                      {chat.sender === 'admin' ? (
-                        <>
-                          <strong className="manager">관리자(관리자 ID) : </strong>
-                          <span>{chat.message}</span>
-                        </>
-                      ) : (
-                        <>
-                          <strong className="member">회원명(회원 ID) : </strong>
-                          <span>{chat.message}</span>
-                        </>
-                      )}
-                    </li>
-                  ) : null
-                )}
-              </ul>
-              <div className="writeWrapper" onSubmit={handleFormSubmit}>
-                <textarea
-                  type="text"
-                  placeholder="메시지를 입력해 주세요"
-                  value={newChat}
-                  onChange={(e) => setNewChat(e.target.value)}
-                  onKeyDown={handleInputKeyPress}></textarea>
-                <button type="submit">전송</button>
-              </div>
-            </Data>
-          </InfoWrapper>
-        </InfoContainer>
-        <ModifyBtnWrapper>
-          <ModifyBtn onClick={navigateToChatList}>목록</ModifyBtn>
-        </ModifyBtnWrapper>
+        <Table className="horizontal">
+          <colgroup>
+            <col width="240px" />
+            <col width="auto" />
+          </colgroup>
+          <tbody>
+            <tr>
+              <th>방 번호(방 ID)</th>
+              {/** 방번호보다는 상대 회원명(회원 ID)를 표시하는게 더 직관적일 것 같습니다. 아래 채팅 기록 표시 영역에 회원id가 그대로 남아 있어서 의견 남겨봅니다. */}
+              <td>({roomId})</td>
+            </tr>
+            <tr>
+              <th>최근 발송일</th>
+              <td>{recentTime}</td>
+            </tr>
+            <tr>
+              <th>상태</th>
+              <td>
+                {status}
+                <NormalBtn type="button" className="mini" onClick={handleClosedClick}>
+                  종료
+                </NormalBtn>
+              </td>
+            </tr>
+            <tr>
+              <td colSpan="2" className="writeWrapper">
+                <S.ChatWrapper>
+                  <ul className="chatLog" ref={chatContainerRef}>
+                    {chatData.map((chat, index) =>
+                      chat.messageType === 'TALK' ? ( // chat.type이 'TALK'인 경우에만 출력
+                        <li key={index}>
+                          {chat.sender === 'admin' ? (
+                            <>
+                              <strong className="manager">관리자(관리자 ID) : </strong>
+                              <span>{chat.message}</span>
+                            </>
+                          ) : (
+                            <>
+                              <strong className="member">회원명(회원 ID) : </strong>
+                              <span>{chat.message}</span>
+                            </>
+                          )}
+                        </li>
+                      ) : null
+                    )}
+                  </ul>
+                  <div className="writeWrapper" onSubmit={handleFormSubmit}>
+                    <textarea
+                      type="text"
+                      placeholder="메시지를 입력해 주세요"
+                      value={newChat}
+                      onChange={(e) => setNewChat(e.target.value)}
+                      onKeyDown={handleInputKeyPress}></textarea>
+                    <button type="submit">전송</button>
+                  </div>
+                </S.ChatWrapper>
+              </td>
+            </tr>
+          </tbody>
+        </Table>
+        <BtnWrapper className="center mt40">
+          <LinkBtn onClick={navigateToChatList}>목록</LinkBtn>
+        </BtnWrapper>
       </Container>
     </AdminLayout>
   );

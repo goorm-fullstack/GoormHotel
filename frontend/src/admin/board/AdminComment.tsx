@@ -1,57 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
+import * as S from './Style';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
-import {
-  Container,
-  Table,
-  TableHeader
-} from '../member/AdminMember';
+import { Container, Table, TableHeader } from '../member/AdminMember';
 import axios from 'axios';
 import Paging from '../../components/common/Paging/Paging';
 import { ReplyData } from './AdminBoard';
-
-const ModalContainer = styled.div`
-  display: none;
-  position: absolute;
-  width: 217px;
-  height: 104px;
-  border: 1px solid #dddddd;
-  background-color: #fff;
-  text-align: left;
-  padding-top: 27px;
-  padding-left: 21px;
-  z-index: 10;
-  right: -50px;
-  margin-top: 10px;
-`;
-
-const CommentText = styled.div`
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-    text-decoration-color: #444444;
-    text-underline-offset: 10px;
-  }
-
-  &:hover + ${ModalContainer} {
-    display: block;
-  }
-`;
-
-const ModalContent = styled.div`
-  max-height: 300px;
-`;
-
-const LinkStyle = styled(Link)`
-  &:hover {
-    text-decoration: underline;
-    text-decoration-color: #444444;
-    text-underline-offset: 10px;
-  }
-`;
 
 const AdminComment = () => {
   const { page } = useParams<{page: string}>();
@@ -217,14 +172,23 @@ const AdminComment = () => {
           </p>
           <BtnWrapper className="flexgap right">
             <NormalBtn className="header" onClick={handleReport}>
-              신고처리
+              신고된 글로 이동
             </NormalBtn>
             <NormalBtn className="header red" onClick={handleDeleteItems}>
-              삭제
+              댓글 삭제
             </NormalBtn>
           </BtnWrapper>
         </TableHeader>
         <Table>
+          <colgroup>
+            <col width="80px" />
+            <col width="100px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="auto" />
+            <col width="150px" />
+            <col width="150px" />
+          </colgroup>
           <thead>
             <tr>
               <th>
@@ -257,13 +221,13 @@ const AdminComment = () => {
                 <td className="center">{totalReply - idx}</td>
                 <td className="center">{reply.board.boardTitle}</td>
                 <td className="center">
-                  <LinkStyle to={`/board/${reply.boardId}/detail`}>{reply.board.title}</LinkStyle>
+                  <S.LinkStyle to={`/board/${reply.boardId}/detail`}>{reply.board.title}</S.LinkStyle>
                 </td>
                 <td className="center">
-                  <CommentText>{truncateString(reply.replyContent, 8)}</CommentText>
-                  <ModalContainer>
-                    <ModalContent>{reply.replyContent}</ModalContent>
-                  </ModalContainer>
+                  <S.CommentText>{truncateString(reply.replyContent, 8)}</S.CommentText>
+                  <S.ModalContainer>
+                    <S.ModalContent>{reply.replyContent}</S.ModalContent>
+                  </S.ModalContainer>
                 </td>
                 <td className="center">
                   {reply.replyWriter}

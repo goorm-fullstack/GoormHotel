@@ -1,50 +1,8 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import adminLogo from '../images/common/logo_admin.png';
+import * as S from './Style';
+import adminLogo from '../../images/common/logo_admin.png';
 import { Link } from 'react-router-dom';
-import { commonAdminContainer, PageTitle, SubmitBtn, BtnWrapper, CheckLabel, InputCheckbox } from '../Style/commonStyles';
-import { Container } from './common/AdminHeader';
-
-const LoginContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  min-height: 100vh;
-  background-color: ${(props) => props.theme.colors.graybg};
-  text-align: center;
-`;
-
-const AdminContainer = styled(commonAdminContainer)`
-  width: 400px;
-  padding-top: calc(100px + 20vh);
-
-  h2 {
-    margin-bottom: 40px;
-  }
-
-  form {
-    margin-bottom: 10px;
-
-    input {
-      width: 100%;
-      height: 50px;
-      margin-top: 10px;
-      padding-left: 12px;
-    }
-  }
-`;
-
-const Header = styled(Container)``;
-
-const HeaderLink = styled.h1`
-  margin-right: 45px;
-`;
-
-const ShareID = styled.div`
-  line-height: 1.6;
-  padding: 20px;
-  margin-top: 40px;
-  color: ${(props) => props.theme.colors.graylight};
-`;
+import { PageTitle, SubmitBtn, BtnWrapper, CheckLabel, InputCheckbox } from '../../Style/commonStyles';
 
 const AdminLogin = () => {
   const [adminId, setAdminId] = useState('');
@@ -64,17 +22,16 @@ const AdminLogin = () => {
   };
 
   return (
-    <LoginContainer>
-      <Header>
-        <HeaderLink>
+    <S.LoginContainer>
+      <S.Header>
+        <h1>
           <Link to="/admin">
             <img src={adminLogo} alt="logo" />
           </Link>
-        </HeaderLink>
-      </Header>
-      <AdminContainer>
+        </h1>
+      </S.Header>
+      <S.AdminContainer>
         <PageTitle>관리자 로그인</PageTitle>
-
         <form>
           <input placeholder="아이디" type="text" value={adminId} onChange={handleIdChange} />
           <input placeholder="비밀번호" type="password" value={adminPassword} onChange={handlePwChange} />
@@ -89,12 +46,12 @@ const AdminLogin = () => {
             아이디 기억하기
           </CheckLabel>
         </div>
-        <ShareID>
+        <S.ShareID>
           <p>[관리자 페이지 체험용 부운영자 계정 정보]</p>
           <p>ID : manager / PW : administrator1!</p>
-        </ShareID>
-      </AdminContainer>
-    </LoginContainer>
+        </S.ShareID>
+      </S.AdminContainer>
+    </S.LoginContainer>
   );
 };
 

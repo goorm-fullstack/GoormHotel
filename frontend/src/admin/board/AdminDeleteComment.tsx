@@ -1,24 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import * as S from './Style';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
-import {
-  Container,
-  Table,
-  TableHeader
-} from '../member/AdminMember';
+import { Container, Table, TableHeader } from '../member/AdminMember';
 import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
 import { BoardData } from './AdminBoard';
 
-const LinkStyle = styled(Link)`
-  &:hover {
-    text-decoration: underline;
-    text-decoration-color: #444444;
-    text-underline-offset: 10px;
-  }
-`;
+const tableData = [
+  {
+    id: 1,
+    board: '이용후기',
+    post: '게시글 제목111',
+    content: '첫 번째 댓글입니다.',
+    author: { name: '홍구름', id: 'memberId1' },
+    date: '2023.09.13',
+  },
+  {
+    id: 2,
+    board: '공지사항',
+    post: '게시글 제목222',
+    content: '두 번째 댓글입니다.',
+    author: { name: '홍구름', id: 'memberId2' },
+    date: '2023.09.14',
+  },
+];
 
 const AdminDeleteComment = () => {
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
@@ -100,14 +106,22 @@ const AdminDeleteComment = () => {
           </p>
           <BtnWrapper className="flexgap right">
             <NormalBtn type="button" className="header" onClick={unDeleteBtnClick}>
-              복원
+              선택 글 복원하기
             </NormalBtn>
             <NormalBtn type="button" className="header red" onClick={realDeleteBtnClick}>
-              영구삭제
+              영구 삭제
             </NormalBtn>
           </BtnWrapper>
         </TableHeader>
         <Table>
+          <colgroup>
+            <col width="80px" />
+            <col width="100px" />
+            <col width="200px" />
+            <col width="auto" />
+            <col width="200px" />
+            <col width="150px" />
+          </colgroup>
           <thead>
             <tr>
               <th>
@@ -116,7 +130,7 @@ const AdminDeleteComment = () => {
               <th>번호</th>
               <th>게시판</th>
               <th>삭제된 글</th>
-              <th>작성자 명(회원 ID)</th> {/** 회원 ID의 ID는 대문자로 통일합시다. */}
+              <th>작성자명(회원 ID)</th> {/** 회원 ID의 ID는 대문자로 통일합시다. */}
               <th>삭제일</th>
             </tr>
           </thead>
@@ -139,11 +153,11 @@ const AdminDeleteComment = () => {
                 <td className="center">{board.boardId}</td>
                 <td className="center">{`${board.boardTitle}`}</td>
                 <td className="center">
-                  <LinkStyle to={`/admin/member/${board.boardContent}`}>{board.boardContent}</LinkStyle>
+                  <S.LinkStyle to={`/admin/member/${board.boardContent}`}>{board.boardContent}</S.LinkStyle>
                 </td>
                 <td className="center">
                   {board.boardWriter}
-                  <LinkStyle to={`/admin/member/${board.boardWriter}`}>({board.boardWriter})</LinkStyle>
+                  <S.LinkStyle to={`/admin/member/${board.boardWriter}`}>({board.boardWriter})</S.LinkStyle>
                 </td>
                 <td className="center">{`${board.boardWriteDate[0]}.${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}.${
                   board.boardWriteDate[2] < 10 ? '0' : ''

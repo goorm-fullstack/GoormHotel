@@ -1,88 +1,17 @@
 import React from 'react';
-import styled from 'styled-components';
+import * as S from './Style';
 import adminLogo from '../../images/common/logo_admin.png';
 import { Link } from 'react-router-dom';
 
-export const Container = styled.header`
-  width: 100%;
-  height: 100px;
-  background-color: ${(props) => props.theme.colors.charcoal};
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  padding: 0 40px;
-  min-width: ${(props) => props.theme.wrapper.minwidth};
-`;
-
-const HeaderLink = styled.h1`
-  margin-right: 45px;
-`;
-
-const MenuItem = styled.ul`
-  display: flex;
-  column-gap: 40px;
-  color: #ffffff;
-  flex: 1;
-
-  li a:hover {
-    color: ${(props) => props.theme.colors.gold};
-  }
-`;
-
-const HeaderRight = styled.ul`
-  display: flex;
-  align-items: center;
-  column-gap: 20px;
-  font-size: ${(props) => props.theme.font.sizes};
-
-  a {
-    color: #bbb;
-    font-size: ${(props) => props.theme.font.sizexs};
-    text-decoration: underline;
-
-    &:hover {
-      color: white;
-    }
-  }
-`;
-
-const ManagerId = styled.li`
-  color: #ffffff;
-  margin-left: 10px;
-  display: flex;
-  align-items: center;
-  column-gap: 8px;
-`;
-
-const LogoutBtn = styled.button`
-  border: 1px solid white;
-  border-radius: 30px;
-  height: 32px;
-  line-height: 30px;
-  background-color: transparent;
-  color: white;
-  width: 90px;
-  font-size: ${(props) => props.theme.font.sizexs};
-  margin-left: 8px;
-
-  &:hover {
-    color: ${(props) => props.theme.colors.gold};
-    border-color: ${(props) => props.theme.colors.gold};
-  }
-`;
-
 const AdminHeader = () => {
   return (
-    <Container>
-      <HeaderLink>
+    <S.AdminHeader>
+      <h1>
         <Link to="/admin">
           <img src={adminLogo} alt="logo" />
         </Link>
-      </HeaderLink>
-      <MenuItem>
+      </h1>
+      <ul className="nav">
         <li>
           <Link to="/admin/member/1">회원 관리</Link>
         </li>
@@ -98,21 +27,13 @@ const AdminHeader = () => {
         <li>
           <Link to="/admin/chat/1">채팅/메일 관리</Link>
         </li>
-      </MenuItem>
-      <HeaderRight>
+      </ul>
+      <ul className="right">
         <li>
           <Link to="/">사이트 홈</Link>
         </li>
-        <ManagerId>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            version="1.1"
-            viewBox="0 0 24 24"
-            enableBackground="new 0 0 24 24"
-            width="24px"
-            height="24px"
-            fill="#DDDDDD"
-            xmlSpace="preserve">
+        <li className="manager">
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 24 24" width="24px" height="24px" fill="#ddd" xmlSpace="preserve">
             <g id="info" />
             <g id="icons">
               <path
@@ -122,10 +43,12 @@ const AdminHeader = () => {
             </g>
           </svg>
           <span>관리자(admin)</span>
-          <LogoutBtn type="button">로그아웃</LogoutBtn>
-        </ManagerId>
-      </HeaderRight>
-    </Container>
+          <button type="button" className="logoutbtn">
+            로그아웃
+          </button>
+        </li>
+      </ul>
+    </S.AdminHeader>
   );
 };
 
