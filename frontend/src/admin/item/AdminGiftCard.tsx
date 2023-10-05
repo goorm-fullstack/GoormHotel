@@ -31,14 +31,17 @@ const checkboxList = [
 const AdminGiftCard = () => {
   const [avaliableClick, setAvaliableClick] = useState(false);
   const [unAvaliableClick, setUnAvaliableClick] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
   const length = checkboxList.length;
 
   // 체크박스 전체 선택 or 해체 기능
-  const inputRef = useRef([]);
+  const inputRef = useRef<(HTMLInputElement | null)[]>([]);
 
-  const handleAllChecked = (e) => {
+  const handleAllChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     inputRef.current.forEach((checkbox) => {
-      checkbox.checked = e.target.checked;
+      if(checkbox){
+        checkbox.checked = e.target.checked;
+      }
     });
   };
 
@@ -108,7 +111,7 @@ const AdminGiftCard = () => {
             <thead>
               <tr>
                 <th>
-                  <InputCheckbox type="checkbox" id="all-select-label" onClick={handleAllChecked} />
+                  <InputCheckbox type="checkbox" id="all-select-label" onChange={handleAllChecked} />
                 </th>
                 <th>번호</th>
                 <th>상품권명</th>
@@ -121,7 +124,7 @@ const AdminGiftCard = () => {
             </thead>
             <tbody>
               <tr>
-                <td colSpan="8" className="center empty">
+                <td colSpan={8} className="center empty">
                   등록된 상품권이 없습니다.
                 </td>
               </tr>
@@ -150,7 +153,7 @@ const AdminGiftCard = () => {
               })}
             </tbody>
           </Table>
-          <Paging />
+          <Paging totalPage={totalPages} />
         </Section>
       </Container>
     </AdminLayout>
