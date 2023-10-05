@@ -61,9 +61,6 @@ const BoardWrite = () => {
 
   //게시글 작성 api
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    const confirmed = window.confirm('작성하시겠습니까?');
-
-    if (confirmed) {
       e.preventDefault();
 
       const form = new FormData();
@@ -89,7 +86,7 @@ const BoardWrite = () => {
           alert(errorMessage);
         }
       }
-    }
+
   };
 
   return (
