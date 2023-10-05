@@ -223,53 +223,55 @@ const Reservation = ({ updateReservationData }) => {
           </S.SelectWrapper>
           <S.OptionWrapper data-isopen={optionOpen}>
             <table>
-              <tr>
-                <th>객실수</th>
-                <td>
-                  <div>
-                    <button type="button" className="btn-minus" onClick={() => handleMinusClick(setRooms, 1)}>
-                      ─
-                    </button>
-                    <input type="text" value={rooms} readOnly />
-                    <button type="button" className="btn-plus" onClick={() => handlePlusClick(setRooms)}>
-                      ┼
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <th>성인</th>
-                <td>
-                  <div>
-                    <button type="button" className="btn-minus" onClick={() => handleMinusClick(setAdults, 1)}>
-                      ─
-                    </button>
-                    <input type="text" value={adults} readOnly />
-                    <button type="button" className="btn-plus" onClick={() => handlePlusClick(setAdults)}>
-                      ┼
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <th>어린이</th>
-                <td>
-                  <div>
-                    <button type="button" className="btn-minus" onClick={() => handleMinusClick(setChildren, 0)}>
-                      ─
-                    </button>
-                    <input type="text" value={children} readOnly />
-                    <button type="button" className="btn-plus" onClick={() => handlePlusClick(setChildren)}>
-                      ┼
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2" className="chilage">
-                  <span>!</span> 어린이: 4세~12세
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <th>객실수</th>
+                  <td>
+                    <div>
+                      <button type="button" className="btn-minus" onClick={() => handleMinusClick(setRooms, 1)}>
+                        ─
+                      </button>
+                      <input type="text" value={rooms} readOnly />
+                      <button type="button" className="btn-plus" onClick={() => handlePlusClick(setRooms)}>
+                        ┼
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th>성인</th>
+                  <td>
+                    <div>
+                      <button type="button" className="btn-minus" onClick={() => handleMinusClick(setAdults, 1)}>
+                        ─
+                      </button>
+                      <input type="text" value={adults} readOnly />
+                      <button type="button" className="btn-plus" onClick={() => handlePlusClick(setAdults)}>
+                        ┼
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th>어린이</th>
+                  <td>
+                    <div>
+                      <button type="button" className="btn-minus" onClick={() => handleMinusClick(setChildren, 0)}>
+                        ─
+                      </button>
+                      <input type="text" value={children} readOnly />
+                      <button type="button" className="btn-plus" onClick={() => handlePlusClick(setChildren)}>
+                        ┼
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan={2} className="chilage">
+                    <span>!</span> 어린이: 4세~12세
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </S.OptionWrapper>
         </div>
