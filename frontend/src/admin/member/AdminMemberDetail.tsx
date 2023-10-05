@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, BtnWrapper, SubmitBtn, LinkBtn } from '../../Style/commonStyles';
 import { useParams } from 'react-router-dom';
-import { Container, Table } from './AdminMember';
+import { Container, Table } from './Style';
 
 const AdminMemberDetail = () => {
   const { memberId } = useParams();

@@ -4,7 +4,6 @@ import { useParams, useNavigate } from 'react-router-dom'; // useHistory 추가
 import { commonContainerStyle, PageTitle, BtnWrapper, SubmitBtn, commonTable } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
-import { Image } from '../../components/AddItemForm/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
 
 const Container = styled(commonContainerStyle)``;
@@ -12,7 +11,7 @@ const Table = styled(commonTable)``;
 
 type FormData = {
   [key: string]: string;
-}
+};
 
 const BoardWrite = () => {
   const board = useParams().board;
@@ -109,13 +108,13 @@ const BoardWrite = () => {
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <Table className="horizontal">
               <tr>
-                <th style={{width: '240px'}}>제목</th>
+                <th style={{ width: '240px' }}>제목</th>
                 <td>
                   <input type="text" className="title long" name="title" value={formData.title} onChange={handleChange} required />
                 </td>
               </tr>
               <tr>
-                <th style={{width: '240px'}}>카테고리</th>
+                <th style={{ width: '240px' }}>카테고리</th>
                 <td>
                   {(() => {
                     switch (board) {
@@ -154,13 +153,15 @@ const BoardWrite = () => {
                 <th>첨부파일</th>
                 <td>
                   <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
-                  {imgFile ? <Image src={imgFile} alt="후기 이미지" /> : <Image style={{ display: 'none' }} />}
+                  {imgFile ? <img src={imgFile} alt="후기 이미지" /> : <img style={{ display: 'none' }} />}
                 </td>
               </tr>
             </Table>
             <BtnWrapper className="center double mt40">
               <SubmitBtn type="submit">작성하기</SubmitBtn>
-              <SubmitBtn type='button' onClick={() => navigate(-1)}>취소</SubmitBtn>
+              <SubmitBtn type="button" onClick={() => navigate(-1)}>
+                취소
+              </SubmitBtn>
             </BtnWrapper>
           </form>
         </div>

@@ -21,7 +21,7 @@ const Reservation = ({ updateReservationData }: any) => {
   useEffect(() => {
     const processedCheckInDate: ValuePiece = Array.isArray(checkInValue) ? checkInValue[0] : checkInValue;
     const processedCheckOutDate: ValuePiece = Array.isArray(checkOutValue) ? checkOutValue[0] : checkOutValue;
-  
+
     const checkInMoment = moment(processedCheckInDate);
     const checkOutMoment = moment(processedCheckOutDate);
 
@@ -106,15 +106,15 @@ const Reservation = ({ updateReservationData }: any) => {
     const checkOutDateValue: ValuePiece = checkOutValue && Array.isArray(checkOutValue) ? checkOutValue[0] : checkOutValue;
 
     if (processedSelectedDate) {
-        const formattedDate = moment(processedSelectedDate).format('YYYY.MM.DD');
-        const dayOfWeek = moment(processedSelectedDate).format('ddd');
-        setCheckInDate(`${formattedDate} (${dayOfWeek})`);
+      const formattedDate = moment(processedSelectedDate).format('YYYY.MM.DD');
+      const dayOfWeek = moment(processedSelectedDate).format('ddd');
+      setCheckInDate(`${formattedDate} (${dayOfWeek})`);
 
-        const checkOutDate = new Date(checkOutDateValue as Date);
-        const timeDifference = checkOutDate.getTime() - processedSelectedDate.getTime();
-        const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
+      const checkOutDate = new Date(checkOutDateValue as Date);
+      const timeDifference = checkOutDate.getTime() - processedSelectedDate.getTime();
+      const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
 
-        setNights(daysDifference);
+      setNights(daysDifference);
     }
   };
 
@@ -238,53 +238,55 @@ const Reservation = ({ updateReservationData }: any) => {
           </S.SelectWrapper>
           <S.OptionWrapper data-isopen={optionOpen}>
             <table>
-              <tr>
-                <th>객실수</th>
-                <td>
-                  <div>
-                    <button type="button" className="btn-minus" onClick={() => handleMinusClick(setRooms, 1)}>
-                      ─
-                    </button>
-                    <input type="text" value={rooms} readOnly />
-                    <button type="button" className="btn-plus" onClick={() => handlePlusClick(setRooms)}>
-                      ┼
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <th>성인</th>
-                <td>
-                  <div>
-                    <button type="button" className="btn-minus" onClick={() => handleMinusClick(setAdults, 1)}>
-                      ─
-                    </button>
-                    <input type="text" value={adults} readOnly />
-                    <button type="button" className="btn-plus" onClick={() => handlePlusClick(setAdults)}>
-                      ┼
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <th>어린이</th>
-                <td>
-                  <div>
-                    <button type="button" className="btn-minus" onClick={() => handleMinusClick(setChildren, 0)}>
-                      ─
-                    </button>
-                    <input type="text" value={children} readOnly />
-                    <button type="button" className="btn-plus" onClick={() => handlePlusClick(setChildren)}>
-                      ┼
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td colSpan={2} className="chilage">
-                  <span>!</span> 어린이: 4세~12세
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <th>객실수</th>
+                  <td>
+                    <div>
+                      <button type="button" className="btn-minus" onClick={() => handleMinusClick(setRooms, 1)}>
+                        ─
+                      </button>
+                      <input type="text" value={rooms} readOnly />
+                      <button type="button" className="btn-plus" onClick={() => handlePlusClick(setRooms)}>
+                        ┼
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th>성인</th>
+                  <td>
+                    <div>
+                      <button type="button" className="btn-minus" onClick={() => handleMinusClick(setAdults, 1)}>
+                        ─
+                      </button>
+                      <input type="text" value={adults} readOnly />
+                      <button type="button" className="btn-plus" onClick={() => handlePlusClick(setAdults)}>
+                        ┼
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th>어린이</th>
+                  <td>
+                    <div>
+                      <button type="button" className="btn-minus" onClick={() => handleMinusClick(setChildren, 0)}>
+                        ─
+                      </button>
+                      <input type="text" value={children} readOnly />
+                      <button type="button" className="btn-plus" onClick={() => handlePlusClick(setChildren)}>
+                        ┼
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan={2} className="chilage">
+                    <span>!</span> 어린이: 4세~12세
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </S.OptionWrapper>
         </div>

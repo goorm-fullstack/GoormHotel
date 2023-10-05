@@ -1,25 +1,9 @@
 import React, { useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import styled from 'styled-components';
+import * as S from './Style';
 import { Link } from 'react-router-dom';
-import { commonAdminContents, PageTitle, commonTable, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
 import Paging from '../../components/common/Paging/Paging';
-
-export const Container = styled(commonAdminContents)``;
-
-export const Table = styled(commonTable)``;
-
-export const TableHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
-  margin-top: -14px;
-
-  strong {
-    color: ${(props) => props.theme.colors.goldhover};
-  }
-`;
 
 const AdminMember = () => {
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
@@ -79,9 +63,9 @@ const AdminMember = () => {
 
   return (
     <AdminLayout subMenus="member">
-      <Container>
+      <S.Container>
         <PageTitle>전체 회원 관리</PageTitle>
-        <TableHeader>
+        <S.TableHeader>
           <p className="total">
             전체 <strong>{memberData.length}</strong> 건
           </p>
@@ -89,8 +73,8 @@ const AdminMember = () => {
             <NormalBtn className="header">블랙리스트 해제</NormalBtn>
             <NormalBtn className="header red">블랙리스트 추가</NormalBtn>
           </BtnWrapper>
-        </TableHeader>
-        <Table>
+        </S.TableHeader>
+        <S.Table>
           <colgroup>
             <col width="80px" />
             <col width="100px" />
@@ -139,9 +123,9 @@ const AdminMember = () => {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </S.Table>
         <Paging totalPage={totalPages} />
-      </Container>
+      </S.Container>
     </AdminLayout>
   );
 };

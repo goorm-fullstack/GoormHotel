@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as S from './Style';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
-import { Container, Table, TableHeader } from '../member/AdminMember';
+import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
 import { BoardData } from './AdminBoard';
