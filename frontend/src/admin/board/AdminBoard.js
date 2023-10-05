@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../Style/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, LinkBtn } from '../../Style/commonStyles';
 import { Container, Table, TableHeader } from '../member/AdminMember';
 import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
@@ -98,15 +98,27 @@ const AdminBoard = () => {
             전체 <strong>{board.length}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
+            <LinkBtn className="header" to="/admin/board/write">
+              게시글 작성
+            </LinkBtn>
             <NormalBtn className="header" onClick={ReportBoard}>
               신고된 글로 이동
             </NormalBtn>
             <NormalBtn className="header red" onClick={DeleteBoard}>
-              삭제
+              게시글 삭제
             </NormalBtn>
           </BtnWrapper>
         </TableHeader>
         <Table>
+          <colgroup>
+            <col width="80px" />
+            <col width="100px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="auto" />
+            <col width="200px" />
+            <col width="150px" />
+          </colgroup>
           <thead>
             <tr>
               <th>
@@ -114,17 +126,19 @@ const AdminBoard = () => {
               </th>
               <th>번호</th>
               <th>게시판</th>
+              <th>카테고리</th>
               <th>제목</th>
-              <th>작성자</th>
+              <th>작성자명(회원 ID)</th>
               <th>작성일</th>
-              <th>블랙리스트</th>
             </tr>
           </thead>
           <tbody>
             {board.length === 0 && (
-              <td colSpan="7" className="center">
-                등록된 게시글이 없습니다.
-              </td>
+              <tr>
+                <td colSpan="7" className="center empty">
+                  등록된 게시글이 없습니다.
+                </td>
+              </tr>
             )}
             {board.map((board, idx) => (
               <tr key={board.boardId}>
@@ -137,6 +151,7 @@ const AdminBoard = () => {
                 </td>
                 <td className="center">{idx + 1}</td>
                 <td className="center">{board.boardTitle}</td>
+                <td className="center">카테고리</td>
                 <td className="center">
                   <Link to={`/admin/member/${board.boardId}`}>{board.title}</Link>
                 </td>
@@ -146,7 +161,6 @@ const AdminBoard = () => {
                 <td className="center">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
                   board.boardWriteDate[2] < 10 ? '0' : ''
                 }${board.boardWriteDate[2]}`}</td>
-                <td>{board.blacklist}</td>
               </tr>
             ))}
           </tbody>

@@ -167,14 +167,23 @@ const AdminComment = () => {
           </p>
           <BtnWrapper className="flexgap right">
             <NormalBtn className="header" onClick={handleReport}>
-              신고처리
+              신고된 글로 이동
             </NormalBtn>
             <NormalBtn className="header red" onClick={handleDeleteItems}>
-              삭제
+              댓글 삭제
             </NormalBtn>
           </BtnWrapper>
         </TableHeader>
         <Table>
+          <colgroup>
+            <col width="80px" />
+            <col width="100px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="auto" />
+            <col width="150px" />
+            <col width="150px" />
+          </colgroup>
           <thead>
             <tr>
               <th>
@@ -190,7 +199,7 @@ const AdminComment = () => {
           </thead>
           <tbody>
             {reply.length === 0 && (
-              <td colSpan="7" className="center">
+              <td colSpan="7" className="center empty">
                 등록된 댓글이 없습니다.
               </td>
             )}

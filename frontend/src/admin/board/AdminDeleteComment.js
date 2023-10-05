@@ -103,14 +103,22 @@ const AdminDeleteComment = () => {
           </p>
           <BtnWrapper className="flexgap right">
             <NormalBtn type="button" className="header" onClick={unDeleteBtnClick}>
-              복원
+              선택 글 복원하기
             </NormalBtn>
             <NormalBtn type="button" className="header red" onClick={realDeleteBtnClick}>
-              영구삭제
+              영구 삭제
             </NormalBtn>
           </BtnWrapper>
         </TableHeader>
         <Table>
+          <colgroup>
+            <col width="80px" />
+            <col width="100px" />
+            <col width="200px" />
+            <col width="auto" />
+            <col width="200px" />
+            <col width="150px" />
+          </colgroup>
           <thead>
             <tr>
               <th>
@@ -119,7 +127,7 @@ const AdminDeleteComment = () => {
               <th>번호</th>
               <th>게시판</th>
               <th>삭제된 글</th>
-              <th>작성자 명(회원 ID)</th> {/** 회원 ID의 ID는 대문자로 통일합시다. */}
+              <th>작성자명(회원 ID)</th> {/** 회원 ID의 ID는 대문자로 통일합시다. */}
               <th>삭제일</th>
             </tr>
           </thead>
