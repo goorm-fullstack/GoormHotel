@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom'; // useHistory 추가
-import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn, SubmitBtn, commonTable } from '../../Style/commonStyles';
+import { commonContainerStyle, PageTitle, BtnWrapper, SubmitBtn, commonTable } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
 import { Image } from '../../components/AddItemForm/Style';
@@ -20,6 +20,7 @@ const BoardWrite = () => {
   console.log(board);
   const [imgFile, setImgFile] = useState('');
   const imgRef = useRef<HTMLInputElement>(null);
+  const [boardContent, setBoardContent] = useState('');
   const [formData, setFormData] = useState<FormData>({
     title: '',
     boardContent: '',
@@ -67,6 +68,7 @@ const BoardWrite = () => {
 
       const form = new FormData();
       form.append('multipartFile', imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '');
+      formData.boardContent = boardContent;
 
       Object.keys(formData).forEach((key) => {
         // Object.keys 수정
@@ -120,24 +122,16 @@ const BoardWrite = () => {
                 <td>
                   {(() => {
                     switch (board) {
-                      // case 'notice': {/** 사용자 페이지에서 공지사항 작성 안함 */}
-                      //   return (
-                      //     <select name="category" value={formData.category} onChange={handleChange}>
-                      //       <option value="">선택</option>
-                      //       <option value="공지">공지</option>
-                      //       <option value="이벤트">이벤트</option>
-                      //     </select>
-                      //   );
                       case 'qna':
                         return (
-                          <select name="category" value={formData.category} onChange={handleChange}>
+                          <select name="category" onChange={handleChange}>
                             <option value="문의1">문의1</option>
                             <option value="문의2">문의2</option>
                           </select>
                         );
                       case 'review':
                         return (
-                          <select name="category" value={formData.category} onChange={handleChange}>
+                          <select name="category" onChange={handleChange}>
                             <option value="객실">객실</option>
                             <option value="다이닝">다이닝</option>
                           </select>
@@ -156,26 +150,20 @@ const BoardWrite = () => {
               </tr>
               <tr className="contents">
                 <td colSpan={2} className="writeWrapper">
-                  <TextEditor name="boardContent" value={formData.boardContent} onChange={handleChange} required />
+                  <TextEditor setValue={setBoardContent} />
                 </td>
               </tr>
               <tr className="conbtm">
                 <th>첨부파일</th>
                 <td>
-                  <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required />
+                  <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
                   {imgFile ? <Image src={imgFile} alt="후기 이미지" /> : <Image style={{ display: 'none' }} />}
                 </td>
               </tr>
-              {/*<tr>*/}
-              {/*  <th>비밀번호</th>*/}
-              {/*  <td>*/}
-              {/*    <input type="password" name=/>*/}
-              {/*  </td>*/}
-              {/*</tr>*/}
             </Table>
             <BtnWrapper className="center double mt40">
               <SubmitBtn type="submit">작성하기</SubmitBtn>
-              <LinkBtn to={() => navigate(-1)}>취소</LinkBtn>
+              <SubmitBtn type='button' onClick={() => navigate(-1)}>취소</SubmitBtn>
             </BtnWrapper>
           </form>
         </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { useNavigate, useParams } from 'react-router-dom';
-import * as S from "./Style";
+import * as S from './Style';
 import Instance from '../../utils/api/axiosInstance';
 import { PageTitle, BtnWrapper, CloseButton, NormalBtn } from '../../Style/commonStyles';
 import { Container, Table, TableHeader } from '../member/AdminMember';
