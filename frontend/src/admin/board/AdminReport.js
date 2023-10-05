@@ -1,67 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import * as S from './Style';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../Style/commonStyles';
-import {
-  Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
-  Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
-} from '../member/AdminMember';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
+import { Container, Table, TableHeader } from '../member/AdminMember';
 import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
-
-const LinkStyle = styled(Link)`
-  &:hover {
-    text-decoration: underline;
-    text-decoration-color: #444444;
-    text-underline-offset: 10px;
-  }
-`;
-
-export const PageParam = styled.ul`
-  text-align: center;
-  margin-top: 50px;
-
-  li {
-    display: inline-block;
-    margin: 0 2px;
-  }
-  li a {
-    display: inline-block;
-    padding: 0 8px;
-    border-radius: 100%;
-    height: 1.6rem;
-    line-height: 1.3rem;
-    color: #666;
-  }
-  li.selected a {
-    color: #baa085;
-    text-decoration: underline;
-  }
-  li a:hover {
-    text-decoration: underline;
-  }
-  li.sideParam {
-    margin: 0 8px;
-  }
-  li.sideParam a {
-    border: 1px solid #baa085;
-    color: #baa085;
-  }
-  li.sideParam a:hover {
-    text-decoration: none;
-  }
-`;
 
 const AdminReport = () => {
   const [checkedItems, setCheckedItems] = useState([]);
@@ -144,6 +87,16 @@ const AdminReport = () => {
           </BtnWrapper>
         </TableHeader>
         <Table>
+          <colgroup>
+            <col width="80px" />
+            <col width="100px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="auto" />
+            <col width="200px" />
+            <col width="150px" />
+            <col width="150px" />
+          </colgroup>
           <thead>
             <tr>
               <th>
@@ -178,9 +131,9 @@ const AdminReport = () => {
                 <td className="center">{report.reportId}</td>
                 <td className="center">
                   {report.replyId != null ? (
-                    <LinkStyle>{report.replyContent}</LinkStyle>
+                    <S.LinkStyle>{report.replyContent}</S.LinkStyle>
                   ) : report.boardId != null ? (
-                    <LinkStyle>{report.title}</LinkStyle>
+                    <S.LinkStyle>{report.title}</S.LinkStyle>
                   ) : (
                     report.reportContent
                   )}

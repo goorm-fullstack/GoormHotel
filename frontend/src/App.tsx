@@ -29,7 +29,7 @@ import Signup from './pages/member/Signup';
 import BoardWrite from './pages/board/BoardWrite';
 import BoardRead from './pages/board/BoardRead';
 import JoinComplete from './pages/member/JoinComplete';
-import AdminLogin from './admin/AdminLogin';
+import AdminLogin from './admin/login/AdminLogin';
 import AdminMember from './admin/member/AdminMember';
 import AdminMemberDetail from './admin/member/AdminMemberDetail';
 import AdminManager from './admin/member/AdminManager';
@@ -70,7 +70,7 @@ const FloatingWrapper = styled.div`
   }
 `;
 
-const FloatingBtn = styled.button<{$show: boolean}>`
+const FloatingBtn = styled.button<{ $show: boolean }>`
   width: 60px;
   height: 60px;
   border-radius: 50%;

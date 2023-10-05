@@ -1,18 +1,14 @@
 import React from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, CheckLabel, MultiCheck, SubmitBtn } from '../../Style/commonStyles';
-import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { Container, Table } from '../member/AdminMember';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
 
 const AdminBoardWrite = () => {
-  // 나중에 적딩히 변경해서 사용해주세요
-  const setValue = () => {
-
-  }
+  // 수정해야하는 부분 있으면 알아서 변경해서 사용해주세요
+  const setValue = () => {};
   return (
-    <AdminLayout subMenus="chat">
+    <AdminLayout subMenus="board">
       <Container>
         <PageTitle>게시글 작성</PageTitle>
         <Table className="horizontal">
@@ -29,7 +25,15 @@ const AdminBoardWrite = () => {
               </td>
             </tr>
             <tr>
-              <th>분류</th>
+              <th>게시판</th>
+              <td>
+                <select>
+                  <option>값값</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th>카테고리</th>
               <td>
                 <select>
                   <option>값값</option>
@@ -44,7 +48,7 @@ const AdminBoardWrite = () => {
             </tr>
             <tr>
               <td colSpan={2} className="writeWrapper">
-                <TextEditor setValue = {setValue}/>
+                <TextEditor setValue={setValue} />
               </td>
             </tr>
           </tbody>
