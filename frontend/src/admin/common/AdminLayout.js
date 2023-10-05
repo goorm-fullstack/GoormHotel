@@ -1,65 +1,7 @@
 import React from 'react';
 import AdminHeader from './AdminHeader';
-import styled from 'styled-components';
+import * as S from './Style';
 import { NavLink, useLocation } from 'react-router-dom';
-import { ReactComponent as SideMenuIcon } from '../../images/icon/ico_slide_btn.svg';
-
-const SideMenu = styled.div`
-  width: 276px;
-  height: calc(100vh - 100px);
-  position: fixed;
-  left: 0;
-  top: 100px;
-  bottom: 0;
-  border-right: 1px solid ${(props) => props.theme.colors.grayborder};
-`;
-
-const SideMenuWrapper = styled.ul`
-  width: 100%;
-  padding: 32px 40px;
-
-  li {
-    margin-bottom: 18px;
-  }
-`;
-
-const SideTitle = styled.h2`
-  font-size: ${(props) => props.theme.font.sizem};
-  font-weight: 500;
-  height: 70px;
-  line-height: 70px;
-  padding: 0 40px;
-  border-bottom: 1px solid ${(props) => props.theme.colors.grayborder};
-  color: ${(props) => props.theme.colors.charcoal};
-`;
-
-const PageContents = styled.div`
-  padding: 200px 40px 100px 316px;
-`;
-
-const SideMenuList = styled(NavLink)`
-  display: flex;
-  justify-content: space-between;
-  color: ${(props) => props.theme.colors.graydark};
-
-  &:hover,
-  &.active {
-    color: ${(props) => props.theme.colors.goldhover};
-  }
-
-  path {
-    stroke: ${(props) => props.theme.colors.graydark} !important;
-  }
-
-  &:hover path,
-  &.active path {
-    stroke: ${(props) => props.theme.colors.goldhover} !important;
-  }
-`;
-
-const SideIcon = styled(SideMenuIcon)`
-  transform: rotate(180deg);
-`;
 
 export const adminsubnav = {
   member: {
@@ -141,14 +83,14 @@ const AdminLayout = ({ children, subMenus }) => {
   const location = useLocation();
 
   return (
-    <div>
+    <S.AdminContainer>
       <AdminHeader />
-      <SideMenu>
-        <SideTitle>{adminsubnav[subMenus].pagetitle}</SideTitle>
-        <SideMenuWrapper>
+      <S.SideMenu>
+        <h2>{adminsubnav[subMenus].pagetitle}</h2>
+        <ul className="menulist">
           {adminsubnav[subMenus].nav.map((nav) => (
             <li>
-              <SideMenuList
+              <NavLink
                 to={nav.linkto}
                 $activeClassName="active"
                 $isActive={(match) => {
@@ -158,15 +100,15 @@ const AdminLayout = ({ children, subMenus }) => {
                 }}>
                 <p>{nav.title}</p>
                 <div>
-                  <SideIcon />
+                  <S.SideIcon />
                 </div>
-              </SideMenuList>
+              </NavLink>
             </li>
           ))}
-        </SideMenuWrapper>
-      </SideMenu>
-      <PageContents>{children}</PageContents>
-    </div>
+        </ul>
+      </S.SideMenu>
+      <div className="pagecontents">{children}</div>
+    </S.AdminContainer>
   );
 };
 
