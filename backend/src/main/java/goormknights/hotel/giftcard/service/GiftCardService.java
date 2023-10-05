@@ -4,6 +4,7 @@ import goormknights.hotel.giftcard.dto.request.RequestGiftCardDto;
 import goormknights.hotel.giftcard.dto.request.StateChangeData;
 import goormknights.hotel.giftcard.dto.response.ResponseGiftCardDto;
 import goormknights.hotel.giftcard.exception.AlreadyUsedException;
+import goormknights.hotel.giftcard.exception.NoSuchGiftCardException;
 import goormknights.hotel.giftcard.exception.NotAvailableException;
 import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.giftcard.repository.GiftCardRepository;
@@ -46,6 +47,17 @@ public class GiftCardService {
         return result;
     }
 
+    public Long calcPageCount() {
+        long count = giftCardRepository.count();
+        count /= 10;
+
+        return count;
+    }
+
+    public ResponseGiftCardDto getGiftCard(String uuid) {
+        GiftCard giftCard = giftCardRepository.findByUuid(uuid).orElseThrow(() -> new NoSuchGiftCardException("존재하지 않는 대상입니다."));
+        return giftCard.toResponseDto();
+    }
 
     // 기프트 카드 발행 로직
     // 만약 존재하는 기프트카드 번호라면 다시 돌 수 있도록 구현

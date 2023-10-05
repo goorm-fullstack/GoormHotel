@@ -28,6 +28,7 @@ const AdminGiftCard = () => {
   const [expire, setExpire] = useState("");
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
+  const [count, setCount] = useState<number>(1);
 
   // 체크박스 전체 선택 or 해체 기능
   const inputRef = useRef<HTMLInputElement[]>([]);
@@ -36,6 +37,10 @@ const AdminGiftCard = () => {
     Instance.get("/api/giftcard/list?page="+page).then((response)=>{
       setDataLength(response.data.length);
       setGiftCardList(response.data);
+    });
+
+    Instance.get("/api/giftcard/count").then((response) => {
+      setCount(response.data);
     })
   },[])
 
@@ -204,7 +209,7 @@ const AdminGiftCard = () => {
                     </td>
                     <td className="center">
                       <p>
-                        <Link to={`/admin/giftcard/detail/${idx}`}>{item.uuid}</Link>
+                        <Link to={`/admin/giftcard/detail/${item.uuid}`}>{item.uuid}</Link>
                       </p>
                     </td>
                     <td className="center">{item.money}</td>
@@ -218,7 +223,7 @@ const AdminGiftCard = () => {
               )}
             </tbody>
           </Table>
-          <Paging url={"/admin/giftcard"}/>
+          <Paging totalPage={count} />
         </Section>
       </Container>
     </AdminLayout>

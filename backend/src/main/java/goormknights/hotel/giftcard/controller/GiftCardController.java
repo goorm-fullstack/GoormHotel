@@ -20,10 +20,11 @@ import java.util.List;
 public class GiftCardController {
     private final GiftCardService giftCardService;
 
-    // 상품권 상세 조회 기능 추가 필요
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseGiftCardDto> getGiftCard(@PathVariable Long id) {
-        return new ResponseEntity<>(HttpStatus.OK.value(), new ResponseGiftCardDto());
+    // 상품권 상세 조회 - uuid를 이용
+    @GetMapping("/{uuid}")
+    public ResponseEntity<ResponseGiftCardDto> getGiftCardByUuid(@PathVariable String uuid) {
+        ResponseGiftCardDto giftCard = giftCardService.getGiftCard(uuid);
+        return new ResponseEntity<>(HttpStatus.OK.value(), giftCard);
     }
 
     /**
@@ -32,6 +33,12 @@ public class GiftCardController {
     @GetMapping("/list")
     public List<ResponseGiftCardDto> getAllGiftCard(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         return giftCardService.getGiftCardList(pageable);
+    }
+
+    // 페이지 수를 반환하는 코드
+    @GetMapping("/count")
+    public Long getPageCount() {
+        return giftCardService.calcPageCount();
     }
 
     // 관리자가 상품권 발행을 요청하는 페이지
