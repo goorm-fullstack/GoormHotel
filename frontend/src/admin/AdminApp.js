@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AdminLogin from './AdminLogin';
 import AdminMember from './member/AdminMember';
@@ -28,6 +28,7 @@ import {useAuth} from "../utils/api/AuthContext";
 
 const AdminApp = () => {
   const { setAuthState } = useAuth();
+  const [isLogined, setIsLogined] = useState(false);
 
   // 쿠키를 파싱하는 함수
   function getCookie(name) {
@@ -42,9 +43,16 @@ const AdminApp = () => {
     const role = getCookie("role");
     const auth = getCookie("auth");
 
+    // 로컬 스토리지에 정보를 저장한다.
+    // 추후 업그레이드한다면 json으로 Object데이터를 넣을까요?
+    localStorage.setItem("adminId", adminId);
+    localStorage.setItem("role", role);
+    localStorage.setItem("auth", auth);
+
     // 가져온 값이 있다면 상태를 설정합니다.
     if (adminId && role && auth) {
       setAuthState({ adminId, role, auth });
+      setIsLogined(true);
     } else {
       // 원래대로 서버에서 상태를 가져올 수도 있습니다.
       Instance.get('/api/adminCheck').then(response => {

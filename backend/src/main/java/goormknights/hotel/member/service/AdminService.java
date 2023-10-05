@@ -49,7 +49,7 @@ public class AdminService {
     }
 
     // 매니저 로그인
-    public boolean ManagerLogin(String adminId, String password, HttpServletRequest request, HttpServletResponse response) {
+    public boolean managerLogin(String adminId, String password, HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("manager") != null) {
             // 이미 로그인한 상태
@@ -67,10 +67,10 @@ public class AdminService {
             Cookie adminIdCookie = new Cookie("adminId", optionalManager.get().getAdminId());
             Cookie roleCookie = new Cookie("role", optionalManager.get().getRole().toString());
             Cookie authCookie = new Cookie("auth", optionalManager.get().getAuth());
-            cookie.setMaxAge(10);
-            adminIdCookie.setMaxAge(10);
-            roleCookie.setMaxAge(10);
-            authCookie.setMaxAge(10);
+            cookie.setMaxAge(3600);
+            adminIdCookie.setMaxAge(3600);
+            roleCookie.setMaxAge(3600);
+            authCookie.setMaxAge(3600);
             cookie.setPath("/");
             adminIdCookie.setPath("/");
             roleCookie.setPath("/");

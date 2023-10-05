@@ -157,12 +157,33 @@ public class MemberService {
 
     // 멤버 로그인
     public boolean memberLogin(String memberId, String password, HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("member") != null) {
+            // 이미 로그인한 상태
+            return false;
+        }
+
         Optional<Member> optionalMember = memberRepository.findByMemberId(memberId);
         if (optionalMember.isPresent() && passwordEncoder.matches(password, optionalMember.get().getPassword())) {
-            HttpSession session = request.getSession();
-            session.setAttribute("member", optionalMember.get());
+            session = request.getSession();
+            session.setAttribute("memberId", optionalMember.get().getMemberId());
+            session.setAttribute("role", optionalMember.get().getRole());
+
             Cookie cookie = new Cookie("JSESSIONID", session.getId());
+            Cookie memberIdCookie = new Cookie("memberId", optionalMember.get().getMemberId());
+            Cookie roleCookie = new Cookie("role", optionalMember.get().getRole().toString());
+            cookie.setMaxAge(3600);
+            memberIdCookie.setMaxAge(3600);
+            roleCookie.setMaxAge(3600);
+            cookie.setPath("/");
+            memberIdCookie.setPath("/");
+            roleCookie.setPath("/");
             response.addCookie(cookie);
+            response.addCookie(memberIdCookie);
+            response.addCookie(roleCookie);
+            log.info("쿠키 이름: " + cookie.getName());
+            log.info("쿠키 값: " + cookie.getValue());
+            log.info("리스폰스 헤더값: " + response.getHeaderNames());
             return true;
         }
         return false;

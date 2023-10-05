@@ -105,7 +105,8 @@ const Login = () => {
   const [contactNumber, setContactNumber] = useState('');
   const [rememberId, setRememberId] = useState(false); //아이디 기억하기 상태
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
     const loginInfo = {
       memberId: memberId,
@@ -118,23 +119,16 @@ const Login = () => {
           'Content-Type': 'application/json',
         },
       });
-      console.log("세션 응답 아이디: ", response.data);
       if (response.status === 200) {
-        const {sessionId, memberId} = response.data;
         alert('로그인 성공');
-        localStorage.setItem('sessionId', sessionId);
-        localStorage.setItem('memberId', memberId);
-        localStorage.setItem('role', response.data.role);
         window.location.href = '/'
+      } else {
+        alert('아이디 또는 비밀번호가 일치하지 않습니다.');
       }
     } catch (error) {
-      if (error.response) {
-        if (error.response.status === 401 || error.response.status === 404) {
-          alert('아이디 또는 비밀번호가 일치하지 않습니다.');
-        }
-      }
+      alert('아이디 또는 비밀번호가 일치하지 않습니다. 또는 서버 오류가 발생했습니다.');
     }
-  }
+  };
 
   const handleIdChange = (e) => {
     setMemberId(e.target.value);
