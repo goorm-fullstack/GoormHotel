@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react';
 import * as S from './Style';
 import { Table, TableHeader } from '../../admin/member/AdminMember';
-import { PageTitle, SubmitBtn, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
+import { PageTitle, SubmitBtn, BtnWrapper, LinkBtn, NormalBtn } from '../../Style/commonStyles';
 import axios from 'axios';
 
 export type DiningForm = {
   [key: string]: string;
-}
+};
 
 const WriteFormDining = () => {
   const [imgFile, setImgFile] = useState<string>(''); // 이미지 상태 관리
@@ -47,7 +47,7 @@ const WriteFormDining = () => {
         e.preventDefault();
 
         const form = new FormData();
-        if(imgRef.current && imgRef.current.files){
+        if (imgRef.current && imgRef.current.files) {
           form.append('img', imgRef.current.files[0]);
         }
 
@@ -84,7 +84,7 @@ const WriteFormDining = () => {
   // 이미지 업로드 input의 onChange(이미지 미리보기)
   const saveImgFile = () => {
     let file: File | null = null;
-    if(imgRef.current && imgRef.current.files){
+    if (imgRef.current && imgRef.current.files) {
       file = imgRef.current.files[0];
     }
     const reader = new FileReader();
@@ -110,7 +110,7 @@ const WriteFormDining = () => {
         setIsConfirm(true);
       }
     } catch (error) {
-      if(axios.isAxiosError(error)){
+      if (axios.isAxiosError(error)) {
         setDuplicateMessage(error.response?.data);
         console.log(error.response?.data);
         setIsConfirm(false);
@@ -145,16 +145,16 @@ const WriteFormDining = () => {
             <th>썸네일</th>
             <td>
               <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required />
-              {imgFile ? <S.Image src={imgFile} alt="프로필 이미지" /> : <S.Image style={{ display: 'none' }} />}
+              {imgFile ? <img src={imgFile} alt="프로필 이미지" /> : <img style={{ display: 'none' }} />}
             </td>
           </tr>
           <tr>
             <th>상품명</th>
             <td>
               <input type="text" name="name" value={formData.name} onChange={handleChange} ref={nameRef} required />
-              <S.DuplicateButton type="button" onClick={handleDuplicate}>
+              <NormalBtn type="button" className="withinput" onClick={handleDuplicate}>
                 중복확인
-              </S.DuplicateButton>
+              </NormalBtn>
               {responseMessege}
             </td>
           </tr>

@@ -1,19 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, SubmitBtn } from '../../Style/commonStyles';
-import { Image } from '../../components/AddItemForm/Style';
-import { RoomData, Select } from './AdminItemList';
+import { RoomData } from './AdminItemList';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Table } from '../member/AdminMember';
 import { RoomForm } from '../../components/AddItemForm/WriteFormRoom';
-
-// 세부 타입 select
-const WriteFormSelect = styled(Select)`
-  width: 200px;
-  margin: 0;
-`;
 
 // 중복검사 버튼
 const DuplicateButton = styled.button`
@@ -47,7 +40,7 @@ const GreenP = styled.p`
 const AdminDetailRoom = () => {
   const [imgFile, setImgFile] = useState<string>(''); // 이미지 상태관리
   const imgRef = useRef<HTMLInputElement>(null); // 이미지 태그
-  const { type, name } = useParams<{type: string, name: string}>(); // url 파라미터
+  const { type, name } = useParams<{ type: string; name: string }>(); // url 파라미터
   const [responseData, setResponseData] = useState<RoomData>(); // get 요청으로 받은 데이터 상태관리
   const [duplicateMessage, setDuplicateMessage] = useState<string>(''); // 중복검사 메시지 상태관리
   const [isConfirm, setIsConfirm] = useState<boolean>(true); // 중복검사 정상 실행 여부 상태관리
@@ -72,7 +65,7 @@ const AdminDetailRoom = () => {
     reader.onloadend = () => {
       setImgFile(reader.result as string);
     };
-    if(imgRef.current){
+    if (imgRef.current) {
       imgRef.current.src = imgFile;
     }
   };
@@ -168,7 +161,7 @@ const AdminDetailRoom = () => {
       }
       console.log('responseObject = ', responseObject);
     } catch (error) {
-      if(axios.isAxiosError(error)){
+      if (axios.isAxiosError(error)) {
         setDuplicateMessage(error.response?.data);
         console.log(error.response?.data);
         setIsConfirm(false);
@@ -194,7 +187,7 @@ const AdminDetailRoom = () => {
                 <th>썸네일</th>
                 <td>
                   <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
-                  {imgFile ? <Image src={imgFile} alt="프로필 이미지" /> : <Image src={imageUrls[0] || ''} alt="프로필 이미지"></Image>}
+                  {imgFile ? <img src={imgFile} alt="프로필 이미지" /> : <img src={imageUrls[0] || ''} alt="프로필 이미지" />}
                 </td>
               </tr>
               <tr>
@@ -252,29 +245,24 @@ const AdminDetailRoom = () => {
               <tr>
                 <th>세부 타입</th>
                 <td>
-                  <WriteFormSelect
-                    name="typeDetail"
-                    key={responseData.typeDetail}
-                    defaultValue={responseData.typeDetail}
-                    onChange={handleChange}
-                    required>
+                  <select name="typeDetail" key={responseData.typeDetail} defaultValue={responseData.typeDetail} onChange={handleChange} required>
                     <option value="">선택</option>
                     <option value="deluxe">디럭스</option>
                     <option value="sweet">스위트</option>
                     <option value="family">패밀리</option>
                     <option value="poolVilla">풀 빌라</option>
-                  </WriteFormSelect>
+                  </select>
                 </td>
               </tr>
               <tr>
                 <th>침대 타입</th>
                 <td>
-                  <WriteFormSelect name="bed" key={responseData.bed} defaultValue={responseData.bed} onChange={handleChange} required>
+                  <select name="bed" key={responseData.bed} defaultValue={responseData.bed} onChange={handleChange} required>
                     <option value="">선택</option>
                     <option value="single">싱글</option>
                     <option value="double">더블/트윈</option>
                     <option value="king">킹</option>
-                  </WriteFormSelect>
+                  </select>
                 </td>
               </tr>
               <tr>

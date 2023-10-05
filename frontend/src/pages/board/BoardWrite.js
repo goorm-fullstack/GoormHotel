@@ -4,7 +4,6 @@ import { useParams, useNavigate } from 'react-router-dom'; // useHistory 추가
 import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn, SubmitBtn, commonTable } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
-import { Image } from '../../components/AddItemForm/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
 
 const Container = styled(commonContainerStyle)``;
@@ -159,7 +158,7 @@ const BoardWrite = () => {
                 <th>첨부파일</th>
                 <td>
                   <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required />
-                  {imgFile ? <Image src={imgFile} alt="후기 이미지" /> : <Image style={{ display: 'none' }} />}
+                  {/* {imgFile ? <img src={imgFile} alt="후기 이미지" /> : <img style={{ display: 'none' }} />} */}
                 </td>
               </tr>
               {/*<tr>*/}

@@ -22,7 +22,11 @@ public class QGiftCard extends EntityPathBase<GiftCard> {
 
     public static final QGiftCard giftCard = new QGiftCard("giftCard");
 
+    public final NumberPath<Integer> expire = createNumber("expire", Integer.class);
+
     public final NumberPath<Integer> id = createNumber("id", Integer.class);
+
+    public final DatePath<java.time.LocalDate> issueDate = createDate("issueDate", java.time.LocalDate.class);
 
     public final ComparablePath<Character> isZeroMoney = createComparable("isZeroMoney", Character.class);
 

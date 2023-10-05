@@ -236,6 +236,16 @@ export const commonButton = styled.button`
   &.search {
     width: 80px !important;
   }
+
+  &.withinput {
+    // table 안에서 input 옆에 같이 사용
+    width: 80px;
+    height: 36px;
+    line-height: 34px;
+    margin-left: 8px;
+    border: 1px solid ${(props) => props.theme.colors.gold};
+    color: ${(props) => props.theme.colors.goldhover};
+  }
 `;
 
 export const LinkBtn = styled(commonLinkBtn)`
