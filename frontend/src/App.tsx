@@ -3,7 +3,7 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import { styled } from 'styled-components';
 import Header from './components/layout/Header/Header';
 import Footer from './components/layout/Footer/Footer';
-import Home from './pages/Home';
+import Home from './pages/Home/Home';
 import Room from './pages/about/Room';
 import Dining from './pages/about/Dining';
 import About from './pages/about/About';
@@ -87,6 +87,7 @@ const FloatingBtn = styled.button<{ $show: boolean }>`
     background-color: white;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
+    transform: ${(props) => (props.$show ? 'translate(0, 0)' : 'translate(0, 80px)')};
   }
 
   &.chatBtn svg {
@@ -96,7 +97,7 @@ const FloatingBtn = styled.button<{ $show: boolean }>`
   }
 
   &:hover {
-    transform: scale(1.1);
+    transform: ${(props) => (props.$show ? 'scale(1.1)' : 'translate(0, 80px) scale(1.1)')};
   }
 
   &.scrolltop {

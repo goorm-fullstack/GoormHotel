@@ -1,7 +1,7 @@
 import React from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, CheckLabel, MultiCheck, SubmitBtn } from '../../Style/commonStyles';
-import { Container, Table } from '../member/AdminMember';
+import { Container, Table } from '../member/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
 
 const AdminBoardWrite = () => {
