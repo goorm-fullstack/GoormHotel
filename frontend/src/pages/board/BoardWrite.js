@@ -39,10 +39,16 @@ const BoardWrite = () => {
   const saveImgFile = () => {
     const file = imgRef.current.files[0];
     const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setImgFile(reader.result);
-    };
+    if(file){
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImgFile(reader.result);
+      };
+    }
+    else{
+      setImgFile('');
+    }
+
   };
 
   //input 입력 시
@@ -56,20 +62,23 @@ const BoardWrite = () => {
 
   //게시글 작성 api
   const handleSubmit = async (e) => {
+    e.preventDefault();
+
     const confirmed = window.confirm('작성하시겠습니까?');
 
     if (confirmed) {
-      e.preventDefault();
-
       const form = new FormData();
-      form.append('multipartFile', imgRef.current.files[0]);
 
+      // CKEditor에서 가져온 텍스트를 form에 추가
+      form.append('boardContent', formData.boardContent);
+
+      // 나머지 폼 필드를 추가
       Object.keys(formData).forEach((key) => {
-        // Object.keys 수정
         form.append(key, formData[key]);
       });
 
       try {
+        // axios 또는 다른 HTTP 라이브러리를 사용하여 폼 데이터를 서버로 전송
         await axios.post('/boards/writeform', form, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -127,14 +136,16 @@ const BoardWrite = () => {
                       case 'qna':
                         return (
                           <select name="category" value={formData.category} onChange={handleChange}>
-                            <option value="문의1">문의1</option>
+                            <option value="">선택</option>
+                            <option value="문의1" selected>문의1</option>
                             <option value="문의2">문의2</option>
                           </select>
                         );
                       case 'review':
                         return (
                           <select name="category" value={formData.category} onChange={handleChange}>
-                            <option value="객실">객실</option>
+                            <option value="">선택</option>
+                            <option value="객실" selected>객실</option>
                             <option value="다이닝">다이닝</option>
                           </select>
                         );
