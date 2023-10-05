@@ -1,8 +1,7 @@
 import React, { useRef, useState } from 'react';
-import * as S from './Style';
 import { useNavigate } from 'react-router-dom';
 import { Table } from '../../admin/member/AdminMember';
-import { PageTitle, SubmitBtn, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
+import { PageTitle, SubmitBtn, BtnWrapper, NormalBtn, GreenP, RedP, SelectImage } from '../../Style/commonStyles';
 import axios from 'axios';
 
 export type RoomForm = {
@@ -116,9 +115,9 @@ const WriteFormRoom = () => {
   // 중복검사 메시지에 따른 태그 결정
   let responseMessege;
   if (duplicateMessage === '중복된 상품명입니다.' || duplicateMessage === '상품명은 공백일 수 없습니다.') {
-    responseMessege = <S.RedP>{duplicateMessage}</S.RedP>;
+    responseMessege = <RedP>{duplicateMessage}</RedP>;
   } else {
-    responseMessege = <S.GreenP>{duplicateMessage}</S.GreenP>;
+    responseMessege = <GreenP>{duplicateMessage}</GreenP>;
   }
 
   // 객실, 다이닝 전환
@@ -142,7 +141,7 @@ const WriteFormRoom = () => {
 
   return (
     <>
-      <PageTitle>객실 등록</PageTitle>
+      <PageTitle>상품 등록</PageTitle>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         {/** 상품 타입 */}
         <input type="hidden" name="type" onChange={handleChange} value="room" readOnly />
@@ -164,12 +163,12 @@ const WriteFormRoom = () => {
                 </select>
               </td>
               <td rowSpan={5}>
-                <S.SelectImage>
+                <SelectImage>
                   <label>
                     <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required />
                     <div className="imgwrapper">{imgFile ? <img src={imgFile} alt="프로필 이미지" /> : <img style={{ display: 'none' }} />}</div>
                   </label>
-                </S.SelectImage>
+                </SelectImage>
               </td>
             </tr>
             <tr>

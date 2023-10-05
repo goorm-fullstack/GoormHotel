@@ -10,22 +10,22 @@ import Paging from '../../components/common/Paging/Paging';
 import Instance from '../../utils/api/axiosInstance';
 
 interface Giftcard {
-  id : number;
-  title : string;
-  uuid : string;
-  money : number;
-  issueDate : string;
-  expire : number;
-  isZeroMoney : string;
+  id: number;
+  title: string;
+  uuid: string;
+  money: number;
+  issueDate: string;
+  expire: number;
+  isZeroMoney: string;
 }
 
 const AdminGiftCard = () => {
   const { page } = useParams();
   const [dataLength, setDataLength] = useState(0);
   const [giftcardList, setGiftCardList] = useState<Giftcard[]>([]);
-  const [money, setMoney] = useState("");
+  const [money, setMoney] = useState('');
   const [title, setTitle] = useState('');
-  const [expire, setExpire] = useState("");
+  const [expire, setExpire] = useState('');
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [count, setCount] = useState<number>(1);
@@ -33,18 +33,18 @@ const AdminGiftCard = () => {
   // 체크박스 전체 선택 or 해체 기능
   const inputRef = useRef<HTMLInputElement[]>([]);
 
-  useEffect(() =>{
-    Instance.get("/api/giftcard/list?page="+page).then((response)=>{
+  useEffect(() => {
+    Instance.get('/api/giftcard/list?page=' + page).then((response) => {
       setDataLength(response.data.length);
       setGiftCardList(response.data);
     });
 
-    Instance.get("/api/giftcard/count").then((response) => {
+    Instance.get('/api/giftcard/count').then((response) => {
       setCount(response.data);
-    })
-  },[])
+    });
+  }, []);
 
-  const handleSelectAll = (e : React.ChangeEvent<HTMLInputElement>) => {
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
     if (checked) {
@@ -55,61 +55,59 @@ const AdminGiftCard = () => {
     }
   };
 
-  const handleCheckboxChange = (id : number) => {
-    setCheckedItems((prevItems : any) => {
+  const handleCheckboxChange = (id: number) => {
+    setCheckedItems((prevItems: any) => {
       if (prevItems.includes(id)) {
-        return prevItems.filter((item : number) => item !== id);
+        return prevItems.filter((item: number) => item !== id);
       } else {
         return [...prevItems, id];
       }
     });
   };
 
-  const calcExpireDate = (day : string, expire : number) => {
+  const calcExpireDate = (day: string, expire: number) => {
     const issueDate = new Date(day);
     const expireDate = new Date(issueDate.setDate(issueDate.getDate() + expire));
 
     const year = expireDate.getFullYear();
     const month = String(expireDate.getMonth() + 1).padStart(2, '0');
     const day1 = String(expireDate.getDate()).padStart(2, '0');
-    
+
     const formattedExpireDate = `${year}.${month}.${day1}`;
     return formattedExpireDate;
-  }
+  };
 
   // 상품권을 사용가능 형식으로 변경
   const handleAvaliableClicked = () => {
     let stateChangeData = {
-      data : checkedItems,
-    }
-    Instance.post("/api/giftcard/usable", stateChangeData).then(()=>{
+      data: checkedItems,
+    };
+    Instance.post('/api/giftcard/usable', stateChangeData).then(() => {
       window.location.reload();
-    })
+    });
   };
 
   // 상품권을 사용가능 형식으로 변경
   const handleUnAvaliableClicked = () => {
     let stateChangeData = {
-      data : checkedItems,
-    }
-    Instance.post("/api/giftcard/unusable", stateChangeData).then(()=>{
+      data: checkedItems,
+    };
+    Instance.post('/api/giftcard/unusable', stateChangeData).then(() => {
       window.location.reload();
-    })
+    });
   };
 
   const handleSubmit = () => {
     const formData = new FormData();
-    formData.append("title", title);
-    formData.append("money", money);
-    formData.append("expire", expire);
-    Instance.post("/api/giftcard/issue", formData, {
+    formData.append('title', title);
+    formData.append('money', money);
+    formData.append('expire', expire);
+    Instance.post('/api/giftcard/issue', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-    }).then(()=>{
-
-    })
-  }
+    }).then(() => {});
+  };
 
   return (
     <AdminLayout subMenus="item">
@@ -117,30 +115,28 @@ const AdminGiftCard = () => {
         <PageTitle>상품권 관리</PageTitle>
         <Section>
           <ContentsTitleXSmall>상품권 발행</ContentsTitleXSmall>
-          <InputWrapper>
+          <InputWrapper className="giftcard">
             <form onSubmit={handleSubmit}>
-              <input type="text" 
-              name="title" 
-              placeholder="상품권 이름" 
-              value={title} 
-              onChange={(e) => setTitle(e.target.value)}
-              required />
-              <input type="number" 
-              name="money" 
-              placeholder="상품권 금액(원)" 
-              min="1000" 
-              value={money}
-              onChange={(e) => setMoney(e.target.value)}
-              required />
+              <input type="text" name="title" placeholder="상품권 이름" value={title} onChange={(e) => setTitle(e.target.value)} required />
               <input
-              type="number"
-              name="expire" 
-              placeholder="유효기간(일)" 
-              min="1" 
-              value={expire}
-              onChange={(e) => setExpire(e.target.value)}
-              required />
-              <SubmitBtn type="submit">상품권 발행</SubmitBtn>
+                type="number"
+                name="money"
+                placeholder="상품권 금액(원)"
+                min="1000"
+                value={money}
+                onChange={(e) => setMoney(e.target.value)}
+                required
+              />
+              <input
+                type="number"
+                name="expire"
+                placeholder="유효기간(일)"
+                min="1"
+                value={expire}
+                onChange={(e) => setExpire(e.target.value)}
+                required
+              />
+              <SubmitBtn type="submit">상품권 발행하기</SubmitBtn>
             </form>
           </InputWrapper>
         </Section>
@@ -187,38 +183,42 @@ const AdminGiftCard = () => {
             <tbody>
               {giftcardList.length === 0 ? (
                 <>
-                <tr>
-                <td colSpan={8} className="center empty">
-                  등록된 상품권이 없습니다.
-                </td>
-              </tr>
+                  <tr>
+                    <td colSpan={8} className="center empty">
+                      등록된 상품권이 없습니다.
+                    </td>
+                  </tr>
                 </>
               ) : (
                 <>
-                {giftcardList.map((item, idx) => {
-                const id = 'checkbox' + idx;
-                return (
-                  <tr>
-                    <td className="center">
-                      <InputCheckbox type="checkbox" id={id}  checked={checkedItems.includes(item.id)}
-                      onChange={() => handleCheckboxChange(item.id)}/>
-                    </td>
-                    <td className="center">{idx + 1}</td>
-                    <td className="center">
-                      <p className="textover">{item.title}</p>
-                    </td>
-                    <td className="center">
-                      <p>
-                        <Link to={`/admin/giftcard/detail/${item.uuid}`}>{item.uuid}</Link>
-                      </p>
-                    </td>
-                    <td className="center">{item.money}</td>
-                    <td className="center">{item.issueDate}</td>
-                    <td className="center">{calcExpireDate(item.issueDate, item.expire)}</td>
-                    <td className="center">{item.isZeroMoney}</td>
-                  </tr>
-                );
-              })}
+                  {giftcardList.map((item, idx) => {
+                    const id = 'checkbox' + idx;
+                    return (
+                      <tr>
+                        <td className="center">
+                          <InputCheckbox
+                            type="checkbox"
+                            id={id}
+                            checked={checkedItems.includes(item.id)}
+                            onChange={() => handleCheckboxChange(item.id)}
+                          />
+                        </td>
+                        <td className="center">{idx + 1}</td>
+                        <td className="center">
+                          <p className="textover">{item.title}</p>
+                        </td>
+                        <td className="center">
+                          <p>
+                            <Link to={`/admin/giftcard/detail/${item.uuid}`}>{item.uuid}</Link>
+                          </p>
+                        </td>
+                        <td className="center">{item.money}</td>
+                        <td className="center">{item.issueDate}</td>
+                        <td className="center">{calcExpireDate(item.issueDate, item.expire)}</td>
+                        <td className="center">{item.isZeroMoney}</td>
+                      </tr>
+                    );
+                  })}
                 </>
               )}
             </tbody>

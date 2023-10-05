@@ -39,6 +39,12 @@ export const InputWrapper = styled.div`
       width: 17%;
     }
   }
+
+  &.giftcard {
+    form input {
+      width: calc((100% - 17%) / 3);
+    }
+  }
 `;
 
 const AdminManager = () => {
