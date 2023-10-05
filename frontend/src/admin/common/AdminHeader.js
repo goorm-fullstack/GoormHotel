@@ -100,6 +100,26 @@ const AdminHeader = () => {
     }
   };
 
+  function deleteAllCookies() {
+    const cookies = document.cookie.split(";");
+  
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+  }
+
+  // 로컬 스토리지를 사용하는 경우에 로컬값을 지워서
+  // 로그아웃을 진행합시다.
+  const handleLogoutUseLocalStorge = () => {
+    localStorage.clear();
+    deleteAllCookies();
+    alert("로그아웃이 되었습니다.")
+    window.location.href="/admin";
+  }
+
   return (
     <Container>
       <HeaderLink>
@@ -144,7 +164,7 @@ const AdminHeader = () => {
             </g>
           </svg>
           <span>{`유저: ${authState.adminId}, 역할: ${authState.role}, 권한: ${authState.auth}`}</span>
-          <LoginBtn type="button" onClick={isLoggedIn ? handleLogout : handleLogin}>
+          <LoginBtn type="button" onClick={isLoggedIn ? handleLogoutUseLocalStorge : handleLogin}>
             {isLoggedIn ? '로그아웃' : '로그인'}
           </LoginBtn>
         </ManagerId>

@@ -86,64 +86,75 @@ const AdminBoard = () => {
     setSelectAllChecked(updatedCheckedItems.length === memberData.length);
   };
 
-  return (
-    <AdminLayout subMenus="board">
-      <Container>
-        <PageTitle>게시글 관리</PageTitle>
-        <TableHeader>
-          <p className="total">
-            전체 <strong>{board.length}</strong> 건
-          </p>
-          <BtnWrapper className="flexgap right">
-            <NormalBtn className="header">신고된 글로 이동</NormalBtn>
-            <NormalBtn className="header red">삭제</NormalBtn>
-          </BtnWrapper>
-        </TableHeader>
-        <Table>
-          <thead>
-            <tr>
-              <th>
-                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
-              </th>
-              <th>번호</th>
-              <th>게시판</th>
-              <th>제목</th>
-              <th>작성자</th>
-              <th>작성일</th>
-              <th>블랙리스트</th>
-            </tr>
-          </thead>
-          <tbody>
-            {board.length === 0 && <td colSpan="7">등록된 글이 없습니다.</td>}
-            {board.map((board) => (
-              <tr key={board.boardId}>
-                <td>
-                  <InputCheckbox
-                    type="checkbox"
-                    checked={checkedItems.includes(board.boardId)}
-                    onChange={() => handleCheckboxChange(board.boardId)}
-                  />
-                </td>
-                <td>{board.boardId}</td>
-                <td>{board.boardTitle}</td>
-                <td>
-                  <Link to={`/admin/member/${board.boardId}`}>{board.title}</Link>
-                </td>
-                <td>
-                  <Link to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</Link>
-                </td>
-                <td>{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
-                  board.boardWriteDate[2] < 10 ? '0' : ''
-                }${board.boardWriteDate[2]}`}</td>
-                <td>{board.blacklist}</td>
+  // 특정 권한이 없다면 다른 렌더링으로 페이지를 보여준다.
+  if(localStorage.getItem("auth") && localStorage.getItem("auth").includes("AUTH_C")) {
+    return (
+      <AdminLayout subMenus="board">
+        <Container>
+          <PageTitle>게시글 관리</PageTitle>
+          <TableHeader>
+            <p className="total">
+              전체 <strong>{board.length}</strong> 건
+            </p>
+            <BtnWrapper className="flexgap right">
+              <NormalBtn className="header">신고된 글로 이동</NormalBtn>
+              <NormalBtn className="header red">삭제</NormalBtn>
+            </BtnWrapper>
+          </TableHeader>
+          <Table>
+            <thead>
+              <tr>
+                <th>
+                  <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
+                </th>
+                <th>번호</th>
+                <th>게시판</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성일</th>
+                <th>블랙리스트</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-        <Paging />
-      </Container>
-    </AdminLayout>
-  );
+            </thead>
+            <tbody>
+              {board.length === 0 && <td colSpan="7">등록된 글이 없습니다.</td>}
+              {board.map((board) => (
+                <tr key={board.boardId}>
+                  <td>
+                    <InputCheckbox
+                      type="checkbox"
+                      checked={checkedItems.includes(board.boardId)}
+                      onChange={() => handleCheckboxChange(board.boardId)}
+                    />
+                  </td>
+                  <td>{board.boardId}</td>
+                  <td>{board.boardTitle}</td>
+                  <td>
+                    <Link to={`/admin/member/${board.boardId}`}>{board.title}</Link>
+                  </td>
+                  <td>
+                    <Link to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</Link>
+                  </td>
+                  <td>{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
+                    board.boardWriteDate[2] < 10 ? '0' : ''
+                  }${board.boardWriteDate[2]}`}</td>
+                  <td>{board.blacklist}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Paging />
+        </Container>
+      </AdminLayout>
+    );
+  } else {
+    return (
+      <AdminLayout subMenus="board">
+        <Container>
+          <p>사용할 수 없는 페이지입니다.</p>
+        </Container>
+      </AdminLayout>
+    )
+  }
 };
 
 export default AdminBoard;
