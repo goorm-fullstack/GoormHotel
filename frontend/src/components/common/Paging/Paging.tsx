@@ -32,14 +32,12 @@ const Paging: React.FC<TotalPage> = (props) => {
   const [pages, setPages] = useState<number[]>(pageArray.length > 0 ? pageArray[0] : [1]); // 하단 페이지 처리할 배열 상태 관리
   const navigate = useNavigate();
 
-  console.log(pageArray);
-
   // 이전 페이지 이동
   const previousPageChange = () => {
     if (currentPage === 1) {
       return `${afterUrl}1`;
     } else {
-      navigate(`${afterUrl}${pages[0]}`);
+      // navigate(`${afterUrl}${pages[0]}`);
       return `${afterUrl}${pages[0]}`;
     }
   };
@@ -49,7 +47,7 @@ const Paging: React.FC<TotalPage> = (props) => {
     if (currentPage === totalPages) {
       return `${afterUrl}${currentPage}`;
     } else {
-      navigate(`${afterUrl}${pages[0]}`);
+      // navigate(`${afterUrl}${pages[0]}`);
       return `${afterUrl}${pages[0]}`;
     }
   };

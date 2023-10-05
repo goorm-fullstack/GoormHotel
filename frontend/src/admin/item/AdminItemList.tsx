@@ -236,7 +236,7 @@ const AdminItemList = () => {
           </thead>
           <tbody>
             {items.length === 0 && (
-              <tr>
+              <tr key={0}>
                 <td colSpan={8} className="center empty">
                   등록된 상품이 없습니다.
                 </td>
@@ -280,7 +280,7 @@ const AdminItemList = () => {
               })}
           </tbody>
         </Table>
-        <Paging totalPage={totalPages} />
+        <Paging totalPage={2} />
         {searchJsx}
       </Container>
     </AdminLayout>

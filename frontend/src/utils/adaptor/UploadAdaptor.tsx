@@ -1,7 +1,7 @@
 import Instance from "../api/axiosInstance";
 
 export default class UploadAdapter {
-	constructor(loader , url) {
+	constructor(loader, url) {
 		this.loader = loader;
 
 		this.upload();
