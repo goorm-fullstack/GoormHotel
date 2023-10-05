@@ -1,0 +1,47 @@
+### 회원가입
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "email": "example1902@naver.com",
+  "memberId": "yss1902",
+  "password": "1234",
+  "name": "김영한",
+  "phoneNumber": "01012121212",
+  "grade": "bronze",
+  "privacyCheck": true,
+  "birth": "1999-01-01",
+  "gender": "남성",
+  "code": "4R5jdK5U"
+}
+
+### 회원가입코드
+POST http://localhost:8080/api/mail/email
+Content-Type: application/json
+
+{
+  "email": "example1902@naver.com"
+}
+
+### 로그인
+POST http://localhost:8080/login/member
+Content-Type: application/json
+
+{
+  "memberId": "yss1902",
+  "password": "1234"
+}
+
+### 회원수정
+PATCH http://localhost:8080/members/1
+Content-Type: application/json
+
+{
+  "email": "memilman33@gmail.com",
+  "memberId": "yss33",
+  "password": "2365",
+  "name": "김영항",
+  "phoneNumber": "01034343434",
+  "birth": "1965-02-02",
+  "gender": "여성"
+}

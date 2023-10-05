@@ -1,26 +1,52 @@
 package goormknights.hotel.auth.controller;
 
+import goormknights.hotel.auth.service.AuthService;
+import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.member.dto.request.FindMemberIdRequest;
 import goormknights.hotel.member.dto.request.FindPasswordRequest;
 import goormknights.hotel.member.dto.request.ResetPasswordRequest;
 import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.service.MemberService;
 import goormknights.hotel.member.service.VerificationService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class AuthController {
 
     private final MemberService memberService;
+    private final AuthService authService;
     private final VerificationService verificationService;
+
+    // 역할 체크
+    @GetMapping("/api/adminCheck")
+    public ResponseEntity<?> checkRole(HttpSession session) {
+        Map<String, Object> userInfo = new HashMap<>();
+        Role role = (Role) session.getAttribute("role");
+        String adminId = (String) session.getAttribute("adminId");
+        String auth = (String) session.getAttribute("auth");
+
+        if (role != null && adminId != null && auth != null) {
+            userInfo.put("role", role);
+            userInfo.put("adminId", adminId);
+            userInfo.put("auth", auth);
+            return ResponseEntity.ok(userInfo);
+        } else {
+            return ResponseEntity.badRequest().body("Not logged in.");
+        }
+    }
 
     // 아이디 찾기
     @PostMapping("/findMemberId")
