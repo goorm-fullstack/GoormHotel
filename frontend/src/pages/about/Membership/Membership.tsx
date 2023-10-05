@@ -1,102 +1,16 @@
 import React from 'react';
-import { styled } from 'styled-components';
-import { commonContainerStyle, PageTitle } from '../../Style/commonStyles';
-
-const ImageBorder = styled.div`
-  background-color: ${(props) => props.theme.colors.graybg};
-  width: 100%;
-  text-align: center;
-  padding: 55px 0;
-`;
-
-const Grade = styled.h3`
-  font-size: ${(props) => props.theme.font.sizel};
-  font-weight: 500;
-  color: ${(props) => props.theme.memberColors.bronze};
-  margin: 15px 0;
-
-  &.silver {
-    color: ${(props) => props.theme.memberColors.silver};
-  }
-  &.gold {
-    color: ${(props) => props.theme.memberColors.gold};
-  }
-`;
-
-const ImageBorderFooter = styled.p`
-  font-size: ${(props) => props.theme.font.sizes};
-  color: ${(props) => props.theme.colors.graylight};
-`;
-
-const Benefit = styled.div`
-  width: 100%;
-  padding: 0 40px;
-
-  h4 {
-    margin: 40px 0 10px;
-    font-weight: 500;
-    color: rgb(33, 32, 30);
-    line-height: 2;
-    font-size: ${(props) => props.theme.font.sizes};
-  }
-
-  li {
-    font-size: ${(props) => props.theme.font.sizexs};
-    color: ${(props) => props.theme.colors.graylight};
-    line-height: 1.8;
-  }
-
-  li::before {
-    content: '•';
-    margin-right: 8px;
-  }
-`;
-
-const Container = styled(commonContainerStyle)``;
-
-const MembershipBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const MembershipItemBox = styled.div`
-  width: 360px;
-  height: 750px;
-  border: 1px solid ${(props) => props.theme.colors.grayborder};
-`;
-
-const MembershipDetailInfo = styled.ul`
-  margin-top: 20px;
-  font-size: ${(props) => props.theme.font.sizexs};
-  color: ${(props) => props.theme.colors.graylight};
-  line-height: 1.6;
-`;
-
-const MemberIcon = styled.svg`
-  width: 160px;
-  position: relative;
-  left: 6px; /* 시각 보정 */
-
-  &.bronze path {
-    fill: url('#gradient1');
-  }
-  &.silver path {
-    fill: url('#gradient2');
-  }
-  &.gold path {
-    fill: url('#gradient3');
-  }
-`;
+import * as S from './Style';
+import { PageTitle } from '../../../Style/commonStyles';
 
 const Membership = () => {
   return (
     <>
-      <Container>
+      <S.Container>
         <PageTitle>멤버십</PageTitle>
-        <MembershipBox>
-          <MembershipItemBox>
-            <ImageBorder>
-              <MemberIcon
+        <S.MembershipBox>
+          <S.MembershipItemBox>
+            <S.ImageBorder>
+              <S.MemberIcon
                 className="bronze"
                 fill="rgb(145, 104, 74)"
                 data-name="Layer 1"
@@ -137,11 +51,11 @@ const Membership = () => {
                 <path d="M52.82,14.83a1.28,1.28,0,1,0-1.28,1.28A1.28,1.28,0,0,0,52.82,14.83Z" />
                 <path d="M27.77,90.12a1.29,1.29,0,1,0-1.28,1.28A1.28,1.28,0,0,0,27.77,90.12Z" />
                 <path d="M98.91,14.83a1.28,1.28,0,1,0-1.28,1.28A1.28,1.28,0,0,0,98.91,14.83Z" />
-              </MemberIcon>
-              <Grade>Bronze</Grade>
-              <ImageBorderFooter>회원가입 즉시</ImageBorderFooter>
-            </ImageBorder>
-            <Benefit>
+              </S.MemberIcon>
+              <S.Grade>Bronze</S.Grade>
+              <S.ImageBorderFooter>회원가입 즉시</S.ImageBorderFooter>
+            </S.ImageBorder>
+            <S.Benefit>
               <h4>멤버십 쿠폰</h4>
               <ul>
                 <li>객실 5% 할인 쿠폰</li>
@@ -150,11 +64,11 @@ const Membership = () => {
               <ul>
                 <li>전시 관람 혜택</li>
               </ul>
-            </Benefit>
-          </MembershipItemBox>
-          <MembershipItemBox>
-            <ImageBorder>
-              <MemberIcon className="silver" data-name="Layer 1" id="Layer_2" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+            </S.Benefit>
+          </S.MembershipItemBox>
+          <S.MembershipItemBox>
+            <S.ImageBorder>
+              <S.MemberIcon className="silver" data-name="Layer 1" id="Layer_2" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#61677a"></stop>
@@ -189,11 +103,11 @@ const Membership = () => {
                 <path d="M52.82,14.83a1.28,1.28,0,1,0-1.28,1.28A1.28,1.28,0,0,0,52.82,14.83Z" />
                 <path d="M27.77,90.12a1.29,1.29,0,1,0-1.28,1.28A1.28,1.28,0,0,0,27.77,90.12Z" />
                 <path d="M98.91,14.83a1.28,1.28,0,1,0-1.28,1.28A1.28,1.28,0,0,0,98.91,14.83Z" />
-              </MemberIcon>
-              <Grade className="silver">Silver</Grade>
-              <ImageBorderFooter>연간 10박 숙박 시</ImageBorderFooter>
-            </ImageBorder>
-            <Benefit>
+              </S.MemberIcon>
+              <S.Grade className="silver">Silver</S.Grade>
+              <S.ImageBorderFooter>연간 10박 숙박 시</S.ImageBorderFooter>
+            </S.ImageBorder>
+            <S.Benefit>
               <h4>멤버십 쿠폰</h4>
               <ul>
                 <li>객실 10% 할인 쿠폰</li>
@@ -206,11 +120,11 @@ const Membership = () => {
                 <li>웰컴 어메니티 제공</li>
                 <li>체크인 시 한강뷰 업그레이드</li>
               </ul>
-            </Benefit>
-          </MembershipItemBox>
-          <MembershipItemBox>
-            <ImageBorder>
-              <MemberIcon className="gold" data-name="Layer 1" id="Layer_3" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+            </S.Benefit>
+          </S.MembershipItemBox>
+          <S.MembershipItemBox>
+            <S.ImageBorder>
+              <S.MemberIcon className="gold" data-name="Layer 1" id="Layer_3" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#6a492b"></stop>
@@ -245,11 +159,11 @@ const Membership = () => {
                 <path d="M52.82,14.83a1.28,1.28,0,1,0-1.28,1.28A1.28,1.28,0,0,0,52.82,14.83Z" />
                 <path d="M27.77,90.12a1.29,1.29,0,1,0-1.28,1.28A1.28,1.28,0,0,0,27.77,90.12Z" />
                 <path d="M98.91,14.83a1.28,1.28,0,1,0-1.28,1.28A1.28,1.28,0,0,0,98.91,14.83Z" />
-              </MemberIcon>
-              <Grade className="gold">Gold</Grade>
-              <ImageBorderFooter>연간 50박 숙박 시</ImageBorderFooter>
-            </ImageBorder>
-            <Benefit>
+              </S.MemberIcon>
+              <S.Grade className="gold">Gold</S.Grade>
+              <S.ImageBorderFooter>연간 50박 숙박 시</S.ImageBorderFooter>
+            </S.ImageBorder>
+            <S.Benefit>
               <h4>멤버십 쿠폰</h4>
               <ul>
                 <li>객실 15% 할인 쿠폰</li>
@@ -264,15 +178,15 @@ const Membership = () => {
                 <li>체크인 시 객실 업그레이드</li>
                 <li>라운지 무료 이용(회원 포함 최대 2인)</li>
               </ul>
-            </Benefit>
-          </MembershipItemBox>
-        </MembershipBox>
-        <MembershipDetailInfo>
+            </S.Benefit>
+          </S.MembershipItemBox>
+        </S.MembershipBox>
+        <S.MembershipDetailInfo>
           <li>⁕&nbsp;&nbsp;상기 멤버십 서비스 혜택은 변경 및 종료될 수 있습니다.</li>
           <li>⁕&nbsp;&nbsp;특전의 세부 이용 조건은 약관을 통해 확인하실 수 있습니다.</li>
           <li>⁕&nbsp;&nbsp;등급 심사는 매월 1일 진행되며 최근 2년 간의 실적을 기준으로 합니다.</li>
-        </MembershipDetailInfo>
-      </Container>
+        </S.MembershipDetailInfo>
+      </S.Container>
     </>
   );
 };
