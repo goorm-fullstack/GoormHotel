@@ -1,8 +1,10 @@
 package goormknights.hotel.giftcard.service;
 
 import goormknights.hotel.giftcard.dto.request.RequestGiftCardDto;
+import goormknights.hotel.giftcard.dto.request.StateChangeData;
 import goormknights.hotel.giftcard.dto.response.ResponseGiftCardDto;
 import goormknights.hotel.giftcard.exception.AlreadyUsedException;
+import goormknights.hotel.giftcard.exception.NoSuchGiftCardException;
 import goormknights.hotel.giftcard.exception.NotAvailableException;
 import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.giftcard.repository.GiftCardRepository;
@@ -10,9 +12,13 @@ import goormknights.hotel.member.exception.NotExistMemberException;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,27 +38,42 @@ public class GiftCardService {
     }
 
     // 전체 상품권를 조회하는 로직
-    public List<ResponseGiftCardDto> getGiftCardList() {
-        List<ResponseGiftCardDto> giftcardList = giftCardRepository.findAll().stream().map(GiftCard::toResponseDto).toList();
-        return giftcardList;
+    public List<ResponseGiftCardDto> getGiftCardList(Pageable pageable) {
+        Page<GiftCard> giftcardList = giftCardRepository.findAll(pageable);
+        List<ResponseGiftCardDto> result = new ArrayList<>();
+        for(GiftCard giftCard : giftcardList) {
+            result.add(giftCard.toResponseDto());
+        }
+        return result;
     }
 
+    public Long calcPageCount() {
+        long count = giftCardRepository.count();
+        count /= 10;
+
+        return count;
+    }
+
+    public ResponseGiftCardDto getGiftCard(String uuid) {
+        GiftCard giftCard = giftCardRepository.findByUuid(uuid).orElseThrow(() -> new NoSuchGiftCardException("존재하지 않는 대상입니다."));
+        return giftCard.toResponseDto();
+    }
 
     // 기프트 카드 발행 로직
     // 만약 존재하는 기프트카드 번호라면 다시 돌 수 있도록 구현
     // 여러번 중복되면 로또 사세요.
-    public void issuedGiftCard(int amount, int money) {
-        for(int i = 0; i < amount; i++) {
-            String uuid = makeSerialString();
-            if(giftCardRepository.findByUuid(uuid).isEmpty()) {
-                GiftCard giftCard = GiftCard.builder()
-                        .money(money)
-                        .isZeroMoney('N')
-                        .uuid(uuid)
-                        .build();
-                giftCardRepository.save(giftCard);
-            } else //만약 값이 존재해서 발행하지 못하면 다시 로직을 돌수 있도록 구현
-                i-=1;
+    public void issuedGiftCard(RequestGiftCardDto requestGiftCardDto) {
+        String uuid = makeSerialString();
+        if(giftCardRepository.findByUuid(uuid).isEmpty()) {
+            GiftCard giftCard = GiftCard.builder()
+                    .title(requestGiftCardDto.getTitle())
+                    .money(requestGiftCardDto.getMoney())
+                    .isZeroMoney('N')
+                    .uuid(uuid)
+                    .issueDate(LocalDate.now())
+                    .expire(requestGiftCardDto.getExpire())
+                    .build();
+            giftCardRepository.save(giftCard);
         }
     }
 
@@ -87,5 +108,21 @@ public class GiftCardService {
 
         giftCard.registrationGiftCard(registor);
         registor.getGiftCardList().add(giftCard);
+    }
+
+    public void stateUsable(StateChangeData stateChangeData) {
+        for(Integer id : stateChangeData.getData()) {
+            GiftCard giftCard = giftCardRepository.findById(id).orElseThrow();
+            giftCard.changeUsableState();
+            giftCardRepository.save(giftCard);
+        }
+    }
+
+    public void stateUnusable(StateChangeData stateChangeData) {
+        for(Integer id : stateChangeData.getData()) {
+            GiftCard giftCard = giftCardRepository.findById(id).orElseThrow();
+            giftCard.changeUnusableState();
+            giftCardRepository.save(giftCard);
+        }
     }
 }
