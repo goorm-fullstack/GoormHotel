@@ -22,10 +22,11 @@ export const TableHeader = styled.div`
 `;
 
 const AdminMember = () => {
-  const [checkedItems, setCheckedItems] = useState([]);
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
 
-  const handleSelectAllChange = (e) => {
+  const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
 
@@ -37,7 +38,7 @@ const AdminMember = () => {
     }
   };
 
-  const handleCheckboxChange = (memberId) => {
+  const handleCheckboxChange = (memberId: string) => {
     const updatedCheckedItems = checkedItems.includes(memberId) ? checkedItems.filter((id) => id !== memberId) : [...checkedItems, memberId];
 
     setCheckedItems(updatedCheckedItems);
@@ -114,7 +115,7 @@ const AdminMember = () => {
           </thead>
           <tbody>
             {memberData.length === 0 && (
-              <td colSpan="7" className="center empty">
+              <td colSpan={7} className="center empty">
                 등록된 회원이 없습니다.
               </td>
             )}
@@ -139,7 +140,7 @@ const AdminMember = () => {
             ))}
           </tbody>
         </Table>
-        <Paging />
+        <Paging totalPage={totalPages} />
       </Container>
     </AdminLayout>
   );

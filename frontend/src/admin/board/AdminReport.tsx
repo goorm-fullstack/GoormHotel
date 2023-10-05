@@ -2,23 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../Style/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
 import {
   Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
   Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
+  TableHeader
 } from '../member/AdminMember';
 import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
+import { ReportData } from './AdminBoard';
 
 const LinkStyle = styled(Link)`
   &:hover {
@@ -64,21 +56,27 @@ export const PageParam = styled.ul`
 `;
 
 const AdminReport = () => {
-  const [checkedItems, setCheckedItems] = useState([]);
-  const [selectAllChecked, setSelectAllChecked] = useState(false);
-  const [report, setReport] = useState([]);
+  const [checkedItems, setCheckedItems] = useState<number[]>([]);
+  const [selectAllChecked, setSelectAllChecked] = useState<boolean>(false);
+  const [report, setReport] = useState<ReportData[]>([]);
+  const [totalPage, setTotalPage] = useState<number>(0);
+  const [totalData, setTotalData] = useState<number>(0);
+
   useEffect(() => {
     axios
       .get('/report/list')
       .then((response) => {
         // 데이터를 가져올 때 reportCheck와 reportResult를 문자열로 처리
-        const modifiedData = response.data.map((item) => ({
+        const modifiedData: ReportData[] = response.data.map((item: ReportData) => ({
           ...item,
           reportCheck: item.reportCheck.toString(),
           reportResult: item.reportResult.toString(),
         }));
+        const totalPages = parseInt(response.headers['totalpages'], 10);
+        const totalData = parseInt(response.headers['totaldata'], 10);
         setReport(modifiedData);
-
+        setTotalPage(totalPages);
+        setTotalData(totalData);
         console.log('get 성공');
       })
       .catch((error) => {
@@ -88,47 +86,26 @@ const AdminReport = () => {
 
   console.log(report);
 
-  const handleSelectAllChange = (e) => {
-    const checked = e.target.checked;
+  const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked: boolean = e.target.checked;
     setSelectAllChecked(checked);
 
     if (checked) {
-      const allMemberIds = reportData.map((item) => item.memberId);
+      const allMemberIds = report.map((item) => item.reportId);
       setCheckedItems(allMemberIds);
     } else {
       setCheckedItems([]);
     }
   };
 
-  const handleCheckboxChange = (memberId) => {
+  const handleCheckboxChange = (memberId: number) => {
     const updatedCheckedItems = checkedItems.includes(memberId) ? checkedItems.filter((id) => id !== memberId) : [...checkedItems, memberId];
 
     setCheckedItems(updatedCheckedItems);
-    setSelectAllChecked(updatedCheckedItems.length === reportData.length);
+    setSelectAllChecked(updatedCheckedItems.length === report.length);
   };
 
   console.log(checkedItems);
-
-  const reportData = [
-    {
-      id: 1,
-      reportedPost: '이것은 게시글인가 댓글인가 둘 다임',
-      author: { name: '홍구름', id: 'memberId1' },
-      reportReason: '스팸',
-      reportDate: '2023.09.13',
-      confirmation: 'N',
-      result: '처리 중',
-    },
-    {
-      id: 2,
-      reportedPost: '안녕하세요안녕하세요',
-      author: { name: '김철수', id: 'memberId2' },
-      reportReason: '광고',
-      reportDate: '2023.09.14',
-      confirmation: 'Y',
-      result: '처리 완료',
-    },
-  ];
 
   return (
     <AdminLayout subMenus="board">
@@ -136,7 +113,7 @@ const AdminReport = () => {
         <PageTitle>신고 관리</PageTitle>
         <TableHeader>
           <p className="total">
-            전체 <strong>{report.length}</strong> 건
+            전체 <strong>{totalData}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
             <NormalBtn className="header">확인(이상 없음)</NormalBtn>
@@ -160,11 +137,12 @@ const AdminReport = () => {
           </thead>
           <tbody>
             {report.length === 0 && (
-              <td colSpan="8" className="center empty">
+              <td colSpan={8} className="center empty">
                 신고된 글이 없습니다.
               </td>
             )}
-            {report.map((report) => (
+            {report &&
+            report.map((report, idx) => (
               <tr key={report.reportId}>
                 <td className="center">
                   <InputCheckbox
@@ -175,15 +153,16 @@ const AdminReport = () => {
                     // onChange={() => handleCheckboxChange(item.memberId)}
                   />
                 </td>
-                <td className="center">{report.reportId}</td>
+                <td className="center">{totalData - idx}</td>
                 <td className="center">
+                  {/* todo: 페이지 이동(상세페이지 인것 같음)을 어떻게 할 건지 필요 */}
                   {report.replyId != null ? (
-                    <LinkStyle>{report.replyContent}</LinkStyle>
+                    <LinkStyle to={'/'}>{report.replyContent}</LinkStyle>
                   ) : report.boardId != null ? (
-                    <LinkStyle>{report.title}</LinkStyle>
+                    <LinkStyle to={'/'}>{report.title}</LinkStyle>
                   ) : (
-                    report.reportContent
-                  )}
+                    '신고된 내용이 없습니다.'
+                  )};
                 </td>
                 <td className="center">
                   {report.reportWriter}
@@ -218,7 +197,7 @@ const AdminReport = () => {
             ))}
           </tbody>
         </Table>
-        <Paging />
+        <Paging totalPage={totalPage} />
       </Container>
     </AdminLayout>
   );

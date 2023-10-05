@@ -68,7 +68,8 @@ const BoardRead = () => {
   const loc = useLocation();
   const searchParams = new URLSearchParams(loc.search);
   const boardId = searchParams.get('boardId');
-  const [boardData, setBoardData] = useState(null);
+  const [boardData, setBoardData] = useState<any>(null);
+  const [listLink, setListLink] = useState('');
 
   useEffect(() => {
     axios.get(`/boards/${boardId}`).then((response) => {
@@ -78,17 +79,16 @@ const BoardRead = () => {
 
   console.log(boardData);
 
-  let listlink;
   if (boardData) {
     switch (boardData.boardTitle) {
       case '문의하기':
-        listlink = '/board/qna/1';
+        setListLink('/board/qna/1');
         break;
       case '공지사항':
-        listlink = '/board/notice/1';
+        setListLink('/board/notice/1');
         break;
       case '이용후기':
-        listlink = '/board/review/1';
+        setListLink('/board/review/1');
         break;
     }
   }
@@ -186,7 +186,7 @@ const BoardRead = () => {
             </tr>
           </TableRead>
           <BtnWrapper className="center mt40">
-            <LinkBtn to={listlink}>목록</LinkBtn>
+            <LinkBtn to={listLink}>목록</LinkBtn>
           </BtnWrapper>
         </div>
       </Container>

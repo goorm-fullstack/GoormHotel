@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import AdminHeader from './AdminHeader';
 import styled from 'styled-components';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -61,7 +61,21 @@ const SideIcon = styled(SideMenuIcon)`
   transform: rotate(180deg);
 `;
 
-export const adminsubnav = {
+interface AdminSubNav {
+  pagetitle: string;
+  nav: { title: string; linkto: string }[];
+}
+
+interface AdminSubNavMap {
+  member: AdminSubNav;
+  item: AdminSubNav;
+  reservation: AdminSubNav;
+  board: AdminSubNav;
+  chat: AdminSubNav;
+  [key: string]: AdminSubNav;
+}
+
+export const adminsubnav: AdminSubNavMap = {
   member: {
     pagetitle: '회원 관리',
     nav: [
@@ -137,8 +151,15 @@ export const adminsubnav = {
   },
 };
 
-const AdminLayout = ({ children, subMenus }) => {
+const AdminLayout = ({ children, subMenus }: {children: ReactNode; subMenus: string;}) => {
   const location = useLocation();
+
+  // const isActive = () => {
+  //   if (location.pathname === nav.linkto) {
+  //     return true;
+  //   }
+  //   return false;
+  // };
 
   return (
     <div>
@@ -150,11 +171,8 @@ const AdminLayout = ({ children, subMenus }) => {
             <li>
               <SideMenuList
                 to={nav.linkto}
-                $activeClassName="active"
-                $isActive={(match) => {
-                  if (match) return true;
-                  if (location.pathname.startsWith('/admin/member')) return true;
-                  return false;
+                className={({isActive}) => {
+                  return isActive ? 'active' : '';
                 }}>
                 <p>{nav.title}</p>
                 <div>

@@ -1,12 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as S from './Style';
 import * as R from '../../Reservation/Style';
 import moment from 'moment';
 
+export type  ValuePiece = Date | null;
+
 const DateBtn = () => {
-  const [selectValue, setSelectValue] = useState(new Date());
-  const [selectDate, setSelectDate] = useState('');
-  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [selectValue, setSelectValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
+  const [selectDate, setSelectDate] = useState<string>('');
+  const [calendarOpen, setCalendarOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const placeholder = '사용 기한';
@@ -18,15 +20,25 @@ const DateBtn = () => {
     setCalendarOpen(!calendarOpen);
   };
 
-  const handleCheckInDateChange = (selectedDate) => {
-    setSelectValue(selectedDate);
-    setCalendarOpen(false);
-    const formattedDate = moment(selectedDate).format('YYYY.MM.DD');
-    const dayOfWeek = moment(selectedDate).format('ddd');
-    setSelectDate(`${formattedDate} (${dayOfWeek})`);
-  };
+  const handleCheckInDateChange = (selectedDate: ValuePiece | [ValuePiece, ValuePiece]) => {
+    let processedDate: ValuePiece;
 
-  const isDateDisabled = (date) => {
+    if (Array.isArray(selectedDate)) {
+      processedDate = selectedDate[0];
+    } else {
+      processedDate = selectedDate;
+    }
+
+    if(processedDate){
+      setSelectValue(selectedDate);
+      setCalendarOpen(false);
+      const formattedDate = moment(processedDate).format('YYYY.MM.DD');
+      const dayOfWeek = moment(processedDate).format('ddd');
+      setSelectDate(`${formattedDate} (${dayOfWeek})`);
+    }
+    };
+
+  const isDateDisabled = (date: Date) => {
     // 현재 날짜보다 이전인 경우에만 true를 반환
     return moment(date).isBefore(moment(), 'day');
   };

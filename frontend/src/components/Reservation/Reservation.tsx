@@ -3,25 +3,29 @@ import * as S from './Style';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import 'moment/locale/ko';
+import { ValuePiece } from '../common/DateButton/DateButton';
 
-const Reservation = ({ updateReservationData }) => {
-  const [checkInValue, setCheckInValue] = useState(new Date());
-  const [checkOutValue, setCheckOutValue] = useState(new Date());
-  const [checkInDate, setCheckInDate] = useState('');
-  const [checkOutDate, setCheckOutDate] = useState('');
-  const [checkInOpen, setCheckInOpen] = useState(false);
-  const [checkOutOpen, setCheckOutOpen] = useState(false);
-  const [optionOpen, setOptionOpen] = useState(false);
-  const [rooms, setRooms] = useState(1);
-  const [adults, setAdults] = useState(1);
-  const [children, setChildren] = useState(0);
-  const [nights, setNights] = useState(0);
+const Reservation = ({ updateReservationData }: any) => {
+  const [checkInValue, setCheckInValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
+  const [checkOutValue, setCheckOutValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
+  const [checkInDate, setCheckInDate] = useState<string>('');
+  const [checkOutDate, setCheckOutDate] = useState<string>('');
+  const [checkInOpen, setCheckInOpen] = useState<boolean>(false);
+  const [checkOutOpen, setCheckOutOpen] = useState<boolean>(false);
+  const [optionOpen, setOptionOpen] = useState<boolean>(false);
+  const [rooms, setRooms] = useState<number>(1);
+  const [adults, setAdults] = useState<number>(1);
+  const [children, setChildren] = useState<number>(0);
+  const [nights, setNights] = useState<number>(0);
 
   useEffect(() => {
-    const checkInMoment = moment(checkInValue);
-    const checkOutMoment = moment(checkOutValue);
+    const processedCheckInDate: ValuePiece = Array.isArray(checkInValue) ? checkInValue[0] : checkInValue;
+    const processedCheckOutDate: ValuePiece = Array.isArray(checkOutValue) ? checkOutValue[0] : checkOutValue;
+  
+    const checkInMoment = moment(processedCheckInDate);
+    const checkOutMoment = moment(processedCheckOutDate);
 
-    const nightsDifference = checkOutMoment.diff(checkInMoment, 'days');
+    const nightsDifference = checkOutMoment.diff(checkInMoment, 'day');
     setNights(nightsDifference);
   }, [checkInValue, checkOutValue]);
 
@@ -48,7 +52,10 @@ const Reservation = ({ updateReservationData }) => {
   }, [checkInDate, checkOutDate, rooms, adults, children, nights]);
 
   useEffect(() => {
-    const nightsDifference = moment(checkOutValue).diff(moment(checkInValue), 'days');
+    const processedCheckInDate: ValuePiece = Array.isArray(checkInValue) ? checkInValue[0] : checkInValue;
+    const processedCheckOutDate: ValuePiece = Array.isArray(checkOutValue) ? checkOutValue[0] : checkOutValue;
+
+    const nightsDifference = moment(processedCheckOutDate).diff(moment(processedCheckInDate), 'day');
     setNights(nightsDifference);
   }, [checkInValue, checkOutValue]);
 
@@ -70,7 +77,7 @@ const Reservation = ({ updateReservationData }) => {
     setCheckOutValue(tomorrow);
   }, []);
 
-  const formatAndSetDate = (date) => {
+  const formatAndSetDate = (date: Date) => {
     const formattedDate = moment(date).format('YYYY.MM.DD');
     const dayOfWeek = moment(date).format('ddd');
     return `${formattedDate} (${dayOfWeek})`;
@@ -90,35 +97,43 @@ const Reservation = ({ updateReservationData }) => {
     setOptionOpen(!optionOpen);
   };
 
-  const handleCheckInDateChange = (selectedDate) => {
+  const handleCheckInDateChange = (selectedDate: ValuePiece | [ValuePiece, ValuePiece]) => {
+    if (!selectedDate) return;
     setCheckInValue(selectedDate);
     setCheckInOpen(false);
-    const formattedDate = moment(selectedDate).format('YYYY.MM.DD');
-    const dayOfWeek = moment(selectedDate).format('ddd');
-    setCheckInDate(`${formattedDate} (${dayOfWeek})`);
 
-    const checkOutDate = new Date(checkOutValue);
-    const timeDifference = checkOutDate.getTime() - selectedDate.getTime();
-    const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
+    const processedSelectedDate: ValuePiece = Array.isArray(selectedDate) ? selectedDate[0] : selectedDate;
+    const checkOutDateValue: ValuePiece = checkOutValue && Array.isArray(checkOutValue) ? checkOutValue[0] : checkOutValue;
 
-    setNights(daysDifference);
+    if (processedSelectedDate) {
+        const formattedDate = moment(processedSelectedDate).format('YYYY.MM.DD');
+        const dayOfWeek = moment(processedSelectedDate).format('ddd');
+        setCheckInDate(`${formattedDate} (${dayOfWeek})`);
+
+        const checkOutDate = new Date(checkOutDateValue as Date);
+        const timeDifference = checkOutDate.getTime() - processedSelectedDate.getTime();
+        const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
+
+        setNights(daysDifference);
+    }
   };
 
-  const handleCheckOutDateChange = (selectedDate) => {
-    selectedDate.setHours(12, 0, 0, 0);
+  const handleCheckOutDateChange = (selectedDate: ValuePiece | [ValuePiece, ValuePiece]) => {
+    const processedSelectedDate: ValuePiece = Array.isArray(selectedDate) ? selectedDate[0] : selectedDate;
+    processedSelectedDate?.setHours(12, 0, 0, 0);
     setCheckOutValue(selectedDate);
     setCheckOutOpen(false);
-    const formattedDate = moment(selectedDate).format('YYYY.MM.DD');
-    const dayOfWeek = moment(selectedDate).format('ddd');
+    const formattedDate = moment(processedSelectedDate).format('YYYY.MM.DD');
+    const dayOfWeek = moment(processedSelectedDate).format('ddd');
     setCheckOutDate(`${formattedDate} (${dayOfWeek})`);
   };
 
-  const isDateDisabled = (date) => {
+  const isDateDisabled = (date: Date) => {
     // 현재 날짜보다 이전인 경우에만 true를 반환
     return moment(date).isBefore(moment(), 'day');
   };
 
-  const handleMinusClick = (stateUpdater, minValue) => {
+  const handleMinusClick = (stateUpdater: React.Dispatch<React.SetStateAction<number>>, minValue: number) => {
     stateUpdater((prevState) => {
       if (prevState > minValue) {
         return prevState - 1;
@@ -127,7 +142,7 @@ const Reservation = ({ updateReservationData }) => {
     });
   };
 
-  const handlePlusClick = (stateUpdater) => {
+  const handlePlusClick = (stateUpdater: React.Dispatch<React.SetStateAction<number>>) => {
     stateUpdater((prevState) => {
       if (prevState < 9) {
         return prevState + 1;
@@ -266,7 +281,7 @@ const Reservation = ({ updateReservationData }) => {
                 </td>
               </tr>
               <tr>
-                <td colspan="2" className="chilage">
+                <td colSpan={2} className="chilage">
                   <span>!</span> 어린이: 4세~12세
                 </td>
               </tr>

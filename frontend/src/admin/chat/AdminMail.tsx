@@ -1,22 +1,21 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, CheckLabel, MultiCheck, SubmitBtn } from '../../Style/commonStyles';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
 import { useParams } from 'react-router-dom';
 import { Container, Table } from '../member/AdminMember';
 import Instance from '../../utils/api/axiosInstance';
-import UploadAdapter from '../../utils/adaptor/UploadAdaptor';
 
 const AdminMail = () => {
   const {receiver} = useParams();
   const [receiverValue, setReceiverValue] = useState('');
   const [receiverList, setReceiverList] = useState([]);
   const [subscribe, setSubScribe] = useState([]);
-  const [members, setMembers] = useState([]);
+  const [members, setMembers] = useState<any[]>([]);
   const [subject, setSubject] = useState('');
   const [carbonCopy, setCarbonCopy] = useState('');
-  const fileRef = useRef();
-  const [file, setFile] = useState();
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [file, setFile] = useState('');
   const [message, setMessage] = useState('');
   
 
@@ -28,11 +27,11 @@ const AdminMail = () => {
 
   //이미지 업로드 input의 onChange
   const saveFile = () => {
-    const file = fileRef.current.files[0];
+    const file = fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '';
     const reader = new FileReader();
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(file as Blob);
     reader.onloadend = () => {
-      setFile(reader.result);
+      setFile(reader.result as string);
     };
   };
 
@@ -43,7 +42,7 @@ const AdminMail = () => {
     })
   }
 
-  const handleClickSubScribe = (checked) => {
+  const handleClickSubScribe = (checked: boolean) => {
     if(checked) {
       Instance.get("/subscribe").then((response) =>{
         setSubScribe(response.data);
@@ -54,13 +53,13 @@ const AdminMail = () => {
     }
   }
 
-  const handleClickMembers = (checked) => {
+  const handleClickMembers = (checked: boolean) => {
     if(checked) {
       Instance.get("/member/list").then((response) =>{
         const members = response.data;
         const membersEmail = [];
         for(var i = 0; i < members.length; i++) {
-          membersEmail.append(members[i].email);
+          membersEmail.push(members[i].email);
         }
         setMembers(membersEmail);//전체 멤버에 대한 메일 주소 저장
         console.log(membersEmail);//테스트 코드
@@ -92,9 +91,9 @@ const AdminMail = () => {
   // Form Date를 API에 전송
   const handleSubmit= () => {
     const form = new FormData();
-    const receiverData = splitComma();
+    const receiverData = splitComma().join(',');
     console.log(receiverData);
-    form.append('multipartFile', fileRef.current.files[0]);
+    form.append('multipartFile', fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '');
     form.append('carbonCopy', carbonCopy);
     form.append('to', receiverData);
     form.append('message', message);
@@ -154,7 +153,7 @@ const AdminMail = () => {
                 </td>
               </tr>
               <tr>
-                <td colSpan="2" className="writeWrapper">
+                <td colSpan={2} className="writeWrapper">
                   <TextEditor extra setValue = {setMessage} name="message" required/>
                 </td>
               </tr>

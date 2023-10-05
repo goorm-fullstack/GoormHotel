@@ -4,19 +4,9 @@ import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel, ContentsTi
 import styled from 'styled-components';
 import {
   Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
   Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
+  TableHeader
 } from './AdminMember';
-import { InfoContainer, InfoWrapper, Label, ModifyBtnWrapper, ModifyBtn } from './AdminMemberDetail';
 import Paging from '../../components/common/Paging/Paging';
 
 export const Section = styled.section`
@@ -41,33 +31,48 @@ export const InputWrapper = styled.div`
   }
 `;
 
+// interface ManagerData{
+//   id: number;
+//   number: number;
+//   name: string;
+//   memberId: string;
+//   nickname: string;
+//   joinDate: string;
+//   use: string;
+// }
+
+type ManagerData = {
+  [key: string]: string | number;
+}
+
 const AdminManager = () => {
-  const [checkedItems, setCheckedItems] = useState([]);
-  const [selectedManager, setSelectedManager] = useState(null);
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
+  const [selectedManager, setSelectedManager] = useState<ManagerData | undefined>();
   const [selectAllChecked, setSelectAllChecked] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
 
   console.log(checkedItems);
   console.log(selectedManager);
 
-  const handleCheckboxChange = (memberId) => {
+  const handleCheckboxChange = (memberId: string) => {
     const updatedCheckedItems = checkedItems.includes(memberId) ? checkedItems.filter((id) => id !== memberId) : [...checkedItems, memberId];
 
     setCheckedItems(updatedCheckedItems);
     setSelectAllChecked(updatedCheckedItems.length === managerData.length);
   };
 
-  const handleManagerClick = (manager) => {
+  const handleManagerClick = (manager: ManagerData) => {
     setSelectedManager(manager);
   };
 
-  const handleInputChange = (field, value) => {
-    setSelectedManager((prevManager) => ({
+  const handleInputChange = (field: string, value: string | number) => {
+    setSelectedManager((prevManager: ManagerData | undefined) => ({
       ...prevManager,
       [field]: value,
     }));
   };
 
-  const handleSelectAllChange = (e) => {
+  const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
 
@@ -153,7 +158,7 @@ const AdminManager = () => {
             </thead>
             <tbody>
               {managerData.length === 0 && (
-                <td colSpan="7" className="center empty">
+                <td colSpan={7} className="center empty">
                   등록된 계정이 없습니다.
                 </td>
               )}
@@ -178,7 +183,7 @@ const AdminManager = () => {
               ))}
             </tbody>
           </Table>
-          <Paging />
+          <Paging totalPage={totalPages} />
         </Section>
         <Section>
           <ContentsTitleXSmall>부운영자 계정 설정</ContentsTitleXSmall>

@@ -66,8 +66,9 @@ const Table = styled(commonTable)``;
 
 const CustomerSupport = () => {
   const board = useParams().board;
-  const [boards, setBoard] = useState([]);
-  const [imageUrl, setImageUrl] = useState([]);
+  const [boards, setBoard] = useState<any[]>([]);
+  const [imageUrl, setImageUrl] = useState<any[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     // board 값이 변경될 때마다 데이터를 다시 불러옴
@@ -99,7 +100,7 @@ const CustomerSupport = () => {
     });
   }, [boards]);
 
-  const GetImageUrl = (boardId) => {
+  const GetImageUrl = (boardId: number) => {
     Instance.get(`/boards/image/${boardId}`, {
       responseType: 'arraybuffer',
     }).then((response) => {
@@ -142,7 +143,7 @@ const CustomerSupport = () => {
         })()}
         <div>
           {(() => {
-            if (board != 'notice') {
+            if (board !== 'notice') {
               return (
                 <WriteBtnWrapper className="right">
                   <LinkBtn to={`/board/` + board + `/write`}>작성하기</LinkBtn>
@@ -200,7 +201,7 @@ const CustomerSupport = () => {
                   </thead>
                   <tbody>
                     {boards.length === 0 && (
-                      <td colSpan="7" className="center">
+                      <td colSpan={7} className="center">
                         작성된 게시글이 없습니다.
                       </td>
                     )}
@@ -226,7 +227,7 @@ const CustomerSupport = () => {
             }
           })()}
         </div>
-        <Paging />
+        <Paging totalPage={totalPages} />
       </Container>
     </>
   );

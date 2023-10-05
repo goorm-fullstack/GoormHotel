@@ -1,8 +1,6 @@
 import React from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, CheckLabel, MultiCheck, SubmitBtn } from '../../Style/commonStyles';
-import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { Container, Table } from '../member/AdminMember';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
 

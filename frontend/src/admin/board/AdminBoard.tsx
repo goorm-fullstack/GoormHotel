@@ -1,22 +1,59 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../Style/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
 import { Container, Table, TableHeader } from '../member/AdminMember';
 import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
 
-const AdminBoard = () => {
-  const { page } = useParams();
-  const [checkedItems, setCheckedItems] = useState([]);
-  const [selectAllChecked, setSelectAllChecked] = useState(false);
-  const [totalPage, setTotalPage] = useState(0);
-  const [totalBoard, setTotalBoard] = useState(0);
+export interface BoardData{
+  boardId: number;
+  title: string;
+  boardContent: string;
+  boardWriteDate: number[];
+  boardWriter: string;
+  reply: ReplyData[];
+  boardTitle: string;
+  category: string;
+  report: ReportData[];
+  boardImage: ImageData;
+  blackList: string;
+}
 
-  const [board, setBoard] = useState([]);
+export interface ReplyData{
+  replyId: number;
+  boardId: number;
+  replyContent: string;
+  replyWriteDate: number[];
+  replyWriter: string;
+  report: ReportData[];
+  board: BoardData;
+}
+
+export interface ReportData{
+  reportId: number;
+  boardId: number;
+  title: string;
+  replyId: number;
+  replyContent: string;
+  reportReason: string;
+  reportDate: number[];
+  reportWriter: string;
+  reportCheck: boolean;
+  reportResult: string;
+}
+
+const AdminBoard = () => {
+  const { page } = useParams<{page: string}>();
+  const [checkedItems, setCheckedItems] = useState<number[]>([]);
+  const [selectAllChecked, setSelectAllChecked] = useState<boolean>(false);
+  const [totalPage, setTotalPage] = useState<number>(0);
+  const [totalBoard, setTotalBoard] = useState<number>(0);
+  const [board, setBoard] = useState<BoardData[]>([]);
+
   // 전체 게시글 목록 조회
   useEffect(() => {
-    const currentPage = parseInt(page, 10);
+    const currentPage: number = parseInt(page ? page : '1', 10);
     axios
       .get(`/boards/list?page=${currentPage}`)
       .then((response) => {
@@ -32,14 +69,9 @@ const AdminBoard = () => {
       });
   }, []);
 
-  let writeDate;
-  board.map((Item) => {
-    writeDate = Item.boardWriteDate[0] + '-' + Item.boardWriteDate[1] + '-' + Item.boardWriteDate[2];
-  });
-
   // 전체 선택
-  const handleSelectAllChange = (e) => {
-    const checked = e.target.checked;
+  const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked: boolean = e.target.checked;
     setSelectAllChecked(checked);
 
     if (checked) {
@@ -51,8 +83,8 @@ const AdminBoard = () => {
   };
 
   // 하나씩 선택해서 전부 선택시 맨 위에 체크되도록 하는 기능
-  const handleCheckboxChange = (boardId) => {
-    const updatedCheckedItems = checkedItems.includes(boardId) ? checkedItems.filter((id) => id !== boardId) : [...checkedItems, boardId];
+  const handleCheckboxChange = (boardId: number) => {
+    const updatedCheckedItems: number[] = checkedItems.includes(boardId) ? checkedItems.filter((id) => id !== boardId) : [...checkedItems, boardId];
 
     setCheckedItems(updatedCheckedItems);
     setSelectAllChecked(updatedCheckedItems.length === board.length);
@@ -62,7 +94,7 @@ const AdminBoard = () => {
     checkedItems.forEach((boardId) => {
       axios
         .put(`/boards/softdelete/${boardId}`)
-        .then((response) => {
+        .then(() => {
           window.location.reload();
         })
         .catch((error) => {
@@ -80,7 +112,7 @@ const AdminBoard = () => {
       };
       axios
         .post(`/report/writeform`, data)
-        .then((response) => {
+        .then(() => {
           window.location.reload();
         })
         .catch((error) => {
@@ -95,7 +127,7 @@ const AdminBoard = () => {
         <PageTitle>게시글 관리</PageTitle>
         <TableHeader>
           <p className="total">
-            전체 <strong>{board.length}</strong> 건
+            전체 <strong>{totalBoard}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
             <NormalBtn className="header" onClick={ReportBoard}>
@@ -122,11 +154,12 @@ const AdminBoard = () => {
           </thead>
           <tbody>
             {board.length === 0 && (
-              <td colSpan="7" className="center">
+              <td colSpan={7} className="center">
                 등록된 게시글이 없습니다.
               </td>
             )}
-            {board.map((board, idx) => (
+            {board &&
+            board.map((board, idx) => (
               <tr key={board.boardId}>
                 <td className="center">
                   <InputCheckbox
@@ -135,7 +168,7 @@ const AdminBoard = () => {
                     onChange={() => handleCheckboxChange(board.boardId)}
                   />
                 </td>
-                <td className="center">{idx + 1}</td>
+                <td className="center">{totalBoard - idx}</td>
                 <td className="center">{board.boardTitle}</td>
                 <td className="center">
                   <Link to={`/admin/member/${board.boardId}`}>{board.title}</Link>
@@ -146,12 +179,12 @@ const AdminBoard = () => {
                 <td className="center">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
                   board.boardWriteDate[2] < 10 ? '0' : ''
                 }${board.boardWriteDate[2]}`}</td>
-                <td>{board.blacklist}</td>
+                <td>{board.blackList}</td>
               </tr>
             ))}
           </tbody>
         </Table>
-        <Paging />
+        <Paging totalPage={totalPage} />
       </Container>
     </AdminLayout>
   );

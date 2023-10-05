@@ -28,7 +28,7 @@ const ButtonWrapper = styled.div`
   margin-bottom: 20px;
 `;
 
-const MemberBtn = styled.button`
+const MemberBtn = styled.button<{isActive: boolean}>`
   background-color: ${({ isActive }) => (isActive ? '#FFFFFF' : '#f7f7f7')};
   border: 1px solid ${({ isActive }) => (isActive ? '#baa085' : '#ddd')};
   color: ${({ isActive }) => (isActive ? '#9c836a' : '#888')};
@@ -103,19 +103,19 @@ const Login = () => {
   const [contactNumber, setContactNumber] = useState('');
   const [rememberId, setRememberId] = useState(false); //아이디 기억하기 상태
 
-  const handleIdChange = (e) => {
+  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMemberId(e.target.value);
   };
 
-  const handlePwChange = (e) => {
+  const handlePwChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const handleReservationNumberChange = (e) => {
+  const handleReservationNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReservationNumber(e.target.value);
   };
 
-  const handleContactNumberChange = (e) => {
+  const handleContactNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContactNumber(e.target.value);
   };
 
@@ -170,7 +170,7 @@ const Login = () => {
             )}
             {isMemberActive && (
               <RememberAndFind>
-                <CheckLabel for="rememberId">
+                <CheckLabel htmlFor="rememberId">
                   <InputCheckbox type="checkbox" id="rememberId" checked={rememberId} onChange={handleRememberIdChange} />
                   아이디 기억하기
                 </CheckLabel>

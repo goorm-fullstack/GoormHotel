@@ -10,13 +10,17 @@ import TextEditor from '../../components/common/TextEditor/TextEditor';
 const Container = styled(commonContainerStyle)``;
 const Table = styled(commonTable)``;
 
+type FormData = {
+  [key: string]: string;
+}
+
 const BoardWrite = () => {
   const board = useParams().board;
   const navigate = useNavigate();
   console.log(board);
   const [imgFile, setImgFile] = useState('');
-  const imgRef = useRef();
-  const [formData, setFormData] = useState({
+  const imgRef = useRef<HTMLInputElement>(null);
+  const [formData, setFormData] = useState<FormData>({
     title: '',
     boardContent: '',
     boardTitle: (() => {
@@ -37,16 +41,16 @@ const BoardWrite = () => {
 
   //이미지 업로드 input의 onChange
   const saveImgFile = () => {
-    const file = imgRef.current.files[0];
+    const file = imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '';
     const reader = new FileReader();
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(file as Blob);
     reader.onloadend = () => {
-      setImgFile(reader.result);
+      setImgFile(reader.result as string);
     };
   };
 
   //input 입력 시
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -55,14 +59,14 @@ const BoardWrite = () => {
   };
 
   //게시글 작성 api
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     const confirmed = window.confirm('작성하시겠습니까?');
 
     if (confirmed) {
       e.preventDefault();
 
       const form = new FormData();
-      form.append('multipartFile', imgRef.current.files[0]);
+      form.append('multipartFile', imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '');
 
       Object.keys(formData).forEach((key) => {
         // Object.keys 수정
@@ -76,7 +80,7 @@ const BoardWrite = () => {
           },
         });
         window.location.href = `/board/${board}/1`;
-      } catch (e) {
+      } catch (e: any) {
         console.error('Error: ', e.message);
         if (e.response.data.message.startsWith('Validation failed')) {
           const errorMessage = e.response.data.errors[0].defaultMessage;
@@ -106,13 +110,13 @@ const BoardWrite = () => {
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <Table className="horizontal">
               <tr>
-                <th width="240px">제목</th>
+                <th style={{width: '240px'}}>제목</th>
                 <td>
                   <input type="text" className="title long" name="title" value={formData.title} onChange={handleChange} required />
                 </td>
               </tr>
               <tr>
-                <th width="240px">카테고리</th>
+                <th style={{width: '240px'}}>카테고리</th>
                 <td>
                   {(() => {
                     switch (board) {
@@ -151,7 +155,7 @@ const BoardWrite = () => {
                 </td>
               </tr>
               <tr className="contents">
-                <td colSpan="2" className="writeWrapper">
+                <td colSpan={2} className="writeWrapper">
                   <TextEditor name="boardContent" value={formData.boardContent} onChange={handleChange} required />
                 </td>
               </tr>
@@ -171,7 +175,7 @@ const BoardWrite = () => {
             </Table>
             <BtnWrapper className="center double mt40">
               <SubmitBtn type="submit">작성하기</SubmitBtn>
-              <LinkBtn onClick={() => navigate(-1)}>취소</LinkBtn>
+              <LinkBtn to={() => navigate(-1)}>취소</LinkBtn>
             </BtnWrapper>
           </form>
         </div>

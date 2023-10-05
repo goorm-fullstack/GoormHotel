@@ -9,12 +9,14 @@ import AdminLayout from '../common/AdminLayout';
 import { PageTitle } from '../../Style/commonStyles';
 import { Container } from '../member/AdminMember';
 import { numberWithCommas } from '../../utils/function/comma';
+import { ReservationData } from './AdminReservation';
+import { ValuePiece } from '../../components/common/DateButton/DateButton';
 
 const CalendarContainer = styled.div`
   position: relative;
 `;
 
-const CalendarWrapper = styled.div`
+const CalendarWrapper = styled.div<{open: boolean}>`
   z-index: 10;
   position: absolute;
   top: 100%;
@@ -102,7 +104,7 @@ const CalendarButton = styled.button`
   background-color: #fff;
 `;
 
-const UpdateButton = styled.button`
+const UpdateButton = styled.button<{updateClick: boolean}>`
   width: 200px;
   height: 40px;
   background-color: #95846e;
@@ -137,98 +139,66 @@ const AdminReservationDetail = () => {
   const [emailAddress, setEmailAddress] = useState(''); //이메일
   const [customerRequest, setCustomerRequest] = useState(''); //요청 사항
   const [applyCoupon, setApplyCoupon] = useState(''); //적용 쿠폰
-  const [applyGiftCard, setApplyGiftCard] = useState([]); //적용 상품권
+  const [applyGiftCard, setApplyGiftCard] = useState<any[]>([]); //적용 상품권
   const [totalPrice, setTotalPrice] = useState(''); //결제 금액
   const [updateClick, setUpdateClick] = useState(true);
-  const [reservationData, setReservationData] = useState({
-    reservationNumber: '테스트',
-    orderDae: '2023.09.01',
-    checkIn: '2023.09.25',
-    checkOut: '2023.09.27',
-    count: 3,
-    adult: 2,
-    children: 2,
-    notice: 'test',
-    member: {
-      name: 'name',
-      email: 'test@naver.com',
-      phoneNumber: '010-0000-0000',
-    },
-    item: {
-      name: 'itemName',
-    },
-    stay: 3,
-    coupon: {
-      name: 'coupon name',
-      discountPrice: '1000',
-    },
-    giftcard: [
-      {
-        name: 'giftcard Name',
-        money: '5000',
-      },
-    ],
-    sumPrice: 10000,
-    discountPrice: 0,
-    totalPrice: 10000,
-    state: '에약',
-  });
+  const [reservationData, setReservationData] = useState<ReservationData>();
 
   // 캘린더 관련
   const [checkInOpen, setCheckInOpen] = useState(false);
   const [checkOutOpen, setCheckOutOpen] = useState(false);
-  const [checkInValue, setCheckInValue] = useState(new Date());
-  const [checkOutValue, setCheckOutValue] = useState(new Date());
+  const [checkInValue, setCheckInValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
+  const [checkOutValue, setCheckOutValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
 
   useEffect(() => {
     Instance.get(`/reservation/reservationNumber/${reservationNumber}`).then((response) => {
       setReservationData(response.data);
       console.log(response.data);
 
-      const formattedCheckIn = formatDate(reservationData.checkIn);
-      const formattedCheckOut = formatDate(reservationData.checkOut);
-      const formattedReservationDate = formatDate(reservationData.orderDate);
+      const formattedCheckIn = formatDate(response.data.checkIn);
+      const formattedCheckOut = formatDate(response.data.checkOut);
+      const formattedReservationDate = formatDate(response.data.orderDate);
 
       setCheckInDate(formattedCheckIn);
       setCheckOutDate(formattedCheckOut);
       setReservationDate(formattedReservationDate);
-      setCustomerName(reservationData.member.name);
-      setPhoneNumber(reservationData.member.phoneNumber);
-      setEmailAddress(reservationData.member.email);
-      setCustomerRequest(reservationData.notice);
-      setApplyCoupon(reservationData.coupon);
-      setApplyGiftCard(reservationData.giftcard);
+      setCustomerName(response.data.member.name);
+      setPhoneNumber(response.data.member.phoneNumber);
+      setEmailAddress(response.data.member.email);
+      setCustomerRequest(response.data.notice);
+      setApplyCoupon(response.data.coupon.name);
+      setApplyGiftCard(response.data.giftCard);
     });
   }, []);
 
-  const formatDate = (date) => {
+  const formatDate = (date: Date) => {
     const formattedDate = moment(date).format('YYYY.MM.DD');
     return `${formattedDate}`;
   };
 
-  const isDateDisabled = (date) => {
+  const isDateDisabled = (date: Date) => {
     return moment(date).isBefore(moment(), 'day');
   };
 
-  const handleNoticeInputChange = (e) => {
+  const handleNoticeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!updateClick) {
       setCustomerRequest(e.target.value);
     }
   };
 
-  const handleNameInputChange = (e) => {
+  const handleNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!updateClick) {
       setCustomerName(e.target.value);
     }
   };
 
-  const handlePhoneNumberInputChange = (e) => {
+  const handlePhoneNumberInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!updateClick) {
       setPhoneNumber(e.target.value);
     }
   };
 
-  const handleEmailInputChange = (e) => {
+  const handleEmailInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!updateClick) {
       setEmailAddress(e.target.value);
     }
@@ -248,17 +218,19 @@ const AdminReservationDetail = () => {
     }
   };
 
-  const handleCheckInDateChange = (selectedDate) => {
+  const handleCheckInDateChange = (selectedDate: ValuePiece | [ValuePiece, ValuePiece]) => {
     setCheckInValue(selectedDate);
     setCheckInOpen(false);
-    const formattedDate = moment(selectedDate).format('YYYY.MM.DD');
+    const processedSelectedDate: ValuePiece = Array.isArray(selectedDate) ? selectedDate[0] : selectedDate;
+    const formattedDate = moment(processedSelectedDate).format('YYYY.MM.DD');
     setCheckInDate(`${formattedDate}`);
   };
 
-  const handleCheckOutDateChange = (selectedDate) => {
+  const handleCheckOutDateChange = (selectedDate: ValuePiece | [ValuePiece, ValuePiece]) => {
     setCheckOutValue(selectedDate);
     setCheckOutOpen(false);
-    const formattedDate = moment(selectedDate).format('YYYY.MM.DD');
+    const processedSelectedDate: ValuePiece = Array.isArray(selectedDate) ? selectedDate[0] : selectedDate;
+    const formattedDate = moment(processedSelectedDate).format('YYYY.MM.DD');
     setCheckOutDate(`${formattedDate}`);
   };
 
@@ -362,7 +334,7 @@ const AdminReservationDetail = () => {
           </InfoWrapper>
           <InfoWrapper>
             <Label>적용 쿠폰</Label>
-            {reservationData.coupon !== null ? (
+            {reservationData && reservationData.coupon !== null ? (
               <Data>
                 {reservationData.coupon.name}(적용 금액 : {numberWithCommas(reservationData.coupon.discountPrice)})
               </Data>
@@ -373,10 +345,10 @@ const AdminReservationDetail = () => {
           <InfoWrapper>
             <Label>적용 상품권</Label>
             <Data>
-              {reservationData.giftcard !== null && reservationData.giftcard.length > 0
-                ? reservationData.giftcard.map((gift, index) => (
+              {reservationData && reservationData.giftCard !== null && reservationData.giftCard.length > 0
+                ? reservationData.giftCard.map((gift, index) => (
                     <span key={index}>
-                      {gift.name}(적용 금액 : {numberWithCommas(gift.money)}){index < reservationData.giftcard.length - 1 ? ', ' : ''}
+                      {gift.name}(적용 금액 : {numberWithCommas(gift.money)}){index < reservationData.giftCard.length - 1 ? ', ' : ''}
                     </span>
                   ))
                 : '적용된 상품권이 없습니다.'}
@@ -384,7 +356,7 @@ const AdminReservationDetail = () => {
           </InfoWrapper>
           <InfoWrapper>
             <Label>결제 금액</Label>
-            <Data>{numberWithCommas(reservationData.totalPrice)}</Data>
+            <Data>{reservationData && numberWithCommas(reservationData.totalPrice)}</Data>
           </InfoWrapper>
           <BtnWrapper>
             {updateClick === true ? (

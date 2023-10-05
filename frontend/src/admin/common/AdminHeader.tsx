@@ -108,7 +108,10 @@ const AdminHeader = () => {
             xmlns="http://www.w3.org/2000/svg"
             version="1.1"
             viewBox="0 0 24 24"
-            style={{ enableBackground: 'new 0 0 24 24', width: '24px', height: '24px', fill: '#DDDDDD' }}
+            enableBackground="new 0 0 24 24"
+            width="24px"
+            height="24px"
+            fill="#DDDDDD"
             xmlSpace="preserve">
             <g id="info" />
             <g id="icons">

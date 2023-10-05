@@ -4,6 +4,7 @@ import AdminHeader from './common/AdminHeader';
 import { commonAdminContainer, commonContentsStyle, PageTitle } from '../Style/commonStyles';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { BoardData } from './board/AdminBoard';
 
 export const AdminContainer = styled(commonAdminContainer)``;
 
@@ -126,7 +127,8 @@ const LatestList = styled.ul`
 `;
 
 const AdminIndex = () => {
-  const [notice, setNotice] = useState([]);
+  const [notice, setNotice] = useState<BoardData[]>([]);
+
   useEffect(() => {
     axios
       .get('/boards/find/boardTitle/공지사항')
@@ -137,7 +139,9 @@ const AdminIndex = () => {
         console.error(error);
       });
   }, []);
-  const [review, setReview] = useState([]);
+
+  const [review, setReview] = useState<BoardData[]>([]);
+
   useEffect(() => {
     axios
       .get('/boards/find/boardTitle/이용후기')
@@ -148,7 +152,9 @@ const AdminIndex = () => {
         console.error(error);
       });
   }, []);
-  const [qna, setQna] = useState([]);
+
+  const [qna, setQna] = useState<BoardData[]>([]);
+
   useEffect(() => {
     axios
       .get('/boards/find/boardTitle/문의하기')

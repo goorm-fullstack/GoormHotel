@@ -8,7 +8,7 @@ import Paging from '../../components/common/Paging/Paging';
 
 const AdminSubScribe = () => {
   const { page } = useParams();
-  const [checkedItems, setCheckedItems] = useState([]);
+  const [checkedItems, setCheckedItems] = useState<number[]>([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [subScribeData, setSubScribeData] = useState([
     {
@@ -28,6 +28,7 @@ const AdminSubScribe = () => {
       isSubScribe: '구독중',
     },
   ]);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     Instance.get(`/subscribe?page=${page}`).then((response) => {
@@ -35,7 +36,7 @@ const AdminSubScribe = () => {
     });
   }, []);
 
-  const handleSelectAllChange = (e) => {
+  const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
     if (checked) {
@@ -46,7 +47,7 @@ const AdminSubScribe = () => {
     }
   };
 
-  const handleCheckboxChange = (id) => {
+  const handleCheckboxChange = (id: number) => {
     setCheckedItems((prevItems) => {
       if (prevItems.includes(id)) {
         return prevItems.filter((item) => item !== id);
@@ -56,7 +57,7 @@ const AdminSubScribe = () => {
     });
   };
 
-  const handleClosedClick = (e) => {
+  const handleClosedClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     console.log(checkedItems);
     checkedItems.map((id, index) => {
       Instance.post('/subscribe/cancel/' + id).then(() => {
@@ -100,7 +101,7 @@ const AdminSubScribe = () => {
           <tbody>
             {subScribeData.length === 0 ? (
               // empty td의 colspan 개수는 테이블 행의 모든 td 수와 일치해야 합니다.
-              <td colSpan="4">현재 구독자가 없습니다.</td>
+              <td colSpan={4}>현재 구독자가 없습니다.</td>
             ) : (
               subScribeData.map((item, index) => (
                 <tr key={item.id}>
@@ -112,13 +113,13 @@ const AdminSubScribe = () => {
                   <td className="lastChat center">
                     <Link to={`/admin/mail?mailto=${item.emailAddress}`}>{item.emailAddress}</Link>
                   </td>
-                  <td className="center">{item.isSubscribe}</td>
+                  <td className="center">{item.isSubScribe}</td>
                 </tr>
               ))
             )}
           </tbody>
         </Table>
-        <Paging />
+        <Paging totalPage={totalPages} />
       </Container>
     </AdminLayout>
   );

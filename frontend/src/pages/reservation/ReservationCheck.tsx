@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import Reservation from '../../components/Reservation/Reservation';
 import Product from '../../components/Item/Item';
@@ -125,11 +125,11 @@ const ReservationCheck = () => {
                 </tr>
                 <tr>
                   <th>이메일</th>
-                  <td colSpan="3">goorm@goorm.com</td>
+                  <td colSpan={3}>goorm@goorm.com</td>
                 </tr>
                 <tr>
                   <th>요청사항</th>
-                  <td colSpan="3">내용</td>
+                  <td colSpan={3}>내용</td>
                 </tr>
               </table>
             </Section>
@@ -160,7 +160,7 @@ const ReservationCheck = () => {
                   ))}
                   <tr>
                     {/* 사용한 쿠폰이 없는 경우 */}
-                    <td colSpan="2">사용한 쿠폰이 없습니다.</td>
+                    <td colSpan={2}>사용한 쿠폰이 없습니다.</td>
                   </tr>
                 </table>
               </CouponInfo>
@@ -180,7 +180,7 @@ const ReservationCheck = () => {
                 <td>2023.09.23</td>
               </tr>
               <tr>
-                <td colSpan="2" className="notice">
+                <td colSpan={2} className="notice">
                   ⁕ 결제된 금액은 포트원 정책에 따라 매일 자동 취소됩니다. 자세한 내용은{' '}
                   <a href="https://developers.portone.io/docs/ko/readme/get-started" target="_blank">
                     포트원 개발자센터 홈페이지

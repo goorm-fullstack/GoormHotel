@@ -242,6 +242,15 @@ const ReservationButton = styled(Link)`
   }
 `;
 
+interface ReservationData{
+  checkInDate: string;
+  checkOutDate: string;
+  rooms: number;
+  adults: number;
+  children: number;
+  nights: number;
+}
+
 const Home = () => {
   const [activeIndex, setActiveIndex] = useState(1);
   const SLIDE_NUM = images.length;
@@ -257,7 +266,7 @@ const Home = () => {
     nights: 0,
   });
 
-  const updateReservationData = (newData) => {
+  const updateReservationData = (newData: ReservationData) => {
     setReservationData(newData);
   };
 
@@ -272,29 +281,33 @@ const Home = () => {
       setActiveIndex(activeIndex + 1);
     }
   };
-  const sliderRef = useRef(null);
+  const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (activeIndex === 4) {
-      if (sliderRef.current) {
-        setTimeout(() => {
+      setTimeout(() => {
+        if(sliderRef.current){
           sliderRef.current.style.transition = 'none';
-          setActiveIndex(1);
-        }, 500);
-        setTimeout(() => {
+        }
+        setActiveIndex(1);
+      }, 500);
+      setTimeout(() => {
+        if(sliderRef.current){
           sliderRef.current.style.transition = 'all 500ms ease-in-out';
-        }, 600);
-      }
+        }
+      }, 600);
     } else if (activeIndex === 0) {
-      if (sliderRef.current) {
-        setTimeout(() => {
+      setTimeout(() => {
+        if(sliderRef.current){
           sliderRef.current.style.transition = 'none';
-          setActiveIndex(3);
-        }, 500);
-        setTimeout(() => {
+        }
+        setActiveIndex(3);
+      }, 500);
+      setTimeout(() => {
+        if(sliderRef.current){
           sliderRef.current.style.transition = 'all 500ms ease-in-out';
-        }, 600);
-      }
+        }
+      }, 600);
     }
   }, [activeIndex]);
 

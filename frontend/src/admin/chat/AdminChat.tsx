@@ -8,49 +8,10 @@ import { Container, Table, TableHeader } from '../member/AdminMember';
 
 const AdminChat = () => {
   const { page } = useParams();
-  const [checkedItems, setCheckedItems] = useState([]);
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
-  const [chatData, setChatData] = useState([
-    {
-      id: 3,
-      number: 3,
-      chatMessages: [
-        {
-          memberId: 'user001',
-          name: '홍길동',
-          lastChat: '마지막 채팅 내용입니다.',
-          lastDate: '2023.09.03',
-        },
-      ],
-      state: '미확인',
-    },
-    {
-      id: 2,
-      number: 2,
-      chatMessages: [
-        {
-          memberId: 'user001',
-          name: '홍길동',
-          lastChat: '마지막 채팅 내용입니다.',
-          lastDate: '2023.09.03',
-        },
-      ],
-      state: '종료',
-    },
-    {
-      id: 1,
-      number: 1,
-      chatMessages: [
-        {
-          memberId: 'user001',
-          name: '홍길동',
-          lastChat: '마지막 채팅 내용입니다.',
-          lastDate: '2023.09.03',
-        },
-      ],
-      state: '종료',
-    },
-  ]);
+  const [chatData, setChatData] = useState<any[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     Instance.get(`/chat/getLastMessage?page=${page}`).then((response) => {
@@ -58,18 +19,18 @@ const AdminChat = () => {
     });
   }, []);
 
-  const handleSelectAllChange = (e) => {
+  const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
     if (checked) {
-      const allMemberIds = chatData.map((item) => item.chatMessages[0].roomId);
+      const allMemberIds = chatData?.map((item) => item.chatMessages[0].roomId);
       setCheckedItems(allMemberIds);
     } else {
       setCheckedItems([]);
     }
   };
 
-  const handleCheckboxChange = (id) => {
+  const handleCheckboxChange = (id: string) => {
     setCheckedItems((prevItems) => {
       if (prevItems.includes(id)) {
         return prevItems.filter((item) => item !== id);
@@ -79,7 +40,7 @@ const AdminChat = () => {
     });
   };
 
-  const handleClosedClick = (e) => {
+  const handleClosedClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     checkedItems.map((roomId, index) => {
       Instance.get('/chat/closed/' + roomId).then((response) => {
         console.log(response);
@@ -128,7 +89,7 @@ const AdminChat = () => {
           </thead>
           <tbody>
             {chatData.length === 0 ? (
-              <td colSpan="6" className="center empty">
+              <td colSpan={6} className="center empty">
                 채팅 메시지 기록이 없습니다.
               </td>
             ) : (
@@ -162,7 +123,7 @@ const AdminChat = () => {
             )}
           </tbody>
         </Table>
-        <Paging url={'/admin/chat'} />
+        <Paging totalPage={totalPages} />
       </Container>
     </AdminLayout>
   );

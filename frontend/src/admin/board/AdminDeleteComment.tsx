@@ -2,23 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../Style/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
 import {
   Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
   Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
+  TableHeader
 } from '../member/AdminMember';
 import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
+import { BoardData } from './AdminBoard';
 
 const LinkStyle = styled(Link)`
   &:hover {
@@ -28,34 +20,22 @@ const LinkStyle = styled(Link)`
   }
 `;
 
-const tableData = [
-  {
-    id: 1,
-    board: '이용후기',
-    post: '게시글 제목111',
-    content: '첫 번째 댓글입니다.',
-    author: { name: '홍구름', id: 'memberId1' },
-    date: '2023.09.13',
-  },
-  {
-    id: 2,
-    board: '공지사항',
-    post: '게시글 제목222',
-    content: '두 번째 댓글입니다.',
-    author: { name: '홍구름', id: 'memberId2' },
-    date: '2023.09.14',
-  },
-];
-
 const AdminDeleteComment = () => {
-  const [checkedItems, setCheckedItems] = useState([]);
-  const [selectAllChecked, setSelectAllChecked] = useState(false);
-  const [board, setBoard] = useState([]);
+  const [checkedItems, setCheckedItems] = useState<number[]>([]);
+  const [selectAllChecked, setSelectAllChecked] = useState<boolean>(false);
+  const [board, setBoard] = useState<BoardData[]>([]);
+  const [totalPage, setTotalPage] = useState<number>(0);
+  const [totalData, setTotalData] = useState<number>(0);
+
   useEffect(() => {
     axios
       .get('/boards/deleted')
       .then((response) => {
+        const totalPages = parseInt(response.headers['totalpages'], 10);
+        const totalData = parseInt(response.headers['totaldata'], 10);
         setBoard(response.data);
+        setTotalPage(totalPages);
+        setTotalData(totalData);
         console.log('get 성공');
       })
       .catch((error) => {
@@ -63,35 +43,30 @@ const AdminDeleteComment = () => {
       });
   }, []);
 
-  let writeDate;
-  board.map((Item) => {
-    writeDate = Item.boardWriteDate[0] + '-' + Item.boardWriteDate[1] + '-' + Item.boardWriteDate[2];
-  });
-
-  const handleSelectAllChange = (e) => {
+  const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
 
     if (checked) {
-      const allMemberIds = tableData.map((item) => item.memberId);
+      const allMemberIds = board.map((item) => item.boardId);
       setCheckedItems(allMemberIds);
     } else {
       setCheckedItems([]);
     }
   };
 
-  const handleCheckboxChange = (memberId) => {
+  const handleCheckboxChange = (memberId: number) => {
     const updatedCheckedItems = checkedItems.includes(memberId) ? checkedItems.filter((id) => id !== memberId) : [...checkedItems, memberId];
 
     setCheckedItems(updatedCheckedItems);
-    setSelectAllChecked(updatedCheckedItems.length === tableData.length);
+    setSelectAllChecked(updatedCheckedItems.length === board.length);
   };
 
   const unDeleteBtnClick = () => {
     checkedItems.forEach((boardId) => {
       axios
         .put(`/boards/undelete/${boardId}`)
-        .then((response) => {
+        .then(() => {
           console.log(`${boardId} 복원 성공`);
           window.location.reload();
         })
@@ -105,7 +80,7 @@ const AdminDeleteComment = () => {
     checkedItems.forEach((boardId) => {
       axios
         .delete(`/boards/${boardId}`)
-        .then((response) => {
+        .then(() => {
           console.log(`${boardId} 삭제 성공`);
           window.location.reload();
         })
@@ -121,7 +96,7 @@ const AdminDeleteComment = () => {
         <PageTitle>삭제된 글 관리</PageTitle>
         <TableHeader>
           <p className="total">
-            전체 <strong>{board.length}</strong> 건
+            전체 <strong>{totalData}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
             <NormalBtn type="button" className="header" onClick={unDeleteBtnClick}>
@@ -147,11 +122,12 @@ const AdminDeleteComment = () => {
           </thead>
           <tbody>
             {board.length === 0 && (
-              <td colSpan="6" className="center empty">
+              <td colSpan={6} className="center empty">
                 삭제된 글이 없습니다.
               </td>
             )}
-            {board.map((board) => (
+            {board &&
+            board.map((board) => (
               <tr key={board.boardId}>
                 <td className="center">
                   <InputCheckbox
@@ -176,7 +152,7 @@ const AdminDeleteComment = () => {
             ))}
           </tbody>
         </Table>
-        <Paging />
+        <Paging totalPage={totalPage} />
       </Container>
     </AdminLayout>
   );

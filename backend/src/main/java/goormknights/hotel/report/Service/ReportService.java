@@ -11,6 +11,7 @@ import goormknights.hotel.report.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -62,17 +63,24 @@ public class ReportService {
     }
 
     //신고 조회(Read)
-    public List<ResponseReportDto> getAllReports(Pageable pageable) {
+    public Page<ResponseReportDto> getAllReports(Pageable pageable) {
         Page<Report> all = reportRepository.findAll(pageable);
         List<ResponseReportDto> response = new ArrayList<>();
 
         for (Report report : all) {
-            if(report.getReportDeleteTime()==null){
+            if(report.getReportDeleteTime() == null){
                 response.add(report.toResponseReportDto());
             }
         }
 
-        return response;
+        return new PageImpl<>(response, pageable, response.size());
+//        for (Report report : all) {
+//            if(report.getReportDeleteTime()==null){
+//                response.add(report.toResponseReportDto());
+//            }
+//        }
+//
+//        return response;
     }
 
     //신고 완전 삭제

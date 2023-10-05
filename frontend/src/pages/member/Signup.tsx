@@ -88,7 +88,7 @@ const Signup = () => {
 
   console.log(formData);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -105,7 +105,7 @@ const Signup = () => {
     setPrivacyAgree(!privacyAgree);
   };
 
-  const handleSignupButton = (e) => {
+  const handleSignupButton = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (termsAgree && privacyAgree) {
@@ -127,7 +127,7 @@ const Signup = () => {
                 <h4>
                   이용약관 동의 <span>(필수)</span>
                 </h4>
-                <CheckLabel onChange={handleTermsCheck} for="agreementcheck">
+                <CheckLabel onChange={handleTermsCheck} htmlFor="agreementcheck">
                   <InputCheckbox type="checkbox" id="agreementcheck" checked={termsAgree} onChange={handleTermsCheck} required />
                   동의합니다
                 </CheckLabel>
@@ -141,7 +141,7 @@ const Signup = () => {
                 <h4>
                   개인정보처리방침 동의 <span>(필수)</span>
                 </h4>
-                <CheckLabel for="privacycheck">
+                <CheckLabel htmlFor="privacycheck">
                   <InputCheckbox type="checkbox" id="privacycheck" checked={privacyAgree} onChange={handlePrivacyAgree} required />
                   동의합니다
                 </CheckLabel>

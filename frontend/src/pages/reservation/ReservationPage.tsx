@@ -192,7 +192,7 @@ const ReservationPage = () => {
     },
   ]);
 
-  const handleChangeData = (field, e) => {
+  const handleChangeData = (field: string, e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -200,16 +200,16 @@ const ReservationPage = () => {
     }));
   };
 
-  const handleCouponNumber = (event) => {
+  const handleCouponNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
     setGiftCardNumber(event.target.value);
   };
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(event.target.value);
     console.log('Selected option:', event.target.value);
   };
 
-  const handleRemoveCoupon = (index) => {
+  const handleRemoveCoupon = (index: number) => {
     // 해당 인덱스의 쿠폰을 삭제합니다.
     const updatedCoupons = coupons.filter((_, i) => i !== index);
     setCoupons(updatedCoupons);
@@ -229,7 +229,7 @@ const ReservationPage = () => {
     fetchMember();
   }, []);
 
-  const formatDateForServer = (date) => {
+  const formatDateForServer = (date: Date) => {
     return moment(date).format('YYYY-MM-DDTHH:mm:ss');
   };
 
@@ -255,7 +255,7 @@ const ReservationPage = () => {
     }
   };
 
-  const updateReservationData = (newData) => {
+  const updateReservationData = (newData: any) => {
     setFormData(newData);
   };
 
@@ -348,7 +348,7 @@ const ReservationPage = () => {
                   <h4>
                     개인정보처리방침 동의 <span>(필수)</span>
                   </h4>
-                  <CheckLabel for="privacycheck">
+                  <CheckLabel htmlFor="privacycheck">
                     <InputCheckbox type="checkbox" id="privacycheck" required />
                     동의합니다
                   </CheckLabel>
@@ -362,7 +362,7 @@ const ReservationPage = () => {
                   <h4>
                     취소 환불 수수료에 관한 동의 <span>(필수)</span>
                   </h4>
-                  <CheckLabel for="privacycheck">
+                  <CheckLabel htmlFor="privacycheck">
                     <InputCheckbox type="checkbox" id="privacycheck" required />
                     동의합니다
                   </CheckLabel>

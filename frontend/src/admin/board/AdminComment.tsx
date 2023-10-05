@@ -2,23 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel } from '../../Style/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
 import {
   Container,
-  ContentHeader,
-  Total,
-  BlackListBtn,
-  Delete,
-  Add,
   Table,
-  TableCheckboxWrapper,
-  TableHeader,
-  TableCell,
-  TableCheckbox,
-  Num,
+  TableHeader
 } from '../member/AdminMember';
-import axios, { get } from 'axios';
+import axios from 'axios';
 import Paging from '../../components/common/Paging/Paging';
+import { ReplyData } from './AdminBoard';
 
 const ModalContainer = styled.div`
   display: none;
@@ -62,26 +54,26 @@ const LinkStyle = styled(Link)`
 `;
 
 const AdminComment = () => {
-  const { page } = useParams();
-  const [checkedItems, setCheckedItems] = useState([]);
-  const [selectAllChecked, setSelectAllChecked] = useState(false);
-  const [reply, setReply] = useState([]);
-  const [board, setBoard] = useState([]);
-  const [totalPage, setTotalPage] = useState(0);
-  const [totalReply, setTotalReply] = useState(0);
+  const { page } = useParams<{page: string}>();
+  const [checkedItems, setCheckedItems] = useState<number[]>([]);
+  const [selectAllChecked, setSelectAllChecked] = useState<boolean>(false);
+  const [reply, setReply] = useState<ReplyData[]>([]);
+  // const [board, setBoard] = useState<BoardData[]>([]);
+  const [totalPage, setTotalPage] = useState<number>(0);
+  const [totalReply, setTotalReply] = useState<number>(0);
 
   useEffect(() => {
-    const currentPage = parseInt(page, 10);
+    const currentPage: number = parseInt(page ? page : '1', 10);
     const fetchData = async () => {
       try {
         const response = await axios.get(`/reply/list?page=${currentPage}`);
-        const replyData = response.data;
+        const replyData: ReplyData[] = response.data;
         const totalPages = parseInt(response.headers['totalpages'], 10);
         const totalData = parseInt(response.headers['totaldata'], 10);
         console.log(totalData);
 
         // 게시물의 title을 가져오는 함수
-        const getBoardTitle = async (boardId) => {
+        const getBoardTitle = async (boardId: number) => {
           try {
             const titleResponse = await axios.get(`/boards/${boardId}`);
             return titleResponse.data.title;
@@ -92,7 +84,7 @@ const AdminComment = () => {
         };
 
         //게시물의 게시판 이름을 가져오는 함수
-        const getBoardBoardTitle = async (boardId) => {
+        const getBoardBoardTitle = async (boardId: number) => {
           try {
             const titleResponse = await axios.get(`/boards/${boardId}`);
             return titleResponse.data.boardTitle;
@@ -126,7 +118,7 @@ const AdminComment = () => {
   console.log(reply);
 
   // 전체 선택
-  const handleSelectAllChange = (e) => {
+  const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
 
@@ -139,7 +131,7 @@ const AdminComment = () => {
   };
 
   // 하나씩 선택해서 전부 선택시 맨 위에 체크되도록 하는 기능
-  const handleCheckboxChange = (replyId) => {
+  const handleCheckboxChange = (replyId: number) => {
     const updatedCheckedItems = checkedItems.includes(replyId) ? checkedItems.filter((id) => id !== replyId) : [...checkedItems, replyId];
 
     setCheckedItems(updatedCheckedItems);
@@ -147,7 +139,7 @@ const AdminComment = () => {
   };
 
   // 댓글 내용 줄이기
-  const truncateString = (str, maxLength) => {
+  const truncateString = (str: string, maxLength: number) => {
     if (str.length > maxLength) {
       return str.substring(0, maxLength) + '...';
     }
@@ -156,18 +148,20 @@ const AdminComment = () => {
 
   // 선택 댓글 삭제
   const handleDeleteItems = () => {
-    let isConfirm = window.confirm('삭제하시겠습니까?');
+    const isConfirm = window.confirm('삭제하시겠습니까?');
     const deletions = checkedItems.map((item) => {
       console.log(item);
       const url = `/reply/softdelete/${item}`;
       if (isConfirm) {
         return axios.put(url);
+      }else {
+        return null;
       }
     });
 
     Promise.all(deletions)
       .then((responses) => {
-        const successfulDeletions = responses.filter((response) => response.status === 200);
+        const successfulDeletions = responses.filter((response) => response?.status === 200);
         if (successfulDeletions.length === deletions.length) {
           setCheckedItems([]); // 모든 항목이 성공적으로 삭제된 경우 setCheckedItems 초기화합니다.
           window.location.reload();
@@ -192,12 +186,14 @@ const AdminComment = () => {
       };
       if (isConfirm) {
         return axios.post(url, requestReportDto);
+      }else {
+        return null;
       }
     });
 
     Promise.all(reportions)
       .then((response) => {
-        const successfulReportions = response.filter((response) => response.status === 200);
+        const successfulReportions = response.filter((response) => response?.status === 200);
         if (successfulReportions.length === reportions.length) {
           setCheckedItems([]);
           alert('신고처리 되었습니다.');
@@ -244,11 +240,12 @@ const AdminComment = () => {
           </thead>
           <tbody>
             {reply.length === 0 && (
-              <td colSpan="7" className="center">
+              <td colSpan={7} className="center">
                 등록된 댓글이 없습니다.
               </td>
             )}
-            {reply.map((reply, idx) => (
+            {reply &&
+            reply.map((reply, idx) => (
               <tr key={reply.replyId}>
                 <td className="center">
                   <InputCheckbox
@@ -257,10 +254,10 @@ const AdminComment = () => {
                     onChange={() => handleCheckboxChange(reply.replyId)}
                   />
                 </td>
-                <td className="center">{idx + 1}</td>
-                <td className="center">{reply.boardTitle}</td>
+                <td className="center">{totalReply - idx}</td>
+                <td className="center">{reply.board.boardTitle}</td>
                 <td className="center">
-                  <LinkStyle to={`/board/${reply.boardId}/detail`}>{reply.title}</LinkStyle>
+                  <LinkStyle to={`/board/${reply.boardId}/detail`}>{reply.board.title}</LinkStyle>
                 </td>
                 <td className="center">
                   <CommentText>{truncateString(reply.replyContent, 8)}</CommentText>
@@ -279,7 +276,7 @@ const AdminComment = () => {
             ))}
           </tbody>
         </Table>
-        <Paging />
+        <Paging totalPage={totalPage} />
       </Container>
     </AdminLayout>
   );

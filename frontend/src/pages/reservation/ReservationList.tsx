@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { commonContainerStyle, PageTitle, commonTable } from '../../Style/commonStyles';
 import Paging from '../../components/common/Paging/Paging';
@@ -7,6 +7,7 @@ const Container = styled(commonContainerStyle)``;
 const Table = styled(commonTable)``;
 
 const ReservationList = () => {
+  const [totalPages, setTotalPages] = useState(0);
   const reservations = [
     {
       reservationNumber: '2023082555672148',
@@ -34,19 +35,19 @@ const ReservationList = () => {
         <Table className="userpage">
           <thead>
             <tr>
-              <th width="110px">번호</th>
-              <th width="220px">예약번호</th>
-              <th width="280px">상품명</th>
-              <th width="140px">체크인</th>
-              <th width="140px">체크아웃</th>
-              <th width="140px">예약(결제)일</th>
-              <th width="150px">결제금액</th>
+              <th style={{width: '110px'}}>번호</th>
+              <th style={{width: '220px'}}>예약번호</th>
+              <th style={{width: '280px'}}>상품명</th>
+              <th style={{width: '140px'}}>체크인</th>
+              <th style={{width: '140px'}}>체크아웃</th>
+              <th style={{width: '140px'}}>예약(결제)일</th>
+              <th style={{width: '150px'}}>결제금액</th>
             </tr>
           </thead>
           <tbody>
             {reservations.length === 0 ? (
               <tr>
-                <td colSpan="7" className="center">
+                <td colSpan={7} className="center">
                   예약 정보가 없습니다.
                 </td>
               </tr>
@@ -69,7 +70,7 @@ const ReservationList = () => {
             )}
           </tbody>
         </Table>
-        <Paging />
+        <Paging totalPage={totalPages} />
       </Container>
     </>
   );

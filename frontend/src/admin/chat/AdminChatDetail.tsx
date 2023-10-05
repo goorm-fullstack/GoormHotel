@@ -129,10 +129,10 @@ const ModifyBtn = styled.button`
 `;
 
 const AdminChatDetail = () => {
-  const { roomId } = useParams();
+  const { roomId } = useParams<{roomId: string}>();
   const [socketConnected, setSocketConnected] = useState(false);
   const [chatData, setChatData] = useState([]);
-  const chatContainerRef = useRef(null);
+  const chatContainerRef = useRef<HTMLUListElement>(null);
   const [newChat, setNewChat] = useState('');
   const [chatRoomData, setChatRoomData] = useState({});
   const [recentTime, setRecentTime] = useState('');
@@ -166,7 +166,7 @@ const AdminChatDetail = () => {
     }
   }, [chatData]);
 
-  const settingWebSocket = (roomId1) => {
+  const settingWebSocket = (roomId1: string) => {
     // 이전 상태(prevRoomId)를 이용하여 새로운 상태를 반환
     if (!ws.current) {
       ws.current = new WebSocket(webSocketURL);
@@ -193,21 +193,21 @@ const AdminChatDetail = () => {
         console.log(error);
       };
 
-     // 메시지 핸들러 설정
-     ws.current.onmessage = (event) => {
-       const message = event.data;
-       const parsedMessage = JSON.parse(message);
-       const chatContent = parsedMessage.message;
-       const chatRoomID = parsedMessage.roomId;
-       const sender = parsedMessage.sender;
-       // 메시지 발신자가 어드민이 아닌 경우에만 호출된다.
-       if(chatRoomID === roomId && sender !== "admin") {
-         // 메시지를 처리하는 로직을 여기에 추가
-         // 이전 채팅 데이터를 복사한 후 새 메시지를 추가
-         setChatData((p) => [...p, { message: chatContent, sender: sender, type: 'TALK' },]);
-       }
-     };
-   }
+      // 메시지 핸들러 설정
+      ws.current.onmessage = (event) => {
+        const message = event.data;
+        const parsedMessage = JSON.parse(message);
+        const chatContent = parsedMessage.message;
+        const chatRoomID = parsedMessage.roomId;
+        const sender = parsedMessage.sender;
+        // 메시지 발신자가 어드민이 아닌 경우에만 호출된다.
+        if(chatRoomID === roomId && sender !== "admin") {
+          // 메시지를 처리하는 로직을 여기에 추가
+          // 이전 채팅 데이터를 복사한 후 새 메시지를 추가
+          setChatData((p) => [...p, { message: chatContent, sender: sender, type: 'TALK' },]);
+        }
+      };
+    }
     // 컴포넌트 언마운트 시 WebSocket 연결 닫기
     return () => {
       console.log('Cleaning up WebSocket');
