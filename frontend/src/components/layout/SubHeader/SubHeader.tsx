@@ -77,7 +77,7 @@ const SubHeader = ({ kind }: SubHeaderProps) => {
       {/** 경규님 짱!bbb */}
       <ul>
         {SubHeaderData[kind].nav.map((nav) => (
-          <li>
+          <li key={nav.linkto}>
             <NavLink to={nav.linkto} className={({ isActive }) => (isActive ? 'active' : '')}>
               {nav.title}
             </NavLink>
