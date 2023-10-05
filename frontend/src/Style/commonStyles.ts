@@ -489,7 +489,7 @@ export const commonTable = styled.table`
       }
 
       &.writeWrapper {
-        // 텍스트 에디터 들어 있는 td에 추가
+        // 텍스트 에디터 들어 있거나 td 칸에 꽉 차게 무언가 넣어야 하는 경우 td에 추가
         padding: 0;
         border-top-color: ${(props) => props.theme.colors.grayborder};
       }
