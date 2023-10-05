@@ -144,15 +144,13 @@ const BoardRead = () => {
     }
   }, [boardData]);
 
-  const [comments, setComments] = useState([]); // 댓글 목록을 저장할 상태
-  const [newComment, setNewComment] = useState(''); // 새로운 댓글 내용을 저장할 상태
+  const [comments, setComments] = useState<any[]>([]);
   const [replyWriter, setReplyWriter] = useState('');
   const [replyContent, setReplyContent] = useState('');
 
-  // 댓글 불러오기
   const fetchComments = async (boardId:number) => {
     try {
-      const response = await axios.get(`/reply/boardId/${boardId}`);
+      const response = await axios.get(`/reply/boardId/${boardData.boardId}`);
       setComments(response.data);
     } catch (error) {
       console.error(error);
@@ -160,22 +158,23 @@ const BoardRead = () => {
   };
 
   useEffect(() => {
-    fetchComments(boardId);
-  }, [boardId]);
+    if (boardData) {
+      fetchComments(boardData.boardId);
+    }
+  }, [boardData]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // 새로운 댓글을 서버에 제출
     try {
       const response = await axios.post('/reply/writeform', {
         boardId: boardId,
         replyContent: replyContent,
         replyWriter: replyWriter
       });
-      fetchComments(boardId);
       setReplyWriter('');
       setReplyContent('');
+      fetchComments(boardId);
     } catch (error) {
       console.error(error);
     }
@@ -199,6 +198,7 @@ const BoardRead = () => {
           })()}
           <div>
             <TableRead>
+              <tbody>
               <tr>
                 <td className="titlew">
                   <p className="title">
@@ -231,8 +231,8 @@ const BoardRead = () => {
                             type="text"
                             placeholder="작성자명"
                             name="replyWriter"
-                            value={replyWriter} // 상태에서 작성자명 가져오기
-                            onChange={(e) => setReplyWriter(e.target.value)} // 입력 값이 변경될 때 상태 업데이트
+                            value={replyWriter}
+                            onChange={(e) => setReplyWriter(e.target.value)}
                         />
                         {/*<input type="password" placeholder="식별 비밀번호?" />*/}
                       </div>
@@ -249,6 +249,17 @@ const BoardRead = () => {
               <tr className="commentslist">
                 <td>
                   <ul>
+                    {comments.map((comment, index) => (
+                        <li key={index}>
+                          <p>
+                            {comment.replyWriter}
+                            <span className="date">{comment.replyDate}</span>
+                            <button type="button">수정</button>
+                            <button type="button">삭제</button>
+                          </p>
+                          <p>{comment.replyContent}</p>
+                        </li>
+                    ))}
                     <li>
                       <p>
                         이름이름
@@ -279,6 +290,7 @@ const BoardRead = () => {
                   </ul>
                 </td>
               </tr>
+              </tbody>
             </TableRead>
             <BtnWrapper className="center mt40">
               <LinkBtn to={listLink}>목록</LinkBtn>
