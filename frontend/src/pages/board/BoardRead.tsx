@@ -64,60 +64,94 @@ const TableRead = styled.table`
 `;
 
 const BoardRead = () => {
-  const board = useParams().board;
+  const {board, boardId} = useParams();
   const loc = useLocation();
-  const searchParams = new URLSearchParams(loc.search);
-  const boardId = searchParams.get('boardId');
+  // const searchParams = new URLSearchParams(loc.search);
+  // const boardId = searchParams.get('boardId');
   const [boardData, setBoardData] = useState<any>(null);
   const [listLink, setListLink] = useState('');
+  const [title, setTitle] = useState<any>();
+  const [file, setFile] = useState('');
 
   useEffect(() => {
-    axios.get(`/boards/${boardId}`).then((response) => {
+    axios.get(`/boards/${boardId}`)
+    .then((response) => {
+      if(response.headers['filename']){
+        const fileName = response.headers['filename'];
+        setFile(fileName);
+      }
       setBoardData(response.data);
+    })
+    .catch((error) => {
+      console.error('Error:', error.message);
     });
   }, []);
 
-  console.log(boardData);
-
-  if (boardData) {
-    switch (boardData.boardTitle) {
-      case '문의하기':
-        setListLink('/board/qna/1');
+  useEffect(() => {
+    let pageTitle;
+    switch (board) {
+      case 'notice':
+        pageTitle = <PageTitle>공지사항</PageTitle>;
         break;
-      case '공지사항':
-        setListLink('/board/notice/1');
+      case 'qna':
+        pageTitle = <PageTitle>문의하기</PageTitle>;
         break;
-      case '이용후기':
-        setListLink('/board/review/1');
+      case 'review':
+        pageTitle = <PageTitle>이용후기</PageTitle>;
+        break;
+      default:
+        pageTitle = <PageTitle>고객지원</PageTitle>;
         break;
     }
+    setTitle(pageTitle ? pageTitle : undefined);
+
+    if (boardData) {
+      let link = '';
+      switch (boardData.boardTitle) {
+        case '문의하기':
+          link = '/board/qna/1';
+          break;
+        case '공지사항':
+          link = '/board/notice/1';
+          break;
+        case '이용후기':
+          link = '/board/review/1';
+          break;
+        default:
+          break;
+      }
+      setListLink(link);
+    }
+  }, [])
+
+  const handleDownLoad = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const result = await axios.get(`/boards/download/${boardId}`, {responseType : 'blob'})
+    let blob = new Blob([result.data], {type: result.headers['content-type']})
+
+    let link = document.createElement('a')
+    link.href = window.URL.createObjectURL(blob)
+    link.target = '_self'
+    link.setAttribute("download", file)
+    link.click()
   }
+
+  console.log(boardData);
 
   return (
     <>
       <SubHeader kind="board" />
       <Container>
-        {(() => {
-          switch (board) {
-            case 'notice':
-              return <PageTitle>공지사항</PageTitle>;
-            case 'qna':
-              return <PageTitle>문의하기</PageTitle>;
-            case 'review':
-              return <PageTitle>이용후기</PageTitle>;
-            default:
-              return <PageTitle>고객지원</PageTitle>;
-          }
-        })()}
+        {title}
         <div>
           <TableRead>
             <tr>
               <td className="titlew">
                 {/* 수정된 부분: boardData가 null인 경우에 대비하여 조건부 렌더링 */}
                 <p className="title">
-                  <span>[카테고리]</span>
+                  <span>{boardData ? boardData.category : ''}</span>
                   {boardData ? boardData.title : ''}
                 </p>
+                <button type='button' onClick={handleDownLoad}>{file}</button>
                 {(() => {
                   // board가 'notice'가 아니고 boardData가 존재하는 경우에만 렌더링
                   if (board !== 'notice' && boardData) {
