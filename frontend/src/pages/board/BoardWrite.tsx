@@ -182,7 +182,7 @@ const BoardWrite = () => {
                 </td>
               </tr>
               <tr className="conbtm">
-                {board === 'review' ? 
+                {board === 'review' ?
                 (<>
                 <th>썸네일 이미지</th>
                 <td>
