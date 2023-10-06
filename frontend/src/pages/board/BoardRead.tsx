@@ -144,14 +144,14 @@ const BoardRead = () => {
     }
   }, [boardData]);
 
-  const [comments, setComments] = useState<any[]>([]);
+  const [reply, setReply] = useState<any[]>([]);
   const [replyWriter, setReplyWriter] = useState('');
   const [replyContent, setReplyContent] = useState('');
 
-  const fetchComments = async (boardId:number) => {
+  const fetchReply = async (boardId:number) => {
     try {
       const response = await axios.get(`/reply/boardId/${boardData.boardId}`);
-      setComments(response.data);
+      setReply(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -159,7 +159,7 @@ const BoardRead = () => {
 
   useEffect(() => {
     if (boardData) {
-      fetchComments(boardData.boardId);
+      fetchReply(boardData.boardId);
     }
   }, [boardData]);
 
@@ -174,11 +174,13 @@ const BoardRead = () => {
       });
       setReplyWriter('');
       setReplyContent('');
-      fetchComments(boardId);
+      fetchReply(boardId);
     } catch (error) {
       console.error(error);
     }
   };
+
+
 
   return (
       <>
@@ -249,15 +251,15 @@ const BoardRead = () => {
               <tr className="commentslist">
                 <td>
                   <ul>
-                    {comments.map((comment, index) => (
+                    {reply.map((reply, index) => (
                         <li key={index}>
                           <p>
-                            {comment.replyWriter}
-                            <span className="date">{comment.replyDate}</span>
+                            {reply.replyWriter}
+                            <span className="date">{reply.replyDate}</span>
                             <button type="button">수정</button>
                             <button type="button">삭제</button>
                           </p>
-                          <p>{comment.replyContent}</p>
+                          <p>{reply.replyContent}</p>
                         </li>
                     ))}
                     <li>
