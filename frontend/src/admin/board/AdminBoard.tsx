@@ -44,6 +44,7 @@ export interface ReportData{
 }
 
 const AdminBoard = () => {
+  const authItem = localStorage.getItem("auth");
   const { page } = useParams<{page: string}>();
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
   const [selectAllChecked, setSelectAllChecked] = useState<boolean>(false);
@@ -121,6 +122,7 @@ const AdminBoard = () => {
     });
   };
 
+  if(authItem && authItem.includes("AUTH_C")) {
   return (
     <AdminLayout subMenus="board">
       <Container>
@@ -201,6 +203,15 @@ const AdminBoard = () => {
       </Container>
     </AdminLayout>
   );
+} else {
+    return (
+        <AdminLayout subMenus="board">
+          <Container>
+            <p>사용할 수 없는 페이지입니다.</p>
+          </Container>
+        </AdminLayout>
+    )
+  }
 };
 
 export default AdminBoard;

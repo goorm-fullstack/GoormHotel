@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link, useLocation } from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import { BtnWrapper, SubmitBtn, PageTitle, InputCheckbox, commonContainerStyle, LinkBtn, CheckLabel } from '../../Style/commonStyles';
 import kakao from '../../images/icon/ico_kakao.png';
 import naver from '../../images/icon/ico_naver.png';
 import google from '../../images/icon/ico_google.png';
+import Instance from "../../utils/api/axiosInstance";
 
 const Container = styled(commonContainerStyle)``;
 
@@ -91,17 +92,49 @@ const SecondText = styled.p`
   line-height: 1.6;
 `;
 
-const Login = () => {
+const Login: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
-  const isReservation = queryParams.get('type') === 'reservation';
+  const isReservation: boolean = queryParams.get('type') === 'reservation';
 
-  const [isMemberActive, setIsMemberActive] = useState(!isReservation);
-  const [memberId, setMemberId] = useState('');
-  const [memberPassword, setPassword] = useState('');
-  const [reservationNumber, setReservationNumber] = useState('');
-  const [contactNumber, setContactNumber] = useState('');
-  const [rememberId, setRememberId] = useState(false); //아이디 기억하기 상태
+  const [isMemberActive, setIsMemberActive] = useState<boolean>(!isReservation);
+  const [memberId, setMemberId] = useState<string>('');
+  const [memberPassword, setPassword] = useState<string>('');
+  const [reservationNumber, setReservationNumber] = useState<string>('');
+  const [contactNumber, setContactNumber] = useState<string>('');
+  const [rememberId, setRememberId] = useState<boolean>(false);
+
+  const handleLogin = async () => {
+
+    const loginInfo = {
+      memberId: memberId,
+      password: memberPassword,
+    };
+
+    try {
+      const response = await Instance.post('/login/member', loginInfo, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log("세션 응답 아이디: ", response.data);
+      if (response.status === 200) {
+        const {sessionId, memberId} = response.data;
+        alert('로그인 성공');
+        localStorage.setItem('sessionId', sessionId);
+        localStorage.setItem('memberId', memberId);
+        localStorage.setItem('role', response.data.role);
+        window.location.href = '/'
+      }
+    } catch (error: any) {
+      if (error.response) {
+        if (error.response.status === 401 || error.response.status === 404) {
+          alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+        }
+      }
+    }
+  }
 
   const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMemberId(e.target.value);
@@ -156,7 +189,7 @@ const Login = () => {
                 <Input placeholder="아이디" value={memberId} onChange={handleIdChange} />
                 <Input className="second" placeholder="비밀번호" value={memberPassword} onChange={handlePwChange} />
                 <BtnWrapper className="mt20 full">
-                  <SubmitBtn type="submit">로그인</SubmitBtn>
+                  <SubmitBtn type="submit" onClick={handleLogin}>로그인</SubmitBtn>
                 </BtnWrapper>
               </form>
             ) : (
