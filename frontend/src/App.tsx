@@ -146,10 +146,18 @@ const App: React.FC = () => {
   }, [location.pathname]);
 
   // 쿠키를 파싱하는 함수
-  function getCookie(name: any) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop()?.split(';').shift();
+  function getCookie(name: string): string | undefined {
+    const cookieString = document.cookie;
+    console.log(cookieString)
+    const cookies = cookieString.split('; ');
+
+    for (let i = 0; i < cookies.length; i++) {
+        console.log(cookies[i]);
+        const cookie = cookies[i].split('=');
+        if (cookie[0] === name) {
+            return cookie[1];
+        }
+    }
   }
 
   // Auth쪽 대시로 분리
@@ -163,22 +171,23 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    // 쿠키에서 값을 가져옵니다.
-    const adminId: any = getCookie("adminId");
-    const role: any = getCookie("role");
-    const auth: any = getCookie("auth");
+    const adminId = getCookie("adminId");
+    const role = getCookie("role");
+    const auth = getCookie("auth");
+
+    console.log('adminId 쿠키 값:', adminId);
+    console.log('role 쿠키 값:', role);
+    console.log('auth 쿠키 값:', auth);
 
     // 로컬 스토리지에 정보를 저장한다.
-    splitDashLine(auth);
-    localStorage.setItem("adminId", adminId);
-    localStorage.setItem("role", role);
-    localStorage.setItem("auth", splitDashLine(auth).join(','));
-
-    // 가져온 값이 있다면 상태를 설정합니다.
-    if (adminId && role && auth) {
+    if(adminId !== undefined && role !== undefined && auth !== undefined) {
       localStorage.setItem("adminId", adminId);
       localStorage.setItem("role", role);
       localStorage.setItem("auth", splitDashLine(auth).join(','));
+    }
+  
+    // 가져온 값이 있다면 상태를 설정합니다.
+    if (adminId && role && auth) {
       setAuthState({ adminId, role, auth });
       setIsLogined(true);
     } else {

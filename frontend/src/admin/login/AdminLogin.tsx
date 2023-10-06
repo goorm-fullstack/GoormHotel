@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import * as S from './Style';
 import adminLogo from '../../images/common/logo_admin.png';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import { PageTitle, SubmitBtn, BtnWrapper, CheckLabel, InputCheckbox } from '../../Style/commonStyles';
 import Instance from "../../utils/api/axiosInstance";
 
 const AdminLogin: React.FC = () => {
-  const navigate = useNavigate();
   const [adminId, setAdminId] = useState<string>('');
   const [adminPassword, setAdminPassword] = useState<string>('');
   const [rememberId, setRememberId] = useState<boolean>(false);
@@ -28,6 +27,7 @@ const AdminLogin: React.FC = () => {
 
       if (response.status === 200) {
         alert('로그인 성공');
+        console.log(document.cookie);
         window.location.href = '/admin'
       } else {
         alert('아이디 또는 비밀번호가 일치하지 않습니다.');
