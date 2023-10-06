@@ -117,7 +117,7 @@ const Home = () => {
             </S.RoomItem>
           </S.ItemList>
           <BtnWrapper className="center">
-            <MoreLink to="/offers/1?type=rooms">자세히보기</MoreLink>
+            <MoreLink to="/offers/1?type=room">자세히보기</MoreLink>
           </BtnWrapper>
         </S.Wrapper>
         <S.Wrapper>
