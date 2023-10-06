@@ -269,7 +269,7 @@ const AdminItemList = () => {
               })}
           </tbody>
         </Table>
-        <Paging totalPage={2} />
+        <Paging totalPage={totalPages} />
         {searchJsx}
       </Container>
     </AdminLayout>

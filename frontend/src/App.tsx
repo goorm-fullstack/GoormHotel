@@ -152,7 +152,7 @@ function App() {
             <Route path="/signup/result" element={<JoinComplete />} />
             <Route path="/board/:board/:page" element={<CustomerSupport />} />
             <Route path="/board/:board/write" element={<BoardWrite />} />
-            <Route path="/board/:board/detail/:title" element={<BoardRead />} />
+            <Route path="/board/:board/detail/:boardId" element={<BoardRead />} />
           </Routes>
         </S.AppContainer>
         <S.FloatingWrapper>

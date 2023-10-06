@@ -7,6 +7,7 @@ import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
 import Instance from '../../utils/api/axiosInstance';
 import Search from '../../components/common/Search/Search';
+import { Link } from 'react-router-dom';
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -69,6 +70,7 @@ const CustomerSupport = () => {
   const [boards, setBoard] = useState<any[]>([]);
   const [imageUrl, setImageUrl] = useState<any[]>([]);
   const [totalPages, setTotalPages] = useState(0);
+  const [totalData, setTotalData] = useState(0);
 
   useEffect(() => {
     // board 값이 변경될 때마다 데이터를 다시 불러옴
@@ -84,7 +86,11 @@ const CustomerSupport = () => {
       axios
         .get(`/boards/find/boardTitle/${boardTitle}`)
         .then((response) => {
+          const totalPages = parseInt(response.headers['totalpages'], 10);
+          const totalData = parseInt(response.headers['totaldata'], 10);
           setBoard(response.data || []);
+          setTotalData(totalData);
+          setTotalPages(totalPages);
         })
         .catch((error) => {
           console.error(error);
@@ -95,9 +101,11 @@ const CustomerSupport = () => {
   }, [board]);
 
   useEffect(() => {
-    boards.map((board) => {
-      GetImageUrl(board.boardId);
-    });
+    if(board === 'review'){
+      boards.map((board) => {
+        GetImageUrl(board.boardId);
+      });
+    }
   }, [boards]);
 
   const GetImageUrl = (boardId:number) => {
@@ -169,20 +177,20 @@ const CustomerSupport = () => {
                             <p>작성된 게시글이 없습니다.</p>
                           </li>
                       )}
-                      {boards.map((item) => (
+                      {boards && boards.map((item) => (
                           <li key={item.boardId}>
                             <div className="thumbnail">
-                              <a href={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>
+                              <Link to={`/board/${board}/detail/${item.boardId}`}>
                                 {imageUrl.find((image) => image.boardId === item.boardId) && (
                                     <img
                                         src={imageUrl.find((image) => image.boardId === item.boardId).imageUrl}
                                         alt={`Image for ${item.title}`}
                                     />
                                 )}
-                              </a>
+                              </Link>
                             </div>
                             <p className="title">
-                              <a href={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
+                              <Link to={`/board/${board}/detail/${item.boardId}`}>{item.title}</Link>
                             </p>
                             <p className="writer">{item.boardWriter}</p>
                             <p className="date">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${
@@ -223,12 +231,12 @@ const CustomerSupport = () => {
                       {/** loop */}
                       {boards.map((item, index) => (
                           <tr key={item.boardId}>
-                            <td className="center">{index + 1}</td>
+                            <td className="center">{totalData - index}</td>
                             <td className="center">{item.category}</td>
                             <td>
                               {/* <IsReply>답글</IsReply> */}
                               {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
-                              <a href={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</a>
+                              <Link to={`/board/${board}/detail/${item.boardId}`}>{item.title}</Link>
                             </td>
                             <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${
                                 item.boardWriteDate[1]

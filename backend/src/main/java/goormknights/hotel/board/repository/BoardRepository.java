@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
@@ -31,9 +32,11 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<Board> findAll(Pageable pageable);
 
     //게시판 제목으로 게시물 찾기
-    List<Board> findAllByBoardTitle(String boardTitle, Pageable pageable);
+    Page<Board> findAllByBoardTitle(String boardTitle, Pageable pageable);
 
     //게시판-카테고리로 게시물 찾기
     List<Board> findAllByCategory(String category, Pageable pageable);
+
+    Optional<Board> findByTitle(String boardTitle);
 
 }

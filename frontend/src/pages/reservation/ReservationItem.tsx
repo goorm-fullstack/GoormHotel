@@ -288,6 +288,7 @@ type SelectProduct = ProductType1 | ProductType2;
 const ReservationItem = () => {
   const [selectedProduct, setSelectedProduct] = useState<SelectProduct | null>();
   const location = useLocation();
+  console.log(location.search.replace('?type=', ''));
   const reservationData = location.state ? location.state.reservationData : null;
   const [selectedType, setSelectedType] = useState<string[]>(['room']);
   const [selectedCategory, setSelectedCategory] = useState<string>(productCategories[0].english);
@@ -359,6 +360,13 @@ const ReservationItem = () => {
     }
   }, [selectedType, selectedCategory]);
 
+  useEffect(() => {
+    if(location.search){
+      const type = location.search.replace('?type=', '');
+      setSelectedType([`${type}`]);
+    }
+  }, [])
+
   const handleReservationClick = (productInfo: RoomData | DiningData, imageUrl: string) => {
     setSelectedProduct({ ...productInfo, imageUrl });
   };
@@ -412,7 +420,7 @@ const ReservationItem = () => {
             <SelectWrapper>
               <div className="typewrapper">
                 {productTypes.map((type, index) => (
-                  <CheckLabel htmlFor={type.id}>
+                  <CheckLabel key={index} htmlFor={type.id}>
                     <InputCheckbox
                       type="checkbox"
                       id={type.id}
@@ -456,34 +464,35 @@ const ReservationItem = () => {
                 products.map((product, index) => (
                   <RoomItem key={index}>
                     <div
+                      key={index}
                       className="imgwrap"
                       style={{
                         backgroundImage: `url(${imageUrls[index] || ''})`,
                       }}
                     />
-                    <RoomItemInfo>
-                      <h4>{product.name}</h4>
-                      <p>
+                    <RoomItemInfo key={index}>
+                      <h4 key={index}>{product.name}</h4>
+                      <p key={index}>
                         {product.type === 'room' ? '객실' : '다이닝'}
-                        <span>{nameOfTypeDetail(product)}</span>
-                        <span>{product.capacity}인 기준</span>
+                        <span key={index}>{nameOfTypeDetail(product)}</span>
+                        <span key={index}>{product.capacity}인 기준</span>
                       </p>
-                      <p className="price">
-                        <strong>{numberWithCommas(product.price)}</strong> 원 ~
+                      <p key={index} className="price">
+                        <strong key={index}>{numberWithCommas(product.price)}</strong> 원 ~
                       </p>
-                      <h5>추가 인원 비용</h5>
-                      <table>
-                        <tr>
-                          <th>성인(1인)</th>
-                          <td>{numberWithCommas(product.priceAdult)} 원</td>
+                      <h5 key={index}>추가 인원 비용</h5>
+                      <table key={index}>
+                        <tr key={index}>
+                          <th key={index}>성인(1인)</th>
+                          <td key={index}>{numberWithCommas(product.priceAdult)} 원</td>
                         </tr>
-                        <tr>
-                          <th>어린이(1인)</th>
-                          <td>{numberWithCommas(product.priceChildren)} 원</td>
+                        <tr key={index}>
+                          <th key={index}>어린이(1인)</th>
+                          <td key={index}>{numberWithCommas(product.priceChildren)} 원</td>
                         </tr>
                       </table>
-                      <BtnWrapper className="full mt30">
-                        <NormalBtn onClick={() => handleReservationClick(product, imageUrls[index])}>상품 담기(예약)</NormalBtn>
+                      <BtnWrapper key={index} className="full mt30">
+                        <NormalBtn key={index} onClick={() => handleReservationClick(product, imageUrls[index])}>상품 담기(예약)</NormalBtn>
                       </BtnWrapper>
                     </RoomItemInfo>
                   </RoomItem>
@@ -544,19 +553,19 @@ const ReservationItem = () => {
                           d="M184,184H69.8L41.9,30.6A8,8,0,0,0,34.1,24H16"
                           fill="none"
                           stroke="#ddd"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="16"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="16"
                         />
-                        <circle cx="80" cy="204" fill="none" r="20" stroke="#ddd" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
-                        <circle cx="184" cy="204" fill="none" r="20" stroke="#ddd" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+                        <circle cx="80" cy="204" fill="none" r="20" stroke="#ddd" strokeLinecap="round" strokeLinejoin="round" strokeWidth="16" />
+                        <circle cx="184" cy="204" fill="none" r="20" stroke="#ddd" strokeLinecap="round" strokeLinejoin="round" strokeWidth="16" />
                         <path
                           d="M62.5,144H188.1a15.9,15.9,0,0,0,15.7-13.1L216,64H48"
                           fill="none"
                           stroke="#ddd"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="16"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="16"
                         />
                       </svg>
                       <br />

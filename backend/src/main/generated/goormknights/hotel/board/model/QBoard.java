@@ -26,6 +26,8 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final DateTimePath<java.time.LocalDateTime> boardDeleteTime = createDateTime("boardDeleteTime", java.time.LocalDateTime.class);
 
+    public final QBoardFile boardFile;
+
     public final NumberPath<Long> boardId = createNumber("boardId", Long.class);
 
     public final QBoardImage boardImage;
@@ -62,6 +64,7 @@ public class QBoard extends EntityPathBase<Board> {
 
     public QBoard(Class<? extends Board> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.boardFile = inits.isInitialized("boardFile") ? new QBoardFile(forProperty("boardFile")) : null;
         this.boardImage = inits.isInitialized("boardImage") ? new QBoardImage(forProperty("boardImage")) : null;
     }
 
