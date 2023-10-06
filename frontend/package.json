@@ -41,7 +41,7 @@
       "react-app/jest"
     ]
   },
-  "proxy": "https://port-0-goormhotel-back-2rrqq2blmrcd5gx.sel5.cloudtype.app/",
+  "proxy": "https://port-0-goormhotel-back-2rrqq2blmrcd5gx.sel5.cloudtype.app",
   "browserslist": {
     "production": [
       ">0.2%",
