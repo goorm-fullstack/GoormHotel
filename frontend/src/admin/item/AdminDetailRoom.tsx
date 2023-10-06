@@ -4,7 +4,7 @@ import { PageTitle, SubmitBtn } from '../../Style/commonStyles';
 import { Image } from '../../components/AddItemForm/Style';
 import { RoomData, Select } from './AdminItemList';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import { Container, Table } from '../member/AdminMember';
 import { RoomForm } from '../../components/AddItemForm/WriteFormRoom';
@@ -55,6 +55,7 @@ const AdminDetailRoom = () => {
   const [imageUrls, setImageUrls] = useState<string[]>([]); // 현재 데이터의 이미지 상태 관리
   const nameRef = useRef<HTMLInputElement>(null); // 상품명 입력하는 input 태그
 
+
   // 현재 데이터 get 요청
   useEffect(() => {
     const nameParam: string = name ? name : '';
@@ -63,6 +64,16 @@ const AdminDetailRoom = () => {
       console.log('get 성공');
     });
   }, [name, type]);
+
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_B"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   // 이미지 업로드 input의 onChange(이미지 미리보기)
   const saveImgFile = () => {
@@ -183,6 +194,7 @@ const AdminDetailRoom = () => {
     responseMessege = <GreenP>{duplicateMessage}</GreenP>;
   }
 
+  if(authItem && authItem.includes("AUTH_B")) {
   return (
     <AdminLayout subMenus="item">
       <Container>
@@ -290,6 +302,9 @@ const AdminDetailRoom = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminDetailRoom;

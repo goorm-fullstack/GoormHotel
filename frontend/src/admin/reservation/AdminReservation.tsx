@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Instance from '../../utils/api/axiosInstance';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import moment from 'moment';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, BtnWrapper, NormalBtn, InputCheckbox } from '../../Style/commonStyles';
@@ -42,6 +42,15 @@ const AdminReservation = () => {
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_B"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
@@ -87,6 +96,7 @@ const AdminReservation = () => {
   //   return `${formattedDate}`;
   // };
 
+  if(authItem && authItem.includes("AUTH_B")) {
   return (
     <AdminLayout subMenus="reservation">
       <Container>
@@ -155,6 +165,9 @@ const AdminReservation = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminReservation;

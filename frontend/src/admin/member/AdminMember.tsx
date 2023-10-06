@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { commonAdminContents, PageTitle, commonTable, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
 import Paging from '../../components/common/Paging/Paging';
 
@@ -25,6 +25,16 @@ const AdminMember = () => {
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_A"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
+
 
   const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
@@ -77,6 +87,7 @@ const AdminMember = () => {
     },
   ];
 
+  if(authItem && authItem.includes("AUTH_A")) {
   return (
     <AdminLayout subMenus="member">
       <Container>
@@ -144,6 +155,9 @@ const AdminMember = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminMember;

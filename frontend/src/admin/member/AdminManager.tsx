@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel, ContentsTitleXSmall, SubmitBtn, MultiCheck } from '../../Style/commonStyles';
 import styled from 'styled-components';
@@ -8,6 +8,7 @@ import {
   TableHeader
 } from './AdminMember';
 import Paging from '../../components/common/Paging/Paging';
+import { useNavigate } from 'react-router-dom';
 
 export const Section = styled.section`
   margin-bottom: 60px;
@@ -50,6 +51,15 @@ const AdminManager = () => {
   const [selectedManager, setSelectedManager] = useState<ManagerData | undefined>();
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_A"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   console.log(checkedItems);
   console.log(selectedManager);
@@ -105,6 +115,7 @@ const AdminManager = () => {
     },
   ];
 
+  if(authItem && authItem.includes("AUTH_A")) {
   return (
     <AdminLayout subMenus="member">
       <Container>
@@ -319,6 +330,9 @@ const AdminManager = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminManager;

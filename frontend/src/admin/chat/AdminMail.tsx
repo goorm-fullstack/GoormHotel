@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, CheckLabel, MultiCheck, SubmitBtn } from '../../Style/commonStyles';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
-import { useLocation, useParams } from 'react-router-dom';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import { Container, Table } from '../member/AdminMember';
 import Instance from '../../utils/api/axiosInstance';
 import queryString from 'query-string';
@@ -19,6 +19,15 @@ const AdminMail = () => {
   const [file, setFile] = useState('');
   const [message, setMessage] = useState('');
   const mailto = queryParams.mailto;
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_C"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
   
   console.log(mailto)
 
@@ -110,7 +119,8 @@ const AdminMail = () => {
     })
     window.location.href = `/admin/mail`;
   }
-  
+
+  if(authItem && authItem.includes("AUTH_C")) {
   return (
     <AdminLayout subMenus="chat">
       <Container>
@@ -168,6 +178,9 @@ const AdminMail = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminMail;

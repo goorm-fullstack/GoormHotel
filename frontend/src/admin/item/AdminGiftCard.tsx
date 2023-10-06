@@ -3,7 +3,7 @@ import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, ContentsTitleXSmall, SubmitBtn } from '../../Style/commonStyles';
 import 'react-calendar/dist/Calendar.css';
 import 'moment/locale/ko';
-import { Link, useParams } from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import { Container, Table, TableHeader } from '../member/AdminMember';
 import { InputWrapper, Section } from '../member/AdminManager';
 import Paging from '../../components/common/Paging/Paging';
@@ -29,6 +29,15 @@ const AdminGiftCard = () => {
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [count, setCount] = useState<number>(1);
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_B"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   // 체크박스 전체 선택 or 해체 기능
   const inputRef = useRef<HTMLInputElement[]>([]);
@@ -111,6 +120,7 @@ const AdminGiftCard = () => {
     })
   }
 
+  if(authItem && authItem.includes("AUTH_B")) {
   return (
     <AdminLayout subMenus="item">
       <Container>
@@ -228,6 +238,9 @@ const AdminGiftCard = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminGiftCard;
