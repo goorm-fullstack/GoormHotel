@@ -1,23 +1,51 @@
 import React, { useState } from 'react';
 import * as S from './Style';
 import adminLogo from '../../images/common/logo_admin.png';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import { PageTitle, SubmitBtn, BtnWrapper, CheckLabel, InputCheckbox } from '../../Style/commonStyles';
+import Instance from "../../utils/api/axiosInstance";
 
-const AdminLogin = () => {
-  const [adminId, setAdminId] = useState('');
-  const [adminPassword, setAdminPassword] = useState('');
-  const [rememberId, setRememberId] = useState(false);
+const AdminLogin: React.FC = () => {
+  const [adminId, setAdminId] = useState<string>('');
+  const [adminPassword, setAdminPassword] = useState<string>('');
+  const [rememberId, setRememberId] = useState<boolean>(false);
+
+  const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const loginInfo = {
+      adminId: adminId,
+      password: adminPassword,
+    };
+    console.log("로그인 정보:", JSON.stringify(loginInfo));
+    try {
+      const response = await Instance.post('/login/manager', loginInfo, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      });
+
+      if (response.status === 200) {
+        alert('로그인 성공');
+        console.log(document.cookie);
+        window.location.href = '/admin'
+      } else {
+        alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+      }
+    } catch (error) {
+      alert('아이디 또는 비밀번호가 일치하지 않습니다. 또는 서버 오류가 발생했습니다.');
+    }
+  };
 
   const handleRememberIdChange = () => {
     setRememberId(!rememberId);
   };
 
-  const handleIdChange = (e: any) => {
+  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAdminId(e.target.value);
   };
 
-  const handlePwChange = (e: any) => {
+  const handlePwChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAdminPassword(e.target.value);
   };
 
@@ -36,13 +64,12 @@ const AdminLogin = () => {
           <input placeholder="아이디" type="text" value={adminId} onChange={handleIdChange} />
           <input placeholder="비밀번호" type="password" value={adminPassword} onChange={handlePwChange} />
           <BtnWrapper className="full mt20">
-            <SubmitBtn>로그인</SubmitBtn>
+            <SubmitBtn onClick={handleLogin}>로그인</SubmitBtn>
           </BtnWrapper>
         </form>
         <div>
           <CheckLabel>
-            <InputCheckbox type="checkbox" />
-            {/* checked={handleRememberIdChange} */}
+            <InputCheckbox type="checkbox" checked={rememberId} onChange={handleRememberIdChange} />
             아이디 기억하기
           </CheckLabel>
         </div>

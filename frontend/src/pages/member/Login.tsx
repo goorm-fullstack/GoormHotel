@@ -5,6 +5,8 @@ import { BtnWrapper, SubmitBtn, PageTitle, InputCheckbox, commonContainerStyle, 
 import kakao from '../../images/icon/ico_kakao.png';
 import naver from '../../images/icon/ico_naver.png';
 import google from '../../images/icon/ico_google.png';
+import Instance from '../../utils/api/axiosInstance';
+import Membership from './../about/Membership/Membership';
 
 const Container = styled(commonContainerStyle)``;
 
@@ -131,6 +133,69 @@ const Login = () => {
     setRememberId(!rememberId);
   };
 
+  // 쿠키를 파싱하는 함수
+  function getCookie(name: string): string | undefined {
+    const cookieString = document.cookie;
+    console.log(cookieString)
+    const cookies = cookieString.split('; ');
+
+    for (let i = 0; i < cookies.length; i++) {
+        console.log(cookies[i]);
+        const cookie = cookies[i].split('=');
+        if (cookie[0] === name) {
+            return cookie[1];
+        }
+    }
+  }
+
+  const handleLoginClick = async (e : React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const loginInfo = {
+      adminId: memberId,
+      password: memberPassword,
+    };
+    console.log("로그인 정보:", JSON.stringify(loginInfo));
+    try {
+      const response = await Instance.post('/login', loginInfo, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      });
+
+      if (response.status === 200) {
+        alert('로그인 성공');
+        const role = getCookie("role");
+        if(role === 'ROLE_BLACKED') {
+          alert("블랙리스트에 등록된 멤버입니다. 자세한 내용은 goormhotel@gmail.com으로 문의주시기 바랍니다.");
+          window.location.reload();
+        } else {
+          const memberId = getCookie("memberId");
+          const name = getCookie("name");
+          const role = getCookie("role");
+          const auth = getCookie("auth");
+          const membership = getCookie("membership");
+          
+          if(memberId !== undefined && name !== undefined && membership !== undefined && role !== undefined && auth !== undefined) {
+            localStorage.setItem("memberId", memberId);
+            localStorage.setItem("name", name);
+            localStorage.setItem("role", role);
+            localStorage.setItem("auth", auth);
+            localStorage.setItem("membership", membership);
+          }
+          
+          window.location.href = '/'
+        }
+
+        
+      } else {
+        alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+      }
+    } catch (error) {
+      alert('아이디 또는 비밀번호가 일치하지 않습니다. 또는 서버 오류가 발생했습니다.');
+    }
+  }
+
   useEffect(() => {
     if (isReservation) {
       setIsMemberActive(false);
@@ -156,7 +221,7 @@ const Login = () => {
                 <Input placeholder="아이디" value={memberId} onChange={handleIdChange} />
                 <Input className="second" placeholder="비밀번호" value={memberPassword} onChange={handlePwChange} />
                 <BtnWrapper className="mt20 full">
-                  <SubmitBtn type="submit">로그인</SubmitBtn>
+                  <SubmitBtn type="submit" onClick={handleLoginClick}>로그인</SubmitBtn>
                 </BtnWrapper>
               </form>
             ) : (

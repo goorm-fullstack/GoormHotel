@@ -4,6 +4,8 @@ import goormknights.hotel.auth.dto.request.Login;
 import goormknights.hotel.auth.dto.request.ManagerLogin;
 import goormknights.hotel.member.service.AdminService;
 import goormknights.hotel.member.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,12 +25,12 @@ public class LoginController {
 
     // 회원 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Login login, HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody Login login, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
         String memberId = login.getMemberId();
         String password = login.getPassword();
 
         try {
-            String loginResult = memberService.login(memberId, password, session);
+            String loginResult = memberService.login(memberId, password, session, request, response);
             return ResponseEntity.ok().body(loginResult);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");

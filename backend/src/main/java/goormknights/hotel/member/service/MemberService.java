@@ -14,9 +14,13 @@ import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.model.MemberEditor;
 import goormknights.hotel.member.repository.MemberRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -154,12 +158,54 @@ public class MemberService {
 
 
     // 로그인
-    public String login(String memberId, String rawPassword, HttpSession session) {
+    public String login(String memberId, String rawPassword, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
         Member member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new UsernameNotFoundException("해당되는 회원이 없습니다"));
 
         if (passwordEncoder.matches(rawPassword, member.getPassword())) {
             session.setAttribute("member", member);
+
+            ResponseCookie nameCookie = ResponseCookie.from("name", member.getName())
+                    .httpOnly(false)//true로 하면 자바스크립트로 쿠키 사용 불가
+                    .path("/")
+                    .sameSite("None")
+                    .secure(true)// Same Site가 None타입인 경우엔 무조건 true
+                    .build();
+
+            ResponseCookie authCookie = ResponseCookie.from("auth", member.getAuth())
+                    .httpOnly(false)//true로 하면 자바스크립트로 쿠키 사용 불가
+                    .path("/")
+                    .sameSite("None")
+                    .secure(true)// Same Site가 None타입인 경우엔 무조건 true
+                    .build();
+
+            ResponseCookie memberShipCookie = ResponseCookie.from("membership", member.getGrade())
+                    .httpOnly(false)//true로 하면 자바스크립트로 쿠키 사용 불가
+                    .path("/")
+                    .sameSite("None")
+                    .secure(true)// Same Site가 None타입인 경우엔 무조건 true
+                    .build();
+
+            ResponseCookie idCookie = ResponseCookie.from("memberId", member.getMemberId())
+                    .httpOnly(false)//true로 하면 자바스크립트로 쿠키 사용 불가
+                    .path("/")
+                    .sameSite("None")
+                    .secure(true)// Same Site가 None타입인 경우엔 무조건 true
+                    .build();
+
+            ResponseCookie roleCookie = ResponseCookie.from("role", member.getRole().toString())
+                    .httpOnly(false)//true로 하면 자바스크립트로 쿠키 사용 불가
+                    .path("/")
+                    .sameSite("None")
+                    .secure(true)// Same Site가 None타입인 경우엔 무조건 true
+                    .build();
+
+            response.addHeader(HttpHeaders.SET_COOKIE, nameCookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, authCookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, memberShipCookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, idCookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, roleCookie.toString());
+
             return "로그인 완료";
         } else {
             throw new BadCredentialsException("비밀번호가 다릅니다");
