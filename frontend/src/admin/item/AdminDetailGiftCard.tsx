@@ -3,9 +3,10 @@ import AdminLayout from '../common/AdminLayout';
 import { PageTitle, BtnWrapper, SubmitBtn, LinkBtn } from '../../Style/commonStyles';
 import 'react-calendar/dist/Calendar.css';
 import 'moment/locale/ko';
-import { Container, Table } from '../member/AdminMember';
 import Instance from '../../utils/api/axiosInstance';
-import {useNavigate, useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Container } from '../../components/Slide/Style';
+import { Table } from '../member/Style';
 
 interface Member {
   name: string;
