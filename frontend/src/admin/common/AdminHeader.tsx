@@ -29,8 +29,20 @@ const AdminHeader: React.FC = () => {
     }
   };
 
+  function deleteAllCookies() {
+    const cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+  }
+
   const handleLogoutUseLocalStorge = () => {
     localStorage.clear();
+    deleteAllCookies();
     alert('로그아웃 되었습니다');
     window.location.href = '/admin';
   };
@@ -73,9 +85,9 @@ const AdminHeader: React.FC = () => {
               />
             </g>
           </svg>
-          <span>관리자(admin)</span>
-          <button type="button" className="logoutbtn">
-            로그아웃
+          <span>{`유저: ${authState.adminId}, 역할: ${authState.role}, 권한: ${authState.auth}`}</span>
+          <button type="button" className="logoutbtn" onClick={isLoggedIn ? handleLogoutUseLocalStorge : handleLogin}>
+            {isLoggedIn ? '로그아웃' : '로그인'}
           </button>
         </li>
       </ul>
