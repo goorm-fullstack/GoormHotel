@@ -195,6 +195,21 @@ const BoardWrite = () => {
                     </td>
                   </>
                 )}
+                {board === 'review' ?
+                (<>
+                <th>썸네일 이미지</th>
+                <td>
+                  <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
+                  {imgFile !== '' ? <ItemThumbnail src={imgFile} alt="후기 이미지" /> : <ItemThumbnail style={{ display: 'none' }} />}
+                </td>
+                </>)
+                :
+                (<>
+                <th>첨부파일</th>
+                <td>
+                  <input type="file" accept="*" ref={fileRef} />
+                </td>
+                </>)}
               </tr>
             </S.Table>
             <BtnWrapper className="center double mt40">
