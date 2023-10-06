@@ -1,12 +1,17 @@
 package goormknights.hotel.chat.controller;
 
+import goormknights.hotel.chat.dto.response.ResponseChatMessageDto;
 import goormknights.hotel.chat.dto.response.ResponseChatRoomDto;
 import goormknights.hotel.chat.model.ChatMessage;
 import goormknights.hotel.chat.model.ChatRoom;
 import goormknights.hotel.chat.model.ChatRoomDto;
 import goormknights.hotel.chat.repository.ChatRoomRepository;
+import goormknights.hotel.chat.service.ChatRoomService;
 import goormknights.hotel.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,17 +24,9 @@ import java.util.Objects;
 @RequestMapping("/chat")
 public class ChatController {
     private final ChatService chatService;
+    private final ChatRoomService chatRoomService;
     private final ChatRoomRepository chatRoomRepository;
 
-    // 채팅방을 개설하고, 그에 관한 정보를 JSON 형태로 보내준다.
-    /*
-    { 예시입니다.
-        "id": 0,
-        "roomId": "eba4f0ac-aadf-40fc-a892-5440100b8322",
-        "name": "{\r\n    \"name\" : \"test\"\r\n}",
-        "sessions": []
-    }
-     */
     // 나중에 로그인 구현이 끝나면 Principal을 받아서 사용자의 정보를 받아오자
     @PostMapping
     public ChatRoom createRoom(@RequestBody String name) {
@@ -38,18 +35,22 @@ public class ChatController {
 
 //    @PreAuthorize("hasRole('Admin')")
     @GetMapping
-    public List<ChatRoomDto> findAllRoom() {
-        return chatRoomRepository.findAll();
+    public ResponseEntity<List<ResponseChatRoomDto>> findAllRoom(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)Pageable pageable) {
+        List<ResponseChatRoomDto> all = chatRoomService.findAll(pageable);
+        return ResponseEntity.ok(all);
     }
 
     @GetMapping("/getLastMessage")
-    public ResponseEntity<List<ResponseChatRoomDto>> getLastMessage() {
-        List<ChatMessage> lastMessage = chatService.findByLastMessage();
-        List<ChatRoomDto> all = chatRoomRepository.findAll();
-        List<ResponseChatRoomDto> result = new ArrayList<>();
-        makeResponseChatRoom(lastMessage, all, result);
+    public ResponseEntity<List<ResponseChatRoomDto>> getLastMessage(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)Pageable pageable) {
+        List<ResponseChatRoomDto> lastMessage = chatRoomService.getLastMessage(pageable);
 
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(lastMessage);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> getCount() {
+        Long count = chatService.calcRoomPageCount();
+        return ResponseEntity.ok(count);
     }
 
     // 웹소켓은 세션 연결이 유지되지 않고 양쪽에서 연결을 종료하면 세션이 정리된다.
@@ -58,7 +59,7 @@ public class ChatController {
     // TODO : 현재 사용 불가 -> 멤버 관련 로직이 완성되어야 가능할듯, 하드코딩중 추후 수정
     @GetMapping("/getPrevId/{roomId}")
     public ResponseEntity<ResponseChatRoomDto> getPrevMessage(@PathVariable String roomId) {
-        List<ChatMessage> prevMessage = chatService.findPrevMessage(roomId);
+        List<ResponseChatMessageDto> prevMessage = chatService.findPrevMessage(roomId).stream().map(ResponseChatMessageDto::new).toList();
         ChatRoomDto chatRoom = chatRoomRepository.findByRoomId(roomId).orElseThrow();
         ResponseChatRoomDto responseChatRoomDto = new ResponseChatRoomDto(chatRoom, prevMessage);
         return ResponseEntity.ok(responseChatRoomDto);
@@ -76,7 +77,8 @@ public class ChatController {
                 if(Objects.equals(chatRoomDto.getRoomId(), chatMessage.getRoomId())) {
                     List<ChatMessage> chatMessages = new ArrayList<>();
                     chatMessages.add(chatMessage);
-                    result.add(new ResponseChatRoomDto(chatRoomDto, chatMessages));
+                    List<ResponseChatMessageDto> chatMessageDtos = chatMessages.stream().map(ResponseChatMessageDto::new).toList();
+                    result.add(new ResponseChatRoomDto(chatRoomDto, chatMessageDtos));
                     break;
                 }
             }

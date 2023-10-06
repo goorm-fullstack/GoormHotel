@@ -3,14 +3,17 @@ package goormknights.hotel.email.controller;
 import goormknights.hotel.email.dto.request.EmailPostDto;
 import goormknights.hotel.email.dto.response.EmailResponseDto;
 import goormknights.hotel.email.model.EmailMessage;
+import goormknights.hotel.email.model.MultipleEmail;
 import goormknights.hotel.email.service.EmailService;
 import goormknights.hotel.member.dto.request.FindPasswordRequest;
 import goormknights.hotel.member.service.VerificationService;
 import jakarta.mail.MessagingException;
+import jakarta.mail.Multipart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -23,8 +26,8 @@ public class EmailController {
     private final VerificationService verificationService;
 
     @PostMapping("/subscribe")
-    public goormknights.hotel.global.dto.ResponseEntity<String> sendSubscribeEmail(@RequestParam String email) throws MessagingException {
-        emailService.sendSubscribe(email, "newsletter");
+    public goormknights.hotel.global.dto.ResponseEntity<String> sendSubscribeEmail(@RequestBody Map<String, String> email) throws MessagingException {
+        emailService.sendSubscribe(email.get("email"), "newsletter");
         return new goormknights.hotel.global.dto.ResponseEntity<>(HttpStatus.OK.value(), "메일 전송이 완료되었습니다.");
     }
 
@@ -88,5 +91,10 @@ public class EmailController {
         }
     }
 
-
+    // 첨부파일이 포함된 이메일을 여러 개의 이메일에 전송
+    @PostMapping("/multiple")
+    public ResponseEntity<String> sendMailToManyPerson(@ModelAttribute MultipleEmail multipleEmail, @RequestParam(required = false) MultipartFile multipartFile) {
+        emailService.sendMail(multipleEmail, multipartFile);
+        return ResponseEntity.ok("메일을 성공적으로 전송했습니다.");
+    }
 }

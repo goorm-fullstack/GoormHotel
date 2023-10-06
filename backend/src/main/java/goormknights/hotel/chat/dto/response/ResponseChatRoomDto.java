@@ -10,13 +10,15 @@ import java.util.List;
 
 @Data
 public class ResponseChatRoomDto {
+    private Long id;
     private String roomId;
     private String name;
-    private List<ChatMessage> chatMessages;
+    private List<ResponseChatMessageDto> chatMessages;
     private Status status;
     private Timestamp timestamp;
 
-    public ResponseChatRoomDto(ChatRoomDto chatRoomDto, List<ChatMessage> chatMessages) {
+    public ResponseChatRoomDto(ChatRoomDto chatRoomDto, List<ResponseChatMessageDto> chatMessages) {
+        this.id = chatRoomDto.getId();
         this.roomId = chatRoomDto.getRoomId();
         this.name = chatRoomDto.getName();
         this.status = chatRoomDto.getStatus();

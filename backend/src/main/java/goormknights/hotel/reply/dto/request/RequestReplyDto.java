@@ -25,6 +25,9 @@ public class RequestReplyDto {
     @Builder.Default
     private LocalDateTime replyWriteDate = LocalDateTime.now();     //댓글 작성 시간
 
+    @Builder.Default
+    private LocalDateTime replyDeleteTime = null;
+
     private String replyWriter;     //댓글 작성자
 
     //private Member member;
@@ -35,6 +38,7 @@ public class RequestReplyDto {
                 .replyContent(replyContent)
                 .replyWriteDate(replyWriteDate)
                 .replyWriter(replyWriter)
+                .replyDeleteTime(replyDeleteTime)
                 .build();
     }
 }

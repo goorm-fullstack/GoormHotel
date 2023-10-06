@@ -2,6 +2,7 @@ package goormknights.hotel.email.service;
 
 import goormknights.hotel.auth.service.RedisUtil;
 import goormknights.hotel.email.model.EmailMessage;
+import goormknights.hotel.email.model.MultipleEmail;
 import goormknights.hotel.email.repository.EmailSender;
 import goormknights.hotel.member.service.VerificationService;
 import jakarta.mail.MessagingException;
@@ -12,6 +13,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
@@ -60,6 +62,37 @@ public class EmailService implements EmailSender {
         }
         javaMailSender.send(message);
     }
+
+    // JSON을 통해 메일 내용을 오브젝트로 받아와서 사용하는 경우에 사용합니다.
+    // 다수의 이메일이 메일을 보내는 로직입니다.
+    // 첨부파일이 작성될 수도 있습니다.
+    public void sendMail(MultipleEmail emailMessage, MultipartFile multipartFile){
+        Context context = new Context();
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = null;
+        String[] senders = emailMessage.getTo().split(",");
+        try {
+            for(String sender : senders) {// 수신자 배열에서 수신자 정보를 출력하는 코드
+                helper = new MimeMessageHelper(message, true, "UTF-8");
+                helper.setSubject(emailMessage.getSubject()); // (민종) getTitle -> getSubject
+                helper.setTo(sender);
+                if(!emailMessage.getCarbonCopy().isEmpty()) {
+                    helper.setCc(emailMessage.getCarbonCopy());
+                }
+                context.setVariable("message", emailMessage.getMessage());
+                String html = templateEngine.process("AdminMail", context);
+                helper.setText(html, true);
+                if(multipartFile != null) {// 첨부 파일이 있는지 보고, 있으면 전송
+                    helper.addAttachment(multipartFile.getOriginalFilename(), multipartFile);
+                }
+                helper.addInline("logo", new ClassPathResource("/static/images/common/logo.png"));
+                javaMailSender.send(message);
+            }
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     /**
      *

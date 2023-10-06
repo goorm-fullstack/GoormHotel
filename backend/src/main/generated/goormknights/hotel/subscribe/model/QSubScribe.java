@@ -23,7 +23,7 @@ public class QSubScribe extends EntityPathBase<SubScribe> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final BooleanPath isSubscribe = createBoolean("isSubscribe");
+    public final StringPath isSubscribe = createString("isSubscribe");
 
     public QSubScribe(String variable) {
         super(SubScribe.class, forVariable(variable));

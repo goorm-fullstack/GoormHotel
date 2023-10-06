@@ -8,17 +8,16 @@ import goormknights.hotel.board.model.Board;
 import goormknights.hotel.board.repository.BoardRepository;
 import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.reply.model.Reply;
-import goormknights.hotel.report.dto.response.ResponseReportDto;
-import goormknights.hotel.report.model.Report;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -124,17 +123,22 @@ public class BoardService {
     }
 
     //삭제된 게시물만 조회
-    public List<ResponseBoardDto> findAllBoardDelete(Pageable pageable){
-        Page<Board> boardDelete = boardRepository.findAll(pageable);
-        List<ResponseBoardDto> response = new ArrayList<>();
-
-        for (Board board : boardDelete){
-            if(board.getBoardDeleteTime()!=null){
-                response.add(board.toResponseBoardDto());
+    public Page<ResponseBoardDto> findAllBoardDelete(Pageable pageable){
+        Page<Board> all = boardRepository.findAll(pageable);
+        List<ResponseBoardDto> list = new ArrayList<>();
+        for (Board board : all) {
+            if(board.getBoardDeleteTime() != null){
+                list.add(board.toResponseBoardDto());
             }
         }
-
-        return response;
+        return new PageImpl<>(list, pageable, list.size());
+//        List<ResponseBoardDto> response = new ArrayList<>();
+//
+//        for (Board board : boardDelete){
+//            if(board.getBoardDeleteTime()!=null){
+//                response.add(board.toResponseBoardDto());
+//            }
+//        }
     }
 
     //게시물 영구 삭제
@@ -143,20 +147,15 @@ public class BoardService {
     }
 
     //모든 게시물 조회
-    public List<ResponseBoardDto> findAllBoards(Pageable pageable) {
+    public Page<Board> findAllBoards(Pageable pageable) {
         Page<Board> all = boardRepository.findAll(pageable);
-        List<ResponseBoardDto> response = new ArrayList<>();
+        List<Board> list = new ArrayList<>();
         for (Board board : all) {
-            if(board.getBoardDeleteTime()==null){
-                ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
-                List<ResponseReportDto> reportList = board.getReport().stream().map(Report::toResponseReportDto).toList();
-                List<ResponseReplyDto> replyList = board.getReplies().stream().map(Reply::toResponseReplyDto).toList();
-                responseBoardDto.setReply(replyList);
-                responseBoardDto.setReport(reportList);
-                response.add(responseBoardDto);
+            if(board.getBoardDeleteTime() == null){
+                list.add(board);
             }
         }
-        return response;
+        return new PageImpl<>(list, pageable, list.size());
     }
 
     // 게시물 수정

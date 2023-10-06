@@ -5,6 +5,7 @@ import goormknights.hotel.report.dto.request.RequestReportDto;
 import goormknights.hotel.report.dto.response.ResponseReportDto;
 import goormknights.hotel.report.model.Report;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -29,11 +30,18 @@ public class ReportController {
     }
 
     //신고 목록
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
     @GetMapping("/list")
     public ResponseEntity<List<ResponseReportDto>> getAllReport(@PageableDefault(size = 10, sort = "reportId", direction = Sort.Direction.DESC) Pageable pageable) {
-        List<ResponseReportDto> reports = reportService.getAllReports(pageable);
+        Page<ResponseReportDto> allReports = reportService.getAllReports(pageable);
 
-        return ResponseEntity.ok(reports);
+        int totalPages = allReports.getTotalPages();
+        long totalElements = allReports.getTotalElements();
+
+        return ResponseEntity.ok()
+                .header("TotalPages", String.valueOf(totalPages))
+                .header("TotalData", String.valueOf(totalElements))
+                .body(allReports.getContent());
     }
 
     //신고 완전 삭제
