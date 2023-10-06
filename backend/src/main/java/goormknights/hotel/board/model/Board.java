@@ -1,6 +1,7 @@
 package goormknights.hotel.board.model;
 
 import goormknights.hotel.board.dto.request.RequestBoardDto;
+import goormknights.hotel.board.dto.request.RequestFileDto;
 import goormknights.hotel.board.dto.request.RequestImageDto;
 import goormknights.hotel.board.dto.response.ResponseBoardDto;
 import goormknights.hotel.reply.model.Reply;
@@ -39,6 +40,10 @@ public class Board {
     @JoinColumn(name = "board_image_id")
     private BoardImage boardImage;       //이미지 저장
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "board_file_id")
+    private BoardFile boardFile;       //파일 저장
+
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replies = new ArrayList<>();            //게시물 댓글
 
@@ -58,13 +63,14 @@ public class Board {
 //    private Member member;
 
     @Builder(toBuilder = true)
-    public Board(Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, String boardTitle, String category, List<Reply> replies, List<Report> report) {
+    public Board(Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, BoardFile boardFile, String boardTitle, String category, List<Reply> replies, List<Report> report) {
         this.boardId = boardId;
         this.title = title;
         this.boardContent = boardContent;
         this.boardWriter = boardWriter;
         this.boardWriteDate = boardWriteDate;
         this.boardImage = boardImage;
+        this.boardFile = boardFile;
         this.boardTitle = boardTitle;
         this.category = category;
         this.replies = replies;
@@ -83,13 +89,14 @@ public class Board {
                 .build();
     }
 
-    public Board updateBoard(Board board, RequestBoardDto requestBoardDto, RequestImageDto requestImageDto){
+    public Board updateBoard(Board board, RequestBoardDto requestBoardDto, RequestImageDto requestImageDto, RequestFileDto requestFileDto){
         return Board.builder()
                 .boardId(board.getBoardId())
                 .title(requestBoardDto.getTitle())
                 .boardContent(requestBoardDto.getBoardContent())
                 .boardWriter(requestBoardDto.getBoardWriter())
                 .boardImage(requestImageDto.toEntity())
+                .boardFile(requestFileDto.toEntity())
                 .boardTitle(requestBoardDto.getBoardTitle())
                 .category(requestBoardDto.getCategory())
                 .boardWriteDate(requestBoardDto.getBoardWriteDate())

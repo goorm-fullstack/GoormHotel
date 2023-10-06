@@ -37,7 +37,7 @@ const Paging: React.FC<TotalPage> = (props) => {
     if (currentPage === 1) {
       return `${afterUrl}1`;
     } else {
-      navigate(`${afterUrl}${pages[0]}`);
+      // navigate(`${afterUrl}${pages[0]}`);
       return `${afterUrl}${pages[0]}`;
     }
   };
@@ -47,7 +47,7 @@ const Paging: React.FC<TotalPage> = (props) => {
     if (currentPage === totalPages) {
       return `${afterUrl}${currentPage}`;
     } else {
-      navigate(`${afterUrl}${pages[0]}`);
+      // navigate(`${afterUrl}${pages[0]}`);
       return `${afterUrl}${pages[0]}`;
     }
   };

@@ -8,18 +8,18 @@ import Instance from '../../utils/api/axiosInstance';
 import { useParams } from 'react-router-dom';
 
 interface Member {
-  name : string;
+  name: string;
 }
 
 interface GiftCard {
-  id : number;
-  uuid : string;
-  title : string;
-  money : number;
-  isZeroMoney : string;
-  issueDate  : string;
-  expire : number;
-  member : Member;
+  id: number;
+  uuid: string;
+  title: string;
+  money: number;
+  isZeroMoney: string;
+  issueDate: string;
+  expire: number;
+  member: Member;
 }
 
 const AdminDetailGiftCard = () => {
@@ -31,7 +31,7 @@ const AdminDetailGiftCard = () => {
   const [used, setIsUsed] = useState<string>('');
 
   useEffect(() => {
-    Instance.get("/api/giftcard/"+id).then((response) =>{
+    Instance.get('/api/giftcard/' + id).then((response) => {
       console.log(response.data);
       setGiftCard(response.data.message);
       setTitle(response.data.message.title);
@@ -40,17 +40,17 @@ const AdminDetailGiftCard = () => {
     })
   }, []);
 
-  const calcExpireDate = (day : string, expire : number) => {
+  const calcExpireDate = (day: string, expire: number) => {
     const issueDate = new Date(day);
     const expireDate = new Date(issueDate.setDate(issueDate.getDate() + expire));
 
     const year = expireDate.getFullYear();
     const month = String(expireDate.getMonth() + 1).padStart(2, '0');
     const day1 = String(expireDate.getDate()).padStart(2, '0');
-    
+
     const formattedExpireDate = `${year}.${month}.${day1}`;
     return formattedExpireDate;
-  }
+  };
 
   const handleUsedChange = (e : React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.toUpperCase(); // 입력된 값을 대문자로 변환

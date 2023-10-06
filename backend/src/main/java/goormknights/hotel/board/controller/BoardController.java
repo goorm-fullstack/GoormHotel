@@ -6,20 +6,26 @@ import goormknights.hotel.board.model.Board;
 import goormknights.hotel.board.service.BoardImageService;
 import goormknights.hotel.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/boards")
 @RequiredArgsConstructor
+@Slf4j
 public class BoardController {
 
     private final BoardService boardService;
@@ -42,33 +48,47 @@ public class BoardController {
 
     // 게시물 상세 조회
     @GetMapping("/{boardId}")
+    @CrossOrigin(exposedHeaders = "FileName")
     public ResponseEntity<ResponseBoardDto> getBoardById(@PathVariable Long boardId) {
-        ResponseBoardDto board = boardService.findById(boardId);
+        Board byId = boardService.findById(boardId);
 
-        return ResponseEntity.ok(board);
+        String fileName = "";
+        if(byId.getBoardFile() != null){
+            fileName = byId.getBoardFile().getOriginalboardFileName();
+        }
+
+        return ResponseEntity.ok()
+                .header("FileName", fileName)
+                .body(byId.toResponseBoardDto());
     }
 
     // 게시물 작성
     @PostMapping("/writeform")
-    public ResponseEntity<Object> createBoard(@ModelAttribute RequestBoardDto requestBoardDto, @RequestParam(required = false) MultipartFile multipartFile) throws IOException {
-        boardService.create(requestBoardDto, multipartFile);
+    public ResponseEntity<Object> createBoard(@ModelAttribute RequestBoardDto requestBoardDto, @RequestParam(required = false) MultipartFile multipartFile, @RequestParam(required = false) MultipartFile file) throws IOException {
+        boardService.create(requestBoardDto, multipartFile, file);
         return ResponseEntity.ok().build();
     }
 
     // 게시물 수정
     @PutMapping("/{boardId}")
-    public ResponseEntity<ResponseBoardDto> updateBoard(@PathVariable Long boardId, @ModelAttribute RequestBoardDto requestBoardDto, @RequestParam(required = false) MultipartFile multipartFile) throws IOException {
-        boardService.updateBoard(boardId, requestBoardDto, multipartFile, false);
+    public ResponseEntity<ResponseBoardDto> updateBoard(@PathVariable Long boardId, @ModelAttribute RequestBoardDto requestBoardDto, @RequestParam(required = false) MultipartFile multipartFile, @RequestParam(required = false) MultipartFile file) throws IOException {
+        boardService.updateBoard(boardId, requestBoardDto, multipartFile, file, false);
 
         return ResponseEntity.ok().build();
     }
 
     // 삭제된 게시물 전체 조회
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
     @GetMapping("/deleted")
     public ResponseEntity<List<ResponseBoardDto>> getDeletedBoards(@PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
-        List<ResponseBoardDto> deletedBoards = boardService.findAllBoardDelete(pageable);
+        Page<ResponseBoardDto> allBoardDelete = boardService.findAllBoardDelete(pageable);
 
-        return ResponseEntity.ok(deletedBoards);
+        int totalPages = allBoardDelete.getTotalPages();
+        long totalElements = allBoardDelete.getTotalElements();
+        return ResponseEntity.ok()
+                .header("TotalPages", String.valueOf(totalPages))
+                .header("TotalData", String.valueOf(totalElements))
+                .body(allBoardDelete.getContent());
     }
 
     // 게시물 영구 삭제
@@ -110,11 +130,18 @@ public class BoardController {
     }
 
     //게시판으로 찾기
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
     @GetMapping("/find/boardTitle/{boardTitle}")
     public ResponseEntity<List<ResponseBoardDto>> findByboardTitle(@PathVariable String boardTitle, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable){
-        List<ResponseBoardDto> boardTitles = boardService.getAllByboardTitle(boardTitle, pageable);
+        Page<ResponseBoardDto> allByboardTitle = boardService.getAllByboardTitle(boardTitle, pageable);
 
-        return ResponseEntity.ok(boardTitles);
+        int totalPages = allByboardTitle.getTotalPages();
+        long totalElements = allByboardTitle.getTotalElements();
+
+        return ResponseEntity.ok()
+                .header("TotalPages", String.valueOf(totalPages))
+                .header("TotalData", String.valueOf(totalElements))
+                .body(allByboardTitle.getContent());
     }
 
     //게시판-카테고리로 찾기
@@ -139,5 +166,37 @@ public class BoardController {
         Board board = boardService.undeleted(boardId);
 
         return ResponseEntity.ok(board.toResponseBoardDto());
+    }
+
+    @GetMapping("/board/{boardTitle}")
+    public ResponseEntity<ResponseBoardDto> board(@PathVariable String boardTitle) throws UnsupportedEncodingException {
+        log.info("boardTitle={}", boardTitle);
+        Board byTitle = boardService.findByBoardTitle(boardTitle);
+        return ResponseEntity.ok(byTitle.toResponseBoardDto());
+    }
+
+    // 파일 다운로드
+    @GetMapping("/download/{boardId}")
+    public ResponseEntity<ByteArrayResource> download(@PathVariable Long boardId) throws MalformedURLException {
+        Board byTitle = boardService.findById(boardId);
+
+        byte[] data = byTitle.getBoardFile().getData();
+
+        ByteArrayResource byteArrayResource = new ByteArrayResource(data);
+
+//        String boardFileName = byTitle.getBoardFile().getBoardFileName();
+//        String uploadFileName = byTitle.getBoardFile().getOriginalboardFileName();
+//        String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
+//        String absolutePath = new File("").getAbsolutePath() + "\\";
+//        Path path = Paths.get(absolutePath + "\\" + boardFileName);
+//        String contentDisposition = "attachment; filename=\"" + encodedUploadFileName + "\"";
+//
+//        UrlResource urlResource = new UrlResource("file:" + path);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentLength(data.length)
+                .body(byteArrayResource);
+
     }
 }

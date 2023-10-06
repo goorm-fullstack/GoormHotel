@@ -1,56 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, SubmitBtn } from '../../Style/commonStyles';
-import { Image } from '../../components/AddItemForm/Style';
-import { DiningData, Select } from './AdminItemList';
-import styled from 'styled-components';
+import { PageTitle, SubmitBtn, SelectImage, RedP, GreenP, NormalBtn, BtnWrapper } from '../../Style/commonStyles';
+import { DiningData } from './AdminItemList';
 import { useParams } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import {
-  Container, 
-  Table
-} from '../member/AdminMember';
+import { Container, Table } from '../member/Style';
 import { DiningForm } from '../../components/AddItemForm/WriteFormDining';
 
-// 세부타입 선택
-const WriteFormSelect = styled(Select)`
-  width: 200px;
-  margin: 0;
-`;
-
-// 중복확인 버튼
-const DuplicateButton = styled.button`
-  vertical-align: middle;
-  margin-left: 50px;
-  width: 100px;
-  height: 40px;
-  color: #95846e;
-  background-color: #ffffff;
-  border: 1px solid rgb(186, 160, 133);
-  &:hover {
-    color: #ffffff;
-    background-color: #95846e;
-  }
-`;
-
-// 중복확인 시 경고 문구
-const RedP = styled.p`
-  color: #ec5353;
-  display: inline-block;
-  margin-left: 30px;
-`;
-
-// 중복확인 시 성공 문구
-const GreenP = styled.p`
-  color: #008000;
-  display: inline-block;
-  margin-left: 30px;
-`;
-
 const AdminDetailDining = () => {
+  const navigate = useNavigate();
   const [imgFile, setImgFile] = useState<string>(''); // 이미지 상태관리
   const imgRef = useRef<HTMLInputElement>(null); // 이미지 태그
-  const { type, name } = useParams<{type: string, name: string}>(); // url 파라미터
+  const { type, name } = useParams<{ type: string; name: string }>(); // url 파라미터
   const [responseData, setResponseData] = useState<DiningData>(); // get 요청으로 받아온 데이터 상태관리
   const [duplicateMessage, setDuplicateMessage] = useState<string>(''); // 중복검사 메시지 상태관리
   const [isConfirm, setIsConfirm] = useState<boolean>(true); // 중복검사 정상 실행 여부 상태관리
@@ -75,7 +37,7 @@ const AdminDetailDining = () => {
     reader.onloadend = () => {
       setImgFile(reader.result as string);
     };
-    if(imgRef.current){
+    if (imgRef.current) {
       imgRef.current.src = imgFile;
     }
   };
@@ -171,7 +133,7 @@ const AdminDetailDining = () => {
       }
       console.log('responseObject = ', responseObject);
     } catch (error) {
-      if(axios.isAxiosError(error)){
+      if (axios.isAxiosError(error)) {
         setDuplicateMessage(error.response?.data);
         console.log(error.response?.data);
         setIsConfirm(false);
@@ -190,101 +152,110 @@ const AdminDetailDining = () => {
   return (
     <AdminLayout subMenus="item">
       <Container>
-        <PageTitle>다이닝 상세</PageTitle>
+        <PageTitle>상품 상세</PageTitle>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <input type="hidden" value="dining" readOnly />
           {responseData && (
-            <Table>
-              <tr>
-                <th>썸네일</th>
-                <td>
-                  <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
-                  {imgFile ? <Image src={imgFile} alt="프로필 이미지" /> : <Image src={imageUrls[0]} alt="프로필 이미지" />}
-                </td>
-              </tr>
-              <tr>
-                <th>상품명</th>
-                <td>
-                  <input type="text" name="name" defaultValue={responseData.name} onChange={handleChange} ref={nameRef} required />
-                  <DuplicateButton type="button" onClick={handleDuplicate}>
-                    중복확인
-                  </DuplicateButton>
-                  {responseMessege}
-                </td>
-              </tr>
-              <tr>
-                <th>상품가격</th>
-                <td>
-                  <input type="text" name="price" defaultValue={responseData.price} onChange={handleChange} required />
-                </td>
-              </tr>
-              <tr>
-                <th>성인 추가 비용</th>
-                <td>
-                  <input type="text" name="priceAdult" defaultValue={responseData.priceAdult} onChange={handleChange} required />
-                </td>
-              </tr>
-              <tr>
-                <th>어린이 추가 비용</th>
-                <td>
-                  <input type="text" name="priceChildren" defaultValue={responseData.priceChildren} onChange={handleChange} required />
-                </td>
-              </tr>
-              <tr>
-                <th>잔여 객실 수</th>
-                <td>
-                  <input type="text" name="spare" defaultValue={responseData.spare} onChange={handleChange} required />
-                </td>
-              </tr>
-              <tr>
-                <th>최대 숙박 가능 인원 수(성인)</th>
-                <td>
-                  <input type="text" name="spareAdult" defaultValue={responseData.spareAdult} onChange={handleChange} required />
-                </td>
-              </tr>
-              <tr>
-                <th>최대 숙박 가능 인원 수(어린이)</th>
-                <td>
-                  <input type="text" name="spareChildren" defaultValue={responseData.spareChildren} onChange={handleChange} required />
-                </td>
-              </tr>
-              <tr>
-                <th>기준 인원</th>
-                <td>
-                  <input type="text" name="spareChildren" defaultValue={responseData.capacity} onChange={handleChange} required />
-                </td>
-              </tr>
-              <tr>
-                <th>상품 타입</th>
-                <td>
-                  <input type="text" value="dining" readOnly />
-                </td>
-              </tr>
-              <tr>
-                <th>세부 타입</th>
-                <td>
-                  <WriteFormSelect
-                    name="typeDetail"
-                    key={responseData.typeDetail}
-                    defaultValue={responseData.typeDetail}
-                    onChange={handleChange}
-                    required>
-                    <option value="">선택</option>
-                    <option value="restaurant">레스토랑</option>
-                    <option value="roomService">룸서비스</option>
-                    <option value="barRounge">바&라운지</option>
-                    <option value="bakery">베이커리</option>
-                  </WriteFormSelect>
-                </td>
-              </tr>
-              <tr>
-                <th>이용 가능 시간</th>
-                <td>
-                  <input type="text" name="useTime" defaultValue={responseData.useTime} onChange={handleChange} required />
-                </td>
-              </tr>
+            <Table className="horizontal">
+              <colgroup>
+                <col width="240px" />
+                <col width="auto" />
+                <col width="280px" />
+              </colgroup>
+              <tbody>
+                <tr>
+                  <th>상품 분류</th>
+                  <td className="text">다이닝</td>
+                  <td rowSpan={5}>
+                    <SelectImage>
+                      <label>
+                        <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
+                        <div className="imgwrapper">
+                          {' '}
+                          {imgFile ? <img src={imgFile} alt="프로필 이미지" /> : <img src={imageUrls[0]} alt="프로필 이미지" />}
+                        </div>
+                      </label>
+                    </SelectImage>
+                  </td>
+                </tr>
+                <tr>
+                  <th>다이닝 타입</th>
+                  <td>
+                    <select name="typeDetail" key={responseData.typeDetail} defaultValue={responseData.typeDetail} onChange={handleChange} required>
+                      <option value="restaurant">레스토랑</option>
+                      <option value="roomService">룸서비스</option>
+                      <option value="barRounge">바&라운지</option>
+                      <option value="bakery">베이커리</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <th>상품명</th>
+                  <td>
+                    <input type="text" name="name" className="long" defaultValue={responseData.name} onChange={handleChange} ref={nameRef} required />
+                    <NormalBtn type="button" className="withinput" onClick={handleDuplicate}>
+                      중복확인
+                    </NormalBtn>
+                    {responseMessege}
+                  </td>
+                </tr>
+                <tr>
+                  <th>상품가</th>
+                  <td>
+                    <input type="text" name="price" defaultValue={responseData.price} onChange={handleChange} required />
+                  </td>
+                </tr>
+                <tr>
+                  <th>성인 추가 비용</th>
+                  <td>
+                    <input type="text" name="priceAdult" defaultValue={responseData.priceAdult} onChange={handleChange} required />
+                  </td>
+                </tr>
+                <tr>
+                  <th>어린이 추가 비용</th>
+                  <td colSpan={2}>
+                    <input type="text" name="priceChildren" defaultValue={responseData.priceChildren} onChange={handleChange} required />
+                  </td>
+                </tr>
+                <tr>
+                  <th>서비스 기준 인원</th>
+                  <td colSpan={2}>
+                    <input type="text" name="capacity" defaultValue={responseData.capacity} onChange={handleChange} required />
+                  </td>
+                </tr>
+                <tr>
+                  <th>성인 최대 서비스 가능 인원</th>
+                  <td colSpan={2}>
+                    <input type="text" name="spareAdult" defaultValue={responseData.spareAdult} onChange={handleChange} required />
+                  </td>
+                </tr>
+                <tr>
+                  <th>어린이 최대 서비스 가능 인원</th>
+                  <td colSpan={2}>
+                    <input type="text" name="spareChildren" defaultValue={responseData.spareChildren} onChange={handleChange} required />
+                  </td>
+                </tr>
+                {/* <tr>
+                  <th>이용 가능 시간</th>
+                  <td>
+                    <input type="text" name="useTime" defaultValue={responseData.useTime} onChange={handleChange} required />
+                  </td>
+                </tr> */}
+                <tr>
+                  <th>판매 수량</th>
+                  <td colSpan={2}>
+                    <input type="text" name="spare" defaultValue={responseData.spare} onChange={handleChange} required />
+                  </td>
+                </tr>
+              </tbody>
             </Table>
           )}
-          <SubmitBtn type="submit">수정</SubmitBtn>
+          <BtnWrapper className="double mt40 center">
+            <SubmitBtn type="submit">상품 수정</SubmitBtn>
+            <NormalBtn type="button" onClick={() => navigate(-1)}>
+              취소
+            </NormalBtn>
+          </BtnWrapper>
         </form>
       </Container>
     </AdminLayout>

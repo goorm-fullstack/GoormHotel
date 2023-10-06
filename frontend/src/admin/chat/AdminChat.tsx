@@ -4,7 +4,7 @@ import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/com
 import { Link, useParams } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
 import Paging from '../../components/common/Paging/Paging';
-import { Container, Table, TableHeader } from '../member/AdminMember';
+import { Container, Table, TableHeader } from '../member/Style';
 
 interface ChatMessage {
   id : number;
@@ -48,7 +48,7 @@ const AdminChat = () => {
     const checked = e.target.checked;
     setSelectAllChecked(checked);
     if (checked) {
-      const allMemberIds = chatData.map((item) => item.chatMessages[0].roomId);
+      const allMemberIds = chatData?.map((item) => item.chatMessages[0].roomId);
       setCheckedItems(allMemberIds);
     } else {
       setCheckedItems([]);
