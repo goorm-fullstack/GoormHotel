@@ -29,6 +29,15 @@ const AdminGiftCard = () => {
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [count, setCount] = useState<number>(1);
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_B"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   // 체크박스 전체 선택 or 해체 기능
   const inputRef = useRef<HTMLInputElement[]>([]);
@@ -109,6 +118,7 @@ const AdminGiftCard = () => {
     }).then(() => {});
   };
 
+  if(authItem && authItem.includes("AUTH_B")) {
   return (
     <AdminLayout subMenus="item">
       <Container>
@@ -228,6 +238,9 @@ const AdminGiftCard = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminGiftCard;

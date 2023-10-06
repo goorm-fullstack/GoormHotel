@@ -17,6 +17,15 @@ const AdminMemberDetail = () => {
     birthday: '입력 안함',
   });
   // const [joinDate, setJoinDate] = useState(null);
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_A"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   console.log(formData);
 
@@ -42,6 +51,7 @@ const AdminMemberDetail = () => {
   //   fetchData();
   // }, [memberId]);
 
+  if(authItem && authItem.includes("AUTH_A")) {
   return (
     <AdminLayout subMenus="member">
       <Container>
@@ -128,6 +138,9 @@ const AdminMemberDetail = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminMemberDetail;

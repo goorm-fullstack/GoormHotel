@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import * as S from './Style/App';
 import Header from './components/layout/Header/Header';
@@ -52,12 +52,17 @@ import AdminChatDetail from './admin/chat/AdminChatDetail';
 import AdminMail from './admin/chat/AdminMail';
 import AdminIndex from './admin/AdminIndex';
 import AdminSubScribe from './admin/chat/AdminSubScribe';
+import {useAuth} from "./utils/api/AuthContext";
+import Instance from "./utils/api/axiosInstance";
 
 function App() {
   const [showChat, setShowChat] = useState<boolean>(false);
   const [showFloatingButtons, setShowFloatingButtons] = useState<boolean>(false);
   const [isAdminPage, setIsAdminPage] = useState<boolean>(false);
+  const [isLogined, setIsLogined] = useState<boolean>(false);
   const location = useLocation();
+  const [isMember, setIsMember] = useState<boolean>(false);
+  const [memberId, setMemberId] = useState<string | null>(null);
 
   const openChat = () => {
     setShowChat(!showChat);
@@ -90,10 +95,76 @@ function App() {
     setIsAdminPage(isAdmin);
   }, [location.pathname]);
 
+  // 쿠키를 파싱하는 함수
+  function getCookie(name: string): string | undefined {
+    const cookieString = document.cookie;
+    console.log(cookieString)
+    const cookies = cookieString.split('; ');
+
+    for (let i = 0; i < cookies.length; i++) {
+        console.log(cookies[i]);
+        const cookie = cookies[i].split('=');
+        if (cookie[0] === name) {
+            return cookie[1];
+        }
+    }
+  }
+
+  // Auth쪽 대시로 분리
+  const splitDashLine = (str: string | undefined): string[] => {
+    if(str !== undefined) {
+      const data = str.split("-");
+      return data;
+    } else {
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const adminId = getCookie("adminId");
+    const memberId = getCookie("memberId");
+    const role = getCookie("role");
+    const auth = getCookie("auth");
+
+    console.log('adminId 쿠키 값:', adminId);
+    console.log('role 쿠키 값:', role);
+    console.log('auth 쿠키 값:', auth);
+
+    // 로컬 스토리지에 정보를 저장한다.
+    // 어드민 로그인이라면
+    if (adminId && role && auth) {
+      localStorage.setItem("adminId", adminId);
+      localStorage.setItem("role", role);
+      localStorage.setItem("auth", splitDashLine(auth).join(','));
+      setAuthState({ adminId, role, auth });
+      setIsLogined(true);
+    }
+    // 회원 로그인이라면
+    else if (memberId && role) {
+      localStorage.setItem("memberId", memberId);
+      localStorage.setItem("role", role);
+      setMemberAuthState({ memberId, role });
+      setIsMember(true);
+    } else {
+      // 서버에서 상태 가져오기(테스트 필요)
+      Instance.get('/api/adminCheck').then(response => {
+        setAuthState({
+          adminId: response.data.adminId,
+          role: response.data.role,
+          auth: response.data.auth
+        });
+      }).catch(error => {
+        console.error("로그인 상태를 가져오지 못했습니다.", error);
+      });
+    }
+  }, []);
+
   if (isAdminPage) {
     return (
       <>
         <Routes>
+          {isLogined ? (
+              <>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<AdminIndex />} />
           <Route path="/admin/reservation/:page" element={<AdminReservation />} />
@@ -118,6 +189,13 @@ function App() {
           <Route path="/admin/chat/detail/:roomId" element={<AdminChatDetail />} />
           <Route path="/admin/mail" element={<AdminMail />} />
           <Route path="/admin/subscriber/:page" element={<AdminSubScribe />} />
+              </>
+          ) : (
+              <>
+                {/* 로그인이 되어있지 않을 때의 라우트 */}
+                <Route path="/admin/*" element={<AdminLogin />} />
+              </>
+          )}
         </Routes>
       </>
     );

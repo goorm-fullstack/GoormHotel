@@ -21,6 +21,17 @@ const AdminMail = () => {
   const mailto = queryParams.mailto;
 
   console.log(mailto);
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_C"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
+
+  console.log(mailto)
 
   useEffect(() => {
     if (mailto !== null && typeof mailto !== 'undefined') {
@@ -108,6 +119,9 @@ const AdminMail = () => {
     window.location.href = `/admin/mail`;
   };
 
+  }
+
+  if(authItem && authItem.includes("AUTH_C")) {
   return (
     <AdminLayout subMenus="chat">
       <Container>
@@ -171,6 +185,9 @@ const AdminMail = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminMail;

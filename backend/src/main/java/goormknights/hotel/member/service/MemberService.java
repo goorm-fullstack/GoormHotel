@@ -14,16 +14,20 @@ import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.model.MemberEditor;
 import goormknights.hotel.member.repository.MemberRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -153,18 +157,61 @@ public class MemberService {
     }
 
 
-    // 로그인
-    public String login(String memberId, String rawPassword, HttpSession session) {
-        Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new UsernameNotFoundException("해당되는 회원이 없습니다"));
-
-        if (passwordEncoder.matches(rawPassword, member.getPassword())) {
-            session.setAttribute("member", member);
-            return "로그인 완료";
-        } else {
-            throw new BadCredentialsException("비밀번호가 다릅니다");
+    // 멤버 로그인
+    public boolean memberLogin(String memberId, String password, HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("member") != null) {
+            // 이미 로그인한 상태
+            return false;
         }
+
+        Optional<Member> optionalMember = memberRepository.findByMemberId(memberId);
+        if (optionalMember.isPresent() && passwordEncoder.matches(password, optionalMember.get().getPassword())) {
+            session = request.getSession();
+            session.setAttribute("memberId", optionalMember.get().getMemberId());
+            session.setAttribute("role", optionalMember.get().getRole());
+
+            Cookie cookie = new Cookie("JSESSIONID", session.getId());
+            cookie.setMaxAge(10);
+            cookie.setPath("/");
+            cookie.setSecure(true);
+
+            ResponseCookie memberIdCookie = ResponseCookie.from("memberId", optionalMember.get().getMemberId())
+                    .httpOnly(false)
+                    .secure(true)
+                    .path("/")      // path
+                    .maxAge(3600)
+                    .sameSite("None")  // sameSite
+                    .build();
+            ResponseCookie roleCookie = ResponseCookie.from("role", optionalMember.get().getRole().toString())
+                    .httpOnly(false)
+                    .secure(true)
+                    .path("/")      // path
+                    .maxAge(3600)
+                    .sameSite("None")  // sameSite
+                    .build();
+
+            response.addCookie(cookie);
+            response.addHeader(HttpHeaders.SET_COOKIE, memberIdCookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, roleCookie.toString());
+            return true;
+        }
+        return false;
     }
+
+    // 멤버 세션체크
+    public Map<String, Object> checkMember(HttpSession session) {
+        HashMap<String, Object> response = new HashMap<>();
+        Member member = (Member) session.getAttribute("member");
+        if (member != null) {
+            response.put("status", "success");
+            response.put("role", member.getRole().getKey());
+        } else {
+            response.put("status", "fail");
+        }
+        return response;
+    }
+
 
 
     // ======================= 위까지 민종님 작업물 ============================
@@ -184,10 +231,5 @@ public class MemberService {
         GiftCard giftCard = giftCardRepository.findByUuid(code).orElseThrow(() -> new NoSuchElementException("존재하지 않는 상품권입니다"));
 //        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotExistMemberException("존재하지 않는 사용자입니다"));
 //        member.getGiftCardList().add(giftCard);
-    }
-
-    // 테스트용입니다. 추후 수정부탁드립니다.
-    public List<Member> findAll() {
-        return memberRepository.findAll();
     }
 }

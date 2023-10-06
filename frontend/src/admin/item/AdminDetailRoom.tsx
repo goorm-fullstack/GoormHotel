@@ -29,6 +29,16 @@ const AdminDetailRoom = () => {
     });
   }, [name, type]);
 
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_B"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
+
   // 이미지 업로드 input의 onChange(이미지 미리보기)
   const saveImgFile = () => {
     const file = imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '';
@@ -148,6 +158,7 @@ const AdminDetailRoom = () => {
     responseMessege = <GreenP>{duplicateMessage}</GreenP>;
   }
 
+  if(authItem && authItem.includes("AUTH_B")) {
   return (
     <AdminLayout subMenus="item">
       <Container>
@@ -260,6 +271,9 @@ const AdminDetailRoom = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminDetailRoom;

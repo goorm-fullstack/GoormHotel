@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,6 +14,6 @@ public class AdminSignup {
     private String password;
     private String adminName;
     private String adminNickname;
-    private List<String> authorities;
+    private String auth;
     private Boolean isActive;
 }

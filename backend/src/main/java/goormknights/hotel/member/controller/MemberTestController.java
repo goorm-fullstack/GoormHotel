@@ -21,9 +21,4 @@ public class MemberTestController {
     public Member find(@RequestParam Long id) {
         return memberService.findById(id);
     }
-
-    @GetMapping("/list")
-    public List<Member> getMember() {
-        return memberService.findAll();
-    }
 }

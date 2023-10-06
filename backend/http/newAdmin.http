@@ -1,0 +1,28 @@
+### 어드민 회원가입
+POST http://localhost:8080/auth/adminsignup
+Content-Type: application/json
+
+{
+  "adminId": "admin",
+  "password": "123",
+  "adminName": "김영한",
+  "adminNickname": "호랑이",
+  "auth": "AUTH_A-AUTH_C"
+}
+
+### 운영자 로그인
+POST http://localhost:8080/login/manager
+Content-Type: application/json
+
+{
+  "adminId": "admin",
+  "password": "123"
+}
+
+### 로그아웃
+POST http://localhost:8080/login/logout
+
+### 세션 정보
+POST http://localhost:8080/api/sessionInfo
+
+

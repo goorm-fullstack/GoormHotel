@@ -5,7 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 import 'moment/locale/ko';
 import { Container, Table } from '../member/AdminMember';
 import Instance from '../../utils/api/axiosInstance';
-import { useParams } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 
 interface Member {
   name: string;
@@ -29,6 +29,15 @@ const AdminDetailGiftCard = () => {
   const [title, setTitle] = useState<string>('');//상품권 명
   const [expire, setExpire] = useState<string>('0');//유효기간
   const [used, setIsUsed] = useState<string>('');
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_B"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   useEffect(() => {
     Instance.get('/api/giftcard/' + id).then((response) => {
@@ -76,6 +85,7 @@ const AdminDetailGiftCard = () => {
     }
   }
 
+  if(authItem && authItem.includes("AUTH_B")) {
   return (
     <AdminLayout subMenus="item">
       <Container>
@@ -153,6 +163,9 @@ const AdminDetailGiftCard = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminDetailGiftCard;
