@@ -127,7 +127,7 @@ const AdminChat = () => {
                       onChange={() => handleCheckboxChange(item.chatMessages[0].roomId)}
                     />
                     </td>
-                    <td style={{textAlign : "center"}}>{index + 1}</td>
+                    <td style={{textAlign : "center"}}>{item.id}</td>
                     <td style={{textAlign : "center"}}>
                       {item.chatMessages[0].sender}(
                       <Link to={`/admin/member/${item.chatMessages[0].sender}`} className="memberId">
