@@ -105,36 +105,33 @@ const Login: React.FC = () => {
   const [contactNumber, setContactNumber] = useState<string>('');
   const [rememberId, setRememberId] = useState<boolean>(false);
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
 
     const loginInfo = {
       memberId: memberId,
       password: memberPassword,
     };
-
+    console.log("로그인 정보:", JSON.stringify(loginInfo));
     try {
       const response = await Instance.post('/login/member', loginInfo, {
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
       });
-      console.log("세션 응답 아이디: ", response.data);
+
       if (response.status === 200) {
-        const {sessionId, memberId} = response.data;
         alert('로그인 성공');
-        localStorage.setItem('sessionId', sessionId);
-        localStorage.setItem('memberId', memberId);
-        localStorage.setItem('role', response.data.role);
+        console.log(document.cookie);
         window.location.href = '/'
+      } else {
+        alert('아이디 또는 비밀번호가 일치하지 않습니다.');
       }
-    } catch (error: any) {
-      if (error.response) {
-        if (error.response.status === 401 || error.response.status === 404) {
-          alert('아이디 또는 비밀번호가 일치하지 않습니다.');
-        }
-      }
+    } catch (error) {
+      alert('아이디 또는 비밀번호가 일치하지 않습니다. 또는 서버 오류가 발생했습니다.');
     }
-  }
+  };
 
   const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMemberId(e.target.value);

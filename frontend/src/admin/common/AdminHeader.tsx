@@ -15,19 +15,21 @@ const AdminHeader: React.FC = () => {
     navigate('/admin/login');
   };
 
-  const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    try {
-      const response = await Instance.get('/login/logout');
-      if (response.status === 200) {
-        setAuthState({ role: '', adminId: '', auth: '' });
-        alert('로그아웃 되었습니다');
-        navigate('/admin');
-      }
-    } catch (error) {
-      console.error('로그아웃 실패:', error);
-    }
-  };
+  // const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await Instance.get('/login/logout');
+  //     if (response.status === 200) {
+  //       alert('로그아웃 되었습니다');
+  //       localStorage.clear();
+  //       deleteAllCookies();
+  //       setAuthState({ role: '', adminId: '', auth: '' });
+  //       navigate('/admin');
+  //     }
+  //   } catch (error) {
+  //     console.error('로그아웃 실패:', error);
+  //   }
+  // };
 
   function deleteAllCookies() {
     const cookies = document.cookie.split(";");

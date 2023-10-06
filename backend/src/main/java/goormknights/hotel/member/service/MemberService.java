@@ -20,6 +20,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -170,20 +172,28 @@ public class MemberService {
             session.setAttribute("role", optionalMember.get().getRole());
 
             Cookie cookie = new Cookie("JSESSIONID", session.getId());
-            Cookie memberIdCookie = new Cookie("memberId", optionalMember.get().getMemberId());
-            Cookie roleCookie = new Cookie("role", optionalMember.get().getRole().toString());
-            cookie.setMaxAge(3600);
-            memberIdCookie.setMaxAge(3600);
-            roleCookie.setMaxAge(3600);
+            cookie.setMaxAge(10);
             cookie.setPath("/");
-            memberIdCookie.setPath("/");
-            roleCookie.setPath("/");
+            cookie.setSecure(true);
+
+            ResponseCookie memberIdCookie = ResponseCookie.from("memberId", optionalMember.get().getMemberId())
+                    .httpOnly(false)
+                    .secure(true)
+                    .path("/")      // path
+                    .maxAge(3600)
+                    .sameSite("None")  // sameSite
+                    .build();
+            ResponseCookie roleCookie = ResponseCookie.from("role", optionalMember.get().getRole().toString())
+                    .httpOnly(false)
+                    .secure(true)
+                    .path("/")      // path
+                    .maxAge(3600)
+                    .sameSite("None")  // sameSite
+                    .build();
+
             response.addCookie(cookie);
-            response.addCookie(memberIdCookie);
-            response.addCookie(roleCookie);
-            log.info("쿠키 이름: " + cookie.getName());
-            log.info("쿠키 값: " + cookie.getValue());
-            log.info("리스폰스 헤더값: " + response.getHeaderNames());
+            response.addHeader(HttpHeaders.SET_COOKIE, memberIdCookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, roleCookie.toString());
             return true;
         }
         return false;

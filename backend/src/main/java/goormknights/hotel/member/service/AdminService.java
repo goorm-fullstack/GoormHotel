@@ -85,13 +85,12 @@ public class AdminService {
                     .sameSite("None")  // sameSite
                     .build();
             ResponseCookie authCookie = ResponseCookie.from("auth", optionalManager.get().getAuth())
-                    .httpOnly(false)//true인 경우엔 자바스크립트에서 접근 불가능
+                    .httpOnly(false)
                     .secure(true)
                     .path("/")      // path
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
                     .build();
-
 
             response.addCookie(cookie);
             response.addHeader(HttpHeaders.SET_COOKIE, adminIdCookie.toString());
