@@ -144,6 +144,44 @@ const BoardRead = () => {
     }
   }, [boardData]);
 
+  const [reply, setReply] = useState<any[]>([]);
+  const [replyWriter, setReplyWriter] = useState('');
+  const [replyContent, setReplyContent] = useState('');
+
+  const fetchReply = async (boardId:number) => {
+    try {
+      const response = await axios.get(`/reply/boardId/${boardData.boardId}`);
+      setReply(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (boardData) {
+      fetchReply(boardData.boardId);
+    }
+  }, [boardData]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('/reply/writeform', {
+        boardId: boardId,
+        replyContent: replyContent,
+        replyWriter: replyWriter
+      });
+      setReplyWriter('');
+      setReplyContent('');
+      fetchReply(boardId);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+
   return (
       <>
         <SubHeader kind="board" />
@@ -162,6 +200,7 @@ const BoardRead = () => {
           })()}
           <div>
             <TableRead>
+              <tbody>
               <tr>
                 <td className="titlew">
                   <p className="title">
@@ -188,12 +227,22 @@ const BoardRead = () => {
               <tr className="commentwrite">
                 <td>
                   <div>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                       <div>
-                        <input type="text" placeholder="작성자명" />
-                        <input type="password" placeholder="식별 비밀번호?" />
+                        <input
+                            type="text"
+                            placeholder="작성자명"
+                            name="replyWriter"
+                            value={replyWriter}
+                            onChange={(e) => setReplyWriter(e.target.value)}
+                        />
+                        {/*<input type="password" placeholder="식별 비밀번호?" />*/}
                       </div>
-                      <textarea></textarea>
+                      <textarea
+                          name="replyContent"
+                          value={replyContent}
+                          onChange={(e) => setReplyContent(e.target.value)}
+                      ></textarea>
                       <button type="submit">등록</button>
                     </form>
                   </div>
@@ -202,6 +251,17 @@ const BoardRead = () => {
               <tr className="commentslist">
                 <td>
                   <ul>
+                    {reply.map((reply, index) => (
+                        <li key={index}>
+                          <p>
+                            {reply.replyWriter}
+                            <span className="date">{reply.replyDate}</span>
+                            <button type="button">수정</button>
+                            <button type="button">삭제</button>
+                          </p>
+                          <p>{reply.replyContent}</p>
+                        </li>
+                    ))}
                     <li>
                       <p>
                         이름이름
@@ -232,6 +292,7 @@ const BoardRead = () => {
                   </ul>
                 </td>
               </tr>
+              </tbody>
             </TableRead>
             <BtnWrapper className="center mt40">
               <LinkBtn to={listLink}>목록</LinkBtn>
