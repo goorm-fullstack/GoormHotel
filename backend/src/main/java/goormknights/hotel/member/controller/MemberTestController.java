@@ -5,8 +5,6 @@ import goormknights.hotel.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/member")
@@ -20,10 +18,5 @@ public class MemberTestController {
     @GetMapping
     public Member find(@RequestParam Long id) {
         return memberService.findById(id);
-    }
-
-    @GetMapping("/list")
-    public List<Member> getMember() {
-        return memberService.findAll();
     }
 }

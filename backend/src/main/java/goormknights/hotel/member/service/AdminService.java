@@ -75,6 +75,7 @@ public class AdminService {
             adminIdCookie.setPath("/");
             roleCookie.setPath("/");
             authCookie.setPath("/");
+            applySameSiteToCookies(response, cookie, adminIdCookie, roleCookie, authCookie);
             response.addCookie(cookie);
             response.addCookie(adminIdCookie);
             response.addCookie(roleCookie);
@@ -85,6 +86,17 @@ public class AdminService {
             return true;
         }
         return false;
+    }
+
+    public void applySameSiteToCookies(HttpServletResponse response, Cookie... cookies) {
+        for (Cookie cookie : cookies) {
+            String cookieValue = String.format("%s=%s; Path=%s; Secure; SameSite=None",
+                    cookie.getName(),
+                    cookie.getValue(),
+                    cookie.getPath());
+
+            response.addHeader("Set-Cookie", cookieValue);
+        }
     }
 
     // 어드민 세션 체크

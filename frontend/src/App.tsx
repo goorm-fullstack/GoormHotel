@@ -146,7 +146,7 @@ const App: React.FC = () => {
   }, [location.pathname]);
 
   // 쿠키를 파싱하는 함수
-  function getCookie(name: string): string | undefined {
+  function getCookie(name: any) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop()?.split(';').shift();
@@ -164,17 +164,21 @@ const App: React.FC = () => {
 
   useEffect(() => {
     // 쿠키에서 값을 가져옵니다.
-    const adminId = getCookie("adminId");
-    const role = getCookie("role");
-    const auth = getCookie("auth");
+    const adminId: any = getCookie("adminId");
+    const role: any = getCookie("role");
+    const auth: any = getCookie("auth");
 
     // 로컬 스토리지에 정보를 저장한다.
-    localStorage.setItem("adminId", adminId || '');
-    localStorage.setItem("role", role || '');
+    splitDashLine(auth);
+    localStorage.setItem("adminId", adminId);
+    localStorage.setItem("role", role);
     localStorage.setItem("auth", splitDashLine(auth).join(','));
 
     // 가져온 값이 있다면 상태를 설정합니다.
     if (adminId && role && auth) {
+      localStorage.setItem("adminId", adminId);
+      localStorage.setItem("role", role);
+      localStorage.setItem("auth", splitDashLine(auth).join(','));
       setAuthState({ adminId, role, auth });
       setIsLogined(true);
     } else {
