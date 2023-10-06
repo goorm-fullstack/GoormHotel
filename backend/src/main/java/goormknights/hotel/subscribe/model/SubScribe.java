@@ -22,10 +22,10 @@ public class SubScribe {
     private Long id;
 
     private String emailAddress;//뉴스레터 구독 이메일
-    private boolean isSubscribe;//구독여부 -> soft delete
+    private String isSubscribe = "Y";//구독여부 -> soft delete
 
     @Builder
-    public SubScribe(String emailAddress, boolean isSubscribe) {
+    public SubScribe(String emailAddress, String isSubscribe) {
         this.emailAddress = emailAddress;
         this.isSubscribe = isSubscribe;
     }
@@ -35,10 +35,10 @@ public class SubScribe {
     }
 
     public void cancelSubscribe() {
-        isSubscribe = false;
+        isSubscribe = "N";
     }
 
-    public boolean isSubscribe() {
+    public String isSubscribe() {
         return isSubscribe;
     }
 }

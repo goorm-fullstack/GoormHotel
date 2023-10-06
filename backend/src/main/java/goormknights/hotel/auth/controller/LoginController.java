@@ -38,7 +38,7 @@ public class LoginController {
     // 관리자 로그인
     @PostMapping("/manager")
     public ResponseEntity<?> adminLogin(@RequestBody ManagerLogin managerLogin, HttpServletRequest request, HttpServletResponse response) {
-        if (adminService.ManagerLogin(managerLogin.getAdminId(), managerLogin.getPassword(), request, response)) {
+        if (adminService.managerLogin(managerLogin.getAdminId(), managerLogin.getPassword(), request, response)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>("로그인 실패", HttpStatus.UNAUTHORIZED);
@@ -48,9 +48,9 @@ public class LoginController {
     // 로그아웃
     @GetMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false); // 이미 존재하는 세션을 가져옴
+        HttpSession session = request.getSession(false);
         if (session != null) {
-            session.invalidate(); // 세션 무효화
+            session.invalidate();
             return new ResponseEntity<>("Logged out", HttpStatus.OK);
         }
         return new ResponseEntity<>("No session found", HttpStatus.BAD_REQUEST);

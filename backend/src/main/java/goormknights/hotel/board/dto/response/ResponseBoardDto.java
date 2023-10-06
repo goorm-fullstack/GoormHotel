@@ -1,5 +1,6 @@
 package goormknights.hotel.board.dto.response;
 
+import goormknights.hotel.board.model.BoardImage;
 import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.report.dto.response.ResponseReportDto;
 import lombok.Builder;
@@ -30,8 +31,10 @@ public class ResponseBoardDto {
 
     private List<ResponseReportDto> report;     //신고 정보
 
+    private BoardImage boardImage;      //이미지 넣기
+
     @Builder
-    public ResponseBoardDto(Long boardId, String title, String boardContent, LocalDateTime boardWriteDate, String boardWriter, String boardTitle, String category, List<ResponseReplyDto> reply, List<ResponseReportDto> report) {
+    public ResponseBoardDto(Long boardId, String title, String boardContent, LocalDateTime boardWriteDate, String boardWriter, String boardTitle, String category, List<ResponseReplyDto> reply, List<ResponseReportDto> report, BoardImage boardImage) {
         this.boardId = boardId;
         this.title = title;
         this.boardContent = boardContent;
@@ -41,6 +44,7 @@ public class ResponseBoardDto {
         this.report = report;
         this.boardTitle = boardTitle;
         this.category = category;
+        this.boardImage = boardImage;
     }
 
 }

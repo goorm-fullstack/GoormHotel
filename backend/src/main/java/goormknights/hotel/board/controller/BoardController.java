@@ -6,6 +6,7 @@ import goormknights.hotel.board.model.Board;
 import goormknights.hotel.board.service.BoardImageService;
 import goormknights.hotel.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -16,8 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-import static goormknights.hotel.reply.model.QReply.reply;
-
 @RestController
 @RequestMapping("/boards")
 @RequiredArgsConstructor
@@ -27,11 +26,18 @@ public class BoardController {
     private final BoardImageService boardImageService;
 
     // 모든 게시물 조회
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
     @GetMapping("/list")
     public ResponseEntity<List<ResponseBoardDto>> getAllBoards(@PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
-        List<ResponseBoardDto> boards = boardService.findAllBoards(pageable);
+        Page<Board> allBoards = boardService.findAllBoards(pageable);
+        Page<ResponseBoardDto> map = allBoards.map(Board::toResponseBoardDto);
 
-        return ResponseEntity.ok(boards);
+        int totalPages = allBoards.getTotalPages();
+        long totalElements = allBoards.getTotalElements();
+        return ResponseEntity.ok()
+                .header("TotalPages", String.valueOf(totalPages))
+                .header("TotalData", String.valueOf(totalElements))
+                .body(map.getContent());
     }
 
     // 게시물 상세 조회
@@ -58,11 +64,17 @@ public class BoardController {
     }
 
     // 삭제된 게시물 전체 조회
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
     @GetMapping("/deleted")
     public ResponseEntity<List<ResponseBoardDto>> getDeletedBoards(@PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
-        List<ResponseBoardDto> deletedBoards = boardService.findAllBoardDelete(pageable);
+        Page<ResponseBoardDto> allBoardDelete = boardService.findAllBoardDelete(pageable);
 
-        return ResponseEntity.ok(deletedBoards);
+        int totalPages = allBoardDelete.getTotalPages();
+        long totalElements = allBoardDelete.getTotalElements();
+        return ResponseEntity.ok()
+                .header("TotalPages", String.valueOf(totalPages))
+                .header("TotalData", String.valueOf(totalElements))
+                .body(allBoardDelete.getContent());
     }
 
     // 게시물 영구 삭제

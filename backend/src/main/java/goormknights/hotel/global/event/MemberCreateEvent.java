@@ -4,6 +4,9 @@ import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.member.model.Member;
 import org.springframework.context.ApplicationEvent;
 
+/**
+ * 멤버가 생성될 때 발생하는 이벤트
+ */
 public class MemberCreateEvent extends ApplicationEvent {
     private final Member member;
     private final Coupon coupon;

@@ -112,13 +112,5 @@ public class AuthController {
         }
     }
 
-//    @PostMapping("/verifyId")
-//    public ResponseEntity<?> verifyId(@RequestBody VerifyIdRequest request) {
-//        if (memberService.verifyCode(request.getEmail(), request.getCode())) {
-//            return ResponseEntity.ok().body("아이디찾기완료-회원아이디: " + request.getMemberId());
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid code");
-//        }
-//    }
 
 }
