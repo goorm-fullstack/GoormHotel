@@ -1,34 +1,21 @@
 import React, { useRef, useState, useEffect } from 'react';
-import styled from 'styled-components';
+import * as S from './Style';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, NormalLinkBtn } from '../../Style/commonStyles';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Table, TableHeader } from '../member/AdminMember';
+import { Container, Table, TableHeader } from '../member/Style';
 import { numberWithCommas } from '../../utils/function/comma';
 import Paging from '../../components/common/Paging/Paging';
 import Search, { Type, TypeDetail } from '../../components/common/Search/Search';
 
-// 카테고리 셀렉트
-export const Select = styled.select`
-  margin-left: 30px;
-  border: 1px solid #dddddd; // theme.colors.grayborder
-`;
-
-// 썸네일 표시
-const Image = styled.img`
-  width: 60px;
-  height: 60px;
-  vertical-align: middle;
-`;
-
 // 체크박스 선택 시 저장할 객체 타입
-interface SelectItem{
+interface SelectItem {
   name: string;
   type: string;
 }
 
-export interface RoomData{
+export interface RoomData {
   name: string;
   price: number;
   priceAdult: number;
@@ -42,7 +29,7 @@ export interface RoomData{
   capacity: number;
 }
 
-export interface DiningData{
+export interface DiningData {
   name: string;
   price: number;
   priceAdult: number;
@@ -78,7 +65,7 @@ const AdminItemList = () => {
   const typeArray: Type[][] = [[{ type: '전체', value: 'all' }], [{ type: '객실', value: 'room' }], [{ type: '다이닝', value: 'dining' }]];
 
   const { searchJsx, url } = Search('/category', typeArray, typeDetailArray); // Search컴포넌트에서 값 받아와서 사용
-  const { page } = useParams<{page: string}>(); // url 파라미터
+  const { page } = useParams<{ page: string }>(); // url 파라미터
   const [items, setItems] = useState<(RoomData | DiningData)[]>([]); // get 요청으로 받아온 전체 데이터 상태관리
   const [selectedItems, setSelectedItems] = useState<SelectItem[]>([]); // 선택된 상품 상태관리
   const [totalPages, setTotalPages] = useState<number>(0); // 전체 페이지 상태관리
@@ -205,7 +192,7 @@ const AdminItemList = () => {
               다이닝 상품 등록
             </NormalLinkBtn>
             <NormalBtn className="header red" type="button" onClick={deleteButton}>
-              선택삭제
+              선택 상품 삭제
             </NormalBtn>
           </BtnWrapper>
         </TableHeader>
@@ -248,7 +235,9 @@ const AdminItemList = () => {
                 const matchedTypeDetail = typeDetailArray.find((typeDetails) => {
                   return typeDetails.some((typeDetail) => typeDetail.value === item.typeDetail);
                 });
-                const displayedTypeDetail = matchedTypeDetail?.find((typeDetail) => {return item.typeDetail === typeDetail.value});
+                const displayedTypeDetail = matchedTypeDetail?.find((typeDetail) => {
+                  return item.typeDetail === typeDetail.value;
+                });
 
                 return (
                   <tr key={idx}>
@@ -262,7 +251,7 @@ const AdminItemList = () => {
                     </td>
                     <td className="center">{totalData - idx}</td>
                     <td className="center">
-                      <Image src={imageUrls[idx] || ''} className="image" />
+                      <S.ItemThumbnail src={imageUrls[idx] || ''} className="image" />
                     </td>
                     <td className="center">
                       {item.type === 'dining' ? (

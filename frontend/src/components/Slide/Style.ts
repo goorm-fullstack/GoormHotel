@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Slider from 'react-slick';
 import { ReactComponent as SideMenuIcon } from '../../images/icon/ico_slide_btn.svg';
 
 export const Container = styled.div`
@@ -84,5 +85,77 @@ export const SideIcon = styled(SideMenuIcon)`
 
   &.right {
     transform: rotate(180deg);
+  }
+`;
+
+export const FSlider = styled(Slider)`
+  .slick-track {
+    height: 500px;
+  }
+
+  div {
+    height: inherit;
+  }
+
+  .slick-list {
+    width: 100%;
+    margin: 0 auto;
+
+    img {
+      min-width: 100%;
+      max-width: 100%;
+      min-height: 100%;
+      max-height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .slick-next,
+  .slick-prev {
+    // 슬라이드 버튼 위치
+    bottom: 0;
+    width: 65px;
+    height: 65px;
+    top: auto;
+    right: 0;
+    transform: translate(0, 0);
+    z-index: 10;
+  }
+
+  .slick-prev {
+    left: auto;
+    right: 65px;
+  }
+
+  .slick-prev:before,
+  .slick-next:before {
+    // 슬라이드 버튼 스타일
+    cursor: pointer;
+    content: '';
+    display: block;
+    width: 65px;
+    height: 65px;
+    opacity: 1;
+    transition: 0.2s all ease-in-out;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 40%;
+  }
+
+  .slick-prev:before {
+    background-color: #21201e;
+    background-image: url('data:image/svg+xml;utf8,<svg  height="512px" id="Layer_1" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon fill="white" points="352,115.4 331.3,96 160,256 331.3,416 352,396.7 201.5,256 "/></svg>');
+  }
+  .slick-prev:hover:before {
+    background-color: #333;
+  }
+
+  .slick-next:before {
+    background-color: #fff;
+    background-image: url('data:image/svg+xml;utf8,<svg height="512px" id="Layer_1" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon fill="black" points="160,115.4 180.7,96 352,256 180.7,416 160,396.7 310.5,256 "/></svg>');
+  }
+
+  .slick-next:hover:before {
+    background-color: #f0f0f0;
   }
 `;

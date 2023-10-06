@@ -1,14 +1,15 @@
 import React, { useRef, useState } from 'react';
-import * as S from './Style';
-import { Table, TableHeader } from '../../admin/member/AdminMember';
-import { PageTitle, SubmitBtn, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
+import { useNavigate } from 'react-router-dom';
+import { Table, TableHeader } from '../../admin/member/Style';
+import { PageTitle, SubmitBtn, BtnWrapper, LinkBtn, NormalBtn, SelectImage, RedP, GreenP } from '../../Style/commonStyles';
 import axios from 'axios';
 
 export type DiningForm = {
   [key: string]: string;
-}
+};
 
 const WriteFormDining = () => {
+  const navigate = useNavigate();
   const [imgFile, setImgFile] = useState<string>(''); // 이미지 상태 관리
   const imgRef = useRef<HTMLInputElement>(null); // 이미지 태그
   const [formData, setFormData] = useState<DiningForm>({
@@ -18,8 +19,8 @@ const WriteFormDining = () => {
     priceAdult: '',
     priceChildren: '',
     type: 'dining',
-    typeDetail: '',
-    useTime: '',
+    typeDetail: 'restaurant',
+    useTime: '0',
     spare: '',
     spareAdult: '',
     spareChildren: '',
@@ -47,7 +48,7 @@ const WriteFormDining = () => {
         e.preventDefault();
 
         const form = new FormData();
-        if(imgRef.current && imgRef.current.files){
+        if (imgRef.current && imgRef.current.files) {
           form.append('img', imgRef.current.files[0]);
         }
 
@@ -84,7 +85,7 @@ const WriteFormDining = () => {
   // 이미지 업로드 input의 onChange(이미지 미리보기)
   const saveImgFile = () => {
     let file: File | null = null;
-    if(imgRef.current && imgRef.current.files){
+    if (imgRef.current && imgRef.current.files) {
       file = imgRef.current.files[0];
     }
     const reader = new FileReader();
@@ -110,7 +111,7 @@ const WriteFormDining = () => {
         setIsConfirm(true);
       }
     } catch (error) {
-      if(axios.isAxiosError(error)){
+      if (axios.isAxiosError(error)) {
         setDuplicateMessage(error.response?.data);
         console.log(error.response?.data);
         setIsConfirm(false);
@@ -121,111 +122,126 @@ const WriteFormDining = () => {
   // 중복 확인 메시지에 따라 태그 결정
   let responseMessege;
   if (duplicateMessage === '중복된 상품명입니다.' || duplicateMessage === '상품명은 공백일 수 없습니다.') {
-    responseMessege = <S.RedP>{duplicateMessage}</S.RedP>;
+    responseMessege = <RedP>{duplicateMessage}</RedP>;
   } else {
-    responseMessege = <S.GreenP>{duplicateMessage}</S.GreenP>;
+    responseMessege = <GreenP>{duplicateMessage}</GreenP>;
+  }
+
+  // 객실, 다이닝 전환
+  let history = useNavigate();
+  function handleChangeSelect(value: string) {
+    history(`${value}`);
   }
 
   return (
     <>
-      <PageTitle>다이닝 등록</PageTitle>
-      <TableHeader>
-        <BtnWrapper className="flexgap right">
-          <LinkBtn to="/admin/item/add/room" className="header">
-            객실 등록
-          </LinkBtn>
-          <LinkBtn to="/admin/item/add/dining" className="header">
-            다이닝 등록
-          </LinkBtn>
-        </BtnWrapper>
-      </TableHeader>
+      <PageTitle>상품 등록</PageTitle>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
+        {/** 상품 타입 */}
+        <input type="hidden" value="dining" name="type" onChange={handleChange} readOnly />
         <Table className="horizontal">
-          <tr>
-            <th>썸네일</th>
-            <td>
-              <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required />
-              {imgFile ? <S.Image src={imgFile} alt="프로필 이미지" /> : <S.Image style={{ display: 'none' }} />}
-            </td>
-          </tr>
-          <tr>
-            <th>상품명</th>
-            <td>
-              <input type="text" name="name" value={formData.name} onChange={handleChange} ref={nameRef} required />
-              <S.DuplicateButton type="button" onClick={handleDuplicate}>
-                중복확인
-              </S.DuplicateButton>
-              {responseMessege}
-            </td>
-          </tr>
-          <tr>
-            <th>상품가격</th>
-            <td>
-              <input type="text" name="price" value={formData.price} onChange={handleChange} required />
-            </td>
-          </tr>
-          <tr>
-            <th>성인 추가 비용</th>
-            <td>
-              <input type="text" name="priceAdult" onChange={handleChange} value={formData.priceAdult} required />
-            </td>
-          </tr>
-          <tr>
-            <th>어린이 추가 비용</th>
-            <td>
-              <input type="text" name="priceChildren" onChange={handleChange} value={formData.priceChildren} required />
-            </td>
-          </tr>
-          <tr>
-            <th>잔여 다이닝 수</th>
-            <td>
-              <input type="text" name="spare" onChange={handleChange} value={formData.spare} required />
-            </td>
-          </tr>
-          <tr>
-            <th>최대 숙박 가능 인원 수(성인)</th>
-            <td>
-              <input type="text" name="spareAdult" onChange={handleChange} value={formData.spareAdult} required />
-            </td>
-          </tr>
-          <tr>
-            <th>최대 숙박 가능 인원 수(어린이)</th>
-            <td>
-              <input type="text" name="spareChildren" onChange={handleChange} value={formData.spareChildren} required />
-            </td>
-          </tr>
-          <tr>
-            <th>기준 인원</th>
-            <td>
-              <input type="text" name="capacity" onChange={handleChange} value={formData.capacity} required />
-            </td>
-          </tr>
-          <tr>
-            <th>상품 타입</th>
-            <td>
-              <input type="text" value="dining" name="type" onChange={handleChange} readOnly />
-            </td>
-          </tr>
-          <tr>
-            <th>세부 타입</th>
-            <td>
-              <select name="typeDetail" value={formData.typeDetail} onChange={handleChange}>
-                <option value="">선택</option>
-                <option value="restaurant">레스토랑</option>
-                <option value="roomService">룸서비스</option>
-                <option value="barRounge">바&라운지</option>
-                <option value="bakery">베이커리</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <th>이용 가능 시간</th>
-            <td>
-              <input type="text" name="useTime" value={formData.useTime} onChange={handleChange} required />
-            </td>
-          </tr>
+          <colgroup>
+            <col width="240px" />
+            <col width="auto" />
+            <col width="280px" />
+          </colgroup>
+          <tbody>
+            <tr>
+              <th>상품 분류</th>
+              <td>
+                <select onChange={(e) => handleChangeSelect(e.target.value)}>
+                  <option value="/admin/item/add/room">객실</option>
+                  <option value="/admin/item/add/dining" selected>
+                    다이닝
+                  </option>
+                </select>
+              </td>
+              <td rowSpan={5}>
+                <SelectImage>
+                  <label>
+                    <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required />
+                    <div className="imgwrapper">{imgFile ? <img src={imgFile} alt="프로필 이미지" /> : <img style={{ display: 'none' }} />}</div>
+                  </label>
+                </SelectImage>
+              </td>
+            </tr>
+            <tr>
+              <th>다이닝 타입</th>
+              <td>
+                <select name="typeDetail" value={formData.typeDetail} onChange={handleChange} defaultValue={formData.typeDetail}>
+                  <option value="restaurant">레스토랑</option>
+                  <option value="roomService">룸서비스</option>
+                  <option value="barRounge">바&라운지</option>
+                  <option value="bakery">베이커리</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th>상품명</th>
+              <td>
+                <input type="text" name="name" className="long" value={formData.name} onChange={handleChange} ref={nameRef} required />
+                <NormalBtn type="button" className="withinput" onClick={handleDuplicate}>
+                  중복확인
+                </NormalBtn>
+                {responseMessege}
+              </td>
+            </tr>
+            <tr>
+              <th>상품가</th>
+              <td>
+                <input type="text" name="price" value={formData.price} onChange={handleChange} required />
+              </td>
+            </tr>
+            <tr>
+              <th>성인 추가 비용</th>
+              <td>
+                <input type="text" name="priceAdult" onChange={handleChange} value={formData.priceAdult} required />
+              </td>
+            </tr>
+            <tr>
+              <th>어린이 추가 비용</th>
+              <td colSpan={2}>
+                <input type="text" name="priceChildren" onChange={handleChange} value={formData.priceChildren} required />
+              </td>
+            </tr>
+            <tr>
+              <th>서비스 기준 인원</th>
+              <td colSpan={2}>
+                <input type="text" name="capacity" onChange={handleChange} value={formData.capacity} required />
+              </td>
+            </tr>
+            <tr>
+              <th>성인 최대 서비스 가능 인원</th>
+              <td colSpan={2}>
+                <input type="text" name="spareAdult" onChange={handleChange} value={formData.spareAdult} required />
+              </td>
+            </tr>
+            <tr>
+              <th>어린이 최대 서비스 가능 인원</th>
+              <td colSpan={2}>
+                <input type="text" name="spareChildren" onChange={handleChange} value={formData.spareChildren} required />
+              </td>
+            </tr>
+            {/* <tr>
+              <th>이용 가능 시간</th>
+              <td>
+                <input type="text" name="useTime" value={formData.useTime} onChange={handleChange} required />
+              </td>
+            </tr> */}
+            <tr>
+              <th>판매 수량</th>
+              <td colSpan={2}>
+                <input type="text" name="spare" onChange={handleChange} value={formData.spare} required />
+              </td>
+            </tr>
+          </tbody>
         </Table>
-        <SubmitBtn type="submit">등록</SubmitBtn>
+        <BtnWrapper className="double mt40 center">
+          <SubmitBtn type="submit">상품등록</SubmitBtn>
+          <NormalBtn type="button" onClick={() => navigate(-1)}>
+            취소
+          </NormalBtn>
+        </BtnWrapper>
       </form>
     </>
   );

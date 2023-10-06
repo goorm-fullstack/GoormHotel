@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle } from '../../Style/commonStyles';
-import { Container } from '../member/AdminMember';
+import { Container } from '../member/Style';
 import { numberWithCommas } from '../../utils/function/comma';
 import { ReservationData } from './AdminReservation';
 import { ValuePiece } from '../../components/common/DateButton/DateButton';

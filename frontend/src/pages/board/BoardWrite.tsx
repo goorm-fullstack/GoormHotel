@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { useParams, useNavigate } from 'react-router-dom'; // useHistory 추가
+import { useParams, useNavigate } from 'react-router-dom';
 import { commonContainerStyle, PageTitle, BtnWrapper, SubmitBtn, commonTable } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
-import { Image } from '../../components/AddItemForm/Style';
+import { ItemThumbnail } from '../../admin/item/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
 
 const Container = styled(commonContainerStyle)``;
@@ -12,7 +12,7 @@ const Table = styled(commonTable)``;
 
 type FormData = {
   [key: string]: string;
-}
+};
 
 const BoardWrite = () => {
   const board = useParams().board;
@@ -42,7 +42,8 @@ const BoardWrite = () => {
     category: '',
   });
 
-  //이미지 업로드 input의 onChange
+  const [categoryError, setCategoryError] = useState<string>('');
+
   const saveImgFile = () => {
     const file = imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '';
     if (file instanceof Blob) {
@@ -74,14 +75,19 @@ const BoardWrite = () => {
       ...formData,
       [name]: value,
     });
+
+    if (name === 'category') {
+      setCategoryError('');
+    }
   };
 
-  //게시글 작성 api
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    const confirmed = window.confirm('작성하시겠습니까?');
+    e.preventDefault();
 
-    if (confirmed) {
-      e.preventDefault();
+    if (!formData.category) {
+      setCategoryError('카테고리를 선택하세요'); // 오류 메시지 설정
+      return;
+    }
 
       const form = new FormData();
       form.append('multipartFile', imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '');
@@ -89,24 +95,22 @@ const BoardWrite = () => {
       formData.boardContent = boardContent;
       console.log(formData.category);
 
-      Object.keys(formData).forEach((key) => {
-        // Object.keys 수정
-        form.append(key, formData[key]);
-      });
+    Object.keys(formData).forEach((key) => {
+      form.append(key, formData[key]);
+    });
 
-      try {
-        await axios.post('/boards/writeform', form, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        window.location.href = `/board/${board}/1`;
-      } catch (e: any) {
-        console.error('Error: ', e.message);
-        if (e.response.data.message.startsWith('Validation failed')) {
-          const errorMessage = e.response.data.errors[0].defaultMessage;
-          alert(errorMessage);
-        }
+    try {
+      await axios.post('/boards/writeform', form, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      window.location.href = `/board/${board}/1`;
+    } catch (e: any) {
+      console.error('에러: ', e.message);
+      if (e.response.data.message.startsWith('Validation failed')) {
+        const errorMessage = e.response.data.errors[0].defaultMessage;
+        alert(errorMessage);
       }
     }
   };
@@ -163,6 +167,7 @@ const BoardWrite = () => {
                         return;
                     }
                   })()}
+                  {categoryError && <div style={{ color: 'red' }}>{categoryError}</div>}
                 </td>
               </tr>
               <tr>
@@ -182,7 +187,7 @@ const BoardWrite = () => {
                 <th>썸네일 이미지</th>
                 <td>
                   <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
-                  {imgFile !== '' ? <Image src={imgFile} alt="후기 이미지" /> : <Image style={{ display: 'none' }} />}
+                  {imgFile !== '' ? <ItemThumbnail src={imgFile} alt="후기 이미지" /> : <ItemThumbnail style={{ display: 'none' }} />}
                 </td>
                 </>)
                 :
