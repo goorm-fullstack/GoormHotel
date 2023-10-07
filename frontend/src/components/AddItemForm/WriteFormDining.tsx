@@ -20,7 +20,6 @@ const WriteFormDining = () => {
     priceChildren: '',
     type: 'dining',
     typeDetail: 'restaurant',
-    useTime: '0',
     spare: '',
     spareAdult: '',
     spareChildren: '',
@@ -222,12 +221,6 @@ const WriteFormDining = () => {
                 <input type="text" name="spareChildren" onChange={handleChange} value={formData.spareChildren} required />
               </td>
             </tr>
-            {/* <tr>
-              <th>이용 가능 시간</th>
-              <td>
-                <input type="text" name="useTime" value={formData.useTime} onChange={handleChange} required />
-              </td>
-            </tr> */}
             <tr>
               <th>판매 수량</th>
               <td colSpan={2}>
