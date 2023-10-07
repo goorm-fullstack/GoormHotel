@@ -3,7 +3,6 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { EditorWrapper } from './Style';
 import UploadAdapter from '../../../utils/adaptor/UploadAdaptor';
-import { write } from 'fs';
 
 // 사용할 Props를 미리 정의해줍니다.
 interface Props {

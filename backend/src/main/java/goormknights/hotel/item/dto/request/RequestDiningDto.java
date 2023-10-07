@@ -38,9 +38,6 @@ public class RequestDiningDto {
     @NotBlank
     private String typeDetail;
 
-    @NotBlank
-    private String useTime; // 이용 시간(ex. 아침, 점심, 저녁)
-
     @PositiveOrZero
     private int spare; // 잔여 객실 수
 
@@ -54,14 +51,13 @@ public class RequestDiningDto {
     private int capacity; // 기준 인원
 
     @Builder(toBuilder = true)
-    public RequestDiningDto(String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, String useTime, int spare, int spareAdult, int spareChildren, int capacity) {
+    public RequestDiningDto(String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, int spare, int spareAdult, int spareChildren, int capacity) {
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;
         this.priceChildren = priceChildren;
         this.type = type;
         this.typeDetail = typeDetail;
-        this.useTime = useTime;
         this.spare = spare;
         this.spareAdult = spareAdult;
         this.spareChildren = spareChildren;
@@ -77,7 +73,6 @@ public class RequestDiningDto {
                 .priceAdult(priceAdult)
                 .priceChildren(priceChildren)
                 .type(type)
-                .useTime(useTime)
                 .typeDetail(typeDetail)
                 .spare(spare)
                 .spareAdult(spareAdult)

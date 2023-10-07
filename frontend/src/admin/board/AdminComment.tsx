@@ -214,9 +214,11 @@ const AdminComment = () => {
           </thead>
           <tbody>
             {reply.length === 0 && (
-              <td colSpan={7} className="center">
-                등록된 댓글이 없습니다.
-              </td>
+              <tr>
+                <td colSpan={7} className="center">
+                  등록된 댓글이 없습니다.
+                </td>
+              </tr>
             )}
             {reply &&
             reply.map((reply, idx) => (
