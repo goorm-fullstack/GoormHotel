@@ -65,7 +65,9 @@ const AdminItemList = () => {
   const typeArray: Type[][] = [[{ type: '전체', value: 'all' }], [{ type: '객실', value: 'room' }], [{ type: '다이닝', value: 'dining' }]];
 
   const { searchJsx, url } = Search('/category', typeArray, typeDetailArray); // Search컴포넌트에서 값 받아와서 사용
-  const { page } = useParams<{ page: string }>(); // url 파라미터
+  console.log(url);
+  // const { page } = useParams<{ page: string }>(); // url 파라미터
+
   const [items, setItems] = useState<(RoomData | DiningData)[]>([]); // get 요청으로 받아온 전체 데이터 상태관리
   const [selectedItems, setSelectedItems] = useState<SelectItem[]>([]); // 선택된 상품 상태관리
   const [totalPages, setTotalPages] = useState<number>(0); // 전체 페이지 상태관리
@@ -85,6 +87,7 @@ const AdminItemList = () => {
   const handleLoadItems = async () => {
     try {
       const response = await axios.get(url);
+      console.log(url);
       const data = response.data;
       const totalPages = parseInt(response.headers['totalpages'], 10);
       const totalData = parseInt(response.headers['totaldata'], 10);
@@ -149,7 +152,9 @@ const AdminItemList = () => {
 
   useEffect(() => {
     handleLoadItems();
-  }, [page, url]);
+    console.log(url);
+    // console.log(page);
+  }, [url]);
 
   // 서버에 저장된 이미지 요청
   useEffect(() => {
@@ -229,8 +234,7 @@ const AdminItemList = () => {
                 </td>
               </tr>
             )}
-            {items &&
-              items.map((item: RoomData | DiningData, idx: number) => {
+            {items && items.map((item: RoomData | DiningData, idx: number) => {
                 const id: string = 'checkbox' + idx;
                 const matchedTypeDetail = typeDetailArray.find((typeDetails) => {
                   return typeDetails.some((typeDetail) => typeDetail.value === item.typeDetail);
@@ -262,7 +266,7 @@ const AdminItemList = () => {
                     </td>
                     <td className="center">{item.type === 'dining' ? '다이닝' : '객실'}</td>
                     <td className="center">{displayedTypeDetail?.typeDetail}</td>
-                    <td className="center">{numberWithCommas(item.price)}</td>
+                    <td className="center">{numberWithCommas(item.price)} 원</td>
                     <td className="center">{item.spare}</td>
                   </tr>
                 );

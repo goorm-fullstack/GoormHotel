@@ -99,9 +99,11 @@ const AdminReport = () => {
           </thead>
           <tbody>
             {report.length === 0 && (
-              <td colSpan={8} className="center empty">
-                신고된 글이 없습니다.
-              </td>
+              <tr>
+                <td colSpan={8} className="center empty">
+                  신고된 글이 없습니다.
+                </td>
+              </tr>
             )}
             {report &&
             report.map((report, idx) => (

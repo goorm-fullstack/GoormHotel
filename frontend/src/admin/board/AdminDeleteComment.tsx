@@ -136,9 +136,11 @@ const AdminDeleteComment = () => {
           </thead>
           <tbody>
             {board.length === 0 && (
-              <td colSpan={6} className="center empty">
-                삭제된 글이 없습니다.
-              </td>
+              <tr>
+                <td colSpan={6} className="center empty">
+                  삭제된 글이 없습니다.
+                </td>
+              </tr>
             )}
             {board &&
             board.map((board) => (
@@ -159,9 +161,7 @@ const AdminDeleteComment = () => {
                   {board.boardWriter}
                   <S.LinkStyle to={`/admin/member/${board.boardWriter}`}>({board.boardWriter})</S.LinkStyle>
                 </td>
-                <td className="center">{`${board.boardWriteDate[0]}.${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}.${
-                  board.boardWriteDate[2] < 10 ? '0' : ''
-                }${board.boardWriteDate[2]}`}</td>
+                <td className="center">{`${board.boardWriteDate[0]}.${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}.${board.boardWriteDate[2] < 10 ? '0' : ''}${board.boardWriteDate[2]}`}</td>
               </tr>
             ))}
           </tbody>
