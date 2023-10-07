@@ -216,6 +216,12 @@ const AdminDetailRoom = () => {
                   </td>
                 </tr>
                 <tr>
+                  <th>상품 소개글</th>
+                  <td>
+                    <input type="text" name='description' className='long' defaultValue={responseData.description} onChange={handleChange} required />
+                  </td>
+                </tr>
+                <tr>
                   <th>상품가</th>
                   <td>
                     <input type="text" name="price" defaultValue={responseData.price} onChange={handleChange} required />

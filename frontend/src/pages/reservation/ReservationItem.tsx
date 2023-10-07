@@ -266,6 +266,7 @@ type ProductType1 = {
   typeDetail: string;
   bed: string;
   capacity: number;
+  description: string;
 }
 
 type ProductType2 = {
@@ -281,6 +282,7 @@ type ProductType2 = {
   typeDetail: string;
   useTime: string;
   capacity: number;
+  description: string;
 }
 
 type SelectProduct = ProductType1 | ProductType2;
@@ -477,6 +479,7 @@ const ReservationItem = () => {
                         <span key={index}>{nameOfTypeDetail(product)}</span>
                         <span key={index}>{product.capacity}인 기준</span>
                       </p>
+                      <h5>{product.description}안녕</h5>
                       <p key={index} className="price">
                         <strong key={index}>{numberWithCommas(product.price)}</strong> 원 ~
                       </p>

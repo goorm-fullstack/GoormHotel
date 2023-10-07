@@ -24,6 +24,7 @@ const WriteFormDining = () => {
     spareAdult: '',
     spareChildren: '',
     capacity: '',
+    description: '',
   });
   const [duplicateMessage, setDuplicateMessage] = useState<string>(''); // 중복검사 메시지 상태 관리
   const [isConfirm, setIsConfirm] = useState<boolean>(false); // 중복검사 정상 실행 여부 상태 관리
@@ -183,6 +184,12 @@ const WriteFormDining = () => {
                   중복확인
                 </NormalBtn>
                 {responseMessege}
+              </td>
+            </tr>
+            <tr>
+              <th>상품 소개글</th>
+              <td>
+                <input type="text" name='description' className='long' value={formData.description} onChange={handleChange} required />
               </td>
             </tr>
             <tr>

@@ -25,9 +25,10 @@ public class ResponseDiningDto {
      * 다이닝: 레스토랑, 룸서비스, 바&라운지(바, 라운지), 베이커리
      */
     private String typeDetail;
+    private String description;
 
     @Builder
-    public ResponseDiningDto(String name, int price, int priceAdult, int priceChildren, int spare, int spareAdult, int spareChildren, int capacity, String type, String typeDetail) {
+    public ResponseDiningDto(String name, int price, int priceAdult, int priceChildren, int spare, int spareAdult, int spareChildren, int capacity, String type, String typeDetail, String description) {
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;
@@ -38,5 +39,6 @@ public class ResponseDiningDto {
         this.capacity = capacity;
         this.type = type;
         this.typeDetail = typeDetail;
+        this.description = description;
     }
 }

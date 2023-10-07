@@ -50,8 +50,11 @@ public class RequestDiningDto {
     @Positive
     private int capacity; // 기준 인원
 
+    @NotBlank
+    private String description;
+
     @Builder(toBuilder = true)
-    public RequestDiningDto(String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, int spare, int spareAdult, int spareChildren, int capacity) {
+    public RequestDiningDto(String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, int spare, int spareAdult, int spareChildren, int capacity, String description) {
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;
@@ -62,6 +65,7 @@ public class RequestDiningDto {
         this.spareAdult = spareAdult;
         this.spareChildren = spareChildren;
         this.capacity = capacity;
+        this.description = description;
     }
 
 
@@ -78,6 +82,7 @@ public class RequestDiningDto {
                 .spareAdult(spareAdult)
                 .spareChildren(spareChildren)
                 .capacity(capacity)
+                .description(description)
                 .build();
     }
 }

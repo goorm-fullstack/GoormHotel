@@ -209,6 +209,12 @@ const AdminDetailDining = () => {
                   </td>
                 </tr>
                 <tr>
+                  <th>상품 소개글</th>
+                  <td>
+                    <input type="text" name='description' className='long' defaultValue={responseData.description} onChange={handleChange} required />
+                  </td>
+                </tr>
+                <tr>
                   <th>상품가</th>
                   <td>
                     <input type="text" name="price" defaultValue={responseData.price} onChange={handleChange} required />
@@ -244,12 +250,6 @@ const AdminDetailDining = () => {
                     <input type="text" name="spareChildren" defaultValue={responseData.spareChildren} onChange={handleChange} required />
                   </td>
                 </tr>
-                {/* <tr>
-                  <th>이용 가능 시간</th>
-                  <td>
-                    <input type="text" name="useTime" defaultValue={responseData.useTime} onChange={handleChange} required />
-                  </td>
-                </tr> */}
                 <tr>
                   <th>판매 수량</th>
                   <td colSpan={2}>
