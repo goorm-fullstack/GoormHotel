@@ -27,6 +27,7 @@ export interface RoomData {
   typeDetail: string;
   bed: string;
   capacity: number;
+  description: string;
 }
 
 export interface DiningData {
@@ -41,6 +42,7 @@ export interface DiningData {
   typeDetail: string;
   useTime: string;
   capacity: number;
+  description: string;
 }
 
 const AdminItemList = () => {
