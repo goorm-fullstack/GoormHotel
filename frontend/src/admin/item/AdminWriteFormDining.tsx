@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import AdminLayout from '../common/AdminLayout';
 import WriteFormDining from '../../components/AddItemForm/WriteFormDining';
 import { Container } from '../member/Style';
+import {useNavigate} from "react-router-dom";
 
 const AdminWriteFormDining = () => {
     const navigate = useNavigate();

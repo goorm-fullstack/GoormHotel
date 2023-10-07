@@ -1,7 +1,7 @@
 import React, {useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import * as S from './Style';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
 import Paging from '../../components/common/Paging/Paging';
 

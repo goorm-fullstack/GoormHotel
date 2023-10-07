@@ -107,7 +107,7 @@ const FloatingBtn = styled.button<{ $show: boolean }>`
 `;
 
 const App: React.FC = () => {
-  const { setAuthState } = useAuth();
+  const { setAuthState, setMemberAuthState } = useAuth();
   const [showChat, setShowChat] = useState<boolean>(false);
   const [showFloatingButtons, setShowFloatingButtons] = useState<boolean>(false);
   const [isAdminPage, setIsAdminPage] = useState<boolean>(false);

@@ -4,7 +4,7 @@ import { PageTitle, BtnWrapper, SubmitBtn, LinkBtn } from '../../Style/commonSty
 import 'react-calendar/dist/Calendar.css';
 import 'moment/locale/ko';
 import Instance from '../../utils/api/axiosInstance';
-import { useParams } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import { Container } from '../../components/Slide/Style';
 import { Table } from '../member/Style';
 

@@ -3,7 +3,7 @@ import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, ContentsTitleXSmall, SubmitBtn } from '../../Style/commonStyles';
 import 'react-calendar/dist/Calendar.css';
 import 'moment/locale/ko';
-import { Link, useParams } from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import { Container, Table, TableHeader } from '../member/Style';
 import { InputWrapper, Section } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';

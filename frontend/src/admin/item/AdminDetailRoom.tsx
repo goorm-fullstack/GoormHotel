@@ -9,7 +9,6 @@ import { Container, Table } from '../member/Style';
 import { RoomForm } from '../../components/AddItemForm/WriteFormRoom';
 
 const AdminDetailRoom = () => {
-  const navigate = useNavigate();
   const [imgFile, setImgFile] = useState<string>(''); // 이미지 상태관리
   const imgRef = useRef<HTMLInputElement>(null); // 이미지 태그
   const { type, name } = useParams<{ type: string; name: string }>(); // url 파라미터

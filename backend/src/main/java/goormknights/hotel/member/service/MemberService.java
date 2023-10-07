@@ -26,8 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -199,18 +197,18 @@ public class MemberService {
         return false;
     }
 
-    // 멤버 세션체크
-    public Map<String, Object> checkMember(HttpSession session) {
-        HashMap<String, Object> response = new HashMap<>();
-        Member member = (Member) session.getAttribute("member");
-        if (member != null) {
-            response.put("status", "success");
-            response.put("role", member.getRole().getKey());
-        } else {
-            response.put("status", "fail");
-        }
-        return response;
-    }
+//    // 멤버 세션체크
+//    public Map<String, Object> checkMember(HttpSession session) {
+//        HashMap<String, Object> response = new HashMap<>();
+//        Member member = (Member) session.getAttribute("member");
+//        if (member != null) {
+//            response.put("status", "success");
+//            response.put("role", member.getRole().getKey());
+//        } else {
+//            response.put("status", "fail");
+//        }
+//        return response;
+//    }
 
 
 
@@ -232,4 +230,11 @@ public class MemberService {
 //        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotExistMemberException("존재하지 않는 사용자입니다"));
 //        member.getGiftCardList().add(giftCard);
     }
+
+    // 블랙리스트 차단합니다.
+    public void setBlackList(Long id) {
+        Member blackMember = memberRepository.findById(id).orElseThrow(MemberNotFound::new);
+        blackMember.setRole(Role.BLACKED);
+    }
+
 }

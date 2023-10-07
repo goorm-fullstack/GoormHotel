@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, CheckLabel, MultiCheck, SubmitBtn } from '../../Style/commonStyles';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
-import { useLocation, useParams } from 'react-router-dom';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import { Container, Table } from '../member/Style';
 import Instance from '../../utils/api/axiosInstance';
 import queryString from 'query-string';
@@ -19,10 +19,10 @@ const AdminMail = () => {
   const [file, setFile] = useState('');
   const [message, setMessage] = useState('');
   const mailto = queryParams.mailto;
-
-  console.log(mailto);
   const navigate = useNavigate();
   const authItem = localStorage.getItem("auth");
+
+  console.log(mailto);
 
   useEffect(() => {
     if (!(authItem && authItem.includes("AUTH_C"))) {
@@ -118,8 +118,6 @@ const AdminMail = () => {
     }).then(() => {});
     window.location.href = `/admin/mail`;
   };
-
-  }
 
   if(authItem && authItem.includes("AUTH_C")) {
   return (
