@@ -108,4 +108,10 @@ public class GiftCard {
     public void changeUnusableState() {
         isZeroMoney = 'Y';
     }
+
+    public void update(RequestGiftCardDto giftCardDto) {
+        this.title = giftCardDto.getTitle();
+        this.expire = giftCardDto.getExpire();
+        this.isZeroMoney = giftCardDto.getIsZeroMoney();
+    }
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import {useNavigate, useParams } from 'react-router-dom';
 import * as S from './Style';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
@@ -16,6 +16,15 @@ const AdminComment = () => {
   // const [board, setBoard] = useState<BoardData[]>([]);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [totalReply, setTotalReply] = useState<number>(0);
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_C"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   useEffect(() => {
     const currentPage: number = parseInt(page ? page : '1', 10);
@@ -162,6 +171,7 @@ const AdminComment = () => {
       });
   };
 
+  if(authItem && authItem.includes("AUTH_C")) {
   return (
     <AdminLayout subMenus="board">
       <Container>
@@ -246,6 +256,9 @@ const AdminComment = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminComment;

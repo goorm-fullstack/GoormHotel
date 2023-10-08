@@ -5,17 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminSignup {
+public class AdminSignupDTO {
     private String adminId;
     private String password;
     private String adminName;
     private String adminNickname;
-    private List<String> authorities;
+    private String auth;
     private Boolean isActive;
 }

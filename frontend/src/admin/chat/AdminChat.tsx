@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
-import { Link, useParams } from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
 import Paging from '../../components/common/Paging/Paging';
 import { Container, Table, TableHeader } from '../member/Style';
@@ -32,6 +32,15 @@ const AdminChat = () => {
   const [count, setCount] = useState(1);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [chatData, setChatData] = useState<ChatRoom[]>([]);
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_C"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   useEffect(() => {
     Instance.get(`/chat/getLastMessage?page=${page}`).then((response) => {
@@ -75,6 +84,7 @@ const AdminChat = () => {
     window.location.reload();
   };
 
+  if(authItem && authItem.includes("AUTH_C")) {
   return (
     <AdminLayout subMenus="chat">
       <Container>
@@ -127,7 +137,7 @@ const AdminChat = () => {
                       onChange={() => handleCheckboxChange(item.chatMessages[0].roomId)}
                     />
                     </td>
-                    <td style={{textAlign : "center"}}>{index + 1}</td>
+                    <td style={{textAlign : "center"}}>{item.id}</td>
                     <td style={{textAlign : "center"}}>
                       {item.chatMessages[0].sender}(
                       <Link to={`/admin/member/${item.chatMessages[0].sender}`} className="memberId">
@@ -151,6 +161,9 @@ const AdminChat = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminChat;

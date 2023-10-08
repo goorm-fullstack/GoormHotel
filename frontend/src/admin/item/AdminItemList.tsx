@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import * as S from './Style';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, NormalLinkBtn } from '../../Style/commonStyles';
-import { Link, useParams } from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import { Container, Table, TableHeader } from '../member/Style';
 import { numberWithCommas } from '../../utils/function/comma';
@@ -75,6 +75,15 @@ const AdminItemList = () => {
   const [totalPages, setTotalPages] = useState<number>(0); // 전체 페이지 상태관리
   const [totalData, setTotalData] = useState<number>(0); // 전체 데이터 수 상태관리
   const [imageUrls, setImageUrls] = useState<string[]>([]); // 이미지 데이터 상태관리
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_B"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   // 체크박스 전체 선택 or 해체 기능
   const inputRef = useRef<HTMLInputElement[]>([]);
@@ -182,6 +191,7 @@ const AdminItemList = () => {
     fetchImageUrls();
   }, [items]);
 
+  if(authItem && authItem.includes("AUTH_B")) {
   console.log(items);
 
   if(!Array.isArray(items)){
@@ -288,6 +298,9 @@ const AdminItemList = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminItemList;

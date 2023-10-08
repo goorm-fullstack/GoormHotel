@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, LinkBtn } from '../../Style/commonStyles';
 import { Container, Table, TableHeader } from '../member/Style';
@@ -56,6 +56,15 @@ const AdminBoard = () => {
   const [totalPage, setTotalPage] = useState<number>(0);
   const [totalBoard, setTotalBoard] = useState<number>(0);
   const [board, setBoard] = useState<BoardData[]>([]);
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_C"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   // 전체 게시글 목록 조회
   useEffect(() => {
@@ -127,6 +136,7 @@ const AdminBoard = () => {
     });
   };
 
+  if(authItem && authItem.includes("AUTH_C")) {
   return (
     <AdminLayout subMenus="board">
       <Container>
@@ -210,6 +220,9 @@ const AdminBoard = () => {
       </Container>
     </AdminLayout>
   );
+} else {
+    return null;
+  }
 };
 
 export default AdminBoard;
