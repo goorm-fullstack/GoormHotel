@@ -86,7 +86,8 @@ const ReservationItem = () => {
   const location = useLocation();
   console.log(location.search.replace('?type=', ''));
   const reservationData = location.state ? location.state.reservationData : null;
-  const [selectedType, setSelectedType] = useState<string[]>(['room']);
+  const [selectedType, setSelectedType] = useState<string[]>(['all', 'room', 'dining']);
+  console.log(selectedType);
   const [selectedCategory, setSelectedCategory] = useState<string>(productCategories[0].english);
   const [products, setProducts] = useState<(RoomData | DiningData)[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -119,7 +120,8 @@ const ReservationItem = () => {
   useEffect(() => {
     const currentPage: number = parseInt(page ? page : '1', 10);
     if (selectedType.includes('all')) {
-      axios
+      if(selectedCategory !== ''){
+        axios
         .get(`/category?page=${currentPage}`, {
           params: {
             typeDetail: selectedCategory,
@@ -135,6 +137,20 @@ const ReservationItem = () => {
         .catch((error) => {
           console.error(error);
         });
+      }else{
+        axios
+        .get(`/category?page=${currentPage}`)
+        .then((response) => {
+          const totalPages = parseInt(response.headers['totalpages'], 10);
+          const totalData = parseInt(response.headers['totaldata'], 10);
+          setProducts(response.data);
+          setTotalData(totalData);
+          setTotalPage(totalPages);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      }
     } else {
       if (selectedCategory !== '') {
         axios
@@ -253,23 +269,23 @@ const ReservationItem = () => {
                   전체 <strong>{totalData}</strong> 개
                 </p>
                 <select id="productType" value={selectedCategory} onChange={handleCategoryChange}>
-                  {selectedType.includes('room')
+                  {selectedType.length === 1 && selectedType[0] === 'room'
                     ? productCategories.map((category, index) => (
                         <option key={index} value={category.english}>
                           {category.korean}
                         </option>
                       ))
-                    : diningCategories.map((category, index) => (
+                    : selectedType.length === 1 && selectedType[0] === 'dining'
+                    ? diningCategories.map((category, index) => (
                         <option key={index} value={category.english}>
                           {category.korean}
                         </option>
-                      ))}
-                  {selectedType.includes('all') &&
-                    [...diningCategories, ...productCategories].map((category, index) => (
-                      <option key={index} value={category.english}>
-                        {category.korean}
-                      </option>
-                    ))}
+                      ))
+                    : ( <option value={productCategories[0].english}>
+                          {productCategories[0].korean}
+                        </option>
+                      )
+                  }
                 </select>
               </div>
             </S.SelectWrapper>

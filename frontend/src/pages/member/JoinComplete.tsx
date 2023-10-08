@@ -1,6 +1,6 @@
 import React from 'react';
 import * as S from './Style';
-import { BtnWrapper, SubmitBtn, PageTitle, LinkBtn } from '../../Style/commonStyles';
+import { BtnWrapper, PageTitle, LinkBtn } from '../../Style/commonStyles';
 
 const JoinComplete = () => {
   return (
@@ -14,7 +14,7 @@ const JoinComplete = () => {
             <br />더 큰 혜택과 편리함을 누려보세요.
           </p>
           <BtnWrapper className="mt40 double">
-            <SubmitBtn>로그인</SubmitBtn>
+            <LinkBtn to="/login">로그인</LinkBtn>
             <LinkBtn to="/">메인 페이지로 이동</LinkBtn>
           </BtnWrapper>
         </S.ResultBox>

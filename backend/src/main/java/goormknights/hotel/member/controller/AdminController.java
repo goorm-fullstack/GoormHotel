@@ -2,7 +2,7 @@ package goormknights.hotel.member.controller;
 
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
-import goormknights.hotel.member.dto.request.AdminSignup;
+import goormknights.hotel.member.dto.request.AdminSignupDTO;
 import goormknights.hotel.member.service.AdminService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -99,9 +99,9 @@ public class AdminController {
 
 
     @PostMapping
-    public ResponseEntity<?> addManager(@RequestBody AdminSignup adminSignup) {
+    public ResponseEntity<?> addManager(@RequestBody AdminSignupDTO adminSignupDTO) {
         try {
-            adminService.adminSignup(adminSignup);
+            adminService.adminSignup(adminSignupDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (AlreadyExistsEmailException e) {
             return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
