@@ -2,7 +2,7 @@ package goormknights.hotel.member.service;
 
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
-import goormknights.hotel.member.dto.request.AdminSignup;
+import goormknights.hotel.member.dto.request.AdminSignupDTO;
 import goormknights.hotel.member.model.Manager;
 import goormknights.hotel.member.repository.ManagerRepository;
 import jakarta.servlet.http.Cookie;
@@ -29,21 +29,21 @@ public class AdminService {
     private final ManagerRepository managerRepository;
 
     // 매니저 가입 및 저장
-    public void adminSignup(AdminSignup adminSignup) {
+    public void adminSignup(AdminSignupDTO adminSignupDTO) {
 
-        Optional<Manager> managerOptional = managerRepository.findByAdminId(adminSignup.getAdminId());
+        Optional<Manager> managerOptional = managerRepository.findByAdminId(adminSignupDTO.getAdminId());
         if (managerOptional.isPresent()) {
             throw new AlreadyExistsEmailException();
         }
 
-        String encryptedPassword = passwordEncoder.encode(adminSignup.getPassword());
+        String encryptedPassword = passwordEncoder.encode(adminSignupDTO.getPassword());
 
         var manager = Manager.builder()
-                .adminId(adminSignup.getAdminId())
+                .adminId(adminSignupDTO.getAdminId())
                 .password(encryptedPassword)
-                .adminName(adminSignup.getAdminName())
-                .adminNickname(adminSignup.getAdminNickname())
-                .auth(adminSignup.getAuth())
+                .adminName(adminSignupDTO.getAdminName())
+                .adminNickname(adminSignupDTO.getAdminNickname())
+                .auth(adminSignupDTO.getAuth())
                 .role(Role.MANAGER)
                 .isActive(true)
                 .build();
