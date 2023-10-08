@@ -9,7 +9,6 @@ import { Container, Table } from '../member/Style';
 import { DiningForm } from '../../components/AddItemForm/WriteFormDining';
 
 const AdminDetailDining = () => {
-  const navigate = useNavigate();
   const [imgFile, setImgFile] = useState<string>(''); // 이미지 상태관리
   const imgRef = useRef<HTMLInputElement>(null); // 이미지 태그
   const { type, name } = useParams<{ type: string; name: string }>(); // url 파라미터
@@ -19,6 +18,15 @@ const AdminDetailDining = () => {
   const [responseObject, setResponseObject] = useState<DiningForm>({}); // form 데이터 상태관리
   const [imageUrls, setImageUrls] = useState<string[]>([]); // 현재 데이터의 이미지 정보 상태관리
   const nameRef = useRef<HTMLInputElement>(null); // 상품 이름 입력 input 태그
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_B"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   // 해당 상품의 데이터 get 요청
   useEffect(() => {
@@ -149,6 +157,7 @@ const AdminDetailDining = () => {
     responseMessege = <GreenP>{duplicateMessage}</GreenP>;
   }
 
+  if(authItem && authItem.includes("AUTH_B")) {
   return (
     <AdminLayout subMenus="item">
       <Container>
@@ -200,6 +209,12 @@ const AdminDetailDining = () => {
                   </td>
                 </tr>
                 <tr>
+                  <th>상품 소개글</th>
+                  <td>
+                    <input type="text" name='description' className='long' defaultValue={responseData.description} onChange={handleChange} required />
+                  </td>
+                </tr>
+                <tr>
                   <th>상품가</th>
                   <td>
                     <input type="text" name="price" defaultValue={responseData.price} onChange={handleChange} required />
@@ -235,12 +250,6 @@ const AdminDetailDining = () => {
                     <input type="text" name="spareChildren" defaultValue={responseData.spareChildren} onChange={handleChange} required />
                   </td>
                 </tr>
-                {/* <tr>
-                  <th>이용 가능 시간</th>
-                  <td>
-                    <input type="text" name="useTime" defaultValue={responseData.useTime} onChange={handleChange} required />
-                  </td>
-                </tr> */}
                 <tr>
                   <th>판매 수량</th>
                   <td colSpan={2}>
@@ -260,6 +269,9 @@ const AdminDetailDining = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminDetailDining;

@@ -1,52 +1,59 @@
 package goormknights.hotel.auth.controller;
 
-import goormknights.hotel.auth.dto.request.Login;
 import goormknights.hotel.auth.dto.request.ManagerLogin;
+import goormknights.hotel.auth.dto.request.MemberLogin;
+import goormknights.hotel.auth.service.AuthService;
 import goormknights.hotel.member.service.AdminService;
 import goormknights.hotel.member.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@Controller
+@RestController
+@RequestMapping("/login")
 @RequiredArgsConstructor
 public class LoginController {
 
+    private final AuthService authService;
     private final MemberService memberService;
     private final AdminService adminService;
 
-    // 회원 로그인
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Login login, HttpSession session) {
-        String memberId = login.getMemberId();
-        String password = login.getPassword();
 
-        try {
-            String loginResult = memberService.login(memberId, password, session);
-            return ResponseEntity.ok().body(loginResult);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");
+    // 회원 로그인
+    @PostMapping("/member")
+    public ResponseEntity<?> memberLogin(@RequestBody MemberLogin memberLogin, HttpServletRequest request, HttpServletResponse response) {
+        if (memberService.memberLogin(memberLogin.getMemberId(), memberLogin.getPassword(), request, response)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("로그인 실패", HttpStatus.UNAUTHORIZED);
         }
     }
 
-    // 운영자 로그인
-    @PostMapping("/login/adminlogin")
-    public ResponseEntity<?> adminLogin(@RequestBody ManagerLogin login, HttpSession session) {
-        String adminId = login.getAdminId();
-        String password = login.getPassword();
-
-        try {
-            String loginResult = adminService.adminLogin(adminId, password, session);
-            return ResponseEntity.ok().body(loginResult);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("어드민 로그인 실패");
+    // 관리자 로그인
+    @PostMapping("/manager")
+    public ResponseEntity<?> adminLogin(@RequestBody ManagerLogin managerLogin, HttpServletRequest request, HttpServletResponse response) {
+        if (adminService.managerLogin(managerLogin.getAdminId(), managerLogin.getPassword(), request, response)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("로그인 실패", HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    // 로그아웃
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+            return new ResponseEntity<>("Logged out", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No session found", HttpStatus.BAD_REQUEST);
     }
 
 }

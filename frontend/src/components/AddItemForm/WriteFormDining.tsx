@@ -20,11 +20,11 @@ const WriteFormDining = () => {
     priceChildren: '',
     type: 'dining',
     typeDetail: 'restaurant',
-    useTime: '0',
     spare: '',
     spareAdult: '',
     spareChildren: '',
     capacity: '',
+    description: '',
   });
   const [duplicateMessage, setDuplicateMessage] = useState<string>(''); // 중복검사 메시지 상태 관리
   const [isConfirm, setIsConfirm] = useState<boolean>(false); // 중복검사 정상 실행 여부 상태 관리
@@ -187,6 +187,12 @@ const WriteFormDining = () => {
               </td>
             </tr>
             <tr>
+              <th>상품 소개글</th>
+              <td>
+                <input type="text" name='description' className='long' value={formData.description} onChange={handleChange} required />
+              </td>
+            </tr>
+            <tr>
               <th>상품가</th>
               <td>
                 <input type="text" name="price" value={formData.price} onChange={handleChange} required />
@@ -222,12 +228,6 @@ const WriteFormDining = () => {
                 <input type="text" name="spareChildren" onChange={handleChange} value={formData.spareChildren} required />
               </td>
             </tr>
-            {/* <tr>
-              <th>이용 가능 시간</th>
-              <td>
-                <input type="text" name="useTime" value={formData.useTime} onChange={handleChange} required />
-              </td>
-            </tr> */}
             <tr>
               <th>판매 수량</th>
               <td colSpan={2}>

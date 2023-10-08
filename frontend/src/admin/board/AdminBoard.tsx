@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, LinkBtn } from '../../Style/commonStyles';
 import { Container, Table, TableHeader } from '../member/Style';
@@ -43,6 +43,12 @@ export interface ReportData{
   reportResult: string;
 }
 
+const boardTitleList = [
+  {board: '공지사항', english: 'notice'},
+  {board: '문의하기', english: 'qna'},
+  {board: '이용후기', english: 'review'},
+]
+
 const AdminBoard = () => {
   const { page } = useParams<{page: string}>();
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
@@ -50,6 +56,15 @@ const AdminBoard = () => {
   const [totalPage, setTotalPage] = useState<number>(0);
   const [totalBoard, setTotalBoard] = useState<number>(0);
   const [board, setBoard] = useState<BoardData[]>([]);
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_C"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   // 전체 게시글 목록 조회
   useEffect(() => {
@@ -121,6 +136,7 @@ const AdminBoard = () => {
     });
   };
 
+  if(authItem && authItem.includes("AUTH_C")) {
   return (
     <AdminLayout subMenus="board">
       <Container>
@@ -130,7 +146,7 @@ const AdminBoard = () => {
             전체 <strong>{totalBoard}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
-            <LinkBtn className="header" to="/admin/board/write">
+            <LinkBtn className="header" to="/admin/board/write" state={{checkedItems: checkedItems}}>
               게시글 작성
             </LinkBtn>
             <NormalBtn className="header" onClick={ReportBoard}>
@@ -162,13 +178,16 @@ const AdminBoard = () => {
               <th>제목</th>
               <th>작성자명(회원 ID)</th>
               <th>작성일</th>
+              <th>블랙리스트</th>
             </tr>
           </thead>
           <tbody>
             {board.length === 0 && (
-              <td colSpan={7} className="center">
-                등록된 게시글이 없습니다.
-              </td>
+              <tr>
+                <td colSpan={7} className="center">
+                  등록된 게시글이 없습니다.
+                </td>
+              </tr>
             )}
             {board &&
             board.map((board, idx: number) => (
@@ -182,9 +201,9 @@ const AdminBoard = () => {
                 </td>
                 <td className="center">{totalBoard - idx}</td>
                 <td className="center">{board.boardTitle}</td>
-                <td className="center">카테고리</td>
+                <td className="center">{board.category}</td>
                 <td className="center">
-                  <Link to={`/admin/member/${board.boardId}`}>{board.title}</Link>
+                  <Link to={`/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}>{board.title}</Link>
                 </td>
                 <td className="center">
                   <Link to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</Link>
@@ -201,6 +220,9 @@ const AdminBoard = () => {
       </Container>
     </AdminLayout>
   );
+} else {
+    return null;
+  }
 };
 
 export default AdminBoard;

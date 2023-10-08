@@ -26,9 +26,10 @@ public class ResponseRoomDto {
     private int spareAdult; // 최대 숙박 가능 인원 수(어른)
     private int spareChildren; // 최대 숙박 가능 인원 수(어린이)
     private int capacity; // 숙박 인원 기준
+    private String description;
 
     @Builder
-    public ResponseRoomDto( String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, String bed, int spare, int spareAdult, int spareChildren, int capacity) {
+    public ResponseRoomDto( String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, String bed, int spare, int spareAdult, int spareChildren, int capacity, String description) {
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;
@@ -40,5 +41,6 @@ public class ResponseRoomDto {
         this.spareAdult = spareAdult;
         this.spareChildren = spareChildren;
         this.capacity = capacity;
+        this.description = description;
     }
 }

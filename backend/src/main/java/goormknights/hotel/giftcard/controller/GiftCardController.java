@@ -67,4 +67,11 @@ public class GiftCardController {
         giftCardService.stateUnusable(stateChangeData);
         return new ResponseEntity<>(HttpStatus.OK.value(), "변경 완료");
     }
+
+    @PostMapping("/update")
+    public ResponseEntity<String> updateGiftCard(@RequestBody RequestGiftCardDto giftCardDto) {
+        System.out.println(giftCardDto.toString());
+        giftCardService.updateGiftCard(giftCardDto);
+        return new ResponseEntity<>(HttpStatus.OK.value(), "업데이트 완료");
+    }
 }

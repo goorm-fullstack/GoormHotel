@@ -38,6 +38,7 @@ public class Room extends Item{
                 .price(this.getPrice())
                 .priceChildren(this.getPriceChildren())
                 .typeDetail(this.getTypeDetail())
+                .description(this.getDescription())
                 .build();
     }
 
@@ -56,6 +57,7 @@ public class Room extends Item{
                 .spare(requestRoomDto.getSpare())
                 .bed(requestRoomDto.getBed())
                 .capacity(requestRoomDto.getCapacity())
+                .description(requestRoomDto.getDescription())
                 .build();
     }
 }

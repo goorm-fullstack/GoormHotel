@@ -6,6 +6,7 @@ import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
 import { ReportData } from './AdminBoard';
+import { useNavigate } from 'react-router-dom';
 
 const AdminReport = () => {
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
@@ -13,6 +14,15 @@ const AdminReport = () => {
   const [report, setReport] = useState<ReportData[]>([]);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [totalData, setTotalData] = useState<number>(0);
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_C"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   useEffect(() => {
     axios
@@ -59,6 +69,7 @@ const AdminReport = () => {
 
   console.log(checkedItems);
 
+  if(authItem && authItem.includes("AUTH_C")) {
   return (
     <AdminLayout subMenus="board">
       <Container>
@@ -99,9 +110,11 @@ const AdminReport = () => {
           </thead>
           <tbody>
             {report.length === 0 && (
-              <td colSpan={8} className="center empty">
-                신고된 글이 없습니다.
-              </td>
+              <tr>
+                <td colSpan={8} className="center empty">
+                  신고된 글이 없습니다.
+                </td>
+              </tr>
             )}
             {report &&
             report.map((report, idx) => (
@@ -163,6 +176,9 @@ const AdminReport = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminReport;

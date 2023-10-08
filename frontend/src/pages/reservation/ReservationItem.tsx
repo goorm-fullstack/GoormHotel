@@ -225,6 +225,7 @@ const SelectItem = styled.div`
 `;
 
 const productCategories = [
+  {korean: '전체', english: ''},
   { korean: '디럭스', english: 'deluxe' },
   { korean: '스위트', english: 'sweet' },
   { korean: '패밀리', english: 'family' },
@@ -232,6 +233,7 @@ const productCategories = [
 ];
 
 const diningCategories = [
+  {korean: '전체', english: ''},
   { korean: '레스토랑', english: 'restaurant' },
   { korean: '룸서비스', english: 'roomService' },
   { korean: '바&라운지', english: 'barRounge' },
@@ -266,6 +268,7 @@ type ProductType1 = {
   typeDetail: string;
   bed: string;
   capacity: number;
+  description: string;
 }
 
 type ProductType2 = {
@@ -281,6 +284,7 @@ type ProductType2 = {
   typeDetail: string;
   useTime: string;
   capacity: number;
+  description: string;
 }
 
 type SelectProduct = ProductType1 | ProductType2;
@@ -290,7 +294,8 @@ const ReservationItem = () => {
   const location = useLocation();
   console.log(location.search.replace('?type=', ''));
   const reservationData = location.state ? location.state.reservationData : null;
-  const [selectedType, setSelectedType] = useState<string[]>(['room']);
+  const [selectedType, setSelectedType] = useState<string[]>(['all', 'room', 'dining']);
+  console.log(selectedType);
   const [selectedCategory, setSelectedCategory] = useState<string>(productCategories[0].english);
   const [products, setProducts] = useState<(RoomData | DiningData)[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -323,7 +328,8 @@ const ReservationItem = () => {
   useEffect(() => {
     const currentPage: number = parseInt(page ? page : '1', 10);
     if (selectedType.includes('all')) {
-      axios
+      if(selectedCategory !== ''){
+        axios
         .get(`/category?page=${currentPage}`, {
           params: {
             typeDetail: selectedCategory,
@@ -339,8 +345,23 @@ const ReservationItem = () => {
         .catch((error) => {
           console.error(error);
         });
+      }else{
+        axios
+        .get(`/category?page=${currentPage}`)
+        .then((response) => {
+          const totalPages = parseInt(response.headers['totalpages'], 10);
+          const totalData = parseInt(response.headers['totaldata'], 10);
+          setProducts(response.data);
+          setTotalData(totalData);
+          setTotalPage(totalPages);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      }
     } else {
-      axios
+      if(selectedCategory !== ''){
+        axios
         .get(`/category?page=${currentPage}`, {
           params: {
             type: selectedType[0],
@@ -357,6 +378,24 @@ const ReservationItem = () => {
         .catch((error) => {
           console.error(error);
         });
+      }else{
+        axios
+        .get(`/category?page=${currentPage}`, {
+          params: {
+            type: selectedType[0],
+          },
+        })
+        .then((response) => {
+          const totalPages = parseInt(response.headers['totalpages'], 10);
+          const totalData = parseInt(response.headers['totaldata'], 10);
+          setProducts(response.data);
+          setTotalData(totalData);
+          setTotalPage(totalPages);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      }
     }
   }, [selectedType, selectedCategory]);
 
@@ -438,23 +477,23 @@ const ReservationItem = () => {
                   전체 <strong>{totalData}</strong> 개
                 </p>
                 <select id="productType" value={selectedCategory} onChange={handleCategoryChange}>
-                  {selectedType.includes('room')
+                  {selectedType.length === 1 && selectedType[0] === 'room'
                     ? productCategories.map((category, index) => (
                         <option key={index} value={category.english}>
                           {category.korean}
                         </option>
                       ))
-                    : diningCategories.map((category, index) => (
+                    : selectedType.length === 1 && selectedType[0] === 'dining'
+                    ? diningCategories.map((category, index) => (
                         <option key={index} value={category.english}>
                           {category.korean}
                         </option>
-                      ))}
-                  {selectedType.includes('all') &&
-                    [...diningCategories, ...productCategories].map((category, index) => (
-                      <option key={index} value={category.english}>
-                        {category.korean}
-                      </option>
-                    ))}
+                      ))
+                    : ( <option value={productCategories[0].english}>
+                          {productCategories[0].korean}
+                        </option>
+                      )
+                  }
                 </select>
               </div>
             </SelectWrapper>
@@ -464,35 +503,37 @@ const ReservationItem = () => {
                 products.map((product, index) => (
                   <RoomItem key={index}>
                     <div
-                      key={index}
                       className="imgwrap"
                       style={{
                         backgroundImage: `url(${imageUrls[index] || ''})`,
                       }}
                     />
-                    <RoomItemInfo key={index}>
-                      <h4 key={index}>{product.name}</h4>
-                      <p key={index}>
+                    <RoomItemInfo>
+                      <h4>{product.name}</h4>
+                      <p>
                         {product.type === 'room' ? '객실' : '다이닝'}
-                        <span key={index}>{nameOfTypeDetail(product)}</span>
-                        <span key={index}>{product.capacity}인 기준</span>
+                        <span>{nameOfTypeDetail(product)}</span>
+                        <span>{product.capacity}인 기준</span>
                       </p>
-                      <p key={index} className="price">
-                        <strong key={index}>{numberWithCommas(product.price)}</strong> 원 ~
+                      <h5>{product.description}</h5>
+                      <p className="price">
+                        <strong>{numberWithCommas(product.price)}</strong> 원 ~
                       </p>
-                      <h5 key={index}>추가 인원 비용</h5>
-                      <table key={index}>
-                        <tr key={index}>
-                          <th key={index}>성인(1인)</th>
-                          <td key={index}>{numberWithCommas(product.priceAdult)} 원</td>
-                        </tr>
-                        <tr key={index}>
-                          <th key={index}>어린이(1인)</th>
-                          <td key={index}>{numberWithCommas(product.priceChildren)} 원</td>
-                        </tr>
+                      <h5>추가 인원 비용</h5>
+                      <table>
+                        <tbody>
+                          <tr>
+                            <th>성인(1인)</th>
+                            <td>{numberWithCommas(product.priceAdult)} 원</td>
+                          </tr>
+                          <tr>
+                            <th>어린이(1인)</th>
+                            <td>{numberWithCommas(product.priceChildren)} 원</td>
+                          </tr>
+                        </tbody>
                       </table>
-                      <BtnWrapper key={index} className="full mt30">
-                        <NormalBtn key={index} onClick={() => handleReservationClick(product, imageUrls[index])}>상품 담기(예약)</NormalBtn>
+                      <BtnWrapper className="full mt30">
+                        <NormalBtn onClick={() => handleReservationClick(product, imageUrls[index])}>상품 담기(예약)</NormalBtn>
                       </BtnWrapper>
                     </RoomItemInfo>
                   </RoomItem>
@@ -521,26 +562,30 @@ const ReservationItem = () => {
                       <p>{nameOfTypeDetail(selectedProduct)}</p>
                       <p>성인 {selectedProduct.capacity}인 기준</p>
                       <table>
-                        <tr>
-                          <th>기본가</th>
-                          <td>{numberWithCommas(selectedProduct.price)} 원</td>
-                        </tr>
+                        <tbody>
+                          <tr>
+                            <th>기본가</th>
+                            <td>{numberWithCommas(selectedProduct.price)} 원</td>
+                          </tr>
+                        </tbody>
                       </table>
                       <h5>추가 인원 비용</h5>
                       <table>
-                        <tr>
-                          <th>성인</th>
-                          <td>{numberWithCommas(selectedProduct.priceAdult)} 원</td>
-                          {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 
+                        <tbody>
+                          <tr>
+                            <th>성인</th>
+                            <td>{numberWithCommas(selectedProduct.priceAdult)} 원</td>
+                            {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 
 
-                          예약 정보 입력 페이지에서 기준 인원 초과하여 인원 추가하는 경우 
-                          추가된 인원 수에 맞춰 위 계산법 적용됩니다. 이하 동일 */}
-                        </tr>
-                        <tr>
-                          <th>어린이</th>
-                          <td>{numberWithCommas(selectedProduct.priceChildren)} 원</td>
-                          {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 */}
-                        </tr>
+                            예약 정보 입력 페이지에서 기준 인원 초과하여 인원 추가하는 경우 
+                            추가된 인원 수에 맞춰 위 계산법 적용됩니다. 이하 동일 */}
+                          </tr>
+                          <tr>
+                            <th>어린이</th>
+                            <td>{numberWithCommas(selectedProduct.priceChildren)} 원</td>
+                            {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 */}
+                          </tr>
+                        </tbody>
                       </table>
                     </SelectedItem>
                   );

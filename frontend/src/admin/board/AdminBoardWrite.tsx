@@ -12,6 +12,7 @@ import { Container, Table } from "../member/Style";
 import TextEditor from "../../components/common/TextEditor/TextEditor";
 import axios from "axios";
 
+
 const AdminBoardWrite = () => {
   const setValue = () => {};
   const [formData, setFormData] = useState<FormData>({
@@ -140,6 +141,17 @@ const AdminBoardWrite = () => {
     }
   };
 
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_C"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
+
+  if(authItem && authItem.includes("AUTH_C")) {
   return (
     <AdminLayout subMenus="board">
       <Container>
@@ -208,7 +220,7 @@ const AdminBoardWrite = () => {
                 <td colSpan={2} className="writeWrapper">
                   <TextEditor setValue={setBoardContent} />
                 </td>
-              </tr> 
+              </tr>
             </tbody>
           </Table>
           <BtnWrapper className="center mt40">
@@ -218,6 +230,9 @@ const AdminBoardWrite = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminBoardWrite;

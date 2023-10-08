@@ -10,7 +10,7 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QAuthority is a Querydsl query type for Authority
+ * QAuthority is a Querydsl query type for Auth
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QAuthority extends EntityPathBase<Authority> {

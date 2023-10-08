@@ -1,9 +1,54 @@
 import React from 'react';
 import * as S from './Style';
 import adminLogo from '../../images/common/logo_admin.png';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import {useAuth} from "../../utils/api/AuthContext";
+import Instance from "../../utils/api/axiosInstance";
 
-const AdminHeader = () => {
+const AdminHeader: React.FC = () => {
+  const { authState, setAuthState } = useAuth();
+  const isLoggedIn = authState.adminId !== '';
+  const navigate = useNavigate();
+
+  const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    navigate('/admin/login');
+  };
+
+  // const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await Instance.get('/login/logout');
+  //     if (response.status === 200) {
+  //       alert('로그아웃 되었습니다');
+  //       localStorage.clear();
+  //       deleteAllCookies();
+  //       setAuthState({ role: '', adminId: '', auth: '' });
+  //       navigate('/admin');
+  //     }
+  //   } catch (error) {
+  //     console.error('로그아웃 실패:', error);
+  //   }
+  // };
+
+  function deleteAllCookies() {
+    const cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+  }
+
+  const handleLogoutUseLocalStorge = () => {
+    localStorage.clear();
+    deleteAllCookies();
+    alert('로그아웃 되었습니다');
+    window.location.href = '/admin';
+  };
+
   return (
     <S.AdminHeader>
       <h1>
@@ -42,9 +87,9 @@ const AdminHeader = () => {
               />
             </g>
           </svg>
-          <span>관리자(admin)</span>
-          <button type="button" className="logoutbtn">
-            로그아웃
+          <span>{`유저: ${authState.adminId}, 역할: ${authState.role}, 권한: ${authState.auth}`}</span>
+          <button type="button" className="logoutbtn" onClick={isLoggedIn ? handleLogoutUseLocalStorge : handleLogin}>
+            {isLoggedIn ? '로그아웃' : '로그인'}
           </button>
         </li>
       </ul>
