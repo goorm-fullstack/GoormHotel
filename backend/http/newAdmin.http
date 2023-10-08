@@ -1,5 +1,5 @@
 ### 어드민 회원가입
-POST http://localhost:8080/admin-signupDTO
+POST http://localhost:8080/admin-signup
 Content-Type: application/json
 
 {
