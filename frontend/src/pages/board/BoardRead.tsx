@@ -15,13 +15,18 @@ const BoardRead = () => {
   const [listLink, setListLink] = useState('');
   const [title, setTitle] = useState<any>();
   const [file, setFile] = useState('');
+  const [reply, setReply] = useState<any[]>([]);
+  const [replyWriter, setReplyWriter] = useState('');
+  const [replyContent, setReplyContent] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedReplyContent, setEditedReplyContent] = useState('');
 
   const parseBoardContent = (content: any) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(content, 'text/html');
-    const paragraphs = Array.from(doc.querySelectorAll('p')); // 모든 <p> 태그 선택
+    const paragraphs = Array.from(doc.querySelectorAll('p'));
 
-    return paragraphs.map((p) => p.textContent); // 각 <p> 태그의 텍스트 내용 추출
+    return paragraphs.map((p) => p.textContent);
   };
 
   const boardContent =
@@ -77,7 +82,7 @@ const BoardRead = () => {
       }
       setListLink(link);
     }
-  }, []);
+  }, [board, boardData]);
 
   const handleDownLoad = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const result = await axios.get(`/boards/download/${boardId}`, { responseType: 'blob' });
@@ -117,24 +122,54 @@ const BoardRead = () => {
   //       });
   // };
 
-  const [reply, setReply] = useState<any[]>([]);
-  const [replyWriter, setReplyWriter] = useState('');
-  const [replyContent, setReplyContent] = useState('');
 
   const fetchReply = async (boardId: number) => {
     try {
-      const response = await axios.get(`/reply/boardId/${boardData.boardId}`);
+      const response = await axios.get(`/reply/boardId/${boardId}`);
       setReply(response.data);
     } catch (error) {
       console.error(error);
     }
   };
 
-  useEffect(() => {
-    if (boardData) {
-      fetchReply(boardData.boardId);
+  const handleDelete = (replyId: number) => {
+    axios
+        .put(`/reply/softdelete/${replyId}`)
+        .then((response) => {
+          console.log('댓글이 삭제되었습니다.');
+          fetchReply(boardData.boardId);
+        })
+        .catch((error) => {
+          console.error('댓글 삭제에 실패했습니다.', error);
+        });
+  };
+
+  const handleUpdate = (replyId: number) => {
+    setIsEditing(true);
+    const replyToEdit = reply.find((r) => r.replyId === replyId);
+    if (replyToEdit) {
+      setEditedReplyContent(replyToEdit.replyContent);
     }
-  }, [boardData]);
+  };
+
+  const handleCancelUpdate = () => {
+    setIsEditing(false);
+    setEditedReplyContent('');
+  };
+
+  const handleSaveUpdate = (replyId: number) => {
+    axios
+        .put(`/reply/${replyId}`, { replyContent: editedReplyContent })
+        .then((response) => {
+          console.log('댓글이 수정되었습니다.');
+          setIsEditing(false);
+          setEditedReplyContent('');
+          fetchReply(boardData.boardId);
+        })
+        .catch((error) => {
+          console.error('댓글 수정에 실패했습니다.', error);
+        });
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -149,11 +184,55 @@ const BoardRead = () => {
       setReplyContent('');
       fetchReply(parseInt(boardId ? boardId : '', 10));
     } catch (error) {
-      console.error(error);
+      console.error('댓글 작성에 실패했습니다.', error);
     }
   };
 
-  console.log(boardData);
+  const Editing = ({ replyId }: { replyId: number }) => {
+    return (
+        <div>
+          {isEditing ? (
+              <>
+                <button
+                    type="button"
+                    onClick={() => handleSaveUpdate(replyId)}
+                >
+                  저장
+                </button>
+                <button
+                    type="button"
+                    onClick={handleCancelUpdate}
+                >
+                  취소
+                </button>
+              </>
+          ) : (
+              <>
+                <button
+                    type="button"
+                    onClick={() => handleUpdate(replyId)}
+                >
+                  수정
+                </button>
+                <button
+                    type="button"
+                    onClick={() => handleDelete(replyId)}
+                >
+                  삭제
+                </button>
+              </>
+          )}
+          {isEditing ? (
+              <textarea
+                  value={editedReplyContent}
+                  onChange={(e) => setEditedReplyContent(e.target.value)}
+              ></textarea>
+          ) : (
+              <p>{reply.find((r) => r.replyId === replyId)?.replyContent}</p>
+          )}
+        </div>
+    );
+  };
 
   return (
     <>
@@ -214,20 +293,14 @@ const BoardRead = () => {
               <tr className="commentslist">
                 <td>
                   <ul>
-                    {reply.map((reply, index) => (
-                      <li key={index}>
-                        <div className="cwinfo">
-                          <strong>{reply.replyWriter}</strong>
-                          <span className="date">{reply.replyDate}</span>
-                          <button type="button" className="modify">
-                            수정
-                          </button>
-                          <button type="button" className="delete">
-                            삭제
-                          </button>
-                        </div>
-                        <p>{reply.replyContent}</p>
-                      </li>
+                    {reply.map((replyItem, index) => (
+                        <li key={index}>
+                          <p>
+                            {replyItem.replyWriter}
+                            <span className="date">{replyItem.replyDate}</span>
+                            <Editing replyId={replyItem.replyId} />
+                          </p>
+                        </li>
                     ))}
                     <li>
                       <div className="cwinfo">

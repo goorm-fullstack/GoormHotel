@@ -85,6 +85,7 @@ public class ReplyController {
         return ResponseEntity.ok(reply.toResponseReplyDto());
     }
 
+    //소프트딜리트
     @PutMapping("/softdelete/{replyId}")
     public ResponseEntity<Object> softdeleteReply(@PathVariable Long replyId) {
         Reply reply = replyService.softdeleteReply(replyId);
