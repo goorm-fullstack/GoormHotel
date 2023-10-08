@@ -181,6 +181,8 @@ const AdminItemList = () => {
     fetchImageUrls();
   }, [items]);
 
+  console.log(items);
+
   return (
     <AdminLayout subMenus="item">
       <Container>

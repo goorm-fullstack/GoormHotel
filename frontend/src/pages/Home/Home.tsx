@@ -14,6 +14,7 @@ import Suite from '../../images/room/Suite.jpg';
 import FacilitiesSlider from '../../components/Slide/FacilitiesSlider';
 import { DiningData, RoomData } from '../../admin/item/AdminItemList';
 import axios from 'axios';
+import Instance from '../../utils/api/axiosInstance';
 
 const diningImages = [dining01, dining02, dining03, dining04];
 
@@ -104,8 +105,8 @@ const Home = () => {
   useEffect(() => {
     const handleLoadItems = async () => {
       try {
-        const responseRoom = await axios.get('/rooms?page=1');
-        const responseDining = await axios.get('/dinings?page=1');
+        const responseRoom = await Instance.get('/rooms?page=1');
+        const responseDining = await Instance.get('/dinings?page=1');
         const dataRoom = responseRoom.data;
         const dataDining = responseDining.data;
         setDiningData(dataDining);
@@ -182,7 +183,7 @@ const Home = () => {
           </S.IndexTitle>
           <S.IndexDesc>환상적인 서울 도심의 파노라믹뷰를 만나보세요.</S.IndexDesc>
           <S.ItemList>
-            {roomData.length === 0 && <S.RoomItem>등록된 상품이 없습니다.</S.RoomItem>}
+            {roomData.length === 0 && <S.NoItem>등록된 상품이 없습니다.</S.NoItem>}
             {roomData[0] && (
             <S.RoomItem>
               <img src={imgUrlsRoom[0]} alt="객실" />
@@ -215,7 +216,7 @@ const Home = () => {
           </S.IndexTitle>
           <S.IndexDesc>세계 최고 수준의 셰프들이 직접 선보이는 다양한 요리를 즐겨보세요.</S.IndexDesc>
           <S.ItemList>
-            {diningData.length === 0 && <S.DiningItem>등록된 상품이 없습니다.</S.DiningItem>}
+            {diningData.length === 0 && <S.NoItem>등록된 상품이 없습니다.</S.NoItem>}
             {diningData[0] && (
             <S.DiningItem>
               <img src={imageUrlsDining[0]} alt={`다이닝 ${diningImages[0]}`} />
