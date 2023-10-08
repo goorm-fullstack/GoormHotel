@@ -19,7 +19,7 @@ import {
 } from '../../Style/commonStyles';
 import PrivacyContents from '../../components/Agreement/PrivacyCon';
 import PaymentAgree from '../../components/Agreement/PayAgree';
-import { AgreementText } from '../member/Signup';
+import { AgreementText } from '../member/Style';
 
 const Container = styled(commonContainerStyle)``;
 
