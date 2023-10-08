@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { styled } from 'styled-components';
+import * as S from './Style';
 import moment from 'moment';
 import Item from '../../components/Item/Item';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Reservation from '../../components/Reservation/Reservation';
 import {
-  commonContainerStyle,
   PageTitle,
   ContentsTitleXSmall,
   SubmitBtn,
@@ -20,119 +19,6 @@ import {
 import PrivacyContents from '../../components/Agreement/PrivacyCon';
 import PaymentAgree from '../../components/Agreement/PayAgree';
 import { AgreementText } from '../member/Style';
-
-const Container = styled(commonContainerStyle)``;
-
-export const Wrapper = styled.div`
-  display: flex;
-  width: 100%;
-`;
-
-export const Left = styled.div`
-  width: 75%;
-  padding-right: 40px;
-`;
-
-export const Right = styled.div`
-  width: 25%;
-`;
-
-export const Section = styled.div`
-  margin-bottom: 50px;
-
-  &.privacy {
-    input {
-      height: 50px;
-      padding-left: 18px;
-    }
-    .flex {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 16px;
-
-      input {
-        width: calc((100% - 32px) / 3);
-      }
-    }
-    .full input {
-      width: 100%;
-    }
-  }
-
-  &.agreewrapper > div {
-    margin-bottom: 30px;
-  }
-`;
-
-export const CouponForm = styled.div`
-  margin-bottom: 20px;
-
-  form {
-    display: flex;
-    height: 50px;
-    justify-content: space-between;
-
-    input {
-      width: calc(100% - 210px);
-      padding-left: 18px;
-    }
-  }
-`;
-
-export const CouponInfo = styled.div`
-  table {
-    width: 100%;
-    border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
-    margin-top: 16px;
-  }
-
-  td {
-    border-bottom: 1px solid ${(props) => props.theme.colors.graylightborder};
-    vertical-align: middle;
-    padding: 13px 0;
-    font-size: ${(props) => props.theme.font.sizes};
-    color: ${(props) => props.theme.colors.blacklight};
-
-    &.right {
-      text-align: right;
-      color: ${(props) => props.theme.colors.charcoal};
-      font-weight: 500;
-      width: 20%;
-    }
-
-    label {
-      color: ${(props) => props.theme.colors.blacklight};
-      font-size: ${(props) => props.theme.font.sizes};
-    }
-  }
-`;
-
-const CouponSelect = styled.select`
-  width: 100%;
-  height: 50px;
-  font-size: ${(props) => props.theme.font.sizes};
-  background-position: 98% center;
-`;
-
-export const OptionWrap = styled.div`
-  border: 1px solid ${(props) => props.theme.colors.grayborder};
-  padding: 45px 45px 46px;
-  display: flex;
-  justify-content: center;
-
-  .reservedate::after {
-    margin: 0 47px 0 53px;
-  }
-
-  .stay {
-    margin-left: 28px;
-    margin-right: 28px;
-  }
-
-  .option {
-    gap: 30px;
-  }
-`;
 
 const ReservationPage = () => {
   const [giftCardNumber, setGiftCardNumber] = useState('');
@@ -261,18 +147,18 @@ const ReservationPage = () => {
 
   return (
     <div>
-      <Container>
+      <S.Container>
         <PageTitle>상품 예약</PageTitle>
-        <Wrapper>
-          <Left>
-            <Section>
+        <S.Wrapper>
+          <S.Left>
+            <S.Section>
               <ContentsTitleXSmall>상품 상세 설정</ContentsTitleXSmall>
-              <OptionWrap>
+              <S.OptionWrap>
                 <Reservation updateReservationData={updateReservationData} />
-              </OptionWrap>
-            </Section>
+              </S.OptionWrap>
+            </S.Section>
 
-            <Section className="privacy">
+            <S.Section className="privacy">
               <ContentsTitleXSmall>고객 정보 입력</ContentsTitleXSmall>
               <div className="flex">
                 <input placeholder="고객명" type="text" value={formData.name} onChange={(e) => handleChangeData('name', e)} required />
@@ -282,17 +168,17 @@ const ReservationPage = () => {
               <div className="full">
                 <input placeholder="요청사항" type="text" value={formData.notice} onChange={(e) => handleChangeData('notice', e)} />
               </div>
-            </Section>
+            </S.Section>
 
-            <Section>
+            <S.Section>
               <ContentsTitleXSmall>상품권 사용</ContentsTitleXSmall>
-              <CouponForm>
+              <S.CouponForm>
                 <form>
                   <input type="text" placeholder="상품권 번호 입력" value={giftCardNumber} onChange={handleCouponNumber} />
                   <AuthBtn type="submit">상품권 등록하기</AuthBtn>
                 </form>
-              </CouponForm>
-              <CouponInfo>
+              </S.CouponForm>
+              <S.CouponInfo>
                 <BtnWrapper className="flexspace">
                   <div>
                     <CheckLabel>
@@ -321,12 +207,12 @@ const ReservationPage = () => {
                     </tr>
                   ))}
                 </table>
-              </CouponInfo>
-            </Section>
+              </S.CouponInfo>
+            </S.Section>
 
-            <Section>
+            <S.Section>
               <ContentsTitleXSmall>쿠폰 사용</ContentsTitleXSmall>
-              <CouponSelect value={selectedOption} onChange={handleChange} disabled={!userLoggedIn}>
+              <S.CouponSelect value={selectedOption} onChange={handleChange} disabled={!userLoggedIn}>
                 {userLoggedIn ? (
                   <>
                     <option value="">선택 안함</option>
@@ -338,10 +224,10 @@ const ReservationPage = () => {
                     로그인이 필요한 서비스입니다.
                   </option>
                 )}
-              </CouponSelect>
-            </Section>
+              </S.CouponSelect>
+            </S.Section>
 
-            <Section className="agreewrapper">
+            <S.Section className="agreewrapper">
               <ContentsTitleXSmall>약관 동의</ContentsTitleXSmall>
               <div>
                 <RequiredTitle>
@@ -371,10 +257,10 @@ const ReservationPage = () => {
                   <PaymentAgree />
                 </AgreementText>
               </div>
-            </Section>
-          </Left>
+            </S.Section>
+          </S.Left>
 
-          <Right>
+          <S.Right>
             <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
             <Item selectedProduct={selectedProduct} />
             <BtnWrapper className="full mt20">
@@ -382,9 +268,9 @@ const ReservationPage = () => {
                 예약 및 결제하기
               </SubmitBtn>
             </BtnWrapper>
-          </Right>
-        </Wrapper>
-      </Container>
+          </S.Right>
+        </S.Wrapper>
+      </S.Container>
     </div>
   );
 };
