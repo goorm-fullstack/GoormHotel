@@ -1,10 +1,11 @@
-import React, {useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, CheckLabel, ContentsTitleXSmall, SubmitBtn, MultiCheck } from '../../Style/commonStyles';
 import * as S from './Style';
 import { Container, Table, TableHeader } from './Style';
 import Paging from '../../components/common/Paging/Paging';
 import { useNavigate } from 'react-router-dom';
+import Instance from "../../utils/api/axiosInstance";
 
 // interface ManagerData{
 //   id: number;
@@ -27,6 +28,12 @@ const AdminManager = () => {
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
   const authItem = localStorage.getItem("auth");
+
+  const [adminId, setAdminId] = useState<string>("");
+  const [adminName, setAdminName] = useState<string>("");
+  const [adminNickname, setAdminNickname] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   useEffect(() => {
     if (!(authItem && authItem.includes("AUTH_A"))) {
@@ -89,6 +96,36 @@ const AdminManager = () => {
     },
   ];
 
+  // 매니저 회원 가입
+  const handleSignup = async () => {
+    // 패스워드 유효성 검사
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*_-]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      alert('비밀번호는 최소 8자, 알파벳, 숫자, 특수문자가 각각 1개 이상 포함되어야 합니다.');
+      return;
+    }
+
+    // 비밀번호와 비밀번호 확인 일치 여부 검사
+    if (password !== confirmPassword) {
+      alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+      return;
+    }
+
+    try {
+      const response = await Instance.post('/admin/signup', {
+        adminId,
+        adminName,
+        adminNickname,
+        password
+      });
+      if (response.status === 200) {
+        alert('가입 성공');
+      }
+    } catch (error) {
+      alert('가입 실패');
+    }
+  };
+
   if(authItem && authItem.includes("AUTH_A")) {
   return (
     <AdminLayout subMenus="member">
@@ -98,12 +135,12 @@ const AdminManager = () => {
           <ContentsTitleXSmall>부운영자 계정 등록</ContentsTitleXSmall>
           <S.InputWrapper>
             <form>
-              <input type="text" placeholder="운영자 ID" />
-              <input type="text" placeholder="운영자명" />
-              <input type="text" placeholder="운영자 별명" />
-              <input type="password" placeholder="접속 비밀번호" />
-              <input type="password" placeholder="접속 비밀번호 확인" />
-              <SubmitBtn className="header">부운영자 등록</SubmitBtn>
+              <input type="text" placeholder="운영자 ID" value={adminId} onChange={(e) => handleInputChange('adminId', e.target.value)} />
+              <input type="text" placeholder="운영자명" value={adminName} onChange={(e) => handleInputChange('adminName', e.target.value)} />
+              <input type="text" placeholder="운영자 별명" value={adminNickname} onChange={(e) => handleInputChange('adminNickname', e.target.value)} />
+              <input type="password" placeholder="비밀번호" value={password} onChange={(e) => handleInputChange('password', e.target.value)} />
+              <input type="password" placeholder="비밀번호 확인" value={confirmPassword} onChange={(e) => handleInputChange('confirmPassword', e.target.value)} />
+              <button type="button" onClick={handleSignup}>회원가입</button>
             </form>
           </S.InputWrapper>
         </S.Section>

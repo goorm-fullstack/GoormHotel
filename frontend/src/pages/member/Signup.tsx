@@ -14,6 +14,8 @@ import {
 } from '../../Style/commonStyles';
 import AgreementContents from '../../components/Agreement/AgreementCon';
 import PrivacyContents from '../../components/Agreement/PrivacyCon';
+import Instance from "../../utils/api/axiosInstance";
+import {useNavigate} from "react-router-dom";
 
 const Container = styled(commonContainerStyle)``;
 
@@ -85,6 +87,8 @@ const Signup = () => {
     birthdate: '',
     gender: '',
   });
+  const navigate = useNavigate();
+  const [emailCode, setEmailCode] = useState('');
 
   console.log(formData);
 
@@ -105,11 +109,48 @@ const Signup = () => {
     setPrivacyAgree(!privacyAgree);
   };
 
-  const handleSignupButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+  // 인증번호 요청 버튼 클릭
+  const clickRequestCode = async () => {
+    try {
+      const response = await Instance.post('/api/mail/email', {
+        email: formData.email,
+      });
+
+      if (response.status === 200) {
+        alert('인증번호가 이메일로 발송되었습니다.');
+        // const receivedCode = response.data.code; (발송된 코드 활용?)
+      }
+    } catch (error: any) {
+      alert('이메일 발송 실패: ' + error?.response?.data?.message || '알 수 없는 에러');
+    }
+  };
+
+  const handleSignupButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (termsAgree && privacyAgree) {
-      //회원가입 요청 로직 작성
+      try {
+        const response = await Instance.post('/signup', {
+          name: formData.name,
+          password: formData.password,
+          memberId: formData.memberId,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          birth: formData.birthdate,
+          gender: formData.gender,
+          code: formData.certificationCode,
+        });
+
+          if (response.status === 200) {
+            navigate('/signup/result');
+          }
+      } catch (error: any) {
+        if (error?.response?.data?.errorCode === 1001) {
+          alert('코드가 일치하지 않습니다');
+        } else {
+          alert('회원가입 실패: ' + error?.response?.data?.message || '알 수 없는 에러');
+        }
+      }
     } else {
       alert('이용약관과 개인정보 처리방침에 동의해야 합니다.');
     }
@@ -167,7 +208,7 @@ const Signup = () => {
               <input type="text" name="name" value={formData.name} placeholder="이름" onChange={handleChange} required />
               <Auth>
                 <input placeholder="이메일" type="email" name="email" value={formData.email} onChange={handleChange} required />
-                <AuthBtn>인증번호 요청</AuthBtn>
+                <AuthBtn onClick={clickRequestCode}>인증번호 요청</AuthBtn>
               </Auth>
               <input
                 type="text"

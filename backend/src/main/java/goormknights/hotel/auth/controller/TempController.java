@@ -1,9 +1,7 @@
 package goormknights.hotel.auth.controller;
 
-import goormknights.hotel.email.dto.request.EmailVerificationRequest;
 import goormknights.hotel.member.dto.request.AdminSignup;
 import goormknights.hotel.member.dto.request.MemberEdit;
-import goormknights.hotel.member.dto.request.Signup;
 import goormknights.hotel.member.service.AdminService;
 import goormknights.hotel.member.service.MemberService;
 import jakarta.validation.Valid;
@@ -21,41 +19,15 @@ public class TempController {
     private final MemberService memberService;
     private final AdminService adminService;
 
-//    @GetMapping("/auth/login")
-//    public SessionResponse login(@RequestBody MemberLogin login){
-//        String accessToken = authService.signin(login);
-//
-//        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-//        String jws = Jwts.builder().setSubject("Joe").signWith(key).compact();
-//        return new SessionResponse(jws);
-//    }
-
     @GetMapping("/signup")
     public String showSignupPage() {
         return "signup";
-    }
-
-    @PostMapping("/auth/signup")
-    public ResponseEntity<String> signup(@RequestBody Signup signup){
-        memberService.signup(signup, signup.getCode());
-        return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
     }
 
     @PostMapping("/auth/adminsignup")
     public ResponseEntity<String> adminSignup(@RequestBody AdminSignup adminSignup){
         adminService.adminSignup(adminSignup);
         return new ResponseEntity<>("어드민계정 가입 성공", HttpStatus.OK);
-    }
-
-    @PostMapping("/verify")
-    public ResponseEntity<String> verifyCode(@RequestBody EmailVerificationRequest request) {
-        boolean isVerified = memberService.verifyCode(request.getEmail(), request.getCode());
-        if (isVerified) {
-            // 코드 검증 성공, 회원 가입 로직
-            return ResponseEntity.ok("회원가입 성공");
-        } else {
-            return ResponseEntity.badRequest().body("인증 코드가 일치하지 않습니다.");
-        }
     }
 
     @GetMapping("/")

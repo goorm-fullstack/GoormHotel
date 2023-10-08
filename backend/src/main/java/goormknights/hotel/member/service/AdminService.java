@@ -45,7 +45,7 @@ public class AdminService {
                 .adminNickname(adminSignup.getAdminNickname())
                 .auth(adminSignup.getAuth())
                 .role(Role.MANAGER)
-                .isActive(false)
+                .isActive(true)
                 .build();
         managerRepository.save(manager);
     }
