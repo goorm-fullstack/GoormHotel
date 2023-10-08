@@ -14,22 +14,22 @@ import java.time.LocalDate;
 public class initMemberData {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-
-    @PostConstruct
-    void initData() {
-        Member member = Member.builder()
-                .email("9rudrb40@naver.com")
-                .memberId("yss1902")
-                .password(passwordEncoder.encode("1234"))
-                .name("테스터")
-                .grade("Bronze")
-                .phoneNumber("00000000")
-                .privacyCheck(true)
-                .birth(LocalDate.now())
-                .gender("Male")
-                .build();
-
-        memberRepository.save(member);
-    }
+//
+//    @PostConstruct
+//    void initData() {
+//        Member member = Member.builder()
+//                .email("9rudrb40@naver.com")
+//                .memberId("yss1902")
+//                .password(passwordEncoder.encode("1234"))
+//                .name("테스터")
+//                .grade("Bronze")
+//                .phoneNumber("00000000")
+//                .privacyCheck(true)
+//                .birth(LocalDate.now())
+//                .gender("Male")
+//                .build();
+//
+//        memberRepository.save(member);
+//    }
 }
 
