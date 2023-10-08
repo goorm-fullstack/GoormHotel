@@ -121,4 +121,71 @@ export const TableRead = styled.table`
   td.titlew {
     background: ${(props) => props.theme.colors.graybg};
   }
+
+  // 댓글 작성
+  .commentwrite {
+    .tawrap {
+      margin-top: 10px;
+      display: flex;
+      column-gap: 10px;
+
+      textarea {
+        width: 100%;
+        height: 100px;
+      }
+
+      button {
+        background: ${(props) => props.theme.colors.navy};
+        color: white;
+        width: 120px;
+        border-radius: 5px;
+
+        &:hover {
+          background: ${(props) => props.theme.colors.navyhover};
+        }
+      }
+    }
+  }
+
+  // 댓글 목록
+  .commentslist {
+    li {
+      margin-top: 30px;
+      padding-top: 30px;
+      border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
+
+      &:first-child {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: 0;
+      }
+
+      .cwinfo {
+        strong {
+          color: ${(props) => props.theme.colors.charcoal};
+          font-weight: 500;
+        }
+        .date {
+          margin-left: 8px;
+          font-size: ${(props) => props.theme.font.sizexs};
+          color: ${(props) => props.theme.colors.graylight};
+        }
+        button {
+          margin-left: 6px;
+          background-color: white;
+          font-size: ${(props) => props.theme.font.sizexs};
+
+          &.modify {
+            margin-left: 8px;
+          }
+          &.delete {
+          }
+        }
+      }
+      p {
+        margin-top: 12px;
+        line-height: 1.4;
+      }
+    }
+  }
 `;

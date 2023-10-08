@@ -203,8 +203,10 @@ const BoardRead = () => {
                         />
                         {/*<input type="password" placeholder="식별 비밀번호?" />*/}
                       </div>
-                      <textarea name="replyContent" value={replyContent} onChange={(e) => setReplyContent(e.target.value)}></textarea>
-                      <button type="submit">등록</button>
+                      <div className="tawrap">
+                        <textarea name="replyContent" value={replyContent} onChange={(e) => setReplyContent(e.target.value)}></textarea>
+                        <button type="submit">작성하기</button>
+                      </div>
                     </form>
                   </div>
                 </td>
@@ -214,41 +216,61 @@ const BoardRead = () => {
                   <ul>
                     {reply.map((reply, index) => (
                       <li key={index}>
-                        <p>
-                          {reply.replyWriter}
+                        <div className="cwinfo">
+                          <strong>{reply.replyWriter}</strong>
                           <span className="date">{reply.replyDate}</span>
-                          <button type="button">수정</button>
-                          <button type="button">삭제</button>
-                        </p>
+                          <button type="button" className="modify">
+                            수정
+                          </button>
+                          <button type="button" className="delete">
+                            삭제
+                          </button>
+                        </div>
                         <p>{reply.replyContent}</p>
                       </li>
                     ))}
                     <li>
-                      <p>
-                        이름이름
+                      <div className="cwinfo">
+                        <strong>이름이름</strong>
                         <span className="date">2023.09.01</span>
-                        <button type="button">수정</button>
-                        <button type="button">삭제</button>
-                      </p>
+                        <button type="button" className="modify">
+                          수정
+                        </button>
+                        <button type="button" className="delete">
+                          삭제
+                        </button>
+                      </div>
                       <p>댓글 내용내용</p>
                     </li>
                     <li>
-                      <p>
-                        이름이름
+                      <div className="cwinfo">
+                        <strong>이름이름</strong>
                         <span className="date">2023.09.01</span>
-                        <button type="button">수정</button>
-                        <button type="button">삭제</button>
-                      </p>
+                        <button type="button" className="modify">
+                          수정
+                        </button>
+                        <button type="button" className="delete">
+                          삭제
+                        </button>
+                      </div>
                       <p>댓글 내용내용</p>
                     </li>
                     <li>
-                      <p>
-                        이름이름
+                      <div className="cwinfo">
+                        <strong>이름이름</strong>
                         <span className="date">2023.09.01</span>
-                        <button type="button">수정</button>
-                        <button type="button">삭제</button>
+                        <button type="button" className="modify">
+                          수정
+                        </button>
+                        <button type="button" className="delete">
+                          삭제
+                        </button>
+                      </div>
+                      <p>
+                        댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글
+                        내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글
+                        내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용
                       </p>
-                      <p>댓글 내용내용</p>
                     </li>
                   </ul>
                 </td>
