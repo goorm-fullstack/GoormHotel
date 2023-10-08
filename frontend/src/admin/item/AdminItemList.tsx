@@ -90,7 +90,8 @@ const AdminItemList = () => {
     try {
       const response = await axios.get(url);
       console.log(url);
-      const data = response.data;
+      const data: any[] = response.data;
+      console.log(data);
       const totalPages = parseInt(response.headers['totalpages'], 10);
       const totalData = parseInt(response.headers['totaldata'], 10);
       setItems(data);
@@ -183,6 +184,11 @@ const AdminItemList = () => {
 
   console.log(items);
 
+  if(!Array.isArray(items)){
+    console.error('Items is not an array');
+    return null;
+  }
+
   return (
     <AdminLayout subMenus="item">
       <Container>
@@ -238,7 +244,7 @@ const AdminItemList = () => {
                 </td>
               </tr>
             )}
-            {items && items.map((item: RoomData | DiningData, idx: number) => {
+            {items.length > 0 && items.map((item: RoomData | DiningData, idx: number) => {
                 const id: string = 'checkbox' + idx;
                 const matchedTypeDetail = typeDetailArray.find((typeDetails) => {
                   return typeDetails.some((typeDetail) => typeDetail.value === item.typeDetail);
