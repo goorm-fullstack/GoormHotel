@@ -191,6 +191,8 @@ const AdminItemList = () => {
   }, [items]);
 
   if(authItem && authItem.includes("AUTH_B")) {
+  console.log(items);
+
   return (
     <AdminLayout subMenus="item">
       <Container>
