@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import AdminLayout from "../common/AdminLayout";
 import {
   PageTitle,
@@ -11,6 +11,7 @@ import {
 import { Container, Table } from "../member/Style";
 import TextEditor from "../../components/common/TextEditor/TextEditor";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 
 const AdminBoardWrite = () => {

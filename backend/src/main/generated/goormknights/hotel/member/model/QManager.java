@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -26,7 +25,7 @@ public class QManager extends EntityPathBase<Manager> {
 
     public final StringPath adminNickname = createString("adminNickname");
 
-    public final ListPath<String, StringPath> authorities = this.<String, StringPath>createList("authorities", String.class, StringPath.class, PathInits.DIRECT2);
+    public final StringPath auth = createString("auth");
 
     public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
 

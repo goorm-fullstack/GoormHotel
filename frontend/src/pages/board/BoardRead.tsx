@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { NavLink, useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
@@ -64,22 +64,23 @@ const TableRead = styled.table`
 `;
 
 const BoardRead = () => {
-  const {board, boardId} = useParams();
-  const loc = useLocation();
-  // const searchParams = new URLSearchParams(loc.search);
-  // const boardId = searchParams.get('boardId');
-  const [imageUrl, setImageUrl] = useState<any[]>([]);
+  const { board, boardId } = useParams();
   const [boardData, setBoardData] = useState<any>(null);
   const [listLink, setListLink] = useState('');
   const [title, setTitle] = useState<any>();
   const [file, setFile] = useState('');
+  const [reply, setReply] = useState<any[]>([]);
+  const [replyWriter, setReplyWriter] = useState('');
+  const [replyContent, setReplyContent] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedReplyContent, setEditedReplyContent] = useState('');
 
   const parseBoardContent = (content: any) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(content, 'text/html');
-    const paragraphs = Array.from(doc.querySelectorAll('p')); // 모든 <p> 태그 선택
+    const paragraphs = Array.from(doc.querySelectorAll('p'));
 
-    return paragraphs.map((p) => p.textContent); // 각 <p> 태그의 텍스트 내용 추출
+    return paragraphs.map((p) => p.textContent);
   };
 
   const boardContent = boardData && boardData.boardContent ? (
@@ -91,17 +92,18 @@ const BoardRead = () => {
   );
 
   useEffect(() => {
-    axios.get(`/boards/${boardId}`)
-    .then((response) => {
-      if(response.headers['filename']){
-        const fileName = response.headers['filename'];
-        setFile(fileName);
-      }
-      setBoardData(response.data);
-    })
-    .catch((error) => {
-      console.error('Error:', error.message);
-    });
+    axios
+        .get(`/boards/${boardId}`)
+        .then((response) => {
+          if (response.headers['filename']) {
+            const fileName = response.headers['filename'];
+            setFile(fileName);
+          }
+          setBoardData(response.data);
+        })
+        .catch((error) => {
+          console.error('Error:', error.message);
+        });
   }, []);
 
   useEffect(() => {
@@ -139,64 +141,70 @@ const BoardRead = () => {
       }
       setListLink(link);
     }
-  }, [])
+  }, [board, boardData]);
 
-  const handleDownLoad = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const result = await axios.get(`/boards/download/${boardId}`, {responseType : 'blob'})
-    let blob = new Blob([result.data], {type: result.headers['content-type']})
+  const handleDownLoad = async () => {
+    const result = await axios.get(`/boards/download/${boardId}`, {
+      responseType: 'blob',
+    });
+    let blob = new Blob([result.data], {
+      type: result.headers['content-type'],
+    });
 
-    let link = document.createElement('a')
-    link.href = window.URL.createObjectURL(blob)
-    link.target = '_self'
-    link.setAttribute("download", file)
-    link.click()
-  }
+    let link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.target = '_self';
+    link.setAttribute('download', file);
+    link.click();
+  };
 
-  // useEffect(() => {
-  //   GetImageUrl(boardData.boardId);
-  // }, [boardData]);
-  // const GetImageUrl = (boardId: number) => {
-  //   if (!boardData) {
-  //     return;
-  //   }
-  //
-  //   Instance.get(`/boards/image/${boardId}`, {
-  //     responseType: 'arraybuffer',
-  //   })
-  //       .then((response) => {
-  //         if (response.data) {
-  //           const blob = new Blob([response.data], {
-  //             type: response.headers['content-type'],
-  //           });
-  //           let image = { boardId: boardId, imageUrl: URL.createObjectURL(blob) };
-  //           setImageUrl((prevImages) => [...prevImages, image]);
-  //         } else {
-  //           console.error('API 응답이 null 또는 데이터가 없습니다.');
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error(error);
-  //       });
-  // };
-
-  const [reply, setReply] = useState<any[]>([]);
-  const [replyWriter, setReplyWriter] = useState('');
-  const [replyContent, setReplyContent] = useState('');
-
-  const fetchReply = async (boardId:number) => {
+  const fetchReply = async (boardId: number) => {
     try {
-      const response = await axios.get(`/reply/boardId/${boardData.boardId}`);
+      const response = await axios.get(`/reply/boardId/${boardId}`);
       setReply(response.data);
     } catch (error) {
       console.error(error);
     }
   };
 
-  useEffect(() => {
-    if (boardData) {
-      fetchReply(boardData.boardId);
+  const handleDelete = (replyId: number) => {
+    axios
+        .put(`/reply/softdelete/${replyId}`)
+        .then((response) => {
+          console.log('댓글이 삭제되었습니다.');
+          fetchReply(boardData.boardId);
+        })
+        .catch((error) => {
+          console.error('댓글 삭제에 실패했습니다.', error);
+        });
+  };
+
+  const handleUpdate = (replyId: number) => {
+    setIsEditing(true);
+    const replyToEdit = reply.find((r) => r.replyId === replyId);
+    if (replyToEdit) {
+      setEditedReplyContent(replyToEdit.replyContent);
     }
-  }, [boardData]);
+  };
+
+  const handleCancelUpdate = () => {
+    setIsEditing(false);
+    setEditedReplyContent('');
+  };
+
+  const handleSaveUpdate = (replyId: number) => {
+    axios
+        .put(`/reply/${replyId}`, { replyContent: editedReplyContent })
+        .then((response) => {
+          console.log('댓글이 수정되었습니다.');
+          setIsEditing(false);
+          setEditedReplyContent('');
+          fetchReply(boardData.boardId);
+        })
+        .catch((error) => {
+          console.error('댓글 수정에 실패했습니다.', error);
+        });
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -205,19 +213,61 @@ const BoardRead = () => {
       const response = await axios.post('/reply/writeform', {
         boardId: boardId,
         replyContent: replyContent,
-        replyWriter: replyWriter
+        replyWriter: replyWriter,
       });
       setReplyWriter('');
       setReplyContent('');
       fetchReply(parseInt(boardId ? boardId : '', 10));
     } catch (error) {
-      console.error(error);
+      console.error('댓글 작성에 실패했습니다.', error);
     }
   };
 
-
-
-  console.log(boardData);
+  const Editing = ({ replyId }: { replyId: number }) => {
+    return (
+        <div>
+          {isEditing ? (
+              <>
+                <button
+                    type="button"
+                    onClick={() => handleSaveUpdate(replyId)}
+                >
+                  저장
+                </button>
+                <button
+                    type="button"
+                    onClick={handleCancelUpdate}
+                >
+                  취소
+                </button>
+              </>
+          ) : (
+              <>
+                <button
+                    type="button"
+                    onClick={() => handleUpdate(replyId)}
+                >
+                  수정
+                </button>
+                <button
+                    type="button"
+                    onClick={() => handleDelete(replyId)}
+                >
+                  삭제
+                </button>
+              </>
+          )}
+          {isEditing ? (
+              <textarea
+                  value={editedReplyContent}
+                  onChange={(e) => setEditedReplyContent(e.target.value)}
+              ></textarea>
+          ) : (
+              <p>{reply.find((r) => r.replyId === replyId)?.replyContent}</p>
+          )}
+        </div>
+    );
+  };
 
   return (
       <>
@@ -233,7 +283,9 @@ const BoardRead = () => {
                     <span>{boardData ? boardData.category : ''}</span>
                     {boardData ? boardData.title : ''}
                   </p>
-                  <button type='button' onClick={handleDownLoad}>{file}</button>
+                  <button type="button" onClick={handleDownLoad}>
+                    {file}
+                  </button>
                   {(() => {
                     if (board !== 'notice' && boardData) {
                       return (
@@ -263,7 +315,6 @@ const BoardRead = () => {
                             value={replyWriter}
                             onChange={(e) => setReplyWriter(e.target.value)}
                         />
-                        {/*<input type="password" placeholder="식별 비밀번호?" />*/}
                       </div>
                       <textarea
                           name="replyContent"
@@ -278,44 +329,15 @@ const BoardRead = () => {
               <tr className="commentslist">
                 <td>
                   <ul>
-                    {reply.map((reply, index) => (
+                    {reply.map((replyItem, index) => (
                         <li key={index}>
                           <p>
-                            {reply.replyWriter}
-                            <span className="date">{reply.replyDate}</span>
-                            <button type="button">수정</button>
-                            <button type="button">삭제</button>
+                            {replyItem.replyWriter}
+                            <span className="date">{replyItem.replyDate}</span>
+                            <Editing replyId={replyItem.replyId} />
                           </p>
-                          <p>{reply.replyContent}</p>
                         </li>
                     ))}
-                    <li>
-                      <p>
-                        이름이름
-                        <span className="date">2023.09.01</span>
-                        <button type="button">수정</button>
-                        <button type="button">삭제</button>
-                      </p>
-                      <p>댓글 내용내용</p>
-                    </li>
-                    <li>
-                      <p>
-                        이름이름
-                        <span className="date">2023.09.01</span>
-                        <button type="button">수정</button>
-                        <button type="button">삭제</button>
-                      </p>
-                      <p>댓글 내용내용</p>
-                    </li>
-                    <li>
-                      <p>
-                        이름이름
-                        <span className="date">2023.09.01</span>
-                        <button type="button">수정</button>
-                        <button type="button">삭제</button>
-                      </p>
-                      <p>댓글 내용내용</p>
-                    </li>
                   </ul>
                 </td>
               </tr>
