@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import * as S from './Style';
 
@@ -30,6 +30,7 @@ const Paging: React.FC<TotalPage> = (props) => {
   const pageArray = chunkArray(totalPageArray, 10); // 페이지 10페이지 단위로 자름(예:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10], [11, 12, ...])
   const currentPage = page ? parseInt(page, 10) : 1; // 현재페이지
   const [pages, setPages] = useState<number[]>(pageArray.length > 0 ? pageArray[0] : [1]); // 하단 페이지 처리할 배열 상태 관리
+  const [pageNumbers, setPageNumbers] = useState<any[]>([]);
   const navigate = useNavigate();
 
   // 이전 페이지 이동
@@ -81,20 +82,23 @@ const Paging: React.FC<TotalPage> = (props) => {
   };
 
   // 총 페이지 수에 맞게 페이지 태그 생성
-  const pageNumbers = [];
-  for (let i = 0; i < pages.length; i++) {
-    pageNumbers.push(
-      <li key={pages[i]}>
-        {pages[i] === currentPage ? (
-          <span>{pages[i]}</span> // 현재 페이지는 링크 없이 표시
-        ) : (
-          <Link to={`${afterUrl}${pages[i]}`}>
-            {pages[i]}
-          </Link>
-        )}
-      </li>
-    );
-  }
+  useEffect(() => {
+    const pageNumbers = [];
+    for (let i = 0; i < pages.length; i++) {
+      pageNumbers.push(
+        <li key={pages[i]}>
+          {pages[i] === currentPage ? (
+            <span>{pages[i]}</span> // 현재 페이지는 링크 없이 표시
+          ) : (
+            <Link to={`${afterUrl}${pages[i]}`}>
+              {pages[i]}
+            </Link>
+          )}
+        </li>
+      );
+    }
+    setPageNumbers(pageNumbers);
+  }, [currentPage])
 
   return (
     <S.PageParam>
