@@ -5,10 +5,9 @@ import goormknights.hotel.email.dto.response.EmailResponseDto;
 import goormknights.hotel.email.model.EmailMessage;
 import goormknights.hotel.email.model.MultipleEmail;
 import goormknights.hotel.email.service.EmailService;
-import goormknights.hotel.member.dto.request.FindPasswordRequest;
+import goormknights.hotel.member.dto.request.FindPasswordDTO;
 import goormknights.hotel.member.service.VerificationService;
 import jakarta.mail.MessagingException;
-import jakarta.mail.Multipart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,9 +48,9 @@ public class EmailController {
 
     // 임시 비밀번호 발급
     @PostMapping("/password")
-    public ResponseEntity<?> sendPasswordMail(@RequestBody FindPasswordRequest findPasswordRequest) {
+    public ResponseEntity<?> sendPasswordMail(@RequestBody FindPasswordDTO findPasswordDTO) {
         EmailMessage emailMessage = EmailMessage.builder()
-                .to(findPasswordRequest.getEmail())
+                .to(findPasswordDTO.getEmail())
                 .subject("[GoormHotel] 임시 비밀번호 발급")
                 .build();
 

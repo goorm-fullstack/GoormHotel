@@ -1,5 +1,5 @@
 ### 회원가입
-POST http://localhost:8080/auth/signup
+POST http://localhost:8080/signupDTO
 Content-Type: application/json
 
 {

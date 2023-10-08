@@ -9,7 +9,7 @@ import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.global.exception.InvalidVerificationCodeException;
 import goormknights.hotel.member.dto.request.MemberEdit;
-import goormknights.hotel.member.dto.request.Signup;
+import goormknights.hotel.member.dto.request.SignupDTO;
 import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.model.MemberEditor;
@@ -41,29 +41,29 @@ public class MemberService {
     private final EmailSender emailSender;
 
     // 멤버 가입 및 저장
-    public void signup(Signup signup, String code) {
+    public void signup(SignupDTO signupDTO, String code) {
 
-        if (!verifyCode(signup.getEmail(), code)) {
+        if (!verifyCode(signupDTO.getEmail(), code)) {
             throw new InvalidVerificationCodeException();
         }
 
-        Optional<Member> memberOptional = memberRepository.findByEmail(signup.getEmail());
+        Optional<Member> memberOptional = memberRepository.findByEmail(signupDTO.getEmail());
         if (memberOptional.isPresent()) {
             throw new AlreadyExistsEmailException();
         }
 
-        String encryptedPassword = passwordEncoder.encode(signup.getPassword());
+        String encryptedPassword = passwordEncoder.encode(signupDTO.getPassword());
 
         var member = Member.builder()
-                .name(signup.getName())
-                .email(signup.getEmail())
-                .memberId(signup.getMemberId())
+                .name(signupDTO.getName())
+                .email(signupDTO.getEmail())
+                .memberId(signupDTO.getMemberId())
                 .password(encryptedPassword)
-                .phoneNumber(signup.getPhoneNumber())
-                .privacyCheck(signup.getPrivacyCheck())
-                .birth(signup.getBirth())
-                .grade(signup.getGrade())
-                .gender(signup.getGender())
+                .phoneNumber(signupDTO.getPhoneNumber())
+                .privacyCheck(true)
+                .birth(signupDTO.getBirth())
+                .grade("Bronze")
+                .gender(signupDTO.getGender())
                 .role(Role.USER)
                 .mailAuth(true)
                 .build();

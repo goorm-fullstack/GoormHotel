@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class FindMemberIdRequest {
+public class FindMemberIdDTO {
     private String name;
     private String email;
     private String code;
