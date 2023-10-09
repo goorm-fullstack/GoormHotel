@@ -1,76 +1,16 @@
 import React from 'react';
-import { styled } from 'styled-components';
-import { commonContainerStyle, PageTitle, ContentsTitleXSmall, AuthBtn, Auth, BtnWrapper, SubmitBtn } from '../../Style/commonStyles';
+import * as S from './Style';
+import { PageTitle, ContentsTitleXSmall, AuthBtn, Auth, BtnWrapper, SubmitBtn } from '../../Style/commonStyles';
 import Coupon from '../../components/Coupon/Coupon';
 import { Link } from 'react-router-dom';
-
-const Container = styled(commonContainerStyle)``;
-
-const Contents = styled.div`
-  display: flex;
-
-  & > div {
-    width: 50%;
-  }
-`;
-
-const EditWrapper = styled.div`
-  padding-right: 80px;
-  border-right: 1px solid ${(props) => props.theme.colors.grayborder};
-
-  input {
-    height: 50px;
-    padding-left: 18px;
-    margin-top: 10px;
-    display: block;
-  }
-
-  input:first-child {
-    margin-top: 0;
-  }
-
-  & form > input {
-    width: 100%;
-  }
-`;
-
-const RightWrapper = styled.div`
-  padding-left: 80px;
-
-  .historyWrapper {
-    margin-bottom: 60px;
-
-    p {
-      background-color: ${(props) => props.theme.colors.graybg};
-      padding: 32.5px 30px;
-      font-size: ${(props) => props.theme.font.sizes};
-      display: flex;
-      justify-content: space-between;
-
-      a {
-        font-size: ${(props) => props.theme.font.sizexs};
-        letter-spacing: -0.02em;
-        text-decoration: underline;
-        color: ${(props) => props.theme.colors.graylight};
-      }
-    }
-  }
-`;
-
-const GuideText = styled.ul`
-  font-size: ${(props) => props.theme.font.sizexs};
-  color: ${(props) => props.theme.colors.graylight};
-  line-height: 1.6;
-  margin-top: 20px;
-`;
 
 const Mypage = () => {
   return (
     <>
-      <Container>
+      <S.Container>
         <PageTitle>마이페이지</PageTitle>
-        <Contents>
-          <EditWrapper>
+        <S.Mypage>
+          <div className="editinfo">
             <ContentsTitleXSmall>회원 정보 수정</ContentsTitleXSmall>
             <form>
               <input placeholder="아이디" />
@@ -89,8 +29,8 @@ const Mypage = () => {
                 <SubmitBtn type="submit">회원 정보 수정</SubmitBtn>
               </BtnWrapper>
             </form>
-          </EditWrapper>
-          <RightWrapper>
+          </div>
+          <div className="right">
             <div className="historyWrapper">
               <ContentsTitleXSmall>예약 내역 확인</ContentsTitleXSmall>
               <p>
@@ -101,15 +41,15 @@ const Mypage = () => {
             <div>
               <ContentsTitleXSmall>멤버십 쿠폰</ContentsTitleXSmall>
               <Coupon grade="bronze" />
-              <GuideText>
+              <ul className="guide">
                 <li>⁕&nbsp;&nbsp;상기 멤버십 서비스 혜택은 변경 및 종료될 수 있습니다.</li>
                 <li>⁕&nbsp;&nbsp;특전의 세부 이용 조건은 약관을 통해 확인하실 수 있습니다.</li>
                 <li>⁕&nbsp;&nbsp;등급 심사는 매월 1일 진행되며 최근 2년 간의 실적을 기준으로 합니다.</li>
-              </GuideText>
+              </ul>
             </div>
-          </RightWrapper>
-        </Contents>
-      </Container>
+          </div>
+        </S.Mypage>
+      </S.Container>
     </>
   );
 };

@@ -1,97 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import * as S from './Style';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { BtnWrapper, SubmitBtn, PageTitle, InputCheckbox, commonContainerStyle, LinkBtn, CheckLabel } from '../../Style/commonStyles';
+import { BtnWrapper, SubmitBtn, PageTitle, InputCheckbox, LinkBtn, CheckLabel } from '../../Style/commonStyles';
 import kakao from '../../images/icon/ico_kakao.png';
 import naver from '../../images/icon/ico_naver.png';
 import google from '../../images/icon/ico_google.png';
 import Instance from '../../utils/api/axiosInstance';
-import Membership from './../about/Membership/Membership';
-
-const Container = styled(commonContainerStyle)``;
-
-const Wrapper = styled.div`
-  display: flex;
-  width: 100%;
-
-  & > div {
-    width: 50%;
-  }
-`;
-
-const LeftWrapper = styled.div`
-  padding-right: 80px;
-  border-right: 1px solid ${(props) => props.theme.colors.grayborder};
-`;
-
-const ButtonWrapper = styled.div`
-  width: 100%;
-  height: 60px;
-  margin-bottom: 20px;
-`;
-
-const MemberBtn = styled.button<{isActive: boolean}>`
-  background-color: ${({ isActive }) => (isActive ? '#FFFFFF' : '#f7f7f7')};
-  border: 1px solid ${({ isActive }) => (isActive ? '#baa085' : '#ddd')};
-  color: ${({ isActive }) => (isActive ? '#9c836a' : '#888')};
-  width: 50%;
-  height: 100%;
-  border-bottom-color: ${({ isActive }) => (isActive ? 'transparent' : '#baa085')};
-  font-size: ${(props) => props.theme.font.sizes};
-`;
-
-const NonMemberBtn = styled(MemberBtn)``;
-
-const Input = styled.input`
-  width: 100%;
-  height: 50px;
-  padding-left: 18px;
-
-  &.second {
-    margin-top: 10px;
-  }
-`;
-
-const RememberAndFind = styled.div`
-  display: flex;
-  justify-content: space-between;
-  color: ${(props) => props.theme.colors.graylight};
-  font-size: ${(props) => props.theme.font.sizexs};
-  align-items: center;
-  margin-top: 10px;
-  letter-spacing: -0.02em;
-`;
-
-const AuthWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 0 18px;
-  height: 50px;
-  width: 100%;
-  margin-top: 50px;
-
-  button {
-    width: 52px;
-    height: 52px;
-    background-color: transparent;
-  }
-`;
-
-const RightWrapper = styled.div`
-  padding-left: 80px;
-`;
-
-const FirstText = styled.p`
-  font-size: ${(props) => props.theme.font.sizel};
-  color: ${(props) => props.theme.colors.goldhover};
-  margin: 55px 0 20px;
-`;
-
-const SecondText = styled.p`
-  color: ${(props) => props.theme.colors.graylight};
-  margin-bottom: 60px;
-  line-height: 1.6;
-`;
 
 const Login: React.FC = () => {
   const location = useLocation();
@@ -109,7 +23,7 @@ const Login: React.FC = () => {
   // 쿠키를 파싱하는 함수
   function getCookie(name: string): string | undefined {
     const cookieString = document.cookie;
-    console.log(cookieString)
+    console.log(cookieString);
     const cookies = cookieString.split('; ');
 
     for (let i = 0; i < cookies.length; i++) {
@@ -128,7 +42,7 @@ const Login: React.FC = () => {
       memberId: memberId,
       password: memberPassword,
     };
-    console.log("로그인 정보:", JSON.stringify(loginInfo));
+    console.log('로그인 정보:', JSON.stringify(loginInfo));
     try {
       const response = await Instance.post('/login/member', loginInfo, {
         headers: {
@@ -138,18 +52,18 @@ const Login: React.FC = () => {
       });
 
       if (response.status === 200) {
-        localStorage.clear();//일단 이전 기록을 좀 지우자~
-        if(getCookie("role")==="BLACKED") {
-          alert("블랙리스트 대상입니다. 자세한 문의 사항은 goormhotel@gmail.com으로 주시면 감사하겠습니다")
+        localStorage.clear(); //일단 이전 기록을 좀 지우자~
+        if (getCookie('role') === 'BLACKED') {
+          alert('차단된 회원입니다. 자세한 사항은 고객센터로 문의 바랍니다.');
         } else {
           alert('로그인 성공');
-          const memberId = getCookie("memberId");
-          const role = getCookie("role");
-          if(memberId !== undefined && role !== undefined) {
-            localStorage.setItem("memberId", memberId);
-            localStorage.setItem("role", role);
+          const memberId = getCookie('memberId');
+          const role = getCookie('role');
+          if (memberId !== undefined && role !== undefined) {
+            localStorage.setItem('memberId', memberId);
+            localStorage.setItem('role', role);
           }
-          window.location.href = '/'
+          window.location.href = '/';
         }
       } else {
         alert('아이디 또는 비밀번호가 일치하지 않습니다.');
@@ -195,45 +109,47 @@ const Login: React.FC = () => {
 
   return (
     <>
-      <Container>
+      <S.Container>
         <PageTitle>로그인</PageTitle>
-        <Wrapper>
-          <LeftWrapper>
-            <ButtonWrapper>
-              <MemberBtn isActive={isMemberActive} onClick={handleMemberClick}>
+        <S.LoginWrapper>
+          <div className="left">
+            <div className="tab">
+              <S.MemberBtn isActive={isMemberActive} onClick={handleMemberClick}>
                 회원
-              </MemberBtn>
-              <NonMemberBtn isActive={!isMemberActive} onClick={handleNonMemberClick}>
+              </S.MemberBtn>
+              <S.MemberBtn isActive={!isMemberActive} onClick={handleNonMemberClick}>
                 비회원(예약확인)
-              </NonMemberBtn>
-            </ButtonWrapper>
+              </S.MemberBtn>
+            </div>
             {isMemberActive ? (
               <form id="memberLogin">
-                <Input placeholder="아이디" value={memberId} onChange={handleIdChange} />
-                <Input className="second" placeholder="비밀번호" value={memberPassword} onChange={handlePwChange} />
+                <input type="text" placeholder="아이디" value={memberId} onChange={handleIdChange} />
+                <input type="password" className="second" placeholder="비밀번호" value={memberPassword} onChange={handlePwChange} />
                 <BtnWrapper className="mt20 full">
-                  <SubmitBtn type="submit" onClick={handleLogin}>로그인</SubmitBtn>
+                  <SubmitBtn type="submit" onClick={handleLogin}>
+                    로그인
+                  </SubmitBtn>
                 </BtnWrapper>
               </form>
             ) : (
               <form>
-                <Input placeholder="예약번호" value={reservationNumber} onChange={handleReservationNumberChange} />
-                <Input className="second" placeholder="연락처" value={contactNumber} onChange={handleContactNumberChange} />
+                <input type="text" placeholder="예약번호" value={reservationNumber} onChange={handleReservationNumberChange} />
+                <input type="text" className="second" placeholder="연락처" value={contactNumber} onChange={handleContactNumberChange} />
                 <BtnWrapper className="mt20 full">
                   <SubmitBtn type="submit">예약 확인</SubmitBtn>
                 </BtnWrapper>
               </form>
             )}
             {isMemberActive && (
-              <RememberAndFind>
+              <div className="remember">
                 <CheckLabel htmlFor="rememberId">
                   <InputCheckbox type="checkbox" id="rememberId" checked={rememberId} onChange={handleRememberIdChange} />
                   아이디 기억하기
                 </CheckLabel>
                 <Link to="/findidpw">아이디/비밀번호 찾기</Link>
-              </RememberAndFind>
+              </div>
             )}
-            <AuthWrapper>
+            <div className="auth">
               <button type="button">
                 <img src={google} alt="authImg" />
               </button>
@@ -243,20 +159,20 @@ const Login: React.FC = () => {
               <button type="button">
                 <img src={naver} alt="authImg" />
               </button>
-            </AuthWrapper>
-          </LeftWrapper>
-          <RightWrapper>
-            <FirstText>아직 회원이 아니신가요?</FirstText>
-            <SecondText>
+            </div>
+          </div>
+          <div className="right">
+            <p className="first">아직 회원이 아니신가요?</p>
+            <p className="second">
               회원이 되시면 구름 리워즈 멤버십 회원으로서
               <br />더 큰 혜택과 편리함을 누릴 수 있습니다.
-            </SecondText>
+            </p>
             <BtnWrapper className="full">
               <LinkBtn to="/signup">회원가입</LinkBtn>
             </BtnWrapper>
-          </RightWrapper>
-        </Wrapper>
-      </Container>
+          </div>
+        </S.LoginWrapper>
+      </S.Container>
     </>
   );
 };
