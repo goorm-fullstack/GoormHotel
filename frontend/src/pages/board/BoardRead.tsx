@@ -221,7 +221,7 @@ const BoardRead = () => {
                   })()}
                 </td>
               </tr>
-              {board !== 'review' &&
+              {board !== 'review' && file &&
               <tr>
                 <td>
                   <button className='fileb' type="button" onClick={handleDownLoad}>
