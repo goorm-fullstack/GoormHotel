@@ -31,7 +31,8 @@ const AdminBoardWrite = () => {
       navigate('/admin');
     }
   }, []);
-
+  
+  if(authItem && authItem.includes("AUTH_C")) {
   type FormData = {
     [key: string]: string;
   };
