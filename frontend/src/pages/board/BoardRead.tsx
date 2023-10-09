@@ -262,12 +262,12 @@ const BoardRead = () => {
                               <input
                                 className="modify-input"
                                 type="text"
-                                defaultValue={replyWriterModify}
+                                defaultValue={'수정할 작성자를 입력하세요'}
                                 onChange={(e) => setReplyWriterModify(e.target.value)}
                               />
                               <input
                                 className="modify-input"
-                                defaultValue={replyContentModify}
+                                defaultValue={'수정할 내용을 입력하세요'}
                                 onChange={(e) => setReplyContentModify(e.target.value)}
                               />
                               <button type="submit" className="modify">
