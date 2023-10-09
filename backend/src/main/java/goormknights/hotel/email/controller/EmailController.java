@@ -1,11 +1,15 @@
 package goormknights.hotel.email.controller;
 
+import goormknights.hotel.email.dto.request.EmailNameDTO;
+import goormknights.hotel.email.dto.request.EmailNameIdDTO;
 import goormknights.hotel.email.dto.request.EmailPostDto;
 import goormknights.hotel.email.dto.response.EmailResponseDto;
 import goormknights.hotel.email.model.EmailMessage;
 import goormknights.hotel.email.model.MultipleEmail;
 import goormknights.hotel.email.service.EmailService;
 import goormknights.hotel.member.dto.request.FindPasswordDTO;
+import goormknights.hotel.member.model.Member;
+import goormknights.hotel.member.repository.MemberRepository;
 import goormknights.hotel.member.service.VerificationService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +27,7 @@ import java.util.Map;
 public class EmailController {
 
     private final EmailService emailService;
+    private final MemberRepository memberRepository;
     private final VerificationService verificationService;
 
     @PostMapping("/subscribe")
@@ -74,6 +80,58 @@ public class EmailController {
 
         return ResponseEntity.ok(emailResponseDto);
     }
+
+    // 아이디 찾기 코드 전송
+    @PostMapping("/findid-code")
+    public ResponseEntity<?> findIdCodeRequest(@RequestBody EmailNameDTO emailNameDTO) {
+        Optional<Member> memberOptional = memberRepository.findByEmail(emailNameDTO.getEmail());
+        if (memberOptional.isPresent()) {
+            EmailMessage emailMessage = EmailMessage.builder()
+                    .to(emailNameDTO.getEmail())
+                    .subject("[GoormHotel] 이메일 인증을 위한 인증 코드 발송")
+                    .build();
+
+            String code = emailService.sendMemberMail(emailMessage, "email-auth");
+            EmailResponseDto emailResponseDto = new EmailResponseDto();
+            emailResponseDto.setCode(code);
+
+            return ResponseEntity.ok(emailResponseDto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found");
+        }
+    }
+
+    // 비밀번호 찾기 코드 전송
+    @PostMapping("/findpw-code")
+    public ResponseEntity<?> findPwCodeRequest(@RequestBody EmailNameIdDTO emailNameIdDTO) {
+        Optional<Member> memberOptional = memberRepository.findByEmailAndMemberIdAndName(
+                emailNameIdDTO.getEmail(), emailNameIdDTO.getMemberId(), emailNameIdDTO.getName());
+        if (memberOptional.isPresent()) {
+            EmailMessage emailMessage = EmailMessage.builder()
+                    .to(emailNameIdDTO.getEmail())
+                    .subject("[GoormHotel] 이메일 인증을 위한 인증 코드 발송")
+                    .build();
+
+            String code = emailService.sendMemberMail(emailMessage, "email-auth");
+            EmailResponseDto emailResponseDto = new EmailResponseDto();
+            emailResponseDto.setCode(code);
+
+            return ResponseEntity.ok(emailResponseDto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found");
+        }
+    }
+
+//    // 아이디 찾기 코드 버튼
+//    @PostMapping("/send-id-find-code")
+//    public ResponseEntity<?> sendIdFindCode(@RequestBody FindMemberIdDTO request) {
+//        try {
+//            String code = memberService.sendIdFindCode(request.getName(), request.getEmail());
+//            return ResponseEntity.ok().body("인증 코드가 발송되었습니다.");
+//        } catch (MemberNotFound e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found");
+//        }
+//    }
 
     // 비밀번호 찾기 토큰 링크 검증용
     @PostMapping("/verifyResetToken")

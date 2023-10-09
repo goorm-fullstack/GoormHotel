@@ -271,7 +271,7 @@ const App: React.FC = () => {
             <Route path="/sitemap" element={<Sitemap />} />
             <Route path="/findidpw" element={<FindAccount />} />
             <Route path="/findid/result" element={<FindIdResult />} />
-            <Route path="/findpw/result" element={<FindPwResult />} />
+            <Route path="/findpw/result/:resetToken" element={<FindPwResult />} />
             <Route path="/membership" element={<Membership />} />
             <Route path="/reservation/:number" element={<ReservationCheck />} />
             <Route path="/offers/:page" element={<ReservationItem />} />

@@ -46,19 +46,19 @@ public class AuthController {
         }
     }
 
-    // 아이디 찾기
-    @PostMapping("/findMemberId")
-    public ResponseEntity<?> findMemberId(@RequestBody FindMemberIdDTO request) {
-        try {
-            String memberId = memberService.findMemberId(request.getName(), request.getEmail());
-            return ResponseEntity.ok().body("아이디 찾기를 위한 코드가 발송되었습니다.");
-        } catch (MemberNotFound e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found");
-        }
-    }
+//    // 아이디 찾기
+//    @PostMapping("/find-id")
+//    public ResponseEntity<?> findMemberId2(@RequestBody FindMemberIdDTO request) {
+//        try {
+//            String memberId = memberService.findMemberId(request.getName(), request.getEmail());
+//            return ResponseEntity.ok().body("아이디 찾기를 위한 코드가 발송되었습니다.");
+//        } catch (MemberNotFound e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found");
+//        }
+//    }
 
     // 비밀번호 찾기
-    @PostMapping("/findpassword")
+    @PostMapping("/find-password")
     public ResponseEntity<?> findPassword(@RequestBody FindPasswordDTO request) {
         try {
             String token = memberService.findPassword(request.getName(), request.getEmail(), request.getMemberId());
@@ -70,7 +70,7 @@ public class AuthController {
     }
 
     // 비밀번호 재설정
-    @PostMapping("/resetpassword")
+    @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
         String token = request.getToken();
         String newPassword = request.getNewPassword();

@@ -3,13 +3,13 @@ package goormknights.hotel.member.service;
 import goormknights.hotel.auth.service.RedisUtil;
 import goormknights.hotel.email.model.EmailMessage;
 import goormknights.hotel.email.repository.EmailSender;
+import goormknights.hotel.email.service.EmailService;
 import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.giftcard.repository.GiftCardRepository;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.global.exception.InvalidVerificationCodeException;
-import goormknights.hotel.member.dto.request.MemberEdit;
-import goormknights.hotel.member.dto.request.SignupDTO;
+import goormknights.hotel.member.dto.request.*;
 import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.model.MemberEditor;
@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -39,6 +40,7 @@ public class MemberService {
     private final RedisUtil redisUtil;
     private final GiftCardRepository giftCardRepository;
     private final EmailSender emailSender;
+    private final EmailService emailService;
 
     // 멤버 가입 및 저장
     public void signup(SignupDTO signupDTO, String code) {
@@ -92,6 +94,28 @@ public class MemberService {
         member.edit(memberEditor);
     }
 
+    @Transactional
+    public void resetPassword(ResetPasswordDTO resetPasswordDTO) {
+        String resetToken = resetPasswordDTO.getResetToken();
+        String newPassword = resetPasswordDTO.getNewPassword();
+
+        String email = redisUtil.getData(resetToken);
+        if (email == null) {
+            throw new InvalidVerificationCodeException();
+        }
+
+        Optional<Member> memberOptional = memberRepository.findByEmail(email);
+        if (memberOptional.isEmpty()) {
+            throw new MemberNotFound();
+        }
+
+        Member member = memberOptional.get();
+        String encryptedPassword = passwordEncoder.encode(newPassword);
+        member.setPassword(encryptedPassword);
+
+        redisUtil.deleteData(resetToken);
+    }
+
     // 이메일 코드 인증
     public boolean verifyCode(String email, String code) {
         String savedCode = redisUtil.getData(email);
@@ -100,20 +124,67 @@ public class MemberService {
         return code.equals(savedCode);
     }
 
-    // 회원 아이디 찾기
-    public String findMemberId(String name, String email) {
-        Optional<Member> memberOptional = memberRepository.findByEmail(email);
-        if (memberOptional.isPresent() && memberOptional.get().getName().equals(name)) {
-            EmailMessage emailMessage = EmailMessage.builder()
-                    .to(email)
-                    .subject("[GoormHotel] 아이디 찾기 인증 코드")
-                    .build();
-            emailSender.sendMemberMail(emailMessage, "findIdandPassword");
-            return memberOptional.get().getMemberId();
-        } else {
-            throw new MemberNotFound();  // 적절한 예외 처리
+//    // 회원 아이디 찾기
+//    public String findMemberId(String name, String email) {
+//        Optional<Member> memberOptional = memberRepository.findByEmail(email);
+//        if (memberOptional.isPresent() && memberOptional.get().getName().equals(name)) {
+//            EmailMessage emailMessage = EmailMessage.builder()
+//                    .to(email)
+//                    .subject("[GoormHotel] 아이디 찾기 인증 코드")
+//                    .build();
+//            emailSender.sendMemberMail(emailMessage, "findIdandPassword");
+//            return memberOptional.get().getMemberId();
+//        } else {
+//            throw new MemberNotFound();  // 적절한 예외 처리
+//        }
+//    }
+
+//    // 아이디 찾기 코드전송
+//    public String sendIdFindCode(String name, String email) {
+//        Optional<Member> memberOptional = memberRepository.findByEmail(email);
+//        if (memberOptional.isPresent() && memberOptional.get().getName().equals(name)) {
+//            EmailMessage emailMessage = EmailMessage.builder()
+//                    .to(email)
+//                    .subject("[YourApp] 아이디 찾기 인증 코드")
+//                    .build();
+//            String code = emailService.sendMemberMail(emailMessage, "password");
+//            redisUtil.setData(email, code);
+//            return code;
+//        } else {
+//            throw new MemberNotFound();
+//        }
+//    }
+
+    // 아이디 찾기 최종
+    public String findMemberId(FindMemberIdDTO findMemberIdDTO, String code) {
+        if (!verifyCode(findMemberIdDTO.getEmail(), code)) {
+            throw new InvalidVerificationCodeException();
         }
+
+        Optional<Member> memberOptional = memberRepository.findByEmail(findMemberIdDTO.getEmail());
+        if (memberOptional.isEmpty()) {
+            throw new MemberNotFound();
+        }
+        return memberOptional.get().getMemberId();
     }
+
+    // 비밀번호 찾기 최종
+    public String findMemberPw(FindPasswordDTO findPasswordDTO, String code) {
+        if (!verifyCode(findPasswordDTO.getEmail(), code)) {
+            throw new InvalidVerificationCodeException();
+        }
+
+        Optional<Member> memberOptional = memberRepository.findByEmail(findPasswordDTO.getEmail());
+        if (memberOptional.isEmpty()) {
+            throw new MemberNotFound();
+        }
+        String resetToken = UUID.randomUUID().toString();
+        // 레디스에 토큰과 이메일 저장
+        redisUtil.setDataExpire(resetToken, findPasswordDTO.getEmail(), 600); // 10분 동안 유효
+        return resetToken;
+    }
+
+
 
     // 회원 비밀번호 찾기
     public String findPassword(String name, String email, String memberId) {

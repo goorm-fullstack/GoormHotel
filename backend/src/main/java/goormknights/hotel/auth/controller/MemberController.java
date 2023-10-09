@@ -1,8 +1,9 @@
 package goormknights.hotel.auth.controller;
 
-import goormknights.hotel.member.dto.request.AdminSignupDTO;
-import goormknights.hotel.member.dto.request.SignupDTO;
+import goormknights.hotel.global.exception.InvalidVerificationCodeException;
+import goormknights.hotel.member.dto.request.*;
 import goormknights.hotel.member.dto.response.ManagerListDTO;
+import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.model.Manager;
 import goormknights.hotel.member.repository.ManagerRepository;
 import goormknights.hotel.member.service.AdminService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,6 +60,46 @@ public class MemberController {
             dto.setPassword(manager.getPassword());
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    // 아이디 찾기 제출
+    @PostMapping("/find-id")
+    public ResponseEntity<?> findMemberId(@RequestBody FindMemberIdDTO findMemberIdDTO) {
+        try {
+            String code = findMemberIdDTO.getCode();
+            String memberId = memberService.findMemberId(findMemberIdDTO, code);
+            return new ResponseEntity<>(memberId, HttpStatus.OK);
+        } catch (InvalidVerificationCodeException e) {
+            return new ResponseEntity<>("Invalid verification code", HttpStatus.BAD_REQUEST);
+        } catch (MemberNotFound e) {
+            return new ResponseEntity<>("Member not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // 비밀번호 찾기 제출
+    @PostMapping("/find-pw")
+    public ResponseEntity<?> findPw(@RequestBody FindPasswordDTO findPasswordDTO) {
+        try {
+            String code = findPasswordDTO.getCode();
+            String resetToken = memberService.findMemberPw(findPasswordDTO, code);
+            return new ResponseEntity<>(Collections.singletonMap("resetToken", resetToken), HttpStatus.OK);
+        } catch (InvalidVerificationCodeException e) {
+            return new ResponseEntity<>("Invalid verification code", HttpStatus.BAD_REQUEST);
+        } catch (MemberNotFound e) {
+            return new ResponseEntity<>("Member not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/reset-pw")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
+        try {
+            memberService.resetPassword(resetPasswordDTO);
+            return new ResponseEntity<>("Password reset successful", HttpStatus.OK);
+        } catch (InvalidVerificationCodeException e) {
+            return new ResponseEntity<>("Invalid reset token", HttpStatus.BAD_REQUEST);
+        } catch (MemberNotFound e) {
+            return new ResponseEntity<>("Member not found", HttpStatus.NOT_FOUND);
+        }
     }
 
 //    // 이메일 인증 요청
