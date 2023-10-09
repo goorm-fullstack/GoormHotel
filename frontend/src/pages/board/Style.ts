@@ -199,6 +199,12 @@ export const TableRead = styled.table`
         margin-top: 12px;
         line-height: 1.4;
       }
+      & .modify-input{
+        margin-right: 20px;
+      }
+      & .modify{
+        margin-right: 5px;
+      }
     }
   }
 `;

@@ -5,6 +5,7 @@ import { PageTitle, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
 import queryString from "query-string";
+import e from 'express';
 
 const BoardRead = () => {
   const loc = useLocation();
@@ -20,8 +21,11 @@ const BoardRead = () => {
   const [reply, setReply] = useState<any[]>([]);
   const [replyWriter, setReplyWriter] = useState('');
   const [replyContent, setReplyContent] = useState('');
+  const [replyWriterModify, setReplyWriterModify] = useState('');
+  const [replyContentModify, setReplyContentModify] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [editedReplyContent, setEditedReplyContent] = useState('');
+  const [editingReplyId, setEditingReplyId] = useState(0); // 수정 중인 댓글 ID를 추적
 
   const parseBoardContent = (content: any) => {
     const parser = new DOMParser();
@@ -120,22 +124,28 @@ const BoardRead = () => {
         });
   };
 
-  const handleUpdate = (replyId: number) => {
+  const handleUpdate = (replyId: any) => {
     setIsEditing(true);
-    const replyToEdit = reply.find((r) => r.replyId === replyId);
+    setEditingReplyId(replyId);
+    const replyToEdit = reply.find((replyItem) => replyItem.replyId === replyId);
     if (replyToEdit) {
-      setEditedReplyContent(replyToEdit.replyContent);
+      setReplyContentModify(replyToEdit.replyContent);
+      setReplyWriterModify(replyToEdit.replyWriter);
     }
   };
 
   const handleCancelUpdate = () => {
     setIsEditing(false);
-    setEditedReplyContent('');
   };
 
-  const handleSaveUpdate = (replyId: number) => {
+  const handleSaveUpdate = (replyId: number, e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = {
+      replyWriter: replyWriterModify,
+      replyContent: replyContentModify,
+    }
     axios
-        .put(`/reply/${replyId}`, { replyContent: editedReplyContent })
+        .put(`/reply/${replyId}`, data)
         .then((response) => {
           console.log('댓글이 수정되었습니다.');
           setIsEditing(false);
@@ -162,52 +172,6 @@ const BoardRead = () => {
     } catch (error) {
       console.error('댓글 작성에 실패했습니다.', error);
     }
-  };
-
-  const Editing = ({ replyId }: { replyId: number }) => {
-    return (
-        <div>
-          {isEditing ? (
-              <>
-                <button
-                    type="button"
-                    onClick={() => handleSaveUpdate(replyId)}
-                >
-                  저장
-                </button>
-                <button
-                    type="button"
-                    onClick={handleCancelUpdate}
-                >
-                  취소
-                </button>
-              </>
-          ) : (
-              <>
-                <button
-                    type="button"
-                    onClick={() => handleUpdate(replyId)}
-                >
-                  수정
-                </button>
-                <button
-                    type="button"
-                    onClick={() => handleDelete(replyId)}
-                >
-                  삭제
-                </button>
-              </>
-          )}
-          {isEditing ? (
-              <textarea
-                  value={editedReplyContent}
-                  onChange={(e) => setEditedReplyContent(e.target.value)}
-              ></textarea>
-          ) : (
-              <p>{reply.find((r) => r.replyId === replyId)?.replyContent}</p>
-          )}
-        </div>
-    );
   };
 
   return (
@@ -269,58 +233,55 @@ const BoardRead = () => {
               <tr className="commentslist">
                 <td>
                   <ul>
-                    {reply.map((replyItem, index) => (
+                    {reply.length === 0 && (
+                      <li>
+                        <div className="cwinfo">
+                          <strong>작성된 댓글이 없습니다.</strong>
+                        </div>
+                      </li>
+                    )}
+                    {reply.length > 0 &&
+                      reply.map((replyItem, index) => (
                         <li key={index}>
-                          <p>
-                            {replyItem.replyWriter}
-                            <span className="date">{replyItem.replyDate}</span>
-                            <Editing replyId={replyItem.replyId} />
-                          </p>
+                          <div className="cwinfo">
+                            <strong>{replyItem.replyWriter}</strong>
+                            <span className="date">{`${replyItem.replyWriteDate[0]}.${replyItem.replyWriteDate[1] < 10 ? '0' : ''}${
+                              replyItem.replyWriteDate[1]
+                            }.${
+                              replyItem.replyWriteDate[2] < 10 ? '0' : ''
+                            }${replyItem.replyWriteDate[2]}`}</span>
+                            <button type="button" className="modify" onClick={() => handleUpdate(replyItem.replyId)}>
+                              수정
+                            </button>
+                            <button type="button" className="delete" onClick={() => handleDelete(replyItem.replyId)}>
+                              삭제
+                            </button>
+                          </div>
+                          {editingReplyId === replyItem.replyId && isEditing ? (
+                            <form onSubmit={(e) => handleSaveUpdate(replyItem.replyId, e)}>
+                              <input
+                                className="modify-input"
+                                type="text"
+                                defaultValue={replyWriterModify}
+                                onChange={(e) => setReplyWriterModify(e.target.value)}
+                              />
+                              <input
+                                className="modify-input"
+                                defaultValue={replyContentModify}
+                                onChange={(e) => setReplyContentModify(e.target.value)}
+                              />
+                              <button type="submit" className="modify">
+                                저장
+                              </button>
+                              <button type="button" className="delete" onClick={handleCancelUpdate}>
+                                취소
+                              </button>
+                            </form>
+                          ) : (
+                            <p>{replyItem.replyContent}</p>
+                          )}
                         </li>
-                    ))}
-                    <li>
-                      <div className="cwinfo">
-                        <strong>이름이름</strong>
-                        <span className="date">2023.09.01</span>
-                        <button type="button" className="modify">
-                          수정
-                        </button>
-                        <button type="button" className="delete">
-                          삭제
-                        </button>
-                      </div>
-                      <p>댓글 내용내용</p>
-                    </li>
-                    <li>
-                      <div className="cwinfo">
-                        <strong>이름이름</strong>
-                        <span className="date">2023.09.01</span>
-                        <button type="button" className="modify">
-                          수정
-                        </button>
-                        <button type="button" className="delete">
-                          삭제
-                        </button>
-                      </div>
-                      <p>댓글 내용내용</p>
-                    </li>
-                    <li>
-                      <div className="cwinfo">
-                        <strong>이름이름</strong>
-                        <span className="date">2023.09.01</span>
-                        <button type="button" className="modify">
-                          수정
-                        </button>
-                        <button type="button" className="delete">
-                          삭제
-                        </button>
-                      </div>
-                      <p>
-                        댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글
-                        내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글
-                        내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용
-                      </p>
-                    </li>
+                      ))}
                   </ul>
                 </td>
               </tr>
