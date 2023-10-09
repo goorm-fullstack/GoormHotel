@@ -2,7 +2,7 @@ import axios from 'axios';
 
 async function getChatRoomInfo(name: string) : Promise<string> {
   return new Promise(async (resolve, reject) => {
-    const baseURL = 'http://127.0.0.1:8080/chat';
+    const baseURL = `http://${process.env.REACT_APP_API_URL}/chat`;
     let data = {
       name: name,
     };
