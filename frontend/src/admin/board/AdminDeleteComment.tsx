@@ -7,25 +7,7 @@ import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
 import { BoardData } from './AdminBoard';
 import { useNavigate } from 'react-router-dom';
-
-const tableData = [
-  {
-    id: 1,
-    board: '이용후기',
-    post: '게시글 제목111',
-    content: '첫 번째 댓글입니다.',
-    author: { name: '홍구름', id: 'memberId1' },
-    date: '2023.09.13',
-  },
-  {
-    id: 2,
-    board: '공지사항',
-    post: '게시글 제목222',
-    content: '두 번째 댓글입니다.',
-    author: { name: '홍구름', id: 'memberId2' },
-    date: '2023.09.14',
-  },
-];
+import { boardTitleList } from './AdminBoard';
 
 const AdminDeleteComment = () => {
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
@@ -34,6 +16,7 @@ const AdminDeleteComment = () => {
   const [totalPage, setTotalPage] = useState<number>(0);
   const [totalData, setTotalData] = useState<number>(0);
   const navigate = useNavigate();
+  const [parsedContent, setParsedContent] = useState<JSX.Element[][]>([]);
   const authItem = localStorage.getItem("auth");
 
   useEffect(() => {
@@ -106,6 +89,26 @@ const AdminDeleteComment = () => {
     });
   };
 
+  const parseBoardContent = (content: any) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(content, 'text/html');
+    const paragraphs = Array.from(doc.querySelectorAll('p'));
+
+    return paragraphs.map((p) => p.textContent);
+  };
+
+  useEffect(() => {
+    const parsedContentArray = board.map(item =>
+      parseBoardContent(item.boardContent).map((paragraph, index) => <p key={index}>{paragraph}</p>)
+    );
+    const parsedTextArray = parsedContentArray.map((contentArray) =>
+      contentArray.map((paragraph, index) => paragraph.props.children)
+    );
+    setParsedContent(parsedTextArray);
+  }, [board]);
+
+  console.log(typeof parsedContent[0]?.[0]);
+
   if(authItem && authItem.includes("AUTH_C")) {
   return (
     <AdminLayout subMenus="board">
@@ -153,8 +156,8 @@ const AdminDeleteComment = () => {
                 </td>
               </tr>
             )}
-            {board &&
-            board.map((board) => (
+            {parsedContent.length > 0 && board &&
+            board.map((board, index) => (
               <tr key={board.boardId}>
                 <td className="center">
                   <InputCheckbox
@@ -163,10 +166,10 @@ const AdminDeleteComment = () => {
                     onChange={() => handleCheckboxChange(board.boardId)}
                   />
                 </td>
-                <td className="center">{board.boardId}</td>
+                <td className="center">{totalData - index}</td>
                 <td className="center">{`${board.boardTitle}`}</td>
                 <td className="center">
-                  <S.LinkStyle to={`/admin/member/${board.boardContent}`}>{board.boardContent}</S.LinkStyle>
+                  <S.LinkStyle to={`/${`board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.title}?boardId=${board.boardId}`}`}>{parsedContent[index][0]}</S.LinkStyle>
                 </td>
                 <td className="center">
                   {board.boardWriter}

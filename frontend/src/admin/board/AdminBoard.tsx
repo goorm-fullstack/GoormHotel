@@ -43,7 +43,7 @@ export interface ReportData{
   reportResult: string;
 }
 
-const boardTitleList = [
+export const boardTitleList = [
   {board: '공지사항', english: 'notice'},
   {board: '문의하기', english: 'qna'},
   {board: '이용후기', english: 'review'},
