@@ -123,13 +123,16 @@ export const TableRead = styled.table`
     font-size: ${(props) => props.theme.font.sizes};
   }
   td.titlew p span {
-    margin-right: 8px;
+    margin-right: 20px;
     color: ${(props) => props.theme.colors.graylight};
   }
   td.titlew .title {
     font-size: ${(props) => props.theme.font.sizesl};
     color: ${(props) => props.theme.colors.charcoal};
     margin-bottom: 14px;
+  }
+  .fileb{
+    text-decoration: underline;
   }
   td.titlew {
     background: ${(props) => props.theme.colors.graybg};
@@ -147,7 +150,7 @@ export const TableRead = styled.table`
         height: 100px;
       }
 
-      button {
+      button[type="submit"] {
         background: ${(props) => props.theme.colors.navy};
         color: white;
         width: 120px;

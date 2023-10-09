@@ -188,9 +188,6 @@ const BoardRead = () => {
                     <span>{boardData ? boardData.category : ''}</span>
                     {boardData ? boardData.title : ''}
                   </p>
-                  <button type="button" onClick={handleDownLoad}>
-                    {file}
-                  </button>
                   {(() => {
                     if (board !== 'notice' && boardData) {
                       return (
@@ -203,6 +200,13 @@ const BoardRead = () => {
                       );
                     }
                   })()}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <button className='fileb' type="button" onClick={handleDownLoad}>
+                    첨부파일 : {file}
+                  </button>
                 </td>
               </tr>
               <tr className="contents">
