@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import * as S from './Style';
 import {
-  commonContainerStyle,
   PageTitle,
   InputCheckbox,
   CheckLabel,
@@ -16,62 +15,6 @@ import AgreementContents from '../../components/Agreement/AgreementCon';
 import PrivacyContents from '../../components/Agreement/PrivacyCon';
 import Instance from "../../utils/api/axiosInstance";
 import {useNavigate} from "react-router-dom";
-
-const Container = styled(commonContainerStyle)``;
-
-const Wrapper = styled.div`
-  display: flex;
-
-  & > div {
-    width: 50%;
-  }
-`;
-
-const LeftWrapper = styled.div`
-  padding-right: 80px;
-  border-right: 1px solid ${(props) => props.theme.colors.grayborder};
-
-  & > div {
-    margin-bottom: 30px;
-
-    label {
-      color: ${(props) => props.theme.colors.graydark};
-    }
-  }
-`;
-
-export const AgreementText = styled.div`
-  font-size: ${(props) => props.theme.font.sizexs};
-  color: ${(props) => props.theme.colors.graydark};
-  height: 200px;
-  border: 1px solid ${(props) => props.theme.colors.grayborder};
-  padding: 20px;
-  margin-bottom: 16px;
-  overflow-y: scroll;
-  line-height: 1.6;
-  background: ${(props) => props.theme.colors.graybg};
-
-  &.forreserv {
-    height: 130px;
-  }
-`;
-
-const RightWrapper = styled.div`
-  padding-left: 80px;
-
-  input {
-    height: 50px;
-    padding-left: 18px;
-    margin-top: 10px;
-    display: block;
-  }
-  input:first-child {
-    margin-top: 0;
-  }
-  & form > input {
-    width: 100%;
-  }
-`;
 
 const Signup = () => {
   const [termsAgree, setTermsAgree] = useState(false);
@@ -158,10 +101,10 @@ const Signup = () => {
 
   return (
     <>
-      <Container>
+      <S.Container>
         <PageTitle>회원가입</PageTitle>
-        <Wrapper>
-          <LeftWrapper>
+        <S.Signup>
+          <div className="left">
             <ContentsTitleXSmall>약관 동의</ContentsTitleXSmall>
             <div>
               <RequiredTitle>
@@ -173,9 +116,9 @@ const Signup = () => {
                   동의합니다
                 </CheckLabel>
               </RequiredTitle>
-              <AgreementText>
+              <S.AgreementText>
                 <AgreementContents />
-              </AgreementText>
+              </S.AgreementText>
             </div>
             <div>
               <RequiredTitle>
@@ -187,12 +130,12 @@ const Signup = () => {
                   동의합니다
                 </CheckLabel>
               </RequiredTitle>
-              <AgreementText>
+              <S.AgreementText>
                 <PrivacyContents />
-              </AgreementText>
+              </S.AgreementText>
             </div>
-          </LeftWrapper>
-          <RightWrapper>
+          </div>
+          <div className="right">
             <ContentsTitleXSmall>회원정보 입력</ContentsTitleXSmall>
             <form>
               <input type="text" placeholder="아이디" name="memberId" value={formData.memberId} onChange={handleChange} required />
@@ -227,9 +170,9 @@ const Signup = () => {
                 </SubmitBtn>
               </BtnWrapper>
             </form>
-          </RightWrapper>
-        </Wrapper>
-      </Container>
+          </div>
+        </S.Signup>
+      </S.Container>
     </>
   );
 };

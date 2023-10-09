@@ -1,14 +1,11 @@
 import React, { useRef, useState } from 'react';
-import { styled } from 'styled-components';
+import * as S from './Style';
 import { useParams, useNavigate } from 'react-router-dom';
-import { commonContainerStyle, PageTitle, BtnWrapper, SubmitBtn, commonTable } from '../../Style/commonStyles';
+import { PageTitle, BtnWrapper, SubmitBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
 import { ItemThumbnail } from '../../admin/item/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
-
-const Container = styled(commonContainerStyle)``;
-const Table = styled(commonTable)``;
 
 type FormData = {
   [key: string]: string;
@@ -49,7 +46,7 @@ const BoardWrite = () => {
     if (file instanceof Blob) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-  
+
       reader.onloadend = () => {
         setImgFile(reader.result as string);
       };
@@ -89,11 +86,11 @@ const BoardWrite = () => {
       return;
     }
 
-      const form = new FormData();
-      form.append('multipartFile', imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '');
-      form.append('file', fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '');
-      formData.boardContent = boardContent;
-      console.log(formData.category);
+    const form = new FormData();
+    form.append('multipartFile', imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '');
+    form.append('file', fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '');
+    formData.boardContent = boardContent;
+    console.log(formData.category);
 
     Object.keys(formData).forEach((key) => {
       form.append(key, formData[key]);
@@ -120,7 +117,7 @@ const BoardWrite = () => {
   return (
     <>
       <SubHeader kind="board" />
-      <Container>
+      <S.Container>
         {(() => {
           switch (board) {
             case 'notice':
@@ -135,22 +132,22 @@ const BoardWrite = () => {
         })()}
         <div>
           <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <Table className="horizontal">
+            <S.Table className="horizontal">
               <tr>
-                <th style={{width: '240px'}}>제목</th>
+                <th style={{ width: '240px' }}>제목</th>
                 <td>
                   <input type="text" className="title long" name="title" value={formData.title} onChange={handleChange} required />
                 </td>
               </tr>
               <tr>
-                <th style={{width: '240px'}}>카테고리</th>
+                <th style={{ width: '240px' }}>카테고리</th>
                 <td>
                   {(() => {
                     switch (board) {
                       case 'qna':
                         return (
                           <select name="category" value={formData.category} onChange={handleChange}>
-                            <option value=''>선택</option>
+                            <option value="">선택</option>
                             <option value="문의1">문의1</option>
                             <option value="문의2">문의2</option>
                           </select>
@@ -158,7 +155,7 @@ const BoardWrite = () => {
                       case 'review':
                         return (
                           <select name="category" value={formData.category} onChange={handleChange}>
-                            <option value=''>선택</option>
+                            <option value="">선택</option>
                             <option value="객실">객실</option>
                             <option value="다이닝">다이닝</option>
                           </select>
@@ -182,30 +179,33 @@ const BoardWrite = () => {
                 </td>
               </tr>
               <tr className="conbtm">
-                {board === 'review' ? 
-                (<>
-                <th>썸네일 이미지</th>
-                <td>
-                  <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
-                  {imgFile !== '' ? <ItemThumbnail src={imgFile} alt="후기 이미지" /> : <ItemThumbnail style={{ display: 'none' }} />}
-                </td>
-                </>)
-                :
-                (<>
-                <th>첨부파일</th>
-                <td>
-                  <input type="file" accept="*" ref={fileRef} />
-                </td>
-                </>)}
+                {board === 'review' ? (
+                  <>
+                    <th>썸네일 이미지</th>
+                    <td>
+                      <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required/>
+                      {imgFile !== '' ? <ItemThumbnail src={imgFile} alt="후기 이미지" /> : <ItemThumbnail style={{ display: 'none' }} />}
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <th>첨부파일</th>
+                    <td>
+                      <input type="file" accept="*" ref={fileRef} />
+                    </td>
+                  </>
+                )}
               </tr>
-            </Table>
+            </S.Table>
             <BtnWrapper className="center double mt40">
               <SubmitBtn type="submit">작성하기</SubmitBtn>
-              <SubmitBtn type='button' onClick={() => navigate(-1)}>취소</SubmitBtn>
+              <SubmitBtn type="button" onClick={() => navigate(-1)}>
+                취소
+              </SubmitBtn>
             </BtnWrapper>
           </form>
         </div>
-      </Container>
+      </S.Container>
     </>
   );
 };

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Left, Right, Wrapper } from './ReservationPage';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { styled } from 'styled-components';
+import * as S from './Style';
 import axios from 'axios';
 import {
-  commonContainerStyle,
   PageTitle,
   ContentsTitleXSmall,
   CheckLabel,
@@ -18,214 +16,8 @@ import Paging from '../../components/common/Paging/Paging';
 import { numberWithCommas } from '../../utils/function/comma';
 import { DiningData, RoomData } from '../../admin/item/AdminItemList';
 
-const Container = styled(commonContainerStyle)``;
-
-const SelectWrapper = styled.div`
-  margin-bottom: 40px;
-
-  .typewrapper {
-    background-color: ${(props) => props.theme.colors.graybg};
-    display: flex;
-    padding: 21px 20px;
-    gap: 0 20px;
-  }
-
-  .typewrapper label {
-    color: ${(props) => props.theme.colors.blacklight};
-  }
-
-  .categorywrap {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 20px;
-
-    p {
-      font-weight: 500;
-      font-size: ${(props) => props.theme.font.sizexs};
-    }
-
-    strong {
-      color: ${(props) => props.theme.colors.goldhover};
-    }
-  }
-`;
-
-const RoomItemWrapper = styled.ul`
-  display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-  gap: 20px 16px;
-`;
-
-const RoomItem = styled.li`
-  width: calc((100% / 3) - (32px / 3));
-  border: 1px solid ${(props) => props.theme.colors.graylightborder};
-
-  .imgwrap {
-    width: 100%;
-    height: 165px;
-    background-size: cover;
-  }
-`;
-
-const RoomItemInfo = styled.div`
-  width: 100%;
-  padding: 30px;
-  letter-spacing: -0.02em;
-
-  h4 {
-    font-size: ${(props) => props.theme.font.sizem};
-    font-weight: 500;
-    color: ${(props) => props.theme.colors.charcoal};
-    margin-bottom: 10px;
-  }
-
-  p {
-    color: ${(props) => props.theme.colors.graydark};
-    font-size: ${(props) => props.theme.font.sizexs};
-
-    span::before {
-      content: '';
-      width: 1px;
-      height: 9px;
-      background: ${(props) => props.theme.colors.grayborder};
-      display: inline-block;
-      margin: 0 8px;
-    }
-  }
-
-  p.price {
-    color: ${(props) => props.theme.colors.blacklight};
-    font-weight: 500;
-    margin: 15px 0 30px;
-    letter-spacing: -0.02em;
-
-    strong {
-      font-size: ${(props) => props.theme.font.sizem};
-    }
-  }
-
-  h5 {
-    font-size: ${(props) => props.theme.font.sizexs};
-    color: ${(props) => props.theme.colors.blacklight};
-    font-weight: 500;
-    margin-bottom: 10px;
-  }
-
-  table {
-    width: 100%;
-  }
-
-  th,
-  td {
-    color: ${(props) => props.theme.colors.graydark};
-    font-size: ${(props) => props.theme.font.sizexs};
-    line-height: 1.5;
-  }
-
-  th {
-    width: 50%;
-  }
-
-  td {
-    text-align: right;
-  }
-
-  button {
-    border-color: ${(props) => props.theme.colors.graylightborder};
-  }
-`;
-
-const NoItem = styled.div`
-  width: 293px;
-  height: 550px;
-  text-align: center;
-  display: table-cell;
-  vertical-align: middle;
-  line-height: 1.6;
-  color: ${(props) => props.theme.colors.graylight};
-  font-size: ${(props) => props.theme.font.sizes};
-  letter-spacing: -0.02em;
-
-  svg {
-    width: 100px;
-  }
-`;
-
-const SelectedItem = styled.div`
-  .imgwrap {
-    width: 100%;
-    height: 165px;
-    background-size: cover;
-  }
-
-  h4 {
-    font-weight: 500;
-    color: ${(props) => props.theme.colors.goldhover};
-    padding: 21px 20px;
-    border-top: 1px solid ${(props) => props.theme.colors.grayborder};
-    border-bottom: 1px solid ${(props) => props.theme.colors.grayborder};
-    margin-bottom: 20px;
-    background: white;
-    position: relative;
-  }
-
-  h5 {
-    font-size: ${(props) => props.theme.font.sizes};
-    color: ${(props) => props.theme.colors.blacklight};
-    font-weight: 500;
-    margin-top: 30px;
-    padding: 0 20px;
-  }
-
-  button {
-    position: absolute;
-    top: 17px;
-    right: 20px;
-  }
-
-  p {
-    padding: 0 20px;
-    line-height: 1.5;
-    font-size: ${(props) => props.theme.font.sizes};
-    color: ${(props) => props.theme.colors.graydark};
-  }
-
-  table {
-    margin-top: 20px;
-    width: 100%;
-
-    th,
-    td {
-      line-height: 1.5;
-      font-size: ${(props) => props.theme.font.sizes};
-      color: ${(props) => props.theme.colors.graydark};
-    }
-
-    th {
-      padding-left: 20px;
-      text-align: left;
-    }
-
-    td {
-      padding-right: 20px;
-      text-align: right;
-    }
-  }
-`;
-
-const SelectItem = styled.div`
-  width: 100%;
-  height: 552px;
-  border: 1px solid ${(props) => props.theme.colors.grayborder};
-  border-radius: 5px;
-  background: ${(props) => props.theme.colors.graybg};
-  overflow: hidden;
-`;
-
 const productCategories = [
-  {korean: '전체', english: ''},
+  { korean: '전체', english: '' },
   { korean: '디럭스', english: 'deluxe' },
   { korean: '스위트', english: 'sweet' },
   { korean: '패밀리', english: 'family' },
@@ -233,7 +25,7 @@ const productCategories = [
 ];
 
 const diningCategories = [
-  {korean: '전체', english: ''},
+  { korean: '전체', english: '' },
   { korean: '레스토랑', english: 'restaurant' },
   { korean: '룸서비스', english: 'roomService' },
   { korean: '바&라운지', english: 'barRounge' },
@@ -269,7 +61,7 @@ type ProductType1 = {
   bed: string;
   capacity: number;
   description: string;
-}
+};
 
 type ProductType2 = {
   imageUrl: string;
@@ -285,7 +77,7 @@ type ProductType2 = {
   useTime: string;
   capacity: number;
   description: string;
-}
+};
 
 type SelectProduct = ProductType1 | ProductType2;
 
@@ -301,7 +93,7 @@ const ReservationItem = () => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [totalData, setTotalData] = useState<number>(0);
   const [totalPage, setTotalPage] = useState<number>(0);
-  const {page} = useParams<{page: string}>();
+  const { page } = useParams<{ page: string }>();
 
   // 서버에 저장된 이미지 요청
   useEffect(() => {
@@ -360,51 +152,51 @@ const ReservationItem = () => {
         });
       }
     } else {
-      if(selectedCategory !== ''){
+      if (selectedCategory !== '') {
         axios
-        .get(`/category?page=${currentPage}`, {
-          params: {
-            type: selectedType[0],
-            typeDetail: selectedCategory,
-          },
-        })
-        .then((response) => {
-          const totalPages = parseInt(response.headers['totalpages'], 10);
-          const totalData = parseInt(response.headers['totaldata'], 10);
-          setProducts(response.data);
-          setTotalData(totalData);
-          setTotalPage(totalPages);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-      }else{
+          .get(`/category?page=${currentPage}`, {
+            params: {
+              type: selectedType[0],
+              typeDetail: selectedCategory,
+            },
+          })
+          .then((response) => {
+            const totalPages = parseInt(response.headers['totalpages'], 10);
+            const totalData = parseInt(response.headers['totaldata'], 10);
+            setProducts(response.data);
+            setTotalData(totalData);
+            setTotalPage(totalPages);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
         axios
-        .get(`/category?page=${currentPage}`, {
-          params: {
-            type: selectedType[0],
-          },
-        })
-        .then((response) => {
-          const totalPages = parseInt(response.headers['totalpages'], 10);
-          const totalData = parseInt(response.headers['totaldata'], 10);
-          setProducts(response.data);
-          setTotalData(totalData);
-          setTotalPage(totalPages);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+          .get(`/category?page=${currentPage}`, {
+            params: {
+              type: selectedType[0],
+            },
+          })
+          .then((response) => {
+            const totalPages = parseInt(response.headers['totalpages'], 10);
+            const totalData = parseInt(response.headers['totaldata'], 10);
+            setProducts(response.data);
+            setTotalData(totalData);
+            setTotalPage(totalPages);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     }
   }, [selectedType, selectedCategory]);
 
   useEffect(() => {
-    if(location.search){
+    if (location.search) {
       const type = location.search.replace('?type=', '');
       setSelectedType([`${type}`]);
     }
-  }, [])
+  }, []);
 
   const handleReservationClick = (productInfo: RoomData | DiningData, imageUrl: string) => {
     setSelectedProduct({ ...productInfo, imageUrl });
@@ -451,12 +243,12 @@ const ReservationItem = () => {
 
   return (
     <div>
-      <Container>
+      <S.Container>
         <PageTitle>스페셜오퍼</PageTitle>
-        <Wrapper>
-          <Left>
+        <S.Wrapper>
+          <S.Left>
             <ContentsTitleXSmall>예약 상품 선택</ContentsTitleXSmall>
-            <SelectWrapper>
+            <S.SelectWrapper>
               <div className="typewrapper">
                 {productTypes.map((type, index) => (
                   <CheckLabel key={index} htmlFor={type.id}>
@@ -496,19 +288,19 @@ const ReservationItem = () => {
                   }
                 </select>
               </div>
-            </SelectWrapper>
-            <RoomItemWrapper>
-              {products.length === 0 && <div>등록된 상품이 없습니다.</div>}
+            </S.SelectWrapper>
+            <S.RoomItemWrapper>
+              {products.length === 0 && <div className="empty">등록된 상품이 없습니다.</div>}
               {products &&
                 products.map((product, index) => (
-                  <RoomItem key={index}>
+                  <S.RoomItem key={index}>
                     <div
                       className="imgwrap"
                       style={{
                         backgroundImage: `url(${imageUrls[index] || ''})`,
                       }}
                     />
-                    <RoomItemInfo>
+                    <S.RoomItemInfo>
                       <h4>{product.name}</h4>
                       <p>
                         {product.type === 'room' ? '객실' : '다이닝'}
@@ -535,19 +327,19 @@ const ReservationItem = () => {
                       <BtnWrapper className="full mt30">
                         <NormalBtn onClick={() => handleReservationClick(product, imageUrls[index])}>상품 담기(예약)</NormalBtn>
                       </BtnWrapper>
-                    </RoomItemInfo>
-                  </RoomItem>
+                    </S.RoomItemInfo>
+                  </S.RoomItem>
                 ))}
-            </RoomItemWrapper>
+            </S.RoomItemWrapper>
             <Paging totalPage={totalPage} />
-          </Left>
-          <Right>
+          </S.Left>
+          <S.Right>
             <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
-            <SelectItem>
+            <S.SelectItem>
               {(() => {
                 if (selectedProduct) {
                   return (
-                    <SelectedItem>
+                    <S.SelectedItem>
                       <div
                         className="imgwrap"
                         style={{
@@ -587,11 +379,11 @@ const ReservationItem = () => {
                           </tr>
                         </tbody>
                       </table>
-                    </SelectedItem>
+                    </S.SelectedItem>
                   );
                 } else {
                   return (
-                    <NoItem>
+                    <S.NoItem>
                       <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
                         <rect fill="none" height="256" width="256" />
                         <path
@@ -615,11 +407,11 @@ const ReservationItem = () => {
                       </svg>
                       <br />
                       담긴 상품이 없습니다.
-                    </NoItem>
+                    </S.NoItem>
                   );
                 }
               })()}
-            </SelectItem>
+            </S.SelectItem>
             <BtnWrapper className="full mt20">
               <SubmitLinkBtn
                 className="shadow"
@@ -631,9 +423,9 @@ const ReservationItem = () => {
                 예약 정보 입력하기
               </SubmitLinkBtn>
             </BtnWrapper>
-          </Right>
-        </Wrapper>
-      </Container>
+          </S.Right>
+        </S.Wrapper>
+      </S.Container>
     </div>
   );
 };

@@ -2,69 +2,13 @@ import React, { useEffect, useState, useRef } from 'react';
 import { styled } from 'styled-components';
 import { useParams } from 'react-router-dom'; // Remove duplicate import
 import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn, commonTable, SubmitBtn } from '../../Style/commonStyles';
+import * as S from './Style';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
 import Instance from '../../utils/api/axiosInstance';
 import { Link } from 'react-router-dom';
-import * as S from './Style';
 import { Type, TypeDetail } from '../../components/common/Search/Search';
-
-export const Container = styled(commonContainerStyle)``;
-
-const IsReply = styled.span`
-  display: inline-block;
-  background: ${(props) => props.theme.colors.gold};
-  color: white;
-  font-size: ${(props) => props.theme.font.sizexxxs};
-  padding: 0 7px;
-  border-radius: 8px;
-  height: 14px;
-  line-height: 14px;
-  margin-right: 10px;
-  vertical-align: middle;
-`;
-
-const BoardGallery = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 40px 20px;
-
-  li {
-    width: 380px;
-    line-height: 1.4;
-  }
-
-  li .thumbnail {
-    background: ${(props) => props.theme.colors.graybg};
-    height: 240px;
-    margin-bottom: 16px;
-
-    img {
-      min-width: 100%;
-      max-width: 100%;
-      min-height: 100%;
-      max-height: 100%;
-      object-fit: cover;
-    }
-  }
-
-  li .writer {
-    margin: 6px 0 2px;
-  }
-  li .writer,
-  li .date {
-    font-size: ${(props) => props.theme.font.sizexs};
-    color: ${(props) => props.theme.colors.graylight};
-  }
-`;
-
-const WriteBtnWrapper = styled(BtnWrapper)`
-  margin-top: -70px;
-  margin-bottom: 20px;
-`;
-
-const Table = styled(commonTable)``;
 
 const CustomerSupport = () => {
   // 대분류, 소분류 지정 배열
@@ -170,14 +114,14 @@ const CustomerSupport = () => {
   }, [board, typeDetail, keyword]);
 
   useEffect(() => {
-    if(board === 'review'){
+    if (board === 'review') {
       boards.map((board) => {
         GetImageUrl(board.boardId);
       });
     }
   }, [boards]);
 
-  const GetImageUrl = (boardId:number) => {
+  const GetImageUrl = (boardId: number) => {
     Instance.get(`/boards/image/${boardId}`, {
       responseType: 'arraybuffer',
     })
@@ -258,7 +202,7 @@ const CustomerSupport = () => {
   return (
       <>
         <SubHeader kind="board" />
-        <Container>
+        <S.Container>
           {(() => {
             switch (board) {
               case 'notice':
@@ -275,16 +219,16 @@ const CustomerSupport = () => {
             {(() => {
               if (board !== 'notice') {
                 return (
-                    <WriteBtnWrapper className="right">
+                    <S.WriteBtnWrapper className="right">
                       <LinkBtn to={`/board/` + board + `/write`}>작성하기</LinkBtn>
-                    </WriteBtnWrapper>
+                    </S.WriteBtnWrapper>
                 );
               }
             })()}
             {(() => {
               if (board === 'review') {
                 return (
-                    <BoardGallery>
+                    <S.BoardGallery>
                       {/** loop */}
                       {boards.length === 0 && (
                           <li key="empty" className="empty">
@@ -294,7 +238,7 @@ const CustomerSupport = () => {
                       {boards && boards.map((item) => (
                           <li key={item.boardId}>
                             <div className="thumbnail">
-                              <Link to={`/board/${board}/detail/${item.boardId}`}>
+                              <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>
                                 {imageUrl.find((image) => image.boardId === item.boardId) && (
                                     <img
                                         src={imageUrl.find((image) => image.boardId === item.boardId).imageUrl}
@@ -304,8 +248,8 @@ const CustomerSupport = () => {
                               </Link>
                             </div>
                             <p className="title">
-                              <Link to={`/board/${board}/detail/${item.boardId}`}>{item.title}</Link>
-                            </p>
+                                <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</Link>
+                                </p>
                             <p className="writer">{item.boardWriter}</p>
                             <p className="date">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${
                                 item.boardWriteDate[1]
@@ -315,11 +259,11 @@ const CustomerSupport = () => {
                           </li>
                       ))}
                       {/** // loop */}
-                    </BoardGallery>
+                    </S.BoardGallery>
                 );
               } else {
                 return (
-                    <Table className="userpage">
+                    <S.Table className="userpage">
                       <colgroup>
                         <col width="110px" />
                         <col width="180px" />
@@ -350,7 +294,8 @@ const CustomerSupport = () => {
                             <td>
                               {/* <IsReply>답글</IsReply> */}
                               {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
-                              <Link to={`/board/${board}/detail/${item.boardId}`}>{item.title}</Link>
+                                <Link
+                                    to={{pathname: `/board/${board}/detail/${item.title}`,search: `boardId=${item.boardId}`}}>{item.title}</Link>
                             </td>
                             <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${
                                 item.boardWriteDate[1]
@@ -361,7 +306,7 @@ const CustomerSupport = () => {
                       ))}
                       {/** // loop */}
                       </tbody>
-                    </Table>
+                    </S.Table>
                 );
               }
             })()}
@@ -378,7 +323,7 @@ const CustomerSupport = () => {
               </SubmitBtn>
             </BtnWrapper>
           </S.SearchHeader>
-        </Container>
+        </S.Container>
       </>
   );
 };

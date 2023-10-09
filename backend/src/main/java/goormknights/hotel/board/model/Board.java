@@ -59,6 +59,10 @@ public class Board {
     @Setter
     private LocalDateTime boardDeleteTime;      //게시글 삭제 날짜
 
+//    private Long groupId;      //첫 게시글 번호
+//
+//    private Long groupNum;      //그룹 속 번호
+
 //    @ManyToOne
 //    private Member member;
 
