@@ -9,9 +9,7 @@ import goormknights.hotel.giftcard.repository.GiftCardRepository;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.global.exception.InvalidVerificationCodeException;
-import goormknights.hotel.member.dto.request.FindMemberIdDTO;
-import goormknights.hotel.member.dto.request.MemberEdit;
-import goormknights.hotel.member.dto.request.SignupDTO;
+import goormknights.hotel.member.dto.request.*;
 import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.model.MemberEditor;
@@ -30,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -95,6 +94,28 @@ public class MemberService {
         member.edit(memberEditor);
     }
 
+    @Transactional
+    public void resetPassword(ResetPasswordDTO resetPasswordDTO) {
+        String resetToken = resetPasswordDTO.getResetToken();
+        String newPassword = resetPasswordDTO.getNewPassword();
+
+        String email = redisUtil.getData(resetToken);
+        if (email == null) {
+            throw new InvalidVerificationCodeException();
+        }
+
+        Optional<Member> memberOptional = memberRepository.findByEmail(email);
+        if (memberOptional.isEmpty()) {
+            throw new MemberNotFound();
+        }
+
+        Member member = memberOptional.get();
+        String encryptedPassword = passwordEncoder.encode(newPassword);
+        member.setPassword(encryptedPassword);
+
+        redisUtil.deleteData(resetToken);
+    }
+
     // 이메일 코드 인증
     public boolean verifyCode(String email, String code) {
         String savedCode = redisUtil.getData(email);
@@ -145,6 +166,22 @@ public class MemberService {
             throw new MemberNotFound();
         }
         return memberOptional.get().getMemberId();
+    }
+
+    // 비밀번호 찾기 최종
+    public String findMemberPw(FindPasswordDTO findPasswordDTO, String code) {
+        if (!verifyCode(findPasswordDTO.getEmail(), code)) {
+            throw new InvalidVerificationCodeException();
+        }
+
+        Optional<Member> memberOptional = memberRepository.findByEmail(findPasswordDTO.getEmail());
+        if (memberOptional.isEmpty()) {
+            throw new MemberNotFound();
+        }
+        String resetToken = UUID.randomUUID().toString();
+        // 레디스에 토큰과 이메일 저장
+        redisUtil.setDataExpire(resetToken, findPasswordDTO.getEmail(), 600); // 10분 동안 유효
+        return resetToken;
     }
 
 

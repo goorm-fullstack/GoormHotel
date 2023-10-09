@@ -35,8 +35,8 @@ public class VerificationService {
         Random random = new Random();
         StringBuilder key = new StringBuilder();
 
-        for (int i = 0; i < 8; i++) {
-            int index = random.nextInt(4);
+        for (int i = 0; i < 6; i++) {
+            int index = random.nextInt(3);
 
             switch (index) {
                 case 0 -> key.append((char) ((int) random.nextInt(26) + 97));

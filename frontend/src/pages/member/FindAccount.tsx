@@ -55,6 +55,10 @@ interface EmailResponseDto {
   code: string;
 }
 
+interface FindPasswordResponse {
+  resetToken: string;
+}
+
 const FindAccount = () => {
   const [findIdData, setFindIdData] = useState<FindMemberIdDTO>({ name: '', email: '' });
   const [findPasswordData, setFindPasswordData] = useState<FindPasswordDTO>({ memberId: '', name: '', email: '' });
@@ -80,9 +84,9 @@ const FindAccount = () => {
   const handleFindIdSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await Instance.post<String>('/find-id', findIdData);
+      const response = await Instance.post<FindMemberIdDTO>('/find-id', findIdData);
       if (response.status === 200) {
-        navigate(`/findid/result/${response.data}`, { state: { name: findIdData.name } });
+        navigate('/findid/result', { state: { memberId: response.data, name: findIdData.name } });
       }
     } catch (error: any) {
       if (error.response && error.response.status === 404) {
@@ -93,15 +97,36 @@ const FindAccount = () => {
     }
   };
 
-  const handleFindPasswordSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // 비밀번호 찾기 인증번호 요청
+  const handleFindPwCodeRequest = async () => {
     try {
-      const response = await Instance.post('/find-password', findPasswordData);
+      const response = await Instance.post<EmailResponseDto>('/api/mail/findpw-code', findPasswordData);
       if (response.status === 200) {
-        console.log("비밀번호 찾기 성공:", response.data);
+        alert('인증 코드가 발송되었습니다.');
       }
     } catch (error: any) {
-      console.error("비밀번호 찾기 실패:", error);
+      if (error.response && error.response.status === 404) {
+        alert('회원이 없습니다');
+      } else {
+        alert('에러 발생');
+      }
+    }
+  };
+
+  // 비밀번호 찾기 제출
+  const handleFindPwSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await Instance.post<FindPasswordResponse>('/find-pw', findPasswordData);
+      if (response.status === 200 && response.data.resetToken) {
+        navigate(`/findpw/result/${response.data.resetToken}`);
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        alert('회원이 없습니다');
+      } else {
+        alert('에러 발생');
+      }
     }
   };
 
@@ -146,16 +171,16 @@ const FindAccount = () => {
           </IdProcess>
           <PwProcess>
             <ContentsTitleXSmall>비밀번호 찾기</ContentsTitleXSmall>
-            <form id="find-pw" onSubmit={handleFindPasswordSubmit}>
+            <form id="find-pw" action="#" method="post">
               <input placeholder="아이디" name="memberId" required onChange={handlePasswordInputChange} />
               <input placeholder="이름" name="name" required onChange={handlePasswordInputChange} />
               <Auth>
                 <input placeholder="이메일" name="email" required onChange={handlePasswordInputChange} />
-                <AuthBtn>인증번호 요청</AuthBtn>
+                <AuthBtn onClick={handleFindPwCodeRequest}>인증번호 요청</AuthBtn>
               </Auth>
               <input placeholder="인증번호를 입력하세요." name="code" required onChange={handlePasswordInputChange} />
               <BtnWrapper className="mt20 full">
-                <SubmitBtn type="submit" form="find-pw">
+                <SubmitBtn onClick={handleFindPwSubmit}>
                   비밀번호 찾기
                 </SubmitBtn>
               </BtnWrapper>

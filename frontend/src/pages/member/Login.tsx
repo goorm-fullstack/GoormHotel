@@ -138,7 +138,7 @@ const Login: React.FC = () => {
       });
 
       if (response.status === 200) {
-        localStorage.clear();//일단 이전 기록을 좀 지우자~
+        localStorage.clear(); //일단 이전 기록을 좀 지우자~
         if(getCookie("role")==="BLACKED") {
           alert("블랙리스트 대상입니다. 자세한 문의 사항은 goormhotel@gmail.com으로 주시면 감사하겠습니다")
         } else {
@@ -193,6 +193,19 @@ const Login: React.FC = () => {
     }
   }, [isReservation]);
 
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+  };
+
+  const handleKakaoLogin = () => {
+    window.location.href = "http://localhost:8080/oauth2/authorization/kakao";
+  };
+
+  const handleNaverLogin = () => {
+    window.location.href = "http://localhost:8080/oauth2/authorization/naver";
+  };
+
+
   return (
     <>
       <Container>
@@ -234,13 +247,13 @@ const Login: React.FC = () => {
               </RememberAndFind>
             )}
             <AuthWrapper>
-              <button type="button">
+              <button type="button" onClick={handleGoogleLogin}>
                 <img src={google} alt="authImg" />
               </button>
-              <button type="button">
+              <button type="button" onClick={handleKakaoLogin}>
                 <img src={kakao} alt="authImg" />
               </button>
-              <button type="button">
+              <button type="button" onClick={handleNaverLogin}>
                 <img src={naver} alt="authImg" />
               </button>
             </AuthWrapper>
