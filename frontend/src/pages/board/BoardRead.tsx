@@ -4,13 +4,17 @@ import { useLocation, useParams } from 'react-router-dom';
 import { PageTitle, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
+import queryString from "query-string";
 
 const BoardRead = () => {
-  const { board, boardId } = useParams();
   const loc = useLocation();
   // const searchParams = new URLSearchParams(loc.search);
   // const boardId = searchParams.get('boardId');
   const [imageUrl, setImageUrl] = useState<any[]>([]);
+  const { board } = useParams();
+  const location = useLocation();
+  const queryParam = queryString.parse(location.search);
+  const boardId = String(queryParam.boardId);
   const [boardData, setBoardData] = useState<any>(null);
   const [listLink, setListLink] = useState('');
   const [title, setTitle] = useState<any>();
@@ -34,17 +38,18 @@ const BoardRead = () => {
 
   useEffect(() => {
     axios
-      .get(`/boards/${boardId}`)
-      .then((response) => {
-        if (response.headers['filename']) {
-          const fileName = response.headers['filename'];
-          setFile(fileName);
-        }
-        setBoardData(response.data);
-      })
-      .catch((error) => {
-        console.error('Error:', error.message);
-      });
+        .get(`/boards/${boardId}`)
+        .then((response) => {
+          if (response.headers['filename']) {
+            const fileName = response.headers['filename'];
+            setFile(fileName);
+          }
+          setBoardData(response.data);
+          fetchReply(response.data.boardId);
+        })
+        .catch((error) => {
+          console.error('Error:', error.message);
+        });
   }, []);
 
   useEffect(() => {
