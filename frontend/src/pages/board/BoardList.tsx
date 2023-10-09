@@ -72,125 +72,120 @@ const CustomerSupport = () => {
       .catch((error) => {});
   };
 
-  let writeDate;
-  let newMonth;
-  boards.map((Item) => {
-    if (Item.boardWriteDate[1].length === 1) {
-      newMonth = '0' + Item.boardWriteDate[1];
-    } else {
-      newMonth = Item.boardWriteDate[1];
-    }
-    writeDate = Item.boardWriteDate[0] + '.' + newMonth + '.' + Item.boardWriteDate[2];
-  });
-
   return (
-    <>
-      <SubHeader kind="board" />
-      <S.Container>
-        {(() => {
-          switch (board) {
-            case 'notice':
-              return <PageTitle key="notice">공지사항</PageTitle>;
-            case 'qna':
-              return <PageTitle key="qna">문의하기</PageTitle>;
-            case 'review':
-              return <PageTitle key="review">이용후기</PageTitle>;
-            default:
-              return <PageTitle key="default">고객지원</PageTitle>;
-          }
-        })()}
-        <div>
+      <>
+        <SubHeader kind="board" />
+        <S.Container>
           {(() => {
-            if (board !== 'notice') {
-              return (
-                <S.WriteBtnWrapper className="right">
-                  <LinkBtn to={`/board/` + board + `/write`}>작성하기</LinkBtn>
-                </S.WriteBtnWrapper>
-              );
+            switch (board) {
+              case 'notice':
+                return <PageTitle key="notice">공지사항</PageTitle>;
+              case 'qna':
+                return <PageTitle key="qna">문의하기</PageTitle>;
+              case 'review':
+                return <PageTitle key="review">이용후기</PageTitle>;
+              default:
+                return <PageTitle key="default">고객지원</PageTitle>;
             }
           })()}
-          {(() => {
-            if (board === 'review') {
-              return (
-                <S.BoardGallery>
-                  {/** loop */}
-                  {boards.length === 0 && (
-                    <li key="empty" className="empty">
-                      <p>작성된 게시글이 없습니다.</p>
-                    </li>
-                  )}
-                  {boards &&
-                    boards.map((item) => (
-                      <li key={item.boardId}>
-                        <div className="thumbnail">
-                          <Link to={`/board/${board}/detail/${item.boardId}`}>
-                            {imageUrl.find((image) => image.boardId === item.boardId) && (
-                              <img src={imageUrl.find((image) => image.boardId === item.boardId).imageUrl} alt={`Image for ${item.title}`} />
-                            )}
-                          </Link>
-                        </div>
-                        <p className="title">
-                          <Link to={`/board/${board}/detail/${item.boardId}`}>{item.title}</Link>
-                        </p>
-                        <p className="writer">{item.boardWriter}</p>
-                        <p className="date">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
-                          item.boardWriteDate[2] < 10 ? '0' : ''
-                        }${item.boardWriteDate[2]}`}</p>
-                      </li>
-                    ))}
-                  {/** // loop */}
-                </S.BoardGallery>
-              );
-            } else {
-              return (
-                <S.Table className="userpage">
-                  <colgroup>
-                    <col width="110px" />
-                    <col width="180px" />
-                    <col width="auto" />
-                    <col width="180px" />
-                  </colgroup>
-                  <thead>
-                    <tr>
-                      <th>번호</th>
-                      <th>카테고리</th>
-                      <th>제목</th>
-                      <th>작성일</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {boards.length === 0 && (
-                      <tr key="no-data">
-                        <td colSpan={7} className="center">
-                          작성된 게시글이 없습니다.
-                        </td>
+          <div>
+            {(() => {
+              if (board !== 'notice') {
+                return (
+                    <S.WriteBtnWrapper className="right">
+                      <LinkBtn to={`/board/` + board + `/write`}>작성하기</LinkBtn>
+                    </S.WriteBtnWrapper>
+                );
+              }
+            })()}
+            {(() => {
+              if (board === 'review') {
+                return (
+                    <S.BoardGallery>
+                      {/** loop */}
+                      {boards.length === 0 && (
+                          <li key="empty" className="empty">
+                            <p>작성된 게시글이 없습니다.</p>
+                          </li>
+                      )}
+                      {boards && boards.map((item) => (
+                          <li key={item.boardId}>
+                            <div className="thumbnail">
+                              <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>
+                                {imageUrl.find((image) => image.boardId === item.boardId) && (
+                                    <img
+                                        src={imageUrl.find((image) => image.boardId === item.boardId).imageUrl}
+                                        alt={`Image for ${item.title}`}
+                                    />
+                                )}
+                              </Link>
+                            </div>
+                            <p className="title">
+                                <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</Link>
+                                </p>
+                            <p className="writer">{item.boardWriter}</p>
+                            <p className="date">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${
+                                item.boardWriteDate[1]
+                            }.${
+                                item.boardWriteDate[2] < 10 ? '0' : ''
+                            }${item.boardWriteDate[2]}`}</p>
+                          </li>
+                      ))}
+                      {/** // loop */}
+                    </S.BoardGallery>
+                );
+              } else {
+                return (
+                    <S.Table className="userpage">
+                      <colgroup>
+                        <col width="110px" />
+                        <col width="180px" />
+                        <col width="auto" />
+                        <col width="180px" />
+                      </colgroup>
+                      <thead>
+                      <tr>
+                        <th>번호</th>
+                        <th>카테고리</th>
+                        <th>제목</th>
+                        <th>작성일</th>
                       </tr>
-                    )}
-                    {/** loop */}
-                    {boards.map((item, index) => (
-                      <tr key={item.boardId}>
-                        <td className="center">{totalData - index}</td>
-                        <td className="center">{item.category}</td>
-                        <td>
-                          {/* <IsReply>답글</IsReply> */}
-                          {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
-                          <Link to={`/board/${board}/detail/${item.boardId}`}>{item.title}</Link>
-                        </td>
-                        <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
-                          item.boardWriteDate[2] < 10 ? '0' : ''
-                        }${item.boardWriteDate[2]}`}</td>
-                      </tr>
-                    ))}
-                    {/** // loop */}
-                  </tbody>
-                </S.Table>
-              );
-            }
-          })()}
-        </div>
-        <Paging totalPage={totalPages} />
-      </S.Container>
-    </>
+                      </thead>
+                      <tbody>
+                      {boards.length === 0 && (
+                          <tr key="no-data">
+                            <td colSpan={7} className="center">
+                              작성된 게시글이 없습니다.
+                            </td>
+                          </tr>
+                      )}
+                      {/** loop */}
+                      {boards.map((item, index) => (
+                          <tr key={item.boardId}>
+                            <td className="center">{totalData - index}</td>
+                            <td className="center">{item.category}</td>
+                            <td>
+                              {/* <IsReply>답글</IsReply> */}
+                              {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
+                                <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</Link>
+                            </td>
+                            <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${
+                                item.boardWriteDate[1]
+                            }.${
+                                item.boardWriteDate[2] < 10 ? '0' : ''
+                            }${item.boardWriteDate[2]}`}</td>
+                          </tr>
+                      ))}
+                      {/** // loop */}
+                      </tbody>
+                    </S.Table>
+                );
+              }
+            })()}
+          </div>
+          <Paging totalPage={totalPages} />
+        </S.Container>
+      </>
   );
 };
 

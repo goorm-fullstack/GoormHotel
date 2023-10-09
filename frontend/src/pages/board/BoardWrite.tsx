@@ -199,7 +199,7 @@ const BoardWrite = () => {
                 (<>
                 <th>썸네일 이미지</th>
                 <td>
-                  <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
+                  <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required/>
                   {imgFile !== '' ? <ItemThumbnail src={imgFile} alt="후기 이미지" /> : <ItemThumbnail style={{ display: 'none' }} />}
                 </td>
                 </>)
