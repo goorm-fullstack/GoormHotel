@@ -45,7 +45,7 @@ import AdminWriteFormDining from './admin/item/AdminWriteFormDining';
 import AdminDetailDining from './admin/item/AdminDetailDining';
 import AdminDetailRoom from './admin/item/AdminDetailRoom';
 import AdminBoard from './admin/board/AdminBoard';
-import AdminBoardWrite from './admin/board/AdminBoardWrite';
+//import AdminBoardWrite from './admin/board/AdminBoardWrite';
 import AdminDeleteComment from './admin/board/AdminDeleteComment';
 import AdminChat from './admin/chat/AdminChat';
 import AdminChatDetail from './admin/chat/AdminChatDetail';
@@ -235,7 +235,7 @@ const App: React.FC = () => {
           <Route path="/admin/giftcard/:page" element={<AdminGiftCard />} />
           <Route path="/admin/giftcard/detail/:id" element={<AdminDetailGiftCard />} />
           <Route path="/admin/board/:page" element={<AdminBoard />} />
-          <Route path="/admin/board/write" element={<AdminBoardWrite />} />
+{/*           <Route path="/admin/board/write" element={<AdminBoardWrite />} /> */}
           <Route path="/admin/deletepost/:page" element={<AdminDeleteComment />} />
           <Route path="/admin/chat/:page" element={<AdminChat />} />
           <Route path="/admin/chat/detail/:roomId" element={<AdminChatDetail />} />
