@@ -27,7 +27,7 @@ const AdminChatDetail = () => {
     navigation('/admin/chat/1');
   };
 
-  const webSocketURL = 'ws://127.0.0.1:8080/ws/chat';
+  const webSocketURL = process.env.REACT_APP_WS_URL;
   let ws = useRef<WebSocket | null>(null);
 
   useLayoutEffect(() => {
@@ -54,7 +54,7 @@ const AdminChatDetail = () => {
 
   const settingWebSocket = (roomId1: string) => {
     // 이전 상태(prevRoomId)를 이용하여 새로운 상태를 반환
-    if (!ws.current) {
+    if (!ws.current && webSocketURL !== undefined) {
       ws.current = new WebSocket(webSocketURL);
       ws.current.onopen = () => {
         setSocketConnected(true);
