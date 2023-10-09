@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { useParams } from 'react-router-dom';
+import {useLocation, useParams} from 'react-router-dom';
 import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
+import queryString from "query-string";
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -64,7 +65,10 @@ const TableRead = styled.table`
 `;
 
 const BoardRead = () => {
-  const { board, boardId } = useParams();
+  const { board } = useParams();
+  const location = useLocation();
+  const queryParam = queryString.parse(location.search);
+  const boardId = String(queryParam.boardId);
   const [boardData, setBoardData] = useState<any>(null);
   const [listLink, setListLink] = useState('');
   const [title, setTitle] = useState<any>();
@@ -100,6 +104,7 @@ const BoardRead = () => {
             setFile(fileName);
           }
           setBoardData(response.data);
+          fetchReply(response.data.boardId);
         })
         .catch((error) => {
           console.error('Error:', error.message);
