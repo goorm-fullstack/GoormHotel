@@ -19,6 +19,12 @@ Content-Type: application/json
   "password": "1234"
 }
 
+### 운영자 로그인 (www)
+POST http://localhost:8080/login/adminlogin
+Content-Type: application/x-www-form-urlencoded
+
+adminId=yss1902admin&password=1234
+
 ### 어드민1의 권한 수정
 PUT http://localhost:8080/yss1902admin/auth
 Content-Type: application/json
@@ -46,3 +52,9 @@ GET http://localhost:8080/manager
 
 ### 매니저 페이지
 GET http://localhost:8080/manager/member
+
+### 매니저 인포 확인
+GET http://localhost:8080/getLoginInfo
+
+### 매니저 인포 확인
+GET http://localhost:8080/admin/userinfo

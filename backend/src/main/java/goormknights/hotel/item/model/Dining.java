@@ -21,7 +21,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @OnDelete(action = OnDeleteAction.CASCADE)
 public class Dining extends Item {
 
-    @Column(nullable = false)
+    @Column
     private String useTime; // 이용 시간(ex. 아침, 점심, 저녁)
 
     // 엔티티 수정
@@ -32,13 +32,13 @@ public class Dining extends Item {
                 .priceAdult(requestDiningDto.getPriceAdult())
                 .name(requestDiningDto.getName())
                 .type(requestDiningDto.getType())
-                .useTime(requestDiningDto.getUseTime())
                 .thumbnail(requestImageDto.toEntity())
                 .typeDetail(requestDiningDto.getTypeDetail())
                 .spare(requestDiningDto.getSpare())
                 .spareAdult(requestDiningDto.getSpareAdult())
                 .spareChildren(requestDiningDto.getSpareChildren())
                 .capacity(requestDiningDto.getCapacity())
+                .description(requestDiningDto.getDescription())
                 .build();
     }
 
@@ -46,7 +46,6 @@ public class Dining extends Item {
     public ResponseDiningDto toResponseDiningDto(){
         return ResponseDiningDto.builder()
                 .type(this.getType())
-                .useTime(this.getUseTime())
                 .price(this.getPrice())
                 .name(this.getName())
                 .priceAdult(this.getPriceAdult())
@@ -56,6 +55,7 @@ public class Dining extends Item {
                 .spareAdult(this.getSpareAdult())
                 .spareChildren(this.getSpareChildren())
                 .capacity(this.getCapacity())
+                .description(this.getDescription())
                 .build();
     }
 }

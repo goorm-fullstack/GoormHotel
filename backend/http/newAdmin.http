@@ -24,4 +24,3 @@ POST http://localhost:8080/login/logout
 
 ### 세션 정보
 POST http://localhost:8080/api/sessionInfo
-

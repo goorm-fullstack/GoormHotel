@@ -21,10 +21,18 @@ const AdminChatDetail = () => {
   const [chatRoomData, setChatRoomData] = useState({});
   const [recentTime, setRecentTime] = useState('');
   const [status, setStatus] = useState('');
-  const navigation = useNavigate();
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_C"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   const navigateToChatList = () => {
-    navigation('/admin/chat/1');
+    navigate('/admin/chat/1');
   };
 
   const webSocketURL = process.env.REACT_APP_WS_URL;
@@ -136,6 +144,7 @@ const AdminChatDetail = () => {
     });
   };
 
+  if(authItem && authItem.includes("AUTH_C")) {
   return (
     <AdminLayout subMenus="chat">
       <Container>
@@ -207,6 +216,9 @@ const AdminChatDetail = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminChatDetail;

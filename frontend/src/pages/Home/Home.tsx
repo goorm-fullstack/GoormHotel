@@ -12,6 +12,9 @@ import deluxe from '../../images/room/Deluxe.jpg';
 import Family from '../../images/room/Family.jpg';
 import Suite from '../../images/room/Suite.jpg';
 import FacilitiesSlider from '../../components/Slide/FacilitiesSlider';
+import { DiningData, RoomData } from '../../admin/item/AdminItemList';
+import axios from 'axios';
+import Instance from '../../utils/api/axiosInstance';
 
 const diningImages = [dining01, dining02, dining03, dining04];
 
@@ -24,6 +27,20 @@ interface ReservationData {
   nights: number;
 }
 
+const productCategories = [
+  { korean: '디럭스', english: 'deluxe' },
+  { korean: '스위트', english: 'sweet' },
+  { korean: '패밀리', english: 'family' },
+  { korean: '풀 빌라', english: 'poolVilla' },
+];
+
+const diningCategories = [
+  { korean: '레스토랑', english: 'restaurant' },
+  { korean: '룸서비스', english: 'roomService' },
+  { korean: '바&라운지', english: 'barRounge' },
+  { korean: '베이커리', english: 'bakery' },
+];
+
 const Home = () => {
   const [activeIndex, setActiveIndex] = useState(1);
   const [reservationData, setReservationData] = useState({
@@ -34,6 +51,10 @@ const Home = () => {
     children: 0,
     nights: 0,
   });
+  const [roomData, setRoomData] = useState<RoomData[]>([]);
+  const [diningData, setDiningData] = useState<DiningData[]>([]);
+  const [imgUrlsRoom, setImageUrlsRoom] = useState<string[]>([]);
+  const [imageUrlsDining, setImageUrlsDining] = useState<string[]>([]);
 
   const updateReservationData = (newData: ReservationData) => {
     setReservationData(newData);
@@ -80,6 +101,68 @@ const Home = () => {
     }
   }, [activeIndex]);
 
+  // 객실, 다이닝 데이터 가져오기
+  useEffect(() => {
+    const handleLoadItems = async () => {
+      try {
+        const responseRoom = await Instance.get('/rooms?page=1');
+        const responseDining = await Instance.get('/dinings?page=1');
+        const dataRoom = responseRoom.data;
+        const dataDining = responseDining.data;
+        setDiningData(dataDining);
+        setRoomData(dataRoom);
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error('Error:', error.message);
+        } else {
+          console.error('An unknown error occurred.');
+        }
+      }
+    };
+    handleLoadItems();
+  }, [])
+
+  // 서버에 저장된 이미지 요청
+  useEffect(() => {
+    const fetchImageUrls = async () => {
+      const urlsRoom = await Promise.all(
+        roomData.map(async (item) => {
+          const response = await axios.get(`/image/${item.name}`, {
+            responseType: 'arraybuffer',
+          });
+          console.log(response);
+          const blob = new Blob([response.data], {
+            type: response.headers['content-type'],
+          });
+          console.log('blob = ', blob);
+          return URL.createObjectURL(blob);
+        })
+      );
+      const urlsDining = await Promise.all(
+        diningData.map(async (item) => {
+          const response = await axios.get(`/image/${item.name}`, {
+            responseType: 'arraybuffer',
+          });
+          console.log(response);
+          const blob = new Blob([response.data], {
+            type: response.headers['content-type'],
+          });
+          console.log('blob = ', blob);
+          return URL.createObjectURL(blob);
+        })
+      );
+      setImageUrlsRoom(urlsRoom);
+      setImageUrlsDining(urlsDining);
+    };
+
+    fetchImageUrls();
+  }, [roomData, diningData]);
+
+  const nameOfTypeDetail = (product: RoomData | DiningData) => {
+    const foundCategory = [...diningCategories, ...productCategories].find((category) => product.typeDetail.includes(category.english));
+    return foundCategory ? foundCategory.korean : 'none';
+  };
+
   return (
     <>
       <S.SlideWrapper>
@@ -100,21 +183,28 @@ const Home = () => {
           </S.IndexTitle>
           <S.IndexDesc>환상적인 서울 도심의 파노라믹뷰를 만나보세요.</S.IndexDesc>
           <S.ItemList>
+            {roomData.length === 0 && <S.NoItem>등록된 상품이 없습니다.</S.NoItem>}
+            {roomData[0] && (
             <S.RoomItem>
-              <img src={deluxe} alt="객실" />
-              <S.ItemTitle>디럭스</S.ItemTitle>
-              <S.ItemDesc>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</S.ItemDesc>
+              <img src={imgUrlsRoom[0]} alt="객실" />
+              <S.ItemTitle>{nameOfTypeDetail(roomData[0])}</S.ItemTitle>
+              <S.ItemDesc>{roomData[0].description}</S.ItemDesc>
             </S.RoomItem>
+            )}
+            {roomData[1] && (
             <S.RoomItem>
-              <img src={Family} alt="객실" />
-              <S.ItemTitle>스위트</S.ItemTitle>
-              <S.ItemDesc>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</S.ItemDesc>
+              <img src={imgUrlsRoom[0]} alt="객실" />
+              <S.ItemTitle>{nameOfTypeDetail(roomData[1])}</S.ItemTitle>
+              <S.ItemDesc>{roomData[1].description}</S.ItemDesc>
             </S.RoomItem>
+            )}
+            {roomData[2] && (
             <S.RoomItem>
-              <img src={Suite} alt="객실" />
-              <S.ItemTitle>패밀리</S.ItemTitle>
-              <S.ItemDesc>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</S.ItemDesc>
+              <img src={imgUrlsRoom[2]} alt="객실" />
+              <S.ItemTitle>{nameOfTypeDetail(roomData[2])}</S.ItemTitle>
+              <S.ItemDesc>{roomData[2].description}</S.ItemDesc>
             </S.RoomItem>
+            )}
           </S.ItemList>
           <BtnWrapper className="center">
             <MoreLink to="/offers/1?type=room">자세히보기</MoreLink>
@@ -126,26 +216,35 @@ const Home = () => {
           </S.IndexTitle>
           <S.IndexDesc>세계 최고 수준의 셰프들이 직접 선보이는 다양한 요리를 즐겨보세요.</S.IndexDesc>
           <S.ItemList>
+            {diningData.length === 0 && <S.NoItem>등록된 상품이 없습니다.</S.NoItem>}
+            {diningData[0] && (
             <S.DiningItem>
-              <img src={diningImages[0]} alt={`다이닝 ${diningImages[0]}`} />
-              <S.ItemTitle>베이커리</S.ItemTitle>
-              <S.ItemDesc>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</S.ItemDesc>
+              <img src={imageUrlsDining[0]} alt={`다이닝 ${diningImages[0]}`} />
+              <S.ItemTitle>{nameOfTypeDetail(diningData[0])}</S.ItemTitle>
+              <S.ItemDesc>{diningData[0].description}</S.ItemDesc>
             </S.DiningItem>
+            )}
+            {diningData[1] && (
             <S.DiningItem>
-              <img src={diningImages[1]} alt={`다이닝 ${diningImages[1]}`} />
-              <S.ItemTitle>바&라운지</S.ItemTitle>
-              <S.ItemDesc>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</S.ItemDesc>
+              <img src={imageUrlsDining[1]} alt={`다이닝 ${diningImages[1]}`} />
+              <S.ItemTitle>{nameOfTypeDetail(diningData[1])}</S.ItemTitle>
+              <S.ItemDesc>{diningData[1].description}</S.ItemDesc>
             </S.DiningItem>
+            )}
+            {diningData[2] && (
             <S.DiningItem>
-              <img src={diningImages[2]} alt={`다이닝 ${diningImages[2]}`} />
-              <S.ItemTitle>레스토랑</S.ItemTitle>
-              <S.ItemDesc>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</S.ItemDesc>
+              <img src={imageUrlsDining[2]} alt={`다이닝 ${diningImages[2]}`} />
+              <S.ItemTitle>{nameOfTypeDetail(diningData[2])}</S.ItemTitle>
+              <S.ItemDesc>{diningData[2].description}</S.ItemDesc>
             </S.DiningItem>
+            )}
+            {diningData[3] && (
             <S.DiningItem>
-              <img src={diningImages[3]} alt={`다이닝 ${diningImages[3]}`} />
-              <S.ItemTitle>룸 서비스</S.ItemTitle>
-              <S.ItemDesc>Every GLAD Moment! 세상에 하나 뿐인 글래드 프레임으로 소중한 사람과 함께한 특별한 순간을 남겨보세요!</S.ItemDesc>
+              <img src={imageUrlsDining[3]} alt={`다이닝 ${diningImages[3]}`} />
+              <S.ItemTitle>{nameOfTypeDetail(diningData[3])}</S.ItemTitle>
+              <S.ItemDesc>{diningData[3].description}</S.ItemDesc>
             </S.DiningItem>
+            )}
           </S.ItemList>
           <BtnWrapper className="center">
             <MoreLink to="/offers/1?type=dining">자세히보기</MoreLink>

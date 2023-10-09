@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import * as S from './Style';
 import {
-  commonContainerStyle,
   PageTitle,
   InputCheckbox,
   CheckLabel,
@@ -14,62 +13,8 @@ import {
 } from '../../Style/commonStyles';
 import AgreementContents from '../../components/Agreement/AgreementCon';
 import PrivacyContents from '../../components/Agreement/PrivacyCon';
-
-const Container = styled(commonContainerStyle)``;
-
-const Wrapper = styled.div`
-  display: flex;
-
-  & > div {
-    width: 50%;
-  }
-`;
-
-const LeftWrapper = styled.div`
-  padding-right: 80px;
-  border-right: 1px solid ${(props) => props.theme.colors.grayborder};
-
-  & > div {
-    margin-bottom: 30px;
-
-    label {
-      color: ${(props) => props.theme.colors.graydark};
-    }
-  }
-`;
-
-export const AgreementText = styled.div`
-  font-size: ${(props) => props.theme.font.sizexs};
-  color: ${(props) => props.theme.colors.graydark};
-  height: 200px;
-  border: 1px solid ${(props) => props.theme.colors.grayborder};
-  padding: 20px;
-  margin-bottom: 16px;
-  overflow-y: scroll;
-  line-height: 1.6;
-  background: ${(props) => props.theme.colors.graybg};
-
-  &.forreserv {
-    height: 130px;
-  }
-`;
-
-const RightWrapper = styled.div`
-  padding-left: 80px;
-
-  input {
-    height: 50px;
-    padding-left: 18px;
-    margin-top: 10px;
-    display: block;
-  }
-  input:first-child {
-    margin-top: 0;
-  }
-  & form > input {
-    width: 100%;
-  }
-`;
+import Instance from "../../utils/api/axiosInstance";
+import {useNavigate} from "react-router-dom";
 
 const Signup = () => {
   const [termsAgree, setTermsAgree] = useState(false);
@@ -85,6 +30,8 @@ const Signup = () => {
     birthdate: '',
     gender: '',
   });
+  const navigate = useNavigate();
+  const [emailCode, setEmailCode] = useState('');
 
   console.log(formData);
 
@@ -105,11 +52,48 @@ const Signup = () => {
     setPrivacyAgree(!privacyAgree);
   };
 
-  const handleSignupButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+  // 인증번호 요청 버튼 클릭
+  const clickRequestCode = async () => {
+    try {
+      const response = await Instance.post('/api/mail/email', {
+        email: formData.email,
+      });
+
+      if (response.status === 200) {
+        alert('인증번호가 이메일로 발송되었습니다.');
+        // const receivedCode = response.data.code; (발송된 코드 활용?)
+      }
+    } catch (error: any) {
+      alert('이메일 발송 실패: ' + error?.response?.data?.message || '알 수 없는 에러');
+    }
+  };
+
+  const handleSignupButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (termsAgree && privacyAgree) {
-      //회원가입 요청 로직 작성
+      try {
+        const response = await Instance.post('/signup', {
+          name: formData.name,
+          password: formData.password,
+          memberId: formData.memberId,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          birth: formData.birthdate,
+          gender: formData.gender,
+          code: formData.certificationCode,
+        });
+
+          if (response.status === 200) {
+            navigate('/signup/result');
+          }
+      } catch (error: any) {
+        if (error?.response?.data?.errorCode === 1001) {
+          alert('코드가 일치하지 않습니다');
+        } else {
+          alert('회원가입 실패: ' + error?.response?.data?.message || '알 수 없는 에러');
+        }
+      }
     } else {
       alert('이용약관과 개인정보 처리방침에 동의해야 합니다.');
     }
@@ -117,10 +101,10 @@ const Signup = () => {
 
   return (
     <>
-      <Container>
+      <S.Container>
         <PageTitle>회원가입</PageTitle>
-        <Wrapper>
-          <LeftWrapper>
+        <S.Signup>
+          <div className="left">
             <ContentsTitleXSmall>약관 동의</ContentsTitleXSmall>
             <div>
               <RequiredTitle>
@@ -132,9 +116,9 @@ const Signup = () => {
                   동의합니다
                 </CheckLabel>
               </RequiredTitle>
-              <AgreementText>
+              <S.AgreementText>
                 <AgreementContents />
-              </AgreementText>
+              </S.AgreementText>
             </div>
             <div>
               <RequiredTitle>
@@ -146,12 +130,12 @@ const Signup = () => {
                   동의합니다
                 </CheckLabel>
               </RequiredTitle>
-              <AgreementText>
+              <S.AgreementText>
                 <PrivacyContents />
-              </AgreementText>
+              </S.AgreementText>
             </div>
-          </LeftWrapper>
-          <RightWrapper>
+          </div>
+          <div className="right">
             <ContentsTitleXSmall>회원정보 입력</ContentsTitleXSmall>
             <form>
               <input type="text" placeholder="아이디" name="memberId" value={formData.memberId} onChange={handleChange} required />
@@ -167,7 +151,7 @@ const Signup = () => {
               <input type="text" name="name" value={formData.name} placeholder="이름" onChange={handleChange} required />
               <Auth>
                 <input placeholder="이메일" type="email" name="email" value={formData.email} onChange={handleChange} required />
-                <AuthBtn>인증번호 요청</AuthBtn>
+                <AuthBtn onClick={clickRequestCode}>인증번호 요청</AuthBtn>
               </Auth>
               <input
                 type="text"
@@ -186,9 +170,9 @@ const Signup = () => {
                 </SubmitBtn>
               </BtnWrapper>
             </form>
-          </RightWrapper>
-        </Wrapper>
-      </Container>
+          </div>
+        </S.Signup>
+      </S.Container>
     </>
   );
 };

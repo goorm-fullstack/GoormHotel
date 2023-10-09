@@ -6,6 +6,7 @@ import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
 import { BoardData } from './AdminBoard';
+import { useNavigate } from 'react-router-dom';
 
 const tableData = [
   {
@@ -32,6 +33,15 @@ const AdminDeleteComment = () => {
   const [board, setBoard] = useState<BoardData[]>([]);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [totalData, setTotalData] = useState<number>(0);
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_C"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   useEffect(() => {
     axios
@@ -96,6 +106,7 @@ const AdminDeleteComment = () => {
     });
   };
 
+  if(authItem && authItem.includes("AUTH_C")) {
   return (
     <AdminLayout subMenus="board">
       <Container>
@@ -136,9 +147,11 @@ const AdminDeleteComment = () => {
           </thead>
           <tbody>
             {board.length === 0 && (
-              <td colSpan={6} className="center empty">
-                삭제된 글이 없습니다.
-              </td>
+              <tr>
+                <td colSpan={6} className="center empty">
+                  삭제된 글이 없습니다.
+                </td>
+              </tr>
             )}
             {board &&
             board.map((board) => (
@@ -159,9 +172,7 @@ const AdminDeleteComment = () => {
                   {board.boardWriter}
                   <S.LinkStyle to={`/admin/member/${board.boardWriter}`}>({board.boardWriter})</S.LinkStyle>
                 </td>
-                <td className="center">{`${board.boardWriteDate[0]}.${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}.${
-                  board.boardWriteDate[2] < 10 ? '0' : ''
-                }${board.boardWriteDate[2]}`}</td>
+                <td className="center">{`${board.boardWriteDate[0]}.${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}.${board.boardWriteDate[2] < 10 ? '0' : ''}${board.boardWriteDate[2]}`}</td>
               </tr>
             ))}
           </tbody>
@@ -170,6 +181,9 @@ const AdminDeleteComment = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminDeleteComment;

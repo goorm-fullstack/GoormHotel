@@ -9,7 +9,6 @@ import { Container, Table } from '../member/Style';
 import { RoomForm } from '../../components/AddItemForm/WriteFormRoom';
 
 const AdminDetailRoom = () => {
-  const navigate = useNavigate();
   const [imgFile, setImgFile] = useState<string>(''); // 이미지 상태관리
   const imgRef = useRef<HTMLInputElement>(null); // 이미지 태그
   const { type, name } = useParams<{ type: string; name: string }>(); // url 파라미터
@@ -28,6 +27,16 @@ const AdminDetailRoom = () => {
       console.log('get 성공');
     });
   }, [name, type]);
+
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_B"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   // 이미지 업로드 input의 onChange(이미지 미리보기)
   const saveImgFile = () => {
@@ -148,6 +157,7 @@ const AdminDetailRoom = () => {
     responseMessege = <GreenP>{duplicateMessage}</GreenP>;
   }
 
+  if(authItem && authItem.includes("AUTH_B")) {
   return (
     <AdminLayout subMenus="item">
       <Container>
@@ -206,6 +216,12 @@ const AdminDetailRoom = () => {
                   </td>
                 </tr>
                 <tr>
+                  <th>상품 소개글</th>
+                  <td>
+                    <input type="text" name='description' className='long' defaultValue={responseData.description} onChange={handleChange} required />
+                  </td>
+                </tr>
+                <tr>
                   <th>상품가</th>
                   <td>
                     <input type="text" name="price" defaultValue={responseData.price} onChange={handleChange} required />
@@ -260,6 +276,9 @@ const AdminDetailRoom = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminDetailRoom;

@@ -111,6 +111,12 @@ const Reservation = ({ updateReservationData }: any) => {
       setCheckInDate(`${formattedDate} (${dayOfWeek})`);
 
       const checkOutDate = new Date(checkOutDateValue as Date);
+      if (moment(checkOutDate).isBefore(moment(processedSelectedDate), 'day')) {
+        const nextDay = new Date(processedSelectedDate);
+        nextDay.setDate(nextDay.getDate() + 1);
+        handleCheckOutDateChange(nextDay);
+      }
+
       const timeDifference = checkOutDate.getTime() - processedSelectedDate.getTime();
       const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
 
@@ -120,6 +126,13 @@ const Reservation = ({ updateReservationData }: any) => {
 
   const handleCheckOutDateChange = (selectedDate: ValuePiece | [ValuePiece, ValuePiece]) => {
     const processedSelectedDate: ValuePiece = Array.isArray(selectedDate) ? selectedDate[0] : selectedDate;
+    const processedCheckInDate: ValuePiece = Array.isArray(checkInValue) ? checkInValue[0] : checkInValue;
+
+    if (processedCheckInDate && processedSelectedDate && processedSelectedDate < processedCheckInDate) {
+      // 이전 날짜인 경우 처리를 막음
+      return;
+    }
+
     processedSelectedDate?.setHours(12, 0, 0, 0);
     setCheckOutValue(selectedDate);
     setCheckOutOpen(false);
@@ -128,9 +141,14 @@ const Reservation = ({ updateReservationData }: any) => {
     setCheckOutDate(`${formattedDate} (${dayOfWeek})`);
   };
 
-  const isDateDisabled = (date: Date) => {
-    // 현재 날짜보다 이전인 경우에만 true를 반환
+  const isDateNotCurrent = (date: Date) => {
+    // 현재 날짜보다 이전인 경우 선택 못하게 막음
     return moment(date).isBefore(moment(), 'day');
+  }
+
+  const isDateDisabled = (date: Date) => {
+    // 체크인 날짜와 이전인 날짜 선택 막음
+    return moment(date).isBefore(moment(), 'day') || moment(date).isSameOrBefore(moment(checkInDate), 'day');
   };
 
   const handleMinusClick = (stateUpdater: React.Dispatch<React.SetStateAction<number>>, minValue: number) => {
@@ -177,7 +195,7 @@ const Reservation = ({ updateReservationData }: any) => {
           <S.CalendarContainer>
             <div className="calwrap" data-isopen={checkInOpen}>
               <S.StyledCalendar
-                tileDisabled={({ date }) => isDateDisabled(date)}
+                tileDisabled={({ date }) => isDateNotCurrent(date)}
                 onChange={handleCheckInDateChange}
                 value={reservationData ? reservationData.checkInDate : checkInValue}
                 formatDay={(locale, date) => moment(date).format('DD')}></S.StyledCalendar>

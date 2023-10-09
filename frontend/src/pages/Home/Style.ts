@@ -63,6 +63,10 @@ export const ItemList = styled.ul`
 
 export const RoomItem = styled.li`
   width: 380px;
+  img{
+    width: 200px;
+    height: 200px;
+  }
 `;
 
 export const ItemTitle = styled.h3`
@@ -212,3 +216,8 @@ export const ReservationButton = styled(Link)`
     background-color: ${(props) => props.theme.colors.navyhover};
   }
 `;
+
+export const NoItem = styled.div`
+  text-align: center;
+  margin: 0 auto;
+`

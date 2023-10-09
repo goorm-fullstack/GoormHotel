@@ -110,7 +110,7 @@ const AdminLayout = ({ children, subMenus }: {children: ReactNode; subMenus: str
         <h2>{adminsubnav[subMenus].pagetitle}</h2>
         <ul className="menulist">
           {adminsubnav[subMenus].nav.map((nav) => (
-            <li>
+            <li key={nav.linkto}>
               <NavLink
                 to={nav.linkto}
                 className={({isActive}) => {

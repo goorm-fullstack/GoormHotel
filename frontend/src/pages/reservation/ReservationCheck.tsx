@@ -1,91 +1,8 @@
 import React, { useState } from 'react';
-import { styled } from 'styled-components';
+import * as S from './Style';
 import Reservation from '../../components/Reservation/Reservation';
 import Product from '../../components/Item/Item';
-import { commonContainerStyle, PageTitle, ContentsTitleXSmall } from '../../Style/commonStyles';
-import { Wrapper, Left, Right, Section, OptionWrap, CouponInfo } from './ReservationPage';
-
-const Container = styled(commonContainerStyle)`
-  .used td {
-    padding: 17px 0;
-  }
-
-  .userinfo {
-    table {
-      width: 100%;
-      border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
-    }
-    th,
-    td {
-      border-bottom: 1px solid ${(props) => props.theme.colors.graylightborder};
-      text-align: left;
-      padding: 16.5px 20px;
-      font-size: ${(props) => props.theme.font.sizes};
-    }
-    th {
-      width: 120px;
-      background: ${(props) => props.theme.colors.graybg};
-      color: ${(props) => props.theme.colors.charcoal};
-    }
-    td {
-      width: 302.5px;
-      color: ${(props) => props.theme.colors.blacklight};
-    }
-  }
-
-  .checkoption {
-    svg {
-      display: none;
-    }
-  }
-`;
-
-const Payment = styled.table`
-  margin-top: 20px;
-  width: 100%;
-  line-height: 1.6;
-
-  th,
-  td {
-    font-size: ${(props) => props.theme.font.sizexs};
-    color: ${(props) => props.theme.colors.blacklight};
-  }
-
-  th {
-    text-align: left;
-  }
-  td {
-    text-align: right;
-
-    &.notice {
-      color: ${(props) => props.theme.colors.graylight};
-      padding-top: 16px;
-      text-align: left;
-      line-height: 1.4;
-
-      a {
-        text-decoration: underline;
-      }
-    }
-  }
-`;
-
-const RevNumber = styled.p`
-  background: ${(props) => props.theme.colors.graybg};
-  height: 60px;
-  line-height: 60px;
-  padding: 0 20px;
-  margin-bottom: 16px;
-  color: ${(props) => props.theme.colors.charcoal};
-  font-size: ${(props) => props.theme.font.sizes};
-  font-weight: 500;
-
-  strong {
-    font-size: ${(props) => props.theme.font.default};
-    color: ${(props) => props.theme.colors.goldhover};
-    margin-left: 6px;
-  }
-`;
+import { PageTitle, ContentsTitleXSmall } from '../../Style/commonStyles';
 
 const ReservationCheck = () => {
   const [coupons, setCoupons] = useState([
@@ -100,21 +17,21 @@ const ReservationCheck = () => {
   ]);
   return (
     <>
-      <Container>
+      <S.Container>
         <PageTitle>예약 확인</PageTitle>
-        <Wrapper>
-          <Left>
-            <Section>
+        <S.Wrapper>
+          <S.Left>
+            <S.Section>
               <ContentsTitleXSmall>상품 상세</ContentsTitleXSmall>
-              <RevNumber>
+              <S.RevNumber>
                 [예약번호] <strong>2023092312315646</strong>
-              </RevNumber>
-              <OptionWrap className="checkoption">
+              </S.RevNumber>
+              <S.OptionWrap className="checkoption">
                 <Reservation />
-              </OptionWrap>
-            </Section>
+              </S.OptionWrap>
+            </S.Section>
 
-            <Section className="userinfo">
+            <S.Section className="userinfo">
               <ContentsTitleXSmall>고객 정보</ContentsTitleXSmall>
               <table>
                 <tr>
@@ -132,11 +49,11 @@ const ReservationCheck = () => {
                   <td colSpan={3}>내용</td>
                 </tr>
               </table>
-            </Section>
+            </S.Section>
 
-            <Section>
+            <S.Section>
               <ContentsTitleXSmall>사용한 상품권</ContentsTitleXSmall>
-              <CouponInfo className="used">
+              <S.CouponInfo className="used">
                 <table>
                   {coupons.map((coupon, index) => (
                     <tr key={index}>
@@ -145,12 +62,12 @@ const ReservationCheck = () => {
                     </tr>
                   ))}
                 </table>
-              </CouponInfo>
-            </Section>
+              </S.CouponInfo>
+            </S.Section>
 
-            <Section>
+            <S.Section>
               <ContentsTitleXSmall>사용한 쿠폰</ContentsTitleXSmall>
-              <CouponInfo className="used">
+              <S.CouponInfo className="used">
                 <table>
                   {coupons.map((coupon, index) => (
                     <tr key={index}>
@@ -163,14 +80,14 @@ const ReservationCheck = () => {
                     <td colSpan={2}>사용한 쿠폰이 없습니다.</td>
                   </tr>
                 </table>
-              </CouponInfo>
-            </Section>
-          </Left>
+              </S.CouponInfo>
+            </S.Section>
+          </S.Left>
 
-          <Right>
+          <S.Right>
             <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
             <Product />
-            <Payment>
+            <S.Payment>
               <tr>
                 <th>결제수단</th>
                 <td>신용카드</td>
@@ -188,10 +105,10 @@ const ReservationCheck = () => {
                   를 확인해주세요.
                 </td>
               </tr>
-            </Payment>
-          </Right>
-        </Wrapper>
-      </Container>
+            </S.Payment>
+          </S.Right>
+        </S.Wrapper>
+      </S.Container>
     </>
   );
 };

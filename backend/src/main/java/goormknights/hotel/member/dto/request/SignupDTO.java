@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Signup {
+public class SignupDTO {
     private String email;
     private String memberId;
     private String password;

@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import { styled } from 'styled-components';
-import { commonContainerStyle, PageTitle, commonTable } from '../../Style/commonStyles';
+import * as S from './Style';
+import { PageTitle } from '../../Style/commonStyles';
 import Paging from '../../components/common/Paging/Paging';
-
-const Container = styled(commonContainerStyle)``;
-const Table = styled(commonTable)``;
 
 const ReservationList = () => {
   const [totalPages, setTotalPages] = useState(0);
@@ -30,18 +27,18 @@ const ReservationList = () => {
 
   return (
     <>
-      <Container>
+      <S.Container>
         <PageTitle>예약 목록</PageTitle>
-        <Table className="userpage">
+        <S.Table className="userpage">
           <thead>
             <tr>
-              <th style={{width: '110px'}}>번호</th>
-              <th style={{width: '220px'}}>예약번호</th>
-              <th style={{width: '280px'}}>상품명</th>
-              <th style={{width: '140px'}}>체크인</th>
-              <th style={{width: '140px'}}>체크아웃</th>
-              <th style={{width: '140px'}}>예약(결제)일</th>
-              <th style={{width: '150px'}}>결제금액</th>
+              <th style={{ width: '110px' }}>번호</th>
+              <th style={{ width: '220px' }}>예약번호</th>
+              <th style={{ width: '280px' }}>상품명</th>
+              <th style={{ width: '140px' }}>체크인</th>
+              <th style={{ width: '140px' }}>체크아웃</th>
+              <th style={{ width: '140px' }}>예약(결제)일</th>
+              <th style={{ width: '150px' }}>결제금액</th>
             </tr>
           </thead>
           <tbody>
@@ -69,9 +66,9 @@ const ReservationList = () => {
               ))
             )}
           </tbody>
-        </Table>
+        </S.Table>
         <Paging totalPage={totalPages} />
-      </Container>
+      </S.Container>
     </>
   );
 };

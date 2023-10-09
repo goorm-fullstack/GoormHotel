@@ -1,48 +1,14 @@
 import React from 'react';
-import { styled } from 'styled-components';
-import { commonContainerStyle, PageTitle, ContentsTitleXSmall, AuthBtn, SubmitBtn, BtnWrapper, Auth } from '../../Style/commonStyles';
-
-const Container = styled(commonContainerStyle)``;
-
-const ProcessBox = styled.div`
-  display: flex;
-  width: 100%;
-
-  & > div {
-    width: 50%;
-  }
-
-  input {
-    height: 50px;
-    padding-left: 18px;
-    margin-top: 10px;
-    display: block;
-  }
-  input:first-child {
-    margin-top: 0;
-  }
-
-  & form > input {
-    width: 100%;
-  }
-`;
-
-const IdProcess = styled.div`
-  padding-right: 80px;
-  border-right: 1px solid ${(props) => props.theme.colors.grayborder};
-`;
-
-const PwProcess = styled.div`
-  padding-left: 80px;
-`;
+import * as S from './Style';
+import { PageTitle, ContentsTitleXSmall, AuthBtn, SubmitBtn, BtnWrapper, Auth } from '../../Style/commonStyles';
 
 const FindAccount = () => {
   return (
     <>
-      <Container>
+      <S.Container>
         <PageTitle>아이디/비밀번호 찾기</PageTitle>
-        <ProcessBox>
-          <IdProcess>
+        <S.ProcessBox>
+          <S.IdProcess>
             <ContentsTitleXSmall>아이디 찾기</ContentsTitleXSmall>
             <form id="find-id" action="#" method="post">
               <input placeholder="이름" name="#" required />
@@ -57,8 +23,8 @@ const FindAccount = () => {
                 </SubmitBtn>
               </BtnWrapper>
             </form>
-          </IdProcess>
-          <PwProcess>
+          </S.IdProcess>
+          <S.PwProcess>
             <ContentsTitleXSmall>비밀번호 찾기</ContentsTitleXSmall>
             <form id="find-pw" action="#" method="post">
               <input placeholder="아이디" name="#" required />
@@ -74,9 +40,9 @@ const FindAccount = () => {
                 </SubmitBtn>
               </BtnWrapper>
             </form>
-          </PwProcess>
-        </ProcessBox>
-      </Container>
+          </S.PwProcess>
+        </S.ProcessBox>
+      </S.Container>
     </>
   );
 };

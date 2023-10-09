@@ -107,12 +107,14 @@ const FloatingBtn = styled.button<{ $show: boolean }>`
 `;
 
 const App: React.FC = () => {
-  const { setAuthState } = useAuth();
+  const { setAuthState, setMemberAuthState } = useAuth();
   const [showChat, setShowChat] = useState<boolean>(false);
   const [showFloatingButtons, setShowFloatingButtons] = useState<boolean>(false);
   const [isAdminPage, setIsAdminPage] = useState<boolean>(false);
   const [isLogined, setIsLogined] = useState<boolean>(false);
   const location = useLocation();
+  const [isMember, setIsMember] = useState<boolean>(false);
+  const [memberId, setMemberId] = useState<string | null>(null);
 
   const openChat = () => {
     setShowChat(!showChat);
@@ -172,6 +174,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const adminId = getCookie("adminId");
+    const memberId = getCookie("memberId");
     const role = getCookie("role");
     const auth = getCookie("auth");
 
@@ -180,18 +183,22 @@ const App: React.FC = () => {
     console.log('auth 쿠키 값:', auth);
 
     // 로컬 스토리지에 정보를 저장한다.
-    if(adminId !== undefined && role !== undefined && auth !== undefined) {
+    // 어드민 로그인이라면
+    if (adminId && role && auth) {
       localStorage.setItem("adminId", adminId);
       localStorage.setItem("role", role);
       localStorage.setItem("auth", splitDashLine(auth).join(','));
-    }
-  
-    // 가져온 값이 있다면 상태를 설정합니다.
-    if (adminId && role && auth) {
       setAuthState({ adminId, role, auth });
       setIsLogined(true);
+    }
+    // 회원 로그인이라면
+    else if (memberId && role) {
+      localStorage.setItem("memberId", memberId);
+      localStorage.setItem("role", role);
+      setMemberAuthState({ memberId, role });
+      setIsMember(true);
     } else {
-      // 원래대로 서버에서 상태를 가져올 수도 있습니다.
+      // 서버에서 상태 가져오기(테스트 필요)
       Instance.get('/api/adminCheck').then(response => {
         setAuthState({
           adminId: response.data.adminId,

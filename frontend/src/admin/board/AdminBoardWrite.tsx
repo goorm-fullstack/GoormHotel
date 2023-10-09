@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, CheckLabel, MultiCheck, SubmitBtn } from '../../Style/commonStyles';
 import { Container, Table } from '../member/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
+import { useNavigate } from 'react-router-dom';
 
 const AdminBoardWrite = () => {
   // 수정해야하는 부분 있으면 알아서 변경해서 사용해주세요
   const setValue = () => {};
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_C"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
+
+  if(authItem && authItem.includes("AUTH_C")) {
   return (
     <AdminLayout subMenus="board">
       <Container>
@@ -59,6 +71,9 @@ const AdminBoardWrite = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminBoardWrite;
