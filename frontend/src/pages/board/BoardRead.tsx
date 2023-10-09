@@ -1,70 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
-import { NavLink, useLocation, useParams } from 'react-router-dom';
-import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
+import * as S from './Style';
+import { useLocation, useParams } from 'react-router-dom';
+import { PageTitle, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
 
-export const Container = styled(commonContainerStyle)``;
-
-const TableRead = styled.table`
-  border-bottom: 1px solid ${(props) => props.theme.colors.charcoal};
-  width: 100%;
-
-  th {
-    border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
-    font-weight: 500;
-    background: ${(props) => props.theme.colors.graybg};
-    color: ${(props) => props.theme.colors.charcoal};
-    vertical-align: top;
-  }
-  th,
-  td {
-    padding: 40px;
-  }
-  td {
-    border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
-    color: ${(props) => props.theme.colors.graydark};
-  }
-  .contents textarea {
-    width: 100%;
-    min-height: 300px;
-    resize: none;
-    border: 0;
-  }
-  tr:first-child th,
-  tr:first-child td {
-    border-top-color: ${(props) => props.theme.colors.charcoal};
-  }
-  input {
-    height: 36px;
-  }
-  input[type='file'] {
-    padding: 0;
-    border: 0;
-  }
-  input.title {
-    width: 80%;
-  }
-  td.titlew p {
-    font-size: ${(props) => props.theme.font.sizes};
-  }
-  td.titlew p span {
-    margin-right: 8px;
-    color: ${(props) => props.theme.colors.graylight};
-  }
-  td.titlew .title {
-    font-size: ${(props) => props.theme.font.sizesl};
-    color: ${(props) => props.theme.colors.charcoal};
-    margin-bottom: 14px;
-  }
-  td.titlew {
-    background: ${(props) => props.theme.colors.graybg};
-  }
-`;
-
 const BoardRead = () => {
-  const {board, boardId} = useParams();
+  const { board, boardId } = useParams();
   const loc = useLocation();
   // const searchParams = new URLSearchParams(loc.search);
   // const boardId = searchParams.get('boardId');
@@ -82,26 +24,22 @@ const BoardRead = () => {
     return paragraphs.map((p) => p.textContent); // 각 <p> 태그의 텍스트 내용 추출
   };
 
-  const boardContent = boardData && boardData.boardContent ? (
-      parseBoardContent(boardData.boardContent).map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
-      ))
-  ) : (
-      ''
-  );
+  const boardContent =
+    boardData && boardData.boardContent ? parseBoardContent(boardData.boardContent).map((paragraph, index) => <p key={index}>{paragraph}</p>) : '';
 
   useEffect(() => {
-    axios.get(`/boards/${boardId}`)
-    .then((response) => {
-      if(response.headers['filename']){
-        const fileName = response.headers['filename'];
-        setFile(fileName);
-      }
-      setBoardData(response.data);
-    })
-    .catch((error) => {
-      console.error('Error:', error.message);
-    });
+    axios
+      .get(`/boards/${boardId}`)
+      .then((response) => {
+        if (response.headers['filename']) {
+          const fileName = response.headers['filename'];
+          setFile(fileName);
+        }
+        setBoardData(response.data);
+      })
+      .catch((error) => {
+        console.error('Error:', error.message);
+      });
   }, []);
 
   useEffect(() => {
@@ -139,18 +77,18 @@ const BoardRead = () => {
       }
       setListLink(link);
     }
-  }, [])
+  }, []);
 
   const handleDownLoad = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const result = await axios.get(`/boards/download/${boardId}`, {responseType : 'blob'})
-    let blob = new Blob([result.data], {type: result.headers['content-type']})
+    const result = await axios.get(`/boards/download/${boardId}`, { responseType: 'blob' });
+    let blob = new Blob([result.data], { type: result.headers['content-type'] });
 
-    let link = document.createElement('a')
-    link.href = window.URL.createObjectURL(blob)
-    link.target = '_self'
-    link.setAttribute("download", file)
-    link.click()
-  }
+    let link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.target = '_self';
+    link.setAttribute('download', file);
+    link.click();
+  };
 
   // useEffect(() => {
   //   GetImageUrl(boardData.boardId);
@@ -183,7 +121,7 @@ const BoardRead = () => {
   const [replyWriter, setReplyWriter] = useState('');
   const [replyContent, setReplyContent] = useState('');
 
-  const fetchReply = async (boardId:number) => {
+  const fetchReply = async (boardId: number) => {
     try {
       const response = await axios.get(`/reply/boardId/${boardData.boardId}`);
       setReply(response.data);
@@ -205,7 +143,7 @@ const BoardRead = () => {
       const response = await axios.post('/reply/writeform', {
         boardId: boardId,
         replyContent: replyContent,
-        replyWriter: replyWriter
+        replyWriter: replyWriter,
       });
       setReplyWriter('');
       setReplyContent('');
@@ -215,34 +153,34 @@ const BoardRead = () => {
     }
   };
 
-
-
   console.log(boardData);
 
   return (
-      <>
-        <SubHeader kind="board" />
-        <Container>
-          {title}
-          <div>
-            <TableRead>
-              <tbody>
+    <>
+      <SubHeader kind="board" />
+      <S.Container>
+        {title}
+        <div>
+          <S.TableRead>
+            <tbody>
               <tr>
                 <td className="titlew">
                   <p className="title">
                     <span>{boardData ? boardData.category : ''}</span>
                     {boardData ? boardData.title : ''}
                   </p>
-                  <button type='button' onClick={handleDownLoad}>{file}</button>
+                  <button type="button" onClick={handleDownLoad}>
+                    {file}
+                  </button>
                   {(() => {
                     if (board !== 'notice' && boardData) {
                       return (
-                          <p>
-                            <span>{boardData.boardWriter}</span>
-                            <span>{`${boardData.boardWriteDate[0]}.${boardData.boardWriteDate[1] < 10 ? '0' : ''}${boardData.boardWriteDate[1]}.${
-                                boardData.boardWriteDate[2] < 10 ? '0' : ''
-                            }${boardData.boardWriteDate[2]}`}</span>
-                          </p>
+                        <p>
+                          <span>{boardData.boardWriter}</span>
+                          <span>{`${boardData.boardWriteDate[0]}.${boardData.boardWriteDate[1] < 10 ? '0' : ''}${boardData.boardWriteDate[1]}.${
+                            boardData.boardWriteDate[2] < 10 ? '0' : ''
+                          }${boardData.boardWriteDate[2]}`}</span>
+                        </p>
                       );
                     }
                   })()}
@@ -257,20 +195,18 @@ const BoardRead = () => {
                     <form onSubmit={handleSubmit}>
                       <div>
                         <input
-                            type="text"
-                            placeholder="작성자명"
-                            name="replyWriter"
-                            value={replyWriter}
-                            onChange={(e) => setReplyWriter(e.target.value)}
+                          type="text"
+                          placeholder="작성자명"
+                          name="replyWriter"
+                          value={replyWriter}
+                          onChange={(e) => setReplyWriter(e.target.value)}
                         />
                         {/*<input type="password" placeholder="식별 비밀번호?" />*/}
                       </div>
-                      <textarea
-                          name="replyContent"
-                          value={replyContent}
-                          onChange={(e) => setReplyContent(e.target.value)}
-                      ></textarea>
-                      <button type="submit">등록</button>
+                      <div className="tawrap">
+                        <textarea name="replyContent" value={replyContent} onChange={(e) => setReplyContent(e.target.value)}></textarea>
+                        <button type="submit">작성하기</button>
+                      </div>
                     </form>
                   </div>
                 </td>
@@ -279,54 +215,74 @@ const BoardRead = () => {
                 <td>
                   <ul>
                     {reply.map((reply, index) => (
-                        <li key={index}>
-                          <p>
-                            {reply.replyWriter}
-                            <span className="date">{reply.replyDate}</span>
-                            <button type="button">수정</button>
-                            <button type="button">삭제</button>
-                          </p>
-                          <p>{reply.replyContent}</p>
-                        </li>
+                      <li key={index}>
+                        <div className="cwinfo">
+                          <strong>{reply.replyWriter}</strong>
+                          <span className="date">{reply.replyDate}</span>
+                          <button type="button" className="modify">
+                            수정
+                          </button>
+                          <button type="button" className="delete">
+                            삭제
+                          </button>
+                        </div>
+                        <p>{reply.replyContent}</p>
+                      </li>
                     ))}
                     <li>
-                      <p>
-                        이름이름
+                      <div className="cwinfo">
+                        <strong>이름이름</strong>
                         <span className="date">2023.09.01</span>
-                        <button type="button">수정</button>
-                        <button type="button">삭제</button>
-                      </p>
+                        <button type="button" className="modify">
+                          수정
+                        </button>
+                        <button type="button" className="delete">
+                          삭제
+                        </button>
+                      </div>
                       <p>댓글 내용내용</p>
                     </li>
                     <li>
-                      <p>
-                        이름이름
+                      <div className="cwinfo">
+                        <strong>이름이름</strong>
                         <span className="date">2023.09.01</span>
-                        <button type="button">수정</button>
-                        <button type="button">삭제</button>
-                      </p>
+                        <button type="button" className="modify">
+                          수정
+                        </button>
+                        <button type="button" className="delete">
+                          삭제
+                        </button>
+                      </div>
                       <p>댓글 내용내용</p>
                     </li>
                     <li>
-                      <p>
-                        이름이름
+                      <div className="cwinfo">
+                        <strong>이름이름</strong>
                         <span className="date">2023.09.01</span>
-                        <button type="button">수정</button>
-                        <button type="button">삭제</button>
+                        <button type="button" className="modify">
+                          수정
+                        </button>
+                        <button type="button" className="delete">
+                          삭제
+                        </button>
+                      </div>
+                      <p>
+                        댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글
+                        내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글
+                        내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용댓글 내용내용
                       </p>
-                      <p>댓글 내용내용</p>
                     </li>
                   </ul>
                 </td>
               </tr>
-              </tbody>
-            </TableRead>
-            <BtnWrapper className="center mt40">
-              <LinkBtn to={listLink}>목록</LinkBtn>
-            </BtnWrapper>
-          </div>
-        </Container>
-      </>
+            </tbody>
+          </S.TableRead>
+          <BtnWrapper className="center mt40">
+            <LinkBtn to={listLink}>목록</LinkBtn>
+          </BtnWrapper>
+        </div>
+      </S.Container>
+    </>
   );
 };
 

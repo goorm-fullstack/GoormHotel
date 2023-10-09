@@ -1,16 +1,58 @@
 import React from 'react';
 import * as S from './Style';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../../images/common/logo.png';
 import { BtnWrapper } from '../../../Style/commonStyles';
+import {useAuth} from "../../../utils/api/AuthContext";
+import Instance from "../../../utils/api/axiosInstance";
 
 const Header = () => {
   const location = useLocation().pathname;
+  const { memberAuthState, setMemberAuthState } = useAuth();
+  const isLoggedIn = memberAuthState.memberId !== '';
+  const navigate = useNavigate();
+
+  // const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await Instance.get('/login/logout');
+  //     if (response.status === 200) {
+  //       setMemberAuthState({ memberId: '' });
+  //       alert('로그아웃 되었습니다');
+  //       navigate('/');
+  //     }
+  //   } catch (error) {
+  //     console.error('로그아웃 실패:', error);
+  //   }
+  // };
+
+  function deleteAllCookies() {
+    const cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+  }
+
+  const handleLogoutUseLocalStorge = () => {
+    localStorage.clear();
+    deleteAllCookies();
+    alert('로그아웃 되었습니다');
+    window.location.href = '/admin';
+  };
+
   return (
     <S.Header data-location={location}>
       <ul className="topinfo">
         <li>
-          <Link to="/login">로그인</Link>
+          { isLoggedIn ? (
+              <button onClick={handleLogoutUseLocalStorge}>로그아웃</button>
+          ) : (
+              <Link to="/login">로그인</Link>
+          )}
         </li>
         <li>
           <Link to="/signup">회원가입</Link>

@@ -125,4 +125,9 @@ public class GiftCardService {
             giftCardRepository.save(giftCard);
         }
     }
+
+    public void updateGiftCard(RequestGiftCardDto giftCardDto) {
+        GiftCard giftCard = giftCardRepository.findById(giftCardDto.getId()).orElseThrow(() -> new NoSuchGiftCardException("해당 상품권이 존재하지 않습니다"));
+        giftCard.update(giftCardDto);
+    }
 }

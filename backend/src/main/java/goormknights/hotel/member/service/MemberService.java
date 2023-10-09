@@ -9,21 +9,23 @@ import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.global.exception.InvalidVerificationCodeException;
 import goormknights.hotel.member.dto.request.MemberEdit;
-import goormknights.hotel.member.dto.request.Signup;
+import goormknights.hotel.member.dto.request.SignupDTO;
 import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.model.MemberEditor;
 import goormknights.hotel.member.repository.MemberRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -39,29 +41,29 @@ public class MemberService {
     private final EmailSender emailSender;
 
     // 멤버 가입 및 저장
-    public void signup(Signup signup, String code) {
+    public void signup(SignupDTO signupDTO, String code) {
 
-        if (!verifyCode(signup.getEmail(), code)) {
+        if (!verifyCode(signupDTO.getEmail(), code)) {
             throw new InvalidVerificationCodeException();
         }
 
-        Optional<Member> memberOptional = memberRepository.findByEmail(signup.getEmail());
+        Optional<Member> memberOptional = memberRepository.findByEmail(signupDTO.getEmail());
         if (memberOptional.isPresent()) {
             throw new AlreadyExistsEmailException();
         }
 
-        String encryptedPassword = passwordEncoder.encode(signup.getPassword());
+        String encryptedPassword = passwordEncoder.encode(signupDTO.getPassword());
 
         var member = Member.builder()
-                .name(signup.getName())
-                .email(signup.getEmail())
-                .memberId(signup.getMemberId())
+                .name(signupDTO.getName())
+                .email(signupDTO.getEmail())
+                .memberId(signupDTO.getMemberId())
                 .password(encryptedPassword)
-                .phoneNumber(signup.getPhoneNumber())
-                .privacyCheck(signup.getPrivacyCheck())
-                .birth(signup.getBirth())
-                .grade(signup.getGrade())
-                .gender(signup.getGender())
+                .phoneNumber(signupDTO.getPhoneNumber())
+                .privacyCheck(true)
+                .birth(signupDTO.getBirth())
+                .grade("Bronze")
+                .gender(signupDTO.getGender())
                 .role(Role.USER)
                 .mailAuth(true)
                 .build();
@@ -153,18 +155,61 @@ public class MemberService {
     }
 
 
-    // 로그인
-    public String login(String memberId, String rawPassword, HttpSession session) {
-        Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new UsernameNotFoundException("해당되는 회원이 없습니다"));
-
-        if (passwordEncoder.matches(rawPassword, member.getPassword())) {
-            session.setAttribute("member", member);
-            return "로그인 완료";
-        } else {
-            throw new BadCredentialsException("비밀번호가 다릅니다");
+    // 멤버 로그인
+    public boolean memberLogin(String memberId, String password, HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("member") != null) {
+            // 이미 로그인한 상태
+            return false;
         }
+
+        Optional<Member> optionalMember = memberRepository.findByMemberId(memberId);
+        if (optionalMember.isPresent() && passwordEncoder.matches(password, optionalMember.get().getPassword())) {
+            session = request.getSession();
+            session.setAttribute("memberId", optionalMember.get().getMemberId());
+            session.setAttribute("role", optionalMember.get().getRole());
+
+            Cookie cookie = new Cookie("JSESSIONID", session.getId());
+            cookie.setMaxAge(10);
+            cookie.setPath("/");
+            cookie.setSecure(true);
+
+            ResponseCookie memberIdCookie = ResponseCookie.from("memberId", optionalMember.get().getMemberId())
+                    .httpOnly(false)
+                    .secure(true)
+                    .path("/")      // path
+                    .maxAge(3600)
+                    .sameSite("None")  // sameSite
+                    .build();
+            ResponseCookie roleCookie = ResponseCookie.from("role", optionalMember.get().getRole().toString())
+                    .httpOnly(false)
+                    .secure(true)
+                    .path("/")      // path
+                    .maxAge(3600)
+                    .sameSite("None")  // sameSite
+                    .build();
+
+            response.addCookie(cookie);
+            response.addHeader(HttpHeaders.SET_COOKIE, memberIdCookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, roleCookie.toString());
+            return true;
+        }
+        return false;
     }
+
+//    // 멤버 세션체크
+//    public Map<String, Object> checkMember(HttpSession session) {
+//        HashMap<String, Object> response = new HashMap<>();
+//        Member member = (Member) session.getAttribute("member");
+//        if (member != null) {
+//            response.put("status", "success");
+//            response.put("role", member.getRole().getKey());
+//        } else {
+//            response.put("status", "fail");
+//        }
+//        return response;
+//    }
+
 
 
     // ======================= 위까지 민종님 작업물 ============================
@@ -186,8 +231,10 @@ public class MemberService {
 //        member.getGiftCardList().add(giftCard);
     }
 
-    // 테스트용입니다. 추후 수정부탁드립니다.
-    public List<Member> findAll() {
-        return memberRepository.findAll();
+    // 블랙리스트 차단합니다.
+    public void setBlackList(Long id) {
+        Member blackMember = memberRepository.findById(id).orElseThrow(MemberNotFound::new);
+        blackMember.setRole(Role.BLACKED);
     }
+
 }

@@ -1,30 +1,54 @@
 package goormknights.hotel.auth.controller;
 
-import goormknights.hotel.member.dto.request.FindMemberIdRequest;
-import goormknights.hotel.member.dto.request.FindPasswordRequest;
+import goormknights.hotel.global.entity.Role;
+import goormknights.hotel.member.dto.request.FindMemberIdDTO;
+import goormknights.hotel.member.dto.request.FindPasswordDTO;
 import goormknights.hotel.member.dto.request.ResetPasswordRequest;
 import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.service.MemberService;
 import goormknights.hotel.member.service.VerificationService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class AuthController {
 
     private final MemberService memberService;
     private final VerificationService verificationService;
 
+    // 역할 체크
+    @GetMapping("/api/adminCheck")
+    public ResponseEntity<?> checkRole(HttpSession session) {
+        Map<String, Object> userInfo = new HashMap<>();
+        Role role = (Role) session.getAttribute("role");
+        String adminId = (String) session.getAttribute("adminId");
+        String auth = (String) session.getAttribute("auth");
+
+        if (role != null && adminId != null && auth != null) {
+            userInfo.put("role", role);
+            userInfo.put("adminId", adminId);
+            userInfo.put("auth", auth);
+            return ResponseEntity.ok(userInfo);
+        } else {
+            return ResponseEntity.badRequest().body("Not logged in.");
+        }
+    }
+
     // 아이디 찾기
     @PostMapping("/findMemberId")
-    public ResponseEntity<?> findMemberId(@RequestBody FindMemberIdRequest request) {
+    public ResponseEntity<?> findMemberId(@RequestBody FindMemberIdDTO request) {
         try {
             String memberId = memberService.findMemberId(request.getName(), request.getEmail());
             return ResponseEntity.ok().body("아이디 찾기를 위한 코드가 발송되었습니다.");
@@ -35,7 +59,7 @@ public class AuthController {
 
     // 비밀번호 찾기
     @PostMapping("/findpassword")
-    public ResponseEntity<?> findPassword(@RequestBody FindPasswordRequest request) {
+    public ResponseEntity<?> findPassword(@RequestBody FindPasswordDTO request) {
         try {
             String token = memberService.findPassword(request.getName(), request.getEmail(), request.getMemberId());
             String redirectUri = "http://localhost:8080/reset-password?token=" + token;
@@ -69,7 +93,7 @@ public class AuthController {
 
     // 코드 검증용 추가 엔드포인트
     @PostMapping("/verifycode")
-    public ResponseEntity<?> verifyCode(@RequestBody FindMemberIdRequest request) {
+    public ResponseEntity<?> verifyCode(@RequestBody FindMemberIdDTO request) {
         try {
             // 코드를 검증한다.
             boolean isVerified = memberService.verifyCode(request.getEmail(), request.getCode());
@@ -86,13 +110,5 @@ public class AuthController {
         }
     }
 
-//    @PostMapping("/verifyId")
-//    public ResponseEntity<?> verifyId(@RequestBody VerifyIdRequest request) {
-//        if (memberService.verifyCode(request.getEmail(), request.getCode())) {
-//            return ResponseEntity.ok().body("아이디찾기완료-회원아이디: " + request.getMemberId());
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid code");
-//        }
-//    }
 
 }

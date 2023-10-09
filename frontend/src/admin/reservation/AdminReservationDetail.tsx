@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // css import
 import moment from 'moment';
-import { useParams } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle } from '../../Style/commonStyles';
@@ -149,6 +149,15 @@ const AdminReservationDetail = () => {
   const [checkOutOpen, setCheckOutOpen] = useState(false);
   const [checkInValue, setCheckInValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
   const [checkOutValue, setCheckOutValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
+  const navigate = useNavigate();
+  const authItem = localStorage.getItem("auth");
+
+  useEffect(() => {
+    if (!(authItem && authItem.includes("AUTH_B"))) {
+      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      navigate('/admin');
+    }
+  }, []);
 
   useEffect(() => {
     Instance.get(`/reservation/reservationNumber/${reservationNumber}`).then((response) => {
@@ -234,6 +243,7 @@ const AdminReservationDetail = () => {
     setCheckOutDate(`${formattedDate}`);
   };
 
+  if(authItem && authItem.includes("AUTH_B")) {
   return (
     <AdminLayout subMenus="reservation">
       <Container>
@@ -374,6 +384,9 @@ const AdminReservationDetail = () => {
       </Container>
     </AdminLayout>
   );
+  } else {
+    return null;
+  }
 };
 
 export default AdminReservationDetail;

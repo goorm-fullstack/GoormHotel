@@ -3,9 +3,8 @@ package goormknights.hotel.member.controller;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,8 +21,11 @@ public class MemberTestController {
         return memberService.findById(id);
     }
 
-    @GetMapping("/list")
-    public List<Member> getMember() {
-        return memberService.findAll();
+    //블랙리스트 기능 테스트중입니다.
+    @PostMapping("/blacked/{id}")
+    public ResponseEntity<String> blacked(@PathVariable Long id) {
+        memberService.setBlackList(id);
+        return ResponseEntity.ok("차단 완료");
     }
 }
+

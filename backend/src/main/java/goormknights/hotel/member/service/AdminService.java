@@ -2,19 +2,25 @@ package goormknights.hotel.member.service;
 
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
-import goormknights.hotel.member.dto.request.AdminSignup;
+import goormknights.hotel.member.dto.request.AdminSignupDTO;
 import goormknights.hotel.member.model.Manager;
 import goormknights.hotel.member.repository.ManagerRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AdminService {
@@ -23,47 +29,90 @@ public class AdminService {
     private final ManagerRepository managerRepository;
 
     // 매니저 가입 및 저장
-    public void adminSignup(AdminSignup adminSignup) {
+    public void adminSignup(AdminSignupDTO adminSignupDTO) {
 
-        Optional<Manager> managerOptional = managerRepository.findByAdminId(adminSignup.getAdminId());
+        Optional<Manager> managerOptional = managerRepository.findByAdminId(adminSignupDTO.getAdminId());
         if (managerOptional.isPresent()) {
             throw new AlreadyExistsEmailException();
         }
 
-        String encryptedPassword = passwordEncoder.encode(adminSignup.getPassword());
+        String encryptedPassword = passwordEncoder.encode(adminSignupDTO.getPassword());
 
         var manager = Manager.builder()
-                .adminId(adminSignup.getAdminId())
+                .adminId(adminSignupDTO.getAdminId())
                 .password(encryptedPassword)
-                .adminName(adminSignup.getAdminName())
-                .adminNickname(adminSignup.getAdminNickname())
-                .authorities(adminSignup.getAuthorities())
+                .adminName(adminSignupDTO.getAdminName())
+                .adminNickname(adminSignupDTO.getAdminNickname())
+                .auth(adminSignupDTO.getAuth())
                 .role(Role.MANAGER)
-                .isActive(false)
+                .isActive(true)
                 .build();
         managerRepository.save(manager);
     }
 
-    // 매니저 권한 업데이트
-    public void updateManagerAuth(String adminId, List<String> newAuthorities) {
-        Manager manager = managerRepository.findByAdminId(adminId)
-                .orElseThrow(() -> new RuntimeException("Manager not found"));
+    // 매니저 로그인
+    public boolean managerLogin(String adminId, String password, HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("manager") != null) {
+            // 이미 로그인한 상태
+            return false;
+        }
 
-        manager.setAuthorities(newAuthorities);
-        managerRepository.save(manager);
+        Optional<Manager> optionalManager = managerRepository.findByAdminId(adminId);
+        if (optionalManager.isPresent() && passwordEncoder.matches(password, optionalManager.get().getPassword())) {
+            session = request.getSession();
+            session.setAttribute("adminId", optionalManager.get().getAdminId());
+            session.setAttribute("role", optionalManager.get().getRole());
+            session.setAttribute("auth", optionalManager.get().getAuth());
+
+            Cookie cookie = new Cookie("JSESSIONID", session.getId());
+            cookie.setMaxAge(10);
+            cookie.setPath("/");
+            cookie.setSecure(true);
+
+            ResponseCookie adminIdCookie = ResponseCookie.from("adminId", optionalManager.get().getAdminId())
+                    .httpOnly(false)
+                    .secure(true)
+                    .path("/")      // path
+                    .maxAge(3600)
+                    .sameSite("None")  // sameSite
+                    .build();
+            ResponseCookie roleCookie = ResponseCookie.from("role", optionalManager.get().getRole().toString())
+                    .httpOnly(false)
+                    .secure(true)
+                    .path("/")      // path
+                    .maxAge(3600)
+                    .sameSite("None")  // sameSite
+                    .build();
+            ResponseCookie authCookie = ResponseCookie.from("auth", optionalManager.get().getAuth())
+                    .httpOnly(false)
+                    .secure(true)
+                    .path("/")      // path
+                    .maxAge(3600)
+                    .sameSite("None")  // sameSite
+                    .build();
+
+            response.addCookie(cookie);
+            response.addHeader(HttpHeaders.SET_COOKIE, adminIdCookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, roleCookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, authCookie.toString());
+            return true;
+        }
+        return false;
     }
 
-    // 매니저 로그인
-    public String adminLogin(String adminId, String rawPassword, HttpSession session) {
-        Manager manager = managerRepository.findByAdminId(adminId)
-                .orElseThrow(() -> new UsernameNotFoundException("해당되는 운영자가 없습니다"));
-
-        if (passwordEncoder.matches(rawPassword, manager.getPassword())) {
-            session.setAttribute("manager", manager);
-            return "로그인 완료";
+    // 어드민 세션 체크
+    public Map<String, Object> checkAdmin(HttpSession session) {
+        HashMap<String, Object> response = new HashMap<>();
+        Manager admin = (Manager) session.getAttribute("admin");
+        if (admin != null) {
+            response.put("status", "success");
+            response.put("role", session.getAttribute("role"));
+            response.put("authorities", session.getAttribute("authorities"));
         } else {
-            throw new BadCredentialsException("비밀번호가 다릅니다");
+            response.put("status", "fail");
         }
+        return response;
     }
 
 

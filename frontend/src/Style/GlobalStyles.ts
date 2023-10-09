@@ -125,6 +125,14 @@ select {
 	color: white;
 }
 
+textarea {
+	resize: none;
+	border: 1px solid #ddd;
+	padding: 8px;
+	font-family: inherit;
+	line-height: 1.4;
+}
+
 `;
 
 export default GlobalStyle;

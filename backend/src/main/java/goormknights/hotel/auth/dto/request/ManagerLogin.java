@@ -6,8 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ManagerLogin {
-
     private String adminId;
     private String password;
-
 }
