@@ -54,6 +54,7 @@ import AdminIndex from './admin/AdminIndex';
 import AdminSubScribe from './admin/chat/AdminSubScribe';
 import {useAuth} from "./utils/api/AuthContext";
 import Instance from "./utils/api/axiosInstance";
+import AdminBoardDetail from './admin/board/AdminBoardDetail';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -236,6 +237,7 @@ const App: React.FC = () => {
           <Route path="/admin/giftcard/detail/:id" element={<AdminDetailGiftCard />} />
           <Route path="/admin/board/:page" element={<AdminBoard />} />
           <Route path="/admin/board/write" element={<AdminBoardWrite />} />
+          <Route path="/admin/board/:board/detail/:id" element={<AdminBoardDetail />} />
           <Route path="/admin/deletepost/:page" element={<AdminDeleteComment />} />
           <Route path="/admin/chat/:page" element={<AdminChat />} />
           <Route path="/admin/chat/detail/:roomId" element={<AdminChatDetail />} />

@@ -90,6 +90,7 @@ public class Board {
                 .boardWriter(boardWriter)
                 .boardTitle(boardTitle)
                 .category(category)
+                .boardDeleteTime(boardDeleteTime)
                 .build();
     }
 

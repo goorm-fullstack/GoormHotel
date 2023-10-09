@@ -206,4 +206,19 @@ public class BoardController {
                 .body(byteArrayResource);
 
     }
+
+    // 삭제된 게시글, 댓글 모두 조회
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
+    @GetMapping("/deletedall")
+    public ResponseEntity<List<Object>> findAllDeletedBoardReply(Pageable pageable){
+        Page<Object> allBoardReplyDeleted = boardService.findAllBoardReplyDeleted(pageable);
+
+        int totalPages = allBoardReplyDeleted.getTotalPages();
+        long totalElements = allBoardReplyDeleted.getTotalElements();
+
+        return ResponseEntity.ok()
+                .header("TotalPages", String.valueOf(totalPages))
+                .header("TotalData", String.valueOf(totalElements))
+                .body(allBoardReplyDeleted.getContent());
+    }
 }

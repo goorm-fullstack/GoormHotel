@@ -70,6 +70,7 @@ public class Report {
             return ResponseReportDto.builder()
                     .reportId(reportId)
                     .boardId(board.getBoardId())
+                    .boardTitle(board.getBoardTitle())
                     .title(board.getTitle())
                     .replyId(null)
                     .replyContent(null)

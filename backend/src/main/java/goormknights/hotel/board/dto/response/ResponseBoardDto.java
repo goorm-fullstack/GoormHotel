@@ -33,8 +33,10 @@ public class ResponseBoardDto {
 
     private BoardImage boardImage;      //이미지 넣기
 
+    private LocalDateTime boardDeleteTime; // 삭제 날짜
+
     @Builder
-    public ResponseBoardDto(Long boardId, String title, String boardContent, LocalDateTime boardWriteDate, String boardWriter, String boardTitle, String category, List<ResponseReplyDto> reply, List<ResponseReportDto> report, BoardImage boardImage) {
+    public ResponseBoardDto(Long boardId, String title, String boardContent, LocalDateTime boardWriteDate, String boardWriter, String boardTitle, String category, List<ResponseReplyDto> reply, List<ResponseReportDto> report, BoardImage boardImage, LocalDateTime boardDeleteTime) {
         this.boardId = boardId;
         this.title = title;
         this.boardContent = boardContent;
@@ -45,6 +47,7 @@ public class ResponseBoardDto {
         this.boardTitle = boardTitle;
         this.category = category;
         this.boardImage = boardImage;
+        this.boardDeleteTime = boardDeleteTime;
     }
 
 }

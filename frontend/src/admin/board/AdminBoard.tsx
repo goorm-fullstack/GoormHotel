@@ -18,6 +18,7 @@ export interface BoardData{
   report: ReportData[];
   boardImage: ImageData;
   blackList: string;
+  boardDeleteTime: number[];
 }
 
 export interface ReplyData{
@@ -27,7 +28,9 @@ export interface ReplyData{
   replyWriteDate: number[];
   replyWriter: string;
   report: ReportData[];
-  board: BoardData;
+  responseBoardDto: BoardData;
+  boardTitle: string;
+  replyDeleteTime: number[];
 }
 
 export interface ReportData{
@@ -41,6 +44,7 @@ export interface ReportData{
   reportWriter: string;
   reportCheck: boolean;
   reportResult: string;
+  boardTitle: string;
 }
 
 export const boardTitleList = [
@@ -203,7 +207,7 @@ const AdminBoard = () => {
                 <td className="center">{board.boardTitle}</td>
                 <td className="center">{board.category}</td>
                 <td className="center">
-                  <Link to={`/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.title}?boardId=${board.boardId}`}>{board.title}</Link>
+                  <Link to={`/admin/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}>{board.title}</Link>
                 </td>
                 <td className="center">
                   <Link to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</Link>
