@@ -24,6 +24,12 @@ const AdminBoardWrite = () => {
     category: "",
     boardWriter: "",
   });
+  const [categoryError, setCategoryError] = useState<string>("");
+  const [boardTitleError, setBoardTitleError] = useState<string>("");
+  const [imgFile, setImgFile] = useState<string>("");
+  const [boardContent, setBoardContent] = useState("");
+  const imgRef = useRef<HTMLInputElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!(authItem && authItem.includes("AUTH_C"))) {
@@ -36,12 +42,7 @@ const AdminBoardWrite = () => {
   type FormData = {
     [key: string]: string;
   };
-  const [categoryError, setCategoryError] = useState<string>("");
-  const [boardTitleError, setBoardTitleError] = useState<string>("");
-  const [imgFile, setImgFile] = useState<string>("");
-  const [boardContent, setBoardContent] = useState("");
-  const imgRef = useRef<HTMLInputElement>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
+  
 
   const saveImgFile = () => {
     const file =
