@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { commonContainerStyle, PageTitle, ContentsTitleXSmall, AuthBtn, SubmitBtn, BtnWrapper, Auth } from '../../Style/commonStyles';
 import Instance from "../../utils/api/axiosInstance";
@@ -50,19 +51,45 @@ interface FindPasswordDTO {
   code?: string;
 }
 
+interface EmailResponseDto {
+  code: string;
+}
+
 const FindAccount = () => {
   const [findIdData, setFindIdData] = useState<FindMemberIdDTO>({ name: '', email: '' });
   const [findPasswordData, setFindPasswordData] = useState<FindPasswordDTO>({ memberId: '', name: '', email: '' });
+  const navigate = useNavigate();
 
   // 아이디 찾기 인증번호 요청
-  const handleIdAuthRequest = async () => {
+  const handleFindIdCodeRequest = async () => {
     try {
-      const response = await Instance.post('/find-id', { name: findIdData.name, email: findIdData.email });
+      const response = await Instance.post<EmailResponseDto>('/api/mail/findid-code', findIdData);
       if (response.status === 200) {
-        console.log("인증번호가 발송되었습니다:", response.data);
+        alert('인증 코드가 발송되었습니다.');
       }
-    } catch (error) {
-      console.error("인증번호 발송 실패:", error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        alert('회원이 없습니다');
+      } else {
+        alert('에러 발생');
+      }
+    }
+  };
+
+  // 아이디 찾기 제출
+  const handleFindIdSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await Instance.post<String>('/find-id', findIdData);
+      if (response.status === 200) {
+        navigate(`/findid/result/${response.data}`, { state: { name: findIdData.name } });
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        alert('회원이 없습니다');
+      } else {
+        alert('에러 발생');
+      }
     }
   };
 
@@ -73,7 +100,7 @@ const FindAccount = () => {
       if (response.status === 200) {
         console.log("비밀번호 찾기 성공:", response.data);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("비밀번호 찾기 실패:", error);
     }
   };
@@ -107,11 +134,11 @@ const FindAccount = () => {
               <input placeholder="이름" name="name" required onChange={handleIdInputChange} />
               <Auth>
                 <input placeholder="이메일" name="email" required onChange={handleIdInputChange} />
-                <AuthBtn onClick={handleIdAuthRequest}>인증번호 요청</AuthBtn>
+                <AuthBtn onClick={handleFindIdCodeRequest}>인증번호 요청</AuthBtn>
               </Auth>
               <input placeholder="인증번호를 입력하세요." name="code" required onChange={handleIdInputChange} />
               <BtnWrapper className="mt20 full">
-                <SubmitBtn type="submit" form="find-id">
+                <SubmitBtn onClick={handleFindIdSubmit}>
                   아이디 찾기
                 </SubmitBtn>
               </BtnWrapper>

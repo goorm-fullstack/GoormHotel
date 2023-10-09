@@ -46,16 +46,16 @@ public class AuthController {
         }
     }
 
-    // 아이디 찾기
-    @PostMapping("/find-id")
-    public ResponseEntity<?> findMemberId(@RequestBody FindMemberIdDTO request) {
-        try {
-            String memberId = memberService.findMemberId(request.getName(), request.getEmail());
-            return ResponseEntity.ok().body("아이디 찾기를 위한 코드가 발송되었습니다.");
-        } catch (MemberNotFound e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found");
-        }
-    }
+//    // 아이디 찾기
+//    @PostMapping("/find-id")
+//    public ResponseEntity<?> findMemberId2(@RequestBody FindMemberIdDTO request) {
+//        try {
+//            String memberId = memberService.findMemberId(request.getName(), request.getEmail());
+//            return ResponseEntity.ok().body("아이디 찾기를 위한 코드가 발송되었습니다.");
+//        } catch (MemberNotFound e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found");
+//        }
+//    }
 
     // 비밀번호 찾기
     @PostMapping("/find-password")

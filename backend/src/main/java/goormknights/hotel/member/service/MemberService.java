@@ -9,6 +9,7 @@ import goormknights.hotel.giftcard.repository.GiftCardRepository;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.global.exception.InvalidVerificationCodeException;
+import goormknights.hotel.member.dto.request.FindMemberIdDTO;
 import goormknights.hotel.member.dto.request.MemberEdit;
 import goormknights.hotel.member.dto.request.SignupDTO;
 import goormknights.hotel.member.exception.MemberNotFound;
@@ -102,36 +103,51 @@ public class MemberService {
         return code.equals(savedCode);
     }
 
-    // 회원 아이디 찾기
-    public String findMemberId(String name, String email) {
-        Optional<Member> memberOptional = memberRepository.findByEmail(email);
-        if (memberOptional.isPresent() && memberOptional.get().getName().equals(name)) {
-            EmailMessage emailMessage = EmailMessage.builder()
-                    .to(email)
-                    .subject("[GoormHotel] 아이디 찾기 인증 코드")
-                    .build();
-            emailSender.sendMemberMail(emailMessage, "findIdandPassword");
-            return memberOptional.get().getMemberId();
-        } else {
-            throw new MemberNotFound();  // 적절한 예외 처리
-        }
-    }
+//    // 회원 아이디 찾기
+//    public String findMemberId(String name, String email) {
+//        Optional<Member> memberOptional = memberRepository.findByEmail(email);
+//        if (memberOptional.isPresent() && memberOptional.get().getName().equals(name)) {
+//            EmailMessage emailMessage = EmailMessage.builder()
+//                    .to(email)
+//                    .subject("[GoormHotel] 아이디 찾기 인증 코드")
+//                    .build();
+//            emailSender.sendMemberMail(emailMessage, "findIdandPassword");
+//            return memberOptional.get().getMemberId();
+//        } else {
+//            throw new MemberNotFound();  // 적절한 예외 처리
+//        }
+//    }
 
-    /
-    public String sendIdFindCode(String name, String email) {
-        Optional<Member> memberOptional = memberRepository.findByEmail(email);
-        if (memberOptional.isPresent() && memberOptional.get().getName().equals(name)) {
-            EmailMessage emailMessage = EmailMessage.builder()
-                    .to(email)
-                    .subject("[YourApp] 아이디 찾기 인증 코드")
-                    .build();
-            String code = emailService.sendMemberMail(emailMessage, "idFind"); // 코드 생성 및 메일 발송
-            redisUtil.setData(email, code); // Redis에 인증 코드 저장
-            return code;
-        } else {
+//    // 아이디 찾기 코드전송
+//    public String sendIdFindCode(String name, String email) {
+//        Optional<Member> memberOptional = memberRepository.findByEmail(email);
+//        if (memberOptional.isPresent() && memberOptional.get().getName().equals(name)) {
+//            EmailMessage emailMessage = EmailMessage.builder()
+//                    .to(email)
+//                    .subject("[YourApp] 아이디 찾기 인증 코드")
+//                    .build();
+//            String code = emailService.sendMemberMail(emailMessage, "password");
+//            redisUtil.setData(email, code);
+//            return code;
+//        } else {
+//            throw new MemberNotFound();
+//        }
+//    }
+
+    // 아이디 찾기 최종
+    public String findMemberId(FindMemberIdDTO findMemberIdDTO, String code) {
+        if (!verifyCode(findMemberIdDTO.getEmail(), code)) {
+            throw new InvalidVerificationCodeException();
+        }
+
+        Optional<Member> memberOptional = memberRepository.findByEmail(findMemberIdDTO.getEmail());
+        if (memberOptional.isEmpty()) {
             throw new MemberNotFound();
         }
+        return memberOptional.get().getMemberId();
     }
+
+
 
     // 회원 비밀번호 찾기
     public String findPassword(String name, String email, String memberId) {
