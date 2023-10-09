@@ -134,6 +134,10 @@ export const TableRead = styled.table`
   .fileb{
     text-decoration: underline;
   }
+  .reviewImg{
+    width:200px;
+    height:200px;
+  }
   td.titlew {
     background: ${(props) => props.theme.colors.graybg};
   }

@@ -9,7 +9,7 @@ import e from 'express';
 
 const BoardRead = () => {
   const loc = useLocation();
-  const [imageUrl, setImageUrl] = useState<any[]>([]);
+  const [imageUrl, setImageUrl] = useState<any>('');
   const { board } = useParams();
   const location = useLocation();
   const queryParam = queryString.parse(location.search);
@@ -90,6 +90,25 @@ const BoardRead = () => {
       setListLink(link);
     }
   }, [board, boardData]);
+
+  useEffect(() => {
+    // 단일 항목에 대한 이미지 URL을 가져옵니다
+    const fetchImageUrl = async () => {
+      try {
+        const response = await axios.get(`/boards/image/${boardId}`, {
+          responseType: 'arraybuffer',
+        });
+
+        const blob = new Blob([response.data], { type: response.headers['content-type'] });
+        const imageUrl = URL.createObjectURL(blob);
+        setImageUrl(imageUrl); // 이미지 URL을 상태에 설정
+      } catch (error) {
+        console.error('이미지 URL을 가져오는 중 오류가 발생했습니다:', error);
+      }
+    };
+
+    fetchImageUrl();
+  }, [boardId]);
 
   const handleDownLoad = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const result = await axios.get(`/boards/download/${boardId}`, { responseType: 'blob' });
@@ -202,6 +221,7 @@ const BoardRead = () => {
                   })()}
                 </td>
               </tr>
+              {board !== 'review' &&
               <tr>
                 <td>
                   <button className='fileb' type="button" onClick={handleDownLoad}>
@@ -209,9 +229,18 @@ const BoardRead = () => {
                   </button>
                 </td>
               </tr>
+              }
+              {board === 'review' && 
+              <tr>
+                <td>
+                  <img className='reviewImg' src={imageUrl} alt='이미지'/>
+                </td>
+              </tr>
+              }
               <tr className="contents">
                 <td>{boardContent}</td>
               </tr>
+              {board !== 'notice' &&
               <tr className="commentwrite">
                 <td>
                   <div>
@@ -234,6 +263,8 @@ const BoardRead = () => {
                   </div>
                 </td>
               </tr>
+              }
+              {board !== 'notice' &&
               <tr className="commentslist">
                 <td>
                   <ul>
@@ -289,6 +320,7 @@ const BoardRead = () => {
                   </ul>
                 </td>
               </tr>
+              }
             </tbody>
           </S.TableRead>
           <BtnWrapper className="center mt40">
