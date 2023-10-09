@@ -1,9 +1,9 @@
 ### 회원가입
-POST http://localhost:8080/signupDTO
+POST http://localhost:8080/signup
 Content-Type: application/json
 
 {
-  "email": "example1902@naver.com",
+  "email": "yss1902@naver.com",
   "memberId": "yss1902",
   "password": "1234",
   "name": "김영한",
@@ -12,7 +12,7 @@ Content-Type: application/json
   "privacyCheck": true,
   "birth": "1999-01-01",
   "gender": "남성",
-  "code": "q1FS8l70"
+  "code": "27F214Gs"
 }
 
 ### 회원가입코드
@@ -20,7 +20,7 @@ POST http://localhost:8080/api/mail/email
 Content-Type: application/json
 
 {
-  "email": "example1902@naver.com"
+  "email": "yss1902@naver.com"
 }
 
 ### 로그인

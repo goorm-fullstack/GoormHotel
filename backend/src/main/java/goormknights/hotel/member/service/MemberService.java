@@ -3,6 +3,7 @@ package goormknights.hotel.member.service;
 import goormknights.hotel.auth.service.RedisUtil;
 import goormknights.hotel.email.model.EmailMessage;
 import goormknights.hotel.email.repository.EmailSender;
+import goormknights.hotel.email.service.EmailService;
 import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.giftcard.repository.GiftCardRepository;
 import goormknights.hotel.global.entity.Role;
@@ -39,6 +40,7 @@ public class MemberService {
     private final RedisUtil redisUtil;
     private final GiftCardRepository giftCardRepository;
     private final EmailSender emailSender;
+    private final EmailService emailService;
 
     // 멤버 가입 및 저장
     public void signup(SignupDTO signupDTO, String code) {
@@ -112,6 +114,22 @@ public class MemberService {
             return memberOptional.get().getMemberId();
         } else {
             throw new MemberNotFound();  // 적절한 예외 처리
+        }
+    }
+
+    /
+    public String sendIdFindCode(String name, String email) {
+        Optional<Member> memberOptional = memberRepository.findByEmail(email);
+        if (memberOptional.isPresent() && memberOptional.get().getName().equals(name)) {
+            EmailMessage emailMessage = EmailMessage.builder()
+                    .to(email)
+                    .subject("[YourApp] 아이디 찾기 인증 코드")
+                    .build();
+            String code = emailService.sendMemberMail(emailMessage, "idFind"); // 코드 생성 및 메일 발송
+            redisUtil.setData(email, code); // Redis에 인증 코드 저장
+            return code;
+        } else {
+            throw new MemberNotFound();
         }
     }
 

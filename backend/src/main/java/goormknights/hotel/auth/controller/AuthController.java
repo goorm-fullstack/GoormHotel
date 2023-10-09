@@ -47,7 +47,7 @@ public class AuthController {
     }
 
     // 아이디 찾기
-    @PostMapping("/findMemberId")
+    @PostMapping("/find-id")
     public ResponseEntity<?> findMemberId(@RequestBody FindMemberIdDTO request) {
         try {
             String memberId = memberService.findMemberId(request.getName(), request.getEmail());
@@ -58,7 +58,7 @@ public class AuthController {
     }
 
     // 비밀번호 찾기
-    @PostMapping("/findpassword")
+    @PostMapping("/find-password")
     public ResponseEntity<?> findPassword(@RequestBody FindPasswordDTO request) {
         try {
             String token = memberService.findPassword(request.getName(), request.getEmail(), request.getMemberId());
@@ -70,7 +70,7 @@ public class AuthController {
     }
 
     // 비밀번호 재설정
-    @PostMapping("/resetpassword")
+    @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
         String token = request.getToken();
         String newPassword = request.getNewPassword();
