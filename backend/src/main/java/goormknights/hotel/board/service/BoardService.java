@@ -232,19 +232,38 @@ public class BoardService {
         return new PageImpl<>(response, pageable, response.size());
     }
 
-    //게시판-카테고리로 게시물 찾기
-    public List<ResponseBoardDto> getAllByCategory(String category, Pageable pageable){
-        List<Board> allByCataegory = boardRepository.findAllByCategory(category, pageable);
+    //게시판-카테고리와 검색 단어로 게시물 찾기
+    public Page<ResponseBoardDto> getAllByCategory(String boardTitle, String category, String keyword, Pageable pageable){
+        Page<Board> allByBoardTitle = boardRepository.findAllByBoardTitle(boardTitle, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
 
-        for(Board board : allByCataegory){
-            if(board.getBoardDeleteTime()==null){
-                ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
-                response.add(responseBoardDto);
+        if(category == null && keyword == null){
+            for (Board board : allByBoardTitle) {
+                if(board.getBoardDeleteTime() == null){
+                    response.add(board.toResponseBoardDto());
+                }
+            }
+        }else if(category != null && keyword == null){
+            for (Board board : allByBoardTitle) {
+                if(board.getBoardDeleteTime() == null && board.getCategory().equals(category)){
+                    response.add(board.toResponseBoardDto());
+                }
+            }
+        }else if(category == null && keyword != null){
+            for (Board board : allByBoardTitle) {
+                if(board.getBoardDeleteTime() == null && (board.getTitle().contains(keyword) || board.getBoardContent().contains(keyword))){
+                    response.add(board.toResponseBoardDto());
+                }
+            }
+        }else{
+            for (Board board : allByBoardTitle) {
+                if(board.getBoardDeleteTime() == null && board.getCategory().equals(category) && (board.getTitle().contains(keyword) || board.getBoardContent().contains(keyword))){
+                    response.add(board.toResponseBoardDto());
+                }
             }
         }
 
-        return response;
+        return new PageImpl<>(response, pageable, response.size());
     }
 
     //삭제 게시물 복원

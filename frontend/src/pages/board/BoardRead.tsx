@@ -73,6 +73,7 @@ const BoardRead = () => {
   const [listLink, setListLink] = useState('');
   const [title, setTitle] = useState<any>();
   const [file, setFile] = useState('');
+  console.log(boardId);
 
   const parseBoardContent = (content: any) => {
     const parser = new DOMParser();

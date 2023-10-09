@@ -145,11 +145,18 @@ public class BoardController {
     }
 
     //게시판-카테고리로 찾기
-    @GetMapping("/find/category/{category}")
-    public ResponseEntity<List<ResponseBoardDto>> findByCategory(@PathVariable String category, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable){
-        List<ResponseBoardDto> allByCategory = boardService.getAllByCategory(category, pageable);
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
+    @GetMapping("/find/category")
+    public ResponseEntity<List<ResponseBoardDto>> findByCategory(@RequestParam String boardTitle, @RequestParam(required = false) String category, @RequestParam(required = false) String keyword, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable){
+        Page<ResponseBoardDto> allByCategory = boardService.getAllByCategory(boardTitle, category, keyword, pageable);
 
-        return ResponseEntity.ok(allByCategory);
+        int totalPages = allByCategory.getTotalPages();
+        long totalElements = allByCategory.getTotalElements();
+
+        return ResponseEntity.ok()
+                .header("TotalPages", String.valueOf(totalPages))
+                .header("TotalData", String.valueOf(totalElements))
+                .body(allByCategory.getContent());
     }
 
     //게시물 소프트딜리트
