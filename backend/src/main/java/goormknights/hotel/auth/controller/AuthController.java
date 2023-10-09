@@ -1,10 +1,9 @@
 package goormknights.hotel.auth.controller;
 
 import goormknights.hotel.global.entity.Role;
-import goormknights.hotel.member.dto.request.FindMemberIdDTO;
-import goormknights.hotel.member.dto.request.FindPasswordDTO;
-import goormknights.hotel.member.dto.request.ResetPasswordRequest;
+import goormknights.hotel.member.dto.request.*;
 import goormknights.hotel.member.exception.MemberNotFound;
+import goormknights.hotel.member.service.AdminService;
 import goormknights.hotel.member.service.MemberService;
 import goormknights.hotel.member.service.VerificationService;
 import jakarta.servlet.http.HttpSession;
@@ -25,8 +24,23 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final AdminService adminService;
     private final MemberService memberService;
     private final VerificationService verificationService;
+
+    // 멤버 회원가입
+    @PostMapping("/signup")
+    public ResponseEntity<String> signup(@RequestBody SignupDTO signupDTO){
+        memberService.signup(signupDTO, signupDTO.getCode());
+        return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
+    }
+
+    // 매니저 회원가입
+    @PostMapping("/admin-signup")
+    public ResponseEntity<String> adminSignup(@RequestBody AdminSignupDTO adminSignupDTO){
+        adminService.adminSignup(adminSignupDTO);
+        return new ResponseEntity<>("어드민계정 가입 성공", HttpStatus.OK);
+    }
 
     // 역할 체크
     @GetMapping("/api/adminCheck")
@@ -109,6 +123,4 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred");
         }
     }
-
-
 }

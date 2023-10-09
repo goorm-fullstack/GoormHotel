@@ -10,6 +10,7 @@ import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.global.exception.InvalidVerificationCodeException;
 import goormknights.hotel.member.dto.request.MemberEdit;
 import goormknights.hotel.member.dto.request.SignupDTO;
+import goormknights.hotel.member.dto.response.ResponseMemberDto;
 import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.model.MemberEditor;
@@ -20,17 +21,22 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -237,4 +243,34 @@ public class MemberService {
         blackMember.setRole(Role.BLACKED);
     }
 
+    public void setBlackList(List<Long> ids) {
+        for(Long id : ids) {
+            Member blackMember = memberRepository.findById(id).orElseThrow(MemberNotFound::new);
+            blackMember.setRole(Role.BLACKED);
+        }
+    }
+
+    public List<ResponseMemberDto> getMemberList(Pageable pageable) {
+        Page<Member> memberPage = memberRepository.findAll(pageable);
+        List<ResponseMemberDto> result = new ArrayList<>();
+
+        for(Member member : memberPage) {
+            result.add(new ResponseMemberDto(member));
+        }
+
+        return result;
+    }
+
+    public Long getCount() {
+        return memberRepository.count() / 10;
+    }
+    
+    
+    // 블랙 해제
+    public void setUnBlacked(List<Long> ids) {
+        for(Long id : ids) {
+            Member blackMember = memberRepository.findById(id).orElseThrow(MemberNotFound::new);
+            blackMember.setRole(Role.USER);
+        }
+    }
 }

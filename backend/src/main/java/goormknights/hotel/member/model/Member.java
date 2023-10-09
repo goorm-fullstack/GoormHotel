@@ -46,7 +46,7 @@ public class Member extends BaseEntity implements Serializable {
 
     private String gender;
     private LocalDate birth; // YYYY-MM-DD
-    private LocalDateTime signupDate; // YYYY-MM-DDTHH:MM:SS
+    private LocalDate signupDate = LocalDate.now(); // YYYY-MM-DD
 
     private String grade;           // Bronze, Silver, Gold
     private String auth;            // ROLE_ANONYMOUS, ROLE_MEMBER,ROLE_ADMIN
@@ -77,7 +77,7 @@ public class Member extends BaseEntity implements Serializable {
     @Builder
     public Member(String email, String memberId, String password, String name, String phoneNumber,
                   boolean privacyCheck, String grade, LocalDate birth,
-                  String gender, LocalDateTime signupDate, Boolean mailAuth, Role role) {
+                  String gender, Boolean mailAuth, Role role) {
         validateEmail(email);
         validateDisplayName(name);
 
@@ -90,7 +90,7 @@ public class Member extends BaseEntity implements Serializable {
         this.grade = grade;
         this.birth = birth;
         this.gender = gender;
-        this.signupDate = LocalDateTime.now();
+        this.signupDate = LocalDate.now();
         this.mailAuth = mailAuth;
         this.role = role;
     }

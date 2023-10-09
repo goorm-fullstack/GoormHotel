@@ -1,29 +1,29 @@
-package goormknights.hotel.auth.controller;
+package goormknights.hotel.member.controller;
 
 import goormknights.hotel.member.dto.request.AdminSignupDTO;
 import goormknights.hotel.member.dto.request.SignupDTO;
 import goormknights.hotel.member.dto.response.ManagerListDTO;
+import goormknights.hotel.member.dto.response.ResponseMemberDto;
 import goormknights.hotel.member.model.Manager;
+import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.repository.ManagerRepository;
 import goormknights.hotel.member.service.AdminService;
 import goormknights.hotel.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/member")
 public class MemberController {
-
     private final MemberService memberService;
     private final AdminService adminService;
     private final ManagerRepository managerRepository;
@@ -60,15 +60,43 @@ public class MemberController {
         }).collect(Collectors.toList());
     }
 
-//    // 이메일 인증 요청
-//    @PostMapping("/verify")
-//    public ResponseEntity<String> verifyCode(@RequestBody EmailVerificationRequest request) {
-//        boolean isVerified = memberService.verifyCode(request.getEmail(), request.getCode());
-//        if (isVerified) {
-//            return ResponseEntity.ok("회원가입 성공");
-//        } else {
-//            return ResponseEntity.badRequest().body("인증 코드가 일치하지 않습니다.");
-//        }
-//    }
+    @PostMapping
+    public void join(@RequestBody Member member) {
+        memberService.save(member);
+    }
 
+    @GetMapping
+    public Member find(@RequestParam Long id) {
+        return memberService.findById(id);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<ResponseMemberDto>> getMemberList(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(memberService.getMemberList(pageable));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> countByPaging() {
+        return ResponseEntity.ok(memberService.getCount());
+    }
+
+    //블랙리스트 기능 테스트중입니다.
+    @PostMapping("/blacked/{id}")
+    public ResponseEntity<String> blacked(@PathVariable Long id) {
+        memberService.setBlackList(id);
+        return ResponseEntity.ok("차단 완료");
+    }
+
+    @PostMapping("/blacked")
+    public ResponseEntity<String> blacked(@RequestBody List<Long> id) {
+        memberService.setBlackList(id);
+        return ResponseEntity.ok("차단 완료");
+    }
+
+    @PostMapping("/unBlacked")
+    public ResponseEntity<String> unBlacked(@RequestBody List<Long> id) {
+        memberService.setUnBlacked(id);
+        return ResponseEntity.ok("차단 해제 완료");
+    }
 }
+
