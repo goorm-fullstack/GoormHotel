@@ -17,6 +17,13 @@ const AdminBoardWrite = () => {
   const setValue = () => {};
   const navigate = useNavigate();
   const authItem = localStorage.getItem("auth");
+  const [formData, setFormData] = useState<FormData>({
+    title: "",
+    boardContent: "",
+    boardTitle: "",
+    category: "",
+    boardWriter: "",
+  });
 
   useEffect(() => {
     if (!(authItem && authItem.includes("AUTH_C"))) {
@@ -25,14 +32,6 @@ const AdminBoardWrite = () => {
     }
   }, []);
 
-  if(authItem && authItem.includes("AUTH_C")) {
-  const [formData, setFormData] = useState<FormData>({
-    title: "",
-    boardContent: "",
-    boardTitle: "",
-    category: "",
-    boardWriter: "",
-  });
   type FormData = {
     [key: string]: string;
   };
