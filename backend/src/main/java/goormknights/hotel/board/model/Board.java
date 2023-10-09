@@ -60,13 +60,13 @@ public class Board {
     private LocalDateTime boardDeleteTime;      //게시글 삭제 날짜
 
     @Column(nullable = false)
-    private boolean isComment;      //답글 여부
+    private Boolean isComment;      //답글 여부
 
 //    @ManyToOne
 //    private Member member;
 
     @Builder(toBuilder = true)
-    public Board(boolean isComment, Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, BoardFile boardFile, String boardTitle, String category, List<Reply> replies, List<Report> report) {
+    public Board(Boolean isComment, Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, BoardFile boardFile, String boardTitle, String category, List<Reply> replies, List<Report> report) {
         this.boardId = boardId;
         this.title = title;
         this.boardContent = boardContent;
@@ -78,7 +78,7 @@ public class Board {
         this.category = category;
         this.replies = replies;
         this.report = report;
-        this.isComment = isComment();
+        this.isComment = isComment;
     }
 
     public ResponseBoardDto toResponseBoardDto(){

@@ -86,9 +86,12 @@ const BoardWrite = () => {
       return;
     }
 
+    const isComment = 'false';
+
     const form = new FormData();
     form.append('multipartFile', imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '');
     form.append('file', fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '');
+    form.append('isComment', isComment);
     formData.boardContent = boardContent;
     console.log(formData.category);
 
