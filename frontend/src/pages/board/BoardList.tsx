@@ -129,18 +129,6 @@ const CustomerSupport = () => {
         });
   };
 
-
-  let writeDate;
-  let newMonth;
-  boards.map((Item) => {
-    if (Item.boardWriteDate[1].length === 1) {
-      newMonth = '0' + Item.boardWriteDate[1];
-    } else {
-      newMonth = Item.boardWriteDate[1];
-    }
-    writeDate = Item.boardWriteDate[0] + '.' + newMonth + '.' + Item.boardWriteDate[2];
-  });
-
   return (
       <>
         <SubHeader kind="board" />
@@ -180,7 +168,7 @@ const CustomerSupport = () => {
                       {boards && boards.map((item) => (
                           <li key={item.boardId}>
                             <div className="thumbnail">
-                              <Link to={`/board/${board}/detail/${item.boardId}`}>
+                              <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>
                                 {imageUrl.find((image) => image.boardId === item.boardId) && (
                                     <img
                                         src={imageUrl.find((image) => image.boardId === item.boardId).imageUrl}
@@ -190,8 +178,8 @@ const CustomerSupport = () => {
                               </Link>
                             </div>
                             <p className="title">
-                              <Link to={`/board/${board}/detail/${item.boardId}`}>{item.title}</Link>
-                            </p>
+                                <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</Link>
+                                </p>
                             <p className="writer">{item.boardWriter}</p>
                             <p className="date">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${
                                 item.boardWriteDate[1]
@@ -236,7 +224,7 @@ const CustomerSupport = () => {
                             <td>
                               {/* <IsReply>답글</IsReply> */}
                               {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
-                              <Link to={`/board/${board}/detail/${item.boardId}`}>{item.title}</Link>
+                                <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</Link>
                             </td>
                             <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${
                                 item.boardWriteDate[1]
