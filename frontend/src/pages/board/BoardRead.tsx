@@ -132,15 +132,18 @@ const BoardRead = () => {
   };
 
   const handleDelete = (replyId: number) => {
-    axios
-        .put(`/reply/softdelete/${replyId}`)
-        .then((response) => {
-          console.log('댓글이 삭제되었습니다.');
-          fetchReply(boardData.boardId);
-        })
-        .catch((error) => {
-          console.error('댓글 삭제에 실패했습니다.', error);
-        });
+    const isConfirm = window.confirm('삭제하시겠습니까?');
+    if(isConfirm){
+      axios
+      .put(`/reply/softdelete/${replyId}`)
+      .then((response) => {
+        alert('삭제되었습니다.');
+        fetchReply(boardData.boardId);
+      })
+      .catch((error) => {
+        console.error('댓글 삭제에 실패했습니다.', error);
+      });
+    }
   };
 
   const handleUpdate = (replyId: any) => {
@@ -166,7 +169,7 @@ const BoardRead = () => {
     axios
         .put(`/reply/${replyId}`, data)
         .then((response) => {
-          console.log('댓글이 수정되었습니다.');
+          alert('수정되었습니다.');
           setIsEditing(false);
           setEditedReplyContent('');
           fetchReply(boardData.boardId);
@@ -192,6 +195,22 @@ const BoardRead = () => {
       console.error('댓글 작성에 실패했습니다.', error);
     }
   };
+
+  // 유저 정보 불러오기 지우지 마세요!!
+  // useEffect(() => {
+  //   const handleUserInfo = async () => {
+  //     try{
+  //       await axios.get('/')
+  //       .then((response) => {
+  //         setUserId(response.data.userId);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error.message);
+  //       })
+  //     }
+  //   }
+  //   handleUserInfo();
+  // }, [])
 
   return (
     <>

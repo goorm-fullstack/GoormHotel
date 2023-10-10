@@ -9,6 +9,7 @@ import axios from 'axios';
 import Instance from '../../utils/api/axiosInstance';
 import { Link } from 'react-router-dom';
 import { Type, TypeDetail } from '../../components/common/Search/Search';
+import { error } from 'console';
 
 const CustomerSupport = () => {
   // 대분류, 소분류 지정 배열
@@ -25,7 +26,9 @@ const CustomerSupport = () => {
       { type: 'review', typeDetail: '다이닝', value: '다이닝' },
     ],
     [
-      {type: 'notice', typeDetail: '전체', value: 'all'}
+      {type: 'notice', typeDetail: '전체', value: 'all'},
+      {type: 'notice', typeDetail: '공지사항', value: '공지사항'},
+      {type: 'notice', typeDetail: '이벤트', value: '이벤트'}
     ]
   ];
   const typeArray: Type[][] = [[{ type: '전체', value: 'all' }], [{ type: '공지사항', value: '공지사항' }], [{ type: '문의하기', value: '문의하기' }], [{type: '이용후기', value: '이용후기'}]];
@@ -287,7 +290,7 @@ const CustomerSupport = () => {
                           </tr>
                       )}
                       {/** loop */}
-                      {boards.map((item, index) => (
+                      {boards.length > 0 && boards.map((item, index) => (
                           <tr key={item.boardId}>
                             <td className="center">{totalData - index}</td>
                             <td className="center">{item.category}</td>

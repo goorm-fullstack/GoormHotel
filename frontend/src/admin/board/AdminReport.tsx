@@ -66,6 +66,7 @@ const AdminReport = () => {
       axios
         .put(`/report/check/${boardId}`)
         .then(() => {
+          alert('처리되었습니다.');
           window.location.reload();
         })
         .catch((error) => {

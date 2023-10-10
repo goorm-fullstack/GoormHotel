@@ -96,23 +96,41 @@ const BoardWrite = () => {
       form.append(key, formData[key]);
     });
 
-    try {
-      await axios.post('/boards/writeform', form, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      window.location.href = `/board/${board}/1`;
-    } catch (e: any) {
-      console.error('에러: ', e.message);
-      if (e.response.data.message.startsWith('Validation failed')) {
-        const errorMessage = e.response.data.errors[0].defaultMessage;
-        alert(errorMessage);
+    const isConfirm = window.confirm('작성하시겠습니까?');
+    if(isConfirm){
+      try {
+        await axios.post('/boards/writeform', form, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        alert('작성 완료되었습니다.');
+        window.location.href = `/board/${board}/1`;
+      } catch (e: any) {
+        console.error('에러: ', e.message);
+        if (e.response.data.message.startsWith('Validation failed')) {
+          const errorMessage = e.response.data.errors[0].defaultMessage;
+          alert(errorMessage);
+        }
       }
     }
   };
 
-  console.log(imgFile);
+  // 유저 정보 불러오기 지우지 마세요!!
+  // useEffect(() => {
+  //   const handleUserInfo = async () => {
+  //     try{
+  //       await axios.get('/')
+  //       .then((response) => {
+  //         setUserId(response.data.userId);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error.message);
+  //       })
+  //     }
+  //   }
+  //   handleUserInfo();
+  // }, [])
 
   return (
     <>

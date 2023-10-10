@@ -139,6 +139,22 @@ const AdminComment = () => {
       });
   };
 
+  // 유저 정보 불러오기 지우지 마세요!!
+  // useEffect(() => {
+  //   const handleUserInfo = async () => {
+  //     try{
+  //       await axios.get('/')
+  //       .then((response) => {
+  //         setUserId(response.data.userId);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error.message);
+  //       })
+  //     }
+  //   }
+  //   handleUserInfo();
+  // }, [])
+
   // 신고처리
   const handleReport = () => {
     let isConfirm = window.confirm('신고하시겠습니까?');

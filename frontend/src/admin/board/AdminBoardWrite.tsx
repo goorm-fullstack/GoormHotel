@@ -101,6 +101,7 @@ const AdminBoardWrite = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+      alert('게시글이 작성되었습니다.');
       window.location.href = `/admin/board/1`;
     } catch (e: any) {
       console.error("에러: ", e.message);
@@ -151,6 +152,22 @@ const AdminBoardWrite = () => {
       navigate('/admin');
     }
   }, []);
+
+  // 유저 정보 불러오기 지우지 마세요!!
+  // useEffect(() => {
+  //   const handleUserInfo = async () => {
+  //     try{
+  //       await axios.get('/')
+  //       .then((response) => {
+  //         setUserId(response.data.userId);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error.message);
+  //       })
+  //     }
+  //   }
+  //   handleUserInfo();
+  // }, [])
 
   if(authItem && authItem.includes("AUTH_C")) {
   return (

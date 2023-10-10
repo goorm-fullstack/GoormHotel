@@ -135,15 +135,18 @@ const AdminBoardDetail = () => {
   };
 
   const handleDelete = (replyId: number) => {
-    axios
-        .put(`/reply/softdelete/${replyId}`)
-        .then((response) => {
-          console.log('댓글이 삭제되었습니다.');
-          fetchReply(boardData.boardId);
-        })
-        .catch((error) => {
-          console.error('댓글 삭제에 실패했습니다.', error);
-        });
+    const isConfirm = window.confirm('삭제하시겠습니까?');
+    if(isConfirm){
+      axios
+      .put(`/reply/softdelete/${replyId}`)
+      .then((response) => {
+        alert('삭제되었습니다.');
+        fetchReply(boardData.boardId);
+      })
+      .catch((error) => {
+        console.error('댓글 삭제에 실패했습니다.', error);
+      });
+    }
   };
 
   const handleUpdate = (replyId: any) => {
@@ -161,22 +164,25 @@ const AdminBoardDetail = () => {
   };
 
   const handleSaveUpdate = (replyId: number, e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const data = {
-      replyWriter: replyWriterModify,
-      replyContent: replyContentModify,
+    const isConfirm = window.confirm('수정하시겠습니까?');
+    if(isConfirm){
+      e.preventDefault();
+      const data = {
+        replyWriter: replyWriterModify,
+        replyContent: replyContentModify,
+      }
+      axios
+          .put(`/reply/${replyId}`, data)
+          .then((response) => {
+            alert('완료되었습니다.');
+            setIsEditing(false);
+            setEditedReplyContent('');
+            fetchReply(boardData.boardId);
+          })
+          .catch((error) => {
+            console.error('댓글 수정에 실패했습니다.', error);
+          });
     }
-    axios
-        .put(`/reply/${replyId}`, data)
-        .then((response) => {
-          console.log('댓글이 수정되었습니다.');
-          setIsEditing(false);
-          setEditedReplyContent('');
-          fetchReply(boardData.boardId);
-        })
-        .catch((error) => {
-          console.error('댓글 수정에 실패했습니다.', error);
-        });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

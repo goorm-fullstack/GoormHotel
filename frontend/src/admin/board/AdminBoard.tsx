@@ -110,34 +110,42 @@ const AdminBoard = () => {
   };
 
   const DeleteBoard = () => {
-    checkedItems.forEach((boardId) => {
-      axios
-        .put(`/boards/softdelete/${boardId}`)
-        .then(() => {
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.error(error.message);
-        });
-    });
-  };
+    const isConfirm = window.confirm('삭제하시겠습니까?');
+    if(isConfirm){
+      checkedItems.forEach((boardId) => {
+        axios
+          .put(`/boards/softdelete/${boardId}`)
+          .then(() => {
+            alert('삭제되었습니다.');
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.error(error.message);
+          });
+      });
+    };
+  }
 
   const ReportBoard = () => {
-    checkedItems.forEach((boardId) => {
-      const data = {
-        boardId: boardId,
-        reportWriter: '관리자',
-        reportReason: '관리자 임의 배정',
-      };
-      axios
-        .post(`/report/writeform`, data)
-        .then(() => {
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.error(error.message);
-        });
-    });
+    const isConfirm = window.confirm('신고하시겠습니까?');
+    if(isConfirm){
+      checkedItems.forEach((boardId) => {
+        const data = {
+          boardId: boardId,
+          reportWriter: '관리자',
+          reportReason: '관리자 임의 배정',
+        };
+        axios
+          .post(`/report/writeform`, data)
+          .then(() => {
+            alert('신고처리되었습니다.');
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.error(error.message);
+          });
+      });
+    }
   };
 
   if(authItem && authItem.includes("AUTH_C")) {

@@ -86,59 +86,65 @@ const AdminDeleteComment = () => {
   };
 
   const unDeleteBtnClick = () => {
-    checkedItems.forEach((boardId) => {
-      if(boardId.startsWith('board')){
-        const id = boardId.replace('board', '');
-        axios
-        .put(`/boards/undelete/${id}`)
-        .then(() => {
-          console.log(`${boardId} 복원 성공`);
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
-      }else{
-        const id = boardId.replace('reply', '');
-        axios
-        .put(`/reply/undelete/${id}`)
-        .then(() => {
-          console.log(`${boardId} 복원 성공`);
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
-      }
-    });
+    const isConfirm = window.confirm('복구하시겠습니까?');
+    if(isConfirm){
+      checkedItems.forEach((boardId) => {
+        if(boardId.startsWith('board')){
+          const id = boardId.replace('board', '');
+          axios
+          .put(`/boards/undelete/${id}`)
+          .then(() => {
+            alert('복구되었습니다.');
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+        }else{
+          const id = boardId.replace('reply', '');
+          axios
+          .put(`/reply/undelete/${id}`)
+          .then(() => {
+            alert('복구되었습니다.');
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+        }
+      });
+    }
   };
 
   const realDeleteBtnClick = () => {
-    checkedItems.forEach((boardId) => {
-      if(boardId.startsWith('board')){
-        const id = boardId.replace('board', '');
-        axios
-        .delete(`/boards/${id}`)
-        .then(() => {
-          console.log(`${boardId} 삭제 성공`);
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
-      }else{
-        const id = boardId.replace('reply', '');
-        axios
-        .delete(`/reply/${id}`)
-        .then(() => {
-          console.log(`${boardId} 삭제 성공`);
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
-      }
-    });
+    const isConfirm = window.confirm('영구삭제 하시겠습니까?');
+    if(isConfirm){
+      checkedItems.forEach((boardId) => {
+        if(boardId.startsWith('board')){
+          const id = boardId.replace('board', '');
+          axios
+          .delete(`/boards/${id}`)
+          .then(() => {
+            alert('삭제되었습니다.');
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+        }else{
+          const id = boardId.replace('reply', '');
+          axios
+          .delete(`/reply/${id}`)
+          .then(() => {
+            alert('삭제되었습니다.');
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+        }
+      });
+    }
   };
 
   const parseBoardContent = (content: any) => {
