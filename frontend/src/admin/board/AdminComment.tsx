@@ -19,6 +19,16 @@ const AdminComment = () => {
   const navigate = useNavigate();
   const authItem = localStorage.getItem("auth");
 
+  interface ReplyData {
+    replyId: number;
+    boardId: number;
+    replyContent: string;
+    replyWriter: string;
+    replyWriteDate: number[];
+    replyBoardTitle: string;
+    replyTitle: string;
+  }
+
   useEffect(() => {
     if (!(authItem && authItem.includes("AUTH_C"))) {
       alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
@@ -60,11 +70,11 @@ const AdminComment = () => {
 
         // 각 댓글의 title을 가져오고 데이터에 추가
         const updatedReplyData = await Promise.all(
-          replyData.map(async (replyItem) => {
-            const title = await getBoardTitle(replyItem.boardId);
-            const boardTitle = await getBoardBoardTitle(replyItem.boardId);
-            return { ...replyItem, title: title, boardTitle: boardTitle };
-          })
+            replyData.map(async (replyItem) => {
+              const replyTitle = await getBoardTitle(replyItem.boardId);
+              const replyBoardTitle = await getBoardBoardTitle(replyItem.boardId);
+              return { ...replyItem, replyTitle, replyBoardTitle };
+            })
         );
 
         setReply(updatedReplyData);
@@ -221,35 +231,34 @@ const AdminComment = () => {
               </tr>
             )}
             {reply &&
-            reply.map((reply, idx) => (
-              <tr key={reply.replyId}>
-                <td className="center">
-                  <InputCheckbox
-                    type="checkbox"
-                    checked={checkedItems.includes(reply.replyId)}
-                    onChange={() => handleCheckboxChange(reply.replyId)}
-                  />
-                </td>
-                <td className="center">{totalReply - idx}</td>
-                <td className="center">{reply.board.boardTitle}</td>
-                <td className="center">
-                  <S.LinkStyle to={`/board/${reply.boardId}/detail`}>{reply.board.title}</S.LinkStyle>
-                </td>
-                <td className="center">
-                  <S.CommentText>{truncateString(reply.replyContent, 8)}</S.CommentText>
-                  <S.ModalContainer>
-                    <S.ModalContent>{reply.replyContent}</S.ModalContent>
-                  </S.ModalContainer>
-                </td>
-                <td className="center">
-                  {reply.replyWriter}
-                  {/*<LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>*/}
-                </td>
-                <td className="center">{`${reply.replyWriteDate[0]}.${reply.replyWriteDate[1] < 10 ? '0' : ''}${reply.replyWriteDate[1]}.${
-                  reply.replyWriteDate[2] < 10 ? '0' : ''
-                }${reply.replyWriteDate[2]}`}</td>
-              </tr>
-            ))}
+                reply.map((reply, idx) => (
+                    <tr key={reply.replyId}>
+                      <td className="center">
+                        <InputCheckbox
+                            type="checkbox"
+                            checked={checkedItems.includes(reply.replyId)}
+                            onChange={() => handleCheckboxChange(reply.replyId)}
+                        />
+                      </td>
+                      <td className="center">{totalReply - idx}</td>
+                      <td className="center">{reply.replyBoardTitle}</td>
+                      <td className="center">
+                        <S.LinkStyle to={`/board/${reply.boardId}/detail`}>{reply.replyTitle}</S.LinkStyle>
+                      </td>
+                      <td className="center">
+                        <S.CommentText>{truncateString(reply.replyContent, 8)}</S.CommentText>
+                        <S.ModalContainer>
+                          <S.ModalContent>{reply.replyContent}</S.ModalContent>
+                        </S.ModalContainer>
+                      </td>
+                      <td className="center">
+                        {reply.replyWriter}
+                      </td>
+                      <td className="center">{`${reply.replyWriteDate[0]}.${reply.replyWriteDate[1] < 10 ? '0' : ''}${reply.replyWriteDate[1]}.${
+                          reply.replyWriteDate[2] < 10 ? '0' : ''
+                      }${reply.replyWriteDate[2]}`}</td>
+                    </tr>
+                ))}
           </tbody>
         </Table>
         <Paging totalPage={totalPage} />
