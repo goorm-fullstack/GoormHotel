@@ -156,7 +156,8 @@ const CustomerSupport = () => {
                       </tr>
                     )}
                     {/** loop */}
-                    {boards.map((item, index) => (
+                    {boards &&
+                        boards.map((item, index) => (
                       <tr key={item.boardId}>
                         <td className="center">{totalData - index}</td>
                         <td className="center">{item.category}</td>
