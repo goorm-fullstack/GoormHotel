@@ -27,6 +27,15 @@ const AdminComment = () => {
     }
     return str;
   };
+  interface ReplyData {
+    replyId: number;
+    boardId: number;
+    replyContent: string;
+    replyWriter: string;
+    replyWriteDate: number[];
+    replyBoardTitle: string;
+    replyTitle: string;
+  }
 
   useEffect(() => {
     if (!(authItem && authItem.includes("AUTH_C"))) {
@@ -69,11 +78,11 @@ const AdminComment = () => {
 
         // 각 댓글의 title을 가져오고 데이터에 추가
         const updatedReplyData = await Promise.all(
-          replyData.map(async (replyItem) => {
-            const title = await getBoardTitle(replyItem.boardId);
-            const boardTitle = await getBoardBoardTitle(replyItem.boardId);
-            return { ...replyItem, title: title, boardTitle: boardTitle };
-          })
+            replyData.map(async (replyItem) => {
+              const replyTitle = await getBoardTitle(replyItem.boardId);
+              const replyBoardTitle = await getBoardBoardTitle(replyItem.boardId);
+              return { ...replyItem, replyTitle, replyBoardTitle };
+            })
         );
 
         setReply(updatedReplyData);
@@ -249,9 +258,9 @@ const AdminComment = () => {
                   />
                 </td>
                 <td className="center">{totalReply - idx}</td>
-                <td className="center">{reply.responseBoardDto.boardTitle}</td>
+                <td className="center">{reply.replyBoardTitle}</td>
                 <td className="center">
-                  <S.LinkStyle to={`/admin/board/${boardTitleList.find((item) => item.board === reply.responseBoardDto.boardTitle)?.english}/detail/${reply.responseBoardDto.boardId}`}>{reply.responseBoardDto.title}</S.LinkStyle>
+                  <S.LinkStyle to={`/admin/board/${boardTitleList.find((item) => item.board === reply.replyBoardTitle)?.english}/detail/${reply.boardId}`}>{reply.replyTitle}</S.LinkStyle>
                 </td>
                 <td className="center">
                   <S.CommentText>{truncateString(reply.replyContent, 8)}</S.CommentText>

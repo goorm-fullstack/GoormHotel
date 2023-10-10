@@ -64,22 +64,6 @@ public class BoardService {
     public Board findById(Long boardId){
 
         return boardRepository.findById(boardId).orElseThrow(() -> new NoBoardException("작성되지 않은 게시판입니다."));
-
-//        if (optionalBoard.isPresent()) {
-//            // 게시물이 존재할 경우에만 처리
-//            Board board = optionalBoard.get();
-//            ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
-//
-//            List<ResponseReplyDto> replies = board.getReplies().stream()
-//                    .map(Reply::toResponseReplyDto)
-//                    .toList();
-//
-//            responseBoardDto.setReply(replies);
-//            return responseBoardDto;
-//        } else {
-//            // 게시물이 없을 경우 NoBoardException을 던질 수 있습니다.
-//            throw new NoBoardException("찾는 게시판이 없습니다.");
-//        }
     }
 
     //게시물 작성자 이름으로 찾기

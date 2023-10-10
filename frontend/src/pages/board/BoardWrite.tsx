@@ -14,9 +14,7 @@ type FormData = {
 const BoardWrite = () => {
   const board = useParams().board;
   const navigate = useNavigate();
-  console.log(board);
   const [imgFile, setImgFile] = useState<string>('');
-  // const [file, setFile] = useState('');
   const imgRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [boardContent, setBoardContent] = useState('');
@@ -55,16 +53,6 @@ const BoardWrite = () => {
     }
   };
 
-  //파일 업로드 input의 onChange
-  // const saveFile = () => {
-  //   const file = fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '';
-  //   const reader = new FileReader();
-  //   reader.readAsDataURL(file as Blob);
-  //   reader.onloadend = () => {
-  //     setFile(reader.result as string);
-  //   };
-  // };
-
   //input 입력 시
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -86,9 +74,12 @@ const BoardWrite = () => {
       return;
     }
 
+    const isComment = 'false';
+
     const form = new FormData();
     form.append('multipartFile', imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '');
     form.append('file', fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '');
+    form.append('isComment', isComment);
     formData.boardContent = boardContent;
     console.log(formData.category);
 

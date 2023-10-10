@@ -5,6 +5,7 @@ import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, LinkBtn } from '../../
 import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
+import {IsReply} from "../../pages/board/Style";
 
 export interface BoardData{
   boardId: number;
@@ -19,6 +20,7 @@ export interface BoardData{
   boardImage: ImageData;
   blackList: string;
   boardDeleteTime: number[];
+  isComment: string;
 }
 
 export interface ReplyData{
@@ -215,7 +217,7 @@ const AdminBoard = () => {
                 <td className="center">{board.boardTitle}</td>
                 <td className="center">{board.category}</td>
                 <td className="center">
-                  <Link to={`/admin/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}>{board.title}</Link>
+                  <Link to={`/admin/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}>{board.isComment==="true" ? <IsReply>답글</IsReply> : null}{board.title}</Link>
                 </td>
                 <td className="center">
                   <Link to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</Link>

@@ -3,6 +3,7 @@ package goormknights.hotel.board.dto.response;
 import goormknights.hotel.board.model.BoardImage;
 import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.report.dto.response.ResponseReportDto;
+import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 
@@ -35,8 +36,10 @@ public class ResponseBoardDto {
 
     private LocalDateTime boardDeleteTime; // 삭제 날짜
 
+    private String isComment;      //답글 여부
+
     @Builder
-    public ResponseBoardDto(Long boardId, String title, String boardContent, LocalDateTime boardWriteDate, String boardWriter, String boardTitle, String category, List<ResponseReplyDto> reply, List<ResponseReportDto> report, BoardImage boardImage, LocalDateTime boardDeleteTime) {
+    public ResponseBoardDto(Long boardId, String title, String boardContent, LocalDateTime boardWriteDate, String boardWriter, String boardTitle, String category, List<ResponseReplyDto> reply, List<ResponseReportDto> report, BoardImage boardImage, LocalDateTime boardDeleteTime, String isComment) {
         this.boardId = boardId;
         this.title = title;
         this.boardContent = boardContent;
@@ -48,6 +51,7 @@ public class ResponseBoardDto {
         this.category = category;
         this.boardImage = boardImage;
         this.boardDeleteTime = boardDeleteTime;
+        this.isComment = isComment;
     }
 
 }

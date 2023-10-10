@@ -191,15 +191,6 @@ public class BoardController {
 
         ByteArrayResource byteArrayResource = new ByteArrayResource(data);
 
-//        String boardFileName = byTitle.getBoardFile().getBoardFileName();
-//        String uploadFileName = byTitle.getBoardFile().getOriginalboardFileName();
-//        String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
-//        String absolutePath = new File("").getAbsolutePath() + "\\";
-//        Path path = Paths.get(absolutePath + "\\" + boardFileName);
-//        String contentDisposition = "attachment; filename=\"" + encodedUploadFileName + "\"";
-//
-//        UrlResource urlResource = new UrlResource("file:" + path);
-
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .contentLength(data.length)
