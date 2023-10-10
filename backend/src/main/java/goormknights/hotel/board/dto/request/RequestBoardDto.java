@@ -1,6 +1,7 @@
 package goormknights.hotel.board.dto.request;
 
 import goormknights.hotel.board.model.Board;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,6 +32,9 @@ public class RequestBoardDto {
 
     private LocalDateTime boardDeleteTime;      //소프트딜리트 시간
 
+    private Boolean isComment;      //답글 여부
+
+
     public Board toEntity() {
         return Board.builder()
                 .title(title)
@@ -39,6 +43,7 @@ public class RequestBoardDto {
                 .boardWriteDate(boardWriteDate)
                 .boardTitle(boardTitle)
                 .category(category)
+                .isComment(isComment)
                 .build();
     }
 }

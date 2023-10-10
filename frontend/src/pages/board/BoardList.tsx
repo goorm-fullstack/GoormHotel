@@ -9,6 +9,7 @@ import axios from 'axios';
 import Instance from '../../utils/api/axiosInstance';
 import { Link } from 'react-router-dom';
 import { Type, TypeDetail } from '../../components/common/Search/Search';
+import {IsReply} from "./Style";
 
 const CustomerSupport = () => {
   // 대분류, 소분류 지정 배열
@@ -60,6 +61,7 @@ const CustomerSupport = () => {
             const totalPages = parseInt(response.headers['totalpages'], 10);
             const totalData = parseInt(response.headers['totaldata'], 10);
             setBoard(response.data || []);
+            console.log(response.data);
             setTotalData(totalData);
             setTotalPages(totalPages);
           })
@@ -286,13 +288,12 @@ const CustomerSupport = () => {
                             </td>
                           </tr>
                       )}
-                      {/** loop */}
                       {boards.map((item, index) => (
                           <tr key={item.boardId}>
                             <td className="center">{totalData - index}</td>
                             <td className="center">{item.category}</td>
                             <td>
-                              {/* <IsReply>답글</IsReply> */}
+                              {item.isComment ? <IsReply>답글</IsReply> : null}
                               {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
                                 <Link
                                     to={{pathname: `/board/${board}/detail/${item.title}`,search: `boardId=${item.boardId}`}}>{item.title}</Link>
