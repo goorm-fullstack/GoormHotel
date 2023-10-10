@@ -2,7 +2,6 @@ package goormknights.hotel.auth.controller;
 
 import goormknights.hotel.auth.dto.request.ManagerLogin;
 import goormknights.hotel.auth.dto.request.MemberLogin;
-import goormknights.hotel.auth.service.AuthService;
 import goormknights.hotel.member.service.AdminService;
 import goormknights.hotel.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class LoginController {
 
-    private final AuthService authService;
     private final MemberService memberService;
     private final AdminService adminService;
 

@@ -90,6 +90,7 @@ public class MemberController {
         }
     }
 
+    // 비밀번호 리셋
     @PostMapping("/reset-pw")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
         try {
@@ -101,16 +102,5 @@ public class MemberController {
             return new ResponseEntity<>("Member not found", HttpStatus.NOT_FOUND);
         }
     }
-
-//    // 이메일 인증 요청
-//    @PostMapping("/verify")
-//    public ResponseEntity<String> verifyCode(@RequestBody EmailVerificationRequest request) {
-//        boolean isVerified = memberService.verifyCode(request.getEmail(), request.getCode());
-//        if (isVerified) {
-//            return ResponseEntity.ok("회원가입 성공");
-//        } else {
-//            return ResponseEntity.badRequest().body("인증 코드가 일치하지 않습니다.");
-//        }
-//    }
 
 }
