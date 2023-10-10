@@ -246,7 +246,7 @@ const CustomerSupport = () => {
                               <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>
                                 {imageUrl.find((image) => image.boardId === item.boardId) && (
                                     <img
-                                        src={imageUrl.find((image) => image.boardId === item.boardId).imageUrl}
+                                        src={imageUrl.find((image: any) => image.boardId === item.boardId).imageUrl}
                                         alt={`Image for ${item.title}`}
                                     />
                                 )}
