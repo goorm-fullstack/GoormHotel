@@ -8,6 +8,7 @@ import axios from 'axios';
 import Instance from '../../utils/api/axiosInstance';
 import Search from '../../components/common/Search/Search';
 import { Link } from 'react-router-dom';
+import {IsReply} from "./Style";
 
 const CustomerSupport = () => {
   const board = useParams().board;
@@ -156,21 +157,35 @@ const CustomerSupport = () => {
                       </tr>
                     )}
                     {/** loop */}
-                    {boards &&
-                        boards.map((item, index) => (
-                      <tr key={item.boardId}>
-                        <td className="center">{totalData - index}</td>
-                        <td className="center">{item.category}</td>
-                        <td>
-                          {/* <IsReply>답글</IsReply> */}
-                          {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
-                          <Link to={`/board/${board}/detail/${item.boardId}`}>{item.title}</Link>
-                        </td>
-                        <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
-                          item.boardWriteDate[2] < 10 ? '0' : ''
-                        }${item.boardWriteDate[2]}`}</td>
-                      </tr>
-                    ))}
+                    {
+                        boards &&
+                        boards.map((board) => (
+                            <tr key={board.boardId}>
+                                <td className="center">{totalData}</td>
+                                <td className="center">{board.category}</td>
+                                <td>
+                                    <IsReply>답글</IsReply>
+                                    <Link to={`/board/${board.boardId}/detail/${board.boardId}`}>{board.title}</Link>
+                                </td>
+                                <td className="center">{`${board.boardWriteDate[0]}.${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}.${board.boardWriteDate[2] < 10 ? '0' : ''}${board.boardWriteDate[2]}`}</td>
+                            </tr>
+                        ))
+                    }
+                    {/*{boards &&*/}
+                    {/*    boards.map((item, index) => (*/}
+                    {/*  <tr key={item.boardId}>*/}
+                    {/*    <td className="center">{totalData - index}</td>*/}
+                    {/*    <td className="center">{item.category}</td>*/}
+                    {/*    <td>*/}
+                    {/*      /!* <IsReply>답글</IsReply> *!/*/}
+                    {/*      /!** 답글 여부에 따라 보이거나 안 보이게 처리 *!/*/}
+                    {/*      <Link to={`/board/${board}/detail/${item.boardId}`}>{item.title}</Link>*/}
+                    {/*    </td>*/}
+                    {/*    <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${*/}
+                    {/*      item.boardWriteDate[2] < 10 ? '0' : ''*/}
+                    {/*    }${item.boardWriteDate[2]}`}</td>*/}
+                    {/*  </tr>*/}
+                    {/*))}*/}
                     {/** // loop */}
                   </tbody>
                 </S.Table>
