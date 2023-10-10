@@ -293,7 +293,7 @@ const CustomerSupport = () => {
                             <td className="center">{totalData - index}</td>
                             <td className="center">{item.category}</td>
                             <td>
-                              {item.isComment ? <IsReply>답글</IsReply> : null}
+                              {item.isComment==="true" ? <IsReply>답글</IsReply> : null}
                               {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
                                 <Link
                                     to={{pathname: `/board/${board}/detail/${item.title}`,search: `boardId=${item.boardId}`}}>{item.title}</Link>

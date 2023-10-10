@@ -169,10 +169,13 @@ const AdminBoardWrite = () => {
                   <td>
                     <MultiCheck className="fit">
                       <input type="text" className="long" name="title" value={formData.title} onChange={handleChange} required/>
-                      <CheckLabel>
-                        <InputCheckbox type="checkbox" checked={isComment} onChange={handleCommentCheckboxChange}/>{" "}
-                        답글
-                      </CheckLabel>
+                      {
+                        formData.boardTitle ==="문의하기" &&
+                          <CheckLabel>
+                            <InputCheckbox type="checkbox" checked={isComment} onChange={handleCommentCheckboxChange}/>{" "}
+                            답글
+                          </CheckLabel>
+                      }
                     </MultiCheck>
                   </td>
                 </tr>

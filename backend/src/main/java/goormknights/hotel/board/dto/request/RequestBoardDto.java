@@ -32,7 +32,7 @@ public class RequestBoardDto {
 
     private LocalDateTime boardDeleteTime;      //소프트딜리트 시간
 
-    private Boolean isComment;      //답글 여부
+    private String isComment;      //답글 여부
 
 
     public Board toEntity() {
