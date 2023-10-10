@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as S from './Style';
 import { BtnWrapper, SubmitBtn, PageTitle } from '../../Style/commonStyles';
+import { useNavigate, useParams } from 'react-router-dom';
+import Instance from '../../utils/api/axiosInstance';
 
 const FindPwResult = () => {
   const { resetToken } = useParams();

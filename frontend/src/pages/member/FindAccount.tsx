@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as S from './Style';
 import { PageTitle, ContentsTitleXSmall, AuthBtn, SubmitBtn, BtnWrapper, Auth } from '../../Style/commonStyles';
+import Instance from '../../utils/api/axiosInstance';
+import { useNavigate } from 'react-router-dom';
 
 interface FindMemberIdDTO {
   name: string;

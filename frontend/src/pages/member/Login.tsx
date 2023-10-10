@@ -153,10 +153,10 @@ const Login: React.FC = () => {
               <button type="button">
                 <img src={google} alt="authImg" />
               </button>
-              <button type="button" onClick={handleKakaoLogin}>
+              <button type="button">
                 <img src={kakao} alt="authImg" />
               </button>
-              <button type="button" onClick={handleNaverLogin}>
+              <button type="button">
                 <img src={naver} alt="authImg" />
               </button>
             </div>
