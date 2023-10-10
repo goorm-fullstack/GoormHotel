@@ -33,7 +33,7 @@ const CustomerSupport = () => {
         .then((response) => {
           const totalPages = parseInt(response.headers['totalpages'], 10);
           const totalData = parseInt(response.headers['totaldata'], 10);
-            setBoard(response.data);
+            setBoard(response.data || []);
             setTotalData(totalData);
           setTotalPages(totalPages);
         })
