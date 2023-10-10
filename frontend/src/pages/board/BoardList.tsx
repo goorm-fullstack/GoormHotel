@@ -148,18 +148,6 @@ const CustomerSupport = () => {
         });
   };
 
-
-  let writeDate;
-  let newMonth;
-  boards.map((Item) => {
-    if (Item.boardWriteDate[1].length === 1) {
-      newMonth = '0' + Item.boardWriteDate[1];
-    } else {
-      newMonth = Item.boardWriteDate[1];
-    }
-    writeDate = Item.boardWriteDate[0] + '.' + newMonth + '.' + Item.boardWriteDate[2];
-  });
-
   // typeDetail 변경
   const handleTypeDetailChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if(searchKeyword.current){
