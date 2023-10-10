@@ -73,6 +73,8 @@ const CustomerSupport = () => {
       .catch((error) => {});
   };
 
+  console.log(boards);
+
   return (
     <>
       <SubHeader kind="board" />
