@@ -280,7 +280,7 @@ const CustomerSupport = () => {
                           </tr>
                       )}
                       {/** loop */}
-                      {boards.length > 0 && boards.map((item, index) => (
+                      {boards.length > 0 && boards.map((item, index:number) => (
                           <tr key={item.boardId}>
                             <td className="center">{totalData - index}</td>
                             <td className="center">{item.category}</td>
