@@ -59,63 +59,63 @@ const CustomerSupport = () => {
       if (boardTitle !== '') {
         if(typeDetail === 'all' && keyword === ''){
           axios
-          .get(`/boards/find/category?boardTitle=${boardTitle}`)
-          .then((response) => {
-            const totalPages = parseInt(response.headers['totalpages'], 10);
-            const totalData = parseInt(response.headers['totaldata'], 10);
-            setBoard(response.data || []);
-            console.log(response.data);
-            setTotalData(totalData);
-            setTotalPages(totalPages);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+              .get(`/boards/find/category?boardTitle=${boardTitle}`)
+              .then((response) => {
+                const totalPages = parseInt(response.headers['totalpages'], 10);
+                const totalData = parseInt(response.headers['totaldata'], 10);
+                setBoard(response.data || []);
+                console.log(response.data);
+                setTotalData(totalData);
+                setTotalPages(totalPages);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
         }else if(typeDetail !== 'all' && keyword === ''){
           axios
-          .get(`/boards/find/category?boardTitle=${boardTitle}&category=${typeDetail}`)
-          .then((response) => {
-            const totalPages = parseInt(response.headers['totalpages'], 10);
-            const totalData = parseInt(response.headers['totaldata'], 10);
-            setBoard(response.data || []);
-            setTotalData(totalData);
-            setTotalPages(totalPages);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+              .get(`/boards/find/category?boardTitle=${boardTitle}&category=${typeDetail}`)
+              .then((response) => {
+                const totalPages = parseInt(response.headers['totalpages'], 10);
+                const totalData = parseInt(response.headers['totaldata'], 10);
+                setBoard(response.data || []);
+                setTotalData(totalData);
+                setTotalPages(totalPages);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
         }else if(typeDetail === 'all' && keyword !== ''){
           axios
-          .get(`/boards/find/category?boardTitle=${boardTitle}&keyword=${keyword}`)
-          .then((response) => {
-            const totalPages = parseInt(response.headers['totalpages'], 10);
-            const totalData = parseInt(response.headers['totaldata'], 10);
-            setBoard(response.data || []);
-            setTotalData(totalData);
-            setTotalPages(totalPages);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+              .get(`/boards/find/category?boardTitle=${boardTitle}&keyword=${keyword}`)
+              .then((response) => {
+                const totalPages = parseInt(response.headers['totalpages'], 10);
+                const totalData = parseInt(response.headers['totaldata'], 10);
+                setBoard(response.data || []);
+                setTotalData(totalData);
+                setTotalPages(totalPages);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
         }else{
           axios
-          .get(`/boards/find/category?boardTitle=${boardTitle}&category=${typeDetail}&keyword=${keyword}`)
-          .then((response) => {
-            const totalPages = parseInt(response.headers['totalpages'], 10);
-            const totalData = parseInt(response.headers['totaldata'], 10);
-            setBoard(response.data || []);
-            setTotalData(totalData);
-            setTotalPages(totalPages);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+              .get(`/boards/find/category?boardTitle=${boardTitle}&category=${typeDetail}&keyword=${keyword}`)
+              .then((response) => {
+                const totalPages = parseInt(response.headers['totalpages'], 10);
+                const totalData = parseInt(response.headers['totaldata'], 10);
+                setBoard(response.data || []);
+                setTotalData(totalData);
+                setTotalPages(totalPages);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
         }
       }
     }
 
-      setImageUrl([]);
-      handleLoadBoard();
+    setImageUrl([]);
+    handleLoadBoard();
   }, [board, typeDetail, keyword]);
 
   useEffect(() => {
@@ -161,9 +161,9 @@ const CustomerSupport = () => {
   const generateOptions = (item: TypeDetail, selectedType: string) => {
     if (item.type === selectedType) {
       return (
-        <option key={item.value} value={item.value}>
-          {item.typeDetail}
-        </option>
+          <option key={item.value} value={item.value}>
+            {item.typeDetail}
+          </option>
       );
     }
   };
@@ -241,8 +241,8 @@ const CustomerSupport = () => {
                               </Link>
                             </div>
                             <p className="title">
-                                <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</Link>
-                                </p>
+                              <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</Link>
+                            </p>
                             <p className="writer">{item.boardWriter}</p>
                             <p className="date">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${
                                 item.boardWriteDate[1]
@@ -280,14 +280,14 @@ const CustomerSupport = () => {
                           </tr>
                       )}
                       {/** loop */}
-                      {boards.length > 0 && boards.map((item, index:number) => (
+                      {boards.length > 0 && boards.map((item) => (
                           <tr key={item.boardId}>
-                            <td className="center">{totalData - index}</td>
+                            <td className="center">{totalData}</td>
                             <td className="center">{item.category}</td>
                             <td>
                               {item.isComment==="true" ? <IsReply>답글</IsReply> : null}
                               {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
-                                <Link to={{pathname: `/board/${board}/detail/${item.title}`,search: `boardId=${item.boardId}`}}>{item.title}</Link>
+                              <Link to={{pathname: `/board/${board}/detail/${item.title}`,search: `boardId=${item.boardId}`}}>{item.title}</Link>
                             </td>
                             <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${
                                 item.boardWriteDate[1]
