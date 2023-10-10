@@ -280,9 +280,9 @@ const CustomerSupport = () => {
                           </tr>
                       )}
                       {/** loop */}
-                      {boards.length > 0 && boards.map((item) => (
+                      {boards.length > 0 && boards.map((item, index) => (
                           <tr key={item.boardId}>
-                            <td className="center">{totalData}</td>
+                            <td className="center">{totalData - index}</td>
                             <td className="center">{item.category}</td>
                             <td>
                               {item.isComment==="true" ? <IsReply>답글</IsReply> : null}
