@@ -8,7 +8,6 @@ import axios from 'axios';
 import Instance from '../../utils/api/axiosInstance';
 import Search from '../../components/common/Search/Search';
 import { Link } from 'react-router-dom';
-import {IsReply} from "./Style";
 
 const CustomerSupport = () => {
   const board = useParams().board;
@@ -33,8 +32,8 @@ const CustomerSupport = () => {
         .then((response) => {
           const totalPages = parseInt(response.headers['totalpages'], 10);
           const totalData = parseInt(response.headers['totaldata'], 10);
-            setBoard(response.data || []);
-            setTotalData(totalData);
+          setBoard(response.data || []);
+          setTotalData(totalData);
           setTotalPages(totalPages);
         })
         .catch((error) => {
@@ -72,8 +71,6 @@ const CustomerSupport = () => {
       })
       .catch((error) => {});
   };
-
-  console.log(boards);
 
   return (
     <>
@@ -159,8 +156,7 @@ const CustomerSupport = () => {
                       </tr>
                     )}
                     {/** loop */}
-                    {boards &&
-                        boards.map((item, index) => (
+                    {boards.map((item, index) => (
                       <tr key={item.boardId}>
                         <td className="center">{totalData - index}</td>
                         <td className="center">{item.category}</td>
