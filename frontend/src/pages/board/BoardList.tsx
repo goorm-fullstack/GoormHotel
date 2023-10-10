@@ -192,6 +192,37 @@ const CustomerSupport = () => {
     }
   };
 
+  const renderTableRows = () => {
+    if (boards.length === 0) {
+      return (
+          <tr key="no-data">
+            <td colSpan={7} className="center">
+              작성된 게시글이 없습니다.
+            </td>
+          </tr>
+      );
+    }
+
+    return boards.map((item, index) => {
+      const formattedDate = `${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${item.boardWriteDate[2] < 10 ? '0' : ''}${item.boardWriteDate[2]}`;
+      const isReply = item.isComment === "true";
+
+      return (
+          <tr key={item.boardId}>
+            <td className="center">{totalData - index}</td>
+            <td className="center">{item.category}</td>
+            <td>
+              {isReply && <IsReply>답글</IsReply>}
+              <Link to={{ pathname: `/board/${board}/detail/${item.title}`, search: `boardId=${item.boardId}` }}>
+                {item.title}
+              </Link>
+            </td>
+            <td className="center">{formattedDate}</td>
+          </tr>
+      );
+    });
+  };
+
   return (
       <>
         <SubHeader kind="board" />
@@ -272,30 +303,31 @@ const CustomerSupport = () => {
                       </tr>
                       </thead>
                       <tbody>
-                      {boards.length === 0 && (
-                          <tr key="no-data">
-                            <td colSpan={7} className="center">
-                              작성된 게시글이 없습니다.
-                            </td>
-                          </tr>
-                      )}
-                      {/** loop */}
-                      {boards.length > 0 && boards.map((item, index) => (
-                          <tr key={item.boardId}>
-                            <td className="center">{totalData - index}</td>
-                            <td className="center">{item.category}</td>
-                            <td>
-                              {item.isComment==="true" ? <IsReply>답글</IsReply> : null}
-                              {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
-                                <Link to={{pathname: `/board/${board}/detail/${item.title}`,search: `boardId=${item.boardId}`}}>{item.title}</Link>
-                            </td>
-                            <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${
-                                item.boardWriteDate[1]
-                            }.${
-                                item.boardWriteDate[2] < 10 ? '0' : ''
-                            }${item.boardWriteDate[2]}`}</td>
-                          </tr>
-                      ))}
+                      {/*{boards.length === 0 && (*/}
+                      {/*    <tr key="no-data">*/}
+                      {/*      <td colSpan={7} className="center">*/}
+                      {/*        작성된 게시글이 없습니다.*/}
+                      {/*      </td>*/}
+                      {/*    </tr>*/}
+                      {/*)}*/}
+                      {/*/!** loop *!/*/}
+                      {/*{boards.length > 0 && boards.map((item, index) => (*/}
+                      {/*    <tr key={item.boardId}>*/}
+                      {/*      <td className="center">{totalData - index}</td>*/}
+                      {/*      <td className="center">{item.category}</td>*/}
+                      {/*      <td>*/}
+                      {/*        {item.isComment==="true" ? <IsReply>답글</IsReply> : null}*/}
+                      {/*        /!** 답글 여부에 따라 보이거나 안 보이게 처리 *!/*/}
+                      {/*          <Link to={{pathname: `/board/${board}/detail/${item.title}`,search: `boardId=${item.boardId}`}}>{item.title}</Link>*/}
+                      {/*      </td>*/}
+                      {/*      <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${*/}
+                      {/*          item.boardWriteDate[1]*/}
+                      {/*      }.${*/}
+                      {/*          item.boardWriteDate[2] < 10 ? '0' : ''*/}
+                      {/*      }${item.boardWriteDate[2]}`}</td>*/}
+                      {/*    </tr>*/}
+                      {/*))}*/}
+                      {renderTableRows()}
                       {/** // loop */}
                       </tbody>
                     </S.Table>
