@@ -7,6 +7,8 @@ import goormknights.hotel.board.dto.response.ResponseBoardDto;
 import goormknights.hotel.board.exception.NoBoardException;
 import goormknights.hotel.board.model.Board;
 import goormknights.hotel.board.repository.BoardRepository;
+import goormknights.hotel.reply.model.Reply;
+import goormknights.hotel.reply.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,6 +27,7 @@ import java.util.List;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final ReplyRepository replyRepository;
     private final BoardImageService boardImageService;
     private final BoardFileService boardFileService;
 
@@ -61,22 +64,6 @@ public class BoardService {
     public Board findById(Long boardId){
 
         return boardRepository.findById(boardId).orElseThrow(() -> new NoBoardException("작성되지 않은 게시판입니다."));
-
-//        if (optionalBoard.isPresent()) {
-//            // 게시물이 존재할 경우에만 처리
-//            Board board = optionalBoard.get();
-//            ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
-//
-//            List<ResponseReplyDto> replies = board.getReplies().stream()
-//                    .map(Reply::toResponseReplyDto)
-//                    .toList();
-//
-//            responseBoardDto.setReply(replies);
-//            return responseBoardDto;
-//        } else {
-//            // 게시물이 없을 경우 NoBoardException을 던질 수 있습니다.
-//            throw new NoBoardException("찾는 게시판이 없습니다.");
-//        }
     }
 
     //게시물 작성자 이름으로 찾기
@@ -84,7 +71,7 @@ public class BoardService {
         List<Board> byBoardWriter = boardRepository.findAllByBoardWriter(boardWriter, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
         for (Board board : byBoardWriter) {
-            if(board.getBoardDeleteTime()==null){
+            if(board.getBoardDeleteTime()==null && board.getReport().size() == 0){
                 response.add(board.toResponseBoardDto());
             }
         }
@@ -98,7 +85,7 @@ public class BoardService {
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
-            if(board.getBoardDeleteTime()==null){
+            if(board.getBoardDeleteTime()==null && board.getReport().size() == 0){
                 response.add(board.toResponseBoardDto());
             }
         }
@@ -112,7 +99,7 @@ public class BoardService {
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
-            if(board.getBoardDeleteTime()==null){
+            if(board.getBoardDeleteTime()==null && board.getReport().size() == 0){
                 response.add(board.toResponseBoardDto());
             }
         }
@@ -126,7 +113,7 @@ public class BoardService {
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
-            if(board.getBoardDeleteTime()==null){
+            if(board.getBoardDeleteTime()==null && board.getReport().size() == 0){
                 response.add(board.toResponseBoardDto());
             }
         }
@@ -163,7 +150,7 @@ public class BoardService {
         Page<Board> all = boardRepository.findAll(pageable);
         List<Board> list = new ArrayList<>();
         for (Board board : all) {
-            if(board.getBoardDeleteTime() == null){
+            if(board.getBoardDeleteTime() == null && board.getReport().size() == 0){
                 list.add(board);
             }
         }
@@ -223,7 +210,7 @@ public class BoardService {
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : allByBoardTitle) {
-            if(board.getBoardDeleteTime()==null){
+            if(board.getBoardDeleteTime()==null && board.getReport().size() == 0){
                 ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
                 response.add(responseBoardDto);
             }
@@ -232,19 +219,38 @@ public class BoardService {
         return new PageImpl<>(response, pageable, response.size());
     }
 
-    //게시판-카테고리로 게시물 찾기
-    public List<ResponseBoardDto> getAllByCategory(String category, Pageable pageable){
-        List<Board> allByCataegory = boardRepository.findAllByCategory(category, pageable);
+    //게시판-카테고리와 검색 단어로 게시물 찾기
+    public Page<ResponseBoardDto> getAllByCategory(String boardTitle, String category, String keyword, Pageable pageable){
+        Page<Board> allByBoardTitle = boardRepository.findAllByBoardTitle(boardTitle, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
 
-        for(Board board : allByCataegory){
-            if(board.getBoardDeleteTime()==null){
-                ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
-                response.add(responseBoardDto);
+        if(category == null && keyword == null){
+            for (Board board : allByBoardTitle) {
+                if(board.getBoardDeleteTime() == null && board.getReport().size() == 0){
+                    response.add(board.toResponseBoardDto());
+                }
+            }
+        }else if(category != null && keyword == null){
+            for (Board board : allByBoardTitle) {
+                if(board.getBoardDeleteTime() == null && board.getReport().size() == 0 && board.getCategory().equals(category)){
+                    response.add(board.toResponseBoardDto());
+                }
+            }
+        }else if(category == null && keyword != null){
+            for (Board board : allByBoardTitle) {
+                if(board.getBoardDeleteTime() == null && board.getReport().size() == 0 && (board.getTitle().contains(keyword) || board.getBoardContent().contains(keyword))){
+                    response.add(board.toResponseBoardDto());
+                }
+            }
+        }else{
+            for (Board board : allByBoardTitle) {
+                if(board.getBoardDeleteTime() == null && board.getReport().size() == 0 && board.getCategory().equals(category) && (board.getTitle().contains(keyword) || board.getBoardContent().contains(keyword))){
+                    response.add(board.toResponseBoardDto());
+                }
             }
         }
 
-        return response;
+        return new PageImpl<>(response, pageable, response.size());
     }
 
     //삭제 게시물 복원
@@ -273,6 +279,26 @@ public class BoardService {
 
     public Board findByBoardTitle(String boardTitle) {
         return boardRepository.findByTitle(boardTitle).orElseThrow(() -> new NoBoardException("등록되지 않은 게시판입니다."));
+    }
+
+    // 삭제된 게시글, 댓글 모두 조회
+    public Page<Object> findAllBoardReplyDeleted(Pageable pageable){
+        Page<Board> all = boardRepository.findAll(pageable);
+        Page<Reply> all1 = replyRepository.findAll(pageable);
+        List<Object> list = new ArrayList<>();
+
+        for (Board board : all) {
+            if(board.getBoardDeleteTime() != null){
+                list.add(board.toResponseBoardDto());
+            }
+        }
+        for (Reply reply : all1) {
+            if(reply.getReplyDeleteTime() != null){
+                list.add(reply.toResponseReplyDto());
+            }
+        }
+
+        return new PageImpl<>(list, pageable, list.size());
     }
 
 }

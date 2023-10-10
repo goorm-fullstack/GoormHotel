@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import AdminLayout from '../common/AdminLayout';
+import * as S from './Style'
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, LinkBtn } from '../../Style/commonStyles';
 import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
+import {IsReply} from "../../pages/board/Style";
 
 export interface BoardData{
   boardId: number;
@@ -18,6 +20,8 @@ export interface BoardData{
   report: ReportData[];
   boardImage: ImageData;
   blackList: string;
+  boardDeleteTime: number[];
+  isComment: string;
 }
 
 export interface ReplyData{
@@ -27,7 +31,9 @@ export interface ReplyData{
   replyWriteDate: number[];
   replyWriter: string;
   report: ReportData[];
-  board: BoardData;
+  responseBoardDto: BoardData;
+  boardTitle: string;
+  replyDeleteTime: number[];
 }
 
 export interface ReportData{
@@ -41,9 +47,10 @@ export interface ReportData{
   reportWriter: string;
   reportCheck: boolean;
   reportResult: string;
+  boardTitle: string;
 }
 
-const boardTitleList = [
+export const boardTitleList = [
   {board: '공지사항', english: 'notice'},
   {board: '문의하기', english: 'qna'},
   {board: '이용후기', english: 'review'},
@@ -106,34 +113,42 @@ const AdminBoard = () => {
   };
 
   const DeleteBoard = () => {
-    checkedItems.forEach((boardId) => {
-      axios
-        .put(`/boards/softdelete/${boardId}`)
-        .then(() => {
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.error(error.message);
-        });
-    });
-  };
+    const isConfirm = window.confirm('삭제하시겠습니까?');
+    if(isConfirm){
+      checkedItems.forEach((boardId) => {
+        axios
+          .put(`/boards/softdelete/${boardId}`)
+          .then(() => {
+            alert('삭제되었습니다.');
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.error(error.message);
+          });
+      });
+    };
+  }
 
   const ReportBoard = () => {
-    checkedItems.forEach((boardId) => {
-      const data = {
-        boardId: boardId,
-        reportWriter: '관리자',
-        reportReason: '관리자 임의 배정',
-      };
-      axios
-        .post(`/report/writeform`, data)
-        .then(() => {
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.error(error.message);
-        });
-    });
+    const isConfirm = window.confirm('신고하시겠습니까?');
+    if(isConfirm){
+      checkedItems.forEach((boardId) => {
+        const data = {
+          boardId: boardId,
+          reportWriter: '관리자',
+          reportReason: '관리자 임의 배정',
+        };
+        axios
+          .post(`/report/writeform`, data)
+          .then(() => {
+            alert('신고처리되었습니다.');
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.error(error.message);
+          });
+      });
+    }
   };
 
   if(authItem && authItem.includes("AUTH_C")) {
@@ -203,10 +218,10 @@ const AdminBoard = () => {
                 <td className="center">{board.boardTitle}</td>
                 <td className="center">{board.category}</td>
                 <td className="center">
-                  <Link to={`/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.title}?boardId=${board.boardId}`}>{board.title}</Link>
+                  <S.LinkStyle to={`/admin/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}>{board.isComment==="true" ? <IsReply>답글</IsReply> : null}{board.title}</S.LinkStyle>
                 </td>
                 <td className="center">
-                  <Link to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</Link>
+                  <S.LinkStyle to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</S.LinkStyle>
                 </td>
                 <td className="center">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
                   board.boardWriteDate[2] < 10 ? '0' : ''

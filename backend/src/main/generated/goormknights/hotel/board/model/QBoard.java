@@ -40,6 +40,8 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final StringPath category = createString("category");
 
+    public final StringPath isComment = createString("isComment");
+
     public final ListPath<goormknights.hotel.reply.model.Reply, goormknights.hotel.reply.model.QReply> replies = this.<goormknights.hotel.reply.model.Reply, goormknights.hotel.reply.model.QReply>createList("replies", goormknights.hotel.reply.model.Reply.class, goormknights.hotel.reply.model.QReply.class, PathInits.DIRECT2);
 
     public final ListPath<goormknights.hotel.report.model.Report, goormknights.hotel.report.model.QReport> report = this.<goormknights.hotel.report.model.Report, goormknights.hotel.report.model.QReport>createList("report", goormknights.hotel.report.model.Report.class, goormknights.hotel.report.model.QReport.class, PathInits.DIRECT2);

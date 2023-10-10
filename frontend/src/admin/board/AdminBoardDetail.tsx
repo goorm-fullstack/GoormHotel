@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './Style';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PageTitle, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
 import queryString from "query-string";
-import e from 'express';
+import AdminLayout from '../common/AdminLayout';
+import { Container } from '../member/Style';
+import { NormalBtn } from '../../Style/commonStyles';
 
-const BoardRead = () => {
+const AdminBoardDetail = () => {
   const loc = useLocation();
   const [imageUrl, setImageUrl] = useState<any>('');
-  const { board } = useParams();
-  const location = useLocation();
-  const queryParam = queryString.parse(location.search);
-  const boardId = String(queryParam.boardId);
+  const { board, id } = useParams();
+//   const location = useLocation();
+//   const queryParam = queryString.parse(location.search);
+//   const boardId = String(queryParam.boardId);
   const [boardData, setBoardData] = useState<any>(null);
   const [listLink, setListLink] = useState('');
   const [title, setTitle] = useState<any>();
@@ -26,6 +28,8 @@ const BoardRead = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedReplyContent, setEditedReplyContent] = useState('');
   const [editingReplyId, setEditingReplyId] = useState(0); // 수정 중인 댓글 ID를 추적
+	const navigate = useNavigate();
+	console.log(id);
 
   const parseBoardContent = (content: any) => {
     const parser = new DOMParser();
@@ -40,7 +44,7 @@ const BoardRead = () => {
 
   useEffect(() => {
     axios
-        .get(`/boards/${boardId}`)
+        .get(`/boards/${id}`)
         .then((response) => {
           if (response.headers['filename']) {
             const fileName = response.headers['filename'];
@@ -58,16 +62,15 @@ const BoardRead = () => {
     let pageTitle;
     switch (board) {
       case 'notice':
-        pageTitle = <PageTitle>공지사항</PageTitle>;
+        pageTitle = <PageTitle>공지사항 상세</PageTitle>;
         break;
       case 'qna':
-        pageTitle = <PageTitle>문의하기</PageTitle>;
+        pageTitle = <PageTitle>문의하기 상세</PageTitle>;
         break;
       case 'review':
-        pageTitle = <PageTitle>이용후기</PageTitle>;
+        pageTitle = <PageTitle>이용후기 상세</PageTitle>;
         break;
       default:
-        pageTitle = <PageTitle>고객지원</PageTitle>;
         break;
     }
     setTitle(pageTitle ? pageTitle : undefined);
@@ -76,13 +79,13 @@ const BoardRead = () => {
       let link = '';
       switch (boardData.boardTitle) {
         case '문의하기':
-          link = '/board/qna/1';
+          link = '/admin/board/1';
           break;
         case '공지사항':
-          link = '/board/notice/1';
+          link = '/admin/board/1';
           break;
         case '이용후기':
-          link = '/board/review/1';
+          link = '/admin/board/1';
           break;
         default:
           break;
@@ -95,7 +98,7 @@ const BoardRead = () => {
     // 단일 항목에 대한 이미지 URL을 가져옵니다
     const fetchImageUrl = async () => {
       try {
-        const response = await axios.get(`/boards/image/${boardId}`, {
+        const response = await axios.get(`/boards/image/${id}`, {
           responseType: 'arraybuffer',
         });
 
@@ -108,10 +111,10 @@ const BoardRead = () => {
     };
 
     fetchImageUrl();
-  }, [boardId]);
+  }, [id]);
 
   const handleDownLoad = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const result = await axios.get(`/boards/download/${boardId}`, { responseType: 'blob' });
+    const result = await axios.get(`/boards/download/${id}`, { responseType: 'blob' });
     let blob = new Blob([result.data], { type: result.headers['content-type'] });
 
     let link = document.createElement('a');
@@ -161,22 +164,25 @@ const BoardRead = () => {
   };
 
   const handleSaveUpdate = (replyId: number, e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const data = {
-      replyWriter: replyWriterModify,
-      replyContent: replyContentModify,
+    const isConfirm = window.confirm('수정하시겠습니까?');
+    if(isConfirm){
+      e.preventDefault();
+      const data = {
+        replyWriter: replyWriterModify,
+        replyContent: replyContentModify,
+      }
+      axios
+          .put(`/reply/${replyId}`, data)
+          .then((response) => {
+            alert('완료되었습니다.');
+            setIsEditing(false);
+            setEditedReplyContent('');
+            fetchReply(boardData.boardId);
+          })
+          .catch((error) => {
+            console.error('댓글 수정에 실패했습니다.', error);
+          });
     }
-    axios
-        .put(`/reply/${replyId}`, data)
-        .then((response) => {
-          alert('수정되었습니다.');
-          setIsEditing(false);
-          setEditedReplyContent('');
-          fetchReply(boardData.boardId);
-        })
-        .catch((error) => {
-          console.error('댓글 수정에 실패했습니다.', error);
-        });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -184,38 +190,22 @@ const BoardRead = () => {
 
     try {
       const response = await axios.post('/reply/writeform', {
-        boardId: boardId,
+        boardId: id,
         replyContent: replyContent,
         replyWriter: replyWriter,
       });
       setReplyWriter('');
       setReplyContent('');
-      fetchReply(parseInt(boardId ? boardId : '', 10));
+      fetchReply(parseInt(id ? id : '', 10));
     } catch (error) {
       console.error('댓글 작성에 실패했습니다.', error);
     }
   };
 
-  // 유저 정보 불러오기 지우지 마세요!!
-  // useEffect(() => {
-  //   const handleUserInfo = async () => {
-  //     try{
-  //       await axios.get('/')
-  //       .then((response) => {
-  //         setUserId(response.data.userId);
-  //       })
-  //       .catch((error) => {
-  //         console.error(error.message);
-  //       })
-  //     }
-  //   }
-  //   handleUserInfo();
-  // }, [])
-
   return (
-    <>
-      <SubHeader kind="board" />
-      <S.Container>
+	<>
+    <AdminLayout subMenus="board">
+      <Container>
         {title}
         <div>
           <S.TableRead>
@@ -249,7 +239,7 @@ const BoardRead = () => {
                 </td>
               </tr>
               }
-              {board === 'review' &&
+              {board === 'review' && 
               <tr>
                 <td>
                   <img className='reviewImg' src={imageUrl} alt='이미지'/>
@@ -343,12 +333,13 @@ const BoardRead = () => {
             </tbody>
           </S.TableRead>
           <BtnWrapper className="center mt40">
-            <LinkBtn to={listLink}>목록</LinkBtn>
+            <NormalBtn onClick={() => navigate(-1)}>목록</NormalBtn>
           </BtnWrapper>
         </div>
-      </S.Container>
-    </>
+      </Container>
+		</AdminLayout>
+	</>
   );
 };
 
-export default BoardRead;
+export default AdminBoardDetail;

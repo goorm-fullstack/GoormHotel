@@ -5,35 +5,19 @@ import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/com
 import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
 import axios from 'axios';
-import { BoardData } from './AdminBoard';
+import { BoardData, ReplyData } from './AdminBoard';
 import { useNavigate } from 'react-router-dom';
-
-const tableData = [
-  {
-    id: 1,
-    board: '이용후기',
-    post: '게시글 제목111',
-    content: '첫 번째 댓글입니다.',
-    author: { name: '홍구름', id: 'memberId1' },
-    date: '2023.09.13',
-  },
-  {
-    id: 2,
-    board: '공지사항',
-    post: '게시글 제목222',
-    content: '두 번째 댓글입니다.',
-    author: { name: '홍구름', id: 'memberId2' },
-    date: '2023.09.14',
-  },
-];
+import { boardTitleList } from './AdminBoard';
 
 const AdminDeleteComment = () => {
-  const [checkedItems, setCheckedItems] = useState<number[]>([]);
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
   const [selectAllChecked, setSelectAllChecked] = useState<boolean>(false);
   const [board, setBoard] = useState<BoardData[]>([]);
+  const [reply, setReply] = useState<ReplyData[]>([]);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [totalData, setTotalData] = useState<number>(0);
   const navigate = useNavigate();
+  const [parsedContent, setParsedContent] = useState<JSX.Element[][]>([]);
   const authItem = localStorage.getItem("auth");
 
   useEffect(() => {
@@ -47,12 +31,34 @@ const AdminDeleteComment = () => {
     axios
       .get('/boards/deleted')
       .then((response) => {
+        setBoard(response.data);
+        console.log('get 성공');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get('/reply/deleted')
+      .then((response) => {
+        setReply(response.data);
+        console.log('get 성공');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get('/boards/deletedall')
+      .then((response) => {
         const totalPages = parseInt(response.headers['totalpages'], 10);
         const totalData = parseInt(response.headers['totaldata'], 10);
-        setBoard(response.data);
         setTotalPage(totalPages);
         setTotalData(totalData);
-        console.log('get 성공');
       })
       .catch((error) => {
         console.error(error);
@@ -64,14 +70,15 @@ const AdminDeleteComment = () => {
     setSelectAllChecked(checked);
 
     if (checked) {
-      const allMemberIds = board.map((item) => item.boardId);
-      setCheckedItems(allMemberIds);
+      const allBoardIds = board.map((item) => `board${item.boardId}`);
+      const allReplyIds = reply.map((item) => `reply${item.replyId}`);
+      setCheckedItems([...allBoardIds, ...allReplyIds]);
     } else {
       setCheckedItems([]);
     }
   };
 
-  const handleCheckboxChange = (memberId: number) => {
+  const handleCheckboxChange = (memberId: string) => {
     const updatedCheckedItems = checkedItems.includes(memberId) ? checkedItems.filter((id) => id !== memberId) : [...checkedItems, memberId];
 
     setCheckedItems(updatedCheckedItems);
@@ -79,32 +86,86 @@ const AdminDeleteComment = () => {
   };
 
   const unDeleteBtnClick = () => {
-    checkedItems.forEach((boardId) => {
-      axios
-        .put(`/boards/undelete/${boardId}`)
-        .then(() => {
-          console.log(`${boardId} 복원 성공`);
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
-    });
+    const isConfirm = window.confirm('복구하시겠습니까?');
+    if(isConfirm){
+      checkedItems.forEach((boardId) => {
+        if(boardId.startsWith('board')){
+          const id = boardId.replace('board', '');
+          axios
+          .put(`/boards/undelete/${id}`)
+          .then(() => {
+            alert('복구되었습니다.');
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+        }else{
+          const id = boardId.replace('reply', '');
+          axios
+          .put(`/reply/undelete/${id}`)
+          .then(() => {
+            alert('복구되었습니다.');
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+        }
+      });
+    }
   };
 
   const realDeleteBtnClick = () => {
-    checkedItems.forEach((boardId) => {
-      axios
-        .delete(`/boards/${boardId}`)
-        .then(() => {
-          console.log(`${boardId} 삭제 성공`);
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
-    });
+    const isConfirm = window.confirm('영구삭제 하시겠습니까?');
+    if(isConfirm){
+      checkedItems.forEach((boardId) => {
+        if(boardId.startsWith('board')){
+          const id = boardId.replace('board', '');
+          axios
+          .delete(`/boards/${id}`)
+          .then(() => {
+            alert('삭제되었습니다.');
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+        }else{
+          const id = boardId.replace('reply', '');
+          axios
+          .delete(`/reply/${id}`)
+          .then(() => {
+            alert('삭제되었습니다.');
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+        }
+      });
+    }
   };
+
+  const parseBoardContent = (content: any) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(content, 'text/html');
+    const paragraphs = Array.from(doc.querySelectorAll('p'));
+
+    return paragraphs.map((p) => p.textContent);
+  };
+
+  useEffect(() => {
+    const parsedContentArray = board.map(item =>
+      parseBoardContent(item.boardContent).map((paragraph, index) => <p key={index}>{paragraph}</p>)
+    );
+    const parsedTextArray = parsedContentArray.map((contentArray) =>
+      contentArray.map((paragraph, index) => paragraph.props.children)
+    );
+    setParsedContent(parsedTextArray);
+  }, [board]);
+
+  console.log(board);
 
   if(authItem && authItem.includes("AUTH_C")) {
   return (
@@ -139,7 +200,7 @@ const AdminDeleteComment = () => {
                 <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
               </th>
               <th>번호</th>
-              <th>게시판</th>
+              <th>분류</th>
               <th>삭제된 글</th>
               <th>작성자명(회원 ID)</th> {/** 회원 ID의 ID는 대문자로 통일합시다. */}
               <th>삭제일</th>
@@ -153,26 +214,50 @@ const AdminDeleteComment = () => {
                 </td>
               </tr>
             )}
-            {board &&
-            board.map((board) => (
+            {parsedContent.length > 0 && board.length > 0 &&
+            board.map((board, index) => (
               <tr key={board.boardId}>
                 <td className="center">
                   <InputCheckbox
                     type="checkbox"
-                    checked={checkedItems.includes(board.boardId)}
-                    onChange={() => handleCheckboxChange(board.boardId)}
+                    checked={checkedItems.includes(`board${board.boardId}`)}
+                    onChange={() => handleCheckboxChange(`board${board.boardId}`)}
                   />
                 </td>
-                <td className="center">{board.boardId}</td>
+                <td className="center">{totalData - index}</td>
                 <td className="center">{`${board.boardTitle}`}</td>
                 <td className="center">
-                  <S.LinkStyle to={`/admin/member/${board.boardContent}`}>{board.boardContent}</S.LinkStyle>
+                  <S.LinkStyle to={`/admin/${`board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}`}>{parsedContent[index][0]}</S.LinkStyle>
                 </td>
                 <td className="center">
                   {board.boardWriter}
                   <S.LinkStyle to={`/admin/member/${board.boardWriter}`}>({board.boardWriter})</S.LinkStyle>
                 </td>
-                <td className="center">{`${board.boardWriteDate[0]}.${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}.${board.boardWriteDate[2] < 10 ? '0' : ''}${board.boardWriteDate[2]}`}</td>
+                <td className="center">{`${board.boardDeleteTime[0]}.${board.boardDeleteTime[1] < 10 ? '0' : ''}${board.boardDeleteTime[1]}.${board.boardDeleteTime[2] < 10 ? '0' : ''}${board.boardDeleteTime[2]}`}
+                </td>
+              </tr>
+            ))}
+            {reply.length > 0 &&
+            reply.map((reply, index) => (
+              <tr key={reply.replyId}>
+                <td className="center">
+                  <InputCheckbox
+                    type="checkbox"
+                    checked={checkedItems.includes(`reply${reply.replyId}`)}
+                    onChange={() => handleCheckboxChange(`reply${reply.replyId}`)}
+                  />
+                </td>
+                <td className="center">{totalData - board.length - index}</td>
+                <td className="center">댓글</td>
+                <td className="center">
+                  <S.LinkStyle to={`/admin/${`board/${boardTitleList.find((item) => item.board === reply.boardTitle)?.english}/detail/${reply.boardId}`}`}>{reply.replyContent}</S.LinkStyle>
+                </td>
+                <td className="center">
+                  {reply.replyWriter}
+                  <S.LinkStyle to={`/admin/member/${reply.replyWriter}`}>({reply.replyWriter})</S.LinkStyle>
+                </td>
+                <td className="center">{`${reply.replyDeleteTime[0]}.${reply.replyDeleteTime[1] < 10 ? '0' : ''}${reply.replyDeleteTime[1]}.${reply.replyDeleteTime[2] < 10 ? '0' : ''}${reply.replyDeleteTime[2]}`}
+                </td>
               </tr>
             ))}
           </tbody>
