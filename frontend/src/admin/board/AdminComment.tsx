@@ -243,7 +243,7 @@ const AdminComment = () => {
                       <td className="center">{totalReply - idx}</td>
                       <td className="center">{reply.replyBoardTitle}</td>
                       <td className="center">
-                        <S.LinkStyle to={`/board/${reply.boardId}/detail`}>{reply.replyTitle}</S.LinkStyle>
+                        <S.LinkStyle to={{pathname: `/board/${reply.replyBoardTitle}/detail/${reply.replyTitle}`,search: `boardId=${reply.boardId}`}}>{reply.replyTitle}</S.LinkStyle>
                       </td>
                       <td className="center">
                         <S.CommentText>{truncateString(reply.replyContent, 8)}</S.CommentText>
