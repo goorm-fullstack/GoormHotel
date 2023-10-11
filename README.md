@@ -102,7 +102,7 @@
 
 ## ✍🏻 Architecture
 
-이미지 첨부 예정
+![구름호텔아키텍처](https://github.com/goorm-fullstack/GoormHotel/assets/121299334/36c470cf-02f3-4830-8a40-13f3cb609b61)
 
 <br>
 
