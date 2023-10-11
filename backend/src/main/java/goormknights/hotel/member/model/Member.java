@@ -164,6 +164,10 @@ public class Member extends BaseEntity implements Serializable {
         return this;
     }
 
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
+
     public String getUsername() {
         return this.email;
     }

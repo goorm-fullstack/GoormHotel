@@ -35,9 +35,7 @@ public class ReservationController {
             @Validated @RequestBody RequestReservationDto reservationDto,
             @RequestParam long memberId
     ) {
-        Member findMember = memberRepository.findById(memberId).orElse(null);
-        reservationDto.setMember(findMember);
-        reservationService.saveReservation(reservationDto);
+        reservationService.saveReservation(reservationDto, memberId);
         return ResponseEntity.ok().build();
     }
 

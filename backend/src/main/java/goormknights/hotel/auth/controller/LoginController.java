@@ -1,5 +1,6 @@
 package goormknights.hotel.auth.controller;
 
+import goormknights.hotel.auth.dto.request.AnonymousLogin;
 import goormknights.hotel.auth.dto.request.ManagerLogin;
 import goormknights.hotel.auth.dto.request.MemberLogin;
 import goormknights.hotel.auth.service.AuthService;
@@ -29,6 +30,16 @@ public class LoginController {
     @PostMapping("/member")
     public ResponseEntity<?> memberLogin(@RequestBody MemberLogin memberLogin, HttpServletRequest request, HttpServletResponse response) {
         if (memberService.memberLogin(memberLogin.getMemberId(), memberLogin.getPassword(), request, response)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("로그인 실패", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    // 비회원 사용자 로그인
+    @PostMapping("/anonymous")
+    public ResponseEntity<?> anonymousLogin(@RequestBody AnonymousLogin anonymousLogin, HttpServletRequest request, HttpServletResponse response) {
+        if (memberService.annoymousLogin(anonymousLogin.getMemberId(), anonymousLogin.getPhoneNumber(), request, response)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>("로그인 실패", HttpStatus.UNAUTHORIZED);

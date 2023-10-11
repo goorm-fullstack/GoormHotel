@@ -1,6 +1,7 @@
 package goormknights.hotel.member.controller;
 
 import goormknights.hotel.member.dto.request.AdminSignupDTO;
+import goormknights.hotel.member.dto.request.AnonymousSignupDto;
 import goormknights.hotel.member.dto.request.SignupDTO;
 import goormknights.hotel.member.dto.response.ManagerListDTO;
 import goormknights.hotel.member.dto.response.ResponseMemberDto;
@@ -9,6 +10,8 @@ import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.repository.ManagerRepository;
 import goormknights.hotel.member.service.AdminService;
 import goormknights.hotel.member.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,6 +36,13 @@ public class MemberController {
     public ResponseEntity<String> signup(@RequestBody SignupDTO signupDTO){
         memberService.signup(signupDTO, signupDTO.getCode());
         return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
+    }
+
+    // 비회원 회원가입
+    @PostMapping("/anonymous/signup")
+    public ResponseEntity<String> anonymousSignup(@RequestBody AnonymousSignupDto signupDTO, HttpServletRequest request, HttpServletResponse response){
+        memberService.anonymousSignup(signupDTO, signupDTO.getCode(), request, response);
+        return ResponseEntity.ok("비회원 회원가입 완료");
     }
 
     // 매니저 회원가입

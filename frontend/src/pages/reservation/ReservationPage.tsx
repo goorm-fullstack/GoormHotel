@@ -31,6 +31,7 @@ const ReservationPage = () => {
   const { reservationData, selectedProduct } = location.state;
   const navigate = useNavigate();
   const [nights, setNights] = useState(1);
+  const isLogined = localStorage.getItem("memberId");
 
   console.log(reservationData);
   console.log(selectedProduct);
