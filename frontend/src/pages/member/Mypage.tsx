@@ -1,10 +1,77 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as S from './Style';
 import { PageTitle, ContentsTitleXSmall, AuthBtn, Auth, BtnWrapper, SubmitBtn } from '../../Style/commonStyles';
 import Coupon from '../../components/Coupon/Coupon';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Instance from '../../utils/api/axiosInstance';
+
+interface Member {
+  name: string;
+  email: string;
+  memberId: string;
+  password: string;
+  confirmPassword: string;
+  phoneNumber: string;
+  birth: string;
+  gender: string;
+  code?: string;
+}
+
+interface RequestCode {
+  code: string;
+}
+
+interface FindMemberDTO {
+  memberId: string;
+  name: string;
+  email: string;
+}
 
 const Mypage = () => {
+  const [member, setMember] = useState<Member>({name: '', email: '', memberId: '', password: '',
+    confirmPassword: '', phoneNumber: '', birth: '', gender: ''});
+  const [findMemberData, setFindMemberData] = useState<FindMemberDTO>({ memberId: '', name: '', email: '' });
+  const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setMember({ ...member, [name]: value });
+  };
+
+// 회원정보 수정 제출
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await Instance.post<Member>(`/api/member/${member.memberId}`, member);
+      if (response.status === 200) {
+        alert('회원정보 수정이 완료되었습니다');
+        navigate('/mypage', { state: { memberId: response.data, name: member.memberId } });
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        alert('회원이 없습니다');
+      } else {
+        alert('에러 발생');
+      }
+    }
+  };
+
+  // 인증번호 요청
+  const handleCodeRequest = async () => {
+    try {
+      const response = await Instance.post<RequestCode>('/api/mail/findpw-code', findMemberData);
+      if (response.status === 200) {
+        alert('인증 코드가 발송되었습니다.');
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        alert('회원이 없습니다');
+      } else {
+        alert('에러 발생');
+      }
+    }
+  };
+
   return (
     <>
       <S.Container>
@@ -13,18 +80,18 @@ const Mypage = () => {
           <div className="editinfo">
             <ContentsTitleXSmall>회원 정보 수정</ContentsTitleXSmall>
             <form>
-              <input placeholder="아이디" />
-              <input placeholder="비밀번호" />
-              <input placeholder="비밀번호 확인" />
-              <input placeholder="이름" />
+              <input name="memberId" placeholder="아이디" onChange={handleChange} value={member.memberId} />
+              <input name="password" placeholder="비밀번호" onChange={handleChange} value={member.password} />
+              <input name="confirmPassword" placeholder="비밀번호 확인" onChange={handleChange} value={member.confirmPassword} />
+              <input name="name" placeholder="이름" onChange={handleChange} value={member.name} />
               <Auth>
-                <input placeholder="이메일" />
+                <input name="email" placeholder="이메일" onChange={handleChange} value={member.email} />
                 <AuthBtn>인증번호 요청</AuthBtn>
               </Auth>
-              <input placeholder="인증번호를 입력하세요" />
-              <input placeholder="연락처" />
-              <input placeholder="생년월일(선택입력)" />
-              <input placeholder="성별(선택입력)" />
+              <input name="code" placeholder="인증번호를 입력하세요." onChange={handleChange} value={member.code} />
+              <input name="phoneNumber" placeholder="연락처" onChange={handleChange} value={member.phoneNumber} />
+              <input name="birth" placeholder="생년월일(선택입력)" onChange={handleChange} value={member.birth} />
+              <input name="gender" placeholder="성별(선택입력)" onChange={handleChange} value={member.gender} />
               <BtnWrapper className="mt20 full">
                 <SubmitBtn type="submit">회원 정보 수정</SubmitBtn>
               </BtnWrapper>

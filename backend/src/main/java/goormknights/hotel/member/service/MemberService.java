@@ -73,21 +73,21 @@ public class MemberService {
 
     // 회원 정보 수정
     @Transactional
-    public void edit(Long id, MemberEdit memberEdit){
+    public void edit(Long id, MemberEditDTO memberEditDTO){
         Member member = memberRepository.findById(id)
                 .orElseThrow(MemberNotFound::new);
 
-        String encryptedPassword = passwordEncoder.encode(memberEdit.getPassword());
+        String encryptedPassword = passwordEncoder.encode(memberEditDTO.getPassword());
 
         MemberEditor.MemberEditorBuilder editorBuilder = member.toEditor();
         MemberEditor memberEditor = editorBuilder
-                .name(memberEdit.getName())
-                .email(memberEdit.getEmail())
-                .memberId(memberEdit.getMemberId())
+                .name(memberEditDTO.getName())
+                .email(memberEditDTO.getEmail())
+                .memberId(memberEditDTO.getMemberId())
                 .password(encryptedPassword)
-                .phoneNumber(memberEdit.getPhoneNumber())
-                .birth(memberEdit.getBirth())
-                .gender(memberEdit.getGender())
+                .phoneNumber(memberEditDTO.getPhoneNumber())
+                .birth(memberEditDTO.getBirth())
+                .gender(memberEditDTO.getGender())
                 .build();
 
         member.edit(memberEditor);

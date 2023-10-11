@@ -3,6 +3,7 @@ package goormknights.hotel.member.service;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.member.dto.request.AdminSignupDTO;
+import goormknights.hotel.member.exception.InvalidMemberException;
 import goormknights.hotel.member.model.Manager;
 import goormknights.hotel.member.repository.ManagerRepository;
 import jakarta.servlet.http.Cookie;
@@ -60,6 +61,10 @@ public class AdminService {
 
         Optional<Manager> optionalManager = managerRepository.findByAdminId(adminId);
         if (optionalManager.isPresent() && passwordEncoder.matches(password, optionalManager.get().getPassword())) {
+            // 계정이 비활성화 상태인 경우
+            if (!optionalManager.get().getIsActive()) {
+                throw new InvalidMemberException();
+            }
             session = request.getSession();
             session.setAttribute("adminId", optionalManager.get().getAdminId());
             session.setAttribute("role", optionalManager.get().getRole());
@@ -120,7 +125,7 @@ public class AdminService {
 
     // 매니저 정보 수정
 //    @Transactional
-//    public void edit(Integer id, MemberEdit memberEdit){
+//    public void edit(Integer id, MemberEditDTO memberEdit){
 //        Member member = memberRepository.findById(id)
 //                .orElseThrow(MemberNotFound::new);
 //

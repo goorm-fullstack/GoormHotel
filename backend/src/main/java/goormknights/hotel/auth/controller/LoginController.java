@@ -2,6 +2,7 @@ package goormknights.hotel.auth.controller;
 
 import goormknights.hotel.auth.dto.request.ManagerLogin;
 import goormknights.hotel.auth.dto.request.MemberLogin;
+import goormknights.hotel.member.exception.InvalidMemberException;
 import goormknights.hotel.member.service.AdminService;
 import goormknights.hotel.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,12 +35,24 @@ public class LoginController {
     }
 
     // 관리자 로그인
+//    @PostMapping("/manager")
+//    public ResponseEntity<?> adminLogin(@RequestBody ManagerLogin managerLogin, HttpServletRequest request, HttpServletResponse response) {
+//        if (adminService.managerLogin(managerLogin.getAdminId(), managerLogin.getPassword(), request, response)) {
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>("로그인 실패", HttpStatus.UNAUTHORIZED);
+//        }
+//    }
     @PostMapping("/manager")
     public ResponseEntity<?> adminLogin(@RequestBody ManagerLogin managerLogin, HttpServletRequest request, HttpServletResponse response) {
-        if (adminService.managerLogin(managerLogin.getAdminId(), managerLogin.getPassword(), request, response)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("로그인 실패", HttpStatus.UNAUTHORIZED);
+        try {
+            if (adminService.managerLogin(managerLogin.getAdminId(), managerLogin.getPassword(), request, response)) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("로그인 실패", HttpStatus.UNAUTHORIZED);
+            }
+        } catch (InvalidMemberException e) {
+            return new ResponseEntity<>("이 매니저 계정은 비활성화 되었습니다", HttpStatus.FORBIDDEN);
         }
     }
 

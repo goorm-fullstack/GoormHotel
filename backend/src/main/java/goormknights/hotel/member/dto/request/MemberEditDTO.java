@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Setter
 @ToString
 @NoArgsConstructor
-public class MemberEdit {
+public class MemberEditDTO {
     @NotBlank(message = "이름을 입력해주세요")
     private String name;
     @NotBlank(message = "이메일을 입력해주세요")
@@ -27,8 +27,8 @@ public class MemberEdit {
     private String gender;
 
     @Builder
-    public MemberEdit(String email, String memberId, String password, String name, String phoneNumber,
-                      LocalDate birth, String gender) {
+    public MemberEditDTO(String email, String memberId, String password, String name, String phoneNumber,
+                         LocalDate birth, String gender) {
         this.email = email;
         this.memberId = memberId;
         this.password = password;
