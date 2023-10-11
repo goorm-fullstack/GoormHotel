@@ -191,19 +191,25 @@ public class BoardController {
 
         ByteArrayResource byteArrayResource = new ByteArrayResource(data);
 
-//        String boardFileName = byTitle.getBoardFile().getBoardFileName();
-//        String uploadFileName = byTitle.getBoardFile().getOriginalboardFileName();
-//        String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
-//        String absolutePath = new File("").getAbsolutePath() + "\\";
-//        Path path = Paths.get(absolutePath + "\\" + boardFileName);
-//        String contentDisposition = "attachment; filename=\"" + encodedUploadFileName + "\"";
-//
-//        UrlResource urlResource = new UrlResource("file:" + path);
-
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .contentLength(data.length)
                 .body(byteArrayResource);
 
+    }
+
+    // 삭제된 게시글, 댓글 모두 조회
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
+    @GetMapping("/deletedall")
+    public ResponseEntity<List<Object>> findAllDeletedBoardReply(Pageable pageable){
+        Page<Object> allBoardReplyDeleted = boardService.findAllBoardReplyDeleted(pageable);
+
+        int totalPages = allBoardReplyDeleted.getTotalPages();
+        long totalElements = allBoardReplyDeleted.getTotalElements();
+
+        return ResponseEntity.ok()
+                .header("TotalPages", String.valueOf(totalPages))
+                .header("TotalData", String.valueOf(totalElements))
+                .body(allBoardReplyDeleted.getContent());
     }
 }

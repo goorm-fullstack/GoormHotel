@@ -20,9 +20,10 @@ public class ResponseReportDto {
     private String reportWriter;
     private boolean reportCheck;
     private String reportResult;
+    private String boardTitle;
 
     @Builder
-    public ResponseReportDto(Long reportId, Long boardId, String title, String reportReason, LocalDateTime reportDate, String reportWriter, boolean reportCheck, String reportResult, Long replyId, String replyContent) {
+    public ResponseReportDto(Long reportId, Long boardId, String title, String reportReason, LocalDateTime reportDate, String reportWriter, boolean reportCheck, String reportResult, Long replyId, String replyContent, String boardTitle) {
         this.reportId = reportId;
         this.boardId = boardId;
         this.title = title;
@@ -33,5 +34,6 @@ public class ResponseReportDto {
         this.reportWriter = reportWriter;
         this.reportCheck = reportCheck;
         this.reportResult = reportResult;
+        this.boardTitle = boardTitle;
     }
 }

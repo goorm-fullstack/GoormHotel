@@ -34,11 +34,12 @@ public class ResponseBoardDto {
 
     private BoardImage boardImage;      //이미지 넣기
 
-    private Boolean isComment;      //답글 여부
+    private LocalDateTime boardDeleteTime; // 삭제 날짜
 
+    private String isComment;      //답글 여부
 
     @Builder
-    public ResponseBoardDto(Boolean isComment, Long boardId, String title, String boardContent, LocalDateTime boardWriteDate, String boardWriter, String boardTitle, String category, List<ResponseReplyDto> reply, List<ResponseReportDto> report, BoardImage boardImage) {
+    public ResponseBoardDto(Long boardId, String title, String boardContent, LocalDateTime boardWriteDate, String boardWriter, String boardTitle, String category, List<ResponseReplyDto> reply, List<ResponseReportDto> report, BoardImage boardImage, LocalDateTime boardDeleteTime, String isComment) {
         this.boardId = boardId;
         this.title = title;
         this.boardContent = boardContent;
@@ -49,6 +50,7 @@ public class ResponseBoardDto {
         this.boardTitle = boardTitle;
         this.category = category;
         this.boardImage = boardImage;
+        this.boardDeleteTime = boardDeleteTime;
         this.isComment = isComment;
     }
 

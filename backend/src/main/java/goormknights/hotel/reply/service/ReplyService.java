@@ -46,7 +46,7 @@ public class ReplyService {
         Page<Reply> all = replyRepository.findAll(pageable);
         List<Reply> list = new ArrayList<>();
         for (Reply reply : all) {
-            if(reply.getReplyDeleteTime() == null){
+            if(reply.getReplyDeleteTime() == null && reply.getReport().size() == 0){
                 list.add(reply);
             }
         }
@@ -59,7 +59,7 @@ public class ReplyService {
         List<ResponseReplyDto> response = new ArrayList<>();
 
         for (Reply reply : replies){
-            if(reply.getReplyDeleteTime()==null){
+            if(reply.getReplyDeleteTime()==null && reply.getReport().size() == 0){
                 response.add(reply.toResponseReplyDto());
             }
         }
@@ -74,7 +74,7 @@ public class ReplyService {
         List<ResponseReplyDto> response = new ArrayList<>();
 
         for(Reply reply : replies){
-            if(reply.getReplyDeleteTime()==null){
+            if(reply.getReplyDeleteTime()==null && reply.getReport().size() == 0){
                 response.add(reply.toResponseReplyDto());
             }
         }
@@ -124,6 +124,19 @@ public class ReplyService {
         reply.setReplyDeleteTime(replyDeleteTime);
 
         return replyRepository.save(reply);
+    }
+
+    //삭제된 댓글 조회
+    public Page<ResponseReplyDto> findAllReplyDelete(Pageable pageable){
+        Page<Reply> all = replyRepository.findAll(pageable);
+        List<ResponseReplyDto> list = new ArrayList<>();
+
+        for (Reply reply : all) {
+            if(reply.getReplyDeleteTime() != null){
+                list.add(reply.toResponseReplyDto());
+            }
+        }
+        return new PageImpl<>(list, pageable, list.size());
     }
 
 }

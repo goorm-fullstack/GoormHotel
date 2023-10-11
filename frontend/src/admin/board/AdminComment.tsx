@@ -7,6 +7,7 @@ import { Container, Table, TableHeader } from '../member/Style';
 import axios from 'axios';
 import Paging from '../../components/common/Paging/Paging';
 import { ReplyData } from './AdminBoard';
+import { boardTitleList } from './AdminBoard';
 
 const AdminComment = () => {
   const { page } = useParams<{page: string}>();
@@ -18,6 +19,23 @@ const AdminComment = () => {
   const [totalReply, setTotalReply] = useState<number>(0);
   const navigate = useNavigate();
   const authItem = localStorage.getItem("auth");
+
+  // 댓글 내용 줄이기
+  const truncateString = (str: string, maxLength: number) => {
+    if (str.length > maxLength) {
+      return str.substring(0, maxLength) + '...';
+    }
+    return str;
+  };
+  interface ReplyData {
+    replyId: number;
+    boardId: number;
+    replyContent: string;
+    replyWriter: string;
+    replyWriteDate: number[];
+    replyBoardTitle: string;
+    replyTitle: string;
+  }
 
   useEffect(() => {
     if (!(authItem && authItem.includes("AUTH_C"))) {
@@ -60,11 +78,11 @@ const AdminComment = () => {
 
         // 각 댓글의 title을 가져오고 데이터에 추가
         const updatedReplyData = await Promise.all(
-          replyData.map(async (replyItem) => {
-            const title = await getBoardTitle(replyItem.boardId);
-            const boardTitle = await getBoardBoardTitle(replyItem.boardId);
-            return { ...replyItem, title: title, boardTitle: boardTitle };
-          })
+            replyData.map(async (replyItem) => {
+              const replyTitle = await getBoardTitle(replyItem.boardId);
+              const replyBoardTitle = await getBoardBoardTitle(replyItem.boardId);
+              return { ...replyItem, replyTitle, replyBoardTitle };
+            })
         );
 
         setReply(updatedReplyData);
@@ -102,14 +120,6 @@ const AdminComment = () => {
     setSelectAllChecked(updatedCheckedItems.length === reply.length);
   };
 
-  // 댓글 내용 줄이기
-  const truncateString = (str: string, maxLength: number) => {
-    if (str.length > maxLength) {
-      return str.substring(0, maxLength) + '...';
-    }
-    return str;
-  };
-
   // 선택 댓글 삭제
   const handleDeleteItems = () => {
     const isConfirm = window.confirm('삭제하시겠습니까?');
@@ -137,6 +147,22 @@ const AdminComment = () => {
         console.error('Error:', error.message);
       });
   };
+
+  // 유저 정보 불러오기 지우지 마세요!!
+  // useEffect(() => {
+  //   const handleUserInfo = async () => {
+  //     try{
+  //       await axios.get('/')
+  //       .then((response) => {
+  //         setUserId(response.data.userId);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error.message);
+  //       })
+  //     }
+  //   }
+  //   handleUserInfo();
+  // }, [])
 
   // 신고처리
   const handleReport = () => {
@@ -170,6 +196,7 @@ const AdminComment = () => {
         console.error('Error:', error.message);
       });
   };
+  console.log(reply);
 
   if(authItem && authItem.includes("AUTH_C")) {
   return (
@@ -220,7 +247,7 @@ const AdminComment = () => {
                 </td>
               </tr>
             )}
-            {reply &&
+            {reply.length > 0 &&
             reply.map((reply, idx) => (
               <tr key={reply.replyId}>
                 <td className="center">
@@ -231,9 +258,9 @@ const AdminComment = () => {
                   />
                 </td>
                 <td className="center">{totalReply - idx}</td>
-                <td className="center">{reply.board.boardTitle}</td>
+                <td className="center">{reply.replyBoardTitle}</td>
                 <td className="center">
-                  <S.LinkStyle to={`/board/${reply.boardId}/detail`}>{reply.board.title}</S.LinkStyle>
+                  <S.LinkStyle to={`/admin/board/${boardTitleList.find((item) => item.board === reply.replyBoardTitle)?.english}/detail/${reply.boardId}`}>{reply.replyTitle}</S.LinkStyle>
                 </td>
                 <td className="center">
                   <S.CommentText>{truncateString(reply.replyContent, 8)}</S.CommentText>
@@ -243,7 +270,6 @@ const AdminComment = () => {
                 </td>
                 <td className="center">
                   {reply.replyWriter}
-                  {/*<LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>*/}
                 </td>
                 <td className="center">{`${reply.replyWriteDate[0]}.${reply.replyWriteDate[1] < 10 ? '0' : ''}${reply.replyWriteDate[1]}.${
                   reply.replyWriteDate[2] < 10 ? '0' : ''

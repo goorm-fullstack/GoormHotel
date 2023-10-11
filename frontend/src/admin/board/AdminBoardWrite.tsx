@@ -106,6 +106,7 @@ const AdminBoardWrite = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+      alert('게시글이 작성되었습니다.');
       window.location.href = `/admin/board/1`;
     } catch (e: any) {
       console.error("에러: ", e.message);
@@ -157,75 +158,105 @@ const AdminBoardWrite = () => {
     }
   }, []);
 
-  if (authItem && authItem.includes("AUTH_C")) {
-    return (
-        <AdminLayout subMenus="board">
-          <Container>
-            <form onSubmit={handleSubmit} encType="multipart/form-data">
-              <Table className="horizontal">
-                <tbody>
-                <tr>
-                  <th>제목</th>
-                  <td>
-                    <MultiCheck className="fit">
-                      <input type="text" className="long" name="title" value={formData.title} onChange={handleChange} required/>
-                      <CheckLabel>
-                        <InputCheckbox type="checkbox" checked={isComment} onChange={handleCommentCheckboxChange}/>{" "}
-                        답글
-                      </CheckLabel>
-                    </MultiCheck>
-                  </td>
-                </tr>
-                <tr>
-                  <th>게시판</th>
-                  <td>
-                    <select name="boardTitle" value={formData.boardTitle} onChange={handleChange}>
-                      <option value="">선택</option>
-                      <option value="공지사항">공지사항</option>
-                      <option value="문의하기">문의하기</option>
-                      <option value="이용후기">이용후기</option>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <th>카테고리</th>
-                  <td>
-                    <select name="category" value={formData.category} onChange={handleChange}>
-                      {categoryOption()}
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <th>파일첨부</th>
-                  <td>
-                    <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef}/>
-                    {imgFile !== "" ? (
-                        <img src={imgFile} alt="후기 이미지" />
-                    ) : (
-                        <img style={{ display: "none" }} />
-                    )}
-                  </td>
-                </tr>
-                <tr>
-                  <th>작성자</th>
-                  <td>
-                    <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange}/>
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan={2} className="writeWrapper">
-                    <TextEditor setValue={setBoardContent} />
-                  </td>
-                </tr>
-                </tbody>
-              </Table>
-              <BtnWrapper className="center mt40">
-                <SubmitBtn type="submit">작성하기</SubmitBtn>
-              </BtnWrapper>
-            </form>
-          </Container>
-        </AdminLayout>
-    );
+  // 유저 정보 불러오기 지우지 마세요!!
+  // useEffect(() => {
+  //   const handleUserInfo = async () => {
+  //     try{
+  //       await axios.get('/')
+  //       .then((response) => {
+  //         setUserId(response.data.userId);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error.message);
+  //       })
+  //     }
+  //   }
+  //   handleUserInfo();
+  // }, [])
+
+  if(authItem && authItem.includes("AUTH_C")) {
+  return (
+    <AdminLayout subMenus="board">
+      <Container>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <Table className="horizontal">
+            <tbody>
+              <tr>
+                <th>제목</th>
+                <td>
+                  <MultiCheck className="fit">
+                    <input
+                      type="text"
+                      className="long"
+                      name="title"
+                      value={formData.title}
+                      onChange={handleChange}
+                      required
+                    />
+                    {
+                        formData.boardTitle ==="문의하기" &&
+                          <CheckLabel>
+                            <InputCheckbox type="checkbox" checked={isComment} onChange={handleCommentCheckboxChange}/>{" "}
+                            답글
+                          </CheckLabel>
+                      }
+                  </MultiCheck>
+                </td>
+              </tr>
+              <tr>
+                <th>게시판</th>
+                <td>
+                  <select
+                    name="boardTitle"
+                    value={formData.boardTitle}
+                    onChange={handleChange}
+                  >
+                    <option value="">선택</option>
+                    <option value="공지사항">공지사항</option>
+                    <option value="문의하기">문의하기</option>
+                    <option value="이용후기">이용후기</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th>카테고리</th>
+                <td>
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                  >
+                    {categoryOption()};
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th>파일첨부</th>
+                <td>
+                <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
+                  {imgFile !== '' ? <img src={imgFile} alt="후기 이미지" /> : <img style={{ display: 'none' }} />}
+                </td>
+              </tr>
+              <tr>
+                <th>작성자</th>
+                <td>
+                  <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange}/>
+                </td>
+              </tr>
+              <tr>
+                <td colSpan={2} className="writeWrapper">
+                  <TextEditor setValue={setBoardContent} />
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+          <BtnWrapper className="center mt40">
+            <SubmitBtn type="submit">작성하기</SubmitBtn>
+          </BtnWrapper>
+        </form>
+      </Container>
+    </AdminLayout>
+  );
   } else {
     return null;
   }
