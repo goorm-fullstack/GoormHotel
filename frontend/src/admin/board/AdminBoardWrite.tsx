@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AdminLayout from "../common/AdminLayout";
 import {
   PageTitle,
@@ -11,8 +11,7 @@ import {
 import { Container, Table } from "../member/Style";
 import TextEditor from "../../components/common/TextEditor/TextEditor";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 
 const AdminBoardWrite = () => {
   const setValue = () => {};
@@ -29,13 +28,14 @@ const AdminBoardWrite = () => {
   const [categoryError, setCategoryError] = useState<string>("");
   const [boardTitleError, setBoardTitleError] = useState<string>("");
   const [imgFile, setImgFile] = useState<string>("");
+  const [isComment, setIsComment] = useState(false);
   const [boardContent, setBoardContent] = useState("");
   const imgRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const saveImgFile = () => {
     const file =
-      imgRef.current && imgRef.current.files ? imgRef.current.files[0] : "";
+        imgRef.current && imgRef.current.files ? imgRef.current.files[0] : "";
     if (file instanceof Blob) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -49,7 +49,7 @@ const AdminBoardWrite = () => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData({
@@ -64,6 +64,10 @@ const AdminBoardWrite = () => {
     if (name === "category") {
       setCategoryError("");
     }
+  };
+
+  const handleCommentCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsComment(e.target.checked);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -81,14 +85,15 @@ const AdminBoardWrite = () => {
 
     const form = new FormData();
     form.append(
-      "multipartFile",
-      imgRef.current && imgRef.current.files ? imgRef.current.files[0] : ""
+        "multipartFile",
+        imgRef.current && imgRef.current.files ? imgRef.current.files[0] : ""
     );
     form.append(
-      "file",
-      fileRef.current && fileRef.current.files ? fileRef.current.files[0] : ""
+        "file",
+        fileRef.current && fileRef.current.files ? fileRef.current.files[0] : ""
     );
     formData.boardContent = boardContent;
+    form.append("isComment", isComment.toString());
     console.log(formData.category);
 
     Object.keys(formData).forEach((key) => {
@@ -101,6 +106,7 @@ const AdminBoardWrite = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+      alert('게시글이 작성되었습니다.');
       window.location.href = `/admin/board/1`;
     } catch (e: any) {
       console.error("에러: ", e.message);
@@ -115,27 +121,27 @@ const AdminBoardWrite = () => {
     switch (formData.boardTitle) {
       case "공지사항":
         return (
-          <>
-            <option value="">선택</option>
-            <option value="공지">공지</option>
-            <option value="이벤트">이벤트</option>
-          </>
+            <>
+              <option value="">선택</option>
+              <option value="공지">공지</option>
+              <option value="이벤트">이벤트</option>
+            </>
         );
       case "문의하기":
         return (
-          <>
-            <option value="">선택</option>
-            <option value="문의1">문의1</option>
-            <option value="문의2">문의2</option>
-          </>
+            <>
+              <option value="">선택</option>
+              <option value="문의1">문의1</option>
+              <option value="문의2">문의2</option>
+            </>
         );
       case "이용후기":
         return (
-          <>
-            <option value="">선택</option>
-            <option value="룸">룸</option>
-            <option value="다이닝">다이닝</option>
-          </>
+            <>
+              <option value="">선택</option>
+              <option value="룸">룸</option>
+              <option value="다이닝">다이닝</option>
+            </>
         );
       default:
         return <option value="">선택</option>;
@@ -147,10 +153,26 @@ const AdminBoardWrite = () => {
 
   useEffect(() => {
     if (!(authItem && authItem.includes("AUTH_C"))) {
-      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
-      navigate('/admin');
+      alert("사용할 수 없는 페이지이거나 권한이 없습니다.");
+      navigate("/admin");
     }
   }, []);
+
+  // 유저 정보 불러오기 지우지 마세요!!
+  // useEffect(() => {
+  //   const handleUserInfo = async () => {
+  //     try{
+  //       await axios.get('/')
+  //       .then((response) => {
+  //         setUserId(response.data.userId);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error.message);
+  //       })
+  //     }
+  //   }
+  //   handleUserInfo();
+  // }, [])
 
   if(authItem && authItem.includes("AUTH_C")) {
   return (
@@ -171,9 +193,13 @@ const AdminBoardWrite = () => {
                       onChange={handleChange}
                       required
                     />
-                    <CheckLabel>
-                      <InputCheckbox type="checkbox" /> 답글
-                    </CheckLabel>
+                    {
+                        formData.boardTitle ==="문의하기" &&
+                          <CheckLabel>
+                            <InputCheckbox type="checkbox" checked={isComment} onChange={handleCommentCheckboxChange}/>{" "}
+                            답글
+                          </CheckLabel>
+                      }
                   </MultiCheck>
                 </td>
               </tr>

@@ -9,6 +9,8 @@ import axios from 'axios';
 import Instance from '../../utils/api/axiosInstance';
 import { Link } from 'react-router-dom';
 import { Type, TypeDetail } from '../../components/common/Search/Search';
+import { error } from 'console';
+import {IsReply} from "./Style";
 
 const CustomerSupport = () => {
   // 대분류, 소분류 지정 배열
@@ -25,7 +27,9 @@ const CustomerSupport = () => {
       { type: 'review', typeDetail: '다이닝', value: '다이닝' },
     ],
     [
-      {type: 'notice', typeDetail: '전체', value: 'all'}
+      {type: 'notice', typeDetail: '전체', value: 'all'},
+      {type: 'notice', typeDetail: '공지사항', value: '공지사항'},
+      {type: 'notice', typeDetail: '이벤트', value: '이벤트'}
     ]
   ];
   const typeArray: Type[][] = [[{ type: '전체', value: 'all' }], [{ type: '공지사항', value: '공지사항' }], [{ type: '문의하기', value: '문의하기' }], [{type: '이용후기', value: '이용후기'}]];
@@ -60,6 +64,7 @@ const CustomerSupport = () => {
             const totalPages = parseInt(response.headers['totalpages'], 10);
             const totalData = parseInt(response.headers['totaldata'], 10);
             setBoard(response.data || []);
+            console.log(response.data);
             setTotalData(totalData);
             setTotalPages(totalPages);
           })
@@ -235,13 +240,13 @@ const CustomerSupport = () => {
                             <p>작성된 게시글이 없습니다.</p>
                           </li>
                       )}
-                      {boards && boards.map((item) => (
+                      {boards.length > 0 && boards.map((item) => (
                           <li key={item.boardId}>
                             <div className="thumbnail">
                               <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>
                                 {imageUrl.find((image) => image.boardId === item.boardId) && (
                                     <img
-                                        src={imageUrl.find((image) => image.boardId === item.boardId).imageUrl}
+                                        src={imageUrl.find((image: any) => image.boardId === item.boardId).imageUrl}
                                         alt={`Image for ${item.title}`}
                                     />
                                 )}
@@ -287,15 +292,14 @@ const CustomerSupport = () => {
                           </tr>
                       )}
                       {/** loop */}
-                      {boards.map((item, index) => (
+                      {boards.length > 0 && boards.map((item, index) => (
                           <tr key={item.boardId}>
                             <td className="center">{totalData - index}</td>
                             <td className="center">{item.category}</td>
                             <td>
-                              {/* <IsReply>답글</IsReply> */}
+                              {item.isComment==="true" ? <IsReply>답글</IsReply> : null}
                               {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
-                                <Link
-                                    to={{pathname: `/board/${board}/detail/${item.title}`,search: `boardId=${item.boardId}`}}>{item.title}</Link>
+                                <Link to={{pathname: `/board/${board}/detail/${item.title}`,search: `boardId=${item.boardId}`}}>{item.title}</Link>
                             </td>
                             <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${
                                 item.boardWriteDate[1]

@@ -39,4 +39,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Optional<Board> findByTitle(String boardTitle);
 
+
+
 }

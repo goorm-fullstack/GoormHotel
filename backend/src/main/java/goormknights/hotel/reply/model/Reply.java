@@ -71,6 +71,8 @@ public class Reply {
                 .replyWriter(replyWriter)
                 .report(report.stream().map(Report::toResponseReportDto).toList())
                 .responseBoardDto(board.toResponseBoardDto())
+                .replyDeleteTime(replyDeleteTime)
+                .boardTitle(board.getBoardTitle())
                 .build();
     }
 

@@ -14,9 +14,7 @@ type FormData = {
 const BoardWrite = () => {
   const board = useParams().board;
   const navigate = useNavigate();
-  console.log(board);
   const [imgFile, setImgFile] = useState<string>('');
-  // const [file, setFile] = useState('');
   const imgRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [boardContent, setBoardContent] = useState('');
@@ -55,16 +53,6 @@ const BoardWrite = () => {
     }
   };
 
-  //파일 업로드 input의 onChange
-  // const saveFile = () => {
-  //   const file = fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '';
-  //   const reader = new FileReader();
-  //   reader.readAsDataURL(file as Blob);
-  //   reader.onloadend = () => {
-  //     setFile(reader.result as string);
-  //   };
-  // };
-
   //input 입력 시
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -86,9 +74,12 @@ const BoardWrite = () => {
       return;
     }
 
+    const isComment = 'false';
+
     const form = new FormData();
     form.append('multipartFile', imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '');
     form.append('file', fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '');
+    form.append('isComment', isComment);
     formData.boardContent = boardContent;
     console.log(formData.category);
 
@@ -96,23 +87,41 @@ const BoardWrite = () => {
       form.append(key, formData[key]);
     });
 
-    try {
-      await axios.post('/boards/writeform', form, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      window.location.href = `/board/${board}/1`;
-    } catch (e: any) {
-      console.error('에러: ', e.message);
-      if (e.response.data.message.startsWith('Validation failed')) {
-        const errorMessage = e.response.data.errors[0].defaultMessage;
-        alert(errorMessage);
+    const isConfirm = window.confirm('작성하시겠습니까?');
+    if(isConfirm){
+      try {
+        await axios.post('/boards/writeform', form, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        alert('작성 완료되었습니다.');
+        window.location.href = `/board/${board}/1`;
+      } catch (e: any) {
+        console.error('에러: ', e.message);
+        if (e.response.data.message.startsWith('Validation failed')) {
+          const errorMessage = e.response.data.errors[0].defaultMessage;
+          alert(errorMessage);
+        }
       }
     }
   };
 
-  console.log(imgFile);
+  // 유저 정보 불러오기 지우지 마세요!!
+  // useEffect(() => {
+  //   const handleUserInfo = async () => {
+  //     try{
+  //       await axios.get('/')
+  //       .then((response) => {
+  //         setUserId(response.data.userId);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error.message);
+  //       })
+  //     }
+  //   }
+  //   handleUserInfo();
+  // }, [])
 
   return (
     <>
