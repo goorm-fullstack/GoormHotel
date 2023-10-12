@@ -18,8 +18,8 @@ import java.time.LocalDate;
 @EnableJpaAuditing
 @RequiredArgsConstructor
 public class HotelApplication {
-//	private final MemberRepository memberRepository;
-//	private final PasswordEncoder passwordEncoder;
+	private final MemberRepository memberRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
 		SpringApplication.run(HotelApplication.class, args);
@@ -40,6 +40,6 @@ public class HotelApplication {
 //				.role(Role.USER)
 //				.build();
 //		memberRepository.save(member);
-
-	}
+//
+//	}
 }
