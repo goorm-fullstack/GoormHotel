@@ -34,7 +34,14 @@ const AdminBoardWrite = () => {
   const imgRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const cookies = new Cookies();
-  const [admin, setAdmin] = useState<any>(null);
+  const [admin, setAdmin] = useState<data>({
+    adminId : "",
+    adminNickname : "",
+    role : "",
+  });
+  type data = {
+    [key: string]: string;
+  }
   const getCookie = (name: string) => {
     return cookies.get(name);
   }
