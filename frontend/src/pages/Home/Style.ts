@@ -63,9 +63,18 @@ export const ItemList = styled.ul`
 
 export const RoomItem = styled.li`
   width: 380px;
-  img {
-    width: 200px;
-    height: 200px;
+
+  .imgw {
+    // 상품 이미지
+    height: 240px;
+
+    img {
+      min-width: 100%;
+      max-width: 100%;
+      min-height: 100%;
+      max-height: 100%;
+      object-fit: cover;
+    }
   }
 `;
 

@@ -183,21 +183,27 @@ const Home = () => {
             {roomData.length === 0 && <S.NoItem>등록된 상품이 없습니다.</S.NoItem>}
             {roomData[0] && (
               <S.RoomItem>
-                <img src={imgUrlsRoom[0]} alt="객실" />
+                <div className="imgw">
+                  <img src={imgUrlsRoom[0]} alt="객실" />
+                </div>
                 <S.ItemTitle>{nameOfTypeDetail(roomData[0])}</S.ItemTitle>
                 <S.ItemDesc>{roomData[0].description}</S.ItemDesc>
               </S.RoomItem>
             )}
             {roomData[1] && (
               <S.RoomItem>
-                <img src={imgUrlsRoom[0]} alt="객실" />
+                <div className="imgw">
+                  <img src={imgUrlsRoom[0]} alt="객실" />
+                </div>
                 <S.ItemTitle>{nameOfTypeDetail(roomData[1])}</S.ItemTitle>
                 <S.ItemDesc>{roomData[1].description}</S.ItemDesc>
               </S.RoomItem>
             )}
             {roomData[2] && (
               <S.RoomItem>
-                <img src={imgUrlsRoom[2]} alt="객실" />
+                <div className="imgw">
+                  <img src={imgUrlsRoom[2]} alt="객실" />
+                </div>
                 <S.ItemTitle>{nameOfTypeDetail(roomData[2])}</S.ItemTitle>
                 <S.ItemDesc>{roomData[2].description}</S.ItemDesc>
               </S.RoomItem>
@@ -216,28 +222,36 @@ const Home = () => {
             {diningData.length === 0 && <S.NoItem>등록된 상품이 없습니다.</S.NoItem>}
             {diningData[0] && (
               <S.DiningItem>
-                <img src={imageUrlsDining[0]} alt={`다이닝 ${diningImages[0]}`} />
+                <div className="imgw">
+                  <img src={imageUrlsDining[0]} alt={`다이닝 ${diningImages[0]}`} />
+                </div>
                 <S.ItemTitle>{nameOfTypeDetail(diningData[0])}</S.ItemTitle>
                 <S.ItemDesc>{diningData[0].description}</S.ItemDesc>
               </S.DiningItem>
             )}
             {diningData[1] && (
               <S.DiningItem>
-                <img src={imageUrlsDining[1]} alt={`다이닝 ${diningImages[1]}`} />
+                <div className="imgw">
+                  <img src={imageUrlsDining[1]} alt={`다이닝 ${diningImages[1]}`} />
+                </div>
                 <S.ItemTitle>{nameOfTypeDetail(diningData[1])}</S.ItemTitle>
                 <S.ItemDesc>{diningData[1].description}</S.ItemDesc>
               </S.DiningItem>
             )}
             {diningData[2] && (
               <S.DiningItem>
-                <img src={imageUrlsDining[2]} alt={`다이닝 ${diningImages[2]}`} />
+                <div className="imgw">
+                  <img src={imageUrlsDining[2]} alt={`다이닝 ${diningImages[2]}`} />
+                </div>
                 <S.ItemTitle>{nameOfTypeDetail(diningData[2])}</S.ItemTitle>
                 <S.ItemDesc>{diningData[2].description}</S.ItemDesc>
               </S.DiningItem>
             )}
             {diningData[3] && (
               <S.DiningItem>
-                <img src={imageUrlsDining[3]} alt={`다이닝 ${diningImages[3]}`} />
+                <div className="imgw">
+                  <img src={imageUrlsDining[3]} alt={`다이닝 ${diningImages[3]}`} />
+                </div>
                 <S.ItemTitle>{nameOfTypeDetail(diningData[3])}</S.ItemTitle>
                 <S.ItemDesc>{diningData[3].description}</S.ItemDesc>
               </S.DiningItem>
