@@ -182,6 +182,10 @@ const BoardWrite = () => {
                   <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} required />
                 </td>
               </tr>
+              <tr>
+                <th>비밀번호</th>
+                <input type="text" name="boardPassword" value={formData.boardPassword} onChange={handleChange} required/>
+              </tr>
               <tr className="contents">
                 <td colSpan={2} className="writeWrapper">
                   <TextEditor setValue={setBoardContent} />
