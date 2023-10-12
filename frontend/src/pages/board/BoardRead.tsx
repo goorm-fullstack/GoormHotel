@@ -20,6 +20,7 @@ const BoardRead = () => {
   const [file, setFile] = useState('');
   const [reply, setReply] = useState<any[]>([]);
   const [replyWriter, setReplyWriter] = useState('');
+  const [replyPassword, setReplyPassword] = useState('');
   const [replyContent, setReplyContent] = useState('');
   const [replyWriterModify, setReplyWriterModify] = useState('');
   const [replyContentModify, setReplyContentModify] = useState('');
@@ -187,8 +188,10 @@ const BoardRead = () => {
         boardId: boardId,
         replyContent: replyContent,
         replyWriter: replyWriter,
+        replyPassword: replyPassword,
       });
       setReplyWriter('');
+      setReplyPassword('');
       setReplyContent('');
       fetchReply(parseInt(boardId ? boardId : '', 10));
     } catch (error) {
@@ -271,6 +274,13 @@ const BoardRead = () => {
                           name="replyWriter"
                           value={replyWriter}
                           onChange={(e) => setReplyWriter(e.target.value)}
+                        />
+                        <input
+                            type="text"
+                            placeholder="비밀번호"
+                            name="replyPassword"
+                            value={replyPassword}
+                            onChange={(e) => setReplyPassword(e.target.value)}
                         />
                         {/*<input type="password" placeholder="식별 비밀번호?" />*/}
                       </div>
