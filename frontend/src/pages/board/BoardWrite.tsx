@@ -6,6 +6,7 @@ import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
 import { ItemThumbnail } from '../../admin/item/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
+import {Cookies} from "react-cookie";
 
 type FormData = {
   [key: string]: string;
@@ -18,6 +19,12 @@ const BoardWrite = () => {
   const imgRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [boardContent, setBoardContent] = useState('');
+  const cookies = new Cookies();
+  const getCookie = (name: string) => {
+    return cookies.get(name);
+  }
+  const cookie = getCookie("JSESSIONID");
+
   const [formData, setFormData] = useState<FormData>({
     title: '',
     boardContent: '',
@@ -108,6 +115,38 @@ const BoardWrite = () => {
     }
   };
 
+  const writerOption = () => {
+    if (!cookie) {
+      return (
+        <>
+          <tr>
+            <th>작성자</th>
+            <td>
+              <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} required />
+            </td>
+          </tr>
+          <tr>
+            <th>비밀번호</th>
+            <td>
+              <input type="password" name="boardPassword" value={formData.boardPassword} onChange={handleChange} required />
+            </td>
+          </tr>
+        </>
+      )
+    }
+    return (
+      <>
+        <tr>
+          <th>작성자</th>
+          <td>
+            <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} required />
+          </td>
+        </tr>
+      </>
+    )
+  }
+
+
   // 유저 정보 불러오기 지우지 마세요!!(회원 여부 확인)
   // useEffect(() => {
   //   const handleUserInfo = async () => {
@@ -177,18 +216,19 @@ const BoardWrite = () => {
                   <input type="text" className="title long" name="title" value={formData.title} onChange={handleChange} required />
                 </td>
               </tr>
-              <tr>
-                <th>작성자</th>
-                <td>
-                  <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} required />
-                </td>
-              </tr>
-              <tr>
-                <th>비밀번호</th>
-                <td>
-                  <input type="password" name="boardPassword" value={formData.boardPassword} onChange={handleChange} required />
-                </td>
-              </tr>
+              {writerOption()}
+              {/*<tr>*/}
+              {/*  <th>작성자</th>*/}
+              {/*  <td>*/}
+              {/*    <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} required />*/}
+              {/*  </td>*/}
+              {/*</tr>*/}
+              {/*<tr>*/}
+              {/*  <th>비밀번호</th>*/}
+              {/*  <td>*/}
+              {/*    <input type="password" name="boardPassword" value={formData.boardPassword} onChange={handleChange} required />*/}
+              {/*  </td>*/}
+              {/*</tr>*/}
               <tr className="contents">
                 <td colSpan={2} className="writeWrapper">
                   <TextEditor setValue={setBoardContent} />
