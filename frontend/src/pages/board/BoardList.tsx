@@ -58,7 +58,7 @@ const CustomerSupport = () => {
       }
       if (boardTitle !== '') {
         if(typeDetail === 'all' && keyword === ''){
-          axios
+          Instance
               .get(`/boards/find/category?boardTitle=${boardTitle}`)
               .then((response) => {
                 const totalPages = parseInt(response.headers['totalpages'], 10);
@@ -72,7 +72,7 @@ const CustomerSupport = () => {
                 console.error(error);
               });
         }else if(typeDetail !== 'all' && keyword === ''){
-          axios
+          Instance
               .get(`/boards/find/category?boardTitle=${boardTitle}&category=${typeDetail}`)
               .then((response) => {
                 const totalPages = parseInt(response.headers['totalpages'], 10);
@@ -85,7 +85,7 @@ const CustomerSupport = () => {
                 console.error(error);
               });
         }else if(typeDetail === 'all' && keyword !== ''){
-          axios
+          Instance
               .get(`/boards/find/category?boardTitle=${boardTitle}&keyword=${keyword}`)
               .then((response) => {
                 const totalPages = parseInt(response.headers['totalpages'], 10);
@@ -98,7 +98,7 @@ const CustomerSupport = () => {
                 console.error(error);
               });
         }else{
-          axios
+          Instance
               .get(`/boards/find/category?boardTitle=${boardTitle}&category=${typeDetail}&keyword=${keyword}`)
               .then((response) => {
                 const totalPages = parseInt(response.headers['totalpages'], 10);
