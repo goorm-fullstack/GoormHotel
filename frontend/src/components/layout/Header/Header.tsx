@@ -3,8 +3,7 @@ import * as S from './Style';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../../images/common/logo.png';
 import { BtnWrapper } from '../../../Style/commonStyles';
-import {useAuth} from "../../../utils/api/AuthContext";
-import Instance from "../../../utils/api/axiosInstance";
+import { useAuth } from '../../../utils/api/AuthContext';
 
 const Header = () => {
   const location = useLocation().pathname;
@@ -27,13 +26,13 @@ const Header = () => {
   // };
 
   function deleteAllCookies() {
-    const cookies = document.cookie.split(";");
+    const cookies = document.cookie.split(';');
 
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i];
-      const eqPos = cookie.indexOf("=");
+      const eqPos = cookie.indexOf('=');
       const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
     }
   }
 
@@ -48,15 +47,15 @@ const Header = () => {
     <S.Header data-location={location}>
       <ul className="topinfo">
         <li>
-          { isLoggedIn ? (
-              <button onClick={handleLogoutUseLocalStorge}>로그아웃</button>
+          {isLoggedIn ? (
+            <button type="button" className="btnlogout" onClick={handleLogoutUseLocalStorge}>
+              로그아웃
+            </button>
           ) : (
-              <Link to="/login">로그인</Link>
+            <Link to="/login">로그인</Link>
           )}
         </li>
-        <li>
-          <Link to="/signup">회원가입</Link>
-        </li>
+        <li>{isLoggedIn ? <Link to="/mypage">마이페이지</Link> : <Link to="/signup">회원가입</Link>}</li>
         <li>
           <Link to="/login?type=reservation">예약 확인</Link>
         </li>

@@ -53,8 +53,7 @@ export const SearchHeader = styled.div`
   select {
     width: 120px;
   }
-`
-
+`;
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -173,12 +172,12 @@ export const TableRead = styled.table`
     color: ${(props) => props.theme.colors.charcoal};
     margin-bottom: 14px;
   }
-  .fileb{
+  .fileb {
     text-decoration: underline;
   }
-  .reviewImg{
-    width:200px;
-    height:200px;
+  .reviewImg {
+    width: 200px;
+    height: 200px;
   }
   td.titlew {
     background: ${(props) => props.theme.colors.graybg};
@@ -196,7 +195,7 @@ export const TableRead = styled.table`
         height: 100px;
       }
 
-      button[type="submit"] {
+      button[type='submit'] {
         background: ${(props) => props.theme.colors.navy};
         color: white;
         width: 120px;
@@ -248,13 +247,12 @@ export const TableRead = styled.table`
         margin-top: 12px;
         line-height: 1.4;
       }
-      & .modify-input{
+      & .modify-input {
         margin-right: 20px;
       }
-      & .modify{
+      & .modify {
         margin-right: 5px;
       }
     }
   }
 `;
-

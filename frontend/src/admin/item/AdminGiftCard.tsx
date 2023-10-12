@@ -3,7 +3,7 @@ import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, ContentsTitleXSmall, SubmitBtn } from '../../Style/commonStyles';
 import 'react-calendar/dist/Calendar.css';
 import 'moment/locale/ko';
-import {Link, useNavigate, useParams} from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Container, Table, TableHeader } from '../member/Style';
 import { InputWrapper, Section } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
@@ -30,10 +30,10 @@ const AdminGiftCard = () => {
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [count, setCount] = useState<number>(1);
   const navigate = useNavigate();
-  const authItem = localStorage.getItem("auth");
+  const authItem = localStorage.getItem('auth');
 
   useEffect(() => {
-    if (!(authItem && authItem.includes("AUTH_B"))) {
+    if (!(authItem && authItem.includes('AUTH_B'))) {
       alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
       navigate('/admin');
     }
@@ -118,126 +118,128 @@ const AdminGiftCard = () => {
     }).then(() => {});
   };
 
-  if(authItem && authItem.includes("AUTH_B")) {
-  return (
-    <AdminLayout subMenus="item">
-      <Container>
-        <PageTitle>상품권 관리</PageTitle>
-        <Section>
-          <ContentsTitleXSmall>상품권 발행</ContentsTitleXSmall>
-          <InputWrapper className="giftcard">
-            <form onSubmit={handleSubmit}>
-              <input type="text" name="title" placeholder="상품권 이름" value={title} onChange={(e) => setTitle(e.target.value)} required />
-              <input
-                type="number"
-                name="money"
-                placeholder="상품권 금액(원)"
-                min="1000"
-                value={money}
-                onChange={(e) => setMoney(e.target.value)}
-                required
-              />
-              <input
-                type="number"
-                name="expire"
-                placeholder="유효기간(일)"
-                min="1"
-                value={expire}
-                onChange={(e) => setExpire(e.target.value)}
-                required
-              />
-              <SubmitBtn type="submit">상품권 발행하기</SubmitBtn>
-            </form>
-          </InputWrapper>
-        </Section>
-        <Section>
-          <ContentsTitleXSmall>상품권 목록</ContentsTitleXSmall>
-          <TableHeader>
-            <p className="total number-of-list">
-              전체 <strong>{dataLength}</strong> 건
-            </p>
-            <BtnWrapper className="flexgap right">
-              <NormalBtn className="header" type="button" onClick={handleAvaliableClicked}>
-                상품권 사용 가능
-              </NormalBtn>
-              <NormalBtn className="header red" type="button" onClick={handleUnAvaliableClicked}>
-                상품권 사용 중지
-              </NormalBtn>
-            </BtnWrapper>
-          </TableHeader>
-          <Table>
-            <colgroup>
-              <col width="80px" />
-              <col width="90px" />
-              <col width="200px" />
-              <col width="200px" />
-              <col width="180px" />
-              <col width="180px" />
-              <col width="180px" />
-              <col width="100px" />
-            </colgroup>
-            <thead>
-              <tr>
-                <th>
-                  <InputCheckbox type="checkbox" id="all-select-label" onChange={handleSelectAll} />
-                </th>
-                <th>번호</th>
-                <th>상품권명</th>
-                <th>상품권번호</th>
-                <th>상품권 금액</th>
-                <th>발행일</th>
-                <th>사용기한</th>
-                <th>상태</th>
-              </tr>
-            </thead>
-            <tbody>
-              {giftcardList.length === 0 ? (
-                <>
-                  <tr>
-                    <td colSpan={8} className="center empty">
-                      등록된 상품권이 없습니다.
-                    </td>
-                  </tr>
-                </>
-              ) : (
-                <>
-                  {giftcardList.map((item, idx) => {
-                    const id = 'checkbox' + idx;
-                    return (
-                      <tr>
-                        <td className="center">
-                          <InputCheckbox
-                            type="checkbox"
-                            id={id}
-                            checked={checkedItems.includes(item.id)}
-                            onChange={() => handleCheckboxChange(item.id)}
-                          />
-                        </td>
-                        <td className="center">{idx + 1}</td>
-                        <td className="center">
-                          <p className="textover">{item.title}</p>
-                        </td>
-                        <td className="center">
-                          <p>
-                            <Link to={`/admin/giftcard/detail/${item.uuid}`}>{item.uuid}</Link>
-                          </p>
-                        </td>
-                        <td className="center">{item.money}</td>
-                        <td className="center">{item.issueDate}</td>
-                        <td className="center">{calcExpireDate(item.issueDate, item.expire)}</td>
-                        <td className="center">{item.isZeroMoney}</td>
-                      </tr>
-                    );
-                  })}
-                </>
-              )}
-            </tbody>
-          </Table>
-          <Paging totalPage={count} />
-        </Section>
-      </Container>
-    </AdminLayout>
-  );
+  if (authItem && authItem.includes('AUTH_B')) {
+    return (
+      <AdminLayout subMenus="item">
+        <Container>
+          <PageTitle>상품권 관리</PageTitle>
+          <Section>
+            <ContentsTitleXSmall>상품권 발행</ContentsTitleXSmall>
+            <InputWrapper className="giftcard">
+              <form onSubmit={handleSubmit}>
+                <input type="text" name="title" placeholder="상품권 이름" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                <input
+                  type="number"
+                  name="money"
+                  placeholder="상품권 금액(원)"
+                  min="1000"
+                  value={money}
+                  onChange={(e) => setMoney(e.target.value)}
+                  required
+                />
+                <input
+                  type="number"
+                  name="expire"
+                  placeholder="유효기간(일)"
+                  min="1"
+                  value={expire}
+                  onChange={(e) => setExpire(e.target.value)}
+                  required
+                />
+                <SubmitBtn type="submit">상품권 발행하기</SubmitBtn>
+              </form>
+            </InputWrapper>
+          </Section>
+          <Section>
+            <ContentsTitleXSmall>상품권 목록</ContentsTitleXSmall>
+            <TableHeader>
+              <p className="total number-of-list">
+                전체 <strong>{dataLength}</strong> 건
+              </p>
+              <BtnWrapper className="flexgap right">
+                <NormalBtn className="header" type="button" onClick={handleAvaliableClicked}>
+                  상품권 사용 가능
+                </NormalBtn>
+                <NormalBtn className="header red" type="button" onClick={handleUnAvaliableClicked}>
+                  상품권 사용 중지
+                </NormalBtn>
+              </BtnWrapper>
+            </TableHeader>
+            <Table>
+              <colgroup>
+                <col width="80px" />
+                <col width="90px" />
+                <col width="200px" />
+                <col width="200px" />
+                <col width="180px" />
+                <col width="180px" />
+                <col width="180px" />
+                <col width="100px" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>
+                    <InputCheckbox type="checkbox" id="all-select-label" onChange={handleSelectAll} />
+                  </th>
+                  <th>번호</th>
+                  <th>상품권명</th>
+                  <th>상품권번호</th>
+                  <th>상품권 금액</th>
+                  <th>발행일</th>
+                  <th>사용기한</th>
+                  <th>상태</th>
+                </tr>
+              </thead>
+              <tbody>
+                {giftcardList.length === 0 ? (
+                  <>
+                    <tr>
+                      <td colSpan={8} className="center empty">
+                        등록된 상품권이 없습니다.
+                      </td>
+                    </tr>
+                  </>
+                ) : (
+                  <>
+                    {giftcardList.map((item, idx) => {
+                      const id = 'checkbox' + idx;
+                      return (
+                        <tr>
+                          <td className="center">
+                            <InputCheckbox
+                              type="checkbox"
+                              id={id}
+                              checked={checkedItems.includes(item.id)}
+                              onChange={() => handleCheckboxChange(item.id)}
+                            />
+                          </td>
+                          <td className="center">{idx + 1}</td>
+                          <td className="center">
+                            <p className="textover">{item.title}</p>
+                          </td>
+                          <td className="center">
+                            <p>
+                              <Link to={`/admin/giftcard/detail/${item.uuid}`} className="u">
+                                {item.uuid}
+                              </Link>
+                            </p>
+                          </td>
+                          <td className="center">{item.money}</td>
+                          <td className="center">{item.issueDate}</td>
+                          <td className="center">{calcExpireDate(item.issueDate, item.expire)}</td>
+                          <td className="center">{item.isZeroMoney}</td>
+                        </tr>
+                      );
+                    })}
+                  </>
+                )}
+              </tbody>
+            </Table>
+            <Paging totalPage={count} />
+          </Section>
+        </Container>
+      </AdminLayout>
+    );
   } else {
     return null;
   }

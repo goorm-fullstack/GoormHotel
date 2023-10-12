@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { commonContainerStyle, PageTitle, ContentsTitleXSmall, AuthBtn, SubmitBtn, BtnWrapper, Auth } from '../../Style/commonStyles';
+import { commonContainerStyle } from '../../Style/commonStyles';
 
 export const Container = styled(commonContainerStyle)``;
 

@@ -6,7 +6,7 @@ import imgPool from '../../../images/facilities/pool.jpg';
 import imgSalon from '../../../images/facilities/salon.jpg';
 import imgSauna from '../../../images/facilities/sauna.jpg';
 import imgSpa from '../../../images/facilities/spa.jpg';
-import { commonContainerStyle, PageTitle } from '../../../Style/commonStyles';
+import { PageTitle } from '../../../Style/commonStyles';
 import SubHeader from '../../../components/layout/SubHeader/SubHeader';
 
 const Facilities = () => {
