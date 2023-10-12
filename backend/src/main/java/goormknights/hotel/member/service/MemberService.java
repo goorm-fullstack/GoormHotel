@@ -367,4 +367,12 @@ public class MemberService {
 
         return sb.toString();
     }
+
+    public ResponseMemberDto findByMemberId(String id) {
+        Optional<Member> member = memberRepository.findByMemberId(id);
+        if(member.isEmpty()) {
+            throw new MemberNotFound();
+        }
+        return new ResponseMemberDto(member.get());
+    }
 }

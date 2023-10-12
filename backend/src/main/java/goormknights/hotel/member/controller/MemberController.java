@@ -80,6 +80,11 @@ public class MemberController {
         return memberService.findById(id);
     }
 
+    @GetMapping("/find")
+    public ResponseEntity<ResponseMemberDto> findByMemberId(@RequestParam String id) {
+        return ResponseEntity.ok(memberService.findByMemberId(id));
+    }
+
     @GetMapping("/list")
     public ResponseEntity<List<ResponseMemberDto>> getMemberList(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(memberService.getMemberList(pageable));

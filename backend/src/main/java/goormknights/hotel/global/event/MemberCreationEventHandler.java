@@ -24,7 +24,7 @@ public class MemberCreationEventHandler implements ApplicationListener<MemberCre
     public void onApplicationEvent(MemberCreateEvent event) {
         Member member = event.getMember();
         Coupon coupon = event.getCoupon();
-        if(member.getRole() != Role.GUEST) {
+        if(member.getRole() != Role.GUEST && member.getRole() != Role.ANONYMOUS) {
             Coupon saveCoupon = couponRepository.save(coupon);
             coupon.setMember(member);
             coupon.nameStrategy();

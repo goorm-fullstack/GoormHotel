@@ -144,7 +144,9 @@ public class AdminService {
         Manager updateManager = managerRepository.findByAdminId(managerDto.getAdminId()).orElseThrow(NotExistMemberException::new);
         updateManager.setAdminName(managerDto.getAdminName());
         updateManager.setAdminNickname(managerDto.getAdminNickname());
-        updateManager.setPassword(passwordEncoder.encode(managerDto.getPassword()));
+        if(!managerDto.getPassword().isEmpty()) {
+            updateManager.setPassword(passwordEncoder.encode(managerDto.getPassword()));
+        }
         updateManager.setAuth(managerDto.getAuth());
     }
 
