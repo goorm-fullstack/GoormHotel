@@ -140,19 +140,75 @@ const BoardRead = () => {
     }
   };
 
-  const handleDelete = (replyId: number) => {
-    const isConfirm = window.confirm('삭제하시겠습니까?');
-    if(isConfirm){
-      axios
-      .put(`/reply/softdelete/${replyId}`)
-      .then((response) => {
-        alert('삭제되었습니다.');
-        fetchReply(boardData.boardId);
-      })
-      .catch((error) => {
-        console.error('댓글 삭제에 실패했습니다.', error);
-      });
+  const findReply = async (replyId : number) => {
+    try{
+      const response = await axios.get(`/reply/replyId/${replyId}`);
+      if(!response){
+        return ;
+      }
+      return response.data.replyPassword;
     }
+    catch (e) {
+      console.error(e);
+    }
+  }
+
+  const handleDelete = (replyId: number, replyWriter: string, replyPassword: string) => {
+
+    if( (cookie === replyWriter) && !replyPassword){                   // 쿠키 아이디와 작성자 이름이 같고 댓글 비밀번호가 없을 때
+      const isConfirm = window.confirm('삭제하시겠습니까?');
+      if(isConfirm){
+        axios
+          .put(`/reply/softdelete/${replyId}`)
+          .then((response) => {
+            alert('삭제되었습니다.');
+            fetchReply(boardData.boardId);
+          })
+          .catch((error) => {
+            console.error('댓글 삭제에 실패했습니다.', error);
+          });
+      }
+    }
+
+    if(!cookie){                                                                      //쿠키 아이디가 없을 때
+      if(!replyPassword){                                                             //replyPassword(회원이 작성한 댓글이라면)가 없다면
+        alert("삭제가 불가능한 댓글입니다.");                                             //삭제 불가능
+        return;
+      }
+
+      const inputPassword = prompt("비밀번호를 입력하세요.");
+      if(replyPassword != inputPassword){                                             //입력받은 비밀번호와 replyPassword가 다르면
+        alert("비밀번호가 틀렸습니다.");                                                 //댓글 삭제 실패
+        return;
+      }
+
+      if(replyPassword === inputPassword){                                           //입력받은 비밀번호와 replyPassword가 일치하다면
+        return (                                                                     //댓글 삭제
+          axios
+            .put(`/reply/softdelete/${replyId}`)
+            .then((response) => {
+              alert('삭제되었습니다.');
+              fetchReply(boardData.boardId);
+            })
+            .catch((error) => {
+              console.error('댓글 삭제에 실패했습니다.', error);
+            })
+        )
+      }
+    }
+
+    // const isConfirm = window.confirm('삭제하시겠습니까?');
+    // if(isConfirm){
+    //   axios
+    //   .put(`/reply/softdelete/${replyId}`)
+    //   .then((response) => {
+    //     alert('삭제되었습니다.');
+    //     fetchReply(boardData.boardId);
+    //   })
+    //   .catch((error) => {
+    //     console.error('댓글 삭제에 실패했습니다.', error);
+    //   });
+    // }
   };
 
   const handleUpdate = (replyId: any) => {
@@ -355,7 +411,7 @@ const BoardRead = () => {
                             <button type="button" className="modify" onClick={() => handleUpdate(replyItem.replyId)}>
                               수정
                             </button>
-                            <button type="button" className="delete" onClick={() => handleDelete(replyItem.replyId)}>
+                            <button type="button" className="delete" onClick={() => handleDelete(replyItem.replyId, replyItem.replyWriter, replyItem.replyPassword)}>
                               삭제
                             </button>
                           </div>
