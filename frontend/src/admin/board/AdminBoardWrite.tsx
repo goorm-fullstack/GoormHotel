@@ -15,13 +15,22 @@ import { useNavigate } from "react-router-dom";
 import {Cookies} from "react-cookie";
 
 const AdminBoardWrite = () => {
+  const adminAuth = localStorage.getItem("auth");
+  const adminAdminId = localStorage.getItem("adminId") || "";
+  const adminRole = localStorage.getItem("role");
+  // const adminAdminNickname = localStorage.getItem("adminNickname");
+  console.log(adminAuth);
+  console.log(adminAdminId);
+  console.log(adminRole);
+  //console.log(adminAdminNickname);
+
   const setValue = () => {};
   const [formData, setFormData] = useState<FormData>({
     title: "",
     boardContent: "",
     boardTitle: "",
     category: "",
-    boardWriter: "",
+    boardWriter: adminAdminId,
   });
   type FormData = {
     [key: string]: string;
@@ -43,14 +52,7 @@ const AdminBoardWrite = () => {
     [key: string]: string;
   }
 
-  const adminAuth = localStorage.getItem("auth");
-  const adminAdminId = localStorage.getItem("adminId");
-  const adminRole = localStorage.getItem("role");
-  // const adminAdminNickname = localStorage.getItem("adminNickname");
-  console.log(adminAuth);
-  console.log(adminAdminId);
-  console.log(adminRole);
-  //console.log(adminAdminNickname);
+
 
   const getCookie = (name: string) => {
     return cookies.get(name);
@@ -100,6 +102,8 @@ const AdminBoardWrite = () => {
       setCategoryError("");
     }
   };
+
+
 
   const handleCommentCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsComment(e.target.checked);
@@ -158,7 +162,7 @@ const AdminBoardWrite = () => {
         <tr>
           <th>작성자</th>
           <td>
-            {/*<input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange}/>*/}
+            <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} style={{ display : "none"}}/>
             <p>{admin.adminNickname} 매니저</p>
           </td>
         </tr>
@@ -169,7 +173,7 @@ const AdminBoardWrite = () => {
         <th>작성자</th>
         <td>
           <p>관리자</p>
-          {/*<input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange}/>*/}
+          <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} style={{ display : "none"}}/>
         </td>
       </tr>
     )
