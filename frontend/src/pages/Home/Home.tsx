@@ -49,7 +49,7 @@ const Home = () => {
     rooms: 1,
     adults: 1,
     children: 0,
-    nights: 0,
+    nights: 1,
   });
   const [roomData, setRoomData] = useState<RoomData[]>([]);
   const [diningData, setDiningData] = useState<DiningData[]>([]);

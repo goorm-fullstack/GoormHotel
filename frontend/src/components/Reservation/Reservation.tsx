@@ -4,23 +4,30 @@ import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import 'moment/locale/ko';
 import { ValuePiece } from '../common/DateButton/DateButton';
+import { useLocation } from 'react-router-dom';
 
 const Reservation = ({ updateReservationData }: any) => {
+  const location = useLocation();
+  const prevReservationData = location.state?.reservationData;
   const [checkInValue, setCheckInValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
   const [checkOutValue, setCheckOutValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
-  const [checkInDate, setCheckInDate] = useState<string>('');
-  const [checkOutDate, setCheckOutDate] = useState<string>('');
+  const [checkInDate, setCheckInDate] = useState<string>(prevReservationData ? prevReservationData.checkInDate : '');
+  const [checkOutDate, setCheckOutDate] = useState<string>(prevReservationData ? prevReservationData.checkOutDate : '');
   const [checkInOpen, setCheckInOpen] = useState<boolean>(false);
   const [checkOutOpen, setCheckOutOpen] = useState<boolean>(false);
   const [optionOpen, setOptionOpen] = useState<boolean>(false);
-  const [rooms, setRooms] = useState<number>(1);
-  const [adults, setAdults] = useState<number>(1);
-  const [children, setChildren] = useState<number>(0);
+  const [rooms, setRooms] = useState<number>(prevReservationData ? prevReservationData.rooms : 1);
+  const [adults, setAdults] = useState<number>(prevReservationData ? prevReservationData.adults : 1);
+  const [children, setChildren] = useState<number>(prevReservationData ? prevReservationData.children : 0);
   const [nights, setNights] = useState<number>(0);
 
   useEffect(() => {
     const processedCheckInDate: ValuePiece = Array.isArray(checkInValue) ? checkInValue[0] : checkInValue;
     const processedCheckOutDate: ValuePiece = Array.isArray(checkOutValue) ? checkOutValue[0] : checkOutValue;
+    if(prevReservationData === undefined){
+      processedCheckInDate?.setHours(0, 0, 0, 0);
+      processedCheckOutDate?.setHours(0, 0, 0, 0);
+    }
 
     const checkInMoment = moment(processedCheckInDate);
     const checkOutMoment = moment(processedCheckOutDate);
@@ -55,15 +62,22 @@ const Reservation = ({ updateReservationData }: any) => {
     const processedCheckInDate: ValuePiece = Array.isArray(checkInValue) ? checkInValue[0] : checkInValue;
     const processedCheckOutDate: ValuePiece = Array.isArray(checkOutValue) ? checkOutValue[0] : checkOutValue;
 
-    const nightsDifference = moment(processedCheckOutDate).diff(moment(processedCheckInDate), 'day');
-    setNights(nightsDifference);
+    // const nightsDifference = moment(processedCheckOutDate).diff(moment(processedCheckInDate), 'day');
+    // setNights(nightsDifference);
   }, [checkInValue, checkOutValue]);
 
   useEffect(() => {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-
+    let today;
+    let tomorrow;
+    if(prevReservationData === undefined){
+      today = new Date();
+      tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
+    }else{
+      today = new Date(prevReservationData.checkInDate);
+      tomorrow = new Date(prevReservationData.checkOutDate);
+    }
+  
     const formattedToday = formatAndSetDate(today);
     const formattedTomorrow = formatAndSetDate(tomorrow);
 
@@ -72,9 +86,20 @@ const Reservation = ({ updateReservationData }: any) => {
   }, []);
 
   useEffect(() => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    setCheckOutValue(tomorrow);
+    let today;
+    let tomorrow;
+    if(prevReservationData === undefined){
+      today = new Date();
+      tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      setCheckInValue(today);
+      setCheckOutValue(tomorrow);
+    }else{
+      today = new Date(prevReservationData.checkInDate);
+      tomorrow = new Date(prevReservationData.checkOutDate);
+      setCheckInValue(today);
+      setCheckOutValue(tomorrow);
+    }
   }, []);
 
   const formatAndSetDate = (date: Date) => {
@@ -133,7 +158,7 @@ const Reservation = ({ updateReservationData }: any) => {
       return;
     }
 
-    processedSelectedDate?.setHours(12, 0, 0, 0);
+    // processedSelectedDate?.setHours(12, 0, 0, 0);
     setCheckOutValue(selectedDate);
     setCheckOutOpen(false);
     const formattedDate = moment(processedSelectedDate).format('YYYY.MM.DD');
