@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table, TableHeader } from '../../admin/member/Style';
-import { PageTitle, SubmitBtn, BtnWrapper, LinkBtn, NormalBtn, SelectImage, RedP, GreenP } from '../../Style/commonStyles';
+import { Table } from '../../admin/member/Style';
+import { PageTitle, SubmitBtn, BtnWrapper, NormalBtn, SelectImage, RedP, GreenP } from '../../Style/commonStyles';
 import axios from 'axios';
 
 export type DiningForm = {
@@ -189,7 +189,7 @@ const WriteFormDining = () => {
             <tr>
               <th>상품 소개글</th>
               <td>
-                <input type="text" name='description' className='long' value={formData.description} onChange={handleChange} required />
+                <input type="text" name="description" className="long" value={formData.description} onChange={handleChange} required />
               </td>
             </tr>
             <tr>

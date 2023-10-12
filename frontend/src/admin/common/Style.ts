@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
 import { ReactComponent as SideMenuIcon } from '../../images/icon/ico_slide_btn.svg';
 
 export const AdminHeader = styled.header`
@@ -10,6 +9,7 @@ export const AdminHeader = styled.header`
   top: 0;
   left: 0;
   right: 0;
+  z-index: 99;
   display: flex;
   align-items: center;
   padding: 0 40px;

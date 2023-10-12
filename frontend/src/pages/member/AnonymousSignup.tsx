@@ -13,7 +13,7 @@ import {
 } from '../../Style/commonStyles';
 import AgreementContents from '../../components/Agreement/AgreementCon';
 import PrivacyContents from '../../components/Agreement/PrivacyCon';
-import Instance from "../../utils/api/axiosInstance";
+import Instance from '../../utils/api/axiosInstance';
 
 const AnonymousSignup = () => {
   const [termsAgree, setTermsAgree] = useState(false);
@@ -68,24 +68,28 @@ const AnonymousSignup = () => {
 
     if (termsAgree && privacyAgree) {
       try {
-          const response = await Instance.post('/member/anonymous/signup', {
+        const response = await Instance.post(
+          '/member/anonymous/signup',
+          {
             name: formData.name,
             email: formData.email,
             phoneNumber: formData.phoneNumber,
             birth: formData.birthdate,
             gender: formData.gender,
             code: formData.certificationCode,
-        }, {
-          headers : {
-            'Content-Type': 'application/json',
           },
-          withCredentials: true,
-        });
-
-          if (response.status === 200) {
-            alert('비회원 성공');
-            window.location.href = '/offers/1';
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            withCredentials: true,
           }
+        );
+
+        if (response.status === 200) {
+          alert('비회원 성공');
+          window.location.href = '/offers/1';
+        }
       } catch (error: any) {
         if (error?.response?.data?.errorCode === 1001) {
           alert('코드가 일치하지 않습니다');

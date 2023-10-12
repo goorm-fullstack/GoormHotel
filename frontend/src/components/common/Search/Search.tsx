@@ -4,13 +4,13 @@ import * as S from './Style';
 import { BtnWrapper, SubmitBtn } from '../../../Style/commonStyles';
 
 // 대분류 배열 타입
-export interface Type{
+export interface Type {
   type: string;
   value: string;
 }
 
 // 소분류 배열 타입
-export interface TypeDetail{
+export interface TypeDetail {
   type: string;
   typeDetail: string;
   value: string;
@@ -18,7 +18,7 @@ export interface TypeDetail{
 
 // endPoint = api의 엔드포인트
 const Search = (endPoint: string, typeArray: Type[][], typeDetailArray: TypeDetail[][]) => {
-  const { page } = useParams<{page: string}>(); // url 파라미터
+  const { page } = useParams<{ page: string }>(); // url 파라미터
   const [currentUrl, setCurrentUrl] = useState<string>('');
   const [type, setType] = useState<string>('all'); // 타입 상태관리
   const [typeDetail, setTypeDetail] = useState<string>('all'); // 세부 타입 상태관리
@@ -28,7 +28,7 @@ const Search = (endPoint: string, typeArray: Type[][], typeDetailArray: TypeDeta
 
   // type 변경
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if(searchKeyword.current){
+    if (searchKeyword.current) {
       searchKeyword.current.value = '';
     }
     setKeyword('');
@@ -38,7 +38,7 @@ const Search = (endPoint: string, typeArray: Type[][], typeDetailArray: TypeDeta
 
   // typeDetail 변경
   const handleTypeDetailChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if(searchKeyword.current){
+    if (searchKeyword.current) {
       searchKeyword.current.value = '';
     }
     setKeyword('');
@@ -48,10 +48,10 @@ const Search = (endPoint: string, typeArray: Type[][], typeDetailArray: TypeDeta
 
   // 검색어 입력
   const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if(searchKeyword.current){
+    if (searchKeyword.current) {
       setKeyword(searchKeyword.current.value);
     }
-  }
+  };
 
   // 검색 버튼 클릭 이벤트
   const handleSearch = () => {
@@ -129,7 +129,7 @@ const Search = (endPoint: string, typeArray: Type[][], typeDetailArray: TypeDeta
           {detailTypeForType}
         </select>
         <BtnWrapper className="flexgap right">
-          <input type="text" id="search" ref={searchKeyword} placeholder="제목+내용" onChange={handleKeywordChange} />
+          <input type="text" id="search" ref={searchKeyword} placeholder="검색어를 입력하세요." onChange={handleKeywordChange} />
           <SubmitBtn type="button" className="header search" onClick={handleSearch}>
             검색
           </SubmitBtn>

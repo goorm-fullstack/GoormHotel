@@ -144,7 +144,7 @@ const Reservation = ({ updateReservationData }: any) => {
   const isDateNotCurrent = (date: Date) => {
     // 현재 날짜보다 이전인 경우 선택 못하게 막음
     return moment(date).isBefore(moment(), 'day');
-  }
+  };
 
   const isDateDisabled = (date: Date) => {
     // 체크인 날짜와 이전인 날짜 선택 막음

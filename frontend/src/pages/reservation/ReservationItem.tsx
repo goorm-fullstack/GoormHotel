@@ -93,7 +93,7 @@ const ReservationItem = () => {
   const [totalData, setTotalData] = useState<number>(0);
   const [totalPage, setTotalPage] = useState<number>(0);
   const { page } = useParams();
-  const isLogined = localStorage.getItem("memberId");
+  const isLogined = localStorage.getItem('memberId');
 
   // 쿠키를 파싱하는 함수
   function getCookie(name: string): string | undefined {
@@ -101,10 +101,10 @@ const ReservationItem = () => {
     const cookies = cookieString.split('; ');
 
     for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].split('=');
-        if (cookie[0] === name) {
-            return cookie[1];
-        }
+      const cookie = cookies[i].split('=');
+      if (cookie[0] === name) {
+        return cookie[1];
+      }
     }
   }
 
@@ -133,36 +133,36 @@ const ReservationItem = () => {
   useEffect(() => {
     const currentPage: number = parseInt(page ? page : '1', 10);
     if (selectedType.includes('all')) {
-      if(selectedCategory !== ''){
+      if (selectedCategory !== '') {
         axios
-        .get(`/category?page=${currentPage}`, {
-          params: {
-            typeDetail: selectedCategory,
-          },
-        })
-        .then((response) => {
-          const totalPages = parseInt(response.headers['totalpages'], 10);
-          const totalData = parseInt(response.headers['totaldata'], 10);
-          setProducts(response.data);
-          setTotalData(totalData);
-          setTotalPage(totalPages);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-      }else{
+          .get(`/category?page=${currentPage}`, {
+            params: {
+              typeDetail: selectedCategory,
+            },
+          })
+          .then((response) => {
+            const totalPages = parseInt(response.headers['totalpages'], 10);
+            const totalData = parseInt(response.headers['totaldata'], 10);
+            setProducts(response.data);
+            setTotalData(totalData);
+            setTotalPage(totalPages);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
         axios
-        .get(`/category?page=${currentPage}`)
-        .then((response) => {
-          const totalPages = parseInt(response.headers['totalpages'], 10);
-          const totalData = parseInt(response.headers['totaldata'], 10);
-          setProducts(response.data);
-          setTotalData(totalData);
-          setTotalPage(totalPages);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+          .get(`/category?page=${currentPage}`)
+          .then((response) => {
+            const totalPages = parseInt(response.headers['totalpages'], 10);
+            const totalData = parseInt(response.headers['totaldata'], 10);
+            setProducts(response.data);
+            setTotalData(totalData);
+            setTotalPage(totalPages);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     } else {
       if (selectedCategory !== '') {
@@ -254,18 +254,19 @@ const ReservationItem = () => {
   };
 
   const handleSubmitClick = () => {
-    if(!isLogined) {
-      if(window.confirm('로그인이 진행되지 않았습니다. 비회원으로 주문을 진행하시겠습니까?')) {
-        navigate("/anonymous/signup");
-      } 
+    if (!isLogined) {
+      if (window.confirm('로그인이 진행되지 않았습니다. 비회원으로 주문을 진행하시겠습니까?')) {
+        navigate('/anonymous/signup');
+      }
     } else {
-      navigate("/offers/step2", {state : {
-        reservationData: reservationData,
-        selectedProduct: selectedProduct,
-        }}
-      )
-    }     
-  }
+      navigate('/offers/step2', {
+        state: {
+          reservationData: reservationData,
+          selectedProduct: selectedProduct,
+        },
+      });
+    }
+  };
 
   return (
     <div>
@@ -295,23 +296,21 @@ const ReservationItem = () => {
                   전체 <strong>{totalData}</strong> 개
                 </p>
                 <select id="productType" value={selectedCategory} onChange={handleCategoryChange}>
-                  {selectedType.length === 1 && selectedType[0] === 'room'
-                    ? productCategories.map((category, index) => (
-                        <option key={index} value={category.english}>
-                          {category.korean}
-                        </option>
-                      ))
-                    : selectedType.length === 1 && selectedType[0] === 'dining'
-                    ? diningCategories.map((category, index) => (
-                        <option key={index} value={category.english}>
-                          {category.korean}
-                        </option>
-                      ))
-                    : ( <option value={productCategories[0].english}>
-                          {productCategories[0].korean}
-                        </option>
-                      )
-                  }
+                  {selectedType.length === 1 && selectedType[0] === 'room' ? (
+                    productCategories.map((category, index) => (
+                      <option key={index} value={category.english}>
+                        {category.korean}
+                      </option>
+                    ))
+                  ) : selectedType.length === 1 && selectedType[0] === 'dining' ? (
+                    diningCategories.map((category, index) => (
+                      <option key={index} value={category.english}>
+                        {category.korean}
+                      </option>
+                    ))
+                  ) : (
+                    <option value={productCategories[0].english}>{productCategories[0].korean}</option>
+                  )}
                 </select>
               </div>
             </S.SelectWrapper>
@@ -333,7 +332,7 @@ const ReservationItem = () => {
                         <span>{nameOfTypeDetail(product)}</span>
                         <span>{product.capacity}인 기준</span>
                       </p>
-                      <h5>{product.description}</h5>
+                      <p className="desc">{product.description}</p>
                       <p className="price">
                         <strong>{numberWithCommas(product.price)}</strong> 원 ~
                       </p>

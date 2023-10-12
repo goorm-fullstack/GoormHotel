@@ -209,7 +209,7 @@ const WriteFormRoom = () => {
             <tr>
               <th>상품 소개글</th>
               <td>
-                <input type="text" name='description' className='long' value={formData.description} onChange={handleChange} required />
+                <input type="text" name="description" className="long" value={formData.description} onChange={handleChange} required />
               </td>
             </tr>
             <tr>

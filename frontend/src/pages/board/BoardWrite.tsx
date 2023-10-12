@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import * as S from './Style';
 import { useParams, useNavigate } from 'react-router-dom';
-import { PageTitle, BtnWrapper, SubmitBtn } from '../../Style/commonStyles';
+import { PageTitle, BtnWrapper, SubmitBtn, NormalBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
 import { ItemThumbnail } from '../../admin/item/Style';
@@ -89,7 +89,7 @@ const BoardWrite = () => {
     });
 
     const isConfirm = window.confirm('작성하시겠습니까?');
-    if(isConfirm){
+    if (isConfirm) {
       try {
         await axios.post('/boards/writeform', form, {
           headers: {
@@ -197,9 +197,9 @@ const BoardWrite = () => {
               <tr className="conbtm">
                 {board === 'review' ? (
                   <>
-                    <th>썸네일 이미지</th>
+                    <th>대표 이미지</th>
                     <td>
-                      <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required/>
+                      <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required />
                       {imgFile !== '' ? <ItemThumbnail src={imgFile} alt="후기 이미지" /> : <ItemThumbnail style={{ display: 'none' }} />}
                     </td>
                   </>
@@ -215,9 +215,9 @@ const BoardWrite = () => {
             </S.Table>
             <BtnWrapper className="center double mt40">
               <SubmitBtn type="submit">작성하기</SubmitBtn>
-              <SubmitBtn type="button" onClick={() => navigate(-1)}>
+              <NormalBtn type="button" onClick={() => navigate(-1)}>
                 취소
-              </SubmitBtn>
+              </NormalBtn>
             </BtnWrapper>
           </form>
         </div>

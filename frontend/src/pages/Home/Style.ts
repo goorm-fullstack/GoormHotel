@@ -63,7 +63,7 @@ export const ItemList = styled.ul`
 
 export const RoomItem = styled.li`
   width: 380px;
-  img{
+  img {
     width: 200px;
     height: 200px;
   }
@@ -220,4 +220,4 @@ export const ReservationButton = styled(Link)`
 export const NoItem = styled.div`
   text-align: center;
   margin: 0 auto;
-`
+`;
