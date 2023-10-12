@@ -144,37 +144,37 @@ const BoardWrite = () => {
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <S.Table className="horizontal">
               <tr>
-                <th style={{ width: '240px' }}>제목</th>
-                <td>
-                  <input type="text" className="title long" name="title" value={formData.title} onChange={handleChange} required />
-                </td>
-              </tr>
-              <tr>
                 <th style={{ width: '240px' }}>카테고리</th>
                 <td>
                   {(() => {
                     switch (board) {
                       case 'qna':
                         return (
-                          <select name="category" value={formData.category} onChange={handleChange}>
-                            <option value="">선택</option>
-                            <option value="문의1">문의1</option>
-                            <option value="문의2">문의2</option>
-                          </select>
+                            <select name="category" value={formData.category} onChange={handleChange}>
+                              <option value="">선택</option>
+                              <option value="문의1">문의1</option>
+                              <option value="문의2">문의2</option>
+                            </select>
                         );
                       case 'review':
                         return (
-                          <select name="category" value={formData.category} onChange={handleChange}>
-                            <option value="">선택</option>
-                            <option value="객실">객실</option>
-                            <option value="다이닝">다이닝</option>
-                          </select>
+                            <select name="category" value={formData.category} onChange={handleChange}>
+                              <option value="">선택</option>
+                              <option value="객실">객실</option>
+                              <option value="다이닝">다이닝</option>
+                            </select>
                         );
                       default:
                         return;
                     }
                   })()}
                   {categoryError && <div style={{ color: 'red' }}>{categoryError}</div>}
+                </td>
+              </tr>
+              <tr>
+                <th style={{ width: '240px' }}>제목</th>
+                <td>
+                  <input type="text" className="title long" name="title" value={formData.title} onChange={handleChange} required />
                 </td>
               </tr>
               <tr>
@@ -185,7 +185,9 @@ const BoardWrite = () => {
               </tr>
               <tr>
                 <th>비밀번호</th>
-                <input type="text" name="boardPassword" value={formData.boardPassword} onChange={handleChange} required/>
+                <td>
+                  <input type="password" name="boardPassword" value={formData.boardPassword} onChange={handleChange} required />
+                </td>
               </tr>
               <tr className="contents">
                 <td colSpan={2} className="writeWrapper">

@@ -181,6 +181,33 @@ const AdminBoardWrite = () => {
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <Table className="horizontal">
             <tbody>
+            <tr>
+              <th>게시판</th>
+              <td>
+                <select
+                    name="boardTitle"
+                    value={formData.boardTitle}
+                    onChange={handleChange}
+                >
+                  <option value="">선택</option>
+                  <option value="공지사항">공지사항</option>
+                  <option value="문의하기">문의하기</option>
+                  <option value="이용후기">이용후기</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th>카테고리</th>
+              <td>
+                <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                >
+                  {categoryOption()};
+                </select>
+              </td>
+            </tr>
               <tr>
                 <th>제목</th>
                 <td>
@@ -204,43 +231,16 @@ const AdminBoardWrite = () => {
                 </td>
               </tr>
               <tr>
-                <th>게시판</th>
+                <th>작성자</th>
                 <td>
-                  <select
-                    name="boardTitle"
-                    value={formData.boardTitle}
-                    onChange={handleChange}
-                  >
-                    <option value="">선택</option>
-                    <option value="공지사항">공지사항</option>
-                    <option value="문의하기">문의하기</option>
-                    <option value="이용후기">이용후기</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <th>카테고리</th>
-                <td>
-                  <select
-                    name="category"
-                    value={formData.category}
-                    onChange={handleChange}
-                  >
-                    {categoryOption()};
-                  </select>
+                  <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange}/>
                 </td>
               </tr>
               <tr>
                 <th>파일첨부</th>
                 <td>
-                <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
+                  <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
                   {imgFile !== '' ? <img src={imgFile} alt="후기 이미지" /> : <img style={{ display: 'none' }} />}
-                </td>
-              </tr>
-              <tr>
-                <th>작성자</th>
-                <td>
-                  <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange}/>
                 </td>
               </tr>
               <tr>
