@@ -3,17 +3,26 @@ package goormknights.hotel.member.controller;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.member.dto.request.AdminSignupDTO;
+import goormknights.hotel.member.dto.request.RequestManagerDto;
+import goormknights.hotel.member.dto.response.ManagerListDTO;
+import goormknights.hotel.member.dto.response.ResponseManagerDto;
+import goormknights.hotel.member.model.Manager;
 import goormknights.hotel.member.service.AdminService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -52,31 +61,6 @@ public class AdminController {
         return ResponseEntity.ok(sessionAttributes);
     }
 
-
-
-//    @GetMapping("/session")
-//    public ResponseEntity<?> getSessionInfo(HttpSession session) {
-//        String role = (String) session.getAttribute("role");
-//        Object authoritiesObj = session.getAttribute("authorities");
-//
-//        if (!(authoritiesObj instanceof List)) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid authorities in session");
-//        }
-//
-//        @SuppressWarnings("unchecked")
-//        List<String> authorities = (List<String>) authoritiesObj;
-//
-//        if (role == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No active session");
-//        }
-//
-//        Map<String, Object> sessionInfo = new HashMap<>();
-//        sessionInfo.put("role", role);
-//        sessionInfo.put("authorities", authorities);
-//
-//        return ResponseEntity.ok(sessionInfo);
-//    }
-
     @RequestMapping("/sessionInfo")
     public void sessionInfo(HttpSession session) {
         // 세션 ID
@@ -110,5 +94,37 @@ public class AdminController {
         }
     }
 
+    @PostMapping("/manager/{id}")
+    public ResponseEntity<ResponseManagerDto> findByAdminId(@PathVariable String id) {
+        return ResponseEntity.ok(adminService.findByAdminID(id));
+    }
 
+    @PostMapping("/manager/update")
+    public ResponseEntity<String> updateByAdminId(@RequestBody RequestManagerDto managerDto) {
+        adminService.updateManager(managerDto);
+        return ResponseEntity.ok("업데이트 완료");
+    }
+
+    @GetMapping("/manager/list")
+    public ResponseEntity<List<ResponseManagerDto>> getManagerList(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        List<ResponseManagerDto> list = adminService.getList(pageable);
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/manager/count")
+    public ResponseEntity<Long> getCount() {
+        return ResponseEntity.ok(adminService.getCount());
+    }
+
+    @PostMapping("/manager/status/activate")
+    public ResponseEntity<String> activateStatus(@RequestBody String[] admins) {
+        adminService.updateActivationStatus(admins);
+        return ResponseEntity.ok("업데이트 완료");
+    }
+
+    @PostMapping("/manager/status/unActivate")
+    public ResponseEntity<String> unActivateStatus(@RequestBody String[] admins) {
+        adminService.updateDisActivationStatus(admins);
+        return ResponseEntity.ok("업데이트 완료");
+    }
 }

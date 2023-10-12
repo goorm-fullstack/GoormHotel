@@ -4,18 +4,40 @@ import * as S from './Style';
 import {Link, useNavigate} from 'react-router-dom';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
 import Paging from '../../components/common/Paging/Paging';
+import Instance from '../../utils/api/axiosInstance';
+import { MemberBtn } from '../../pages/member/Style';
+import { response } from 'express';
+
+interface Member {
+  id : number;
+  memberId : string;
+  name : string;
+  signupDate : string;
+  grade : string;
+  role : string;
+}
 
 const AdminMember = () => {
-  const [checkedItems, setCheckedItems] = useState<string[]>([]);
+  const [checkedItems, setCheckedItems] = useState<number[]>([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
   const authItem = localStorage.getItem("auth");
+  const [memberData, setMemberData] = useState<Member[]>([]);
 
   useEffect(() => {
     if (!(authItem && authItem.includes("AUTH_A"))) {
       alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
       navigate('/admin');
+    } else {
+      Instance.get("/member/list").then((response) => {
+        setMemberData(response.data);
+        console.log(response.data);
+      });
+
+      Instance.get("/member/count").then((response) => {
+        setTotalPages(response.data);
+      })
     }
   }, []);
 
@@ -25,51 +47,31 @@ const AdminMember = () => {
     setSelectAllChecked(checked);
 
     if (checked) {
-      const allMemberIds = memberData.map((item) => item.memberId);
+      const allMemberIds = memberData.map((item) => item.id);
       setCheckedItems(allMemberIds);
     } else {
       setCheckedItems([]);
     }
   };
 
-  const handleCheckboxChange = (memberId: string) => {
+  const handleCheckboxChange = (memberId: number) => {
     const updatedCheckedItems = checkedItems.includes(memberId) ? checkedItems.filter((id) => id !== memberId) : [...checkedItems, memberId];
 
     setCheckedItems(updatedCheckedItems);
     setSelectAllChecked(updatedCheckedItems.length === memberData.length);
   };
 
-  console.log(checkedItems);
+  const handleAddBlackList = () => {
+    Instance.post("/member/blacked", checkedItems).then(()=>{
+      window.location.reload();
+    });
+  }
 
-  const memberData = [
-    {
-      id: 1,
-      number: 1,
-      grade: 'Gold',
-      memberId: 'user001',
-      name: '홍길동',
-      joinDate: '2023.09.01',
-      blacklist: 'N',
-    },
-    {
-      id: 2,
-      number: 2,
-      grade: 'Silver',
-      memberId: 'user002',
-      name: '김철수',
-      joinDate: '2023.09.01',
-      blacklist: 'Y',
-    },
-    {
-      id: 3,
-      number: 3,
-      grade: 'Bronze',
-      memberId: 'user003',
-      name: '이영희',
-      joinDate: '2023.09.01',
-      blacklist: 'N',
-    },
-  ];
+  const handleRemoveBlackList = () => {
+    Instance.post("/member/unBlacked", checkedItems).then(()=>{
+      window.location.reload();
+    });
+  }
 
   if(authItem && authItem.includes("AUTH_A")) {
   return (
@@ -81,8 +83,8 @@ const AdminMember = () => {
             전체 <strong>{memberData.length}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
-            <NormalBtn className="header">블랙리스트 해제</NormalBtn>
-            <NormalBtn className="header red">블랙리스트 추가</NormalBtn>
+            <NormalBtn className="header" onClick={handleRemoveBlackList}>블랙리스트 해제</NormalBtn>
+            <NormalBtn className="header red" onClick={handleAddBlackList}>블랙리스트 추가</NormalBtn>
           </BtnWrapper>
         </S.TableHeader>
         <S.Table>
@@ -114,23 +116,27 @@ const AdminMember = () => {
                 등록된 회원이 없습니다.
               </td>
             )}
-            {memberData.map((item) => (
+            {memberData.map((item, index : number) => (
               <tr key={item.id}>
                 <td className="center">
                   <InputCheckbox
                     type="checkbox"
-                    checked={checkedItems.includes(item.memberId)}
-                    onChange={() => handleCheckboxChange(item.memberId)}
+                    checked={checkedItems.includes(item.id)}
+                    onChange={() => handleCheckboxChange(item.id)}
                   />
                 </td>
-                <td className="center">{item.number}</td>
+                <td className="center">{index}</td>
                 <td className="center">
                   <Link to={`/admin/member/detail/${item.memberId}`}>{item.memberId}</Link>
                 </td>
                 <td className="center">{item.name}</td>
                 <td className="center">{item.grade}</td>
-                <td className="center">{item.joinDate}</td>
-                <td className="center">{item.blacklist}</td>
+                <td className="center">{item.signupDate}</td>
+                {item.role === 'BLACKED' ? (
+                  <td className="center">Y</td>
+                ) : (
+                  <td className="center">N</td>
+                )}    
               </tr>
             ))}
           </tbody>

@@ -3,6 +3,9 @@ package goormknights.hotel.member.service;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.member.dto.request.AdminSignupDTO;
+import goormknights.hotel.member.dto.request.RequestManagerDto;
+import goormknights.hotel.member.dto.response.ResponseManagerDto;
+import goormknights.hotel.member.exception.NotExistMemberException;
 import goormknights.hotel.member.model.Manager;
 import goormknights.hotel.member.repository.ManagerRepository;
 import jakarta.servlet.http.Cookie;
@@ -11,18 +14,20 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AdminService {
 
     private final PasswordEncoder passwordEncoder;
@@ -115,39 +120,47 @@ public class AdminService {
         return response;
     }
 
+    public List<ResponseManagerDto> getList(Pageable pageable) {
+        Page<Manager> all = managerRepository.findAll(pageable);
+        List<ResponseManagerDto> result = new ArrayList<>();
+        for(Manager manager : all) {
+            result.add(new ResponseManagerDto(manager));
+        }
+
+        return result;
+    }
+
+    public ResponseManagerDto findByAdminID(String adminId) {
+        return new ResponseManagerDto(managerRepository.findByAdminId(adminId).orElseThrow(NotExistMemberException::new));
+    }
+
+    public Long getCount() {
+        return managerRepository.count()/10;
+    }
 
 
+    // 메니저 업데이트
+    public void updateManager(RequestManagerDto managerDto) {
+        Manager updateManager = managerRepository.findByAdminId(managerDto.getAdminId()).orElseThrow(NotExistMemberException::new);
+        updateManager.setAdminName(managerDto.getAdminName());
+        updateManager.setAdminNickname(managerDto.getAdminNickname());
+        if(!managerDto.getPassword().isEmpty()) {
+            updateManager.setPassword(passwordEncoder.encode(managerDto.getPassword()));
+        }
+        updateManager.setAuth(managerDto.getAuth());
+    }
 
-    // 매니저 정보 수정
-//    @Transactional
-//    public void edit(Integer id, MemberEdit memberEdit){
-//        Member member = memberRepository.findById(id)
-//                .orElseThrow(MemberNotFound::new);
-//
-//        String encryptedPassword = passwordEncoder.encode(memberEdit.getPassword());
-//
-//        MemberEditor.MemberEditorBuilder editorBuilder = member.toEditor();
-//        MemberEditor memberEditor = editorBuilder
-//                .name(memberEdit.getName())
-//                .email(memberEdit.getEmail())
-//                .memberId(memberEdit.getMemberId())
-//                .password(encryptedPassword)
-//                .phoneNumber(memberEdit.getPhoneNumber())
-//                .birth(memberEdit.getBirth())
-//                .gender(memberEdit.getGender())
-//                .build();
-//
-//        member.edit(memberEditor);
-//    }
-//
-//
-//    @Transactional
-//    public void SetTempPassword(String email, String tempPassword) {
-//        Member member = memberRepository.findByEmail(email)
-//                .orElseThrow(() -> new RuntimeException("Member not found with email: " + email));
-//
-//        member.changePassword(passwordEncoder.encode(tempPassword));
-//        memberRepository.save(member);
-//    }
+    public void updateDisActivationStatus(String[] admins) {
+        for(String id : admins) {
+            Manager findManager = managerRepository.findByAdminId(id).orElseThrow();
+            findManager.setIsActive(false);
+        }
+    }
 
+    public void updateActivationStatus(String[] admins) {
+        for(String id : admins) {
+            Manager findManager = managerRepository.findByAdminId(id).orElseThrow();
+            findManager.setIsActive(true);
+        }
+    }
 }

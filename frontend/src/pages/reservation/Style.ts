@@ -354,6 +354,17 @@ export const CouponForm = styled.div`
       padding-left: 18px;
     }
   }
+
+  div {
+    display: flex;
+    height: 50px;
+    justify-content: space-between;
+
+    input {
+      width: calc(100% - 210px);
+      padding-left: 18px;
+    }
+  }
 `;
 
 export const CouponInfo = styled.div`

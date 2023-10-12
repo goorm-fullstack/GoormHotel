@@ -1,8 +1,8 @@
 package goormknights.hotel.reservation.service;
 
-import goormknights.hotel.coupon.repository.CouponRepository;
-import goormknights.hotel.giftcard.repository.GiftCardRepository;
-import goormknights.hotel.item.repository.ItemRepository;
+import goormknights.hotel.global.entity.Role;
+import goormknights.hotel.member.exception.MemberNotFound;
+import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.repository.MemberRepository;
 import goormknights.hotel.reservation.dto.request.RequestReservationDto;
 import goormknights.hotel.reservation.model.Reservation;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,17 +25,25 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
-    private final ItemRepository itemRepository;
-    private final CouponRepository couponRepository;
-    private final GiftCardRepository giftCardRepository;
-    private static String reservationNumber;
 
     /**
      * 예약 정보 저장
+     *
      * @param reservationDto - user가 입력한 정보
+     * @param memberId
      */
-    public void saveReservation(RequestReservationDto reservationDto) {
-        reservationDto.setReservationNumber(makeReservationNumber());
+    public void saveReservation(RequestReservationDto reservationDto, long memberId) {
+        Optional<Member> customer = memberRepository.findById(memberId);
+        if(customer.isEmpty()) {
+            throw new MemberNotFound();
+        }
+        String generatedNumber = makeReservationNumber();
+        Member member = customer.get();
+        reservationDto.setMember(member);
+        if(member.getRole() == Role.ANONYMOUS) {
+            member.setMemberId(generatedNumber);
+        }
+        reservationDto.setReservationNumber(generatedNumber);
         Reservation saveReservation = reservationRepository.save(reservationDto.toEntity());
         saveReservation.getMember().getReservationList().add(saveReservation);
     }
@@ -45,9 +52,10 @@ public class ReservationService {
      * 예약 번호 생성
      * @return reservationNumber - 예약 번호: 예약 날짜(yyyyMMdd)+랜덤 문자 8자리
      */
-    public String makeReservationNumber() {
+    private String makeReservationNumber() {
         Date now = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        String reservationNumber;
         int randomNumber = (int)(Math.random() * 89999999) + 10000000;
         reservationNumber = format.format(now) + randomNumber;
         log.info("예약번호" + reservationNumber);

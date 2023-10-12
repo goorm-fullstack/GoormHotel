@@ -1,6 +1,5 @@
 package goormknights.hotel.reservation;
 
-import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.item.dto.request.RequestImageDto;
 import goormknights.hotel.item.dto.request.RequestRoomDto;
@@ -17,9 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @SpringBootTest
 @Transactional
@@ -90,7 +87,7 @@ public class ReservationTest {
                 .mailAuth(true)
                 .build();
 
-//        memberRepository.save(member);
+        Member save = memberRepository.save(member);
 
         RequestReservationDto reservation = RequestReservationDto.builder()
                 .id(null)
@@ -111,7 +108,7 @@ public class ReservationTest {
                 .totalPrice(15000)
                 .build();
 
-        reservationService.saveReservation(reservation); // 예약 저장
+        reservationService.saveReservation(reservation, save.getId()); // 예약 저장
         reservationService.getAllReservation(); // 전체 예약 목록 조회, 여기까지 테스트 완료(2023-09-02)
         System.out.println();
 

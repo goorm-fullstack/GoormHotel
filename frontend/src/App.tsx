@@ -54,6 +54,7 @@ import AdminIndex from './admin/AdminIndex';
 import AdminSubScribe from './admin/chat/AdminSubScribe';
 import {useAuth} from "./utils/api/AuthContext";
 import Instance from "./utils/api/axiosInstance";
+import AnonymousSignup from './pages/member/AnonymousSignup';
 import AdminBoardDetail from './admin/board/AdminBoardDetail';
 
 const App: React.FC = () => {
@@ -156,7 +157,7 @@ const App: React.FC = () => {
           auth: response.data.auth
         });
       }).catch(error => {
-        console.error("로그인 상태를 가져오지 못했습니다.", error);
+        console.log("로그인 상태를 가져오지 못했습니다.", error);
       });
     }
   }, []);
@@ -230,6 +231,7 @@ const App: React.FC = () => {
             <Route path="/facilities" element={<Facilities />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/anonymous/signup" element={<AnonymousSignup />} />
             <Route path="/signup/result" element={<JoinComplete />} />
             <Route path="/board/:board/:page" element={<CustomerSupport />} />
             <Route path="/board/:board/write" element={<BoardWrite />} />

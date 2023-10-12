@@ -19,21 +19,46 @@ import {
 import PrivacyContents from '../../components/Agreement/PrivacyCon';
 import PaymentAgree from '../../components/Agreement/PayAgree';
 import { AgreementText } from '../member/Style';
+import Instance from '../../utils/api/axiosInstance';
+import { response } from 'express';
+
+interface GiftCard {
+  id : number;
+  uuid : string;
+  money : number;
+  isZeroMoney : string;
+  title : string;
+  issueDate : string;
+  expire : number;
+}
+
+interface Coupon {
+  id : number;
+  uuid : string;
+  discountRate : number;
+  name : string;
+  isUsed : string;
+  issueDate : Array<Number>;
+  expire : number;
+}
+
 
 const ReservationPage = () => {
   const [giftCardNumber, setGiftCardNumber] = useState('');
-  const [memberData, setMemberData] = useState(null);
-
-  // const [userLoggedIn, setUserLoggedIn] = useState(true);
-  const userLoggedIn = false;
+  const [memberData, setMemberData] = useState();
+  const userLoggedIn = localStorage.getItem("memberId");
   const [selectedOption, setSelectedOption] = useState('');
   const location = useLocation();
   const { reservationData, selectedProduct } = location.state;
   const navigate = useNavigate();
   const [nights, setNights] = useState(1);
+  const [giftcardList, setGiftCardList] = useState<GiftCard[]>([]);
+  const [couponList, setCouponList] = useState<Coupon[]>([]);
+  const [selectCoupon, setSelectCoupon] = useState<Coupon>();//적용할 쿠폰
+  const [selectGiftCard, setSelectGiftCard] = useState<GiftCard[]>([]);//적용할 상품권
+  const [click, setClick] = useState(false);
+  const [memberId, setMemberId] = useState(0);
 
-  console.log(reservationData);
-  console.log(selectedProduct);
 
   const [formData, setFormData] = useState({
     checkIn: reservationData?.checkInDate || '',
@@ -51,32 +76,19 @@ const ReservationPage = () => {
     totalPrice: '12345',
   });
 
-  // const reservationData = {
-  //   checkInDate,
-  //   checkOutDate,
-  //   rooms,
-  //   adults,
-  //   children,
-  //   nights,
-  // };
-
+  //member데이터를 불러오는 로직
   useEffect(() => {
-    setFormData((prevData) => ({
-      ...prevData,
-      stay: nights,
-    }));
-  }, [nights, reservationData]);
-
-  const [coupons, setCoupons] = useState([
-    {
-      name: '추석 맞이 특가 이벤트: 객실 금액 100,000원 할인 상품권',
-      price: '-100,000 원',
-    },
-    {
-      name: '추석 맞이 특가 이벤트: 전 상품 금액 50,000원 할인 상품권',
-      price: '-50,000 원',
-    },
-  ]);
+    const params = {
+      id : localStorage.getItem("memberId"),
+    }
+    Instance.get('/member/find', {params}).then((response) => {
+      console.log(response.data)
+      setMemberData(response.data);
+      setCouponList(response.data.couponList);
+      setGiftCardList(response.data.giftCardList);
+      setMemberId(response.data.id);
+    });
+  }, []);
 
   const handleChangeData = (field: string, e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -90,30 +102,24 @@ const ReservationPage = () => {
     setGiftCardNumber(event.target.value);
   };
 
+  const registerGiftCard = () => {
+    if(memberData !== undefined) {
+      Instance.post(`/api/giftcard/register?memberId=${memberId}&uuid=${giftCardNumber}`).then((response) => {
+        if(response.status === 200) {
+          setClick(true);
+        }
+      });
+    }
+    const params = {
+      id : localStorage.getItem("memberId"),
+    }
+    setClick(!click);
+  }
+
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(event.target.value);
     console.log('Selected option:', event.target.value);
   };
-
-  const handleRemoveCoupon = (index: number) => {
-    // 해당 인덱스의 쿠폰을 삭제합니다.
-    const updatedCoupons = coupons.filter((_, i) => i !== index);
-    setCoupons(updatedCoupons);
-  };
-
-  //member데이터를 불러오는 로직
-  useEffect(() => {
-    const fetchMember = async () => {
-      try {
-        const response = await axios.get('http://127.0.0.1:8080/member');
-        setMemberData(response.data);
-      } catch (error) {
-        console.error('사용자 데이터를 불러오지 못했습니다.', error);
-      }
-    };
-
-    fetchMember();
-  }, []);
 
   const formatDateForServer = (date: Date) => {
     return moment(date).format('YYYY-MM-DDTHH:mm:ss');
@@ -173,10 +179,10 @@ const ReservationPage = () => {
             <S.Section>
               <ContentsTitleXSmall>상품권 사용</ContentsTitleXSmall>
               <S.CouponForm>
-                <form>
+                <div>
                   <input type="text" placeholder="상품권 번호 입력" value={giftCardNumber} onChange={handleCouponNumber} />
-                  <AuthBtn type="submit">상품권 등록하기</AuthBtn>
-                </form>
+                  <AuthBtn onClick={registerGiftCard}>상품권 등록하기</AuthBtn>
+                </div>
               </S.CouponForm>
               <S.CouponInfo>
                 <BtnWrapper className="flexspace">
@@ -194,16 +200,16 @@ const ReservationPage = () => {
                     </NormalBtn>
                   </BtnWrapper>
                 </BtnWrapper>
-                <table>
-                  {coupons.map((coupon, index) => (
+                <table>{/* 상품권 목록 출력하는 곳*/}
+                  {giftcardList.map((giftcard, index) => (
                     <tr key={index}>
                       <td>
                         <CheckLabel>
                           <InputCheckbox type="checkbox" />
-                          {coupon.name}
+                          {giftcard.title}
                         </CheckLabel>
                       </td>
-                      <td className="right">{coupon.price}</td>
+                      <td className="right">{giftcard.money}</td>
                     </tr>
                   ))}
                 </table>
@@ -216,8 +222,9 @@ const ReservationPage = () => {
                 {userLoggedIn ? (
                   <>
                     <option value="">선택 안함</option>
-                    <option value="coupon1"> [Bronze 등급 혜택] 객실 5% 할인 쿠폰(-100,000원 적용)</option>
-                    <option value="coupon2"> [Bronze 등급 혜택] 객실 10% 할인 쿠폰(-150,000원 적용)</option>
+                    {couponList.map((coupon : Coupon, index) => (
+                        <option value={coupon.id}>{coupon.name}</option>
+                    ))}
                   </>
                 ) : (
                   <option disabled value="">
