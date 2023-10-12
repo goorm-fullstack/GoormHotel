@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Slider from 'react-slick';
 import imgSpa from '../../images/main/spa.jpg';
 import imgPool from '../../images/facilities/pool.jpg';
 import imgSalon from '../../images/facilities/salon.jpg';

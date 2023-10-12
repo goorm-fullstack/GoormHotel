@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import * as S from './Style';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, NormalLinkBtn } from '../../Style/commonStyles';
-import {Link, useNavigate, useParams} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Table, TableHeader } from '../member/Style';
 import { numberWithCommas } from '../../utils/function/comma';
@@ -76,10 +76,10 @@ const AdminItemList = () => {
   const [totalData, setTotalData] = useState<number>(0); // 전체 데이터 수 상태관리
   const [imageUrls, setImageUrls] = useState<string[]>([]); // 이미지 데이터 상태관리
   const navigate = useNavigate();
-  const authItem = localStorage.getItem("auth");
+  const authItem = localStorage.getItem('auth');
 
   useEffect(() => {
-    if (!(authItem && authItem.includes("AUTH_B"))) {
+    if (!(authItem && authItem.includes('AUTH_B'))) {
       alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
       navigate('/admin');
     }
@@ -191,113 +191,118 @@ const AdminItemList = () => {
     fetchImageUrls();
   }, [items]);
 
-  if(authItem && authItem.includes("AUTH_B")) {
-  console.log(items);
+  if (authItem && authItem.includes('AUTH_B')) {
+    console.log(items);
 
-  if(!Array.isArray(items)){
-    console.error('Items is not an array');
-    return null;
-  }
+    if (!Array.isArray(items)) {
+      console.error('Items is not an array');
+      return null;
+    }
 
-  return (
-    <AdminLayout subMenus="item">
-      <Container>
-        <PageTitle>판매 상품 관리</PageTitle>
-        <TableHeader>
-          <div>
-            <p className="total number-of-list">
-              전체 <strong>{totalData}</strong> 건
-            </p>
-          </div>
-          <BtnWrapper className="flexgap right">
-            <NormalLinkBtn className="header" to="/admin/item/add/room">
-              객실 상품 등록
-            </NormalLinkBtn>
-            <NormalLinkBtn className="header" to="/admin/item/add/dining">
-              다이닝 상품 등록
-            </NormalLinkBtn>
-            <NormalBtn className="header red" type="button" onClick={deleteButton}>
-              선택 상품 삭제
-            </NormalBtn>
-          </BtnWrapper>
-        </TableHeader>
-        <Table>
-          <colgroup>
-            <col width="80px" />
-            <col width="100px" />
-            <col width="180px" />
-            <col width="200px" />
-            <col width="200px" />
-            <col width="200px" />
-            <col width="200px" />
-            <col width="150px" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th>
-                <InputCheckbox type="checkbox" id="all-select-label" onChange={handleAllChecked} />
-              </th>
-              <th>번호</th>
-              <th>이미지</th>
-              <th>상품명</th>
-              <th>종류</th>
-              <th>카테고리</th>
-              <th>상품가</th>
-              <th>재고</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.length === 0 && (
-              <tr key={0}>
-                <td colSpan={8} className="center empty">
-                  등록된 상품이 없습니다.
-                </td>
+    return (
+      <AdminLayout subMenus="item">
+        <Container>
+          <PageTitle>판매 상품 관리</PageTitle>
+          <TableHeader>
+            <div>
+              <p className="total number-of-list">
+                전체 <strong>{totalData}</strong> 건
+              </p>
+            </div>
+            <BtnWrapper className="flexgap right">
+              <NormalLinkBtn className="header" to="/admin/item/add/room">
+                객실 상품 등록
+              </NormalLinkBtn>
+              <NormalLinkBtn className="header" to="/admin/item/add/dining">
+                다이닝 상품 등록
+              </NormalLinkBtn>
+              <NormalBtn className="header red" type="button" onClick={deleteButton}>
+                선택 상품 삭제
+              </NormalBtn>
+            </BtnWrapper>
+          </TableHeader>
+          <Table>
+            <colgroup>
+              <col width="80px" />
+              <col width="100px" />
+              <col width="180px" />
+              <col width="200px" />
+              <col width="200px" />
+              <col width="200px" />
+              <col width="200px" />
+              <col width="150px" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>
+                  <InputCheckbox type="checkbox" id="all-select-label" onChange={handleAllChecked} />
+                </th>
+                <th>번호</th>
+                <th>이미지</th>
+                <th>상품명</th>
+                <th>종류</th>
+                <th>카테고리</th>
+                <th>상품가</th>
+                <th>재고</th>
               </tr>
-            )}
-            {items.length > 0 && items.map((item: RoomData | DiningData, idx: number) => {
-                const id: string = 'checkbox' + idx;
-                const matchedTypeDetail = typeDetailArray.find((typeDetails) => {
-                  return typeDetails.some((typeDetail) => typeDetail.value === item.typeDetail);
-                });
-                const displayedTypeDetail = matchedTypeDetail?.find((typeDetail) => {
-                  return item.typeDetail === typeDetail.value;
-                });
+            </thead>
+            <tbody>
+              {items.length === 0 && (
+                <tr key={0}>
+                  <td colSpan={8} className="center empty">
+                    등록된 상품이 없습니다.
+                  </td>
+                </tr>
+              )}
+              {items.length > 0 &&
+                items.map((item: RoomData | DiningData, idx: number) => {
+                  const id: string = 'checkbox' + idx;
+                  const matchedTypeDetail = typeDetailArray.find((typeDetails) => {
+                    return typeDetails.some((typeDetail) => typeDetail.value === item.typeDetail);
+                  });
+                  const displayedTypeDetail = matchedTypeDetail?.find((typeDetail) => {
+                    return item.typeDetail === typeDetail.value;
+                  });
 
-                return (
-                  <tr key={idx}>
-                    <td className="center">
-                      <InputCheckbox
-                        type="checkbox"
-                        id={id}
-                        ref={(el: HTMLInputElement) => (inputRef.current[idx] = el)}
-                        onClick={() => handleCheckboxClick(item.name, item.type)}
-                      />
-                    </td>
-                    <td className="center">{totalData - idx}</td>
-                    <td className="center">
-                      <S.ItemThumbnail src={imageUrls[idx] || ''} className="image" />
-                    </td>
-                    <td className="center">
-                      {item.type === 'dining' ? (
-                        <Link to={`/admin/item/detail/dining/${item.type}/${item.name}`}>{item.name}</Link>
-                      ) : (
-                        <Link to={`/admin/item/detail/room/${item.type}/${item.name}`}>{item.name}</Link>
-                      )}
-                    </td>
-                    <td className="center">{item.type === 'dining' ? '다이닝' : '객실'}</td>
-                    <td className="center">{displayedTypeDetail?.typeDetail}</td>
-                    <td className="center">{numberWithCommas(item.price)} 원</td>
-                    <td className="center">{item.spare}</td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </Table>
-        <Paging totalPage={totalPages} />
-        {searchJsx}
-      </Container>
-    </AdminLayout>
-  );
+                  return (
+                    <tr key={idx}>
+                      <td className="center">
+                        <InputCheckbox
+                          type="checkbox"
+                          id={id}
+                          ref={(el: HTMLInputElement) => (inputRef.current[idx] = el)}
+                          onClick={() => handleCheckboxClick(item.name, item.type)}
+                        />
+                      </td>
+                      <td className="center">{totalData - idx}</td>
+                      <td className="center">
+                        <S.ItemThumbnail src={imageUrls[idx] || ''} className="image" />
+                      </td>
+                      <td className="center">
+                        {item.type === 'dining' ? (
+                          <Link to={`/admin/item/detail/dining/${item.type}/${item.name}`} className="u">
+                            {item.name}
+                          </Link>
+                        ) : (
+                          <Link to={`/admin/item/detail/room/${item.type}/${item.name}`} className="u">
+                            {item.name}
+                          </Link>
+                        )}
+                      </td>
+                      <td className="center">{item.type === 'dining' ? '다이닝' : '객실'}</td>
+                      <td className="center">{displayedTypeDetail?.typeDetail}</td>
+                      <td className="center">{numberWithCommas(item.price)} 원</td>
+                      <td className="center">{item.spare}</td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </Table>
+          <Paging totalPage={totalPages} />
+          {searchJsx}
+        </Container>
+      </AdminLayout>
+    );
   } else {
     return null;
   }

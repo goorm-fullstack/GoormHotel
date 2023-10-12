@@ -3,7 +3,7 @@ import * as S from './Style';
 import * as R from '../../Reservation/Style';
 import moment from 'moment';
 
-export type  ValuePiece = Date | null;
+export type ValuePiece = Date | null;
 
 const DateBtn = () => {
   const [selectValue, setSelectValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
@@ -29,14 +29,14 @@ const DateBtn = () => {
       processedDate = selectedDate;
     }
 
-    if(processedDate){
+    if (processedDate) {
       setSelectValue(selectedDate);
       setCalendarOpen(false);
       const formattedDate = moment(processedDate).format('YYYY.MM.DD');
       const dayOfWeek = moment(processedDate).format('ddd');
       setSelectDate(`${formattedDate} (${dayOfWeek})`);
     }
-    };
+  };
 
   const isDateDisabled = (date: Date) => {
     // 현재 날짜보다 이전인 경우에만 true를 반환

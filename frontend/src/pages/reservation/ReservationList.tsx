@@ -44,7 +44,7 @@ const ReservationList = () => {
           <tbody>
             {reservations.length === 0 ? (
               <tr>
-                <td colSpan={7} className="center">
+                <td colSpan={7} className="center empty">
                   예약 정보가 없습니다.
                 </td>
               </tr>
@@ -53,7 +53,9 @@ const ReservationList = () => {
                 <tr key={index}>
                   <td className="center">{index + 1}</td>
                   <td className="center">
-                    <a href={`/reservation/${reservation.reservationNumber}`}>{reservation.reservationNumber}</a>
+                    <a href={`/reservation/${reservation.reservationNumber}`} className="u">
+                      {reservation.reservationNumber}
+                    </a>
                   </td>
                   <td className="center">
                     <p className="textover">{reservation.productName}</p>

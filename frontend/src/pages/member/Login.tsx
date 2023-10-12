@@ -100,9 +100,7 @@ const Login: React.FC = () => {
     setRememberId(!rememberId);
   };
 
-  const ClickAnonymousLogin = () => {
-
-  }
+  const ClickAnonymousLogin = () => {};
 
   useEffect(() => {
     if (isReservation) {
@@ -139,7 +137,9 @@ const Login: React.FC = () => {
                 <input type="text" placeholder="예약번호" value={reservationNumber} onChange={handleReservationNumberChange} />
                 <input type="text" className="second" placeholder="연락처" value={contactNumber} onChange={handleContactNumberChange} />
                 <BtnWrapper className="mt20 full">
-                  <SubmitBtn type="submit" onClick={ClickAnonymousLogin}>예약 확인</SubmitBtn>
+                  <SubmitBtn type="submit" onClick={ClickAnonymousLogin}>
+                    예약 확인
+                  </SubmitBtn>
                 </BtnWrapper>
               </form>
             )}
@@ -152,17 +152,6 @@ const Login: React.FC = () => {
                 <Link to="/findidpw">아이디/비밀번호 찾기</Link>
               </div>
             )}
-            <div className="auth">
-              <button type="button">
-                <img src={google} alt="authImg" />
-              </button>
-              <button type="button">
-                <img src={kakao} alt="authImg" />
-              </button>
-              <button type="button">
-                <img src={naver} alt="authImg" />
-              </button>
-            </div>
           </div>
           <div className="right">
             <p className="first">아직 회원이 아니신가요?</p>
