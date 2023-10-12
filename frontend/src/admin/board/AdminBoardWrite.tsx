@@ -42,6 +42,16 @@ const AdminBoardWrite = () => {
   type data = {
     [key: string]: string;
   }
+
+  const adminAuth = localStorage.getItem("auth");
+  const adminAdminId = localStorage.getItem("adminId");
+  const adminRole = localStorage.getItem("role");
+  // const adminAdminNickname = localStorage.getItem("adminNickname");
+  console.log(adminAuth);
+  console.log(adminAdminId);
+  console.log(adminRole);
+  //console.log(adminAdminNickname);
+
   const getCookie = (name: string) => {
     return cookies.get(name);
   }
@@ -57,9 +67,6 @@ const AdminBoardWrite = () => {
           console.error("Admin 정보 호출 실패" + error);
         });
   }, [cookie]);
-
-
-
 
   const saveImgFile = () => {
     const file =
@@ -146,7 +153,7 @@ const AdminBoardWrite = () => {
   };
 
   const writerOption = () => {
-    if(admin.role === "MANAGER"){
+    if(adminRole === "MANAGER"){
       return(
         <tr>
           <th>작성자</th>
@@ -282,12 +289,6 @@ const AdminBoardWrite = () => {
                 </td>
               </tr>
               {writerOption()}
-              {/*<tr>*/}
-              {/*  <th>작성자</th>*/}
-              {/*  <td>*/}
-              {/*    <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange}/>*/}
-              {/*  </td>*/}
-              {/*</tr>*/}
               <tr>
                 <th>파일첨부</th>
                 <td>
