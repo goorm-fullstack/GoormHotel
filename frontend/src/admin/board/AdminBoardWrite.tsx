@@ -12,6 +12,7 @@ import { Container, Table } from "../member/Style";
 import TextEditor from "../../components/common/TextEditor/TextEditor";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import {Cookies} from "react-cookie";
 
 const AdminBoardWrite = () => {
   const setValue = () => {};
@@ -32,6 +33,26 @@ const AdminBoardWrite = () => {
   const [boardContent, setBoardContent] = useState("");
   const imgRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const cookies = new Cookies();
+  const [admin, setAdmin] = useState<any>(null);
+  const getCookie = (name: string) => {
+    return cookies.get(name);
+  }
+  const cookie = getCookie("adminId");
+
+  useEffect(() => {
+    axios.post(`/api/manager/${cookie}`)
+        .then((response) => {
+          setAdmin(response.data);
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error("Admin 정보 호출 실패" + error);
+        });
+  }, [cookie]);
+
+
+
 
   const saveImgFile = () => {
     const file =
@@ -116,6 +137,29 @@ const AdminBoardWrite = () => {
       }
     }
   };
+
+  const writerOption = () => {
+    if(admin.role === "MANAGER"){
+      return(
+        <tr>
+          <th>작성자</th>
+          <td>
+            {/*<input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange}/>*/}
+            <p>{admin.adminNickname} 매니저</p>
+          </td>
+        </tr>
+      )
+    }
+    return(
+      <tr>
+        <th>작성자</th>
+        <td>
+          <p>관리자</p>
+          {/*<input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange}/>*/}
+        </td>
+      </tr>
+    )
+  }
 
   const categoryOption = () => {
     switch (formData.boardTitle) {
@@ -230,12 +274,13 @@ const AdminBoardWrite = () => {
                   </MultiCheck>
                 </td>
               </tr>
-              <tr>
-                <th>작성자</th>
-                <td>
-                  <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange}/>
-                </td>
-              </tr>
+              {writerOption()}
+              {/*<tr>*/}
+              {/*  <th>작성자</th>*/}
+              {/*  <td>*/}
+              {/*    <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange}/>*/}
+              {/*  </td>*/}
+              {/*</tr>*/}
               <tr>
                 <th>파일첨부</th>
                 <td>
