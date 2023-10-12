@@ -199,7 +199,7 @@ const BoardRead = () => {
     }
   };
 
-  // 유저 정보 불러오기 지우지 마세요!!
+  // 유저 정보 불러오기 지우지 마세요!! (회원 여부 확인)
   // useEffect(() => {
   //   const handleUserInfo = async () => {
   //     try{

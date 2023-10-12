@@ -15,6 +15,8 @@ interface ManagerData {
   createdAt: string;
   isActive: boolean;
   password: string;
+  auth : string;
+  role : string;
 }
 
 const AdminManager = () => {
@@ -25,6 +27,10 @@ const AdminManager = () => {
   const navigate = useNavigate();
   const authItem = localStorage.getItem("auth");
   const [managerData, setManagerData] = useState<ManagerData[]>([]);
+  const [authA, setAuthA] = useState(false);
+  const [authB, setAuthB] = useState(false);
+  const [authC, setAuthC] = useState(false);
+  const [password, setPassword] = useState('');
 
   const [newManager, setNewManager] = useState({
     adminId: '',
@@ -38,7 +44,7 @@ const AdminManager = () => {
   useEffect(() => {
     const fetchManagers = async () => {
       try {
-        const response = await Instance.get('/admin-getlist');
+        const response = await Instance.get('/api/manager/list');
         if (response.status === 200) {
           setManagerData(response.data);
         }
@@ -47,6 +53,9 @@ const AdminManager = () => {
       }
     };
     fetchManagers();
+    Instance.get("/api/manager/count").then((response) => {
+      setTotalPages(response.data);
+    })
   }, []);
 
   useEffect(() => {
@@ -55,9 +64,6 @@ const AdminManager = () => {
       navigate('/admin');
     }
   }, []);
-
-  console.log(checkedItems);
-  console.log(selectedManager);
 
   const handleCheckboxChange = (memberId: string) => {
     const updatedCheckedItems = checkedItems.includes(memberId) ? checkedItems.filter((id) => id !== memberId) : [...checkedItems, memberId];
@@ -128,6 +134,121 @@ const AdminManager = () => {
     }
   };
 
+  const handleInputNickName = (e : React.KeyboardEvent<HTMLInputElement>) => {
+    if(e.key === 'Enter') {
+        Instance.post("/api/manager/"+selectedManager?.adminId).then((response) => {
+          setSelectedManager(response.data);
+          console.log(response.data);
+          checkAuthA(response.data.auth);
+          checkAuthB(response.data.auth);
+          checkAuthC(response.data.auth);
+      })
+    }
+  }
+
+  const checkAuthA = (str : string) => {
+    if(str !== undefined) {
+      if(str.includes('AUTH_A')) {
+        console.log(1);
+        setAuthA(true);
+      } else {
+        setAuthA(false);
+      }
+    }
+  }
+
+  const checkAuthB = (str : string) => {
+    if(str !== undefined) {
+      if(str.includes('AUTH_B')) {
+        console.log(2);
+        setAuthB(true);
+      } else {
+        setAuthB(false);
+      }
+    }
+  }
+
+  const checkAuthC = (str : string) => {
+    if(str !== undefined) {
+      if(str.includes('AUTH_C')) {
+        console.log(3);
+        setAuthC(true);
+      } else {
+        setAuthC(false);
+      }
+    }
+  }
+
+  const handleAuthACheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAuthA(!authA);
+  };
+
+  const handleAuthBCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAuthB(!authB);
+  };
+
+  const handleAuthCCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAuthC(!authC);
+  };
+
+  const ClickActivationButton = () => {
+    Instance.post("/api/manager/status/activate", checkedItems).then(()=>{
+      window.location.reload();
+    })
+  }
+
+  const ClickDisActivationButton = () => {
+    Instance.post("/api/manager/status/unActivate", checkedItems).then(()=>{
+      window.location.reload();
+    })
+  }
+
+  const concatenateStrings = () => {
+    let result = '';
+    if(authA) {
+      result += "AUTH_A";
+    }
+    // 첫 번째 문자열과 두 번째 문자열이 이어져 있는 경우 "-"를 붙임
+    // 첫 번째 문자열과 세 번째 문자열이 있는 경우에도 "-"를 붙임
+    if ((authA && authB) || (authA && authC)) {
+        result += "-";
+    }
+
+    if(authB) {
+      result += "AUTH_B";
+    }
+    
+    // 두 번째 문자열과 세 번째 문자열이 이어져 있는 경우 "-"를 붙임
+    if (authB && authC) {
+        result += "-";
+    }
+    
+    if(authC) {
+      result += "AUTH_C";
+    }
+
+    return result;
+  }
+
+  const updateButtonClick = () => {
+    const auth = concatenateStrings();
+    let data = {
+      id : selectedManager?.id,
+      adminId : selectedManager?.adminId,
+      password : password,
+      adminName : selectedManager?.adminName,
+      adminNickname : selectedManager?.adminNickname,
+      isActive : selectedManager?.isActive,
+      createAt : selectedManager?.isActive,
+      auth : auth,
+      role : selectedManager?.role,
+    };
+
+    Instance.post("/api/manager/update", data).then(() => {
+      window.location.reload();
+    });
+  }
+
   if(authItem && authItem.includes("AUTH_A")) {
     return (
         <AdminLayout subMenus="member">
@@ -153,8 +274,8 @@ const AdminManager = () => {
                   전체 <strong>{managerData.length}</strong> 건
                 </p>
                 <BtnWrapper className="flexgap right">
-                  <NormalBtn className="header">계정 사용 가능</NormalBtn>
-                  <NormalBtn className="header red">계정 사용 정지</NormalBtn>
+                  <NormalBtn className="header" onClick={ClickActivationButton}>계정 사용 가능</NormalBtn>
+                  <NormalBtn className="header red" onClick={ClickDisActivationButton}>계정 사용 정지</NormalBtn>
                 </BtnWrapper>
               </TableHeader>
               <Table>
@@ -189,7 +310,7 @@ const AdminManager = () => {
                     </tr>
                 ) : (
                     managerData.map((item) => (
-                        <tr key={item.id}>
+                    <tr key={item.id}>
                       <td className="center">
                         <InputCheckbox
                             type="checkbox"
@@ -204,8 +325,8 @@ const AdminManager = () => {
                       </td>
                       <td className="center">{item.adminNickname}</td>
                       <td className="center">{item.createdAt}</td>
-                          <td className="center">{item.isActive ? '활성화' : '비활성화'}</td>
-                        </tr>
+                      <td className="center">{item.isActive ? '활성화' : '비활성화'}</td>
+                     </tr>
                     ))
                 )}
                 </tbody>
@@ -227,7 +348,8 @@ const AdminManager = () => {
                         <input
                             type="text"
                             placeholder="운영자 ID"
-                            defaultValue={selectedManager.adminId}
+                            value={selectedManager.adminId}
+                            onKeyDown={handleInputNickName}
                             onChange={(e) => handleInputChange('adminId', e.target.value)}
                         />
                       </td>
@@ -238,7 +360,7 @@ const AdminManager = () => {
                         <input
                             type="text"
                             placeholder="운영자명"
-                            defaultValue={selectedManager.adminName}
+                            value={selectedManager.adminName}
                             onChange={(e) => handleInputChange('adminName', e.target.value)}
                         />
                       </td>
@@ -249,7 +371,7 @@ const AdminManager = () => {
                         <input
                             type="text"
                             placeholder="운영자 별명"
-                            defaultValue={selectedManager.adminNickname}
+                            value={selectedManager.adminNickname}
                             onChange={(e) => handleInputChange('adminNickname', e.target.value)}
                         />
                       </td>
@@ -260,8 +382,8 @@ const AdminManager = () => {
                         <input
                             type="password"
                             placeholder="접속 비밀번호"
-                            defaultValue={selectedManager.password}
-                            onChange={(e) => handleInputChange('password', e.target.value)}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                       </td>
                     </tr>
@@ -270,15 +392,15 @@ const AdminManager = () => {
                       <td>
                         <MultiCheck>
                           <CheckLabel>
-                            <InputCheckbox type="checkbox" placeholder="회원 관리" />
-                            회원관리
+                            <InputCheckbox type="checkbox" checked={authA} onChange={handleAuthACheckboxChange}/>
+                              회원관리
                           </CheckLabel>
                           <CheckLabel>
-                            <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                            <InputCheckbox type="checkbox" checked={authB} onChange={handleAuthBCheckboxChange}/>
                             상품 및 예약 관리
                           </CheckLabel>
                           <CheckLabel>
-                            <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                            <InputCheckbox type="checkbox" checked={authC} onChange={handleAuthCCheckboxChange}/>
                             사이트 관리
                           </CheckLabel>
                         </MultiCheck>
@@ -340,7 +462,7 @@ const AdminManager = () => {
                 )}
               </Table>
               <BtnWrapper className="mt40 center">
-                <SubmitBtn>수정</SubmitBtn>
+                <SubmitBtn onClick={updateButtonClick}>수정</SubmitBtn>
               </BtnWrapper>
             </S.Section>
           </Container>

@@ -34,7 +34,6 @@ const Login: React.FC = () => {
       }
     }
   }
-
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -101,6 +100,10 @@ const Login: React.FC = () => {
     setRememberId(!rememberId);
   };
 
+  const ClickAnonymousLogin = () => {
+
+  }
+
   useEffect(() => {
     if (isReservation) {
       setIsMemberActive(false);
@@ -136,7 +139,7 @@ const Login: React.FC = () => {
                 <input type="text" placeholder="예약번호" value={reservationNumber} onChange={handleReservationNumberChange} />
                 <input type="text" className="second" placeholder="연락처" value={contactNumber} onChange={handleContactNumberChange} />
                 <BtnWrapper className="mt20 full">
-                  <SubmitBtn type="submit">예약 확인</SubmitBtn>
+                  <SubmitBtn type="submit" onClick={ClickAnonymousLogin}>예약 확인</SubmitBtn>
                 </BtnWrapper>
               </form>
             )}

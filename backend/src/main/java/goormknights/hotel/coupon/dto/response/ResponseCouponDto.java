@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Data
 public class ResponseCouponDto {
     private int id;
+    private String name;
     private String uuid;
     private int discountRate;
     private Member member;
@@ -23,6 +24,7 @@ public class ResponseCouponDto {
         this.isUsed = coupon.getIsUsed();
         this.issueDate = coupon.getIssueDate();
         this.expire = coupon.getExpire();
+        this.name = coupon.getName();
     }
 
     public Coupon toEntity() {
