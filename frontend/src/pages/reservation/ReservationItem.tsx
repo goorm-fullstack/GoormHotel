@@ -94,6 +94,7 @@ const ReservationItem = () => {
   const [totalData, setTotalData] = useState<number>(0);
   const [totalPage, setTotalPage] = useState<number>(0);
   const { page } = useParams<{ page: string }>();
+  const [click, setClick] = useState(false);
 
   // 서버에 저장된 이미지 요청
   useEffect(() => {
@@ -133,6 +134,7 @@ const ReservationItem = () => {
           setProducts(response.data);
           setTotalData(totalData);
           setTotalPage(totalPages);
+          setClick(!click);
         })
         .catch((error) => {
           console.error(error);
@@ -146,6 +148,7 @@ const ReservationItem = () => {
           setProducts(response.data);
           setTotalData(totalData);
           setTotalPage(totalPages);
+          setClick(!click);
         })
         .catch((error) => {
           console.error(error);
@@ -166,6 +169,7 @@ const ReservationItem = () => {
             setProducts(response.data);
             setTotalData(totalData);
             setTotalPage(totalPages);
+            setClick(!click);
           })
           .catch((error) => {
             console.error(error);
@@ -183,6 +187,7 @@ const ReservationItem = () => {
             setProducts(response.data);
             setTotalData(totalData);
             setTotalPage(totalPages);
+            setClick(!click);
           })
           .catch((error) => {
             console.error(error);
