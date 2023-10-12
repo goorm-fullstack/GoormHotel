@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import AdminLayout from '../common/AdminLayout';
+import * as S from './Style'
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, LinkBtn } from '../../Style/commonStyles';
 import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
@@ -217,10 +218,10 @@ const AdminBoard = () => {
                 <td className="center">{board.boardTitle}</td>
                 <td className="center">{board.category}</td>
                 <td className="center">
-                  <Link to={`/admin/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}>{board.isComment==="true" ? <IsReply>답글</IsReply> : null}{board.title}</Link>
+                  <S.LinkStyle to={`/admin/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}>{board.isComment==="true" ? <IsReply>답글</IsReply> : null}{board.title}</S.LinkStyle>
                 </td>
                 <td className="center">
-                  <Link to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</Link>
+                  <S.LinkStyle to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</S.LinkStyle>
                 </td>
                 <td className="center">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
                   board.boardWriteDate[2] < 10 ? '0' : ''
