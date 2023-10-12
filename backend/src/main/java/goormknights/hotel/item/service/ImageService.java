@@ -50,7 +50,7 @@ public class ImageService {
         int second = now.getSecond();
         int millis = now.get(ChronoField.MILLI_OF_SECOND);
 
-        String absolutePath = new File("").getAbsolutePath() + "\\";
+        String absolutePath = "./";
         String newFileName = "image" + hour + minute + second + millis;
         String fileExtension = '.' + img.getOriginalFilename().replaceAll("^.*\\\\.(.*)$", "$1");
         String path = "images\\" + year + month + day;
