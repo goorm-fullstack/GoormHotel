@@ -86,7 +86,7 @@ const ReservationItem = () => {
   const location = useLocation();
   console.log(location.search.replace('?type=', ''));
   const reservationData = location.state ? location.state.reservationData : null;
-  const [selectedType, setSelectedType] = useState<string[]>(['all', 'room', 'dining']);
+  const [selectedType, setSelectedType] = useState<string[]>(['room']);
   console.log(selectedType);
   const [selectedCategory, setSelectedCategory] = useState<string>(productCategories[0].english);
   const [products, setProducts] = useState<(RoomData | DiningData)[]>([]);

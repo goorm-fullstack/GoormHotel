@@ -204,6 +204,8 @@ const CustomerSupport = () => {
     }
   };
 
+  // todo: 회원 여부 확인 필요
+
   return (
       <>
         <SubHeader kind="board" />
