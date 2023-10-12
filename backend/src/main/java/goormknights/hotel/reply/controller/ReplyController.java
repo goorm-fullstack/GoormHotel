@@ -85,6 +85,7 @@ public class ReplyController {
         return ResponseEntity.ok(reply.toResponseReplyDto());
     }
 
+    //소프트딜리트
     @PutMapping("/softdelete/{replyId}")
     public ResponseEntity<Object> softdeleteReply(@PathVariable Long replyId) {
         Reply reply = replyService.softdeleteReply(replyId);
@@ -92,4 +93,18 @@ public class ReplyController {
         return ResponseEntity.ok(reply.toResponseReplyDto());
     }
 
+    // 삭제된 댓글 조회
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
+    @GetMapping("deleted")
+    public ResponseEntity<List<ResponseReplyDto>> deletedReply(@PageableDefault(size = 10, sort = "replyId", direction = Sort.Direction.DESC) Pageable pageable){
+        Page<ResponseReplyDto> allReplyDelete = replyService.findAllReplyDelete(pageable);
+
+        int totalPages = allReplyDelete.getTotalPages();
+        long totalElements = allReplyDelete.getTotalElements();
+
+        return ResponseEntity.ok()
+                .header("TotalPages", String.valueOf(totalPages))
+                .header("TotalData", String.valueOf(totalElements))
+                .body(allReplyDelete.getContent());
+    }
 }

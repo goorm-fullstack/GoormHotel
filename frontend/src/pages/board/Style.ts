@@ -1,6 +1,19 @@
 import styled from 'styled-components';
 import { commonContainerStyle, BtnWrapper, commonTable } from '../../Style/commonStyles';
 
+export const SearchHeader = styled.div`
+  display: flex;
+  padding: 20px 0;
+  margin-top: 40px;
+  justify-content: center;
+  column-gap: 10px;
+
+  select {
+    width: 120px;
+  }
+`
+
+
 export const Container = styled(commonContainerStyle)``;
 
 export const IsReply = styled.span`
@@ -110,13 +123,20 @@ export const TableRead = styled.table`
     font-size: ${(props) => props.theme.font.sizes};
   }
   td.titlew p span {
-    margin-right: 8px;
+    margin-right: 20px;
     color: ${(props) => props.theme.colors.graylight};
   }
   td.titlew .title {
     font-size: ${(props) => props.theme.font.sizesl};
     color: ${(props) => props.theme.colors.charcoal};
     margin-bottom: 14px;
+  }
+  .fileb{
+    text-decoration: underline;
+  }
+  .reviewImg{
+    width:200px;
+    height:200px;
   }
   td.titlew {
     background: ${(props) => props.theme.colors.graybg};
@@ -134,7 +154,7 @@ export const TableRead = styled.table`
         height: 100px;
       }
 
-      button {
+      button[type="submit"] {
         background: ${(props) => props.theme.colors.navy};
         color: white;
         width: 120px;
@@ -185,6 +205,12 @@ export const TableRead = styled.table`
       p {
         margin-top: 12px;
         line-height: 1.4;
+      }
+      & .modify-input{
+        margin-right: 20px;
+      }
+      & .modify{
+        margin-right: 5px;
       }
     }
   }

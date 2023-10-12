@@ -59,11 +59,14 @@ public class Board {
     @Setter
     private LocalDateTime boardDeleteTime;      //게시글 삭제 날짜
 
+    @Column(nullable = false)
+    private String isComment;      //답글 여부
+
 //    @ManyToOne
 //    private Member member;
 
     @Builder(toBuilder = true)
-    public Board(Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, BoardFile boardFile, String boardTitle, String category, List<Reply> replies, List<Report> report) {
+    public Board(String isComment, Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, BoardFile boardFile, String boardTitle, String category, List<Reply> replies, List<Report> report) {
         this.boardId = boardId;
         this.title = title;
         this.boardContent = boardContent;
@@ -75,6 +78,7 @@ public class Board {
         this.category = category;
         this.replies = replies;
         this.report = report;
+        this.isComment = isComment;
     }
 
     public ResponseBoardDto toResponseBoardDto(){
@@ -86,6 +90,8 @@ public class Board {
                 .boardWriter(boardWriter)
                 .boardTitle(boardTitle)
                 .category(category)
+                .boardDeleteTime(boardDeleteTime)
+                .isComment(isComment)
                 .build();
     }
 

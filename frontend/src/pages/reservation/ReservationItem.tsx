@@ -317,7 +317,7 @@ const ReservationItem = () => {
             </S.SelectWrapper>
             <S.RoomItemWrapper>
               {products.length === 0 && <div className="empty">등록된 상품이 없습니다.</div>}
-              {products &&
+              {products.length > 0 &&
                 products.map((product, index) => (
                   <S.RoomItem key={index}>
                     <div
