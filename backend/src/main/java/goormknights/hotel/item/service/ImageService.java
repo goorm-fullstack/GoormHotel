@@ -58,10 +58,10 @@ public class ImageService {
         File file = new File(path);
         if (!file.exists()) file.mkdirs();
 
-        file = new File(absolutePath + path + "\\" + newFileName + fileExtension);
+        file = new File(absolutePath + newFileName + fileExtension);
         img.transferTo(file);
 
-        Path source = Paths.get(absolutePath + path + "\\" + newFileName + fileExtension);
+        Path source = Paths.get(absolutePath + newFileName + fileExtension);
         byte[] bytes = null;
         try (InputStream inputStream = Files.newInputStream(source)) {
             bytes = inputStream.readAllBytes();
@@ -73,7 +73,7 @@ public class ImageService {
         return RequestImageDto.builder()
                 .originFileName(img.getOriginalFilename())
                 .fileName(newFileName + fileExtension)
-                .filePath(absolutePath + path + "\\" + newFileName + fileExtension)
+                .filePath(absolutePath + newFileName + fileExtension)
                 .mimeType(mimeType)
                 .data(bytes)
                 .build();
