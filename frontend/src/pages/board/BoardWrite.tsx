@@ -19,11 +19,15 @@ const BoardWrite = () => {
   const imgRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [boardContent, setBoardContent] = useState('');
+
+  ////////////변경 있을 수 있음////////////
   const cookies = new Cookies();
   const getCookie = (name: string) => {
     return cookies.get(name);
   }
   const cookie = getCookie("JSESSIONID");
+  ////////////////변경 있을 수 있음//////////
+
 
   const [formData, setFormData] = useState<FormData>({
     title: '',

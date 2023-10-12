@@ -6,6 +6,7 @@ import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
 import queryString from "query-string";
 import e from 'express';
+import {Cookies} from "react-cookie";
 
 const BoardRead = () => {
   const loc = useLocation();
@@ -27,6 +28,13 @@ const BoardRead = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedReplyContent, setEditedReplyContent] = useState('');
   const [editingReplyId, setEditingReplyId] = useState(0); // 수정 중인 댓글 ID를 추적
+
+  const cookies = new Cookies();
+  const getCookie = (name: string) => {
+    return cookies.get(name);
+  }
+  const cookie = getCookie("JSESSIONID");
+  console.log(cookie);
 
   const parseBoardContent = (content: any) => {
     const parser = new DOMParser();
@@ -199,6 +207,49 @@ const BoardRead = () => {
     }
   };
 
+  const replyWriteOption = () => {
+    if(!cookie){
+      return(
+        <>
+          <div>
+            <input
+              type="text"
+              placeholder="작성자명"
+              name="replyWriter"
+              value={replyWriter}
+              onChange={(e) => setReplyWriter(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="비밀번호"
+              name="replyPassword"
+              value={replyPassword}
+              onChange={(e) => setReplyPassword(e.target.value)}
+            />
+            {/*<input type="password" placeholder="식별 비밀번호?" />*/}
+          </div>
+        </>
+      )
+    }
+    return(
+      <div>
+        <input
+          type="text"
+          placeholder="작성자명"
+          name="replyWriter"
+          value={replyWriter}
+          defaultValue={cookie}
+          onChange={(e) => setReplyWriter(e.target.value)}
+          readOnly
+        />
+      </div>
+    )
+  }
+
+  const replyUpdateOption = () => {
+
+  }
+
   // 유저 정보 불러오기 지우지 마세요!! (회원 여부 확인)
   // useEffect(() => {
   //   const handleUserInfo = async () => {
@@ -268,20 +319,7 @@ const BoardRead = () => {
                   <div>
                     <form onSubmit={handleSubmit}>
                       <div>
-                        <input
-                          type="text"
-                          placeholder="작성자명"
-                          name="replyWriter"
-                          value={replyWriter}
-                          onChange={(e) => setReplyWriter(e.target.value)}
-                        />
-                        <input
-                            type="text"
-                            placeholder="비밀번호"
-                            name="replyPassword"
-                            value={replyPassword}
-                            onChange={(e) => setReplyPassword(e.target.value)}
-                        />
+                        {replyWriteOption()}
                         {/*<input type="password" placeholder="식별 비밀번호?" />*/}
                       </div>
                       <div className="tawrap">
