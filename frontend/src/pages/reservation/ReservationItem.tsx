@@ -15,6 +15,7 @@ import {
 import Paging from '../../components/common/Paging/Paging';
 import { numberWithCommas } from '../../utils/function/comma';
 import { DiningData, RoomData } from '../../admin/item/AdminItemList';
+import Instance from '../../utils/api/axiosInstance';
 
 const productCategories = [
   { korean: '전체', english: '' },
@@ -100,7 +101,7 @@ const ReservationItem = () => {
     const fetchImageUrls = async () => {
       const urls = await Promise.all(
         products.map(async (item) => {
-          const response = await axios.get(`/image/${item.name}`, {
+          const response = await Instance.get(`/image/${item.name}`, {
             responseType: 'arraybuffer',
           });
           const blob = new Blob([response.data], {
@@ -121,7 +122,7 @@ const ReservationItem = () => {
     const currentPage: number = parseInt(page ? page : '1', 10);
     if (selectedType.includes('all')) {
       if(selectedCategory !== ''){
-        axios
+        Instance
         .get(`/category?page=${currentPage}`, {
           params: {
             typeDetail: selectedCategory,
@@ -138,7 +139,7 @@ const ReservationItem = () => {
           console.error(error);
         });
       }else{
-        axios
+        Instance
         .get(`/category?page=${currentPage}`)
         .then((response) => {
           const totalPages = parseInt(response.headers['totalpages'], 10);
@@ -153,7 +154,7 @@ const ReservationItem = () => {
       }
     } else {
       if (selectedCategory !== '') {
-        axios
+        Instance
           .get(`/category?page=${currentPage}`, {
             params: {
               type: selectedType[0],
@@ -171,7 +172,7 @@ const ReservationItem = () => {
             console.error(error);
           });
       } else {
-        axios
+        Instance
           .get(`/category?page=${currentPage}`, {
             params: {
               type: selectedType[0],
