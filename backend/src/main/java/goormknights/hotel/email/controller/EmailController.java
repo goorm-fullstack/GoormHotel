@@ -122,6 +122,27 @@ public class EmailController {
         }
     }
 
+    // 회원 정보 수정 코드 전송
+    @PostMapping("/changepw-code")
+    public ResponseEntity<?> changePwCodeRequest(@RequestBody EmailNameIdDTO emailNameIdDTO) {
+        Optional<Member> memberOptional = memberRepository.findByEmailAndMemberIdAndName(
+                emailNameIdDTO.getEmail(), emailNameIdDTO.getMemberId(), emailNameIdDTO.getName());
+        if (memberOptional.isPresent()) {
+            EmailMessage emailMessage = EmailMessage.builder()
+                    .to(emailNameIdDTO.getEmail())
+                    .subject("[GoormHotel] 이메일 인증을 위한 인증 코드 발송")
+                    .build();
+
+            String code = emailService.sendMemberMail(emailMessage, "email-auth");
+            EmailResponseDto emailResponseDto = new EmailResponseDto();
+            emailResponseDto.setCode(code);
+
+            return ResponseEntity.ok(emailResponseDto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found");
+        }
+    }
+
 //    // 아이디 찾기 코드 버튼
 //    @PostMapping("/send-id-find-code")
 //    public ResponseEntity<?> sendIdFindCode(@RequestBody FindMemberIdDTO request) {

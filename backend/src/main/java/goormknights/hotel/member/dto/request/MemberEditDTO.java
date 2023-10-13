@@ -1,7 +1,5 @@
 package goormknights.hotel.member.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -11,19 +9,12 @@ import java.time.LocalDate;
 @ToString
 @NoArgsConstructor
 public class MemberEditDTO {
-    @NotBlank(message = "이름을 입력해주세요")
     private String name;
-    @NotBlank(message = "이메일을 입력해주세요")
     private String email;
-    @NotBlank(message = "아이디를 입력해주세요")
     private String memberId;
-    @NotBlank(message = "비밀번호를 입력해주세요")
     private String password;
-    @NotBlank(message = "휴대폰 번호를 입력해주세요")
     private String phoneNumber;
-    @NotNull(message = "생일을 입력해주세요")
     private LocalDate birth;
-    @NotBlank(message = "성별을 입력해주세요")
     private String gender;
 
     @Builder

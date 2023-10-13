@@ -3,7 +3,9 @@ package goormknights.hotel.member.controller;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.member.dto.request.AdminSignupDTO;
+import goormknights.hotel.member.dto.response.MemberInfoDetailDTO;
 import goormknights.hotel.member.service.AdminService;
+import goormknights.hotel.member.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ import java.util.Map;
 public class AdminController {
 
     private final AdminService adminService;
+    private final MemberService memberService;
 
     @GetMapping("/session")
     public ResponseEntity<?> validateSession(HttpSession session) {
@@ -52,30 +55,16 @@ public class AdminController {
         return ResponseEntity.ok(sessionAttributes);
     }
 
-
-
-//    @GetMapping("/session")
-//    public ResponseEntity<?> getSessionInfo(HttpSession session) {
-//        String role = (String) session.getAttribute("role");
-//        Object authoritiesObj = session.getAttribute("authorities");
-//
-//        if (!(authoritiesObj instanceof List)) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid authorities in session");
-//        }
-//
-//        @SuppressWarnings("unchecked")
-//        List<String> authorities = (List<String>) authoritiesObj;
-//
-//        if (role == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No active session");
-//        }
-//
-//        Map<String, Object> sessionInfo = new HashMap<>();
-//        sessionInfo.put("role", role);
-//        sessionInfo.put("authorities", authorities);
-//
-//        return ResponseEntity.ok(sessionInfo);
-//    }
+    // 회원디테일 정보 조회
+    @GetMapping("/api/admin/member/{memberId}")
+    public ResponseEntity<?> memberInfoDetail(@PathVariable String memberId) {
+        MemberInfoDetailDTO memberInfo = adminService.memberInfoDetail(memberId);
+        if (memberInfo != null) {
+            return ResponseEntity.ok(memberInfo);
+        } else {
+            return ResponseEntity.status(404).body("Member not found");
+        }
+    }
 
     @RequestMapping("/sessionInfo")
     public void sessionInfo(HttpSession session) {

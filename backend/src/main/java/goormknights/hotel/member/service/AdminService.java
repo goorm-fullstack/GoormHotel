@@ -3,9 +3,12 @@ package goormknights.hotel.member.service;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.member.dto.request.AdminSignupDTO;
+import goormknights.hotel.member.dto.response.MemberInfoDetailDTO;
 import goormknights.hotel.member.exception.InvalidMemberException;
 import goormknights.hotel.member.model.Manager;
+import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.repository.ManagerRepository;
+import goormknights.hotel.member.repository.MemberRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,6 +31,7 @@ public class AdminService {
 
     private final PasswordEncoder passwordEncoder;
     private final ManagerRepository managerRepository;
+    private final MemberRepository memberRepository;
 
     // 매니저 가입 및 저장
     public void adminSignup(AdminSignupDTO adminSignupDTO) {
@@ -120,8 +124,27 @@ public class AdminService {
         return response;
     }
 
+    // 회원 정보 조회
+    public MemberInfoDetailDTO memberInfoDetail(String memberId) {
+        Optional<Member> memberOptional = memberRepository.findByMemberId(memberId);
 
-
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            MemberInfoDetailDTO memberInfoDetailDTO = new MemberInfoDetailDTO();
+            memberInfoDetailDTO.setName(member.getName());
+            memberInfoDetailDTO.setEmail(member.getEmail());
+            memberInfoDetailDTO.setGrade(member.getGrade());
+            memberInfoDetailDTO.setPassword(member.getPassword());
+            memberInfoDetailDTO.setPhoneNumber(member.getPhoneNumber());
+            memberInfoDetailDTO.setBirth(member.getBirth());
+            memberInfoDetailDTO.setGender(member.getGender());
+            memberInfoDetailDTO.setMailAuth(member.getMailAuth());
+            memberInfoDetailDTO.setSignupDate(member.getSignupDate());
+            return memberInfoDetailDTO;
+        } else {
+            return null;
+        }
+    }
 
     // 매니저 정보 수정
 //    @Transactional

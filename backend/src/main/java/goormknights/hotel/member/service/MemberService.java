@@ -9,6 +9,7 @@ import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.global.exception.InvalidVerificationCodeException;
 import goormknights.hotel.member.dto.request.*;
+import goormknights.hotel.member.dto.response.MemberInfoDTO;
 import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.model.MemberEditor;
@@ -72,12 +73,13 @@ public class MemberService {
     }
 
     // 회원 정보 수정
-    @Transactional
-    public void edit(Long id, MemberEditDTO memberEditDTO){
-        Member member = memberRepository.findById(id)
+    public void edit(String memberId, MemberEditDTO memberEditDTO){
+        Member member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(MemberNotFound::new);
 
-        String encryptedPassword = passwordEncoder.encode(memberEditDTO.getPassword());
+        String encryptedPassword = memberEditDTO.getPassword() != null ?
+                passwordEncoder.encode(memberEditDTO.getPassword()) :
+                member.getPassword();
 
         MemberEditor.MemberEditorBuilder editorBuilder = member.toEditor();
         MemberEditor memberEditor = editorBuilder
@@ -91,6 +93,7 @@ public class MemberService {
                 .build();
 
         member.edit(memberEditor);
+        memberRepository.save(member);
     }
 
     // 패스워드 리셋
@@ -201,6 +204,25 @@ public class MemberService {
             return true;
         }
         return false;
+    }
+
+    // 회원 마이페이지 정보 얻기
+    public MemberInfoDTO getMemberInfo(String memberId) throws Exception {
+        Optional<Member> optionalMember = memberRepository.findByMemberId(memberId);
+        if (optionalMember.isPresent()) {
+            Member member = optionalMember.get();
+
+            MemberInfoDTO memberInfoDTO = new MemberInfoDTO();
+            memberInfoDTO.setName(member.getName());
+            memberInfoDTO.setEmail(member.getEmail());
+            memberInfoDTO.setPassword(member.getPassword());
+            memberInfoDTO.setPhoneNumber(member.getPhoneNumber());
+            memberInfoDTO.setBirth(member.getBirth());
+            memberInfoDTO.setGender(member.getGender());
+            return memberInfoDTO;
+        } else {
+            throw new Exception("회원이 없습니다");
+        }
     }
 
     // ======================= 위까지 민종님 작업물 ============================

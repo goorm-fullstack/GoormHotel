@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import * as S from './Style';
 import { PageTitle, ContentsTitleXSmall, AuthBtn, Auth, BtnWrapper, SubmitBtn } from '../../Style/commonStyles';
 import Coupon from '../../components/Coupon/Coupon';
@@ -12,7 +12,7 @@ interface Member {
   password: string;
   confirmPassword: string;
   phoneNumber: string;
-  birth: string;
+  birth: number[];
   gender: string;
   code?: string;
 }
@@ -25,27 +25,68 @@ interface FindMemberDTO {
   memberId: string;
   name: string;
   email: string;
+  code?: string;
 }
 
 const Mypage = () => {
   const [member, setMember] = useState<Member>({name: '', email: '', memberId: '', password: '',
-    confirmPassword: '', phoneNumber: '', birth: '', gender: ''});
+    confirmPassword: '', phoneNumber: '', birth: [], gender: '', code: ''});
   const [findMemberData, setFindMemberData] = useState<FindMemberDTO>({ memberId: '', name: '', email: '' });
+  const [isPasswordChanged, setPasswordChanged] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setMember({ ...member, [name]: value });
+    let finalValue: any = value;
+    if (name === "birth") {
+      finalValue = value.split('-').map(n => Number(n));
+    }
+    if (name === "password") {
+      setPasswordChanged(true);
+    }
+    setMember({ ...member, [name]: finalValue });
   };
+
+  // 마이페이지 로딩
+  useEffect(() => {
+    const fetchMemberInfo = async () => {
+      const storedMemberId = localStorage.getItem('memberId');
+      if (storedMemberId) {
+        try {
+          const response = await Instance.get(`/api/${storedMemberId}`);
+          if (response.status === 200) {
+            const { password, ...otherData } = response.data;
+            setMember(otherData);
+            setFindMemberData({ memberId: otherData.memberId, name: otherData.name, email: otherData.email });
+          }
+        } catch (error: any) {
+          alert('로그인 상태가 아니거나 회원이 없습니다.')
+        }
+      }
+    };
+    fetchMemberInfo();
+  }, []);
 
 // 회원정보 수정 제출
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // birth 배열을 문자열로 변환
+    const birthString = member.birth.map(n => n.toString().padStart(2, '0')).join('-');
+
+    if (isPasswordChanged && !member.code) {
+      alert('비밀번호를 변경하려면 인증번호가 필요합니다.');
+      return;
+    }
+
     try {
-      const response = await Instance.post<Member>(`/api/member/${member.memberId}`, member);
+      const payload = isPasswordChanged ? { ...member, birth: birthString, needCodeValidation: true } : { ...member, birth: birthString };
+      console.log("Sending payload: ", payload);
+      const response = await Instance.put<Member>(`/api/member/${member.memberId}`, payload);
+
       if (response.status === 200) {
         alert('회원정보 수정이 완료되었습니다');
-        navigate('/mypage', { state: { memberId: response.data, name: member.memberId } });
+        navigate('/mypage');
       }
     } catch (error: any) {
       if (error.response && error.response.status === 404) {
@@ -57,14 +98,22 @@ const Mypage = () => {
   };
 
   // 인증번호 요청
-  const handleCodeRequest = async () => {
+  const handleCodeRequest = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!findMemberData.email || !findMemberData.memberId || !findMemberData.name) {
+      console.log('findMemberData: ', findMemberData);
+      alert('빈 필드가 있습니다.');
+      return;
+    }
     try {
-      const response = await Instance.post<RequestCode>('/api/mail/findpw-code', findMemberData);
+      const response = await Instance.post<RequestCode>('/api/mail/changepw-code', findMemberData);
       if (response.status === 200) {
+        console.log(findMemberData)
         alert('인증 코드가 발송되었습니다.');
       }
     } catch (error: any) {
       if (error.response && error.response.status === 404) {
+        console.log(findMemberData)
         alert('회원이 없습니다');
       } else {
         alert('에러 발생');
@@ -81,19 +130,19 @@ const Mypage = () => {
             <ContentsTitleXSmall>회원 정보 수정</ContentsTitleXSmall>
             <form>
               <input name="memberId" placeholder="아이디" onChange={handleChange} value={member.memberId} />
-              <input name="password" placeholder="비밀번호" onChange={handleChange} value={member.password} />
-              <input name="confirmPassword" placeholder="비밀번호 확인" onChange={handleChange} value={member.confirmPassword} />
+              <input name="password" placeholder="비밀번호" type="password" onChange={handleChange} value={member.password} />
+              <input name="confirmPassword" placeholder="비밀번호 확인" type="password" onChange={handleChange} value={member.confirmPassword} />
               <input name="name" placeholder="이름" onChange={handleChange} value={member.name} />
               <Auth>
                 <input name="email" placeholder="이메일" onChange={handleChange} value={member.email} />
-                <AuthBtn>인증번호 요청</AuthBtn>
+                <AuthBtn onClick={handleCodeRequest}>인증번호 요청</AuthBtn>
               </Auth>
               <input name="code" placeholder="인증번호를 입력하세요." onChange={handleChange} value={member.code} />
               <input name="phoneNumber" placeholder="연락처" onChange={handleChange} value={member.phoneNumber} />
-              <input name="birth" placeholder="생년월일(선택입력)" onChange={handleChange} value={member.birth} />
+              <input name="birth" placeholder="생년월일(선택입력)" onChange={handleChange} value={member.birth.join('-')}  />
               <input name="gender" placeholder="성별(선택입력)" onChange={handleChange} value={member.gender} />
               <BtnWrapper className="mt20 full">
-                <SubmitBtn type="submit">회원 정보 수정</SubmitBtn>
+                <SubmitBtn onClick={handleSubmit}>회원 정보 수정</SubmitBtn>
               </BtnWrapper>
             </form>
           </div>
