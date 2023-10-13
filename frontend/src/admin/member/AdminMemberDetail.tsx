@@ -37,20 +37,6 @@ const AdminMemberDetail = () => {
     });
   };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(`http://localhost:8080/member/members/${memberId}`);
-  //       const birth = response.data.birth;
-  //       setJoinDate(birth);
-  //     } catch (error) {
-  //       console.error('Error:', error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [memberId]);
-
   if (authItem && authItem.includes('AUTH_A')) {
     return (
       <AdminLayout subMenus="member">

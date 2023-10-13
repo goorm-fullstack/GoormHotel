@@ -3,7 +3,6 @@ import * as S from './Style';
 import moment from 'moment';
 import Item from '../../components/Item/Item';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Reservation from '../../components/Reservation/Reservation';
 import {
   PageTitle,
@@ -133,7 +132,7 @@ const ReservationPage = () => {
 
     if (confirmed) {
       try {
-        await axios.post(`http://127.0.0.1:8080/reservation/save?memberId=1`, serverFormattedData);
+        await Instance.post(`http://127.0.0.1:8080/reservation/save?memberId=1`, serverFormattedData);
 
         navigate('/');
         window.alert('예약이 완료되었습니다');

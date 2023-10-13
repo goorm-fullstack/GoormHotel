@@ -4,9 +4,10 @@ import { PageTitle, SubmitBtn, SelectImage, RedP, GreenP, NormalBtn, BtnWrapper 
 import { DiningData } from './AdminItemList';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { Container, Table } from '../member/Style';
 import { DiningForm } from '../../components/AddItemForm/WriteFormDining';
+import Instance from '../../utils/api/axiosInstance';
+import axios from 'axios';
 
 const AdminDetailDining = () => {
   const [imgFile, setImgFile] = useState<string>(''); // 이미지 상태관리
@@ -31,7 +32,7 @@ const AdminDetailDining = () => {
   // 해당 상품의 데이터 get 요청
   useEffect(() => {
     const nameParam: string = name ? name : '';
-    axios.get(`/dinings/${type}/${encodeURIComponent(nameParam)}`).then((response) => {
+    Instance.get(`/dinings/${type}/${encodeURIComponent(nameParam)}`).then((response) => {
       setResponseData(response.data);
       console.log('get 성공');
     });
@@ -76,7 +77,7 @@ const AdminDetailDining = () => {
 
         try {
           const nameParam: string = name ? name : '';
-          await axios.put(`/dinings/${type}/${encodeURIComponent(nameParam)}`, form, {
+          await Instance.put(`/dinings/${type}/${encodeURIComponent(nameParam)}`, form, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
@@ -105,7 +106,7 @@ const AdminDetailDining = () => {
     const item = responseData ? responseData : null;
     const fetchImageUrl = async () => {
       try {
-        const response = await axios.get(`/image/${item?.name}`, {
+        const response = await Instance.get(`/image/${item?.name}`, {
           responseType: 'arraybuffer',
         });
 
@@ -134,7 +135,7 @@ const AdminDetailDining = () => {
         setDuplicateMessage('사용 가능한 상품명입니다.');
         setIsConfirm(true);
       } else {
-        const response = await axios.get(url);
+        const response = await Instance.get(url);
         const message = response.data;
         setDuplicateMessage(message);
         setIsConfirm(true);

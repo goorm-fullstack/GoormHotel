@@ -3,9 +3,9 @@ import * as S from './Style';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PageTitle, BtnWrapper, SubmitBtn, NormalBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
-import axios from 'axios';
 import { ItemThumbnail } from '../../admin/item/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
+import Instance from '../../utils/api/axiosInstance';
 
 type FormData = {
   [key: string]: string;
@@ -91,7 +91,7 @@ const BoardWrite = () => {
     const isConfirm = window.confirm('작성하시겠습니까?');
     if (isConfirm) {
       try {
-        await axios.post('/boards/writeform', form, {
+        await Instance.post('/boards/writeform', form, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

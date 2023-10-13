@@ -4,10 +4,10 @@ import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
 import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
-import axios from 'axios';
 import { ReportData } from './AdminBoard';
 import { useNavigate } from 'react-router-dom';
 import { boardTitleList } from './AdminBoard';
+import Instance from '../../utils/api/axiosInstance';
 
 const AdminReport = () => {
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
@@ -26,7 +26,7 @@ const AdminReport = () => {
   }, []);
 
   useEffect(() => {
-    axios
+    Instance
       .get('/report/list')
       .then((response) => {
         // 데이터를 가져올 때 reportCheck와 reportResult를 문자열로 처리
@@ -63,7 +63,7 @@ const AdminReport = () => {
 
   const checkedBoard = () => {
     checkedItems.forEach((boardId) => {
-      axios
+      Instance
         .put(`/report/check/${boardId}`)
         .then(() => {
           alert('처리되었습니다.');
@@ -82,7 +82,6 @@ const AdminReport = () => {
     setSelectAllChecked(updatedCheckedItems.length === report.length);
   };
 
-  console.log(checkedItems);
 
   if (authItem && authItem.includes('AUTH_C')) {
     return (
