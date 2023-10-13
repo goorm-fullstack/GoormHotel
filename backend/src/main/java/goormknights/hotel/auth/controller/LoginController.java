@@ -1,5 +1,6 @@
 package goormknights.hotel.auth.controller;
 
+import goormknights.hotel.auth.dto.request.AnonymousLogin;
 import goormknights.hotel.auth.dto.request.ManagerLogin;
 import goormknights.hotel.auth.dto.request.MemberLogin;
 import goormknights.hotel.auth.service.AuthService;
@@ -13,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.UnsupportedEncodingException;
 
 @Slf4j
 @RestController
@@ -35,9 +38,19 @@ public class LoginController {
         }
     }
 
+    // 비회원 사용자 로그인
+    @PostMapping("/anonymous")
+    public ResponseEntity<?> anonymousLogin(@RequestBody AnonymousLogin anonymousLogin, HttpServletRequest request, HttpServletResponse response) {
+        if (memberService.annoymousLogin(anonymousLogin.getMemberId(), anonymousLogin.getPhoneNumber(), request, response)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("로그인 실패", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
     // 관리자 로그인
     @PostMapping("/manager")
-    public ResponseEntity<?> adminLogin(@RequestBody ManagerLogin managerLogin, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> adminLogin(@RequestBody ManagerLogin managerLogin, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         if (adminService.managerLogin(managerLogin.getAdminId(), managerLogin.getPassword(), request, response)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {

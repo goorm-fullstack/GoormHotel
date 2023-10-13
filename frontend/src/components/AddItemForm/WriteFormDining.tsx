@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table, TableHeader } from '../../admin/member/Style';
-import { PageTitle, SubmitBtn, BtnWrapper, LinkBtn, NormalBtn, SelectImage, RedP, GreenP } from '../../Style/commonStyles';
+import { Table } from '../../admin/member/Style';
+import { PageTitle, SubmitBtn, BtnWrapper, NormalBtn, SelectImage, RedP, GreenP } from '../../Style/commonStyles';
 import axios from 'axios';
+import Instance from '../../utils/api/axiosInstance';
 
 export type DiningForm = {
   [key: string]: string;
@@ -58,7 +59,7 @@ const WriteFormDining = () => {
 
         // axios
         try {
-          await axios.post('/dinings/dining', form, {
+          await Instance.post('/dinings/dining', form, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
@@ -105,7 +106,7 @@ const WriteFormDining = () => {
         setDuplicateMessage('상품명은 공백일 수 없습니다.');
         setIsConfirm(false);
       } else {
-        const response = await axios.get(url);
+        const response = await Instance.get(url);
         const message = response.data;
         setDuplicateMessage(message);
         setIsConfirm(true);
@@ -189,7 +190,7 @@ const WriteFormDining = () => {
             <tr>
               <th>상품 소개글</th>
               <td>
-                <input type="text" name='description' className='long' value={formData.description} onChange={handleChange} required />
+                <input type="text" name="description" className="long" value={formData.description} onChange={handleChange} required />
               </td>
             </tr>
             <tr>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import * as S from './Style';
-import axios from 'axios';
 import {
   PageTitle,
   ContentsTitleXSmall,
@@ -9,12 +8,13 @@ import {
   InputCheckbox,
   NormalBtn,
   BtnWrapper,
-  SubmitLinkBtn,
   CircleCloseBtn,
+  SubmitBtn,
 } from '../../Style/commonStyles';
 import Paging from '../../components/common/Paging/Paging';
 import { numberWithCommas } from '../../utils/function/comma';
 import { DiningData, RoomData } from '../../admin/item/AdminItemList';
+import Instance from '../../utils/api/axiosInstance';
 
 const productCategories = [
   { korean: '전체', english: '' },
@@ -84,24 +84,37 @@ type SelectProduct = ProductType1 | ProductType2;
 const ReservationItem = () => {
   const [selectedProduct, setSelectedProduct] = useState<SelectProduct | null>();
   const location = useLocation();
-  console.log(location.search.replace('?type=', ''));
+  const navigate = useNavigate();
   const reservationData = location.state ? location.state.reservationData : null;
   const [selectedType, setSelectedType] = useState<string[]>(['all', 'room', 'dining']);
-  console.log(selectedType);
   const [selectedCategory, setSelectedCategory] = useState<string>(productCategories[0].english);
   const [products, setProducts] = useState<(RoomData | DiningData)[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [totalData, setTotalData] = useState<number>(0);
   const [totalPage, setTotalPage] = useState<number>(0);
-  const { page } = useParams<{ page: string }>();
+  const { page } = useParams();
+  const isLogined = localStorage.getItem('memberId');
   const [click, setClick] = useState(false);
+
+  // 쿠키를 파싱하는 함수
+  function getCookie(name: string): string | undefined {
+    const cookieString = document.cookie;
+    const cookies = cookieString.split('; ');
+
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].split('=');
+      if (cookie[0] === name) {
+        return cookie[1];
+      }
+    }
+  }
 
   // 서버에 저장된 이미지 요청
   useEffect(() => {
     const fetchImageUrls = async () => {
       const urls = await Promise.all(
         products.map(async (item) => {
-          const response = await axios.get(`/image/${item.name}`, {
+          const response = await Instance.get(`/image/${item.name}`, {
             responseType: 'arraybuffer',
           });
           const blob = new Blob([response.data], {
@@ -113,50 +126,48 @@ const ReservationItem = () => {
       setImageUrls(urls);
     };
 
-    if (products.length > 0) {
-      fetchImageUrls();
-    }
+    // if (products.length > 0) {
+    //   fetchImageUrls();
+    // }
   }, [products]);
 
   useEffect(() => {
     const currentPage: number = parseInt(page ? page : '1', 10);
     if (selectedType.includes('all')) {
-      if(selectedCategory !== ''){
-        axios
-        .get(`/category?page=${currentPage}`, {
-          params: {
-            typeDetail: selectedCategory,
-          },
-        })
-        .then((response) => {
-          const totalPages = parseInt(response.headers['totalpages'], 10);
-          const totalData = parseInt(response.headers['totaldata'], 10);
-          setProducts(response.data);
-          setTotalData(totalData);
-          setTotalPage(totalPages);
-          setClick(!click);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-      }else{
-        axios
-        .get(`/category?page=${currentPage}`)
-        .then((response) => {
-          const totalPages = parseInt(response.headers['totalpages'], 10);
-          const totalData = parseInt(response.headers['totaldata'], 10);
-          setProducts(response.data);
-          setTotalData(totalData);
-          setTotalPage(totalPages);
-          setClick(!click);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      if (selectedCategory !== '') {
+        Instance
+          .get(`/category?page=${currentPage}`, {
+            params: {
+              typeDetail: selectedCategory,
+            },
+          })
+          .then((response) => {
+            const totalPages = parseInt(response.headers['totalpages'], 10);
+            const totalData = parseInt(response.headers['totaldata'], 10);
+            setProducts(response.data);
+            setTotalData(totalData);
+            setTotalPage(totalPages);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        Instance
+          .get(`/category?page=${currentPage}`)
+          .then((response) => {
+            const totalPages = parseInt(response.headers['totalpages'], 10);
+            const totalData = parseInt(response.headers['totaldata'], 10);
+            setProducts(response.data);
+            setTotalData(totalData);
+            setTotalPage(totalPages);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     } else {
       if (selectedCategory !== '') {
-        axios
+        Instance
           .get(`/category?page=${currentPage}`, {
             params: {
               type: selectedType[0],
@@ -175,7 +186,7 @@ const ReservationItem = () => {
             console.error(error);
           });
       } else {
-        axios
+        Instance
           .get(`/category?page=${currentPage}`, {
             params: {
               type: selectedType[0],
@@ -217,7 +228,6 @@ const ReservationItem = () => {
 
   const handleTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value: string = e.target.value;
-    console.log(value);
 
     if (value === 'all') {
       if (selectedType.includes('all')) {
@@ -244,6 +254,21 @@ const ReservationItem = () => {
   const nameOfTypeDetail = (product: RoomData | DiningData) => {
     const foundCategory = [...diningCategories, ...productCategories].find((category) => product.typeDetail.includes(category.english));
     return foundCategory ? foundCategory.korean : 'none';
+  };
+
+  const handleSubmitClick = () => {
+    if (!isLogined) {
+      if (window.confirm('로그인이 진행되지 않았습니다. 비회원으로 주문을 진행하시겠습니까?')) {
+        navigate('/anonymous/signup');
+      }
+    } else {
+      navigate('/offers/step2', {
+        state: {
+          reservationData: reservationData,
+          selectedProduct: selectedProduct,
+        },
+      });
+    }
   };
 
   return (
@@ -274,23 +299,21 @@ const ReservationItem = () => {
                   전체 <strong>{totalData}</strong> 개
                 </p>
                 <select id="productType" value={selectedCategory} onChange={handleCategoryChange}>
-                  {selectedType.length === 1 && selectedType[0] === 'room'
-                    ? productCategories.map((category, index) => (
-                        <option key={index} value={category.english}>
-                          {category.korean}
-                        </option>
-                      ))
-                    : selectedType.length === 1 && selectedType[0] === 'dining'
-                    ? diningCategories.map((category, index) => (
-                        <option key={index} value={category.english}>
-                          {category.korean}
-                        </option>
-                      ))
-                    : ( <option value={productCategories[0].english}>
-                          {productCategories[0].korean}
-                        </option>
-                      )
-                  }
+                  {selectedType.length === 1 && selectedType[0] === 'room' ? (
+                    productCategories.map((category, index) => (
+                      <option key={index} value={category.english}>
+                        {category.korean}
+                      </option>
+                    ))
+                  ) : selectedType.length === 1 && selectedType[0] === 'dining' ? (
+                    diningCategories.map((category, index) => (
+                      <option key={index} value={category.english}>
+                        {category.korean}
+                      </option>
+                    ))
+                  ) : (
+                    <option value={productCategories[0].english}>{productCategories[0].korean}</option>
+                  )}
                 </select>
               </div>
             </S.SelectWrapper>
@@ -312,7 +335,7 @@ const ReservationItem = () => {
                         <span>{nameOfTypeDetail(product)}</span>
                         <span>{product.capacity}인 기준</span>
                       </p>
-                      <h5>{product.description}</h5>
+                      <p className="desc">{product.description}</p>
                       <p className="price">
                         <strong>{numberWithCommas(product.price)}</strong> 원 ~
                       </p>
@@ -418,15 +441,9 @@ const ReservationItem = () => {
               })()}
             </S.SelectItem>
             <BtnWrapper className="full mt20">
-              <SubmitLinkBtn
-                className="shadow"
-                to="/offers/step2"
-                state={{
-                  reservationData: reservationData,
-                  selectedProduct: selectedProduct,
-                }}>
+              <SubmitBtn className="shadow" onClick={handleSubmitClick}>
                 예약 정보 입력하기
-              </SubmitLinkBtn>
+              </SubmitBtn>
             </BtnWrapper>
           </S.Right>
         </S.Wrapper>

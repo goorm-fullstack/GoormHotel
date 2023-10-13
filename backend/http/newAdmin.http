@@ -3,10 +3,10 @@ POST http://localhost:8080/admin-signup
 Content-Type: application/json
 
 {
-  "adminId": "admin",
+  "adminId": "admin5",
   "password": "123",
   "adminName": "김영한",
-  "adminNickname": "호랑이",
+  "adminNickname": "Tiger",
   "auth": "AUTH_A-AUTH_C"
 }
 

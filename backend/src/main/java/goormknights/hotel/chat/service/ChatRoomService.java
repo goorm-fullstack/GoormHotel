@@ -35,6 +35,10 @@ public class ChatRoomService {
         return chatRoomDtoList;
     }
 
+    public Long getCount() {
+        return chatRoomRepository.count() / 10;
+    }
+
     public List<ResponseChatRoomDto> getLastMessage(Pageable pageable) {
         Page<ChatRoomDto> page = chatRoomRepository.findAll(pageable);
         List<ResponseChatRoomDto> chatRoomDtoList = new ArrayList<>();

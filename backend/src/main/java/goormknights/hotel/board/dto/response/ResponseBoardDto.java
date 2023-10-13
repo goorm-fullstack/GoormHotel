@@ -24,6 +24,8 @@ public class ResponseBoardDto {
 
     private String boardWriter; //작성자
 
+    private String boardPassword;       //작성자 비밀번호
+
     private List<ResponseReplyDto> reply;  //댓글
 
     private String boardTitle;      //게시판 이름
@@ -38,8 +40,9 @@ public class ResponseBoardDto {
 
     private String isComment;      //답글 여부
 
+
     @Builder
-    public ResponseBoardDto(Long boardId, String title, String boardContent, LocalDateTime boardWriteDate, String boardWriter, String boardTitle, String category, List<ResponseReplyDto> reply, List<ResponseReportDto> report, BoardImage boardImage, LocalDateTime boardDeleteTime, String isComment) {
+    public ResponseBoardDto(String boardPassword, Long boardId, String title, String boardContent, LocalDateTime boardWriteDate, String boardWriter, String boardTitle, String category, List<ResponseReplyDto> reply, List<ResponseReportDto> report, BoardImage boardImage, LocalDateTime boardDeleteTime, String isComment) {
         this.boardId = boardId;
         this.title = title;
         this.boardContent = boardContent;
@@ -52,6 +55,7 @@ public class ResponseBoardDto {
         this.boardImage = boardImage;
         this.boardDeleteTime = boardDeleteTime;
         this.isComment = isComment;
+        this.boardPassword = boardPassword;
     }
 
 }

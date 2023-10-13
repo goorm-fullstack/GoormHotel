@@ -1,22 +1,22 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import * as S from './Style';
 import { numberWithCommas } from '../../utils/function/comma';
 
 const typeName = [
-  {type: 'dining', korean: '다이닝'},
-  {type: 'room', korean: '객실'},
-]
+  { type: 'dining', korean: '다이닝' },
+  { type: 'room', korean: '객실' },
+];
 
 const typeDetailName = [
-  {typeDetail: 'deluxe', korean: '디럭스'},
-  {typeDetail: 'sweet', korean: '스위트'},
-  {typeDetail: 'family', korean: '패밀리'},
-  {typeDetail: 'poolvila', korean: '풀빌라'},
-  {typeDetail: 'restaurant', korean: '레스토랑'},
-  {typeDetail: 'roomService', korean: '룸서비스'},
-  {typeDetail: 'barRounge', korean: '바&라운지'},
-  {typeDetail: 'bakery', korean: '베이커리'},
-]
+  { typeDetail: 'deluxe', korean: '디럭스' },
+  { typeDetail: 'sweet', korean: '스위트' },
+  { typeDetail: 'family', korean: '패밀리' },
+  { typeDetail: 'poolvila', korean: '풀빌라' },
+  { typeDetail: 'restaurant', korean: '레스토랑' },
+  { typeDetail: 'roomService', korean: '룸서비스' },
+  { typeDetail: 'barRounge', korean: '바&라운지' },
+  { typeDetail: 'bakery', korean: '베이커리' },
+];
 
 const Item = ({ selectedProduct }: any) => {
   console.log(selectedProduct.imageUrl);
@@ -32,8 +32,8 @@ const Item = ({ selectedProduct }: any) => {
     const typeDetail = typeDetailName.find((item) => item.typeDetail === selectedProduct.typeDetail);
 
     setType(type ? type.korean : '');
-    setTypeDetail(typeDetail? typeDetail.korean : '');
-  }, [])
+    setTypeDetail(typeDetail ? typeDetail.korean : '');
+  }, []);
 
   // useEffect(() => {
   //   if(!coupon && !giftCard){

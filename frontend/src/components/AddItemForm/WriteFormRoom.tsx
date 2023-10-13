@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table } from '../../admin/member/Style';
 import { PageTitle, SubmitBtn, BtnWrapper, NormalBtn, GreenP, RedP, SelectImage } from '../../Style/commonStyles';
+import Instance from '../../utils/api/axiosInstance';
 import axios from 'axios';
 
 export type RoomForm = {
@@ -65,7 +66,7 @@ const WriteFormRoom = () => {
         });
 
         try {
-          await axios.post('/rooms/room', form, {
+          await Instance.post('/rooms/room', form, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
@@ -99,7 +100,7 @@ const WriteFormRoom = () => {
         setDuplicateMessage('상품명은 공백일 수 없습니다.');
         setIsConfirm(false);
       } else {
-        const response = await axios.get(url, { responseType: 'json' });
+        const response = await Instance.get(url, { responseType: 'json' });
         const message = response.data;
         setDuplicateMessage(message);
         setIsConfirm(true);
@@ -209,7 +210,7 @@ const WriteFormRoom = () => {
             <tr>
               <th>상품 소개글</th>
               <td>
-                <input type="text" name='description' className='long' value={formData.description} onChange={handleChange} required />
+                <input type="text" name="description" className="long" value={formData.description} onChange={handleChange} required />
               </td>
             </tr>
             <tr>

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import * as S from './Style';
 import adminLogo from '../../images/common/logo_admin.png';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { PageTitle, SubmitBtn, BtnWrapper, CheckLabel, InputCheckbox } from '../../Style/commonStyles';
-import Instance from "../../utils/api/axiosInstance";
+import Instance from '../../utils/api/axiosInstance';
 
 const AdminLogin: React.FC = () => {
   const [adminId, setAdminId] = useState<string>('');
@@ -16,7 +16,7 @@ const AdminLogin: React.FC = () => {
       adminId: adminId,
       password: adminPassword,
     };
-    console.log("로그인 정보:", JSON.stringify(loginInfo));
+    console.log('로그인 정보:', JSON.stringify(loginInfo));
     try {
       const response = await Instance.post('/login/manager', loginInfo, {
         headers: {
@@ -28,7 +28,7 @@ const AdminLogin: React.FC = () => {
       if (response.status === 200) {
         alert('로그인 성공');
         console.log(document.cookie);
-        window.location.href = '/admin'
+        window.location.href = '/admin';
       } else {
         alert('아이디 또는 비밀번호가 일치하지 않습니다.');
       }
@@ -74,6 +74,7 @@ const AdminLogin: React.FC = () => {
           </CheckLabel>
         </div>
         <S.ShareID>
+          <Link to="/">사용자 홈 바로가기</Link>
           <p>[관리자 페이지 체험용 부운영자 계정 정보]</p>
           <p>ID : manager / PW : administrator1!</p>
         </S.ShareID>

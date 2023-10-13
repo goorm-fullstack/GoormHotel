@@ -4,9 +4,10 @@ import { PageTitle, SubmitBtn, SelectImage, RedP, GreenP, NormalBtn, BtnWrapper 
 import { RoomData } from './AdminItemList';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import { Container, Table } from '../member/Style';
 import { RoomForm } from '../../components/AddItemForm/WriteFormRoom';
+import Instance from '../../utils/api/axiosInstance';
+import axios from 'axios';
 
 const AdminDetailRoom = () => {
   const [imgFile, setImgFile] = useState<string>(''); // 이미지 상태관리
@@ -22,17 +23,17 @@ const AdminDetailRoom = () => {
   // 현재 데이터 get 요청
   useEffect(() => {
     const nameParam: string = name ? name : '';
-    axios.get(`/rooms/${type}/${encodeURIComponent(nameParam)}`).then((response) => {
+    Instance.get(`/rooms/${type}/${encodeURIComponent(nameParam)}`).then((response) => {
       setResponseData(response.data);
       console.log('get 성공');
     });
   }, [name, type]);
 
   const navigate = useNavigate();
-  const authItem = localStorage.getItem("auth");
+  const authItem = localStorage.getItem('auth');
 
   useEffect(() => {
-    if (!(authItem && authItem.includes("AUTH_B"))) {
+    if (!(authItem && authItem.includes('AUTH_B'))) {
       alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
       navigate('/admin');
     }
@@ -76,7 +77,7 @@ const AdminDetailRoom = () => {
 
         try {
           const nameParam: string = name ? name : '';
-          await axios.put(`/rooms/${type}/${encodeURIComponent(nameParam)}`, form, {
+          await Instance.put(`/rooms/${type}/${encodeURIComponent(nameParam)}`, form, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
@@ -105,7 +106,7 @@ const AdminDetailRoom = () => {
     const item = responseData;
     const fetchImageUrl = async () => {
       try {
-        const response = await axios.get(`/image/${item?.name}`, {
+        const response = await Instance.get(`/image/${item?.name}`, {
           responseType: 'arraybuffer',
         });
 
@@ -135,7 +136,7 @@ const AdminDetailRoom = () => {
         setDuplicateMessage('사용 가능한 상품명입니다.');
         setIsConfirm(true);
       } else {
-        const response = await axios.get(url);
+        const response = await Instance.get(url);
         const message = response.data;
         setDuplicateMessage(message);
         setIsConfirm(true);
@@ -157,125 +158,140 @@ const AdminDetailRoom = () => {
     responseMessege = <GreenP>{duplicateMessage}</GreenP>;
   }
 
-  if(authItem && authItem.includes("AUTH_B")) {
-  return (
-    <AdminLayout subMenus="item">
-      <Container>
-        <PageTitle>상품 상세</PageTitle>
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
-          {responseData && (
-            <Table className="horizontal">
-              <input type="hidden" name="type" defaultValue={responseData.type} readOnly />
-              <colgroup>
-                <col width="240px" />
-                <col width="auto" />
-                <col width="280px" />
-              </colgroup>
-              <tbody>
-                <tr>
-                  <th>상품 분류</th>
-                  <td className="text">객실</td>
-                  <td rowSpan={5}>
-                    <SelectImage>
-                      <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
-                      <div className="imgwrapper">
-                        {imgFile ? <img src={imgFile} alt="프로필 이미지" /> : <img src={imageUrls[0] || ''} alt="프로필 이미지" />}
-                      </div>
-                    </SelectImage>
-                  </td>
-                </tr>
-                <tr>
-                  <th>객실 타입</th>
-                  <td>
-                    <select name="typeDetail" key={responseData.typeDetail} defaultValue={responseData.typeDetail} onChange={handleChange} required>
-                      <option value="deluxe">디럭스</option>
-                      <option value="sweet">스위트</option>
-                      <option value="family">패밀리</option>
-                      <option value="poolVilla">풀 빌라</option>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <th>침대 타입</th>
-                  <td>
-                    <select name="bed" key={responseData.bed} defaultValue={responseData.bed} onChange={handleChange} required>
-                      <option value="single">싱글</option>
-                      <option value="double">더블/트윈</option>
-                      <option value="king">킹</option>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <th>상품명</th>
-                  <td>
-                    <input type="text" name="name" className="long" defaultValue={responseData.name} onChange={handleChange} ref={nameRef} required />
-                    <NormalBtn type="button" className="withinput" onClick={handleDuplicate}>
-                      중복확인
-                    </NormalBtn>
-                    {responseMessege}
-                  </td>
-                </tr>
-                <tr>
-                  <th>상품 소개글</th>
-                  <td>
-                    <input type="text" name='description' className='long' defaultValue={responseData.description} onChange={handleChange} required />
-                  </td>
-                </tr>
-                <tr>
-                  <th>상품가</th>
-                  <td>
-                    <input type="text" name="price" defaultValue={responseData.price} onChange={handleChange} required />
-                  </td>
-                </tr>
-                <tr>
-                  <th>성인 추가 비용</th>
-                  <td colSpan={2}>
-                    <input type="text" name="priceAdult" defaultValue={responseData.priceAdult} onChange={handleChange} required />
-                  </td>
-                </tr>
-                <tr>
-                  <th>어린이 추가 비용</th>
-                  <td colSpan={2}>
-                    <input type="text" name="priceChildren" defaultValue={responseData.priceChildren} onChange={handleChange} required />
-                  </td>
-                </tr>
-                <tr>
-                  <th>숙박 인원 기준</th>
-                  <td colSpan={2}>
-                    <input type="text" name="capacity" defaultValue={responseData.capacity} onChange={handleChange} required />
-                  </td>
-                </tr>
-                <tr>
-                  <th>성인 최대 숙박 가능 인원</th>
-                  <td colSpan={2}>
-                    <input type="text" name="spareAdult" defaultValue={responseData.spareAdult} onChange={handleChange} required />
-                  </td>
-                </tr>
-                <tr>
-                  <th>어린이 최대 숙박 가능 인원</th>
-                  <td colSpan={2}>
-                    <input type="text" name="spareChildren" defaultValue={responseData.spareChildren} onChange={handleChange} required />
-                  </td>
-                </tr>
-                <tr>
-                  <th>판매 수량</th>
-                  <td colSpan={2}>
-                    <input type="text" name="spare" defaultValue={responseData.spare} onChange={handleChange} required />
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
-          )}
-          <BtnWrapper className="double mt40 center">
-            <SubmitBtn type="submit">상품 수정</SubmitBtn>
-            <NormalBtn type="button" onClick={() => navigate(-1)}>
-              취소
-            </NormalBtn>
-          </BtnWrapper>
-        </form>
-      </Container>
-    </AdminLayout>
-  );
+  if (authItem && authItem.includes('AUTH_B')) {
+    return (
+      <AdminLayout subMenus="item">
+        <Container>
+          <PageTitle>상품 상세</PageTitle>
+          <form onSubmit={handleSubmit} encType="multipart/form-data">
+            {responseData && (
+              <Table className="horizontal">
+                <input type="hidden" name="type" defaultValue={responseData.type} readOnly />
+                <colgroup>
+                  <col width="240px" />
+                  <col width="auto" />
+                  <col width="280px" />
+                </colgroup>
+                <tbody>
+                  <tr>
+                    <th>상품 분류</th>
+                    <td className="text">객실</td>
+                    <td rowSpan={5}>
+                      <SelectImage>
+                        <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
+                        <div className="imgwrapper">
+                          {imgFile ? <img src={imgFile} alt="프로필 이미지" /> : <img src={imageUrls[0] || ''} alt="프로필 이미지" />}
+                        </div>
+                      </SelectImage>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>객실 타입</th>
+                    <td>
+                      <select name="typeDetail" key={responseData.typeDetail} defaultValue={responseData.typeDetail} onChange={handleChange} required>
+                        <option value="deluxe">디럭스</option>
+                        <option value="sweet">스위트</option>
+                        <option value="family">패밀리</option>
+                        <option value="poolVilla">풀 빌라</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>침대 타입</th>
+                    <td>
+                      <select name="bed" key={responseData.bed} defaultValue={responseData.bed} onChange={handleChange} required>
+                        <option value="single">싱글</option>
+                        <option value="double">더블/트윈</option>
+                        <option value="king">킹</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>상품명</th>
+                    <td>
+                      <input
+                        type="text"
+                        name="name"
+                        className="long"
+                        defaultValue={responseData.name}
+                        onChange={handleChange}
+                        ref={nameRef}
+                        required
+                      />
+                      <NormalBtn type="button" className="withinput" onClick={handleDuplicate}>
+                        중복확인
+                      </NormalBtn>
+                      {responseMessege}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>상품 소개글</th>
+                    <td>
+                      <input
+                        type="text"
+                        name="description"
+                        className="long"
+                        defaultValue={responseData.description}
+                        onChange={handleChange}
+                        required
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>상품가</th>
+                    <td>
+                      <input type="text" name="price" defaultValue={responseData.price} onChange={handleChange} required />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>성인 추가 비용</th>
+                    <td colSpan={2}>
+                      <input type="text" name="priceAdult" defaultValue={responseData.priceAdult} onChange={handleChange} required />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>어린이 추가 비용</th>
+                    <td colSpan={2}>
+                      <input type="text" name="priceChildren" defaultValue={responseData.priceChildren} onChange={handleChange} required />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>숙박 인원 기준</th>
+                    <td colSpan={2}>
+                      <input type="text" name="capacity" defaultValue={responseData.capacity} onChange={handleChange} required />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>성인 최대 숙박 가능 인원</th>
+                    <td colSpan={2}>
+                      <input type="text" name="spareAdult" defaultValue={responseData.spareAdult} onChange={handleChange} required />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>어린이 최대 숙박 가능 인원</th>
+                    <td colSpan={2}>
+                      <input type="text" name="spareChildren" defaultValue={responseData.spareChildren} onChange={handleChange} required />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>판매 수량</th>
+                    <td colSpan={2}>
+                      <input type="text" name="spare" defaultValue={responseData.spare} onChange={handleChange} required />
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
+            )}
+            <BtnWrapper className="double mt40 center">
+              <SubmitBtn type="submit">상품 수정</SubmitBtn>
+              <NormalBtn type="button" onClick={() => navigate(-1)}>
+                취소
+              </NormalBtn>
+            </BtnWrapper>
+          </form>
+        </Container>
+      </AdminLayout>
+    );
   } else {
     return null;
   }

@@ -28,12 +28,13 @@ public class RequestBoardDto {
 
     private String boardTitle;      //게시판 이름
 
+    private String boardPassword;       //작성자 비밀번호
+
     private String category;        //게시판-카테고리
 
     private LocalDateTime boardDeleteTime;      //소프트딜리트 시간
 
     private String isComment;      //답글 여부
-
 
     public Board toEntity() {
         return Board.builder()
@@ -44,6 +45,7 @@ public class RequestBoardDto {
                 .boardTitle(boardTitle)
                 .category(category)
                 .isComment(isComment)
+                .boardPassword(boardPassword)
                 .build();
     }
 }

@@ -1,5 +1,5 @@
 ### 회원가입
-POST http://localhost:8080/signupDTO
+POST http://localhost:8080/member
 Content-Type: application/json
 
 {
@@ -11,8 +11,7 @@ Content-Type: application/json
   "grade": "bronze",
   "privacyCheck": true,
   "birth": "1999-01-01",
-  "gender": "남성",
-  "code": "q1FS8l70"
+  "gender": "남성"
 }
 
 ### 회원가입코드
