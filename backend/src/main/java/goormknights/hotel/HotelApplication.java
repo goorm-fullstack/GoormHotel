@@ -28,35 +28,35 @@ public class HotelApplication {
 		SpringApplication.run(HotelApplication.class, args);
 	}
 
-	@PostConstruct
-	void init() {
-		Dining dining = Dining.builder()
-				.name("test")
-				.price(1000)
-				.capacity(4)
-				.description("test")
-				.priceAdult(1000)
-				.priceChildren(100)
-				.spare(4)
-				.spareAdult(1)
-				.spareChildren(1)
-				.type("dining")
-				.typeDetail("dining")
-				.build();
-
-		Member member = Member.builder()
-				.memberId("test")
-				.email("test@test.com")
-				.grade("Bronze")
-				.password(passwordEncoder.encode("1234"))
-				.name("test")
-				.phoneNumber("test")
-				.birth(LocalDate.now())
-				.gender("M")
-				.mailAuth(true)
-				.role(Role.USER)
-				.build();
-		memberRepository.save(member);
-		diningRepository.save(dining);
-	}
+//	@PostConstruct
+//	void init() {
+//		Dining dining = Dining.builder()
+//				.name("test")
+//				.price(1000)
+//				.capacity(4)
+//				.description("test")
+//				.priceAdult(1000)
+//				.priceChildren(100)
+//				.spare(4)
+//				.spareAdult(1)
+//				.spareChildren(1)
+//				.type("dining")
+//				.typeDetail("dining")
+//				.build();
+//
+//		Member member = Member.builder()
+//				.memberId("test")
+//				.email("test@test.com")
+//				.grade("Bronze")
+//				.password(passwordEncoder.encode("1234"))
+//				.name("test")
+//				.phoneNumber("test")
+//				.birth(LocalDate.now())
+//				.gender("M")
+//				.mailAuth(true)
+//				.role(Role.USER)
+//				.build();
+//		memberRepository.save(member);
+//		diningRepository.save(dining);
+//	}
 }
