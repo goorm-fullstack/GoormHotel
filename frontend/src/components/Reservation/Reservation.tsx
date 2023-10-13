@@ -55,7 +55,9 @@ const Reservation = ({ updateReservationData }: any) => {
       nights,
     };
 
-    updateReservationData(updatedData);
+    if(updateReservationData !== undefined){
+      updateReservationData(updatedData);
+    }
   }, [checkInDate, checkOutDate, rooms, adults, children, nights]);
 
   useEffect(() => {

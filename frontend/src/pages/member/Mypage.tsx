@@ -38,6 +38,13 @@ const Mypage = () => {
                 <Link to="/myhistory/1">자세히보기</Link>
               </p>
             </div>
+            <div className="historyWrapper">
+              <ContentsTitleXSmall>나의 활동</ContentsTitleXSmall>
+              <p>
+                현재까지의 게시글, 댓글의 작성 내용을 확인할 수 있습니다.
+                <Link to="/myboard/1">자세히보기</Link>
+              </p>
+            </div>
             <div>
               <ContentsTitleXSmall>멤버십 쿠폰</ContentsTitleXSmall>
               <Coupon grade="bronze" />

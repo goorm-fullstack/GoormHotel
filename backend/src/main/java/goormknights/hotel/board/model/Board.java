@@ -4,8 +4,6 @@ import goormknights.hotel.board.dto.request.RequestBoardDto;
 import goormknights.hotel.board.dto.request.RequestFileDto;
 import goormknights.hotel.board.dto.request.RequestImageDto;
 import goormknights.hotel.board.dto.response.ResponseBoardDto;
-import goormknights.hotel.member.model.Manager;
-import goormknights.hotel.member.model.Member;
 import goormknights.hotel.reply.model.Reply;
 import goormknights.hotel.report.model.Report;
 import jakarta.persistence.*;
@@ -109,7 +107,7 @@ public class Board {
                 .boardFile(requestFileDto.toEntity())
                 .boardTitle(requestBoardDto.getBoardTitle())
                 .category(requestBoardDto.getCategory())
-                .boardWriteDate(requestBoardDto.getBoardWriteDate())
+                .boardWriteDate(board.getBoardWriteDate())
                 .replies(board.getReplies())
                 .report(board.getReport())
                 .build();

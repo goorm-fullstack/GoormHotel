@@ -86,7 +86,7 @@ public class Reply {
                 .replyId(reply.getReplyId())
                 .replyContent(requestReplyDto.getReplyContent())
                 .replyWriter(requestReplyDto.getReplyWriter())
-                .replyWriteDate(requestReplyDto.getReplyWriteDate())
+                .replyWriteDate(reply.getReplyWriteDate())
                 .board(reply.getBoard())
                 .report(reply.getReport())
                 .build();

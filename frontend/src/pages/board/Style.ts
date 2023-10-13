@@ -175,7 +175,7 @@ export const TableRead = styled.table`
         height: 100px;
       }
 
-      button[type='submit'] {
+      button {
         background: ${(props) => props.theme.colors.navy};
         color: white;
         width: 120px;
@@ -237,9 +237,6 @@ export const TableRead = styled.table`
 
       & .modify-input {
         margin-right: 20px;
-      }
-      & .modify {
-        margin-right: 5px;
       }
     }
   }

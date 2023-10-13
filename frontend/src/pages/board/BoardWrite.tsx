@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as S from './Style';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { PageTitle, BtnWrapper, SubmitBtn, NormalBtn } from '../../Style/commonStyles';
+import { PageTitle, BtnWrapper, SubmitBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
-import axios from 'axios';
 import { ItemThumbnail } from '../../admin/item/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
 import Instance from '../../utils/api/axiosInstance';
@@ -289,6 +288,14 @@ const BoardWrite = () => {
                     }
                   </td>
                 </tr>
+                {user === '' &&
+                <tr>
+                  <th>비밀번호</th>
+                  <td>
+                    <input type="password" name="boardPassword" value={formData.boardPassword} onChange={handleChange} required />
+                  </td>
+                </tr>
+                }
                 {board !== 'report' ?
                 (<>
                   <tr className="contents">
@@ -299,7 +306,7 @@ const BoardWrite = () => {
                   <tr className="conbtm">
                     {board === 'review' ? (
                       <>
-                        <th>썸네일 이미지</th>
+                        <th>대표 이미지</th>
                         <td>
                           <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required/>
                           {imgFile !== '' ? <ItemThumbnail src={imgFile} alt="후기 이미지" /> : <ItemThumbnail style={{ display: 'none' }} />}

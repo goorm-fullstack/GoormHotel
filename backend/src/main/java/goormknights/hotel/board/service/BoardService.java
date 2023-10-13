@@ -71,7 +71,7 @@ public class BoardService {
         List<Board> byBoardWriter = boardRepository.findAllByBoardWriter(boardWriter, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
         for (Board board : byBoardWriter) {
-            if(board.getBoardDeleteTime()==null && board.getReport().size() == 0){
+            if(board.getBoardDeleteTime()==null){
                 response.add(board.toResponseBoardDto());
             }
         }
@@ -85,7 +85,7 @@ public class BoardService {
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
-            if(board.getBoardDeleteTime()==null && board.getReport().size() == 0){
+            if(board.getBoardDeleteTime()==null){
                 response.add(board.toResponseBoardDto());
             }
         }
@@ -99,7 +99,7 @@ public class BoardService {
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
-            if(board.getBoardDeleteTime()==null && board.getReport().size() == 0){
+            if(board.getBoardDeleteTime()==null){
                 response.add(board.toResponseBoardDto());
             }
         }
@@ -113,7 +113,7 @@ public class BoardService {
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
-            if(board.getBoardDeleteTime()==null && board.getReport().size() == 0){
+            if(board.getBoardDeleteTime()==null){
                 response.add(board.toResponseBoardDto());
             }
         }
@@ -150,7 +150,7 @@ public class BoardService {
         Page<Board> all = boardRepository.findAll(pageable);
         List<Board> list = new ArrayList<>();
         for (Board board : all) {
-            if(board.getBoardDeleteTime() == null && board.getReport().size() == 0){
+            if(board.getBoardDeleteTime() == null){
                 list.add(board);
             }
         }
@@ -210,7 +210,7 @@ public class BoardService {
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : allByBoardTitle) {
-            if(board.getBoardDeleteTime()==null && board.getReport().size() == 0){
+            if(board.getBoardDeleteTime()==null){
                 ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
                 response.add(responseBoardDto);
             }
@@ -226,25 +226,25 @@ public class BoardService {
 
         if(category == null && keyword == null){
             for (Board board : allByBoardTitle) {
-                if(board.getBoardDeleteTime() == null && board.getReport().size() == 0){
+                if(board.getBoardDeleteTime() == null){
                     response.add(board.toResponseBoardDto());
                 }
             }
         }else if(category != null && keyword == null){
             for (Board board : allByBoardTitle) {
-                if(board.getBoardDeleteTime() == null && board.getReport().size() == 0 && board.getCategory().equals(category)){
+                if(board.getBoardDeleteTime() == null && board.getCategory().equals(category)){
                     response.add(board.toResponseBoardDto());
                 }
             }
         }else if(category == null && keyword != null){
             for (Board board : allByBoardTitle) {
-                if(board.getBoardDeleteTime() == null && board.getReport().size() == 0 && (board.getTitle().contains(keyword) || board.getBoardContent().contains(keyword))){
+                if(board.getBoardDeleteTime() == null && (board.getTitle().contains(keyword) || board.getBoardContent().contains(keyword))){
                     response.add(board.toResponseBoardDto());
                 }
             }
         }else{
             for (Board board : allByBoardTitle) {
-                if(board.getBoardDeleteTime() == null && board.getReport().size() == 0 && board.getCategory().equals(category) && (board.getTitle().contains(keyword) || board.getBoardContent().contains(keyword))){
+                if(board.getBoardDeleteTime() == null && board.getCategory().equals(category) && (board.getTitle().contains(keyword) || board.getBoardContent().contains(keyword))){
                     response.add(board.toResponseBoardDto());
                 }
             }

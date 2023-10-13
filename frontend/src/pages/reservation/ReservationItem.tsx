@@ -126,9 +126,9 @@ const ReservationItem = () => {
       setImageUrls(urls);
     };
 
-    // if (products.length > 0) {
-    //   fetchImageUrls();
-    // }
+    if (products.length > 0) {
+      fetchImageUrls();
+    }
   }, [products]);
 
   useEffect(() => {
@@ -250,7 +250,8 @@ const ReservationItem = () => {
   };
 
   const nameOfTypeDetail = (product: RoomData | DiningData) => {
-    const foundCategory = [...diningCategories, ...productCategories].find((category) => product.typeDetail.includes(category.english));
+    const foundCategory = [...diningCategories, ...productCategories].find((category) => product.typeDetail === category.english);
+    console.log(foundCategory);
     return foundCategory ? foundCategory.korean : 'none';
   };
 

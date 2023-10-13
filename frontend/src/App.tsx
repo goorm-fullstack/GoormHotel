@@ -56,6 +56,7 @@ import { useAuth } from './utils/api/AuthContext';
 import Instance from './utils/api/axiosInstance';
 import AnonymousSignup from './pages/member/AnonymousSignup';
 import AdminBoardDetail from './admin/board/AdminBoardDetail';
+import MyBoardList from './pages/board/MyBoardList';
 
 const App: React.FC = () => {
   const { setAuthState, setMemberAuthState } = useAuth();
@@ -224,6 +225,7 @@ const App: React.FC = () => {
             <Route path="/reservation/:number" element={<ReservationCheck />} />
             <Route path="/offers/:page" element={<ReservationItem />} />
             <Route path="/myhistory/:page" element={<ReservationList />} />
+            <Route path="/myboard/:page" element={<MyBoardList />} />
             <Route path="/facilities" element={<Facilities />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
