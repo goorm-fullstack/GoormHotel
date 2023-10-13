@@ -4,12 +4,9 @@ import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.member.dto.request.AdminSignupDTO;
 import goormknights.hotel.member.dto.request.RequestManagerDto;
-import goormknights.hotel.member.dto.response.ManagerListDTO;
-import goormknights.hotel.member.dto.response.ResponseManagerDto;
-import goormknights.hotel.member.model.Manager;
 import goormknights.hotel.member.dto.response.MemberInfoDetailDTO;
+import goormknights.hotel.member.dto.response.ResponseManagerDto;
 import goormknights.hotel.member.service.AdminService;
-import goormknights.hotel.member.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +21,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -33,7 +29,6 @@ import java.util.stream.Collectors;
 public class AdminController {
 
     private final AdminService adminService;
-    private final MemberService memberService;
 
     @GetMapping("/session")
     public ResponseEntity<?> validateSession(HttpSession session) {

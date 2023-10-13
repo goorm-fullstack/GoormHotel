@@ -1,10 +1,10 @@
 package goormknights.hotel.auth.controller;
 
 import goormknights.hotel.global.entity.Role;
-import goormknights.hotel.member.dto.request.*;
-import goormknights.hotel.member.exception.MemberNotFound;
-import goormknights.hotel.member.service.AdminService;
+import goormknights.hotel.member.dto.request.AdminSignupDTO;
 import goormknights.hotel.member.dto.request.FindMemberIdDTO;
+import goormknights.hotel.member.dto.request.SignupDTO;
+import goormknights.hotel.member.service.AdminService;
 import goormknights.hotel.member.service.MemberService;
 import goormknights.hotel.member.service.VerificationService;
 import jakarta.servlet.http.HttpSession;

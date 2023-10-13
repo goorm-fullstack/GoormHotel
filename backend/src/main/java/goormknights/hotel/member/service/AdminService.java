@@ -3,10 +3,10 @@ package goormknights.hotel.member.service;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.member.dto.request.AdminSignupDTO;
-import goormknights.hotel.member.dto.response.MemberInfoDetailDTO;
-import goormknights.hotel.member.exception.InvalidMemberException;
 import goormknights.hotel.member.dto.request.RequestManagerDto;
+import goormknights.hotel.member.dto.response.MemberInfoDetailDTO;
 import goormknights.hotel.member.dto.response.ResponseManagerDto;
+import goormknights.hotel.member.exception.InvalidMemberException;
 import goormknights.hotel.member.exception.NotExistMemberException;
 import goormknights.hotel.member.model.Manager;
 import goormknights.hotel.member.model.Member;
@@ -149,10 +149,8 @@ public class AdminService {
         for(Manager manager : all) {
             result.add(new ResponseManagerDto(manager));
         }
-
         return result;
     }
-
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
             MemberInfoDetailDTO memberInfoDetailDTO = new MemberInfoDetailDTO();
@@ -170,6 +168,17 @@ public class AdminService {
             return null;
         }
     }
+
+    public List<ResponseManagerDto> getList(Pageable pageable) {
+        Page<Manager> all = managerRepository.findAll(pageable);
+        List<ResponseManagerDto> result = new ArrayList<>();
+        for(Manager manager : all) {
+            result.add(new ResponseManagerDto(manager));
+        }
+
+        return result;
+    }
+
     public ResponseManagerDto findByAdminID(String adminId) {
         return new ResponseManagerDto(managerRepository.findByAdminId(adminId).orElseThrow(NotExistMemberException::new));
     }
@@ -178,37 +187,6 @@ public class AdminService {
         return managerRepository.count()/10;
     }
 
-    // 매니저 정보 수정
-//    @Transactional
-//    public void edit(Integer id, MemberEditDTO memberEdit){
-//        Member member = memberRepository.findById(id)
-//                .orElseThrow(MemberNotFound::new);
-//
-//        String encryptedPassword = passwordEncoder.encode(memberEdit.getPassword());
-//
-//        MemberEditor.MemberEditorBuilder editorBuilder = member.toEditor();
-//        MemberEditor memberEditor = editorBuilder
-//                .name(memberEdit.getName())
-//                .email(memberEdit.getEmail())
-//                .memberId(memberEdit.getMemberId())
-//                .password(encryptedPassword)
-//                .phoneNumber(memberEdit.getPhoneNumber())
-//                .birth(memberEdit.getBirth())
-//                .gender(memberEdit.getGender())
-//                .build();
-//
-//        member.edit(memberEditor);
-//    }
-//
-//
-//    @Transactional
-//    public void SetTempPassword(String email, String tempPassword) {
-//        Member member = memberRepository.findByEmail(email)
-//                .orElseThrow(() -> new RuntimeException("Member not found with email: " + email));
-//
-//        member.changePassword(passwordEncoder.encode(tempPassword));
-//        memberRepository.save(member);
-//    }
 
     // 메니저 업데이트
     public void updateManager(RequestManagerDto managerDto) {

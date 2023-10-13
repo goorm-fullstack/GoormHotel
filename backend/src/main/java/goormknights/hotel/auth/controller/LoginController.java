@@ -15,15 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
-
 @Slf4j
 @RestController
 @RequestMapping("/login")
 @RequiredArgsConstructor
 public class LoginController {
 
-    private final AuthService authService;
     private final MemberService memberService;
     private final AdminService adminService;
 
@@ -57,6 +54,7 @@ public class LoginController {
 //            return new ResponseEntity<>("로그인 실패", HttpStatus.UNAUTHORIZED);
 //        }
 //    }
+
     @PostMapping("/manager")
     public ResponseEntity<?> adminLogin(@RequestBody ManagerLogin managerLogin, HttpServletRequest request, HttpServletResponse response) {
         try {

@@ -10,9 +10,6 @@ import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.global.exception.InvalidVerificationCodeException;
 import goormknights.hotel.member.dto.request.*;
 import goormknights.hotel.member.dto.response.MemberInfoDTO;
-import goormknights.hotel.member.dto.request.AnonymousSignupDto;
-import goormknights.hotel.member.dto.request.MemberEdit;
-import goormknights.hotel.member.dto.request.SignupDTO;
 import goormknights.hotel.member.dto.response.ResponseMemberDto;
 import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.exception.NotExistMemberException;
@@ -34,9 +31,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @Service
