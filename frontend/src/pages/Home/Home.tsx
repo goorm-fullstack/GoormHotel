@@ -166,7 +166,7 @@ const Home = () => {
         <S.ReserveContainer>
           <Reservation updateReservationData={updateReservationData} />
           <BtnWrapper className="searchbtnwrap">
-            <S.ReservationButton to="/offers/1" state={{ reservationData: reservationData }}>
+            <S.ReservationButton to="/offers/1?type=room" state={{ reservationData: reservationData }}>
               상품 검색
             </S.ReservationButton>
           </BtnWrapper>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as S from './Style';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { PageTitle, BtnWrapper, LinkBtn, commonButton, SubmitBtn } from '../../Style/commonStyles';
+import { PageTitle, BtnWrapper, LinkBtn, SubmitBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import queryString from 'query-string';
 import Instance from '../../utils/api/axiosInstance';
@@ -507,9 +507,11 @@ const BoardRead = () => {
               }
             </tbody>
           </S.TableRead>
+          {board !== 'notice' &&
           <BtnWrapper className='center mt40'>
             <SubmitBtn className='center' onClick={handleDelteBoard}>삭제</SubmitBtn>
           </BtnWrapper>
+          }
           <BtnWrapper className='center mt40'>
             <LinkBtn to={listLink}>목록</LinkBtn>
           </BtnWrapper>
