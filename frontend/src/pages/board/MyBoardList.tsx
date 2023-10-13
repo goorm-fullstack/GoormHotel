@@ -1,69 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as S from './Style';
 import { PageTitle } from '../../Style/commonStyles';
 import Paging from '../../components/common/Paging/Paging';
+import Instance from '../../utils/api/axiosInstance';
 
 const MyBoardList = () => {
   const [totalPages, setTotalPages] = useState(0);
-  const reservations = [
-    {
-      reservationNumber: '2023082555672148',
-      reservationDate: '2023-09-10',
-      productName: '디럭스 디럭스',
-      paymentAmount: '500,000 원',
-      checkInDate: '2023-09-15',
-      checkOutDate: '2023-09-20',
-    },
-    {
-      reservationNumber: '2023082555672149',
-      reservationDate: '2023-09-12',
-      productName:
-        '풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스',
-      paymentAmount: '300,000 원',
-      checkInDate: '2023-09-17',
-      checkOutDate: '2023-09-22',
-    },
-  ];
+  const [totaData, setTotalData] = useState(0);
+  const [replyData, setReplyData] = useState([]);
+  const [boardData, setBoardData] = useState([]);
+  const [sortData, setSortData] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const reply = await Instance.get('/reply/list');
+      const board = await Instance.get('/boards/list');
+      const totalPage = parseInt(reply.headers['totalpages'], 10) + parseInt(board.headers['totalpages'], 10);
+      const totalData = parseInt(reply.headers['totaldata'], 10) + parseInt(board.headers['totalData'], 10);
+      setReplyData(reply.data);
+      setBoardData(board.data);
+      setTotalPages(totalData % 10 === 0 ? totalData / 10 : totalData / 10 + 1);
+      setTotalData(totalData);
+    }
+    fetchData();
+  }, [])
+
+  useEffect(() => {
+    const sortByDateTime = () => {
+      // LocalDateTime을 기준으로 정렬
+      const sortedData = [...replyData, ...boardData].sort((a: any, b: any) => {
+        const dateA = new Date(a.boardWriteDate ? a.boardWriteDate : a.replyWriteDate); // a의 LocalDateTime
+        const dateB = new Date(b.boardWriteDate ? b.boardWriteDate : b.replyWriteDate); // b의 LocalDateTime
+        return (dateA as any) - (dateB as any); // 오름차순 정렬
+      });
+      setSortData(sortedData);
+    }
+    sortByDateTime();
+  }, [replyData, boardData])
 
   return (
     <>
       <S.Container>
-        <PageTitle>예약 목록</PageTitle>
+        <PageTitle>활동 내용</PageTitle>
         <S.Table className="userpage">
           <thead>
             <tr>
               <th style={{ width: '110px' }}>번호</th>
-              <th style={{ width: '220px' }}>예약번호</th>
-              <th style={{ width: '280px' }}>상품명</th>
-              <th style={{ width: '140px' }}>체크인</th>
-              <th style={{ width: '140px' }}>체크아웃</th>
-              <th style={{ width: '140px' }}>예약(결제)일</th>
-              <th style={{ width: '150px' }}>결제금액</th>
+              <th style={{ width: '220px' }}>게시판</th>
+              <th style={{ width: '280px' }}>카테고리</th>
+              <th style={{ width: '140px' }}>제목</th>
+              <th style={{ width: '140px' }}>작성자명(회원 ID)</th>
+              <th style={{ width: '140px' }}>작성일</th>
             </tr>
           </thead>
           <tbody>
-            {reservations.length === 0 ? (
+            {sortData.length === 0 ? (
               <tr>
                 <td colSpan={7} className="center empty">
-                  예약 정보가 없습니다.
+                  활동 정보가 없습니다.
                 </td>
               </tr>
             ) : (
-              reservations.map((reservation, index) => (
+              sortData.map((data: any, index) => (
                 <tr key={index}>
                   <td className="center">{index + 1}</td>
                   <td className="center">
-                    <a href={`/reservation/${reservation.reservationNumber}`} className="u">
-                      {reservation.reservationNumber}
-                    </a>
+                    {data.boardTitle ? data.boardTitle : '댓글'}
                   </td>
                   <td className="center">
-                    <p className="textover">{reservation.productName}</p>
+                    <p className="textover">{data.category ? data.category : '댓글'}</p>
                   </td>
-                  <td className="center">{reservation.checkInDate}</td>
-                  <td className="center">{reservation.checkOutDate}</td>
-                  <td className="center">{reservation.reservationDate}</td>
-                  <td className="center">{reservation.paymentAmount}</td>
+                  <td className="center">{data.title}</td>
+                  <td className="center">{data.checkOutDate}</td>
+                  <td className="center">{data.reservationDate}</td>
+                  <td className="center">{data.paymentAmount}</td>
                 </tr>
               ))
             )}
