@@ -174,9 +174,9 @@ const CustomerSupport = () => {
   const generateOptions = (item: TypeDetail, selectedType: string) => {
     if (item.type === selectedType) {
       return (
-        <option key={item.value} value={item.value}>
-          {item.typeDetail}
-        </option>
+          <option key={item.value} value={item.value}>
+            {item.typeDetail}
+          </option>
       );
     }
   };
