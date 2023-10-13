@@ -29,6 +29,8 @@ const BoardRead = () => {
   const [editedReplyContent, setEditedReplyContent] = useState('');
   const [editingReplyId, setEditingReplyId] = useState(0); // 수정 중인 댓글 ID를 추적
 
+  const isLogin = localStorage.getItem("memberId");
+
   const cookies = new Cookies();
   const getCookie = (name: string) => {
     return cookies.get(name);
@@ -154,7 +156,7 @@ const BoardRead = () => {
 
   const handleDelete = (replyId: number, replyWriter: string, replyPassword: string) => {
 
-    if( (cookie === replyWriter) && !replyPassword){                   // 쿠키 아이디와 작성자 이름이 같고 댓글 비밀번호가 없을 때
+    if( (isLogin === replyWriter) && !replyPassword){                   // 쿠키 아이디와 작성자 이름이 같고 댓글 비밀번호가 없을 때
       const isConfirm = window.confirm('삭제하시겠습니까?');
       if(isConfirm){
         axios
@@ -169,7 +171,7 @@ const BoardRead = () => {
       }
     }
 
-    if(!cookie){                                                                      //쿠키 아이디가 없을 때
+    if(!isLogin){                                                                      //쿠키 아이디가 없을 때
       if(!replyPassword){                                                             //replyPassword(회원이 작성한 댓글이라면)가 없다면
         alert("삭제가 불가능한 댓글입니다.");                                             //삭제 불가능
         return;
@@ -250,7 +252,7 @@ const BoardRead = () => {
       const response = await axios.post('/reply/writeform', {
         boardId: boardId,
         replyContent: replyContent,
-        replyWriter: replyWriter,
+        replyWriter: isLogin ? isLogin : replyWriter,
         replyPassword: replyPassword,
       });
       setReplyWriter('');
@@ -263,7 +265,7 @@ const BoardRead = () => {
   };
 
   const replyWriteOption = () => {
-    if(!cookie){
+    if(!isLogin){
       return(
         <>
           <div>
@@ -286,19 +288,18 @@ const BoardRead = () => {
         </>
       )
     }
-    return(
+    return (
       <div>
         <input
           type="text"
           placeholder="작성자명"
           name="replyWriter"
-          value={replyWriter}
-          defaultValue={cookie}
+          value={isLogin}
           onChange={(e) => setReplyWriter(e.target.value)}
           readOnly
         />
       </div>
-    )
+    );
   }
 
   const replyUpdateOption = () => {
