@@ -124,10 +124,11 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    const adminId = getCookie('adminId');
-    const memberId = getCookie('memberId');
-    const role = getCookie('role');
-    const auth = getCookie('auth');
+    const adminId = getCookie("adminId");
+    const memberId = getCookie("memberId");
+    const role = getCookie("role");
+    const auth = getCookie("auth");
+    const adminNickName = getCookie("adminNickname");
 
     console.log('adminId 쿠키 값:', adminId);
     console.log('role 쿠키 값:', role);
@@ -135,10 +136,11 @@ const App: React.FC = () => {
 
     // 로컬 스토리지에 정보를 저장한다.
     // 어드민 로그인이라면
-    if (adminId && role && auth) {
-      localStorage.setItem('adminId', adminId);
-      localStorage.setItem('role', role);
-      localStorage.setItem('auth', splitDashLine(auth).join(','));
+    if (adminId && role && auth && adminNickName) {
+      localStorage.setItem("adminId", adminId);
+      localStorage.setItem("role", role);
+      localStorage.setItem("auth", splitDashLine(auth).join(','));
+      localStorage.setItem("adminNickname", adminNickName);
       setAuthState({ adminId, role, auth });
       setIsLogined(true);
     }

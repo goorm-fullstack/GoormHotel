@@ -392,6 +392,15 @@ export const CouponInfo = styled.div`
       font-size: ${(props) => props.theme.font.sizes};
     }
   }
+
+  div {
+    text-align : center;
+    font-size: ${(props) => props.theme.font.sizes};
+    color: ${(props) => props.theme.colors.charcoal};
+    padding: 13px 0;
+    border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
+    border-bottom: 1px solid ${(props) => props.theme.colors.graylightborder};
+  }
 `;
 
 export const CouponSelect = styled.select`

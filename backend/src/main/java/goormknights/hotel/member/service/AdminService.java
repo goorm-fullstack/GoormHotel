@@ -96,11 +96,20 @@ public class AdminService {
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
                     .build();
+            ResponseCookie nicknameCookie = ResponseCookie.from("adminNickname", optionalManager.get().getAdminNickname())
+                    .httpOnly(false)
+                    .secure(true)
+                    .path("/")      // path
+                    .maxAge(3600)
+                    .sameSite("None")  // sameSite
+                    .build();
 
             response.addCookie(cookie);
             response.addHeader(HttpHeaders.SET_COOKIE, adminIdCookie.toString());
             response.addHeader(HttpHeaders.SET_COOKIE, roleCookie.toString());
             response.addHeader(HttpHeaders.SET_COOKIE, authCookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, nicknameCookie.toString());
+
             return true;
         }
         return false;
