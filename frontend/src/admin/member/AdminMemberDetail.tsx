@@ -3,6 +3,21 @@ import AdminLayout from '../common/AdminLayout';
 import { PageTitle, BtnWrapper, SubmitBtn, LinkBtn } from '../../Style/commonStyles';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Container, Table } from './Style';
+import Instance from '../../utils/api/axiosInstance';
+
+interface Member {
+  name: string;
+  email: string;
+  memberId: string;
+  password: string;
+  confirmPassword: string;
+  phoneNumber: string;
+  birth: number[];
+  gender: string;
+  grade: string;
+  mailAuth: boolean;
+  signupDate: any;
+}
 
 const AdminMemberDetail = () => {
   const { memberId } = useParams();
@@ -16,7 +31,26 @@ const AdminMemberDetail = () => {
     gender: '선택 안함',
     birthday: '입력 안함',
   });
+  const [member, setMember] = useState<Partial<Member>>({});
   // const [joinDate, setJoinDate] = useState(null);
+
+  // 회원정보상세 로딩
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const response = await Instance.get(`/api/admin/member/${memberId}`);
+        if (response.status === 200) {
+          const { password, ...otherData } = response.data;
+          setMember(otherData);
+        }
+      } catch (error) {
+        alert('데이터를 불러오는 데 실패했습니다.');
+      }
+    };
+
+    fetchMembers();
+  }, [memberId]);  // 'page'가 변경되면 useEffect 내의 코드가 다시 실행됩니다.
+
   const navigate = useNavigate();
   const authItem = localStorage.getItem('auth');
 
