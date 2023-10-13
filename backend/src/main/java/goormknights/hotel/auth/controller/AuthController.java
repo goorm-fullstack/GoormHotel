@@ -4,6 +4,7 @@ import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.member.dto.request.*;
 import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.service.AdminService;
+import goormknights.hotel.member.dto.request.FindMemberIdDTO;
 import goormknights.hotel.member.service.MemberService;
 import goormknights.hotel.member.service.VerificationService;
 import jakarta.servlet.http.HttpSession;
@@ -57,51 +58,6 @@ public class AuthController {
             return ResponseEntity.ok(userInfo);
         } else {
             return ResponseEntity.badRequest().body("Not logged in.");
-        }
-    }
-
-    // 아이디 찾기
-    @PostMapping("/findMemberId")
-    public ResponseEntity<?> findMemberId(@RequestBody FindMemberIdDTO request) {
-        try {
-            String memberId = memberService.findMemberId(request.getName(), request.getEmail());
-            return ResponseEntity.ok().body("아이디 찾기를 위한 코드가 발송되었습니다.");
-        } catch (MemberNotFound e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found");
-        }
-    }
-
-    // 비밀번호 찾기
-    @PostMapping("/findpassword")
-    public ResponseEntity<?> findPassword(@RequestBody FindPasswordDTO request) {
-        try {
-            String token = memberService.findPassword(request.getName(), request.getEmail(), request.getMemberId());
-            String redirectUri = "http://localhost:8080/reset-password?token=" + token;
-            return ResponseEntity.ok().body("비밀번호 재설정을 위해 이메일을 확인하세요. " + redirectUri);
-        } catch (MemberNotFound e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found");
-        }
-    }
-
-    // 비밀번호 재설정
-    @PostMapping("/resetpassword")
-    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
-        String token = request.getToken();
-        String newPassword = request.getNewPassword();
-        String email = request.getEmail();
-
-        // 토큰 검증
-        boolean isValid = verificationService.isTokenValid(token, email);
-        if (!isValid) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("세션이 만료되었거나 오류가 발생했습니다");
-        }
-
-        // 비밀번호 업데이트 로직
-        try {
-            memberService.updatePassword(email, newPassword);
-            return ResponseEntity.ok().body("비밀번호 변경에 성공했습니다");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비밀번호 변경에 실패했습니다");
         }
     }
 

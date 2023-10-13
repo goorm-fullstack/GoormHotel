@@ -7,7 +7,9 @@ import goormknights.hotel.member.dto.request.RequestManagerDto;
 import goormknights.hotel.member.dto.response.ManagerListDTO;
 import goormknights.hotel.member.dto.response.ResponseManagerDto;
 import goormknights.hotel.member.model.Manager;
+import goormknights.hotel.member.dto.response.MemberInfoDetailDTO;
 import goormknights.hotel.member.service.AdminService;
+import goormknights.hotel.member.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,7 @@ import java.util.stream.Collectors;
 public class AdminController {
 
     private final AdminService adminService;
+    private final MemberService memberService;
 
     @GetMapping("/session")
     public ResponseEntity<?> validateSession(HttpSession session) {
@@ -59,6 +62,17 @@ public class AdminController {
         }
 
         return ResponseEntity.ok(sessionAttributes);
+    }
+
+    // 회원디테일 정보 조회
+    @GetMapping("/api/admin/member/{memberId}")
+    public ResponseEntity<?> memberInfoDetail(@PathVariable String memberId) {
+        MemberInfoDetailDTO memberInfo = adminService.memberInfoDetail(memberId);
+        if (memberInfo != null) {
+            return ResponseEntity.ok(memberInfo);
+        } else {
+            return ResponseEntity.status(404).body("Member not found");
+        }
     }
 
     @RequestMapping("/sessionInfo")
