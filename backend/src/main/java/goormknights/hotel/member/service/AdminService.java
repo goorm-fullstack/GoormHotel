@@ -80,6 +80,7 @@ public class AdminService {
             ResponseCookie adminIdCookie = ResponseCookie.from("adminId", optionalManager.get().getAdminId())
                     .httpOnly(false)
                     .secure(true)
+                    .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                     .path("/")      // path
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
@@ -87,6 +88,7 @@ public class AdminService {
             ResponseCookie roleCookie = ResponseCookie.from("role", optionalManager.get().getRole().toString())
                     .httpOnly(false)
                     .secure(true)
+                    .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                     .path("/")      // path
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
@@ -94,6 +96,7 @@ public class AdminService {
             ResponseCookie authCookie = ResponseCookie.from("auth", optionalManager.get().getAuth())
                     .httpOnly(false)
                     .secure(true)
+                    .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                     .path("/")      // path
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
@@ -101,6 +104,7 @@ public class AdminService {
             ResponseCookie nicknameCookie = ResponseCookie.from("adminNickname", URLEncoder.encode(optionalManager.get().getAdminNickname(), "UTF-8"))
                     .httpOnly(false)
                     .secure(true)
+                    .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                     .path("/")      // path
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
