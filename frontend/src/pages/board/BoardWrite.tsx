@@ -21,6 +21,7 @@ const BoardWrite = () => {
   const [boardContent, setBoardContent] = useState('');
 
   ////////////변경 있을 수 있음////////////
+  const isLogin = localStorage.getItem("memberId");
   const cookies = new Cookies();
   const getCookie = (name: string) => {
     return cookies.get(name);
@@ -44,7 +45,7 @@ const BoardWrite = () => {
           return '고객지원';
       }
     })(),
-    boardWriter: '',
+    boardWriter: isLogin ? isLogin : '',
     boardPassword: '',
     category: '',
   });
@@ -120,7 +121,7 @@ const BoardWrite = () => {
   };
 
   const writerOption = () => {
-    if (!cookie) {
+    if (!isLogin) {
       return (
         <>
           <tr>
@@ -143,7 +144,7 @@ const BoardWrite = () => {
         <tr>
           <th>작성자</th>
           <td>
-            <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} required />
+            <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} required readOnly />
           </td>
         </tr>
       </>
