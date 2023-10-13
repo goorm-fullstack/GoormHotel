@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter @Setter
 public class MemberInfoDetailDTO {
@@ -16,5 +15,5 @@ public class MemberInfoDetailDTO {
     private LocalDate birth;
     private String gender;
     private Boolean mailAuth;
-    private LocalDateTime signupDate;
+    private LocalDate signupDate;
 }

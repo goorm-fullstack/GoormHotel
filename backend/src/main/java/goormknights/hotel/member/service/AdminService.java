@@ -143,14 +143,7 @@ public class AdminService {
     // 회원 정보 조회
     public MemberInfoDetailDTO memberInfoDetail(String memberId) {
         Optional<Member> memberOptional = memberRepository.findByMemberId(memberId);
-    public List<ResponseManagerDto> getList(Pageable pageable) {
-        Page<Manager> all = managerRepository.findAll(pageable);
-        List<ResponseManagerDto> result = new ArrayList<>();
-        for(Manager manager : all) {
-            result.add(new ResponseManagerDto(manager));
-        }
-        return result;
-    }
+
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
             MemberInfoDetailDTO memberInfoDetailDTO = new MemberInfoDetailDTO();
