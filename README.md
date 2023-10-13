@@ -116,7 +116,7 @@ GoormHotel
 
 ## 💾 ERD
 
-이미지 첨부 예정
+![GoormHotel](https://github.com/goorm-fullstack/GoormHotel/assets/121299334/4a899e0e-cb0e-43bc-ba59-04ce6ec7f7a0)
 
 <br>
 
