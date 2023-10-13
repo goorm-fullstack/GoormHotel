@@ -72,7 +72,7 @@ const AdminMail = () => {
   const handleClickMember = (checked: boolean) => {
     if (checked) {
       Instance.get('/member').then((response) => {
-        setMembers(response.data);
+        setMembers(response.data.email);
         console.log(response.data);
       });
     } else {

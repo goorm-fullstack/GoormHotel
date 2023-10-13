@@ -1,15 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { styled } from 'styled-components';
 import { useParams } from 'react-router-dom'; // Remove duplicate import
-import { commonContainerStyle, PageTitle, BtnWrapper, LinkBtn, commonTable, SubmitBtn } from '../../Style/commonStyles';
+import { PageTitle, BtnWrapper, LinkBtn, SubmitBtn } from '../../Style/commonStyles';
 import * as S from './Style';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import Paging from '../../components/common/Paging/Paging';
-import axios from 'axios';
 import Instance from '../../utils/api/axiosInstance';
 import { Link } from 'react-router-dom';
 import { Type, TypeDetail } from '../../components/common/Search/Search';
-import { error } from 'console';
 import {IsReply} from "./Style";
 
 const CustomerSupport = () => {
@@ -58,7 +55,7 @@ const CustomerSupport = () => {
       }
       if (boardTitle !== '') {
         if(typeDetail === 'all' && keyword === ''){
-          axios
+          Instance
           .get(`/boards/find/category?boardTitle=${boardTitle}`)
           .then((response) => {
             const totalPages = parseInt(response.headers['totalpages'], 10);
@@ -72,7 +69,7 @@ const CustomerSupport = () => {
             console.error(error);
           });
         }else if(typeDetail !== 'all' && keyword === ''){
-          axios
+          Instance
           .get(`/boards/find/category?boardTitle=${boardTitle}&category=${typeDetail}`)
           .then((response) => {
             const totalPages = parseInt(response.headers['totalpages'], 10);
@@ -85,7 +82,7 @@ const CustomerSupport = () => {
             console.error(error);
           });
         }else if(typeDetail === 'all' && keyword !== ''){
-          axios
+          Instance
           .get(`/boards/find/category?boardTitle=${boardTitle}&keyword=${keyword}`)
           .then((response) => {
             const totalPages = parseInt(response.headers['totalpages'], 10);
@@ -98,7 +95,7 @@ const CustomerSupport = () => {
             console.error(error);
           });
         }else{
-          axios
+          Instance
           .get(`/boards/find/category?boardTitle=${boardTitle}&category=${typeDetail}&keyword=${keyword}`)
           .then((response) => {
             const totalPages = parseInt(response.headers['totalpages'], 10);
