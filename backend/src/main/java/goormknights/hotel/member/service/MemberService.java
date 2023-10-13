@@ -182,7 +182,6 @@ public class MemberService {
             ResponseCookie memberIdCookie = ResponseCookie.from("memberId", optionalMember.get().getMemberId())
                     .httpOnly(false)
                     .secure(true)
-                    .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                     .path("/")      // path
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
@@ -190,7 +189,6 @@ public class MemberService {
             ResponseCookie roleCookie = ResponseCookie.from("role", optionalMember.get().getRole().toString())
                     .httpOnly(false)
                     .secure(true)
-                    .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                     .path("/")      // path
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
@@ -225,7 +223,6 @@ public class MemberService {
             ResponseCookie memberIdCookie = ResponseCookie.from("memberId", optionalMember.get().getMemberId())
                     .httpOnly(false)
                     .secure(true)
-                    .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                     .path("/")      // path
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
@@ -233,7 +230,6 @@ public class MemberService {
             ResponseCookie roleCookie = ResponseCookie.from("role", optionalMember.get().getRole().toString())
                     .httpOnly(false)
                     .secure(true)
-                    .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                     .path("/")      // path
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
@@ -341,7 +337,6 @@ public class MemberService {
         ResponseCookie memberIdCookie = ResponseCookie.from("memberId", saveMember.getMemberId())
                 .httpOnly(false)
                 .secure(true)
-                .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                 .path("/")      // path
                 .maxAge(3600)
                 .sameSite("None")  // sameSite
@@ -350,7 +345,6 @@ public class MemberService {
         ResponseCookie roleCookie = ResponseCookie.from("role", saveMember.getRole().toString())
                 .httpOnly(false)
                 .secure(true)
-                .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                 .path("/")      // path
                 .maxAge(3600)
                 .sameSite("None")  // sameSite
