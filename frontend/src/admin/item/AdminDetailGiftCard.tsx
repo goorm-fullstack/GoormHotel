@@ -43,10 +43,10 @@ const AdminDetailGiftCard = () => {
   useEffect(() => {
     Instance.get('/api/giftcard/' + id).then((response) => {
       console.log(response.data);
-      setGiftCard(response.data.message);
-      setTitle(response.data.message.title);
-      setExpire(response.data.message.expire);
-      setIsUsed(response.data.message.isZeroMoney);
+      setGiftCard(response.data);
+      setTitle(response.data.title);
+      setExpire(response.data.expire);
+      setIsUsed(response.data.isZeroMoney);
     });
   }, []);
 

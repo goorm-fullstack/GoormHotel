@@ -202,46 +202,6 @@ public class MemberService {
         return false;
     }
 
-    public boolean annoymousLogin(String memberId, String phoneNumber, HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("member") != null) {
-            // 이미 로그인한 상태
-            return false;
-        }
-
-        Optional<Member> optionalMember = memberRepository.findByMemberIdAndPhoneNumberAndRole(memberId, phoneNumber, Role.ANONYMOUS.toString());
-        if (optionalMember.isPresent()) {
-            session = request.getSession();
-            session.setAttribute("memberId", optionalMember.get().getMemberId());
-            session.setAttribute("role", optionalMember.get().getRole());
-
-            Cookie cookie = new Cookie("JSESSIONID", session.getId());
-            cookie.setMaxAge(10);
-            cookie.setPath("/");
-            cookie.setSecure(true);
-
-            ResponseCookie memberIdCookie = ResponseCookie.from("memberId", optionalMember.get().getMemberId())
-                    .httpOnly(false)
-                    .secure(true)
-                    .path("/")      // path
-                    .maxAge(3600)
-                    .sameSite("None")  // sameSite
-                    .build();
-            ResponseCookie roleCookie = ResponseCookie.from("role", optionalMember.get().getRole().toString())
-                    .httpOnly(false)
-                    .secure(true)
-                    .path("/")      // path
-                    .maxAge(3600)
-                    .sameSite("None")  // sameSite
-                    .build();
-
-            response.addCookie(cookie);
-            response.addHeader(HttpHeaders.SET_COOKIE, memberIdCookie.toString());
-            response.addHeader(HttpHeaders.SET_COOKIE, roleCookie.toString());
-            return true;
-        }
-        return false;
-    }
 
     // ======================= 위까지 민종님 작업물 ============================
 
@@ -253,13 +213,6 @@ public class MemberService {
 
     public Member findById(Long id) {
         return memberRepository.findById(id).orElseThrow();
-    }
-
-    // 상품권 등록
-    public void registrationGiftCard(long memberId, String code) {
-        GiftCard giftCard = giftCardRepository.findByUuid(code).orElseThrow(() -> new NoSuchElementException("존재하지 않는 상품권입니다"));
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotExistMemberException("존재하지 않는 사용자입니다"));
-        member.getGiftCardList().add(giftCard);
     }
 
     // 블랙리스트 차단합니다.
@@ -298,75 +251,6 @@ public class MemberService {
         }
     }
 
-    // 임의의 아이디를 만들어서 비회원 아이디에 저장하고, 저장된 아이디 반환
-    public void anonymousSignup(AnonymousSignupDto signupDTO, String code, HttpServletRequest request, HttpServletResponse response) {
-        if (!verifyCode(signupDTO.getEmail(), code)) {
-            throw new InvalidVerificationCodeException();
-        }
-
-        String randomId = generatedRandomID();
-
-        while (memberRepository.existsByMemberId(randomId)) {
-            randomId = generatedRandomID();//중복된 비회원 아이디라면 다시 생성한다.
-        }
-
-        var member = Member.builder()
-                .name(signupDTO.getName())
-                .email(signupDTO.getEmail())
-                .memberId(randomId)
-                .phoneNumber(signupDTO.getPhoneNumber())
-                .privacyCheck(true)
-                .birth(signupDTO.getBirth())
-                .grade("Anonymous")
-                .gender(signupDTO.getGender())
-                .role(Role.ANONYMOUS)
-                .mailAuth(true)
-                .build();
-        Member saveMember = memberRepository.save(member);// 회원 정보 저장
-
-        HttpSession session = request.getSession();
-        session = request.getSession();
-        session.setAttribute("memberId", saveMember.getMemberId());
-        session.setAttribute("role", saveMember.getRole());
-
-        Cookie cookie = new Cookie("JSESSIONID", session.getId());
-        cookie.setMaxAge(10);
-        cookie.setPath("/");
-        cookie.setSecure(true);
-
-        ResponseCookie memberIdCookie = ResponseCookie.from("memberId", saveMember.getMemberId())
-                .httpOnly(false)
-                .secure(true)
-                .path("/")      // path
-                .maxAge(3600)
-                .sameSite("None")  // sameSite
-                .build();
-
-        ResponseCookie roleCookie = ResponseCookie.from("role", saveMember.getRole().toString())
-                .httpOnly(false)
-                .secure(true)
-                .path("/")      // path
-                .maxAge(3600)
-                .sameSite("None")  // sameSite
-                .build();
-
-        response.addCookie(cookie);
-        response.addHeader(HttpHeaders.SET_COOKIE, memberIdCookie.toString());
-        response.addHeader(HttpHeaders.SET_COOKIE, roleCookie.toString());
-    }
-
-    public String generatedRandomID() {
-        int length = 16;
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder();
-
-        for(int i = 0; i < length; i++) {
-            int num = random.nextInt(10);
-            sb.append(num);
-        }
-
-        return sb.toString();
-    }
 
     public ResponseMemberDto findByMemberId(String id) {
         Optional<Member> member = memberRepository.findByMemberId(id);

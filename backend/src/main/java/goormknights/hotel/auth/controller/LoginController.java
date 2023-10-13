@@ -4,7 +4,9 @@ import goormknights.hotel.auth.dto.request.AnonymousLogin;
 import goormknights.hotel.auth.dto.request.ManagerLogin;
 import goormknights.hotel.auth.dto.request.MemberLogin;
 import goormknights.hotel.auth.service.AuthService;
+import goormknights.hotel.member.dto.request.AnonymousDto;
 import goormknights.hotel.member.service.AdminService;
+import goormknights.hotel.member.service.AnonymousService;
 import goormknights.hotel.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,11 +24,9 @@ import java.io.UnsupportedEncodingException;
 @RequestMapping("/login")
 @RequiredArgsConstructor
 public class LoginController {
-
-    private final AuthService authService;
     private final MemberService memberService;
     private final AdminService adminService;
-
+    private final AnonymousService anonymousService;
 
     // 회원 로그인
     @PostMapping("/member")
@@ -40,8 +40,8 @@ public class LoginController {
 
     // 비회원 사용자 로그인
     @PostMapping("/anonymous")
-    public ResponseEntity<?> anonymousLogin(@RequestBody AnonymousLogin anonymousLogin, HttpServletRequest request, HttpServletResponse response) {
-        if (memberService.annoymousLogin(anonymousLogin.getMemberId(), anonymousLogin.getPhoneNumber(), request, response)) {
+    public ResponseEntity<?> anonymousLogin(@RequestBody AnonymousDto anonymousDto, HttpServletRequest request, HttpServletResponse response) {
+        if (anonymousService.annoymousLogin(anonymousDto, request, response)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>("로그인 실패", HttpStatus.UNAUTHORIZED);

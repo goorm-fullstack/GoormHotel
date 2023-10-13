@@ -38,13 +38,6 @@ public class MemberController {
         return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
     }
 
-    // 비회원 회원가입
-    @PostMapping("/anonymous/signup")
-    public ResponseEntity<String> anonymousSignup(@RequestBody AnonymousSignupDto signupDTO, HttpServletRequest request, HttpServletResponse response){
-        memberService.anonymousSignup(signupDTO, signupDTO.getCode(), request, response);
-        return ResponseEntity.ok("비회원 회원가입 완료");
-    }
-
     // 매니저 회원가입
     @PostMapping("/admin-signup")
     public ResponseEntity<String> adminSignup(@RequestBody AdminSignupDTO adminSignupDTO){

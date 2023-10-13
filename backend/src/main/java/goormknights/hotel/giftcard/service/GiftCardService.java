@@ -11,6 +11,8 @@ import goormknights.hotel.giftcard.repository.GiftCardRepository;
 import goormknights.hotel.member.exception.NotExistMemberException;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.repository.MemberRepository;
+import goormknights.hotel.reservation.model.Reservation;
+import goormknights.hotel.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -27,7 +30,7 @@ import java.util.UUID;
 @Transactional
 public class GiftCardService {
     private final GiftCardRepository giftCardRepository;
-    private final MemberRepository memberRepository;
+    private final ReservationRepository reservationRepository;
 
     /**
      * 상품권 생성 로직
@@ -88,30 +91,24 @@ public class GiftCardService {
     }
 
     /**
-     *
-     * @param memberId - 사용자 PK
      * @param uuid - 싱품권 번호
      * 사용자가 상품권 번호를 입력해서 상품권을 등록하는 로직입니다.
      */
-    public void registering(long memberId, String uuid) {
-        Member registor = memberRepository.findById(memberId).orElseThrow(() -> {
-            throw new NotExistMemberException("존재하지 않는 사용자입니다.");
-        });
+    public ResponseGiftCardDto registering(String uuid) {
 
         GiftCard giftCard = giftCardRepository.findByUuid(uuid).orElseThrow(() -> {
             throw new NotAvailableException("사용할 수 없는 상품권입니다.");
         });
 
-        if(giftCard.getMember()!= null) {
+        if(giftCard.getReservation()!= null) {
             throw new AlreadyUsedException("이미 등록된 상품권입니다.");
         }
 
-        giftCard.registrationGiftCard(registor);
-        registor.getGiftCardList().add(giftCard);
+        return new ResponseGiftCardDto(giftCard);
     }
 
     public void stateUsable(StateChangeData stateChangeData) {
-        for(Integer id : stateChangeData.getData()) {
+        for(Long id : stateChangeData.getData()) {
             GiftCard giftCard = giftCardRepository.findById(id).orElseThrow();
             giftCard.changeUsableState();
             giftCardRepository.save(giftCard);
@@ -119,7 +116,7 @@ public class GiftCardService {
     }
 
     public void stateUnusable(StateChangeData stateChangeData) {
-        for(Integer id : stateChangeData.getData()) {
+        for(Long id : stateChangeData.getData()) {
             GiftCard giftCard = giftCardRepository.findById(id).orElseThrow();
             giftCard.changeUnusableState();
             giftCardRepository.save(giftCard);

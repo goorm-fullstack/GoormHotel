@@ -1,5 +1,6 @@
 package goormknights.hotel.reservation.controller;
 
+import goormknights.hotel.member.dto.request.AnonymousSignupDto;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.repository.MemberRepository;
 import goormknights.hotel.reservation.dto.request.RequestReservationDto;
@@ -36,6 +37,15 @@ public class ReservationController {
             @RequestParam long memberId
     ) {
         reservationService.saveReservation(reservationDto, memberId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/save/anonymous")
+    public ResponseEntity<Object> saveReservation_Anonymous(
+            @Validated @RequestBody RequestReservationDto reservationDto,
+            @RequestParam AnonymousSignupDto anonymousSignupDto
+    ) {
+        reservationService.saveReservation_Anonymous(reservationDto, anonymousSignupDto);
         return ResponseEntity.ok().build();
     }
 
