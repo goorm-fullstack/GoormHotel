@@ -208,7 +208,7 @@ export const CloseButton = styled.button`0
   margin-left: 8px;
   border-radius: 4px;
   font-size: 0.875rem;
-`
+`;
 
 export const commonButton = styled.button`
   // button 태그 버튼 공통 스타일: 클릭 후 액션이 필요할 때 사용
@@ -542,12 +542,6 @@ export const commonTable = styled.table`
     letter-spacing: -0.01em;
   }
 
-  a,
-  button {
-    // text-decoration: underline;
-    font-size: ${(props) => props.theme.font.sizes};
-  }
-
   button {
     background-color: transparent;
   }
@@ -557,11 +551,12 @@ export const commonTable = styled.table`
     th,
     td {
       padding: 19px 12px;
-
-      a {
-        text-decoration: none;
-      }
     }
+  }
+
+  a.u,
+  button.u {
+    text-decoration: underline;
   }
 `;
 

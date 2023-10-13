@@ -7,7 +7,7 @@ import Paging from '../../components/common/Paging/Paging';
 import Instance from '../../utils/api/axiosInstance';
 import { Link } from 'react-router-dom';
 import { Type, TypeDetail } from '../../components/common/Search/Search';
-import {IsReply} from "./Style";
+import { IsReply } from './Style';
 
 const CustomerSupport = () => {
   // 대분류, 소분류 지정 배열
@@ -24,12 +24,17 @@ const CustomerSupport = () => {
       { type: 'review', typeDetail: '다이닝', value: '다이닝' },
     ],
     [
-      {type: 'notice', typeDetail: '전체', value: 'all'},
-      {type: 'notice', typeDetail: '공지사항', value: '공지사항'},
-      {type: 'notice', typeDetail: '이벤트', value: '이벤트'}
-    ]
+      { type: 'notice', typeDetail: '전체', value: 'all' },
+      { type: 'notice', typeDetail: '공지사항', value: '공지사항' },
+      { type: 'notice', typeDetail: '이벤트', value: '이벤트' },
+    ],
   ];
-  const typeArray: Type[][] = [[{ type: '전체', value: 'all' }], [{ type: '공지사항', value: '공지사항' }], [{ type: '문의하기', value: '문의하기' }], [{type: '이용후기', value: '이용후기'}]];
+  const typeArray: Type[][] = [
+    [{ type: '전체', value: 'all' }],
+    [{ type: '공지사항', value: '공지사항' }],
+    [{ type: '문의하기', value: '문의하기' }],
+    [{ type: '이용후기', value: '이용후기' }],
+  ];
 
   const board = useParams().board;
   const [boards, setBoard] = useState<any[]>([]);
@@ -109,10 +114,10 @@ const CustomerSupport = () => {
           });
         }
       }
-    }
+    };
 
-      setImageUrl([]);
-      handleLoadBoard();
+    setImageUrl([]);
+    handleLoadBoard();
   }, [board, typeDetail, keyword]);
 
   useEffect(() => {
@@ -127,24 +132,23 @@ const CustomerSupport = () => {
     Instance.get(`/boards/image/${boardId}`, {
       responseType: 'arraybuffer',
     })
-        .then((response) => {
-          if (response.status === 200) {
-            const blob = new Blob([response.data], {
-              type: response.headers['content-type'],
-            });
-            let image = { boardId: boardId, imageUrl: URL.createObjectURL(blob) };
-            setImageUrl((prevImages) => [...prevImages, image]);
-          } else if (response.status === 204) {
-            console.log('해당 boardId가 없음 : ', boardId);
-          } else {
-            console.error('요청 에러 : ', response.status);
-          }
-        })
-        .catch((error) => {
-          console.error(error.message);
-        });
+      .then((response) => {
+        if (response.status === 200) {
+          const blob = new Blob([response.data], {
+            type: response.headers['content-type'],
+          });
+          let image = { boardId: boardId, imageUrl: URL.createObjectURL(blob) };
+          setImageUrl((prevImages) => [...prevImages, image]);
+        } else if (response.status === 204) {
+          console.log('해당 boardId가 없음 : ', boardId);
+        } else {
+          console.error('요청 에러 : ', response.status);
+        }
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
   };
-
 
   let writeDate;
   let newMonth;
@@ -159,7 +163,7 @@ const CustomerSupport = () => {
 
   // typeDetail 변경
   const handleTypeDetailChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if(searchKeyword.current){
+    if (searchKeyword.current) {
       searchKeyword.current.value = '';
     }
     setKeyword('');
@@ -187,10 +191,10 @@ const CustomerSupport = () => {
 
   // 검색어 입력
   const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if(searchKeyword.current){
+    if (searchKeyword.current) {
       setWord(searchKeyword.current.value);
     }
-  }
+  };
 
   // 검색 버튼 클릭 이벤트
   const handleSearch = () => {
@@ -204,130 +208,125 @@ const CustomerSupport = () => {
   // todo: 회원 여부 확인 필요
 
   return (
-      <>
-        <SubHeader kind="board" />
-        <S.Container>
+    <>
+      <SubHeader kind="board" />
+      <S.Container>
+        {(() => {
+          switch (board) {
+            case 'notice':
+              return <PageTitle key="notice">공지사항</PageTitle>;
+            case 'qna':
+              return <PageTitle key="qna">문의하기</PageTitle>;
+            case 'review':
+              return <PageTitle key="review">이용후기</PageTitle>;
+            default:
+              return <PageTitle key="default">고객지원</PageTitle>;
+          }
+        })()}
+        <div>
           {(() => {
-            switch (board) {
-              case 'notice':
-                return <PageTitle key="notice">공지사항</PageTitle>;
-              case 'qna':
-                return <PageTitle key="qna">문의하기</PageTitle>;
-              case 'review':
-                return <PageTitle key="review">이용후기</PageTitle>;
-              default:
-                return <PageTitle key="default">고객지원</PageTitle>;
+            if (board !== 'notice') {
+              return (
+                <S.WriteBtnWrapper className="right">
+                  <LinkBtn to={`/board/` + board + `/write`}>작성하기</LinkBtn>
+                </S.WriteBtnWrapper>
+              );
             }
           })()}
-          <div>
-            {(() => {
-              if (board !== 'notice') {
-                return (
-                    <S.WriteBtnWrapper className="right">
-                      <LinkBtn to={`/board/` + board + `/write`}>작성하기</LinkBtn>
-                    </S.WriteBtnWrapper>
-                );
-              }
-            })()}
-            {(() => {
-              if (board === 'review') {
-                return (
-                    <S.BoardGallery>
-                      {/** loop */}
-                      {boards.length === 0 && (
-                          <li key="empty" className="empty">
-                            <p>작성된 게시글이 없습니다.</p>
-                          </li>
-                      )}
-                      {boards.length > 0 && boards.map((item) => (
-                          <li key={item.boardId}>
-                            <div className="thumbnail">
-                              <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>
-                                {imageUrl.find((image) => image.boardId === item.boardId) && (
-                                    <img
-                                        src={imageUrl.find((image: any) => image.boardId === item.boardId).imageUrl}
-                                        alt={`Image for ${item.title}`}
-                                    />
-                                )}
-                              </Link>
-                            </div>
-                            <p className="title">
-                                <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</Link>
-                                </p>
-                            <p className="writer">{item.boardWriter}</p>
-                            <p className="date">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${
-                                item.boardWriteDate[1]
-                            }.${
-                                item.boardWriteDate[2] < 10 ? '0' : ''
-                            }${item.boardWriteDate[2]}`}</p>
-                          </li>
-                      ))}
-                      {/** // loop */}
-                    </S.BoardGallery>
-                );
-              } else {
-                return (
-                    <S.Table className="userpage">
-                      <colgroup>
-                        <col width="110px" />
-                        <col width="180px" />
-                        <col width="auto" />
-                        <col width="180px" />
-                      </colgroup>
-                      <thead>
-                      <tr>
-                        <th>번호</th>
-                        <th>카테고리</th>
-                        <th>제목</th>
-                        <th>작성일</th>
+          {(() => {
+            if (board === 'review') {
+              return (
+                <S.BoardGallery>
+                  {/** loop */}
+                  {boards.length === 0 && (
+                    <li key="empty" className="empty">
+                      <p>작성된 게시글이 없습니다.</p>
+                    </li>
+                  )}
+                  {boards.length > 0 &&
+                    boards.map((item) => (
+                      <li key={item.boardId}>
+                        <div className="thumbnail">
+                          <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>
+                            {imageUrl.find((image) => image.boardId === item.boardId) && (
+                              <img src={imageUrl.find((image: any) => image.boardId === item.boardId).imageUrl} alt={`Image for ${item.title}`} />
+                            )}
+                          </Link>
+                        </div>
+                        <p className="title">
+                          <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</Link>
+                        </p>
+                        <p className="writer">{item.boardWriter}</p>
+                        <p className="date">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
+                          item.boardWriteDate[2] < 10 ? '0' : ''
+                        }${item.boardWriteDate[2]}`}</p>
+                      </li>
+                    ))}
+                  {/** // loop */}
+                </S.BoardGallery>
+              );
+            } else {
+              return (
+                <S.Table className="userpage">
+                  <colgroup>
+                    <col width="110px" />
+                    <col width="180px" />
+                    <col width="auto" />
+                    <col width="180px" />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>번호</th>
+                      <th>카테고리</th>
+                      <th>제목</th>
+                      <th>작성일</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {boards.length === 0 && (
+                      <tr key="no-data">
+                        <td colSpan={7} className="center">
+                          작성된 게시글이 없습니다.
+                        </td>
                       </tr>
-                      </thead>
-                      <tbody>
-                      {boards.length === 0 && (
-                          <tr key="no-data">
-                            <td colSpan={7} className="center">
-                              작성된 게시글이 없습니다.
-                            </td>
-                          </tr>
-                      )}
-                      {/** loop */}
-                      {boards.length > 0 && boards.map((item, index) => (
-                          <tr key={item.boardId}>
-                            <td className="center">{totalData - index}</td>
-                            <td className="center">{item.category}</td>
-                            <td>
-                              {item.isComment==="true" ? <IsReply>답글</IsReply> : null}
-                              {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
-                                <Link to={{pathname: `/board/${board}/detail/${item.title}`,search: `boardId=${item.boardId}`}}>{item.title}</Link>
-                            </td>
-                            <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${
-                                item.boardWriteDate[1]
-                            }.${
-                                item.boardWriteDate[2] < 10 ? '0' : ''
-                            }${item.boardWriteDate[2]}`}</td>
-                          </tr>
+                    )}
+                    {/** loop */}
+                    {boards.length > 0 &&
+                      boards.map((item, index) => (
+                        <tr key={item.boardId}>
+                          <td className="center">{totalData - index}</td>
+                          <td className="center">{item.category}</td>
+                          <td>
+                            {item.isComment === 'true' ? <IsReply>답글</IsReply> : null}
+                            {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
+                            <Link to={{ pathname: `/board/${board}/detail/${item.title}`, search: `boardId=${item.boardId}` }}>{item.title}</Link>
+                          </td>
+                          <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
+                            item.boardWriteDate[2] < 10 ? '0' : ''
+                          }${item.boardWriteDate[2]}`}</td>
+                        </tr>
                       ))}
-                      {/** // loop */}
-                      </tbody>
-                    </S.Table>
-                );
-              }
-            })()}
-          </div>
-          <Paging totalPage={totalPages} />
-          <S.SearchHeader>
-            <select name="typeDetail" value={typeDetail} onChange={handleTypeDetailChange}>
-              {detailTypeForType}
-            </select>
-            <BtnWrapper className="flexgap right">
-              <input type="text" id="search" ref={searchKeyword} placeholder="제목+내용" onChange={handleKeywordChange} />
-              <SubmitBtn type="button" className="header search" onClick={handleSearch}>
-                검색
-              </SubmitBtn>
-            </BtnWrapper>
-          </S.SearchHeader>
-        </S.Container>
-      </>
+                    {/** // loop */}
+                  </tbody>
+                </S.Table>
+              );
+            }
+          })()}
+        </div>
+        <Paging totalPage={totalPages} />
+        <S.SearchHeader>
+          <select name="typeDetail" value={typeDetail} onChange={handleTypeDetailChange}>
+            {detailTypeForType}
+          </select>
+          <BtnWrapper className="flexgap right">
+            <input type="text" id="search" ref={searchKeyword} placeholder="검색어를 입력하세요." onChange={handleKeywordChange} />
+            <SubmitBtn type="button" className="header search" onClick={handleSearch}>
+              검색
+            </SubmitBtn>
+          </BtnWrapper>
+        </S.SearchHeader>
+      </S.Container>
+    </>
   );
 };
 

@@ -43,6 +43,9 @@ public class Reply {
     @OneToMany(mappedBy = "reply", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Report> report = new ArrayList<>();            //신고
 
+    @Column
+    private String replyPassword;               //비회원 댓글 비밀번호
+
     public void setBoard(Board board) {
         this.board = board;
     }
@@ -52,7 +55,7 @@ public class Reply {
     }
 
     @Builder(toBuilder = true)
-    public Reply(Long replyId, String replyContent, String replyWriter, LocalDateTime replyWriteDate, Board board, List<Report> report, LocalDateTime replyDeleteTime) {
+    public Reply(String replyPassword, Long replyId, String replyContent, String replyWriter, LocalDateTime replyWriteDate, Board board, List<Report> report, LocalDateTime replyDeleteTime) {
         this.replyId = replyId;
         this.replyContent = replyContent;
         this.replyWriter = replyWriter;
@@ -60,6 +63,7 @@ public class Reply {
         this.board = board;
         this.report = report;
         this.replyDeleteTime = replyDeleteTime;
+        this.replyPassword = replyPassword;
     }
 
     public ResponseReplyDto toResponseReplyDto() {
@@ -73,6 +77,7 @@ public class Reply {
                 .responseBoardDto(board.toResponseBoardDto())
                 .replyDeleteTime(replyDeleteTime)
                 .boardTitle(board.getBoardTitle())
+                .replyPassword(replyPassword)
                 .build();
     }
 

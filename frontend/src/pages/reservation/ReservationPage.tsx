@@ -20,28 +20,26 @@ import PrivacyContents from '../../components/Agreement/PrivacyCon';
 import PaymentAgree from '../../components/Agreement/PayAgree';
 import { AgreementText } from '../member/Style';
 import Instance from '../../utils/api/axiosInstance';
-import { response } from 'express';
 
 interface GiftCard {
-  id : number;
-  uuid : string;
-  money : number;
-  isZeroMoney : string;
-  title : string;
-  issueDate : string;
-  expire : number;
+  id: number;
+  uuid: string;
+  money: number;
+  isZeroMoney: string;
+  title: string;
+  issueDate: string;
+  expire: number;
 }
 
 interface Coupon {
-  id : number;
-  uuid : string;
-  discountRate : number;
-  name : string;
-  isUsed : string;
-  issueDate : Array<Number>;
-  expire : number;
+  id: number;
+  uuid: string;
+  discountRate: number;
+  name: string;
+  isUsed: string;
+  issueDate: Array<Number>;
+  expire: number;
 }
-
 
 const ReservationPage = () => {
   const [giftCardNumber, setGiftCardNumber] = useState('');
@@ -58,7 +56,6 @@ const ReservationPage = () => {
   const [click, setClick] = useState(false);
   const [memberId, setMemberId] = useState(0);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
-
 
   const [formData, setFormData] = useState({
     checkIn: reservationData?.checkInDate || '',
@@ -79,10 +76,10 @@ const ReservationPage = () => {
   //member데이터를 불러오는 로직
   useEffect(() => {
     const params = {
-      id : localStorage.getItem("memberId"),
-    }
-    Instance.get('/member/find', {params}).then((response) => {
-      console.log(response.data)
+      id: localStorage.getItem('memberId'),
+    };
+    Instance.get('/member/find', { params }).then((response) => {
+      console.log(response.data);
       setMemberData(response.data);
       setCouponList(response.data.couponList);
       setGiftCardList(response.data.giftCardList);
@@ -103,18 +100,18 @@ const ReservationPage = () => {
   };
 
   const registerGiftCard = () => {
-    if(memberData !== undefined) {
+    if (memberData !== undefined) {
       Instance.post(`/api/giftcard/register?memberId=${memberId}&uuid=${giftCardNumber}`).then((response) => {
-        if(response.status === 200) {
+        if (response.status === 200) {
           setClick(true);
         }
       });
     }
     const params = {
-      id : localStorage.getItem("memberId"),
-    }
+      id: localStorage.getItem('memberId'),
+    };
     setClick(!click);
-  }
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectCoupon(event.target.value);
@@ -199,10 +196,8 @@ const ReservationPage = () => {
             <S.Section>
               <ContentsTitleXSmall>상품권 사용</ContentsTitleXSmall>
               <S.CouponForm>
-                <div>
-                  <input type="text" placeholder="상품권 번호 입력" value={giftCardNumber} onChange={handleCouponNumber} />
-                  <AuthBtn onClick={registerGiftCard}>상품권 등록하기</AuthBtn>
-                </div>
+                <input type="text" placeholder="상품권 번호 입력" value={giftCardNumber} onChange={handleCouponNumber} />
+                <AuthBtn onClick={registerGiftCard}>상품권 등록하기</AuthBtn>
               </S.CouponForm>
               <S.CouponInfo>
                 <BtnWrapper className="flexspace">
@@ -238,9 +233,10 @@ const ReservationPage = () => {
                   ))}
                     </>
                   ) : (
-                    <div>등록된 상품권이 없습니다.</div>
+                    <tr>
+                      <td className="center empty">등록된 상품권이 없습니다.</td>
+                    </tr>
                   )}
-                  
                 </table>
               </S.CouponInfo>
             </S.Section>
@@ -251,8 +247,8 @@ const ReservationPage = () => {
                 {userLoggedIn ? (
                   <>
                     <option value="">선택 안함</option>
-                    {couponList.map((coupon : Coupon, index) => (
-                        <option value={coupon.id}>{coupon.name}</option>
+                    {couponList.map((coupon: Coupon, index) => (
+                      <option value={coupon.id}>{coupon.name}</option>
                     ))}
                   </>
                 ) : (

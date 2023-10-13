@@ -3,7 +3,7 @@ import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import * as S from './Style';
 
 // props로 사용할 전체 페이지 수
-interface TotalPage{
+interface TotalPage {
   totalPage: number;
 }
 
@@ -22,7 +22,7 @@ const chunkArray = (arr: number[], chunkSize: number): number[][] => {
 };
 
 const Paging: React.FC<TotalPage> = (props) => {
-  const {page} = useParams<{page: string}>(); // url 파라미터
+  const { page } = useParams<{ page: string }>(); // url 파라미터
   const location = useLocation();
   const afterUrl = location.pathname.replace(page ?? '1', '');
   const totalPages = props.totalPage === 0 ? 1 : props.totalPage; // 전체 페이지 상태관리
@@ -57,7 +57,7 @@ const Paging: React.FC<TotalPage> = (props) => {
   const onClickPreviousPage = () => {
     if (currentPage === 1) {
       alert('첫 번째 페이지입니다.');
-    }else{
+    } else {
       const currentIndex = pageArray.findIndex((pageArr) => {
         return JSON.stringify(pageArr) === JSON.stringify(pages);
       });
@@ -71,7 +71,7 @@ const Paging: React.FC<TotalPage> = (props) => {
   const onClickNextPage = () => {
     if (currentPage === totalPages) {
       alert('마지막 페이지입니다.');
-    }else{
+    } else {
       const currentIndex = pageArray.findIndex((pageArr) => {
         return JSON.stringify(pageArr) === JSON.stringify(pages);
       });
@@ -90,15 +90,13 @@ const Paging: React.FC<TotalPage> = (props) => {
           {pages[i] === currentPage ? (
             <span>{pages[i]}</span> // 현재 페이지는 링크 없이 표시
           ) : (
-            <Link to={`${afterUrl}${pages[i]}`}>
-              {pages[i]}
-            </Link>
+            <Link to={`${afterUrl}${pages[i]}`}>{pages[i]}</Link>
           )}
         </li>
       );
     }
     setPageNumbers(pageNumbers);
-  }, [currentPage])
+  }, [currentPage]);
 
   return (
     <S.PageParam>

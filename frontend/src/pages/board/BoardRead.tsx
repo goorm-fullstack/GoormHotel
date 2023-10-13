@@ -4,8 +4,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { PageTitle, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
-import queryString from "query-string";
-import e from 'express';
+import queryString from 'query-string';
 
 const BoardRead = () => {
   const loc = useLocation();
@@ -20,6 +19,7 @@ const BoardRead = () => {
   const [file, setFile] = useState('');
   const [reply, setReply] = useState<any[]>([]);
   const [replyWriter, setReplyWriter] = useState('');
+  const [replyPassword, setReplyPassword] = useState('');
   const [replyContent, setReplyContent] = useState('');
   const [replyWriterModify, setReplyWriterModify] = useState('');
   const [replyContentModify, setReplyContentModify] = useState('');
@@ -40,18 +40,18 @@ const BoardRead = () => {
 
   useEffect(() => {
     axios
-        .get(`/boards/${boardId}`)
-        .then((response) => {
-          if (response.headers['filename']) {
-            const fileName = response.headers['filename'];
-            setFile(fileName);
-          }
-          setBoardData(response.data);
-          fetchReply(response.data.boardId);
-        })
-        .catch((error) => {
-          console.error('Error:', error.message);
-        });
+      .get(`/boards/${boardId}`)
+      .then((response) => {
+        if (response.headers['filename']) {
+          const fileName = response.headers['filename'];
+          setFile(fileName);
+        }
+        setBoardData(response.data);
+        fetchReply(response.data.boardId);
+      })
+      .catch((error) => {
+        console.error('Error:', error.message);
+      });
   }, []);
 
   useEffect(() => {
@@ -121,7 +121,6 @@ const BoardRead = () => {
     link.click();
   };
 
-
   const fetchReply = async (boardId: number) => {
     try {
       const response = await axios.get(`/reply/boardId/${boardId}`);
@@ -133,16 +132,16 @@ const BoardRead = () => {
 
   const handleDelete = (replyId: number) => {
     const isConfirm = window.confirm('삭제하시겠습니까?');
-    if(isConfirm){
+    if (isConfirm) {
       axios
-      .put(`/reply/softdelete/${replyId}`)
-      .then((response) => {
-        alert('삭제되었습니다.');
-        fetchReply(boardData.boardId);
-      })
-      .catch((error) => {
-        console.error('댓글 삭제에 실패했습니다.', error);
-      });
+        .put(`/reply/softdelete/${replyId}`)
+        .then((response) => {
+          alert('삭제되었습니다.');
+          fetchReply(boardData.boardId);
+        })
+        .catch((error) => {
+          console.error('댓글 삭제에 실패했습니다.', error);
+        });
     }
   };
 
@@ -165,18 +164,18 @@ const BoardRead = () => {
     const data = {
       replyWriter: replyWriterModify,
       replyContent: replyContentModify,
-    }
+    };
     axios
-        .put(`/reply/${replyId}`, data)
-        .then((response) => {
-          alert('수정되었습니다.');
-          setIsEditing(false);
-          setEditedReplyContent('');
-          fetchReply(boardData.boardId);
-        })
-        .catch((error) => {
-          console.error('댓글 수정에 실패했습니다.', error);
-        });
+      .put(`/reply/${replyId}`, data)
+      .then((response) => {
+        alert('수정되었습니다.');
+        setIsEditing(false);
+        setEditedReplyContent('');
+        fetchReply(boardData.boardId);
+      })
+      .catch((error) => {
+        console.error('댓글 수정에 실패했습니다.', error);
+      });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -187,8 +186,10 @@ const BoardRead = () => {
         boardId: boardId,
         replyContent: replyContent,
         replyWriter: replyWriter,
+        replyPassword: replyPassword,
       });
       setReplyWriter('');
+      setReplyPassword('');
       setReplyContent('');
       fetchReply(parseInt(boardId ? boardId : '', 10));
     } catch (error) {
@@ -223,7 +224,7 @@ const BoardRead = () => {
               <tr>
                 <td className="titlew">
                   <p className="title">
-                    <span>{boardData ? boardData.category : ''}</span>
+                    <span>[{boardData ? boardData.category : ''}]</span>
                     {boardData ? boardData.title : ''}
                   </p>
                   {(() => {
@@ -240,106 +241,117 @@ const BoardRead = () => {
                   })()}
                 </td>
               </tr>
-              {board !== 'review' && file &&
-              <tr>
-                <td>
-                  <button className='fileb' type="button" onClick={handleDownLoad}>
-                    첨부파일 : {file}
-                  </button>
-                </td>
-              </tr>
-              }
-              {board === 'review' && 
-              <tr>
-                <td>
-                  <img className='reviewImg' src={imageUrl} alt='이미지'/>
-                </td>
-              </tr>
-              }
+              {board !== 'review' && file && (
+                <tr className="attachment">
+                  <td>
+                    <button className="fileb" type="button" onClick={handleDownLoad}>
+                      <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M14 0C16.7614 0 19 2.23858 19 5V17C19 20.866 15.866 24 12 24C8.13401 24 5 20.866 5 17V9H7V17C7 19.7614 9.23858 22 12 22C14.7614 22 17 19.7614 17 17V5C17 3.34315 15.6569 2 14 2C12.3431 2 11 3.34315 11 5V17C11 17.5523 11.4477 18 12 18C12.5523 18 13 17.5523 13 17V6H15V17C15 18.6569 13.6569 20 12 20C10.3431 20 9 18.6569 9 17V5C9 2.23858 11.2386 0 14 0Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                      {file}
+                    </button>
+                  </td>
+                </tr>
+              )}
+              {board === 'review' && (
+                <tr className="attachment">
+                  <td>
+                    <img className="reviewImg" src={imageUrl} alt="이미지" />
+                  </td>
+                </tr>
+              )}
               <tr className="contents">
                 <td>{boardContent}</td>
               </tr>
-              {board !== 'notice' &&
-              <tr className="commentwrite">
-                <td>
-                  <div>
-                    <form onSubmit={handleSubmit}>
-                      <div>
-                        <input
-                          type="text"
-                          placeholder="작성자명"
-                          name="replyWriter"
-                          value={replyWriter}
-                          onChange={(e) => setReplyWriter(e.target.value)}
-                        />
-                        {/*<input type="password" placeholder="식별 비밀번호?" />*/}
-                      </div>
-                      <div className="tawrap">
-                        <textarea name="replyContent" value={replyContent} onChange={(e) => setReplyContent(e.target.value)}></textarea>
-                        <button type="submit">작성하기</button>
-                      </div>
-                    </form>
-                  </div>
-                </td>
-              </tr>
-              }
-              {board !== 'notice' &&
-              <tr className="commentslist">
-                <td>
-                  <ul>
-                    {reply.length === 0 && (
-                      <li>
-                        <div className="cwinfo">
-                          <strong>작성된 댓글이 없습니다.</strong>
+              {board !== 'notice' && (
+                <tr className="commentwrite">
+                  <td>
+                    <div>
+                      <form onSubmit={handleSubmit}>
+                        <div>
+                          <input
+                            type="text"
+                            placeholder="작성자명"
+                            name="replyWriter"
+                            value={replyWriter}
+                            onChange={(e) => setReplyWriter(e.target.value)}
+                          />
+                          <input
+                            type="text"
+                            placeholder="비밀번호"
+                            name="replyPassword"
+                            value={replyPassword}
+                            onChange={(e) => setReplyPassword(e.target.value)}
+                          />
+                          {/*<input type="password" placeholder="식별 비밀번호?" />*/}
                         </div>
-                      </li>
-                    )}
-                    {reply.length > 0 &&
-                      reply.map((replyItem, index) => (
-                        <li key={index}>
-                          <div className="cwinfo">
-                            <strong>{replyItem.replyWriter}</strong>
-                            <span className="date">{`${replyItem.replyWriteDate[0]}.${replyItem.replyWriteDate[1] < 10 ? '0' : ''}${
-                              replyItem.replyWriteDate[1]
-                            }.${
-                              replyItem.replyWriteDate[2] < 10 ? '0' : ''
-                            }${replyItem.replyWriteDate[2]}`}</span>
-                            <button type="button" className="modify" onClick={() => handleUpdate(replyItem.replyId)}>
-                              수정
-                            </button>
-                            <button type="button" className="delete" onClick={() => handleDelete(replyItem.replyId)}>
-                              삭제
-                            </button>
+                        <div className="tawrap">
+                          <textarea name="replyContent" value={replyContent} onChange={(e) => setReplyContent(e.target.value)}></textarea>
+                          <button type="submit">작성하기</button>
+                        </div>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              )}
+              {board !== 'notice' && (
+                <tr className="commentslist">
+                  <td>
+                    <ul>
+                      {reply.length === 0 && (
+                        <li>
+                          <div>
+                            <p className="empty">작성된 댓글이 없습니다.</p>
                           </div>
-                          {editingReplyId === replyItem.replyId && isEditing ? (
-                            <form onSubmit={(e) => handleSaveUpdate(replyItem.replyId, e)}>
-                              <input
-                                className="modify-input"
-                                type="text"
-                                defaultValue={'수정할 작성자를 입력하세요'}
-                                onChange={(e) => setReplyWriterModify(e.target.value)}
-                              />
-                              <input
-                                className="modify-input"
-                                defaultValue={'수정할 내용을 입력하세요'}
-                                onChange={(e) => setReplyContentModify(e.target.value)}
-                              />
-                              <button type="submit" className="modify">
-                                저장
-                              </button>
-                              <button type="button" className="delete" onClick={handleCancelUpdate}>
-                                취소
-                              </button>
-                            </form>
-                          ) : (
-                            <p>{replyItem.replyContent}</p>
-                          )}
                         </li>
-                      ))}
-                  </ul>
-                </td>
-              </tr>
-              }
+                      )}
+                      {reply.length > 0 &&
+                        reply.map((replyItem, index) => (
+                          <li key={index}>
+                            <div className="cwinfo">
+                              <strong>{replyItem.replyWriter}</strong>
+                              <span className="date">{`${replyItem.replyWriteDate[0]}.${replyItem.replyWriteDate[1] < 10 ? '0' : ''}${
+                                replyItem.replyWriteDate[1]
+                              }.${replyItem.replyWriteDate[2] < 10 ? '0' : ''}${replyItem.replyWriteDate[2]}`}</span>
+                              <button type="button" className="modify" onClick={() => handleUpdate(replyItem.replyId)}>
+                                수정
+                              </button>
+                              <button type="button" className="delete" onClick={() => handleDelete(replyItem.replyId)}>
+                                삭제
+                              </button>
+                            </div>
+                            {editingReplyId === replyItem.replyId && isEditing ? (
+                              <form onSubmit={(e) => handleSaveUpdate(replyItem.replyId, e)}>
+                                <input
+                                  className="modify-input"
+                                  type="text"
+                                  defaultValue={'수정할 작성자를 입력하세요'}
+                                  onChange={(e) => setReplyWriterModify(e.target.value)}
+                                />
+                                <input
+                                  className="modify-input"
+                                  defaultValue={'수정할 내용을 입력하세요'}
+                                  onChange={(e) => setReplyContentModify(e.target.value)}
+                                />
+                                <button type="submit" className="modify">
+                                  저장
+                                </button>
+                                <button type="button" className="delete" onClick={handleCancelUpdate}>
+                                  취소
+                                </button>
+                              </form>
+                            ) : (
+                              <p>{replyItem.replyContent}</p>
+                            )}
+                          </li>
+                        ))}
+                    </ul>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </S.TableRead>
           <BtnWrapper className="center mt40">

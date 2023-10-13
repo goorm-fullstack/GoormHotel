@@ -189,6 +189,13 @@ export const RoomItemInfo = styled.div`
     margin-bottom: 10px;
   }
 
+  p.desc {
+    font-size: ${(props) => props.theme.font.sizes};
+    color: ${(props) => props.theme.colors.graydark};
+    font-weight: 500;
+    margin-top: 15px;
+  }
+
   table {
     width: 100%;
   }
@@ -344,26 +351,13 @@ export const Section = styled.div`
 export const CouponForm = styled.div`
   margin-bottom: 20px;
 
-  form {
-    display: flex;
-    height: 50px;
-    justify-content: space-between;
+  display: flex;
+  height: 50px;
+  justify-content: space-between;
 
-    input {
-      width: calc(100% - 210px);
-      padding-left: 18px;
-    }
-  }
-
-  div {
-    display: flex;
-    height: 50px;
-    justify-content: space-between;
-
-    input {
-      width: calc(100% - 210px);
-      padding-left: 18px;
-    }
+  input {
+    width: calc(100% - 210px);
+    padding-left: 18px;
   }
 `;
 
@@ -386,6 +380,11 @@ export const CouponInfo = styled.div`
       color: ${(props) => props.theme.colors.charcoal};
       font-weight: 500;
       width: 20%;
+    }
+
+    &.empty {
+      text-align: center;
+      color: ${(props) => props.theme.colors.graylight};
     }
 
     label {
