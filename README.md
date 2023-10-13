@@ -116,7 +116,7 @@ GoormHotel
 
 ## 💾 ERD
 
-![GoormHotel](https://github.com/goorm-fullstack/GoormHotel/assets/121299334/4a899e0e-cb0e-43bc-ba59-04ce6ec7f7a0)
+![GoormHotel](https://github.com/goorm-fullstack/GoormHotel/assets/121299334/94a5bff8-835a-49b9-b33b-db8143064728)
 
 <br>
 
