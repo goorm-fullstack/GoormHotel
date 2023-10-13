@@ -53,15 +53,15 @@ public class ImageService {
         String absolutePath = "./";
         String newFileName = "image" + hour + minute + second + millis;
         String fileExtension = '.' + img.getOriginalFilename().replaceAll("^.*\\\\.(.*)$", "$1");
-        String path = "images\\" + year + month + day;
+        String path = "images/" + year + month + day;
 
         File file = new File(path);
         if (!file.exists()) file.mkdirs();
 
-        file = new File(absolutePath + newFileName + fileExtension);
+        file = new File(absolutePath + path + "/" + newFileName + fileExtension);
         img.transferTo(file);
 
-        Path source = Paths.get(absolutePath + newFileName + fileExtension);
+        Path source = Paths.get(absolutePath + path + "/" + newFileName + fileExtension);
         byte[] bytes = null;
         try (InputStream inputStream = Files.newInputStream(source)) {
             bytes = inputStream.readAllBytes();
