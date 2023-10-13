@@ -56,6 +56,9 @@ const BoardRead = () => {
       .catch((error) => {
         console.error('Error:', error.message);
       });
+
+      const user = localStorage.getItem('memberId');
+      setUser(user as string);
   }, []);
 
   useEffect(() => {
