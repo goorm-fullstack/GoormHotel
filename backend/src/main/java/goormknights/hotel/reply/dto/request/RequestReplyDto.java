@@ -30,7 +30,7 @@ public class RequestReplyDto {
 
     private String replyWriter;     //댓글 작성자
 
-    //private Member member;
+    private String replyPassword;
 
     public Reply toEntity() {
         return Reply.builder()
@@ -39,6 +39,7 @@ public class RequestReplyDto {
                 .replyWriteDate(replyWriteDate)
                 .replyWriter(replyWriter)
                 .replyDeleteTime(replyDeleteTime)
+                .replyPassword(replyPassword)
                 .build();
     }
 }

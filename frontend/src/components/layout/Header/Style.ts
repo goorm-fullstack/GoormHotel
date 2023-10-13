@@ -33,6 +33,10 @@ export const Header = styled.header`
       &:hover {
         color: white;
       }
+
+      .btnlogout {
+        background: transparent;
+      }
     }
   }
 

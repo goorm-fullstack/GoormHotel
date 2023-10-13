@@ -11,8 +11,7 @@ export const SearchHeader = styled.div`
   select {
     width: 120px;
   }
-`
-
+`;
 
 export const Container = styled(commonContainerStyle)``;
 
@@ -99,6 +98,28 @@ export const TableRead = styled.table`
     border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
     color: ${(props) => props.theme.colors.graydark};
   }
+
+  // 게시글 상세: 첨부파일
+  tr.attachment {
+    td {
+      padding-bottom: 0;
+    }
+    & + tr > td {
+      border-top-color: #fff;
+    }
+    button {
+      display: flex;
+      align-items: center;
+      background: transparent;
+      font-size: ${(props) => props.theme.font.sizes};
+      color: ${(props) => props.theme.colors.graylight};
+
+      svg {
+        height: 16px;
+      }
+    }
+  }
+
   .contents textarea {
     width: 100%;
     min-height: 300px;
@@ -131,12 +152,8 @@ export const TableRead = styled.table`
     color: ${(props) => props.theme.colors.charcoal};
     margin-bottom: 14px;
   }
-  .fileb{
+  .fileb {
     text-decoration: underline;
-  }
-  .reviewImg{
-    width:200px;
-    height:200px;
   }
   td.titlew {
     background: ${(props) => props.theme.colors.graybg};
@@ -144,17 +161,21 @@ export const TableRead = styled.table`
 
   // 댓글 작성
   .commentwrite {
+    input {
+      margin-right: 10px;
+    }
+
     .tawrap {
       margin-top: 10px;
       display: flex;
       column-gap: 10px;
 
       textarea {
-        width: 100%;
+        width: 89%;
         height: 100px;
       }
 
-      button[type="submit"] {
+      button[type='submit'] {
         background: ${(props) => props.theme.colors.navy};
         color: white;
         width: 120px;
@@ -202,14 +223,22 @@ export const TableRead = styled.table`
           }
         }
       }
+
       p {
         margin-top: 12px;
         line-height: 1.4;
+
+        &.empty {
+          // 댓글 없음
+          text-align: center;
+          margin-top: 0;
+        }
       }
-      & .modify-input{
+
+      & .modify-input {
         margin-right: 20px;
       }
-      & .modify{
+      & .modify {
         margin-right: 5px;
       }
     }

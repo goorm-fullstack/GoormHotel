@@ -1,9 +1,8 @@
 import React from 'react';
 import * as S from './Style';
 import adminLogo from '../../images/common/logo_admin.png';
-import {Link, useNavigate} from 'react-router-dom';
-import {useAuth} from "../../utils/api/AuthContext";
-import Instance from "../../utils/api/axiosInstance";
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../utils/api/AuthContext';
 
 const AdminHeader: React.FC = () => {
   const { authState, setAuthState } = useAuth();
@@ -32,13 +31,13 @@ const AdminHeader: React.FC = () => {
   // };
 
   function deleteAllCookies() {
-    const cookies = document.cookie.split(";");
+    const cookies = document.cookie.split(';');
 
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i];
-      const eqPos = cookie.indexOf("=");
+      const eqPos = cookie.indexOf('=');
       const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
     }
   }
 
@@ -87,7 +86,7 @@ const AdminHeader: React.FC = () => {
               />
             </g>
           </svg>
-          <span>{`유저: ${authState.adminId}, 역할: ${authState.role}, 권한: ${authState.auth}`}</span>
+          <span>{`${authState.adminId} 님`}</span>
           <button type="button" className="logoutbtn" onClick={isLoggedIn ? handleLogoutUseLocalStorge : handleLogin}>
             {isLoggedIn ? '로그아웃' : '로그인'}
           </button>

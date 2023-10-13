@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as S from './Style';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { PageTitle, BtnWrapper, SubmitBtn } from '../../Style/commonStyles';
+import { PageTitle, BtnWrapper, SubmitBtn, NormalBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
 import { ItemThumbnail } from '../../admin/item/Style';
@@ -42,6 +42,7 @@ const BoardWrite = () => {
       }
     })(),
     boardWriter: '',
+    boardPassword: '',
     category: '',
   });
   const [reportData, setReportData] = useState<ReportData>({

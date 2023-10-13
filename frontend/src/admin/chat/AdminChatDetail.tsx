@@ -22,10 +22,10 @@ const AdminChatDetail = () => {
   const [recentTime, setRecentTime] = useState('');
   const [status, setStatus] = useState('');
   const navigate = useNavigate();
-  const authItem = localStorage.getItem("auth");
+  const authItem = localStorage.getItem('auth');
 
   useEffect(() => {
-    if (!(authItem && authItem.includes("AUTH_C"))) {
+    if (!(authItem && authItem.includes('AUTH_C'))) {
       alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
       navigate('/admin');
     }
@@ -144,78 +144,78 @@ const AdminChatDetail = () => {
     });
   };
 
-  if(authItem && authItem.includes("AUTH_C")) {
-  return (
-    <AdminLayout subMenus="chat">
-      <Container>
-        <PageTitle>채팅 관리</PageTitle>
-        <Table className="horizontal">
-          <colgroup>
-            <col width="240px" />
-            <col width="auto" />
-          </colgroup>
-          <tbody>
-            <tr>
-              <th>회원 아이디(회원 ID)</th>
-              <td>({roomId})</td>
-            </tr>
-            <tr>
-              <th>최근 발송일</th>
-              <td>{recentTime}</td>
-            </tr>
-            <tr>
-              <th>상태</th>
-              <td>
-                {status}
-                <CloseButton type="button" className="chatClose" onClick={handleClosedClick}>
-                  종료
-                </CloseButton>
-              </td>
-            </tr>
-            <tr>
-              <th colSpan={2} className="center">
-                채팅 기록
-              </th>
-            </tr>
-            <tr>
-              <S.ChatWrapper colSpan={2} className="writeWrapper">
-                <ul className="chatLog" ref={chatContainerRef}>
-                  {chatData.map((chat, index) =>
-                    chat.type === 'TALK' ? ( // chat.type이 'TALK'인 경우에만 출력
-                      <li key={index}>
-                        {chat.sender === 'admin' ? (
-                          <>
-                            <strong className="manager">관리자(관리자 ID) : </strong>
-                            <span>{chat.message}</span>
-                          </>
-                        ) : (
-                          <>
-                            <strong className="member">{chat.sender}(회원 ID) : </strong>
-                            <span>{chat.message}</span>
-                          </>
-                        )}
-                      </li>
-                    ) : null
-                  )}
-                </ul>
-                <div className="writeWrapper" onSubmit={handleFormSubmit}>
-                  <textarea
-                    placeholder="메시지를 입력해 주세요"
-                    value={newChat}
-                    onChange={(e) => setNewChat(e.target.value)}
-                    onKeyDown={handleInputKeyPress}></textarea>
-                  <button type="submit">전송</button>
-                </div>
-              </S.ChatWrapper>
-            </tr>
-          </tbody>
-        </Table>
-        <BtnWrapper className="center mt40">
-          <NormalBtn onClick={navigateToChatList}>목록</NormalBtn>
-        </BtnWrapper>
-      </Container>
-    </AdminLayout>
-  );
+  if (authItem && authItem.includes('AUTH_C')) {
+    return (
+      <AdminLayout subMenus="chat">
+        <Container>
+          <PageTitle>채팅 관리</PageTitle>
+          <Table className="horizontal">
+            <colgroup>
+              <col width="240px" />
+              <col width="auto" />
+            </colgroup>
+            <tbody>
+              <tr>
+                <th>회원 아이디(회원 ID)</th>
+                <td>({roomId})</td>
+              </tr>
+              <tr>
+                <th>최근 발송일</th>
+                <td>{recentTime}</td>
+              </tr>
+              <tr>
+                <th>상태</th>
+                <td>
+                  {status}
+                  <CloseButton type="button" className="chatClose" onClick={handleClosedClick}>
+                    종료
+                  </CloseButton>
+                </td>
+              </tr>
+              <tr>
+                <th colSpan={2} className="center">
+                  채팅 기록
+                </th>
+              </tr>
+              <tr>
+                <S.ChatWrapper colSpan={2} className="writeWrapper">
+                  <ul className="chatLog" ref={chatContainerRef}>
+                    {chatData.map((chat, index) =>
+                      chat.type === 'TALK' ? ( // chat.type이 'TALK'인 경우에만 출력
+                        <li key={index}>
+                          {chat.sender === 'admin' ? (
+                            <>
+                              <strong className="manager">관리자(관리자 ID) : </strong>
+                              <span>{chat.message}</span>
+                            </>
+                          ) : (
+                            <>
+                              <strong className="member">{chat.sender}(회원 ID) : </strong>
+                              <span>{chat.message}</span>
+                            </>
+                          )}
+                        </li>
+                      ) : null
+                    )}
+                  </ul>
+                  <div className="writeWrapper" onSubmit={handleFormSubmit}>
+                    <textarea
+                      placeholder="메시지를 입력해 주세요"
+                      value={newChat}
+                      onChange={(e) => setNewChat(e.target.value)}
+                      onKeyDown={handleInputKeyPress}></textarea>
+                    <button type="submit">전송</button>
+                  </div>
+                </S.ChatWrapper>
+              </tr>
+            </tbody>
+          </Table>
+          <BtnWrapper className="center mt40">
+            <NormalBtn onClick={navigateToChatList}>목록</NormalBtn>
+          </BtnWrapper>
+        </Container>
+      </AdminLayout>
+    );
   } else {
     return null;
   }

@@ -40,6 +40,7 @@ public class ChatController {
         return ResponseEntity.ok(all);
     }
 
+
     @GetMapping("/getLastMessage")
     public ResponseEntity<List<ResponseChatRoomDto>> getLastMessage(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)Pageable pageable) {
         List<ResponseChatRoomDto> lastMessage = chatRoomService.getLastMessage(pageable);

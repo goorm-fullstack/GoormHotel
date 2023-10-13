@@ -35,6 +35,13 @@ export const Header = styled(AdminHeader)``;
 export const ShareID = styled.div`
   line-height: 1.6;
   padding: 20px;
-  margin-top: 40px;
+  margin-top: 20px;
   color: ${(props) => props.theme.colors.graylight};
+
+  a {
+    display: inline-block;
+    margin-bottom: 40px;
+    color: ${(props) => props.theme.colors.goldhover};
+    text-decoration: underline;
+  }
 `;

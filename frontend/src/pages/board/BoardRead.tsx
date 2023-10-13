@@ -5,7 +5,6 @@ import { PageTitle, BtnWrapper, LinkBtn, commonButton, SubmitBtn } from '../../S
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import axios from 'axios';
 import queryString from "query-string";
-import { response } from 'express';
 import Instance from '../../utils/api/axiosInstance';
 
 const BoardRead = () => {
@@ -21,6 +20,7 @@ const BoardRead = () => {
   const [file, setFile] = useState('');
   const [reply, setReply] = useState<any[]>([]);
   const [replyWriter, setReplyWriter] = useState('');
+  const [replyPassword, setReplyPassword] = useState('');
   const [replyContent, setReplyContent] = useState('');
   const [replyPassword, setReplyPassword] = useState('');
   const [replyWriterModify, setReplyWriterModify] = useState('');
@@ -130,7 +130,6 @@ const BoardRead = () => {
     link.click();
   };
 
-
   const fetchReply = async (boardId: number) => {
     try {
       const response = await Instance.get(`/reply/boardId/${boardId}`);
@@ -221,9 +220,11 @@ const BoardRead = () => {
       const response = await Instance.post('/reply/writeform', {
         boardId: boardId,
         replyContent: replyContent,
-        replyWriter: inputRef && inputRef.current ? inputRef.current.value : '',
+        replyWriter: inputRef && inputRef.current ? inputRef.current.value : replyWriter,
+        replyPassword: replyPassword,
       });
       setReplyWriter('');
+      setReplyPassword('');
       setReplyContent('');
       fetchReply(parseInt(boardId ? boardId : '', 10));
     } catch (error) {
@@ -258,7 +259,7 @@ const BoardRead = () => {
               <tr>
                 <td className="titlew">
                   <p className="title">
-                    <span>{boardData ? boardData.category : ''}</span>
+                    <span>[{boardData ? boardData.category : ''}]</span>
                     {boardData ? boardData.title : ''}
                   </p>
                   {(() => {
@@ -275,22 +276,28 @@ const BoardRead = () => {
                   })()}
                 </td>
               </tr>
-              {board !== 'review' && file &&
-              <tr>
-                <td>
-                  <button className='fileb' type="button" onClick={handleDownLoad}>
-                    첨부파일 : {file}
-                  </button>
-                </td>
-              </tr>
-              }
-              {board === 'review' && 
-              <tr>
-                <td>
-                  <img className='reviewImg' src={imageUrl} alt='이미지'/>
-                </td>
-              </tr>
-              }
+              {board !== 'review' && file && (
+                <tr className="attachment">
+                  <td>
+                    <button className="fileb" type="button" onClick={handleDownLoad}>
+                      <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M14 0C16.7614 0 19 2.23858 19 5V17C19 20.866 15.866 24 12 24C8.13401 24 5 20.866 5 17V9H7V17C7 19.7614 9.23858 22 12 22C14.7614 22 17 19.7614 17 17V5C17 3.34315 15.6569 2 14 2C12.3431 2 11 3.34315 11 5V17C11 17.5523 11.4477 18 12 18C12.5523 18 13 17.5523 13 17V6H15V17C15 18.6569 13.6569 20 12 20C10.3431 20 9 18.6569 9 17V5C9 2.23858 11.2386 0 14 0Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                      {file}
+                    </button>
+                  </td>
+                </tr>
+              )}
+              {board === 'review' && (
+                <tr className="attachment">
+                  <td>
+                    <img className="reviewImg" src={imageUrl} alt="이미지" />
+                  </td>
+                </tr>
+              )}
               <tr className="contents">
                 <td>{boardContent}</td>
               </tr>
@@ -363,35 +370,52 @@ const BoardRead = () => {
                               신고
                             </button>
                           </div>
-                          {editingReplyId === replyItem.replyId && isEditing ? (
-                            <form onSubmit={(e) => handleSaveUpdate(replyItem.replyId, e)}>
-                              <input
-                                className="modify-input"
-                                type="text"
-                                defaultValue={'수정할 작성자를 입력하세요'}
-                                onChange={(e) => setReplyWriterModify(e.target.value)}
-                              />
-                              <input
-                                className="modify-input"
-                                defaultValue={'수정할 내용을 입력하세요'}
-                                onChange={(e) => setReplyContentModify(e.target.value)}
-                              />
-                              <button type="submit" className="modify">
-                                저장
-                              </button>
-                              <button type="button" className="delete" onClick={handleCancelUpdate}>
-                                취소
-                              </button>
-                            </form>
-                          ) : (
-                            <p>{replyItem.replyContent}</p>
-                          )}
                         </li>
-                      ))}
-                  </ul>
-                </td>
-              </tr>
-              }
+                      )}
+                      {reply.length > 0 &&
+                        reply.map((replyItem, index) => (
+                          <li key={index}>
+                            <div className="cwinfo">
+                              <strong>{replyItem.replyWriter}</strong>
+                              <span className="date">{`${replyItem.replyWriteDate[0]}.${replyItem.replyWriteDate[1] < 10 ? '0' : ''}${
+                                replyItem.replyWriteDate[1]
+                              }.${replyItem.replyWriteDate[2] < 10 ? '0' : ''}${replyItem.replyWriteDate[2]}`}</span>
+                              <button type="button" className="modify" onClick={() => handleUpdate(replyItem.replyId)}>
+                                수정
+                              </button>
+                              <button type="button" className="delete" onClick={() => handleDelete(replyItem.replyId)}>
+                                삭제
+                              </button>
+                            </div>
+                            {editingReplyId === replyItem.replyId && isEditing ? (
+                              <form onSubmit={(e) => handleSaveUpdate(replyItem.replyId, e)}>
+                                <input
+                                  className="modify-input"
+                                  type="text"
+                                  defaultValue={'수정할 작성자를 입력하세요'}
+                                  onChange={(e) => setReplyWriterModify(e.target.value)}
+                                />
+                                <input
+                                  className="modify-input"
+                                  defaultValue={'수정할 내용을 입력하세요'}
+                                  onChange={(e) => setReplyContentModify(e.target.value)}
+                                />
+                                <button type="submit" className="modify">
+                                  저장
+                                </button>
+                                <button type="button" className="delete" onClick={handleCancelUpdate}>
+                                  취소
+                                </button>
+                              </form>
+                            ) : (
+                              <p>{replyItem.replyContent}</p>
+                            )}
+                          </li>
+                        ))}
+                    </ul>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </S.TableRead>
           {boardData && boardData.boardWriter === localStorage.getItem('memberId') ?

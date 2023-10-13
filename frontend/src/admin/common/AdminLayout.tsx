@@ -93,7 +93,7 @@ export const adminsubnav: AdminSubNavMap = {
   },
 };
 
-const AdminLayout = ({ children, subMenus }: {children: ReactNode; subMenus: string;}) => {
+const AdminLayout = ({ children, subMenus }: { children: ReactNode; subMenus: string }) => {
   const location = useLocation();
 
   // const isActive = () => {
@@ -113,7 +113,7 @@ const AdminLayout = ({ children, subMenus }: {children: ReactNode; subMenus: str
             <li key={nav.linkto}>
               <NavLink
                 to={nav.linkto}
-                className={({isActive}) => {
+                className={({ isActive }) => {
                   return isActive ? 'active' : '';
                 }}>
                 <p>{nav.title}</p>

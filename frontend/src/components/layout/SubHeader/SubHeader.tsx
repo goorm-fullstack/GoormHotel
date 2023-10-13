@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import * as S from './Style';
 import { NavLink } from 'react-router-dom';
-import { StringLiteral } from '@babel/types';
 
 const SubHeaderData = {
   about: {
@@ -72,19 +71,19 @@ type SubHeaderProps = {
 
 const SubHeader = ({ kind }: SubHeaderProps) => {
   return (
-      <S.SubHeader>
-        <h2>{SubHeaderData[kind].pagetitle}</h2>
-        {/** 경규님 짱!bbb */}
-        <ul>
-          {SubHeaderData[kind].nav.map((nav, index) => (
-              <li key={index}>
-                <NavLink to={nav.linkto} className={({ isActive }) => (isActive ? 'active' : '')}>
-                  {nav.title}
-                </NavLink>
-              </li>
-          ))}
-        </ul>
-      </S.SubHeader>
+    <S.SubHeader>
+      <h2>{SubHeaderData[kind].pagetitle}</h2>
+      {/** 경규님 짱!bbb */}
+      <ul>
+        {SubHeaderData[kind].nav.map((nav, index) => (
+          <li key={index}>
+            <NavLink to={nav.linkto} className={({ isActive }) => (isActive ? 'active' : '')}>
+              {nav.title}
+            </NavLink>
+          </li>
+        ))}
+      </ul>
+    </S.SubHeader>
   );
 };
 

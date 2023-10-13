@@ -8,8 +8,8 @@ interface ChatModalProps {
 
 const ChatModal: React.FC<ChatModalProps> = ({ closeChat }) => {
   interface ChatMessage {
-    message : string;
-    isUser : boolean;
+    message: string;
+    isUser: boolean;
   }
 
   const [chatData, setChatData] = useState<ChatMessage[]>([]);
@@ -33,9 +33,9 @@ const ChatModal: React.FC<ChatModalProps> = ({ closeChat }) => {
   }, []);
 
   // 웹 소켓 설정을 UseEffect에서 분리
-  const settingWebSocket = (roomId:string) => {
+  const settingWebSocket = (roomId: string) => {
     // 이전 상태(prevRoomId)를 이용하여 새로운 상태를 반환
-  if (!ws.current && webSocketURL !== undefined) {
+    if (!ws.current && webSocketURL !== undefined) {
       ws.current = new WebSocket(webSocketURL);
       ws.current.onopen = () => {
         setSocketConnected(true);
@@ -95,7 +95,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ closeChat }) => {
   }, [chatData]);
 
   // setChatData(p => [...p, { message: newChat, isUser: true }]); -> 권희준 멘트님 추천사항
-  const handleInputKeyPress = (e : React.KeyboardEvent<HTMLInputElement>) => {
+  const handleInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && newChat.trim() !== '' && socketConnected && ws.current) {
       setChatData((p) => [...p, { message: newChat, isUser: true }]);
       ws.current.send(
@@ -110,7 +110,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ closeChat }) => {
     }
   };
 
-  const handleFormSubmit = (e : React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (newChat.trim() !== '') {

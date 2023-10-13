@@ -50,10 +50,11 @@ import AdminDeleteComment from './admin/board/AdminDeleteComment';
 import AdminChat from './admin/chat/AdminChat';
 import AdminChatDetail from './admin/chat/AdminChatDetail';
 import AdminMail from './admin/chat/AdminMail';
-import AdminIndex from './admin/AdminIndex';
+import AdminIndex from './admin/Home/AdminIndex';
 import AdminSubScribe from './admin/chat/AdminSubScribe';
-import {useAuth} from "./utils/api/AuthContext";
-import Instance from "./utils/api/axiosInstance";
+import { useAuth } from './utils/api/AuthContext';
+import Instance from './utils/api/axiosInstance';
+import AnonymousSignup from './pages/member/AnonymousSignup';
 import AdminBoardDetail from './admin/board/AdminBoardDetail';
 
 const App: React.FC = () => {
@@ -100,22 +101,22 @@ const App: React.FC = () => {
   // 쿠키를 파싱하는 함수
   function getCookie(name: string): string | undefined {
     const cookieString = document.cookie;
-    console.log(cookieString)
+    console.log(cookieString);
     const cookies = cookieString.split('; ');
 
     for (let i = 0; i < cookies.length; i++) {
-        console.log(cookies[i]);
-        const cookie = cookies[i].split('=');
-        if (cookie[0] === name) {
-            return cookie[1];
-        }
+      console.log(cookies[i]);
+      const cookie = cookies[i].split('=');
+      if (cookie[0] === name) {
+        return cookie[1];
+      }
     }
   }
 
   // Auth쪽 대시로 분리
   const splitDashLine = (str: string | undefined): string[] => {
-    if(str !== undefined) {
-      const data = str.split("-");
+    if (str !== undefined) {
+      const data = str.split('-');
       return data;
     } else {
       return [];
@@ -127,6 +128,7 @@ const App: React.FC = () => {
     const memberId = getCookie("memberId");
     const role = getCookie("role");
     const auth = getCookie("auth");
+    const adminNickName = getCookie("adminNickname");
 
     console.log('adminId 쿠키 값:', adminId);
     console.log('role 쿠키 값:', role);
@@ -134,39 +136,41 @@ const App: React.FC = () => {
 
     // 로컬 스토리지에 정보를 저장한다.
     // 어드민 로그인이라면
-    if (adminId && role && auth) {
+    if (adminId && role && auth && adminNickName) {
       localStorage.setItem("adminId", adminId);
       localStorage.setItem("role", role);
       localStorage.setItem("auth", splitDashLine(auth).join(','));
+      localStorage.setItem("adminNickname", adminNickName);
       setAuthState({ adminId, role, auth });
       setIsLogined(true);
     }
     // 회원 로그인이라면
     else if (memberId && role) {
-      localStorage.setItem("memberId", memberId);
-      localStorage.setItem("role", role);
+      localStorage.setItem('memberId', memberId);
+      localStorage.setItem('role', role);
       setMemberAuthState({ memberId, role });
       setIsMember(true);
     } else {
       // 서버에서 상태 가져오기(테스트 필요)
-      Instance.get('/api/adminCheck').then(response => {
-        setAuthState({
-          adminId: response.data.adminId,
-          role: response.data.role,
-          auth: response.data.auth
+      Instance.get('/api/adminCheck')
+        .then((response) => {
+          setAuthState({
+            adminId: response.data.adminId,
+            role: response.data.role,
+            auth: response.data.auth,
+          });
+        })
+        .catch((error) => {
+          console.log('로그인 상태를 가져오지 못했습니다.', error);
         });
-      }).catch(error => {
-        console.error("로그인 상태를 가져오지 못했습니다.", error);
-      });
     }
   }, []);
 
   if (isAdminPage) {
     return (
       <>
+        {/** 어드민 로그인 페이지 리디렉션 여기서 하지 마세요: 전달된 내용임 */}
         <Routes>
-          {isLogined ? (
-              <>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<AdminIndex />} />
           <Route path="/admin/reservation/:page" element={<AdminReservation />} />
@@ -192,13 +196,6 @@ const App: React.FC = () => {
           <Route path="/admin/chat/detail/:roomId" element={<AdminChatDetail />} />
           <Route path="/admin/mail" element={<AdminMail />} />
           <Route path="/admin/subscriber/:page" element={<AdminSubScribe />} />
-              </>
-          ) : (
-              <>
-                {/* 로그인이 되어있지 않을 때의 라우트 */}
-                <Route path="/admin/*" element={<AdminLogin />} />
-              </>
-          )}
         </Routes>
       </>
     );
@@ -233,7 +230,7 @@ const App: React.FC = () => {
             <Route path="/signup/result" element={<JoinComplete />} />
             <Route path="/board/:board/:page" element={<CustomerSupport />} />
             <Route path="/board/:board/write" element={<BoardWrite />} />
-            <Route path="/board/:board/detail/:title" element={<BoardRead />} />
+            <Route path="/board/:board/detail/:boardId" element={<BoardRead />} />
           </Routes>
         </S.AppContainer>
         <S.FloatingWrapper>
@@ -258,6 +255,6 @@ const App: React.FC = () => {
       </>
     );
   }
-}
+};
 
 export default App;

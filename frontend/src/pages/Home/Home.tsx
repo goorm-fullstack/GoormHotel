@@ -8,9 +8,6 @@ import dining01 from '../../images/dining/Bakery.jpg';
 import dining02 from '../../images/dining/Bar.jpg';
 import dining03 from '../../images/dining/Restaurant.jpg';
 import dining04 from '../../images/dining/RoomService.jpg';
-import deluxe from '../../images/room/Deluxe.jpg';
-import Family from '../../images/room/Family.jpg';
-import Suite from '../../images/room/Suite.jpg';
 import FacilitiesSlider from '../../components/Slide/FacilitiesSlider';
 import { DiningData, RoomData } from '../../admin/item/AdminItemList';
 import axios from 'axios';
@@ -120,7 +117,7 @@ const Home = () => {
       }
     };
     handleLoadItems();
-  }, [])
+  }, []);
 
   // 서버에 저장된 이미지 요청
   useEffect(() => {
@@ -185,25 +182,31 @@ const Home = () => {
           <S.ItemList>
             {roomData.length === 0 && <S.NoItem>등록된 상품이 없습니다.</S.NoItem>}
             {roomData[0] && (
-            <S.RoomItem>
-              <img src={imgUrlsRoom[0]} alt="객실" />
-              <S.ItemTitle>{nameOfTypeDetail(roomData[0])}</S.ItemTitle>
-              <S.ItemDesc>{roomData[0].description}</S.ItemDesc>
-            </S.RoomItem>
+              <S.RoomItem>
+                <div className="imgw">
+                  <img src={imgUrlsRoom[0]} alt="객실" />
+                </div>
+                <S.ItemTitle>{nameOfTypeDetail(roomData[0])}</S.ItemTitle>
+                <S.ItemDesc>{roomData[0].description}</S.ItemDesc>
+              </S.RoomItem>
             )}
             {roomData[1] && (
-            <S.RoomItem>
-              <img src={imgUrlsRoom[0]} alt="객실" />
-              <S.ItemTitle>{nameOfTypeDetail(roomData[1])}</S.ItemTitle>
-              <S.ItemDesc>{roomData[1].description}</S.ItemDesc>
-            </S.RoomItem>
+              <S.RoomItem>
+                <div className="imgw">
+                  <img src={imgUrlsRoom[0]} alt="객실" />
+                </div>
+                <S.ItemTitle>{nameOfTypeDetail(roomData[1])}</S.ItemTitle>
+                <S.ItemDesc>{roomData[1].description}</S.ItemDesc>
+              </S.RoomItem>
             )}
             {roomData[2] && (
-            <S.RoomItem>
-              <img src={imgUrlsRoom[2]} alt="객실" />
-              <S.ItemTitle>{nameOfTypeDetail(roomData[2])}</S.ItemTitle>
-              <S.ItemDesc>{roomData[2].description}</S.ItemDesc>
-            </S.RoomItem>
+              <S.RoomItem>
+                <div className="imgw">
+                  <img src={imgUrlsRoom[2]} alt="객실" />
+                </div>
+                <S.ItemTitle>{nameOfTypeDetail(roomData[2])}</S.ItemTitle>
+                <S.ItemDesc>{roomData[2].description}</S.ItemDesc>
+              </S.RoomItem>
             )}
           </S.ItemList>
           <BtnWrapper className="center">
@@ -218,32 +221,40 @@ const Home = () => {
           <S.ItemList>
             {diningData.length === 0 && <S.NoItem>등록된 상품이 없습니다.</S.NoItem>}
             {diningData[0] && (
-            <S.DiningItem>
-              <img src={imageUrlsDining[0]} alt={`다이닝 ${diningImages[0]}`} />
-              <S.ItemTitle>{nameOfTypeDetail(diningData[0])}</S.ItemTitle>
-              <S.ItemDesc>{diningData[0].description}</S.ItemDesc>
-            </S.DiningItem>
+              <S.DiningItem>
+                <div className="imgw">
+                  <img src={imageUrlsDining[0]} alt={`다이닝 ${diningImages[0]}`} />
+                </div>
+                <S.ItemTitle>{nameOfTypeDetail(diningData[0])}</S.ItemTitle>
+                <S.ItemDesc>{diningData[0].description}</S.ItemDesc>
+              </S.DiningItem>
             )}
             {diningData[1] && (
-            <S.DiningItem>
-              <img src={imageUrlsDining[1]} alt={`다이닝 ${diningImages[1]}`} />
-              <S.ItemTitle>{nameOfTypeDetail(diningData[1])}</S.ItemTitle>
-              <S.ItemDesc>{diningData[1].description}</S.ItemDesc>
-            </S.DiningItem>
+              <S.DiningItem>
+                <div className="imgw">
+                  <img src={imageUrlsDining[1]} alt={`다이닝 ${diningImages[1]}`} />
+                </div>
+                <S.ItemTitle>{nameOfTypeDetail(diningData[1])}</S.ItemTitle>
+                <S.ItemDesc>{diningData[1].description}</S.ItemDesc>
+              </S.DiningItem>
             )}
             {diningData[2] && (
-            <S.DiningItem>
-              <img src={imageUrlsDining[2]} alt={`다이닝 ${diningImages[2]}`} />
-              <S.ItemTitle>{nameOfTypeDetail(diningData[2])}</S.ItemTitle>
-              <S.ItemDesc>{diningData[2].description}</S.ItemDesc>
-            </S.DiningItem>
+              <S.DiningItem>
+                <div className="imgw">
+                  <img src={imageUrlsDining[2]} alt={`다이닝 ${diningImages[2]}`} />
+                </div>
+                <S.ItemTitle>{nameOfTypeDetail(diningData[2])}</S.ItemTitle>
+                <S.ItemDesc>{diningData[2].description}</S.ItemDesc>
+              </S.DiningItem>
             )}
             {diningData[3] && (
-            <S.DiningItem>
-              <img src={imageUrlsDining[3]} alt={`다이닝 ${diningImages[3]}`} />
-              <S.ItemTitle>{nameOfTypeDetail(diningData[3])}</S.ItemTitle>
-              <S.ItemDesc>{diningData[3].description}</S.ItemDesc>
-            </S.DiningItem>
+              <S.DiningItem>
+                <div className="imgw">
+                  <img src={imageUrlsDining[3]} alt={`다이닝 ${diningImages[3]}`} />
+                </div>
+                <S.ItemTitle>{nameOfTypeDetail(diningData[3])}</S.ItemTitle>
+                <S.ItemDesc>{diningData[3].description}</S.ItemDesc>
+              </S.DiningItem>
             )}
           </S.ItemList>
           <BtnWrapper className="center">
