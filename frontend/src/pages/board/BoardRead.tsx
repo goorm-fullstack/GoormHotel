@@ -3,8 +3,7 @@ import * as S from './Style';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PageTitle, BtnWrapper, LinkBtn, commonButton, SubmitBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
-import axios from 'axios';
-import queryString from "query-string";
+import queryString from 'query-string';
 import Instance from '../../utils/api/axiosInstance';
 
 const BoardRead = () => {
@@ -45,22 +44,18 @@ const BoardRead = () => {
 
   useEffect(() => {
     Instance
-        .get(`/boards/${boardId}`)
-        .then((response) => {
-          if (response.headers['filename']) {
-            const fileName = response.headers['filename'];
-            setFile(fileName);
-          }
-          setBoardData(response.data);
-          console.log(response.data.boardWriter);
-          fetchReply(response.data.boardId);
-        })
-        .catch((error) => {
-          console.error('Error:', error.message);
-        });
-
-    const user = localStorage.getItem('memberId');
-    setUser(user as string);
+      .get(`/boards/${boardId}`)
+      .then((response) => {
+        if (response.headers['filename']) {
+          const fileName = response.headers['filename'];
+          setFile(fileName);
+        }
+        setBoardData(response.data);
+        fetchReply(response.data.boardId);
+      })
+      .catch((error) => {
+        console.error('Error:', error.message);
+      });
   }, []);
 
   useEffect(() => {
@@ -148,7 +143,7 @@ const BoardRead = () => {
         const replyPassword = response.data.replyPassword;
         const password = window.prompt('비밀번호를 입력하세요.');
         if(replyPassword === password){
-          axios
+          Instance
           .put(`/reply/softdelete/${replyId}`)
           .then((response) => {
             alert('삭제되었습니다.');
@@ -165,7 +160,7 @@ const BoardRead = () => {
         const id = response.data.replyWriter;
         console.log(id);
         if(id === user){
-          axios
+          Instance
           .put(`/reply/softdelete/${replyId}`)
           .then((response) => {
             alert('삭제되었습니다.');

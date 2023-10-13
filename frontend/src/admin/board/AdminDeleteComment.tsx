@@ -4,10 +4,10 @@ import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
 import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
-import axios from 'axios';
 import { BoardData, ReplyData } from './AdminBoard';
 import { useNavigate } from 'react-router-dom';
 import { boardTitleList } from './AdminBoard';
+import Instance from '../../utils/api/axiosInstance';
 
 const AdminDeleteComment = () => {
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
@@ -28,7 +28,7 @@ const AdminDeleteComment = () => {
   }, []);
 
   useEffect(() => {
-    axios
+    Instance
       .get('/boards/deleted')
       .then((response) => {
         setBoard(response.data);
@@ -40,7 +40,7 @@ const AdminDeleteComment = () => {
   }, []);
 
   useEffect(() => {
-    axios
+    Instance
       .get('/reply/deleted')
       .then((response) => {
         setReply(response.data);
@@ -52,7 +52,7 @@ const AdminDeleteComment = () => {
   }, []);
 
   useEffect(() => {
-    axios
+    Instance
       .get('/boards/deletedall')
       .then((response) => {
         const totalPages = parseInt(response.headers['totalpages'], 10);
@@ -91,7 +91,7 @@ const AdminDeleteComment = () => {
       checkedItems.forEach((boardId) => {
         if (boardId.startsWith('board')) {
           const id = boardId.replace('board', '');
-          axios
+          Instance
             .put(`/boards/undelete/${id}`)
             .then(() => {
               alert('복구되었습니다.');
@@ -102,7 +102,7 @@ const AdminDeleteComment = () => {
             });
         } else {
           const id = boardId.replace('reply', '');
-          axios
+          Instance
             .put(`/reply/undelete/${id}`)
             .then(() => {
               alert('복구되었습니다.');
@@ -122,7 +122,7 @@ const AdminDeleteComment = () => {
       checkedItems.forEach((boardId) => {
         if (boardId.startsWith('board')) {
           const id = boardId.replace('board', '');
-          axios
+          Instance
             .delete(`/boards/${id}`)
             .then(() => {
               alert('삭제되었습니다.');
@@ -133,7 +133,7 @@ const AdminDeleteComment = () => {
             });
         } else {
           const id = boardId.replace('reply', '');
-          axios
+          Instance
             .delete(`/reply/${id}`)
             .then(() => {
               alert('삭제되었습니다.');

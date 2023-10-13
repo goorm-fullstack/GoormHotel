@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import * as S from './Style';
-import axios from 'axios';
 import {
   PageTitle,
   ContentsTitleXSmall,
@@ -95,6 +94,7 @@ const ReservationItem = () => {
   const [totalPage, setTotalPage] = useState<number>(0);
   const { page } = useParams();
   const isLogined = localStorage.getItem('memberId');
+  const [click, setClick] = useState(false);
 
   // 쿠키를 파싱하는 함수
   function getCookie(name: string): string | undefined {
@@ -180,6 +180,7 @@ const ReservationItem = () => {
             setProducts(response.data);
             setTotalData(totalData);
             setTotalPage(totalPages);
+            setClick(!click);
           })
           .catch((error) => {
             console.error(error);
@@ -197,6 +198,7 @@ const ReservationItem = () => {
             setProducts(response.data);
             setTotalData(totalData);
             setTotalPage(totalPages);
+            setClick(!click);
           })
           .catch((error) => {
             console.error(error);

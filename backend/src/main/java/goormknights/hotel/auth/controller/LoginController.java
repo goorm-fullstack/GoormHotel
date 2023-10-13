@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+
 @Slf4j
 @RestController
 @RequestMapping("/login")
@@ -48,7 +50,7 @@ public class LoginController {
 
     // 관리자 로그인
     @PostMapping("/manager")
-    public ResponseEntity<?> adminLogin(@RequestBody ManagerLogin managerLogin, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> adminLogin(@RequestBody ManagerLogin managerLogin, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         if (adminService.managerLogin(managerLogin.getAdminId(), managerLogin.getPassword(), request, response)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {

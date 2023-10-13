@@ -5,8 +5,8 @@ import * as S from './Style';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, LinkBtn } from '../../Style/commonStyles';
 import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
-import axios from 'axios';
 import { IsReply } from '../../pages/board/Style';
+import Instance from '../../utils/api/axiosInstance';
 
 export interface BoardData {
   boardId: number;
@@ -76,7 +76,7 @@ const AdminBoard = () => {
   // 전체 게시글 목록 조회
   useEffect(() => {
     const currentPage: number = parseInt(page ? page : '1', 10);
-    axios
+    Instance
       .get(`/boards/list?page=${currentPage}`)
       .then((response) => {
         const totalPages = parseInt(response.headers['totalpages'], 10);
@@ -116,7 +116,7 @@ const AdminBoard = () => {
     const isConfirm = window.confirm('삭제하시겠습니까?');
     if (isConfirm) {
       checkedItems.forEach((boardId) => {
-        axios
+        Instance
           .put(`/boards/softdelete/${boardId}`)
           .then(() => {
             alert('삭제되었습니다.');
@@ -138,7 +138,7 @@ const AdminBoard = () => {
           reportWriter: '관리자',
           reportReason: '관리자 임의 배정',
         };
-        axios
+        Instance
           .post(`/report/writeform`, data)
           .then(() => {
             alert('신고처리되었습니다.');

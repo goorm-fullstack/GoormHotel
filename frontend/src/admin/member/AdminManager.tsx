@@ -74,6 +74,7 @@ const AdminManager = () => {
 
   const handleManagerClick = (manager: ManagerData) => {
     setSelectedManager(manager);
+    handleInputNickName(manager);
   };
 
   const handleInputChange = (field: string | React.ChangeEvent<HTMLInputElement>, value?: string | number) => {
@@ -134,16 +135,15 @@ const AdminManager = () => {
     }
   };
 
-  const handleInputNickName = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      Instance.post('/api/manager/' + selectedManager?.adminId).then((response) => {
-        setSelectedManager(response.data);
-        console.log(response.data);
-        checkAuthA(response.data.auth);
-        checkAuthB(response.data.auth);
-        checkAuthC(response.data.auth);
-      });
-    }
+  const handleInputNickName = (manager : ManagerData) => {
+    console.log("call");
+    Instance.post('/api/manager/' + manager.adminId).then((response) => {
+      setSelectedManager(response.data);
+      console.log(response.data);
+      checkAuthA(response.data.auth);
+      checkAuthB(response.data.auth);
+      checkAuthC(response.data.auth);
+    });
   };
 
   const checkAuthA = (str: string) => {
@@ -357,8 +357,6 @@ const AdminManager = () => {
                         type="text"
                         placeholder="운영자 ID"
                         value={selectedManager.adminId}
-                        onKeyDown={handleInputNickName}
-                        onChange={(e) => handleInputChange('adminId', e.target.value)}
                       />
                     </td>
                   </tr>

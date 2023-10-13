@@ -4,9 +4,9 @@ import * as S from './Style';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
 import { Container, Table, TableHeader } from '../member/Style';
-import axios from 'axios';
 import Paging from '../../components/common/Paging/Paging';
 import { boardTitleList } from './AdminBoard';
+import Instance from '../../utils/api/axiosInstance';
 
 const AdminComment = () => {
   const { page } = useParams<{ page: string }>();
@@ -47,7 +47,7 @@ const AdminComment = () => {
     const currentPage: number = parseInt(page ? page : '1', 10);
     const fetchData = async () => {
       try {
-        const response = await axios.get(`/reply/list?page=${currentPage}`);
+        const response = await Instance.get(`/reply/list?page=${currentPage}`);
         const replyData: ReplyData[] = response.data;
         const totalPages = parseInt(response.headers['totalpages'], 10);
         const totalData = parseInt(response.headers['totaldata'], 10);
@@ -56,7 +56,7 @@ const AdminComment = () => {
         // 게시물의 title을 가져오는 함수
         const getBoardTitle = async (boardId: number) => {
           try {
-            const titleResponse = await axios.get(`/boards/${boardId}`);
+            const titleResponse = await Instance.get(`/boards/${boardId}`);
             return titleResponse.data.title;
           } catch (error) {
             console.error('title을 가져오는 중 오류 발생', error);
@@ -67,7 +67,7 @@ const AdminComment = () => {
         //게시물의 게시판 이름을 가져오는 함수
         const getBoardBoardTitle = async (boardId: number) => {
           try {
-            const titleResponse = await axios.get(`/boards/${boardId}`);
+            const titleResponse = await Instance.get(`/boards/${boardId}`);
             return titleResponse.data.boardTitle;
           } catch (error) {
             console.error('title을 가져오는 중 오류 발생', error);
@@ -126,7 +126,7 @@ const AdminComment = () => {
       console.log(item);
       const url = `/reply/softdelete/${item}`;
       if (isConfirm) {
-        return axios.put(url);
+        return Instance.put(url);
       } else {
         return null;
       }
@@ -174,7 +174,7 @@ const AdminComment = () => {
         reportReason: '관리자 임의 배정',
       };
       if (isConfirm) {
-        return axios.post(url, requestReportDto);
+        return Instance.post(url, requestReportDto);
       } else {
         return null;
       }

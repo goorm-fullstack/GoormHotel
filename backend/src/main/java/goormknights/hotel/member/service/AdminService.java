@@ -22,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.*;
 
 @Slf4j
@@ -56,7 +58,7 @@ public class AdminService {
     }
 
     // 매니저 로그인
-    public boolean managerLogin(String adminId, String password, HttpServletRequest request, HttpServletResponse response) {
+    public boolean managerLogin(String adminId, String password, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("manager") != null) {
             // 이미 로그인한 상태
@@ -96,7 +98,7 @@ public class AdminService {
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
                     .build();
-            ResponseCookie nicknameCookie = ResponseCookie.from("adminNickname", optionalManager.get().getAdminNickname())
+            ResponseCookie nicknameCookie = ResponseCookie.from("adminNickname", URLEncoder.encode(optionalManager.get().getAdminNickname(), "UTF-8"))
                     .httpOnly(false)
                     .secure(true)
                     .path("/")      // path

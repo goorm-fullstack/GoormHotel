@@ -192,6 +192,7 @@ const App: React.FC = () => {
           <Route path="/admin/board/:page" element={<AdminBoard />} />
           <Route path="/admin/board/write" element={<AdminBoardWrite />} />
           <Route path="/admin/board/:board/detail/:id" element={<AdminBoardDetail />} />
+{/*           <Route path="/admin/board/write" element={<AdminBoardWrite />} /> */}
           <Route path="/admin/deletepost/:page" element={<AdminDeleteComment />} />
           <Route path="/admin/chat/:page" element={<AdminChat />} />
           <Route path="/admin/chat/detail/:roomId" element={<AdminChatDetail />} />
