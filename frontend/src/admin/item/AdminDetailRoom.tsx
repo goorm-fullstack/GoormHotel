@@ -4,9 +4,10 @@ import { PageTitle, SubmitBtn, SelectImage, RedP, GreenP, NormalBtn, BtnWrapper 
 import { RoomData } from './AdminItemList';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import { Container, Table } from '../member/Style';
 import { RoomForm } from '../../components/AddItemForm/WriteFormRoom';
+import Instance from '../../utils/api/axiosInstance';
+import axios from 'axios';
 
 const AdminDetailRoom = () => {
   const [imgFile, setImgFile] = useState<string>(''); // 이미지 상태관리
@@ -22,7 +23,7 @@ const AdminDetailRoom = () => {
   // 현재 데이터 get 요청
   useEffect(() => {
     const nameParam: string = name ? name : '';
-    axios.get(`/rooms/${type}/${encodeURIComponent(nameParam)}`).then((response) => {
+    Instance.get(`/rooms/${type}/${encodeURIComponent(nameParam)}`).then((response) => {
       setResponseData(response.data);
       console.log('get 성공');
     });
@@ -76,7 +77,7 @@ const AdminDetailRoom = () => {
 
         try {
           const nameParam: string = name ? name : '';
-          await axios.put(`/rooms/${type}/${encodeURIComponent(nameParam)}`, form, {
+          await Instance.put(`/rooms/${type}/${encodeURIComponent(nameParam)}`, form, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
@@ -105,7 +106,7 @@ const AdminDetailRoom = () => {
     const item = responseData;
     const fetchImageUrl = async () => {
       try {
-        const response = await axios.get(`/image/${item?.name}`, {
+        const response = await Instance.get(`/image/${item?.name}`, {
           responseType: 'arraybuffer',
         });
 
@@ -135,7 +136,7 @@ const AdminDetailRoom = () => {
         setDuplicateMessage('사용 가능한 상품명입니다.');
         setIsConfirm(true);
       } else {
-        const response = await axios.get(url);
+        const response = await Instance.get(url);
         const message = response.data;
         setDuplicateMessage(message);
         setIsConfirm(true);
