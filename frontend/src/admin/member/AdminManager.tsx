@@ -44,7 +44,7 @@ const AdminManager = () => {
   useEffect(() => {
     const fetchManagers = async () => {
       try {
-        const response = await Instance.get('/api/manager/list');
+        const response = await Instance.get('/api/admin-getlist');
         if (response.status === 200) {
           setManagerData(response.data);
         }
@@ -102,7 +102,7 @@ const AdminManager = () => {
   const registerManager = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await Instance.post('/admin-signup', newManager, {
+      const response = await Instance.post('/api/admin-signup', newManager, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -111,7 +111,7 @@ const AdminManager = () => {
 
       if (response.status === 200) {
         alert('성공적으로 등록되었습니다.');
-        const newManagerData = await Instance.get('/admin-getlist');
+        const newManagerData = await Instance.get('/api/admin-getlist');
         console.log('Backend Response:', response);
         if (newManagerData.status === 200) {
           console.log('Backend Response:', response, newManagerData);
