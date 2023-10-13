@@ -10,7 +10,6 @@ import dining03 from '../../images/dining/Restaurant.jpg';
 import dining04 from '../../images/dining/RoomService.jpg';
 import FacilitiesSlider from '../../components/Slide/FacilitiesSlider';
 import { DiningData, RoomData } from '../../admin/item/AdminItemList';
-import axios from 'axios';
 import Instance from '../../utils/api/axiosInstance';
 
 const diningImages = [dining01, dining02, dining03, dining04];
@@ -124,7 +123,7 @@ const Home = () => {
     const fetchImageUrls = async () => {
       const urlsRoom = await Promise.all(
         roomData.map(async (item) => {
-          const response = await axios.get(`/image/${item.name}`, {
+          const response = await Instance.get(`/image/${item.name}`, {
             responseType: 'arraybuffer',
           });
           console.log(response);
@@ -137,7 +136,7 @@ const Home = () => {
       );
       const urlsDining = await Promise.all(
         diningData.map(async (item) => {
-          const response = await axios.get(`/image/${item.name}`, {
+          const response = await Instance.get(`/image/${item.name}`, {
             responseType: 'arraybuffer',
           });
           console.log(response);

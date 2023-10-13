@@ -3,10 +3,10 @@ import * as S from './Style';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PageTitle, BtnWrapper, SubmitBtn, NormalBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
-import axios from 'axios';
 import { ItemThumbnail } from '../../admin/item/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
 import {Cookies} from "react-cookie";
+import Instance from '../../utils/api/axiosInstance';
 
 type FormData = {
   [key: string]: string;
@@ -103,7 +103,7 @@ const BoardWrite = () => {
     const isConfirm = window.confirm('작성하시겠습니까?');
     if (isConfirm) {
       try {
-        await axios.post('/boards/writeform', form, {
+        await Instance.post('/boards/writeform', form, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -256,6 +256,21 @@ const BoardWrite = () => {
                     </td>
                   </>
                 )}
+                {board === 'review' ?
+                (<>
+                <th>썸네일 이미지</th>
+                <td>
+                  <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required/>
+                  {imgFile !== '' ? <ItemThumbnail src={imgFile} alt="후기 이미지" /> : <ItemThumbnail style={{ display: 'none' }} />}
+                </td>
+                </>)
+                :
+                (<>
+                <th>첨부파일</th>
+                <td>
+                  <input type="file" accept="*" ref={fileRef} />
+                </td>
+                </>)}
               </tr>
             </S.Table>
             <BtnWrapper className="center double mt40">

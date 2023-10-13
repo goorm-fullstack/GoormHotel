@@ -3,7 +3,6 @@ import * as S from './Style';
 import moment from 'moment';
 import Item from '../../components/Item/Item';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Reservation from '../../components/Reservation/Reservation';
 import {
   PageTitle,
@@ -44,18 +43,18 @@ interface Coupon {
 const ReservationPage = () => {
   const [giftCardNumber, setGiftCardNumber] = useState('');
   const [memberData, setMemberData] = useState();
-  const userLoggedIn = localStorage.getItem('memberId');
-  const [selectedOption, setSelectedOption] = useState('');
+  const userLoggedIn = localStorage.getItem("memberId");
   const location = useLocation();
   const { reservationData, selectedProduct } = location.state;
   const navigate = useNavigate();
   const [nights, setNights] = useState(1);
   const [giftcardList, setGiftCardList] = useState<GiftCard[]>([]);
   const [couponList, setCouponList] = useState<Coupon[]>([]);
-  const [selectCoupon, setSelectCoupon] = useState<Coupon>(); //적용할 쿠폰
-  const [selectGiftCard, setSelectGiftCard] = useState<GiftCard[]>([]); //적용할 상품권
+  const [selectCoupon, setSelectCoupon] = useState('');//적용할 쿠폰
+  const [selectGiftCard, setSelectGiftCard] = useState<number[]>([]);//적용할 상품권
   const [click, setClick] = useState(false);
   const [memberId, setMemberId] = useState(0);
+  const [selectAllChecked, setSelectAllChecked] = useState(false);
 
   const [formData, setFormData] = useState({
     checkIn: reservationData?.checkInDate || '',
@@ -114,8 +113,7 @@ const ReservationPage = () => {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(event.target.value);
-    console.log('Selected option:', event.target.value);
+    setSelectCoupon(event.target.value);
   };
 
   const formatDateForServer = (date: Date) => {
@@ -134,7 +132,7 @@ const ReservationPage = () => {
 
     if (confirmed) {
       try {
-        await axios.post(`http://127.0.0.1:8080/reservation/save?memberId=1`, serverFormattedData);
+        await Instance.post(`http://127.0.0.1:8080/reservation/save?memberId=1`, serverFormattedData);
 
         navigate('/');
         window.alert('예약이 완료되었습니다');
@@ -146,6 +144,27 @@ const ReservationPage = () => {
 
   const updateReservationData = (newData: any) => {
     setFormData(newData);
+  };
+
+  const handleSelectGiftCardAllChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    setSelectAllChecked(checked);
+    if (checked) {
+      const allGiftCardIds = giftcardList?.map((item) => item.id);
+      setSelectGiftCard(allGiftCardIds);
+    } else {
+      setSelectGiftCard([]);
+    }
+  };
+
+  const handleGiftCardCheckboxChange = (id : number) => {
+    setSelectGiftCard((prevItems) => {
+      if (prevItems.includes(id)) {
+        return prevItems.filter((item) => item !== id);
+      } else {
+        return [...prevItems, id];
+      }
+    });
   };
 
   return (
@@ -183,7 +202,7 @@ const ReservationPage = () => {
                 <BtnWrapper className="flexspace">
                   <div>
                     <CheckLabel>
-                      <InputCheckbox type="checkbox" /> 전체 선택
+                      <InputCheckbox type="checkbox" onChange={handleSelectGiftCardAllChange}/> 전체 선택
                     </CheckLabel>
                   </div>
                   <BtnWrapper className="flexgap">
@@ -195,29 +214,35 @@ const ReservationPage = () => {
                     </NormalBtn>
                   </BtnWrapper>
                 </BtnWrapper>
-                <table>
-                  {/* 상품권 목록 출력하는 곳*/}
-                  {giftcardList.map((giftcard, index) => (
-                    <tr key={index}>
+                <table>{/* 상품권 목록 출력하는 곳*/}
+                  {giftcardList.length !== 0 ? (
+                    <>
+                      {giftcardList.map((giftcard, index) => (
+                      <tr key={index}>
                       <td>
                         <CheckLabel>
-                          <InputCheckbox type="checkbox" />
+                          <InputCheckbox type="checkbox"
+                          checked={selectGiftCard.includes(giftcard.id)}
+                          onChange={() => handleGiftCardCheckboxChange(giftcard.id)}/>
                           {giftcard.title}
                         </CheckLabel>
                       </td>
-                      <td className="right">{giftcard.money}</td>
-                    </tr>
+                        <td className="right">{giftcard.money}</td>
+                      </tr>
                   ))}
-                  <tr>
-                    <td className="center empty">등록된 상품권이 없습니다.</td>
-                  </tr>
+                    </>
+                  ) : (
+                    <tr>
+                      <td className="center empty">등록된 상품권이 없습니다.</td>
+                    </tr>
+                  )}
                 </table>
               </S.CouponInfo>
             </S.Section>
 
             <S.Section>
               <ContentsTitleXSmall>쿠폰 사용</ContentsTitleXSmall>
-              <S.CouponSelect value={selectedOption} onChange={handleChange} disabled={!userLoggedIn}>
+              <S.CouponSelect value={selectCoupon} onChange={handleChange} disabled={!userLoggedIn}>
                 {userLoggedIn ? (
                   <>
                     <option value="">선택 안함</option>

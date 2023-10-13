@@ -3,11 +3,11 @@ import * as S from './Style';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, NormalLinkBtn } from '../../Style/commonStyles';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { Container, Table, TableHeader } from '../member/Style';
 import { numberWithCommas } from '../../utils/function/comma';
 import Paging from '../../components/common/Paging/Paging';
 import Search, { Type, TypeDetail } from '../../components/common/Search/Search';
+import Instance from '../../utils/api/axiosInstance';
 
 // 체크박스 선택 시 저장할 객체 타입
 interface SelectItem {
@@ -97,7 +97,7 @@ const AdminItemList = () => {
   // 전체, 객실, 다이닝 상품 가져오는 로직
   const handleLoadItems = async () => {
     try {
-      const response = await axios.get(url);
+      const response = await Instance.get(url);
       console.log(url);
       const data: any[] = response.data;
       console.log(data);
@@ -145,7 +145,7 @@ const AdminItemList = () => {
     const deletions = selectedItems.map((item) => {
       const url = item.type === 'room' ? `/rooms/room/${encodeURIComponent(item.name)}` : `/dinings/dining/${encodeURIComponent(item.name)}`;
 
-      return axios.delete(url);
+      return Instance.delete(url);
     });
 
     Promise.all(deletions)
@@ -173,7 +173,7 @@ const AdminItemList = () => {
     const fetchImageUrls = async () => {
       const urls = await Promise.all(
         items.map(async (item) => {
-          const response = await axios.get(`/image/${item.name}`, {
+          const response = await Instance.get(`/image/${item.name}`, {
             responseType: 'arraybuffer',
           });
           console.log(response);

@@ -3,9 +3,9 @@ import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, CheckLabel, MultiCheck, SubmitBtn, NormalBtn } from '../../Style/commonStyles';
 import { Container, Table } from '../member/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Cookies } from 'react-cookie';
+import Instance from '../../utils/api/axiosInstance';
 
 const AdminBoardWrite = () => {
   const adminAuth = localStorage.getItem("auth");
@@ -50,7 +50,7 @@ const AdminBoardWrite = () => {
   const cookie = getCookie('adminId');
 
   useEffect(() => {
-    axios
+    Instance
       .post(`/api/manager/${cookie}`)
       .then((response) => {
         setAdmin(response.data);
@@ -120,7 +120,7 @@ const AdminBoardWrite = () => {
     });
 
     try {
-      await axios.post('/boards/writeform', form, {
+      await Instance.post('/boards/writeform', form, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -216,7 +216,7 @@ const AdminBoardWrite = () => {
   //   handleUserInfo();
   // }, [])
 
-  if(authItem && authItem.includes("AUTH_C")) {
+  if(authItem && authItem.includes('AUTH_C')) {
   return (
     <AdminLayout subMenus="board">
       <Container>

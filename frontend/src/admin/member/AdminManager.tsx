@@ -44,7 +44,7 @@ const AdminManager = () => {
   useEffect(() => {
     const fetchManagers = async () => {
       try {
-        const response = await Instance.get('/api/manager/list');
+        const response = await Instance.get('/api/admin-getlist');
         if (response.status === 200) {
           setManagerData(response.data);
         }
@@ -74,6 +74,7 @@ const AdminManager = () => {
 
   const handleManagerClick = (manager: ManagerData) => {
     setSelectedManager(manager);
+    handleInputNickName(manager);
   };
 
   const handleInputChange = (field: string | React.ChangeEvent<HTMLInputElement>, value?: string | number) => {
@@ -101,7 +102,7 @@ const AdminManager = () => {
   const registerManager = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await Instance.post('/admin-signup', newManager, {
+      const response = await Instance.post('/api/admin-signup', newManager, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -110,7 +111,7 @@ const AdminManager = () => {
 
       if (response.status === 200) {
         alert('성공적으로 등록되었습니다.');
-        const newManagerData = await Instance.get('/admin-getlist');
+        const newManagerData = await Instance.get('/api/admin-getlist');
         console.log('Backend Response:', response);
         if (newManagerData.status === 200) {
           console.log('Backend Response:', response, newManagerData);
@@ -134,16 +135,15 @@ const AdminManager = () => {
     }
   };
 
-  const handleInputNickName = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      Instance.post('/api/manager/' + selectedManager?.adminId).then((response) => {
-        setSelectedManager(response.data);
-        console.log(response.data);
-        checkAuthA(response.data.auth);
-        checkAuthB(response.data.auth);
-        checkAuthC(response.data.auth);
-      });
-    }
+  const handleInputNickName = (manager : ManagerData) => {
+    console.log("call");
+    Instance.post('/api/manager/' + manager.adminId).then((response) => {
+      setSelectedManager(response.data);
+      console.log(response.data);
+      checkAuthA(response.data.auth);
+      checkAuthB(response.data.auth);
+      checkAuthC(response.data.auth);
+    });
   };
 
   const checkAuthA = (str: string) => {
@@ -357,8 +357,6 @@ const AdminManager = () => {
                         type="text"
                         placeholder="운영자 ID"
                         value={selectedManager.adminId}
-                        onKeyDown={handleInputNickName}
-                        onChange={(e) => handleInputChange('adminId', e.target.value)}
                       />
                     </td>
                   </tr>

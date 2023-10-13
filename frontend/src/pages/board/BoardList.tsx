@@ -4,7 +4,6 @@ import { PageTitle, BtnWrapper, LinkBtn, SubmitBtn } from '../../Style/commonSty
 import * as S from './Style';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import Paging from '../../components/common/Paging/Paging';
-import axios from 'axios';
 import Instance from '../../utils/api/axiosInstance';
 import { Link } from 'react-router-dom';
 import { Type, TypeDetail } from '../../components/common/Search/Search';
@@ -60,59 +59,59 @@ const CustomerSupport = () => {
         boardTitle = '이용후기';
       }
       if (boardTitle !== '') {
-        if (typeDetail === 'all' && keyword === '') {
-          axios
-            .get(`/boards/find/category?boardTitle=${boardTitle}`)
-            .then((response) => {
-              const totalPages = parseInt(response.headers['totalpages'], 10);
-              const totalData = parseInt(response.headers['totaldata'], 10);
-              setBoard(response.data || []);
-              console.log(response.data);
-              setTotalData(totalData);
-              setTotalPages(totalPages);
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        } else if (typeDetail !== 'all' && keyword === '') {
-          axios
-            .get(`/boards/find/category?boardTitle=${boardTitle}&category=${typeDetail}`)
-            .then((response) => {
-              const totalPages = parseInt(response.headers['totalpages'], 10);
-              const totalData = parseInt(response.headers['totaldata'], 10);
-              setBoard(response.data || []);
-              setTotalData(totalData);
-              setTotalPages(totalPages);
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        } else if (typeDetail === 'all' && keyword !== '') {
-          axios
-            .get(`/boards/find/category?boardTitle=${boardTitle}&keyword=${keyword}`)
-            .then((response) => {
-              const totalPages = parseInt(response.headers['totalpages'], 10);
-              const totalData = parseInt(response.headers['totaldata'], 10);
-              setBoard(response.data || []);
-              setTotalData(totalData);
-              setTotalPages(totalPages);
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        } else {
-          axios
-            .get(`/boards/find/category?boardTitle=${boardTitle}&category=${typeDetail}&keyword=${keyword}`)
-            .then((response) => {
-              const totalPages = parseInt(response.headers['totalpages'], 10);
-              const totalData = parseInt(response.headers['totaldata'], 10);
-              setBoard(response.data || []);
-              setTotalData(totalData);
-              setTotalPages(totalPages);
-            })
-            .catch((error) => {
-              console.error(error);
-            });
+        if(typeDetail === 'all' && keyword === ''){
+          Instance
+          .get(`/boards/find/category?boardTitle=${boardTitle}`)
+          .then((response) => {
+            const totalPages = parseInt(response.headers['totalpages'], 10);
+            const totalData = parseInt(response.headers['totaldata'], 10);
+            setBoard(response.data || []);
+            console.log(response.data);
+            setTotalData(totalData);
+            setTotalPages(totalPages);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+        }else if(typeDetail !== 'all' && keyword === ''){
+          Instance
+          .get(`/boards/find/category?boardTitle=${boardTitle}&category=${typeDetail}`)
+          .then((response) => {
+            const totalPages = parseInt(response.headers['totalpages'], 10);
+            const totalData = parseInt(response.headers['totaldata'], 10);
+            setBoard(response.data || []);
+            setTotalData(totalData);
+            setTotalPages(totalPages);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+        }else if(typeDetail === 'all' && keyword !== ''){
+          Instance
+          .get(`/boards/find/category?boardTitle=${boardTitle}&keyword=${keyword}`)
+          .then((response) => {
+            const totalPages = parseInt(response.headers['totalpages'], 10);
+            const totalData = parseInt(response.headers['totaldata'], 10);
+            setBoard(response.data || []);
+            setTotalData(totalData);
+            setTotalPages(totalPages);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+        }else{
+          Instance
+          .get(`/boards/find/category?boardTitle=${boardTitle}&category=${typeDetail}&keyword=${keyword}`)
+          .then((response) => {
+            const totalPages = parseInt(response.headers['totalpages'], 10);
+            const totalData = parseInt(response.headers['totaldata'], 10);
+            setBoard(response.data || []);
+            setTotalData(totalData);
+            setTotalPages(totalPages);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
         }
       }
     };
@@ -175,9 +174,9 @@ const CustomerSupport = () => {
   const generateOptions = (item: TypeDetail, selectedType: string) => {
     if (item.type === selectedType) {
       return (
-        <option key={item.value} value={item.value}>
-          {item.typeDetail}
-        </option>
+          <option key={item.value} value={item.value}>
+            {item.typeDetail}
+          </option>
       );
     }
   };

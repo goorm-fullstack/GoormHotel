@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import * as S from './Style';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PageTitle, BtnWrapper } from '../../Style/commonStyles';
-import axios from 'axios';
 import AdminLayout from '../common/AdminLayout';
 import { Container } from '../member/Style';
 import { NormalBtn } from '../../Style/commonStyles';
+import Instance from '../../utils/api/axiosInstance';
 
 const AdminBoardDetail = () => {
   const loc = useLocation();
@@ -41,7 +41,7 @@ const AdminBoardDetail = () => {
     boardData && boardData.boardContent ? parseBoardContent(boardData.boardContent).map((paragraph, index) => <p key={index}>{paragraph}</p>) : '';
 
   useEffect(() => {
-    axios
+    Instance
       .get(`/boards/${id}`)
       .then((response) => {
         if (response.headers['filename']) {
@@ -96,7 +96,7 @@ const AdminBoardDetail = () => {
     // 단일 항목에 대한 이미지 URL을 가져옵니다
     const fetchImageUrl = async () => {
       try {
-        const response = await axios.get(`/boards/image/${id}`, {
+        const response = await Instance.get(`/boards/image/${id}`, {
           responseType: 'arraybuffer',
         });
 
@@ -112,7 +112,7 @@ const AdminBoardDetail = () => {
   }, [id]);
 
   const handleDownLoad = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const result = await axios.get(`/boards/download/${id}`, { responseType: 'blob' });
+    const result = await Instance.get(`/boards/download/${id}`, { responseType: 'blob' });
     let blob = new Blob([result.data], { type: result.headers['content-type'] });
 
     let link = document.createElement('a');
@@ -124,7 +124,7 @@ const AdminBoardDetail = () => {
 
   const fetchReply = async (boardId: number) => {
     try {
-      const response = await axios.get(`/reply/boardId/${boardId}`);
+      const response = await Instance.get(`/reply/boardId/${boardId}`);
       setReply(response.data);
     } catch (error) {
       console.error(error);
@@ -134,7 +134,7 @@ const AdminBoardDetail = () => {
   const handleDelete = (replyId: number) => {
     const isConfirm = window.confirm('삭제하시겠습니까?');
     if (isConfirm) {
-      axios
+      Instance
         .put(`/reply/softdelete/${replyId}`)
         .then((response) => {
           alert('삭제되었습니다.');
@@ -168,7 +168,7 @@ const AdminBoardDetail = () => {
         replyWriter: replyWriterModify,
         replyContent: replyContentModify,
       };
-      axios
+      Instance
         .put(`/reply/${replyId}`, data)
         .then((response) => {
           alert('완료되었습니다.');
@@ -186,7 +186,7 @@ const AdminBoardDetail = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/reply/writeform', {
+      const response = await Instance.post('/reply/writeform', {
         boardId: id,
         replyContent: replyContent,
         replyWriter: replyWriter,

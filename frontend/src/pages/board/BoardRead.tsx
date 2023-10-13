@@ -7,6 +7,7 @@ import axios from 'axios';
 import queryString from "query-string";
 import e from 'express';
 import {Cookies} from "react-cookie";
+import Instance from '../../utils/api/axiosInstance';
 
 const BoardRead = () => {
   const loc = useLocation();
@@ -50,7 +51,7 @@ const BoardRead = () => {
     boardData && boardData.boardContent ? parseBoardContent(boardData.boardContent).map((paragraph, index) => <p key={index}>{paragraph}</p>) : '';
 
   useEffect(() => {
-    axios
+    Instance
       .get(`/boards/${boardId}`)
       .then((response) => {
         if (response.headers['filename']) {
@@ -106,7 +107,7 @@ const BoardRead = () => {
     // 단일 항목에 대한 이미지 URL을 가져옵니다
     const fetchImageUrl = async () => {
       try {
-        const response = await axios.get(`/boards/image/${boardId}`, {
+        const response = await Instance.get(`/boards/image/${boardId}`, {
           responseType: 'arraybuffer',
         });
 
@@ -122,7 +123,7 @@ const BoardRead = () => {
   }, [boardId]);
 
   const handleDownLoad = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const result = await axios.get(`/boards/download/${boardId}`, { responseType: 'blob' });
+    const result = await Instance.get(`/boards/download/${boardId}`, { responseType: 'blob' });
     let blob = new Blob([result.data], { type: result.headers['content-type'] });
 
     let link = document.createElement('a');
@@ -134,7 +135,7 @@ const BoardRead = () => {
 
   const fetchReply = async (boardId: number) => {
     try {
-      const response = await axios.get(`/reply/boardId/${boardId}`);
+      const response = await Instance.get(`/reply/boardId/${boardId}`);
       setReply(response.data);
     } catch (error) {
       console.error(error);
@@ -143,7 +144,7 @@ const BoardRead = () => {
 
   const findReply = async (replyId : number) => {
     try{
-      const response = await axios.get(`/reply/replyId/${replyId}`);
+      const response = await Instance.get(`/reply/replyId/${replyId}`);
       if(!response){
         return ;
       }
@@ -159,7 +160,7 @@ const BoardRead = () => {
     if( (isLogin === replyWriter) && !replyPassword){                   // 쿠키 아이디와 작성자 이름이 같고 댓글 비밀번호가 없을 때
       const isConfirm = window.confirm('삭제하시겠습니까?');
       if(isConfirm){
-        axios
+        Instance
           .put(`/reply/softdelete/${replyId}`)
           .then((response) => {
             alert('삭제되었습니다.');
@@ -232,7 +233,7 @@ const BoardRead = () => {
       replyWriter: replyWriterModify,
       replyContent: replyContentModify,
     };
-    axios
+    Instance
       .put(`/reply/${replyId}`, data)
       .then((response) => {
         alert('수정되었습니다.');
@@ -249,7 +250,7 @@ const BoardRead = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/reply/writeform', {
+      const response = await Instance.post('/reply/writeform', {
         boardId: boardId,
         replyContent: replyContent,
         replyWriter: isLogin ? isLogin : replyWriter,

@@ -124,10 +124,11 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    const adminId = getCookie('adminId');
-    const memberId = getCookie('memberId');
-    const role = getCookie('role');
-    const auth = getCookie('auth');
+    const adminId = getCookie("adminId");
+    const memberId = getCookie("memberId");
+    const role = getCookie("role");
+    const auth = getCookie("auth");
+    const adminNickName = getCookie("adminNickname");
 
     console.log('adminId 쿠키 값:', adminId);
     console.log('role 쿠키 값:', role);
@@ -135,10 +136,11 @@ const App: React.FC = () => {
 
     // 로컬 스토리지에 정보를 저장한다.
     // 어드민 로그인이라면
-    if (adminId && role && auth) {
-      localStorage.setItem('adminId', adminId);
-      localStorage.setItem('role', role);
-      localStorage.setItem('auth', splitDashLine(auth).join(','));
+    if (adminId && role && auth && adminNickName) {
+      localStorage.setItem("adminId", adminId);
+      localStorage.setItem("role", role);
+      localStorage.setItem("auth", splitDashLine(auth).join(','));
+      localStorage.setItem("adminNickname", adminNickName);
       setAuthState({ adminId, role, auth });
       setIsLogined(true);
     }
@@ -189,6 +191,7 @@ const App: React.FC = () => {
           <Route path="/admin/board/:page" element={<AdminBoard />} />
           <Route path="/admin/board/write" element={<AdminBoardWrite />} />
           <Route path="/admin/board/:board/detail/:id" element={<AdminBoardDetail />} />
+{/*           <Route path="/admin/board/write" element={<AdminBoardWrite />} /> */}
           <Route path="/admin/deletepost/:page" element={<AdminDeleteComment />} />
           <Route path="/admin/chat/:page" element={<AdminChat />} />
           <Route path="/admin/chat/detail/:roomId" element={<AdminChatDetail />} />
@@ -217,7 +220,7 @@ const App: React.FC = () => {
             <Route path="/sitemap" element={<Sitemap />} />
             <Route path="/findidpw" element={<FindAccount />} />
             <Route path="/findid/result" element={<FindIdResult />} />
-            <Route path="/findpw/result" element={<FindPwResult />} />
+            <Route path="/findpw/result/:resetToken" element={<FindPwResult />} />
             <Route path="/membership" element={<Membership />} />
             <Route path="/reservation/:number" element={<ReservationCheck />} />
             <Route path="/offers/:page" element={<ReservationItem />} />

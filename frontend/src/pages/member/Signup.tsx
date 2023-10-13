@@ -73,7 +73,7 @@ const Signup = () => {
 
     if (termsAgree && privacyAgree) {
       try {
-        const response = await Instance.post('/signup', {
+        const response = await Instance.post('/member/signup', {
           name: formData.name,
           password: formData.password,
           memberId: formData.memberId,
