@@ -126,21 +126,20 @@ const ReservationItem = () => {
       setImageUrls(urls);
     };
 
-    // if (products.length > 0) {
-    //   fetchImageUrls();
-    // }
+    if (products.length > 0) {
+      fetchImageUrls();
+    }
   }, [products]);
 
   useEffect(() => {
     const currentPage: number = parseInt(page ? page : '1', 10);
     if (selectedType.includes('all')) {
       if (selectedCategory !== '') {
-        Instance
-          .get(`/category?page=${currentPage}`, {
-            params: {
-              typeDetail: selectedCategory,
-            },
-          })
+        Instance.get(`/category?page=${currentPage}`, {
+          params: {
+            typeDetail: selectedCategory,
+          },
+        })
           .then((response) => {
             const totalPages = parseInt(response.headers['totalpages'], 10);
             const totalData = parseInt(response.headers['totaldata'], 10);
@@ -152,8 +151,7 @@ const ReservationItem = () => {
             console.error(error);
           });
       } else {
-        Instance
-          .get(`/category?page=${currentPage}`)
+        Instance.get(`/category?page=${currentPage}`)
           .then((response) => {
             const totalPages = parseInt(response.headers['totalpages'], 10);
             const totalData = parseInt(response.headers['totaldata'], 10);
@@ -167,13 +165,12 @@ const ReservationItem = () => {
       }
     } else {
       if (selectedCategory !== '') {
-        Instance
-          .get(`/category?page=${currentPage}`, {
-            params: {
-              type: selectedType[0],
-              typeDetail: selectedCategory,
-            },
-          })
+        Instance.get(`/category?page=${currentPage}`, {
+          params: {
+            type: selectedType[0],
+            typeDetail: selectedCategory,
+          },
+        })
           .then((response) => {
             const totalPages = parseInt(response.headers['totalpages'], 10);
             const totalData = parseInt(response.headers['totaldata'], 10);
@@ -186,12 +183,11 @@ const ReservationItem = () => {
             console.error(error);
           });
       } else {
-        Instance
-          .get(`/category?page=${currentPage}`, {
-            params: {
-              type: selectedType[0],
-            },
-          })
+        Instance.get(`/category?page=${currentPage}`, {
+          params: {
+            type: selectedType[0],
+          },
+        })
           .then((response) => {
             const totalPages = parseInt(response.headers['totalpages'], 10);
             const totalData = parseInt(response.headers['totaldata'], 10);
