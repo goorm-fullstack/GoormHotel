@@ -4,8 +4,11 @@ import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.member.dto.request.AdminSignupDTO;
 import goormknights.hotel.member.dto.request.RequestManagerDto;
+import goormknights.hotel.member.dto.response.ManagerListDTO;
 import goormknights.hotel.member.dto.response.MemberInfoDetailDTO;
 import goormknights.hotel.member.dto.response.ResponseManagerDto;
+import goormknights.hotel.member.model.Manager;
+import goormknights.hotel.member.repository.ManagerRepository;
 import goormknights.hotel.member.service.AdminService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -29,6 +33,7 @@ import java.util.Map;
 public class AdminController {
 
     private final AdminService adminService;
+    private final ManagerRepository managerRepository;
 
     @GetMapping("/session")
     public ResponseEntity<?> validateSession(HttpSession session) {
@@ -60,7 +65,7 @@ public class AdminController {
     }
 
     // 회원디테일 정보 조회
-    @GetMapping("/api/admin/member/{memberId}")
+    @GetMapping("/admin/member/{memberId}")
     public ResponseEntity<?> memberInfoDetail(@PathVariable String memberId) {
         MemberInfoDetailDTO memberInfo = adminService.memberInfoDetail(memberId);
         if (memberInfo != null) {
@@ -89,7 +94,30 @@ public class AdminController {
         }
     }
 
+    // 매니저 회원가입
+    @PostMapping("/admin-signup")
+    public ResponseEntity<String> adminSignup(@RequestBody AdminSignupDTO adminSignupDTO){
+        adminService.adminSignup(adminSignupDTO);
+        return new ResponseEntity<>("어드민계정 가입 성공", HttpStatus.OK);
+    }
 
+    // 매니저 리스트 조회
+    @GetMapping("/admin-getlist")
+    public List<ManagerListDTO> getAllManagers() {
+        List<Manager> allManagers = managerRepository.findAll();
+
+        return allManagers.stream().map(manager -> {
+            ManagerListDTO dto = new ManagerListDTO();
+            dto.setId(manager.getId());
+            dto.setAdminName(manager.getAdminName());
+            dto.setAdminId(manager.getAdminId());
+            dto.setAdminNickname(manager.getAdminNickname());
+            dto.setCreatedAt(manager.getCreatedAt());
+            dto.setIsActive(manager.getIsActive());
+            dto.setPassword(manager.getPassword());
+            return dto;
+        }).collect(Collectors.toList());
+    }
 
     @PostMapping
     public ResponseEntity<?> addManager(@RequestBody AdminSignupDTO adminSignupDTO) {

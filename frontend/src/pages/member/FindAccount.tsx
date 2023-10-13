@@ -50,7 +50,7 @@ const FindAccount = () => {
   const handleFindIdSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await Instance.post<FindMemberIdDTO>('/find-id', findIdData);
+      const response = await Instance.post<FindMemberIdDTO>('/member/find-id', findIdData);
       if (response.status === 200) {
         navigate('/findid/result', { state: { memberId: response.data, name: findIdData.name } });
       }
@@ -83,7 +83,7 @@ const FindAccount = () => {
   const handleFindPwSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await Instance.post<FindPasswordResponse>('/find-pw', findPasswordData);
+      const response = await Instance.post<FindPasswordResponse>('/member/find-pw', findPasswordData);
       if (response.status === 200 && response.data.resetToken) {
         navigate(`/findpw/result/${response.data.resetToken}`);
       }

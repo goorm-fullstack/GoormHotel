@@ -53,7 +53,7 @@ const Mypage = () => {
       const storedMemberId = localStorage.getItem('memberId');
       if (storedMemberId) {
         try {
-          const response = await Instance.get(`/api/${storedMemberId}`);
+          const response = await Instance.get(`/member/api/${storedMemberId}`);
           if (response.status === 200) {
             const { password, ...otherData } = response.data;
             setMember(otherData);
@@ -82,7 +82,7 @@ const Mypage = () => {
     try {
       const payload = isPasswordChanged ? { ...member, birth: birthString, needCodeValidation: true } : { ...member, birth: birthString };
       console.log("Sending payload: ", payload);
-      const response = await Instance.put<Member>(`/api/member/${member.memberId}`, payload);
+      const response = await Instance.put<Member>(`/member/api/change-member/${member.memberId}`, payload);
 
       if (response.status === 200) {
         alert('회원정보 수정이 완료되었습니다');
