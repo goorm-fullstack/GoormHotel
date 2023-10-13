@@ -186,7 +186,7 @@ const BoardRead = () => {
 
       if(replyPassword === inputPassword){                                           //입력받은 비밀번호와 replyPassword가 일치하다면
         return (                                                                     //댓글 삭제
-          axios
+          Instance
             .put(`/reply/softdelete/${replyId}`)
             .then((response) => {
               alert('삭제되었습니다.');
