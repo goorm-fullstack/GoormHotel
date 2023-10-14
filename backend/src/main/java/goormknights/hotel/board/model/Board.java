@@ -29,7 +29,7 @@ public class Board {
     @Column(nullable = false)
     private String title;  //제목
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 3000)
     private String boardContent;    //내용
 
     @Column(nullable = false)

@@ -323,6 +323,14 @@ const BoardRead = () => {
   //   handleUserInfo();
   // }, [])
 
+  const OEmbedComponent = ({ url }: { url: string }) => {
+    return (
+        <div>
+          <iframe src={url} title="Embedded Media" />
+        </div>
+    );
+  };
+
   return (
     <>
       <SubHeader kind="board" />
@@ -374,7 +382,9 @@ const BoardRead = () => {
                 </tr>
               )}
               <tr className="contents">
-                <td>{boardContent}</td>
+                <td>
+                  <div dangerouslySetInnerHTML={{ __html: boardData && boardData.boardContent }} />
+                </td>
               </tr>
               {board !== 'notice' &&
               <tr className="commentwrite">
@@ -400,7 +410,8 @@ const BoardRead = () => {
                     {reply.length === 0 && (
                       <li>
                         <div>
-                          <p className="empty">작성된 댓글이 없습니다.</p>                        </div>
+                          <p className="empty">작성된 댓글이 없습니다.</p>
+                        </div>
                       </li>
                     )}
                     {reply.length > 0 &&

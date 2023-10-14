@@ -76,7 +76,20 @@ export const WriteBtnWrapper = styled(BtnWrapper)`
   margin-bottom: 20px;
 `;
 
-export const Table = styled(commonTable)``;
+export const Table = styled(commonTable)`
+  td.writeWrapper {
+    strong{
+      font-weight: bold;
+    }
+    i{
+      font-style: italic;
+    }
+    a{
+      color: blue;
+      text-decoration: underline;
+    }
+  }
+`;
 
 export const TableRead = styled.table`
   // 게시판 상세 스타일
@@ -117,6 +130,19 @@ export const TableRead = styled.table`
       svg {
         height: 16px;
       }
+    }
+  }
+  
+  .boardContent {
+    strong{
+      font-weight: bold;
+    }
+    i{
+      font-style: italic;
+    }
+    a{
+      color: blue;
+      text-decoration: underline;
     }
   }
 
@@ -190,7 +216,16 @@ export const TableRead = styled.table`
 
   // 댓글 목록
   .commentslist {
+    td{
+      padding: 0;
+    }
+    ul{
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
     li {
+      padding-left: 40px;
+      padding-right: 40px;
       margin-top: 30px;
       padding-top: 30px;
       border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
