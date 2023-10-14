@@ -150,19 +150,6 @@ const App: React.FC = () => {
       localStorage.setItem('role', role);
       setMemberAuthState({ memberId, role });
       setIsMember(true);
-    } else {
-      // 서버에서 상태 가져오기(테스트 필요)
-      Instance.get('/api/adminCheck')
-        .then((response) => {
-          setAuthState({
-            adminId: response.data.adminId,
-            role: response.data.role,
-            auth: response.data.auth,
-          });
-        })
-        .catch((error) => {
-          console.log('로그인 상태를 가져오지 못했습니다.', error);
-        });
     }
   }, []);
 

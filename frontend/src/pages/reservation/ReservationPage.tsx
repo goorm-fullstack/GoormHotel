@@ -136,8 +136,10 @@ const ReservationPage = () => {
     if(isLogined) {
       if (confirmed) {
         try {
-          await Instance.post(`/reservation/save`, serverFormattedData);
-  
+          await Instance.post(`/reservation/save`, {
+            params : memberId,
+            data : serverFormattedData
+          });
           navigate('/');
           window.alert('예약이 완료되었습니다');
         } catch (error) {
@@ -152,8 +154,13 @@ const ReservationPage = () => {
             email : email,
             phoneNumber : phoneNumber
           };
-
-          await Instance.post(`/reservation/save/anonymous"`, serverFormattedData, {params : anonymousSignupDto});
+          const serverFormattedData = {
+            ...formData,
+            checkIn: formatDateForServer(new Date(2023,11,25,3,50)),//테스트 데이터
+            checkOut: formatDateForServer(new Date(2023,11,25,3,50)),
+            anonymousSignupDto : anonymousSignupDto
+          };
+          await Instance.post(`/reservation/save/anonymous`, serverFormattedData);
           navigate('/');
           window.alert('예약이 완료되었습니다');
         } catch (error) {

@@ -8,6 +8,7 @@ import goormknights.hotel.member.model.Anonymous;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.repository.AnonymousRepository;
 import goormknights.hotel.member.repository.MemberRepository;
+import goormknights.hotel.reservation.dto.request.RequestAnonymousReservationDto;
 import goormknights.hotel.reservation.dto.request.RequestReservationDto;
 import goormknights.hotel.reservation.model.Reservation;
 import goormknights.hotel.reservation.repository.ReservationRepository;
@@ -58,8 +59,8 @@ public class ReservationService {
     /**
      * 비회원 예약하기 로직
      */
-    public void saveReservation_Anonymous(RequestReservationDto reservationDto, AnonymousSignupDto anonymousSignupDto) {
-        Anonymous anonymous = anonymousRepository.save(anonymousSignupDto.toEntity());
+    public void saveReservation_Anonymous(RequestAnonymousReservationDto reservationDto) {
+        Anonymous anonymous = anonymousRepository.save(reservationDto.getAnonymousSignupDto().toEntity());
         String generatedNumber = makeReservationNumber();
         anonymous.setReservationNumber(generatedNumber);
         reservationDto.setReservationNumber(generatedNumber);
