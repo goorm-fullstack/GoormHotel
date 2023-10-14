@@ -212,4 +212,19 @@ public class BoardController {
                 .header("TotalData", String.valueOf(totalElements))
                 .body(allBoardReplyDeleted.getContent());
     }
+
+    // 마이페이지용
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
+    @GetMapping("/mypage/{writer}")
+    public ResponseEntity<List<Object>> myPage(@PathVariable String writer, Pageable pageable){
+        Page<Object> allBoardAndReply = boardService.findAllBoardAndReply(writer, pageable);
+
+        int totalPages = allBoardAndReply.getTotalPages();
+        long totalElements = allBoardAndReply.getTotalElements();
+
+        return ResponseEntity.ok()
+                .header("TotalPages", String.valueOf(totalPages))
+                .header("TotalData", String.valueOf(totalElements))
+                .body(allBoardAndReply.getContent());
+    }
 }

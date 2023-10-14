@@ -72,6 +72,8 @@ const ReservationPage = () => {
     totalPrice: '12345',
   });
 
+  const isLoggined = localStorage.getItem('memberId'); // 로그인 유무 확인
+
   //member데이터를 불러오는 로직
   useEffect(() => {
     const params = {
@@ -176,7 +178,7 @@ const ReservationPage = () => {
             <S.Section>
               <ContentsTitleXSmall>상품 상세 설정</ContentsTitleXSmall>
               <S.OptionWrap>
-                <Reservation updateReservationData={updateReservationData} />
+                <Reservation updateReservationData={updateReservationData} selectedProduct={selectedProduct} />
               </S.OptionWrap>
             </S.Section>
 

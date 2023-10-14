@@ -141,7 +141,11 @@ const BoardWrite = () => {
       formData.boardWriter = inputRef && inputRef.current ? inputRef.current.value : '';
   
       Object.keys(formData).forEach((key) => {
-        form.append(key, formData[key]);
+        if(key === 'boardWriter'){
+          form.append(key, user !== null ? formData[key] : `UNUSER-${formData[key]}`);
+        }else{
+          form.append(key, formData[key]);
+        }
       });
   
       const isConfirm = window.confirm('작성하시겠습니까?');

@@ -29,6 +29,7 @@ const BoardRead = () => {
   const [user, setUser] = useState('');
   const [scroll, setScroll] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const navigate = useNavigate();
 
   const parseBoardContent = (content: any) => {
@@ -39,8 +40,8 @@ const BoardRead = () => {
     return paragraphs.map((p) => p.textContent);
   };
 
-  const boardContent =
-    boardData && boardData.boardContent ? parseBoardContent(boardData.boardContent).map((paragraph, index) => <p key={index}>{paragraph}</p>) : '';
+  // const boardContent =
+  //   boardData && boardData.boardContent ? parseBoardContent(boardData.boardContent).map((paragraph, index) => <p key={index}>{paragraph}</p>) : '';
 
   useEffect(() => {
     Instance
@@ -188,14 +189,14 @@ const BoardRead = () => {
 
   const handleUpdate = async (replyId: any) => {
     const response = await Instance.get(`/reply/replyId/${replyId}`);
-    const writer = response.data.replyWriter;
+    const writer = user !== null ? response.data.replyWriter : response.data.replyWriter.replace('UNUSER-', '');
     const content = response.data.replyContent;
     setIsEditing(true);
     setEditingReplyId(replyId);
     setReplyWriterModify(writer);
     setReplyContentModify(content);
     setScroll(window.scrollY);
-    scrollToPosition(465);
+    scrollToPosition(300);
   };
 
   const handleCancelUpdate = () => {
@@ -211,14 +212,17 @@ const BoardRead = () => {
       if(replyWriterModify === id){
         const data = {
           replyWriter: replyWriterModify,
-          replyContent: replyContentModify,
+          replyContent: replyContent,
         }
         Instance
             .put(`/reply/${editingReplyId}`, data)
             .then((response) => {
               alert('수정되었습니다.');
-              setIsEditing(false);
               setEditedReplyContent('');
+              setReplyContentModify('');
+              setReplyContent('');
+              scrollToPosition(scroll);
+              setIsEditing(false);
               fetchReply(boardData.boardId);
             })
             .catch((error) => {
@@ -230,16 +234,16 @@ const BoardRead = () => {
       const password = response.data.replyPassword;
       if(password === replyPassword){
         const data = {
-          replyWriter: replyWriterModify,
+          replyWriter: `UNUSER-${replyWriterModify}`,
           replyContent: replyContentModify,
         }
         Instance
           .put(`/reply/${editingReplyId}`, data)
           .then((response) => {
             alert('수정되었습니다.');
-            setIsEditing(false);
             scrollToPosition(scroll);
             setEditedReplyContent('');
+            setIsEditing(false);
             fetchReply(boardData.boardId);
           })
           .catch((error) => {
@@ -275,7 +279,7 @@ const BoardRead = () => {
       Instance.post('/reply/writeform', {
       boardId: boardId,
       replyContent: replyContent,
-      replyWriter: replyWriter,
+      replyWriter: `UNUSER-${replyWriter}`,
       replyPassword: replyPassword,
       })
       .then(() => {
@@ -289,7 +293,7 @@ const BoardRead = () => {
       })
     }
   }
-  console.log(reply);
+
 
   const handleDelteBoard = async () => {
     if(user !== null){
@@ -333,8 +337,8 @@ const BoardRead = () => {
       }
     }
   }
-
-  console.log(isEditing);
+  
+  const p = <p>ddd</p>;
 
   return (
     <>
@@ -388,9 +392,11 @@ const BoardRead = () => {
                 </tr>
               )}
               <tr className="contents">
-                <td>{boardContent}</td>
+                <td>
+                  <div dangerouslySetInnerHTML={{ __html: boardData && boardData.boardContent }} />
+                </td>
               </tr>
-              {board === 'review' &&
+              {board !== 'notice' &&
               <tr className="commentwrite">
                 <td>
                   <div>
@@ -421,7 +427,7 @@ const BoardRead = () => {
                         }
                       </div>
                       <div className="tawrap">
-                        <textarea name="replyContent" value={replyContent} onChange={(e) => setReplyContent(e.target.value)}></textarea>
+                        <textarea name="replyContent" value={replyContent} onChange={(e) => setReplyContent(e.target.value)} required></textarea>
                         <button type="submit">작성하기</button>
                       </div>
                     </form>) :
@@ -438,7 +444,7 @@ const BoardRead = () => {
                             required
                           />
                           {/* 비회원일시 */}
-                          <input name='password' type="password" placeholder="비밀번호" value={replyPassword} onChange={(e) => setReplyPassword(e.target.value)} required />
+                          <input name='password' type="password" placeholder="작성 시 입력한 비밀번호" value={replyPassword} onChange={(e) => setReplyPassword(e.target.value)} required />
                           <div className="tawrap">
                             <textarea name="replyContent" defaultValue={replyContentModify} value={replyContentModify} onChange={(e) => setReplyContentModify(e.target.value)} required></textarea>
                             <button type="submit">수정하기</button>
@@ -455,8 +461,9 @@ const BoardRead = () => {
                             ref={inputRef}
                           />
                           <div className="tawrap">
-                            <textarea name="replyContent" value={replyContent} onChange={(e) => setReplyContent(e.target.value)} required></textarea>
-                            <button type="submit">작성하기</button>
+                            <textarea name="replyContent" defaultValue={replyContentModify} onChange={(e) => setReplyContent(e.target.value)} required></textarea>
+                            <button type="submit">수정하기</button>
+                            <button type="submit" onClick={handleCancelUpdate}>취소</button>
                           </div>
                         </>
                         }
@@ -467,7 +474,7 @@ const BoardRead = () => {
                 </td>
               </tr>
               }
-              {board === 'review' &&
+              {board !== 'notice' &&
               <tr className="commentslist">
                 <td>
                   <ul>
@@ -482,7 +489,7 @@ const BoardRead = () => {
                       reply.map((replyItem, index) => (
                         <li key={index}>
                           <div className="cwinfo">
-                            <strong>{replyItem.replyWriter}</strong>
+                            <strong>{user !== null ? replyItem.replyWriter : replyItem.replyWriter.replace('UNUSER-', '')}</strong>
                             <span className="date">{`${replyItem.replyWriteDate[0]}.${replyItem.replyWriteDate[1] < 10 ? '0' : ''}${
                               replyItem.replyWriteDate[1]
                             }.${

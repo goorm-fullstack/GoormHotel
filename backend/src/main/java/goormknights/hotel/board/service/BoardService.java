@@ -301,4 +301,24 @@ public class BoardService {
         return new PageImpl<>(list, pageable, list.size());
     }
 
+    // 작성자명으로 데이터 가져오기 (마이페이지용)
+    public Page<Object> findAllBoardAndReply(String writer, Pageable pageable){
+        Page<Board> all = boardRepository.findAll(pageable);
+        Page<Reply> all1 = replyRepository.findAll(pageable);
+        List<Object> list = new ArrayList<>();
+
+        for (Board board : all) {
+            if(board.getBoardDeleteTime() == null && board.getBoardWriter().equals(writer)){
+                list.add(board);
+            }
+        }
+        for (Reply reply : all1) {
+            if(reply.getReplyDeleteTime() == null && reply.getReplyWriter().equals(writer)){
+                list.add(reply);
+            }
+        }
+
+        return new PageImpl<>(list, pageable, list.size());
+    }
+
 }

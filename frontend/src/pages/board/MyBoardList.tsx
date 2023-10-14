@@ -11,17 +11,22 @@ const MyBoardList = () => {
   const [replyData, setReplyData] = useState([]);
   const [boardData, setBoardData] = useState([]);
   const [sortData, setSortData] = useState<any[]>([]);
+  const [user, setUser] = useState('');
 
   useEffect(() => {
+    const user = localStorage.getItem('memberId');
+    setUser(user as string);
+
     const fetchData = async () => {
       const reply = await Instance.get('/reply/list');
       const board = await Instance.get('/boards/list');
-      const totalDataReply = parseInt(reply.headers['totaldata'], 10);
-      const totalDataBoard = parseInt(board.headers['totaldata'], 10);
+      const allData = await Instance.get(`/boards/mypage/${user}`);
+      const totalData = parseInt(allData.headers['totaldata'], 10);
+      const totalPage = parseInt(allData.headers['totalpages'], 10);
+      setTotalData(totalData);
+      setTotalPages(totalPage);
       setReplyData(reply.data);
       setBoardData(board.data);
-      setTotalPages(totalData % 10 === 0 ? Math.floor(totalData / 10) : Math.floor(totalData / 10) + 1);
-      setTotalData(totalDataReply + totalDataBoard);
     }
     fetchData();
   }, [])
@@ -34,7 +39,8 @@ const MyBoardList = () => {
         const dateB = new Date(b.boardWriteDate ? b.boardWriteDate : b.replyWriteDate); // b의 LocalDateTime
         return (dateA as any) - (dateB as any); // 오름차순 정렬
       });
-      setSortData(sortedData);
+      const filteredData = sortedData.filter((item: any) => item.boardWriter === user || item.replyWriter === user);
+      setSortData(filteredData);
     }
     sortByDateTime();
   }, [replyData, boardData])
@@ -56,14 +62,13 @@ const MyBoardList = () => {
               <th style={{ width: '110px' }}>게시판</th>
               <th style={{ width: '110px' }}>카테고리</th>
               <th style={{ width: '220px' }}>글 제목 또는 내용</th>
-              <th style={{ width: '140px' }}>작성자명(회원 ID)</th>
               <th style={{ width: '140px' }}>작성일</th>
             </tr>
           </thead>
           <tbody>
             {sortData.length === 0 ? (
               <tr>
-                <td colSpan={6} className="center empty">
+                <td colSpan={5} className="center empty">
                   활동 정보가 없습니다.
                 </td>
               </tr>
@@ -78,7 +83,6 @@ const MyBoardList = () => {
                     <p className="textover">{data.category ? data.category : '댓글'}</p>
                   </td>
                   <td className="center"><Link to={data.title ? `/board/${findBoardEnglish(data.boardTitle)}/detail/${data.title}?boardId=${data.boardId}` : `/board/${findBoardEnglish(data.responseBoardDto.boardTitle)}/detail/${data.responseBoardDto.title}?boardId=${data.responseBoardDto.boardId}`}>{data.title ? data.title : data.replyContent}</Link></td>
-                  <td className="center">{data.boardWriter ? data.boardWriter : data.replyWriter}</td>
                   <td className="center">{data.boardWriteDate ? `${data.boardWriteDate[0]}-${data.boardWriteDate[1] < 10 ? '0' : ''}${data.boardWriteDate[1]}-${
                       data.boardWriteDate[2] < 10 ? '0' : ''
                     }${data.boardWriteDate[2]}` : `${data.replyWriteDate[0]}-${data.replyWriteDate[1] < 10 ? '0' : ''}${data.replyWriteDate[1]}-${

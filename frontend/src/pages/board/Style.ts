@@ -68,6 +68,10 @@ export const BoardGallery = styled.ul`
     font-size: ${(props) => props.theme.font.sizexs};
     color: ${(props) => props.theme.colors.graylight};
   }
+  p.titlew span{
+    margin-right: 20px;
+    color: ${(props) => props.theme.colors.graylight};
+  }
 `;
 
 export const WriteBtnWrapper = styled(BtnWrapper)`
@@ -76,7 +80,13 @@ export const WriteBtnWrapper = styled(BtnWrapper)`
   margin-bottom: 20px;
 `;
 
-export const Table = styled(commonTable)``;
+export const Table = styled(commonTable)`
+  td.writeWrapper{
+    strong{
+      font-weight:900;
+    }
+  }
+`;
 
 export const TableRead = styled.table`
   // 게시판 상세 스타일
@@ -117,6 +127,12 @@ export const TableRead = styled.table`
       svg {
         height: 16px;
       }
+    }
+  }
+
+  .contents{
+    strong{
+      font-weight: 900;
     }
   }
 

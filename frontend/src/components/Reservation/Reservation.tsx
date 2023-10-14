@@ -6,7 +6,7 @@ import 'moment/locale/ko';
 import { ValuePiece } from '../common/DateButton/DateButton';
 import { useLocation } from 'react-router-dom';
 
-const Reservation = ({ updateReservationData }: any) => {
+const Reservation = ({ updateReservationData }: any, {selectedProduct}: any) => {
   const location = useLocation();
   const prevReservationData = location.state?.reservationData;
   const [checkInValue, setCheckInValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
@@ -16,7 +16,7 @@ const Reservation = ({ updateReservationData }: any) => {
   const [checkInOpen, setCheckInOpen] = useState<boolean>(false);
   const [checkOutOpen, setCheckOutOpen] = useState<boolean>(false);
   const [optionOpen, setOptionOpen] = useState<boolean>(false);
-  const [rooms, setRooms] = useState<number>(prevReservationData ? prevReservationData.rooms : 1);
+  const [count, setCount] = useState<number>(prevReservationData ? prevReservationData.count : 1);
   const [adults, setAdults] = useState<number>(prevReservationData ? prevReservationData.adults : 1);
   const [children, setChildren] = useState<number>(prevReservationData ? prevReservationData.children : 0);
   const [nights, setNights] = useState<number>(0);
@@ -39,7 +39,7 @@ const Reservation = ({ updateReservationData }: any) => {
   const reservationData = {
     checkInDate,
     checkOutDate,
-    rooms,
+    count,
     adults,
     children,
     nights,
@@ -49,7 +49,7 @@ const Reservation = ({ updateReservationData }: any) => {
     const updatedData = {
       checkInDate,
       checkOutDate,
-      rooms,
+      count,
       adults,
       children,
       nights,
@@ -58,7 +58,7 @@ const Reservation = ({ updateReservationData }: any) => {
     if(updateReservationData !== undefined){
       updateReservationData(updatedData);
     }
-  }, [checkInDate, checkOutDate, rooms, adults, children, nights]);
+  }, [checkInDate, checkOutDate, count, adults, children, nights]);
 
   useEffect(() => {
     const processedCheckInDate: ValuePiece = Array.isArray(checkInValue) ? checkInValue[0] : checkInValue;
@@ -264,9 +264,9 @@ const Reservation = ({ updateReservationData }: any) => {
       <S.ReserveDetail>
         <div className="option">
           <S.SelectWrapper>
-            <S.SelectLabel>객실수 {/* 객실이면 객실수, 다이닝이면 좌석수, index 페이지에서는 기본 객실수 */}</S.SelectLabel>
+            <S.SelectLabel>{selectedProduct?.typeDetail === 'dining' ? '상품수' : '객실수'} {/* 객실이면 객실수, 다이닝이면 좌석수, index 페이지에서는 기본 객실수 */}</S.SelectLabel>
             <button type="button" onClick={handleOptionToggle}>
-              {rooms}
+              {count}
             </button>
           </S.SelectWrapper>
           <S.SelectWrapper>
@@ -288,11 +288,11 @@ const Reservation = ({ updateReservationData }: any) => {
                   <th>객실수</th>
                   <td>
                     <div>
-                      <button type="button" className="btn-minus" onClick={() => handleMinusClick(setRooms, 1)}>
+                      <button type="button" className="btn-minus" onClick={() => handleMinusClick(setCount, 1)}>
                         ─
                       </button>
-                      <input type="text" value={rooms} readOnly />
-                      <button type="button" className="btn-plus" onClick={() => handlePlusClick(setRooms)}>
+                      <input type="text" value={count} readOnly />
+                      <button type="button" className="btn-plus" onClick={() => handlePlusClick(setCount)}>
                         ┼
                       </button>
                     </div>
