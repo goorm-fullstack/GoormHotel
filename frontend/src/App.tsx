@@ -101,11 +101,9 @@ const App: React.FC = () => {
   // 쿠키를 파싱하는 함수
   function getCookie(name: string): string | undefined {
     const cookieString = document.cookie;
-    console.log(cookieString);
     const cookies = cookieString.split('; ');
 
     for (let i = 0; i < cookies.length; i++) {
-      console.log(cookies[i]);
       const cookie = cookies[i].split('=');
       if (cookie[0] === name) {
         return cookie[1];
@@ -129,10 +127,6 @@ const App: React.FC = () => {
     const role = getCookie("role");
     const auth = getCookie("auth");
     const adminNickName = getCookie("adminNickname");
-
-    console.log('adminId 쿠키 값:', adminId);
-    console.log('role 쿠키 값:', role);
-    console.log('auth 쿠키 값:', auth);
 
     // 로컬 스토리지에 정보를 저장한다.
     // 어드민 로그인이라면

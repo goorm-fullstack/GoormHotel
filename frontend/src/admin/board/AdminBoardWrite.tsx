@@ -45,7 +45,6 @@ const AdminBoardWrite = () => {
       .post(`/api/manager/${cookie}`)
       .then((response) => {
         setAdmin(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error('Admin 정보 호출 실패' + error);
@@ -104,7 +103,6 @@ const AdminBoardWrite = () => {
     form.append('file', fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '');
     formData.boardContent = boardContent;
     form.append('isComment', isComment.toString());
-    console.log(formData.category);
 
     Object.keys(formData).forEach((key) => {
       form.append(key, formData[key]);

@@ -83,7 +83,6 @@ const Search = (endPoint: string, typeArray: Type[][], typeDetailArray: TypeDeta
     }
 
     if (keyword !== '') {
-      console.log(keyword);
       url += `&keyword=${keyword}`;
     }
 

@@ -126,11 +126,9 @@ const Home = () => {
           const response = await Instance.get(`/image/${item.name}`, {
             responseType: 'arraybuffer',
           });
-          console.log(response);
           const blob = new Blob([response.data], {
             type: response.headers['content-type'],
           });
-          console.log('blob = ', blob);
           return URL.createObjectURL(blob);
         })
       );
@@ -139,11 +137,9 @@ const Home = () => {
           const response = await Instance.get(`/image/${item.name}`, {
             responseType: 'arraybuffer',
           });
-          console.log(response);
           const blob = new Blob([response.data], {
             type: response.headers['content-type'],
           });
-          console.log('blob = ', blob);
           return URL.createObjectURL(blob);
         })
       );

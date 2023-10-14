@@ -34,7 +34,6 @@ const AdminDetailDining = () => {
     const nameParam: string = name ? name : '';
     Instance.get(`/dinings/${type}/${encodeURIComponent(nameParam)}`).then((response) => {
       setResponseData(response.data);
-      console.log('get 성공');
     });
   }, [name, type]);
 
@@ -72,7 +71,6 @@ const AdminDetailDining = () => {
 
         Object.keys(responseObject).forEach((key) => {
           form.append(key, responseObject[key]);
-          console.log(responseObject[key]);
         });
 
         try {
@@ -113,7 +111,6 @@ const AdminDetailDining = () => {
         const blob = new Blob([response.data], { type: response.headers['content-type'] });
         const imageUrl = URL.createObjectURL(blob);
         setImageUrls([imageUrl]); // 이미지 URL을 상태에 설정
-        console.log('생성 성공');
         setResponseObject(JSON.parse(JSON.stringify(responseData))); // 현재 데이터 깊은 복사
       } catch (error) {
         console.error('이미지 URL을 가져오는 중 오류가 발생했습니다:', error);
@@ -121,7 +118,6 @@ const AdminDetailDining = () => {
     };
 
     fetchImageUrl();
-    console.log('get data to responseObject = ', responseObject);
   }, [responseData]);
 
   // 중복검사 api 요청
@@ -140,11 +136,10 @@ const AdminDetailDining = () => {
         setDuplicateMessage(message);
         setIsConfirm(true);
       }
-      console.log('responseObject = ', responseObject);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setDuplicateMessage(error.response?.data);
-        console.log(error.response?.data);
+        console.error(error.response?.data);
         setIsConfirm(false);
       }
     }

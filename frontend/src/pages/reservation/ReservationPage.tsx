@@ -81,7 +81,6 @@ const ReservationPage = () => {
       id: localStorage.getItem('memberId'),
       };
       Instance.get('/member/find', { params }).then((response) => {
-        console.log(response.data);
         setMemberData(response.data);
         setCouponList(response.data.couponList);
         setMemberId(response.data.id);

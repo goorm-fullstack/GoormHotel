@@ -27,8 +27,6 @@ const AdminMemberDetail = () => {
     }
   }, []);
 
-  console.log(formData);
-
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({

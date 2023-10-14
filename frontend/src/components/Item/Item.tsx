@@ -19,8 +19,6 @@ const typeDetailName = [
 ];
 
 const Item = ({ selectedProduct }: any) => {
-  console.log(selectedProduct.imageUrl);
-
   const [type, setType] = useState('');
   const [typeDetail, setTypeDetail] = useState('');
   const [coupon, setCoupon] = useState();
