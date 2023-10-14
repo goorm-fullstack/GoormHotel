@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import * as S from './Style';
-import { useParams, useNavigate } from 'react-router-dom';
+import {useParams, useNavigate, useLocation} from 'react-router-dom';
 import { PageTitle, BtnWrapper, SubmitBtn, NormalBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import { ItemThumbnail } from '../../admin/item/Style';

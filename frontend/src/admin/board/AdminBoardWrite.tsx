@@ -3,31 +3,66 @@ import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, CheckLabel, MultiCheck, SubmitBtn, NormalBtn } from '../../Style/commonStyles';
 import { Container, Table } from '../member/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
-import { useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import { Cookies } from 'react-cookie';
 import Instance from '../../utils/api/axiosInstance';
+import boardWrite from "../../pages/board/BoardWrite";
 
 const AdminBoardWrite = () => {
   const adminAuth = localStorage.getItem("auth");
   const adminAdminId = localStorage.getItem("adminId") || "";
   const adminRole = localStorage.getItem("role");
-  // const adminAdminNickname = localStorage.getItem("adminNickname");
-  console.log(adminAuth);
-  console.log(adminAdminId);
-  console.log(adminRole);
-  //console.log(adminAdminNickname);
+  const adminNickname = localStorage.getItem("adminNickname");
 
-  const setValue = () => {};
-  const [formData, setFormData] = useState<FormData>({
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const parentBoardId = queryParams.get('parentBoardId');
+  const [parentBoard, setParentBoard] = useState<any | null>(null);
+
+  useEffect(() => {
+    Instance.get(`boards/${parentBoardId}`)
+        .then((response) => {
+          setParentBoard(response.data);
+          setIsComment(true);
+
+          if (response.data) {
+            setFormData({
+              ...formData,
+              category: response.data.category,
+              boardTitle: response.data.boardTitle,
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+  }, []);
+
+
+  let isCommentFormData = {
     title: "",
     boardContent: "",
     boardTitle: "",
     category: "",
     boardWriter: adminAdminId,
-  });
+  };
+
+  if (parentBoard) {
+    isCommentFormData = {
+      title: "",
+      category: parentBoard.category,
+      boardContent: "",
+      boardTitle: parentBoard.boardTitle,
+      boardWriter: adminAdminId,
+    };
+  }
+
+  const [formData, setFormData] = useState<FormData>(isCommentFormData);
+
   type FormData = {
     [key: string]: string;
   };
+
   const [categoryError, setCategoryError] = useState<string>('');
   const [boardTitleError, setBoardTitleError] = useState<string>('');
   const [imgFile, setImgFile] = useState<string>('');
@@ -93,6 +128,7 @@ const AdminBoardWrite = () => {
 
   const handleCommentCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsComment(e.target.checked);
+
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -216,6 +252,46 @@ const AdminBoardWrite = () => {
   //   handleUserInfo();
   // }, [])
 
+  const isCommentCategory = () => {
+    if(!parentBoard){
+      return (
+        <>
+          <tr>
+            <th>게시판</th>
+            <td>
+              <select name="boardTitle" value={formData.boardTitle} onChange={handleChange}>
+                <option value="">선택</option>
+                <option value="공지사항">공지사항</option>
+                <option value="문의하기">문의하기</option>
+                <option value="이용후기">이용후기</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>카테고리</th>
+            <td>
+              <select name="category" value={formData.category} onChange={handleChange}>
+                {categoryOption()};
+              </select>
+            </td>
+          </tr>
+        </>
+      );
+    }
+    return (
+      <>
+        <tr>
+          <th>게시판</th>
+          <td><p>{parentBoard.boardTitle}</p></td>
+        </tr>
+        <tr>
+          <th>카테고리</th>
+          <td><p>{parentBoard.category}</p></td>
+        </tr>
+      </>
+    );
+  }
+
   if(authItem && authItem.includes('AUTH_C')) {
   return (
     <AdminLayout subMenus="board">
@@ -224,31 +300,32 @@ const AdminBoardWrite = () => {
           <form onSubmit={handleSubmit} encType="multipart/form-data">
           <Table className="horizontal">
             <tbody>
-            <tr>
-              <th>게시판</th>
-              <td>
-                <select name="boardTitle" value={formData.boardTitle} onChange={handleChange}>
-                  <option value="">선택</option>
-                  <option value="공지사항">공지사항</option>
-                  <option value="문의하기">문의하기</option>
-                  <option value="이용후기">이용후기</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <th>카테고리</th>
-              <td>
-                <select name="category" value={formData.category} onChange={handleChange}>
-                  {categoryOption()};
-                </select>
-              </td>
-            </tr>
+            {isCommentCategory()}
+            {/*<tr>*/}
+            {/*  <th>게시판</th>*/}
+            {/*  <td>*/}
+            {/*    <select name="boardTitle" value={formData.boardTitle} onChange={handleChange}>*/}
+            {/*      <option value="">선택</option>*/}
+            {/*      <option value="공지사항">공지사항</option>*/}
+            {/*      <option value="문의하기">문의하기</option>*/}
+            {/*      <option value="이용후기">이용후기</option>*/}
+            {/*    </select>*/}
+            {/*  </td>*/}
+            {/*</tr>*/}
+            {/*<tr>*/}
+            {/*  <th>카테고리</th>*/}
+            {/*  <td>*/}
+            {/*    <select name="category" value={formData.category} onChange={handleChange}>*/}
+            {/*      {categoryOption()};*/}
+            {/*    </select>*/}
+            {/*  </td>*/}
+            {/*</tr>*/}
               <tr>
                 <th>제목</th>
                 <td>
                   <MultiCheck className="fit">
                     <input type="text" className="long" name="title" value={formData.title} onChange={handleChange} required/>
-                    {formData.boardTitle ==="문의하기" &&
+                    {parentBoard &&
                           <CheckLabel>
                             <InputCheckbox type="checkbox" checked={isComment} onChange={handleCommentCheckboxChange}/>{" "}답글
                           </CheckLabel>

@@ -36,6 +36,8 @@ public class RequestBoardDto {
 
     private String isComment;      //답글 여부
 
+    private long parentBoardId;     //부모 글 Id
+
     public Board toEntity() {
         return Board.builder()
                 .title(title)
@@ -46,6 +48,7 @@ public class RequestBoardDto {
                 .category(category)
                 .isComment(isComment)
                 .boardPassword(boardPassword)
+                .parentBoardId(parentBoardId)
                 .build();
     }
 }

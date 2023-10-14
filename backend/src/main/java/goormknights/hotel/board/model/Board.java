@@ -67,8 +67,10 @@ public class Board {
     @Column(nullable = false)
     private String isComment;      //답글 여부
 
+    private Long parentBoardId;     //부모 글 Id
+
     @Builder(toBuilder = true)
-    public Board(String boardPassword, String isComment, Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, BoardFile boardFile, String boardTitle, String category, List<Reply> replies, List<Report> report) {
+    public Board(Long parentBoardId, String boardPassword, String isComment, Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, BoardFile boardFile, String boardTitle, String category, List<Reply> replies, List<Report> report) {
         this.boardId = boardId;
         this.title = title;
         this.boardContent = boardContent;
@@ -82,6 +84,7 @@ public class Board {
         this.report = report;
         this.boardPassword = boardPassword;
         this.isComment = isComment;
+        this.parentBoardId = parentBoardId;
     }
 
     public ResponseBoardDto toResponseBoardDto(){
@@ -96,6 +99,7 @@ public class Board {
                 .boardDeleteTime(boardDeleteTime)
                 .isComment(isComment)
                 .boardPassword(boardPassword)
+                .parentBoardId(parentBoardId)
                 .build();
     }
 

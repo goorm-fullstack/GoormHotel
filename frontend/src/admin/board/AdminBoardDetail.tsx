@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './Style';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import {Link, useLocation, useNavigate, useParams} from 'react-router-dom';
 import { PageTitle, BtnWrapper } from '../../Style/commonStyles';
 import AdminLayout from '../common/AdminLayout';
 import { Container } from '../member/Style';
@@ -28,6 +28,16 @@ const AdminBoardDetail = () => {
   const [editingReplyId, setEditingReplyId] = useState(0); // 수정 중인 댓글 ID를 추적
   const navigate = useNavigate();
   console.log(id);
+
+  const isComment = () => {
+    if (board === 'qna' && boardData) {
+      return (
+          <>
+            <Link to={`/admin/board/write?parentBoardId=${boardData.boardId}`}>답글 작성</Link>
+          </>
+      )
+    }
+  }
 
   const parseBoardContent = (content: any) => {
     const parser = new DOMParser();
@@ -212,6 +222,7 @@ const AdminBoardDetail = () => {
                     <p className="title">
                       <span>{boardData ? boardData.category : ''}</span>
                       {boardData ? boardData.title : ''}
+                      {isComment()}
                     </p>
                     {(() => {
                       if (board !== 'notice' && boardData) {
