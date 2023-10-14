@@ -375,4 +375,9 @@ public class MemberService {
         }
         return new ResponseMemberDto(member.get());
     }
+
+    // 멤버 아이디로 회원 정보 찾기 - 진환
+    public Member findMember(String memberId){
+        return memberRepository.findByMemberId(memberId).orElseThrow(MemberNotFound::new);
+    }
 }

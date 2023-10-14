@@ -13,7 +13,11 @@ export const SearchHeader = styled.div`
   }
 `;
 
-export const Container = styled(commonContainerStyle)``;
+export const Container = styled(commonContainerStyle)`
+  .conbtm .preview{
+    margin-left: 30px;
+  }
+`;
 
 export const IsReply = styled.span`
   // 답글 아이콘

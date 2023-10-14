@@ -113,5 +113,13 @@ public class MemberController {
         memberService.setUnBlacked(id);
         return ResponseEntity.ok("차단 해제 완료");
     }
+
+    // 회원아이디로 멤버 pk 가져오기 - 진환
+    @GetMapping("/{memberId}")
+    public ResponseEntity<Long> findMemberByMemberId(@PathVariable String memberId){
+        Member member = memberService.findMember(memberId);
+        Long id = member.getId();
+        return ResponseEntity.ok(id);
+    }
 }
 

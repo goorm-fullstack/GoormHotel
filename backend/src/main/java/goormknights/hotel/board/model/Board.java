@@ -39,6 +39,9 @@ public class Board {
     @Column
     private String boardPassword;           //작성자 비밀번호
 
+    @Column
+    private Long memberPk; // 회원인 경우 회원의 pk저장
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "board_image_id")
     private BoardImage boardImage;       //이미지 저장
@@ -66,7 +69,7 @@ public class Board {
     private String isComment;      //답글 여부
 
     @Builder(toBuilder = true)
-    public Board(String boardPassword, String isComment, Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, BoardFile boardFile, String boardTitle, String category, List<Reply> replies, List<Report> report) {
+    public Board(String boardPassword, String isComment, Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, BoardFile boardFile, String boardTitle, String category, List<Reply> replies, List<Report> report, Long memberPk) {
         this.boardId = boardId;
         this.title = title;
         this.boardContent = boardContent;
@@ -80,6 +83,7 @@ public class Board {
         this.report = report;
         this.boardPassword = boardPassword;
         this.isComment = isComment;
+        this.memberPk = memberPk;
     }
 
     public ResponseBoardDto toResponseBoardDto(){
@@ -94,6 +98,7 @@ public class Board {
                 .boardDeleteTime(boardDeleteTime)
                 .isComment(isComment)
                 .boardPassword(boardPassword)
+                .memberPk(memberPk)
                 .build();
     }
 
@@ -110,6 +115,8 @@ public class Board {
                 .boardWriteDate(board.getBoardWriteDate())
                 .replies(board.getReplies())
                 .report(board.getReport())
+                .memberPk(board.getMemberPk())
+                .boardPassword(board.getBoardPassword())
                 .build();
     }
 }

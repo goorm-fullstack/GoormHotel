@@ -255,7 +255,7 @@ const CustomerSupport = () => {
                         </div>
                         <p className="titlew">
                           <span>[{item.category}]</span>
-                          <Link to={`/board/${board}/detail?boardId=${item.boardId}`}>{item.title}</Link>
+                          <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</Link>
                         </p>
                         <p className="writer">{item.boardWriter}</p>
                         <p className="date">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
@@ -300,7 +300,7 @@ const CustomerSupport = () => {
                           <td>
                             {item.isComment === 'true' ? <IsReply>답글</IsReply> : null}
                             {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
-                            <Link to={{ pathname: `/board/${board}/detail`, search: `boardId=${item.boardId}` }}>{item.title}</Link>
+                            <Link to={{ pathname: `/board/${board}/detail/${item.title}`, search: `boardId=${item.boardId}` }}>{item.title}</Link>
                           </td>
                           <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
                             item.boardWriteDate[2] < 10 ? '0' : ''

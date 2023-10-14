@@ -28,8 +28,8 @@ const BoardRead = () => {
   const [editingReplyId, setEditingReplyId] = useState(0); // 수정 중인 댓글 ID를 추적
   const [user, setUser] = useState('');
   const [scroll, setScroll] = useState(0);
+  const [memberPk, setMemberPk] = useState<number>(0);
   const inputRef = useRef<HTMLInputElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const navigate = useNavigate();
 
   const parseBoardContent = (content: any) => {
@@ -60,7 +60,16 @@ const BoardRead = () => {
 
       const user = localStorage.getItem('memberId');
       setUser(user as string);
-  }, []);
+
+      Instance.get(`/member/${user}`)
+      .then((response) => {
+        const memberPk = response.data;
+        setMemberPk(memberPk);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      })
+  }, [user]);
 
   useEffect(() => {
     let pageTitle;
@@ -162,8 +171,9 @@ const BoardRead = () => {
       }else{
         const response = await Instance.get(`reply/replyId/${replyId}`);
         const id = response.data.replyWriter;
+        const replyMemberPk = response.data.memberPk;
         console.log(id);
-        if(id === user){
+        if(id === user && memberPk === replyMemberPk){
           Instance
           .put(`/reply/softdelete/${replyId}`)
           .then((response) => {
@@ -189,7 +199,7 @@ const BoardRead = () => {
 
   const handleUpdate = async (replyId: any) => {
     const response = await Instance.get(`/reply/replyId/${replyId}`);
-    const writer = user !== null ? response.data.replyWriter : response.data.replyWriter.replace('UNUSER-', '');
+    const writer = response.data.replyWriter;
     const content = response.data.replyContent;
     setIsEditing(true);
     setEditingReplyId(replyId);
@@ -209,7 +219,8 @@ const BoardRead = () => {
     if(user !== null){
       const response = await Instance.get(`/reply/replyId/${editingReplyId}`);
       const id = response.data.replyWriter;
-      if(replyWriterModify === id){
+      const pk = response.data.memberPk;
+      if(replyWriterModify === id && memberPk === pk){
         const data = {
           replyWriter: replyWriterModify,
           replyContent: replyContent,
@@ -234,7 +245,7 @@ const BoardRead = () => {
       const password = response.data.replyPassword;
       if(password === replyPassword){
         const data = {
-          replyWriter: `UNUSER-${replyWriterModify}`,
+          replyWriter: replyWriterModify,
           replyContent: replyContentModify,
         }
         Instance
@@ -256,7 +267,7 @@ const BoardRead = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if(user !== null){
@@ -264,6 +275,7 @@ const BoardRead = () => {
         boardId: boardId,
         replyContent: replyContent,
         replyWriter: inputRef && inputRef.current ? inputRef.current.value : '',
+        memberPk: memberPk,
       })
       .then(() => {
         setReplyWriter('');
@@ -279,7 +291,7 @@ const BoardRead = () => {
       Instance.post('/reply/writeform', {
       boardId: boardId,
       replyContent: replyContent,
-      replyWriter: `UNUSER-${replyWriter}`,
+      replyWriter: replyWriter,
       replyPassword: replyPassword,
       })
       .then(() => {
@@ -299,7 +311,8 @@ const BoardRead = () => {
     if(user !== null){
       const response = await Instance.get(`/boards/${boardId}`);
       const id = response.data.boardWriter;
-      if(user === id){
+      const pk = response.data.memberPk;
+      if(user === id && memberPk === pk){
         const isConfirm = window.confirm('삭제하시겠습니까?');
         if(isConfirm){
           Instance
@@ -337,8 +350,6 @@ const BoardRead = () => {
       }
     }
   }
-  
-  const p = <p>ddd</p>;
 
   return (
     <>
@@ -489,7 +500,7 @@ const BoardRead = () => {
                       reply.map((replyItem, index) => (
                         <li key={index}>
                           <div className="cwinfo">
-                            <strong>{user !== null ? replyItem.replyWriter : replyItem.replyWriter.replace('UNUSER-', '')}</strong>
+                            <strong>{replyItem.replyWriter}</strong>
                             <span className="date">{`${replyItem.replyWriteDate[0]}.${replyItem.replyWriteDate[1] < 10 ? '0' : ''}${
                               replyItem.replyWriteDate[1]
                             }.${

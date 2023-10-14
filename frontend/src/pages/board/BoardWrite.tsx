@@ -51,8 +51,12 @@ const BoardWrite = () => {
   const [categoryError, setCategoryError] = useState<string>('');
   const [reportTitle, setReportTitle] = useState<any>('');
   const [user, setUser] = useState('');
+  const [memberPk, setMemberPk] = useState<number>(0);
 
   useEffect(() => {
+    const user = localStorage.getItem('memberId');
+    setUser(user as string);
+
     if(board === 'report'){
       const handleInfo = async() => {
         if(id.includes('boardId')){
@@ -76,26 +80,40 @@ const BoardWrite = () => {
             console.error('Error:', error.message);
           });
         }
+
+        const memberPk = await Instance.get(`/member/${user}`);
+        setMemberPk(memberPk.data);
       }
       handleInfo();
     }
-
-    const user = localStorage.getItem('memberId') ? localStorage.getItem('memberId') : '';
-    
-    setUser(user as string);
   }, [])
+
+  const changeFile = () => {
+    const file = fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '';
+
+    if(file instanceof File && file.size > 83886080){
+      if(fileRef.current) fileRef.current.value = '';
+      alert('업로드할 파일은 10MB이하여야 합니다.');
+    }
+  }
 
   const saveImgFile = () => {
     const file = imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '';
-    if (file instanceof Blob) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
 
-      reader.onloadend = () => {
-        setImgFile(reader.result as string);
-      };
-    } else {
-      console.error('The selected file is not a Blob.');
+    if(file instanceof File && file.size > 83886080){
+      if(imgRef.current) imgRef.current.value = '';
+      alert('이미지는 10MB이하여야 합니다.');
+    }else{
+      if (file instanceof Blob) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+  
+        reader.onloadend = () => {
+          setImgFile(reader.result as string);
+        };
+      } else {
+        console.error('The selected file is not a Blob.');
+      }
     }
   };
 
@@ -136,16 +154,13 @@ const BoardWrite = () => {
       form.append('file', fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '');
       form.append('isComment', isComment);
       formData.boardContent = boardContent;
-      console.log(formData.category);
 
       formData.boardWriter = inputRef && inputRef.current ? inputRef.current.value : '';
+
+      if(user !== null) formData.memberPk = String(memberPk);
   
       Object.keys(formData).forEach((key) => {
-        if(key === 'boardWriter'){
-          form.append(key, user !== null ? formData[key] : `UNUSER-${formData[key]}`);
-        }else{
-          form.append(key, formData[key]);
-        }
+        form.append(key, formData[key]);
       });
   
       const isConfirm = window.confirm('작성하시겠습니까?');
@@ -159,11 +174,7 @@ const BoardWrite = () => {
           alert('작성 완료되었습니다.');
           window.location.href = `/board/${board}/1`;
         } catch (e: any) {
-          console.error('에러: ', e.message);
-          if (e.response.data.message.startsWith('Validation failed')) {
-            const errorMessage = e.response.data.errors[0].defaultMessage;
-            alert(errorMessage);
-          }
+          console.error('에러: ', e);
         }
       }
     }else{
@@ -191,11 +202,7 @@ const BoardWrite = () => {
           alert('신고 완료되었습니다.');
           navigate(-2);
         } catch (e: any) {
-          console.error('에러: ', e.message);
-          if (e.response.data.message.startsWith('Validation failed')) {
-            const errorMessage = e.response.data.errors[0].defaultMessage;
-            alert(errorMessage);
-          }
+          console.log('에러: ', e);
         }
       }
     }
@@ -286,13 +293,13 @@ const BoardWrite = () => {
                 <tr>
                   <th>작성자</th>
                   <td>
-                    {user === '' ? 
+                    {user === null ? 
                     <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} required /> :
                     <input type="text" name="boardWriter" value={user} ref={inputRef} readOnly />
                     }
                   </td>
                 </tr>
-                {user === '' &&
+                {user === null &&
                 <tr>
                   <th>비밀번호</th>
                   <td>
@@ -312,15 +319,15 @@ const BoardWrite = () => {
                       <>
                         <th>대표 이미지</th>
                         <td>
-                          <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required/>
-                          {imgFile !== '' ? <ItemThumbnail src={imgFile} alt="후기 이미지" /> : <ItemThumbnail style={{ display: 'none' }} />}
+                          <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required/> 용량 제한 : 10MB
+                          {imgFile !== '' ? <ItemThumbnail className='preview' src={imgFile} alt="후기 이미지" /> : <ItemThumbnail style={{ display: 'none' }} />}
                         </td>
                       </>
                     ) : (
                       <>
                         <th>첨부파일</th>
                         <td>
-                          <input type="file" accept="*" ref={fileRef} />
+                          <input type="file" accept="*" ref={fileRef} onChange={changeFile} /> 용량 제한 : 10MB
                         </td>
                       </>
                     )}
