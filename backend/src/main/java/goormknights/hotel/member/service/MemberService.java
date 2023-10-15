@@ -230,46 +230,6 @@ public class MemberService {
 
     // ======================= 위까지 민종님 작업물 ============================
 
-    public boolean annoymousLogin(String memberId, String phoneNumber, HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("member") != null) {
-            // 이미 로그인한 상태
-            return false;
-        }
-
-        Optional<Member> optionalMember = memberRepository.findByMemberIdAndPhoneNumberAndRole(memberId, phoneNumber, Role.ANONYMOUS.toString());
-        if (optionalMember.isPresent()) {
-            session = request.getSession();
-            session.setAttribute("memberId", optionalMember.get().getMemberId());
-            session.setAttribute("role", optionalMember.get().getRole());
-
-            Cookie cookie = new Cookie("JSESSIONID", session.getId());
-            cookie.setMaxAge(10);
-            cookie.setPath("/");
-            cookie.setSecure(true);
-
-            ResponseCookie memberIdCookie = ResponseCookie.from("memberId", optionalMember.get().getMemberId())
-                    .httpOnly(false)
-                    .secure(true)
-                    .path("/")      // path
-                    .maxAge(3600)
-                    .sameSite("None")  // sameSite
-                    .build();
-            ResponseCookie roleCookie = ResponseCookie.from("role", optionalMember.get().getRole().toString())
-                    .httpOnly(false)
-                    .secure(true)
-                    .path("/")      // path
-                    .maxAge(3600)
-                    .sameSite("None")  // sameSite
-                    .build();
-
-            response.addCookie(cookie);
-            response.addHeader(HttpHeaders.SET_COOKIE, memberIdCookie.toString());
-            response.addHeader(HttpHeaders.SET_COOKIE, roleCookie.toString());
-            return true;
-        }
-        return false;
-    }
 
     public void save(Member member) {
         memberRepository.save(member);
