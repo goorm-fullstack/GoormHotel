@@ -64,6 +64,7 @@ public class Board {
     @Setter
     private LocalDateTime boardDeleteTime;      //게시글 삭제 날짜
 
+    @Setter
     @Column(nullable = false)
     private String isComment;      //답글 여부
 
@@ -116,6 +117,7 @@ public class Board {
                 .boardWriteDate(requestBoardDto.getBoardWriteDate())
                 .replies(board.getReplies())
                 .report(board.getReport())
+                .isComment(requestBoardDto.getIsComment())
                 .build();
     }
 }

@@ -2,6 +2,7 @@ package goormknights.hotel.board.controller;
 
 import goormknights.hotel.board.dto.request.RequestBoardDto;
 import goormknights.hotel.board.dto.response.ResponseBoardDto;
+import goormknights.hotel.board.exception.NoBoardException;
 import goormknights.hotel.board.model.Board;
 import goormknights.hotel.board.service.BoardImageService;
 import goormknights.hotel.board.service.BoardService;
@@ -72,7 +73,7 @@ public class BoardController {
     // 게시물 수정
     @PutMapping("/{boardId}")
     public ResponseEntity<ResponseBoardDto> updateBoard(@PathVariable Long boardId, @ModelAttribute RequestBoardDto requestBoardDto, @RequestParam(required = false) MultipartFile multipartFile, @RequestParam(required = false) MultipartFile file) throws IOException {
-        boardService.updateBoard(boardId, requestBoardDto, multipartFile, file, false);
+        boardService.updateBoard(boardId, requestBoardDto, multipartFile, file);
 
         return ResponseEntity.ok().build();
     }
@@ -211,5 +212,15 @@ public class BoardController {
                 .header("TotalPages", String.valueOf(totalPages))
                 .header("TotalData", String.valueOf(totalElements))
                 .body(allBoardReplyDeleted.getContent());
+    }
+
+    @PutMapping("/updateIsComment/{boardId}")
+    public ResponseEntity<Object> updateIsCommentValue(@PathVariable Long boardId) {
+        try {
+            Board updatedBoard = boardService.updateIsComment(boardId);
+            return ResponseEntity.ok(updatedBoard.toResponseBoardDto());
+        } catch (NoBoardException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

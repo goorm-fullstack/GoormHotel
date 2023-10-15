@@ -20,23 +20,26 @@ const AdminBoardWrite = () => {
   const [parentBoard, setParentBoard] = useState<any | null>(null);
 
   useEffect(() => {
-    Instance.get(`boards/${parentBoardId}`)
-        .then((response) => {
-          setParentBoard(response.data);
-          setIsComment(true);
+    if (parentBoardId) {
+      Instance.get(`boards/${parentBoardId}`)
+          .then((response) => {
+            setParentBoard(response.data);
 
-          if (response.data) {
-            setFormData({
-              ...formData,
-              category: response.data.category,
-              boardTitle: response.data.boardTitle,
-            });
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        })
-  }, []);
+            if (response.data) {
+              setFormData({
+                ...formData,
+                category: response.data.category,
+                boardTitle: response.data.boardTitle,
+                parentBoardId: response.data.boardId,
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+    }
+  }, [parentBoardId]);
+
 
 
   let isCommentFormData = {
@@ -66,7 +69,7 @@ const AdminBoardWrite = () => {
   const [categoryError, setCategoryError] = useState<string>('');
   const [boardTitleError, setBoardTitleError] = useState<string>('');
   const [imgFile, setImgFile] = useState<string>('');
-  const [isComment, setIsComment] = useState(false);
+  const [isComment, setIsComment] = useState(true);
   const [boardContent, setBoardContent] = useState('');
   const imgRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -128,7 +131,8 @@ const AdminBoardWrite = () => {
 
   const handleCommentCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsComment(e.target.checked);
-
+    const { isComment, ...restFormData } = formData;
+    setFormData(restFormData);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -148,7 +152,7 @@ const AdminBoardWrite = () => {
     form.append('multipartFile', imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '');
     form.append('file', fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '');
     formData.boardContent = boardContent;
-    form.append('isComment', isComment.toString());
+    form.append('isComment', isComment ? 'false' : 'true');
     console.log(formData.category);
 
     Object.keys(formData).forEach((key) => {
@@ -161,9 +165,15 @@ const AdminBoardWrite = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
+
+      if(parentBoardId){
+        await Instance.put(`/boards/updateIsComment/${parentBoardId}`);
+      }
+
       alert('게시글이 작성되었습니다.');
       window.location.href = `/admin/board/1`;
-    } catch (e: any) {
+    }
+    catch (e: any) {
       console.error('에러: ', e.message);
       if (e.response.data.message.startsWith('Validation failed')) {
         const errorMessage = e.response.data.errors[0].defaultMessage;
@@ -327,7 +337,7 @@ const AdminBoardWrite = () => {
                     <input type="text" className="long" name="title" value={formData.title} onChange={handleChange} required/>
                     {parentBoard &&
                           <CheckLabel>
-                            <InputCheckbox type="checkbox" checked={isComment} onChange={handleCommentCheckboxChange}/>{" "}답글
+                            <InputCheckbox type="checkbox" checked={isComment} onChange={handleCommentCheckboxChange} disabled/>{" 답글 "}
                           </CheckLabel>
                       }
                   </MultiCheck>

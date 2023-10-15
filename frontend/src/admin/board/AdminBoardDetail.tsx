@@ -209,6 +209,8 @@ const AdminBoardDetail = () => {
     }
   };
 
+  console.log(boardData);
+
   return (
     <>
       <AdminLayout subMenus="board">
