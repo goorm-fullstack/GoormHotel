@@ -200,7 +200,7 @@ export const commonLinkBtn = styled(Link)`
   }
 `;
 
-export const CloseButton = styled.button`0
+export const CloseButton = styled.button`
   border: 1px solid #ddd;
   background: white;
   color: #666;
@@ -267,6 +267,20 @@ export const LinkBtn = styled(commonLinkBtn)`
     background-color: ${(props) => props.theme.colors.gold};
     color: white;
   }
+
+  &.red {
+    // 사용에 주의 필요한 버튼들, 붉게 강조
+    border-color: ${(props) => props.theme.colors.red};
+    color: ${(props) => props.theme.colors.red};
+
+    &:hover {
+    background-color: white;
+    color: ${(props) => props.theme.colors.red};
+  }
+    
+  }
+
+
 `;
 
 export const SubmitLinkBtn = styled(commonLinkBtn)`
@@ -325,6 +339,7 @@ export const NormalLinkBtn = styled(commonLinkBtn)`
   }
 `;
 
+
 export const SubmitBtn = styled(commonButton)`
   background-color: ${(props) => props.theme.colors.gold};
   color: white;
@@ -337,6 +352,7 @@ export const SubmitBtn = styled(commonButton)`
     width: 200px;
     font-size: ${(props) => props.theme.font.sizes};
   }
+
 `;
 
 export const MoreLink = styled(commonLinkBtn)`

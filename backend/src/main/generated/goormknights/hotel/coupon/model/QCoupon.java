@@ -26,7 +26,7 @@ public class QCoupon extends EntityPathBase<Coupon> {
 
     public final NumberPath<Integer> expire = createNumber("expire", Integer.class);
 
-    public final NumberPath<Integer> id = createNumber("id", Integer.class);
+    public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final DateTimePath<java.time.LocalDateTime> issueDate = createDateTime("issueDate", java.time.LocalDateTime.class);
 

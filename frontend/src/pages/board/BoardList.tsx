@@ -246,7 +246,7 @@ const CustomerSupport = () => {
                     boards.map((item) => (
                       <li key={item.boardId}>
                         <div className="thumbnail">
-                          <Link to={`/board/${board}/detail?boardId=${item.boardId}`}>
+                          <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>
                             {imageUrl.find((image) => image.boardId === item.boardId) && (
                               <img src={imageUrl.find((image: any) => image.boardId === item.boardId).imageUrl} alt={`Image for ${item.title}`} />
                             )}
