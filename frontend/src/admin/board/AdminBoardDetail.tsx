@@ -55,7 +55,8 @@ const AdminBoardDetail = () => {
       .then((response) => {
         if (response.headers['filename']) {
           const fileName = response.headers['filename'];
-          setFile(fileName);
+          const decodedFileName = decodeURI(fileName).replaceAll('+', ' ');
+          setFile(decodedFileName);
         }
         setBoardData(response.data);
         fetchReply(response.data.boardId);
