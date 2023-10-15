@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as S from './Style';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { PageTitle, BtnWrapper, LinkBtn, SubmitBtn } from '../../Style/commonStyles';
+import { PageTitle, BtnWrapper, LinkBtn, SubmitBtn, NormalBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import queryString from "query-string";
 import Instance from '../../utils/api/axiosInstance';
@@ -63,6 +63,8 @@ const BoardRead = () => {
         console.error(error.message);
       })
   }, [boardId]);
+
+  console.log(file);
 
   useEffect(() => {
     let pageTitle;
@@ -182,65 +184,6 @@ const BoardRead = () => {
       }
     }
   }
-
-  //동규님 삭제 작업 부분
-  // const handleDelete = (replyId: number, replyWriter: string, replyPassword: string) => {
-
-  //   if( (isLogin === replyWriter) && !replyPassword){                   // 쿠키 아이디와 작성자 이름이 같고 댓글 비밀번호가 없을 때
-  //     const isConfirm = window.confirm('삭제하시겠습니까?');
-  //     if(isConfirm){
-  //       Instance
-  //         .put(`/reply/softdelete/${replyId}`)
-  //         .then((response) => {
-  //           alert('삭제되었습니다.');
-  //           fetchReply(boardData.boardId);
-  //         })
-  //         .catch((error) => {
-  //           console.error('댓글 삭제에 실패했습니다.', error);
-  //         });
-  //     }
-  //   }
-
-  //   if(!isLogin){                                                                      //쿠키 아이디가 없을 때
-  //     if(!replyPassword){                                                             //replyPassword(회원이 작성한 댓글이라면)가 없다면
-  //       alert("삭제가 불가능한 댓글입니다.");                                             //삭제 불가능
-  //       return;
-  //     }
-
-  //     const inputPassword = prompt("비밀번호를 입력하세요.");
-  //     if(replyPassword != inputPassword){                                             //입력받은 비밀번호와 replyPassword가 다르면
-  //       alert("비밀번호가 틀렸습니다.");                                                 //댓글 삭제 실패
-  //       return;
-  //     }
-
-  //     if(replyPassword === inputPassword){                                           //입력받은 비밀번호와 replyPassword가 일치하다면
-  //       return (                                                                     //댓글 삭제
-  //         Instance
-  //           .put(`/reply/softdelete/${replyId}`)
-  //           .then((response) => {
-  //             alert('삭제되었습니다.');
-  //             fetchReply(boardData.boardId);
-  //           })
-  //           .catch((error) => {
-  //             console.error('댓글 삭제에 실패했습니다.', error);
-  //           })
-  //       )
-  //     }
-  //   }
-
-    // const isConfirm = window.confirm('삭제하시겠습니까?');
-    // if(isConfirm){
-    //   axios
-    //   .put(`/reply/softdelete/${replyId}`)
-    //   .then((response) => {
-    //     alert('삭제되었습니다.');
-    //     fetchReply(boardData.boardId);
-    //   })
-    //   .catch((error) => {
-    //     console.error('댓글 삭제에 실패했습니다.', error);
-    //   });
-    // }
-  // };
 
   const scrollToPosition = (number: number) => {
     window.scrollTo({
@@ -403,15 +346,19 @@ const BoardRead = () => {
     }
   }
 
-  console.log(file);
-  console.log(boardData?.boardWriter);
+  const boardReport = () => {
+    navigate(`/board/report/write?boardId=${boardId}`);
+  }
 
   return (
     <>
       <SubHeader kind="board" />
       <S.Container>
         {title}
-        <LinkBtn to={`/board/report/write?boardId=${boardId}`}>신고하기</LinkBtn>
+        <S.WriteBtnWrapper className='right double'>
+          <NormalBtn className='red' onClick={boardReport}>신고하기</NormalBtn>
+          <NormalBtn className='red' onClick={handleDelteBoard}>삭제</NormalBtn>
+        </S.WriteBtnWrapper>
         <div>
           <S.TableRead>
             <tbody>
@@ -582,12 +529,9 @@ const BoardRead = () => {
           </S.TableRead>
           {board !== 'notice' &&
           <BtnWrapper className='center mt40'>
-            <SubmitBtn className='center' onClick={handleDelteBoard}>삭제</SubmitBtn>
-          </BtnWrapper>
-          }
-          <BtnWrapper className='center mt40'>
             <LinkBtn to={listLink}>목록</LinkBtn>
           </BtnWrapper>
+          }
         </div>
       </S.Container>
     </>

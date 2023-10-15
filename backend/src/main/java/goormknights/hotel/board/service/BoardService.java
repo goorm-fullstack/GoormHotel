@@ -158,7 +158,7 @@ public class BoardService {
     }
 
     // 게시물 수정
-    public Board updateBoard(Long boardId, RequestBoardDto requestBoardDto, MultipartFile multipartFile, MultipartFile file, boolean bool) throws IOException {
+    public Board updateBoard(Long boardId, RequestBoardDto requestBoardDto, MultipartFile multipartFile, MultipartFile file) throws IOException {
         Board beforeBoard = boardRepository.findByBoardId(boardId);
         RequestImageDto requestImageDto;
         RequestFileDto requestFileDto;
@@ -300,6 +300,25 @@ public class BoardService {
 
         return new PageImpl<>(list, pageable, list.size());
     }
+
+    //답글 추가, 삭제용
+    public Board updateIsComment(Long boardId) {
+        Board board = boardRepository.findByBoardId(boardId);
+        if (board == null) {
+            throw new NoBoardException("게시판을 찾을 수 없습니다.");
+        }
+
+        // isComment 값을 토글
+        if ("false".equals(board.getIsComment())) {
+            board.setIsComment("true");
+        }
+        else if ("true".equals(board.getIsComment())) {
+            board.setIsComment("false");
+        }
+
+        return boardRepository.save(board);
+    }
+
 
     // 작성자명으로 데이터 가져오기 (마이페이지용)
     public Page<Object> findAllBoardAndReply(String writer, Pageable pageable){

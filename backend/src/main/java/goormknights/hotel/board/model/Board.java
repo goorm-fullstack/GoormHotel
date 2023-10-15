@@ -27,7 +27,7 @@ public class Board {
     @Column(nullable = false)
     private String title;  //제목
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 3000)
     private String boardContent;    //내용
 
     @Column(nullable = false)
@@ -65,11 +65,14 @@ public class Board {
     @Setter
     private LocalDateTime boardDeleteTime;      //게시글 삭제 날짜
 
+    @Setter
     @Column(nullable = false)
     private String isComment;      //답글 여부
 
+    private Long parentBoardId;     //부모 글 Id
+
     @Builder(toBuilder = true)
-    public Board(String boardPassword, String isComment, Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, BoardFile boardFile, String boardTitle, String category, List<Reply> replies, List<Report> report, Long memberPk) {
+    public Board(Long memberPk, Long parentBoardId, String boardPassword, String isComment, Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, BoardFile boardFile, String boardTitle, String category, List<Reply> replies, List<Report> report) {
         this.boardId = boardId;
         this.title = title;
         this.boardContent = boardContent;
@@ -83,6 +86,7 @@ public class Board {
         this.report = report;
         this.boardPassword = boardPassword;
         this.isComment = isComment;
+        this.parentBoardId = parentBoardId;
         this.memberPk = memberPk;
     }
 
@@ -98,6 +102,7 @@ public class Board {
                 .boardDeleteTime(boardDeleteTime)
                 .isComment(isComment)
                 .boardPassword(boardPassword)
+                .parentBoardId(parentBoardId)
                 .memberPk(memberPk)
                 .build();
     }
@@ -115,6 +120,7 @@ public class Board {
                 .boardWriteDate(board.getBoardWriteDate())
                 .replies(board.getReplies())
                 .report(board.getReport())
+                .isComment(requestBoardDto.getIsComment())
                 .memberPk(board.getMemberPk())
                 .boardPassword(board.getBoardPassword())
                 .build();
