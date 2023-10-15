@@ -32,6 +32,8 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final QBoardImage boardImage;
 
+    public final StringPath boardPassword = createString("boardPassword");
+
     public final StringPath boardTitle = createString("boardTitle");
 
     public final DateTimePath<java.time.LocalDateTime> boardWriteDate = createDateTime("boardWriteDate", java.time.LocalDateTime.class);

@@ -30,6 +30,8 @@ public class QReply extends EntityPathBase<Reply> {
 
     public final NumberPath<Long> replyId = createNumber("replyId", Long.class);
 
+    public final StringPath replyPassword = createString("replyPassword");
+
     public final DateTimePath<java.time.LocalDateTime> replyWriteDate = createDateTime("replyWriteDate", java.time.LocalDateTime.class);
 
     public final StringPath replyWriter = createString("replyWriter");
