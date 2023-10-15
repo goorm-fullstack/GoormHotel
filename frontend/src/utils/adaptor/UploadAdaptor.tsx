@@ -18,12 +18,11 @@ export default class UploadAdapter {
 			fd.append("file", file)
 			Instance.post("/ckeditor/upload/img", fd)
 				.then(response => {
-					console.log(response)
 					resolve({ default: response.data });
 				})
 				.catch(error => {
 					reject("Server Error");
-					console.log("Server Error : ", error);
+					console.error("Server Error : ", error);
 				});
 		}));
 	}

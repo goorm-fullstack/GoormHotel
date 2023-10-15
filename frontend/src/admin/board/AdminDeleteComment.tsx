@@ -32,7 +32,6 @@ const AdminDeleteComment = () => {
       .get('/boards/deleted')
       .then((response) => {
         setBoard(response.data);
-        console.log('get 성공');
       })
       .catch((error) => {
         console.error(error);
@@ -44,7 +43,6 @@ const AdminDeleteComment = () => {
       .get('/reply/deleted')
       .then((response) => {
         setReply(response.data);
-        console.log('get 성공');
       })
       .catch((error) => {
         console.error(error);
@@ -98,7 +96,7 @@ const AdminDeleteComment = () => {
               window.location.reload();
             })
             .catch((error) => {
-              console.log(error.message);
+              console.error(error.message);
             });
         } else {
           const id = boardId.replace('reply', '');
@@ -109,7 +107,7 @@ const AdminDeleteComment = () => {
               window.location.reload();
             })
             .catch((error) => {
-              console.log(error.message);
+              console.error(error.message);
             });
         }
       });
@@ -129,7 +127,7 @@ const AdminDeleteComment = () => {
               window.location.reload();
             })
             .catch((error) => {
-              console.log(error.message);
+              console.error(error.message);
             });
         } else {
           const id = boardId.replace('reply', '');
@@ -140,7 +138,7 @@ const AdminDeleteComment = () => {
               window.location.reload();
             })
             .catch((error) => {
-              console.log(error.message);
+              console.error(error.message);
             });
         }
       });
@@ -161,7 +159,6 @@ const AdminDeleteComment = () => {
     setParsedContent(parsedTextArray);
   }, [board]);
 
-  console.log(board);
 
   if (authItem && authItem.includes('AUTH_C')) {
     return (

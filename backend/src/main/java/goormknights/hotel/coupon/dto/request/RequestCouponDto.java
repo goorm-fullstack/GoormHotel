@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class RequestCouponDto {
-    private int id;
+    private Long id;
     private String uuid;
     private int discountRate;
     private Member member;

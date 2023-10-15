@@ -3,7 +3,10 @@ import * as S from './Style';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PageTitle, BtnWrapper, LinkBtn, SubmitBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
-import queryString from 'query-string';
+import axios from 'axios';
+import queryString from "query-string";
+import e from 'express';
+import {Cookies} from "react-cookie";
 import Instance from '../../utils/api/axiosInstance';
 
 const BoardRead = () => {
@@ -31,6 +34,15 @@ const BoardRead = () => {
   const [memberPk, setMemberPk] = useState<number>(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
+  const isLogin = localStorage.getItem("memberId");
+
+  const cookies = new Cookies();
+  const getCookie = (name: string) => {
+    return cookies.get(name);
+  }
+  const cookie = getCookie("JSESSIONID");
+  console.log(cookie);
 
   const parseBoardContent = (content: any) => {
     const parser = new DOMParser();
@@ -147,6 +159,7 @@ const BoardRead = () => {
     }
   };
 
+  // 진환 작업 부분
   // 회원 비회원 구분 삭제
   const handleDelete = async (replyId: number) => {
     const isConfirm = window.confirm('삭제하시겠습니까?');
@@ -172,7 +185,6 @@ const BoardRead = () => {
         const response = await Instance.get(`reply/replyId/${replyId}`);
         const id = response.data.replyWriter;
         const replyMemberPk = response.data.memberPk;
-        console.log(id);
         if(id === user && memberPk === replyMemberPk){
           Instance
           .put(`/reply/softdelete/${replyId}`)
@@ -188,7 +200,66 @@ const BoardRead = () => {
         }
       }
     }
-  };
+  }
+
+  //동규님 삭제 작업 부분
+  // const handleDelete = (replyId: number, replyWriter: string, replyPassword: string) => {
+
+  //   if( (isLogin === replyWriter) && !replyPassword){                   // 쿠키 아이디와 작성자 이름이 같고 댓글 비밀번호가 없을 때
+  //     const isConfirm = window.confirm('삭제하시겠습니까?');
+  //     if(isConfirm){
+  //       Instance
+  //         .put(`/reply/softdelete/${replyId}`)
+  //         .then((response) => {
+  //           alert('삭제되었습니다.');
+  //           fetchReply(boardData.boardId);
+  //         })
+  //         .catch((error) => {
+  //           console.error('댓글 삭제에 실패했습니다.', error);
+  //         });
+  //     }
+  //   }
+
+  //   if(!isLogin){                                                                      //쿠키 아이디가 없을 때
+  //     if(!replyPassword){                                                             //replyPassword(회원이 작성한 댓글이라면)가 없다면
+  //       alert("삭제가 불가능한 댓글입니다.");                                             //삭제 불가능
+  //       return;
+  //     }
+
+  //     const inputPassword = prompt("비밀번호를 입력하세요.");
+  //     if(replyPassword != inputPassword){                                             //입력받은 비밀번호와 replyPassword가 다르면
+  //       alert("비밀번호가 틀렸습니다.");                                                 //댓글 삭제 실패
+  //       return;
+  //     }
+
+  //     if(replyPassword === inputPassword){                                           //입력받은 비밀번호와 replyPassword가 일치하다면
+  //       return (                                                                     //댓글 삭제
+  //         Instance
+  //           .put(`/reply/softdelete/${replyId}`)
+  //           .then((response) => {
+  //             alert('삭제되었습니다.');
+  //             fetchReply(boardData.boardId);
+  //           })
+  //           .catch((error) => {
+  //             console.error('댓글 삭제에 실패했습니다.', error);
+  //           })
+  //       )
+  //     }
+  //   }
+
+    // const isConfirm = window.confirm('삭제하시겠습니까?');
+    // if(isConfirm){
+    //   axios
+    //   .put(`/reply/softdelete/${replyId}`)
+    //   .then((response) => {
+    //     alert('삭제되었습니다.');
+    //     fetchReply(boardData.boardId);
+    //   })
+    //   .catch((error) => {
+    //     console.error('댓글 삭제에 실패했습니다.', error);
+    //   });
+    // }
+  // };
 
   const scrollToPosition = (number: number) => {
     window.scrollTo({

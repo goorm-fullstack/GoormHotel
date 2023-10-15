@@ -266,18 +266,12 @@ const ReservationItem = () => {
   };
 
   const handleSubmitClick = () => {
-    if (!isLogined) {
-      if (window.confirm('로그인이 진행되지 않았습니다. 비회원으로 주문을 진행하시겠습니까?')) {
-        navigate('/anonymous/signup');
-      }
-    } else {
-      navigate('/offers/step2', {
-        state: {
-          reservationData: reservationData,
-          selectedProduct: selectedProduct,
-        },
-      });
-    }
+    navigate('/offers/step2', {
+      state: {
+        reservationData: reservationData,
+        selectedProduct: selectedProduct,
+      },
+    });
   };
 
   return (

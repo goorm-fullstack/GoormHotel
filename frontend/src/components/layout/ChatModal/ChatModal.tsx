@@ -23,7 +23,6 @@ const ChatModal: React.FC<ChatModalProps> = ({ closeChat }) => {
   useLayoutEffect(() => {
     getChatRoomInfo('tester')
       .then((roomId) => {
-        console.log(roomId); //채팅 테스트용도로 사용중입니다.
         setRoomId(roomId); //방 아이디 설정
         settingWebSocket(roomId); //웹소켓 설정
       })
@@ -39,8 +38,6 @@ const ChatModal: React.FC<ChatModalProps> = ({ closeChat }) => {
       ws.current = new WebSocket(webSocketURL);
       ws.current.onopen = () => {
         setSocketConnected(true);
-        console.log(roomId);
-        console.log('WebSocket connected');
 
         // WebSocket 연결이 성공하면 ENTER 메시지 전송
         ws.current?.send(
@@ -53,12 +50,10 @@ const ChatModal: React.FC<ChatModalProps> = ({ closeChat }) => {
         );
       };
       ws.current.onclose = (error) => {
-        console.log('disconnect from ' + webSocketURL);
-        console.log(error);
+        console.error(error);
       };
       ws.current.onerror = (error) => {
-        console.log('connection error ' + webSocketURL);
-        console.log(error);
+        console.error(error);
       };
 
       // 메시지 핸들러 설정
@@ -71,7 +66,6 @@ const ChatModal: React.FC<ChatModalProps> = ({ closeChat }) => {
 
         // 메시지 발신자가 어드민인 경우에만 호출된다.
         if (chatRoomID === roomId && sender === 'admin') {
-          console.log('call');
           // 메시지를 처리하는 로직을 여기에 추가
           // 이전 채팅 데이터를 복사한 후 새 메시지를 추가
           setChatData((p) => [...p, { message: chatContent, isUser: false }]);
@@ -80,7 +74,6 @@ const ChatModal: React.FC<ChatModalProps> = ({ closeChat }) => {
     }
     // 컴포넌트 언마운트 시 WebSocket 연결 닫기
     return () => {
-      console.log('Cleaning up WebSocket');
       if (ws.current && ws.current.readyState === WebSocket.OPEN) {
         ws.current.close();
       }

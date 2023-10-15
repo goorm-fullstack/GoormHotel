@@ -19,7 +19,6 @@ public class ResponseMemberDto {
     private String grade;           // Bronze, Silver, Gold
     private Role role;
     private List<ResponseCouponDto> couponList;
-    private List<ResponseGiftCardDto> giftCardList;
 
     public ResponseMemberDto(Member member) {
         this.id = member.getId();
@@ -29,6 +28,5 @@ public class ResponseMemberDto {
         this.grade = member.getGrade();
         this.role = member.getRole();
         this.couponList = member.getCouponList().stream().map(ResponseCouponDto::new).toList();
-        this.giftCardList = member.getGiftCardList().stream().map(ResponseGiftCardDto::new).toList();
     }
 }

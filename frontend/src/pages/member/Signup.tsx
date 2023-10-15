@@ -33,8 +33,6 @@ const Signup = () => {
   const navigate = useNavigate();
   const [emailCode, setEmailCode] = useState('');
 
-  console.log(formData);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -73,7 +71,7 @@ const Signup = () => {
 
     if (termsAgree && privacyAgree) {
       try {
-        const response = await Instance.post('/signup', {
+        const response = await Instance.post('/member/signup', {
           name: formData.name,
           password: formData.password,
           memberId: formData.memberId,

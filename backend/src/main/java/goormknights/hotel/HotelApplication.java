@@ -1,19 +1,17 @@
 package goormknights.hotel;
 
+import goormknights.hotel.item.repository.DiningRepository;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.item.model.Dining;
 import goormknights.hotel.item.repository.DiningRepository;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.repository.MemberRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.time.LocalDate;
 
 @SpringBootApplication
 @EnableScheduling

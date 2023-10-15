@@ -5,6 +5,7 @@ import { PageTitle, BtnWrapper, SubmitBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import { ItemThumbnail } from '../../admin/item/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
+import {Cookies} from "react-cookie";
 import Instance from '../../utils/api/axiosInstance';
 
 type FormData = {
@@ -24,7 +25,18 @@ const BoardWrite = () => {
   const imgRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [boardContent, setBoardContent] = useState('')
-  const inputRef = useRef<HTMLInputElement>(null);;
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  ////////////변경 있을 수 있음////////////
+  const isLogin = localStorage.getItem("memberId");
+  const cookies = new Cookies();
+  const getCookie = (name: string) => {
+    return cookies.get(name);
+  }
+  const cookie = getCookie("JSESSIONID");
+  ////////////////변경 있을 수 있음//////////
+
+
   const [formData, setFormData] = useState<FormData>({
     title: '',
     boardContent: '',
@@ -40,7 +52,7 @@ const BoardWrite = () => {
           return '고객지원';
       }
     })(),
-    boardWriter: '',
+    boardWriter: isLogin ? isLogin : '',
     boardPassword: '',
     category: '',
   });
@@ -208,6 +220,37 @@ const BoardWrite = () => {
     }
   };
 
+  const writerOption = () => {
+    if (!isLogin) {
+      return (
+        <>
+          <tr>
+            <th>작성자</th>
+            <td>
+              <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} required />
+            </td>
+          </tr>
+          <tr>
+            <th>비밀번호</th>
+            <td>
+              <input type="password" name="boardPassword" value={formData.boardPassword} onChange={handleChange} required />
+            </td>
+          </tr>
+        </>
+      )
+    }
+    return (
+      <>
+        <tr>
+          <th>작성자</th>
+          <td>
+            <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} required readOnly />
+          </td>
+        </tr>
+      </>
+    )
+  }
+
   return (
     <>
       <SubHeader kind="board" />
@@ -345,6 +388,50 @@ const BoardWrite = () => {
                 </>)
                 }
               </tbody>
+              {/* 동규님 작업 부분 */}
+              {/* </tr> */}
+              {/* <tr>
+                <th style={{ width: '240px' }}>제목</th>
+                <td>
+                  <input type="text" className="title long" name="title" value={formData.title} onChange={handleChange} required />
+                </td>
+              </tr> */}
+              {/* {writerOption()} */}
+              {/*<tr>*/}
+              {/*  <th>작성자</th>*/}
+              {/*  <td>*/}
+              {/*    <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} required />*/}
+              {/*  </td>*/}
+              {/*</tr>*/}
+              {/*<tr>*/}
+              {/*  <th>비밀번호</th>*/}
+              {/*  <td>*/}
+              {/*    <input type="password" name="boardPassword" value={formData.boardPassword} onChange={handleChange} required />*/}
+              {/*  </td>*/}
+              {/*</tr>*/}
+              {/* <tr className="contents">
+                <td colSpan={2} className="writeWrapper">
+                  <TextEditor setValue={setBoardContent} />
+                </td>
+              </tr>
+               <tr className="conbtm"> */}
+                 {/* {board === 'review' ? ( */}
+                  {/* <>
+                    <th>대표 이미지</th>
+                    <td>
+                      <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required />
+                      {imgFile !== '' ? <ItemThumbnail src={imgFile} alt="후기 이미지" /> : <ItemThumbnail style={{ display: 'none' }} />}
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <th>첨부파일</th>
+                    <td>
+                      <input type="file" accept="*" ref={fileRef} />
+                    </td>
+                  </>
+                )}
+              </tr> */}
             </S.Table>
             <BtnWrapper className="center double mt40">
               {board !== 'report' ?

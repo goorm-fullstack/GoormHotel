@@ -13,7 +13,7 @@ import java.util.Set;
 public class ChatRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String roomId;
     private String name;
     private Set<WebSocketSession> sessions = new HashSet<>();

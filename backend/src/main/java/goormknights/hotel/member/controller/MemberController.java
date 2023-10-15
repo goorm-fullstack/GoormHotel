@@ -1,11 +1,10 @@
 package goormknights.hotel.member.controller;
 
-import goormknights.hotel.member.dto.request.AdminSignupDTO;
-import goormknights.hotel.member.dto.request.AnonymousSignupDto;
-import goormknights.hotel.member.dto.request.SignupDTO;
-import goormknights.hotel.member.dto.response.ManagerListDTO;
+import goormknights.hotel.global.exception.InvalidVerificationCodeException;
+import goormknights.hotel.member.dto.request.*;
+import goormknights.hotel.member.dto.response.MemberInfoDTO;
 import goormknights.hotel.member.dto.response.ResponseMemberDto;
-import goormknights.hotel.member.model.Manager;
+import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.repository.ManagerRepository;
 import goormknights.hotel.member.service.AdminService;
@@ -20,8 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,13 +37,6 @@ public class MemberController {
         return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
     }
 
-    // 비회원 회원가입
-    @PostMapping("/anonymous/signup")
-    public ResponseEntity<String> anonymousSignup(@RequestBody AnonymousSignupDto signupDTO, HttpServletRequest request, HttpServletResponse response){
-        memberService.anonymousSignup(signupDTO, signupDTO.getCode(), request, response);
-        return ResponseEntity.ok("비회원 회원가입 완료");
-    }
-
     // 매니저 회원가입
     @PostMapping("/admin-signup")
     public ResponseEntity<String> adminSignup(@RequestBody AdminSignupDTO adminSignupDTO){
@@ -52,22 +44,72 @@ public class MemberController {
         return new ResponseEntity<>("어드민계정 가입 성공", HttpStatus.OK);
     }
 
-    // 매니저 리스트 조회
-    @GetMapping("/admin-getlist")
-    public List<ManagerListDTO> getAllManagers() {
-        List<Manager> allManagers = managerRepository.findAll();
+    // 아이디 찾기 제출
+    @PostMapping("/find-id")
+    public ResponseEntity<?> findMemberId(@RequestBody FindMemberIdDTO findMemberIdDTO) {
+        try {
+            String code = findMemberIdDTO.getCode();
+            String memberId = memberService.findMemberId(findMemberIdDTO, code);
+            return new ResponseEntity<>(memberId, HttpStatus.OK);
+        } catch (InvalidVerificationCodeException e) {
+            return new ResponseEntity<>("Invalid verification code", HttpStatus.BAD_REQUEST);
+        } catch (MemberNotFound e) {
+            return new ResponseEntity<>("Member not found", HttpStatus.NOT_FOUND);
+        }
+    }
 
-        return allManagers.stream().map(manager -> {
-            ManagerListDTO dto = new ManagerListDTO();
-            dto.setId(manager.getId());
-            dto.setAdminName(manager.getAdminName());
-            dto.setAdminId(manager.getAdminId());
-            dto.setAdminNickname(manager.getAdminNickname());
-            dto.setCreatedAt(manager.getCreatedAt());
-            dto.setIsActive(manager.getIsActive());
-            dto.setPassword(manager.getPassword());
-            return dto;
-        }).collect(Collectors.toList());
+    // 비밀번호 찾기 제출
+    @PostMapping("/find-pw")
+    public ResponseEntity<?> findPw(@RequestBody FindPasswordDTO findPasswordDTO) {
+        try {
+            String code = findPasswordDTO.getCode();
+            String resetToken = memberService.findMemberPw(findPasswordDTO, code);
+            return new ResponseEntity<>(Collections.singletonMap("resetToken", resetToken), HttpStatus.OK);
+        } catch (InvalidVerificationCodeException e) {
+            return new ResponseEntity<>("Invalid verification code", HttpStatus.BAD_REQUEST);
+        } catch (MemberNotFound e) {
+            return new ResponseEntity<>("Member not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // 비밀번호 리셋
+    @PostMapping("/reset-pw")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
+        try {
+            memberService.resetPassword(resetPasswordDTO);
+            return new ResponseEntity<>("Password reset successful", HttpStatus.OK);
+        } catch (InvalidVerificationCodeException e) {
+            return new ResponseEntity<>("Invalid reset token", HttpStatus.BAD_REQUEST);
+        } catch (MemberNotFound e) {
+            return new ResponseEntity<>("Member not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // 회원 마이페이지 정보 얻기
+    @GetMapping("/api/{memberId}")
+    public ResponseEntity<MemberInfoDTO> getMemberInfo(@PathVariable String memberId) {
+        try {
+            MemberInfoDTO memberInfoDTO = memberService.getMemberInfo(memberId);
+            return ResponseEntity.ok(memberInfoDTO);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // 회원 정보 변경
+    @PutMapping("/api/change-member/{memberId}")
+    public ResponseEntity<?> editMember(@PathVariable String memberId, @RequestBody MemberEditDTO memberEditDTO) {
+        System.out.println("Received data: " + memberEditDTO.toString());
+        try {
+            memberService.edit(memberId, memberEditDTO);
+            return ResponseEntity.ok().build(); // 200 OK
+        } catch (MemberNotFound e) {
+            return ResponseEntity.notFound().build(); // 404 Not Found
+        } catch (Exception e) {
+            System.out.println("Exception caught: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build(); // 400 Bad Request
+        }
     }
 
     @PostMapping

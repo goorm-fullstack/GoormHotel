@@ -20,7 +20,6 @@ const typeDetailName = [
 ];
 
 const Item = ({ selectedProduct }: any) => {
-
   const [type, setType] = useState('');
   const [typeDetail, setTypeDetail] = useState('');
   const [coupon, setCoupon] = useState();
