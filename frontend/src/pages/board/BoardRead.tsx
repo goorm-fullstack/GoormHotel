@@ -493,9 +493,7 @@ const BoardRead = () => {
                   <ul>
                     {reply.length === 0 && (
                       <li>
-                        <div className="cwinfo">
-                          <strong>작성된 댓글이 없습니다.</strong>
-                        </div>
+                        <p className='empty'>작성된 댓글이 없습니다.</p>
                       </li>
                     )}
                     {reply.length > 0 &&

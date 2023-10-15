@@ -289,9 +289,7 @@ const AdminBoardDetail = () => {
                       <ul>
                         {reply.length === 0 && (
                           <li>
-                            <div className="empty">
-                              <strong>작성된 댓글이 없습니다.</strong>
-                            </div>
+                            <p className='empty'>작성된 댓글이 없습니다.</p>
                           </li>
                         )}
                         {reply.length > 0 &&

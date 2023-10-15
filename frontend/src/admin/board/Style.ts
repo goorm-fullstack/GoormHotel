@@ -253,6 +253,10 @@ export const TableRead = styled.table`
       & .modify {
         margin-right: 5px;
       }
+      & .empty{
+        text-align: center;
+        margin-top: 0;
+      }
     }
   }
 `;
