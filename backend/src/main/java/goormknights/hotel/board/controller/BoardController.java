@@ -223,6 +223,7 @@ public class BoardController {
         } catch (NoBoardException e) {
             return ResponseEntity.notFound().build();
         }
+    }
 
     // 마이페이지용
     @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
