@@ -5,6 +5,7 @@ import goormknights.hotel.auth.dto.request.ManagerLogin;
 import goormknights.hotel.auth.dto.request.MemberLogin;
 import goormknights.hotel.auth.service.AuthService;
 import goormknights.hotel.member.dto.request.AnonymousDto;
+import goormknights.hotel.member.exception.InvalidMemberException;
 import goormknights.hotel.member.service.AdminService;
 import goormknights.hotel.member.service.AnonymousService;
 import goormknights.hotel.member.service.MemberService;
@@ -50,11 +51,17 @@ public class LoginController {
 
     // 관리자 로그인
     @PostMapping("/manager")
-    public ResponseEntity<?> adminLogin(@RequestBody ManagerLogin managerLogin, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-        if (adminService.managerLogin(managerLogin.getAdminId(), managerLogin.getPassword(), request, response)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("로그인 실패", HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<?> adminLogin(@RequestBody ManagerLogin managerLogin, HttpServletRequest request, HttpServletResponse response) {
+        try {
+            if (adminService.managerLogin(managerLogin.getAdminId(), managerLogin.getPassword(), request, response)) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("로그인 실패", HttpStatus.UNAUTHORIZED);
+            }
+        } catch (InvalidMemberException e) {
+            return new ResponseEntity<>("이 매니저 계정은 비활성화 되었습니다", HttpStatus.FORBIDDEN);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -29,8 +29,12 @@ const AdminLogin: React.FC = () => {
       } else {
         alert('아이디 또는 비밀번호가 일치하지 않습니다.');
       }
-    } catch (error) {
-      alert('아이디 또는 비밀번호가 일치하지 않습니다. 또는 서버 오류가 발생했습니다.');
+    } catch (error: any) {
+      if (error.response && error.response.status === 403) {
+        alert('비활성화된 관리자 계정입니다.');
+      } else {
+        alert('아이디 또는 비밀번호가 일치하지 않습니다. 또는 서버 오류가 발생했습니다.');
+      }
     }
   };
 
