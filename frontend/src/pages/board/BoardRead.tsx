@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as S from './Style';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { PageTitle, BtnWrapper, LinkBtn, SubmitBtn } from '../../Style/commonStyles';
+import { PageTitle, BtnWrapper, LinkBtn, SubmitBtn, NormalBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import queryString from "query-string";
 import Instance from '../../utils/api/axiosInstance';
@@ -51,7 +51,8 @@ const BoardRead = () => {
         console.error('Error:', error.message);
       });
 
-      setUser(isLogin as string);
+      const user = localStorage.getItem('memberId');
+      setUser(user as string);
 
       Instance.get(`/member/${user}`)
       .then((response) => {
@@ -62,6 +63,8 @@ const BoardRead = () => {
         console.error(error.message);
       })
   }, [boardId]);
+
+  console.log(file);
 
   useEffect(() => {
     let pageTitle;
@@ -402,15 +405,19 @@ const BoardRead = () => {
     }
   }
 
-  console.log(file);
-  console.log(boardData?.boardWriter);
+  const boardReport = () => {
+    navigate(`/board/report/write?boardId=${boardId}`);
+  }
 
   return (
     <>
       <SubHeader kind="board" />
       <S.Container>
         {title}
-        <LinkBtn to={`/board/report/write?boardId=${boardId}`}>신고하기</LinkBtn>
+        <S.WriteBtnWrapper className='right double'>
+          <NormalBtn className='red' onClick={boardReport}>신고하기</NormalBtn>
+          <NormalBtn className='red' onClick={handleDelteBoard}>삭제</NormalBtn>
+        </S.WriteBtnWrapper>
         <div>
           <S.TableRead>
             <tbody>
@@ -545,8 +552,6 @@ const BoardRead = () => {
                   <ul>
                     {reply.length === 0 && (
                       <li>
-                        {/* <div>
-                          <p className="empty">작성된 댓글이 없습니다.</p> */}
                         <div className="cwinfo">
                           <strong>작성된 댓글이 없습니다.</strong>
                         </div>
@@ -583,12 +588,9 @@ const BoardRead = () => {
           </S.TableRead>
           {board !== 'notice' &&
           <BtnWrapper className='center mt40'>
-            <SubmitBtn className='center' onClick={handleDelteBoard}>삭제</SubmitBtn>
-          </BtnWrapper>
-          }
-          <BtnWrapper className='center mt40'>
             <LinkBtn to={listLink}>목록</LinkBtn>
           </BtnWrapper>
+          }
         </div>
       </S.Container>
     </>

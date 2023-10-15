@@ -221,7 +221,7 @@ const AdminBoardDetail = () => {
                 <tr>
                   <td className="titlew">
                     <p className="title">
-                      <span>{boardData ? boardData.category : ''}</span>
+                      <span>{`[${boardData ? boardData.category : ''}]`}</span>
                       {boardData ? boardData.title : ''}
                       {isComment()}
                     </p>
@@ -341,6 +341,7 @@ const AdminBoardDetail = () => {
             </S.TableRead>
             <BtnWrapper className="center mt40">
               <NormalBtn onClick={() => navigate(-1)}>목록</NormalBtn>
+              <NormalBtn onClick={() => `/board/report/write?boardId=${boardData.boardId}`}>신고하기</NormalBtn>
             </BtnWrapper>
           </div>
         </Container>
