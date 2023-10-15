@@ -86,6 +86,8 @@ const ReservationItem = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const reservationData = location.state ? location.state.reservationData : null;
+  const selectData = location.state ? location.state.selectData : null;
+  const indexImg = location.state ? location.state.indexImg : null;
   const [selectedType, setSelectedType] = useState<string[]>(['all', 'room', 'dining']);
   const [selectedCategory, setSelectedCategory] = useState<string>(productCategories[0].english);
   const [products, setProducts] = useState<(RoomData | DiningData)[]>([]);
@@ -270,6 +272,8 @@ const ReservationItem = () => {
       state: {
         reservationData: reservationData,
         selectedProduct: selectedProduct,
+        selectData: selectData,
+        indexImg: indexImg,
       },
     });
   };
@@ -369,27 +373,27 @@ const ReservationItem = () => {
             <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
             <S.SelectItem>
               {(() => {
-                if (selectedProduct) {
+                if (selectedProduct || selectData) {
                   return (
                     <S.SelectedItem>
                       <div
                         className="imgwrap"
                         style={{
-                          backgroundImage: `url(${selectedProduct.imageUrl})`,
+                          backgroundImage: `url(${selectedProduct ? selectedProduct.imageUrl : indexImg})`,
                         }}
                       />
                       <h4>
-                        {selectedProduct.name}
+                        {selectedProduct ? selectedProduct.name : selectData.name}
                         <CircleCloseBtn onClick={handleDeleteClick}></CircleCloseBtn>
                       </h4>
-                      <p>{selectedProduct.type === 'room' ? '객실' : '다이닝'}</p>
-                      <p>{nameOfTypeDetail(selectedProduct)}</p>
-                      <p>성인 {selectedProduct.capacity}인 기준</p>
+                      <p>{selectedProduct ? (selectedProduct.type === 'room' ? '객실' : '다이닝') : (selectData.type === 'room' ? '객실' : '다이닝')}</p>
+                      <p>{selectedProduct ? nameOfTypeDetail(selectedProduct) : nameOfTypeDetail(selectData)}</p>
+                      <p>성인 {selectedProduct ? selectedProduct.capacity : selectData.capacity}인 기준</p>
                       <table>
                         <tbody>
                           <tr>
                             <th>기본가</th>
-                            <td>{numberWithCommas(selectedProduct.price)} 원</td>
+                            <td>{selectedProduct ? numberWithCommas(selectedProduct.price) : numberWithCommas(selectData.price)} 원</td>
                           </tr>
                         </tbody>
                       </table>
@@ -398,7 +402,7 @@ const ReservationItem = () => {
                         <tbody>
                           <tr>
                             <th>성인</th>
-                            <td>{numberWithCommas(selectedProduct.priceAdult)} 원</td>
+                            <td>{selectedProduct ? numberWithCommas(selectedProduct.priceAdult) : numberWithCommas(selectData.priceAdult)} 원</td>
                             {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 
 
                             예약 정보 입력 페이지에서 기준 인원 초과하여 인원 추가하는 경우 
@@ -406,7 +410,7 @@ const ReservationItem = () => {
                           </tr>
                           <tr>
                             <th>어린이</th>
-                            <td>{numberWithCommas(selectedProduct.priceChildren)} 원</td>
+                            <td>{selectedProduct ? numberWithCommas(selectedProduct.priceChildren) : numberWithCommas(selectData.priceChildren)} 원</td>
                             {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 */}
                           </tr>
                         </tbody>

@@ -247,6 +247,7 @@ const BoardRead = () => {
           .put(`/reply/${editingReplyId}`, data)
           .then((response) => {
             alert('수정되었습니다.');
+            setReplyPassword('');
             scrollToPosition(scroll);
             setEditedReplyContent('');
             setIsEditing(false);

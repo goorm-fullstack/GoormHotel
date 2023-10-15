@@ -45,7 +45,7 @@ const ReservationPage = () => {
   const [memberData, setMemberData] = useState();
   const userLoggedIn = localStorage.getItem("memberId");
   const location = useLocation();
-  const { reservationData, selectedProduct } = location.state;
+  const { reservationData, selectedProduct, selectData, indexImg } = location.state;
   const navigate = useNavigate();
   const [nights, setNights] = useState(1);
   const [giftcardList, setGiftCardList] = useState<GiftCard[]>([]);
@@ -69,7 +69,7 @@ const ReservationPage = () => {
     children: reservationData?.children || 0,
     stay: reservationData?.nights,
     notice: notice,
-    sumPrice: selectedProduct.price,
+    sumPrice: selectedProduct ? selectedProduct.price : selectData.price,
     discountPrice: '0',
     totalPrice: '12345',
   });
@@ -322,7 +322,7 @@ const ReservationPage = () => {
 
           <S.Right>
             <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
-            <Item selectedProduct={selectedProduct} />
+            {indexImg ? <Item selectedProduct={selectedProduct ? selectedProduct : selectData} indexImg={indexImg} /> : <Item selectedProduct={selectedProduct ? selectedProduct : selectData} />}
             <BtnWrapper className="full mt20">
               <SubmitBtn type="submit" className="shadow" onClick={handleReservation}>
                 예약 및 결제하기
