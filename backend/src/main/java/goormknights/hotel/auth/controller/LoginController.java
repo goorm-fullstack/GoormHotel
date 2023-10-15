@@ -1,9 +1,7 @@
 package goormknights.hotel.auth.controller;
 
-import goormknights.hotel.auth.dto.request.AnonymousLogin;
 import goormknights.hotel.auth.dto.request.ManagerLogin;
 import goormknights.hotel.auth.dto.request.MemberLogin;
-import goormknights.hotel.auth.service.AuthService;
 import goormknights.hotel.member.dto.request.AnonymousDto;
 import goormknights.hotel.member.exception.InvalidMemberException;
 import goormknights.hotel.member.service.AdminService;

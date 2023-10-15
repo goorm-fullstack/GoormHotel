@@ -53,8 +53,6 @@ import AdminMail from './admin/chat/AdminMail';
 import AdminIndex from './admin/Home/AdminIndex';
 import AdminSubScribe from './admin/chat/AdminSubScribe';
 import { useAuth } from './utils/api/AuthContext';
-import Instance from './utils/api/axiosInstance';
-import AnonymousSignup from './pages/member/AnonymousSignup';
 import AdminBoardDetail from './admin/board/AdminBoardDetail';
 
 const App: React.FC = () => {
