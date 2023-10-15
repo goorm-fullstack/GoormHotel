@@ -24,13 +24,11 @@ public class QGiftCard extends EntityPathBase<GiftCard> {
 
     public final NumberPath<Integer> expire = createNumber("expire", Integer.class);
 
-    public final NumberPath<Integer> id = createNumber("id", Integer.class);
+    public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final DatePath<java.time.LocalDate> issueDate = createDate("issueDate", java.time.LocalDate.class);
 
     public final ComparablePath<Character> isZeroMoney = createComparable("isZeroMoney", Character.class);
-
-    public final goormknights.hotel.member.model.QMember member;
 
     public final NumberPath<Integer> money = createNumber("money", Integer.class);
 
@@ -58,7 +56,6 @@ public class QGiftCard extends EntityPathBase<GiftCard> {
 
     public QGiftCard(Class<? extends GiftCard> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.member = inits.isInitialized("member") ? new goormknights.hotel.member.model.QMember(forProperty("member")) : null;
         this.reservation = inits.isInitialized("reservation") ? new goormknights.hotel.reservation.model.QReservation(forProperty("reservation"), inits.get("reservation")) : null;
     }
 

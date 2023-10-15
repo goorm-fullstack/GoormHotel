@@ -3,10 +3,7 @@ import * as S from './Style';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PageTitle, BtnWrapper, LinkBtn, SubmitBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
-import axios from 'axios';
 import queryString from "query-string";
-import e from 'express';
-import {Cookies} from "react-cookie";
 import Instance from '../../utils/api/axiosInstance';
 
 const BoardRead = () => {
@@ -37,31 +34,15 @@ const BoardRead = () => {
 
   const isLogin = localStorage.getItem("memberId");
 
-  const cookies = new Cookies();
-  const getCookie = (name: string) => {
-    return cookies.get(name);
-  }
-  const cookie = getCookie("JSESSIONID");
-  console.log(cookie);
-
-  const parseBoardContent = (content: any) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(content, 'text/html');
-    const paragraphs = Array.from(doc.querySelectorAll('p'));
-
-    return paragraphs.map((p) => p.textContent);
-  };
-
-  // const boardContent =
-  //   boardData && boardData.boardContent ? parseBoardContent(boardData.boardContent).map((paragraph, index) => <p key={index}>{paragraph}</p>) : '';
-
   useEffect(() => {
     Instance
       .get(`/boards/${boardId}`)
       .then((response) => {
+        console.log(response);
         if (response.headers['filename']) {
           const fileName = response.headers['filename'];
-          setFile(fileName);
+          const decodedFileName = decodeURI(fileName).replaceAll('+', ' ');
+          setFile(decodedFileName);
         }
         setBoardData(response.data);
         fetchReply(response.data.boardId);
@@ -81,7 +62,7 @@ const BoardRead = () => {
       .catch((error) => {
         console.error(error.message);
       })
-  }, [user]);
+  }, [boardId]);
 
   useEffect(() => {
     let pageTitle;
@@ -421,6 +402,9 @@ const BoardRead = () => {
       }
     }
   }
+
+  console.log(file);
+  console.log(boardData?.boardWriter);
 
   return (
     <>
