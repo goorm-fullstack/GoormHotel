@@ -5,6 +5,7 @@ import goormknights.hotel.coupon.exception.NotAvailableUseCoupon;
 import goormknights.hotel.giftcard.exception.NotAvailableException;
 import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.member.model.Member;
+import goormknights.hotel.reservation.model.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,12 +17,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RequestGiftCardDto {
-    private int id;
+    private Long id;
     private String uuid;
     private String title;
     private int money;//현재 잔액
-    private Member member;
     private char isZeroMoney;
+    private Reservation reservation;
     @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate issueDate;//발행일
     private int expire;//만료일
@@ -31,10 +32,10 @@ public class RequestGiftCardDto {
         this.uuid = giftcard.getUuid();
         this.title = giftcard.getTitle();
         this.money = giftcard.getMoney();
-        this.member = giftcard.getMember();
         this.isZeroMoney = giftcard.getIsZeroMoney();
         this.issueDate = giftcard.getIssueDate();
         this.expire = giftcard.getExpire();
+        this.reservation = giftcard.getReservation();
     }
 
     /**
@@ -72,7 +73,7 @@ public class RequestGiftCardDto {
                 .id(id)
                 .uuid(uuid)
                 .money(money)
-                .member(member)
+                .reservation(reservation)
                 .isZeroMoney(isZeroMoney)
                 .build();
     }

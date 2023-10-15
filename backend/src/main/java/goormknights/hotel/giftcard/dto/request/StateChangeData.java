@@ -6,5 +6,5 @@ import java.util.List;
 
 @Data
 public class StateChangeData {
-    private List<Integer> data;
+    private List<Long> data;
 }

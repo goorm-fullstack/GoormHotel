@@ -21,11 +21,9 @@ import java.time.LocalDate;
 public class GiftCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String uuid;
     private int money;//현재 잔액
-    @ManyToOne
-    private Member member;
     private char isZeroMoney = 'N';//만약 잔액이 0라면 사용불가능하도록 표시하자
     private String title;//상품권 이름
     @JsonFormat(pattern = "yyyy.MM.dd")
@@ -41,48 +39,33 @@ public class GiftCard {
         this.title = money+"원 상품권";
     }
 
-    @Override
-    public String toString() {
-        return "GiftCard{" +
-                "id=" + id +
-                ", uuid='" + uuid + '\'' +
-                ", money=" + money +
-                ", member=" + member +
-                ", isZeroMoney=" + isZeroMoney +
-                ", title='" + title + '\'' +
-                ", issueDate=" + issueDate +
-                ", expire=" + expire +
-                ", reservation=" + reservation +
-                '}';
-    }
-
     @Builder
     public GiftCard(
-            int id,
+            Long id,
             String title,
             String uuid,
             int money,
-            Member member,
+            Reservation reservation,
             char isZeroMoney
     ) {
         this.id = id;
         this.uuid = uuid;
         this.money = money;
-        this.member = member;
+        this.reservation = reservation;
         this.isZeroMoney = isZeroMoney;
         this.title = title;
         this.issueDate = LocalDate.now();
         this.expire = 365;
     }
 
-    public void setMember(Member member) {
-        this.member = member;
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
     }
 
     // 사용자가 기프트 카드를 등록한다.
-    public void registrationGiftCard(Member member) {
-        this.member = member;
-        member.getGiftCardList().add(this);
+    public void registrationGiftCard(Reservation reservation) {
+        this.reservation = reservation;
+        reservation.getGiftCard().add(this);
     }
 
     // 사용자가 기프트 카드를 사용하는 경우

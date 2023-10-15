@@ -30,6 +30,8 @@ public class RequestBoardDto {
 
     private String boardPassword;       //작성자 비밀번호
 
+    private Long memberPk; // 회원의 pk
+
     private String category;        //게시판-카테고리
 
     private LocalDateTime boardDeleteTime;      //소프트딜리트 시간
@@ -49,6 +51,7 @@ public class RequestBoardDto {
                 .isComment(isComment)
                 .boardPassword(boardPassword)
                 .parentBoardId(parentBoardId)
+                .memberPk(memberPk)
                 .build();
     }
 }

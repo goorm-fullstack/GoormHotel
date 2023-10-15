@@ -13,7 +13,11 @@ export const SearchHeader = styled.div`
   }
 `;
 
-export const Container = styled(commonContainerStyle)``;
+export const Container = styled(commonContainerStyle)`
+  .conbtm .preview{
+    margin-left: 30px;
+  }
+`;
 
 export const IsReply = styled.span`
   // 답글 아이콘
@@ -66,6 +70,10 @@ export const BoardGallery = styled.ul`
   li .writer,
   li .date {
     font-size: ${(props) => props.theme.font.sizexs};
+    color: ${(props) => props.theme.colors.graylight};
+  }
+  p.titlew span{
+    margin-right: 20px;
     color: ${(props) => props.theme.colors.graylight};
   }
 `;
@@ -146,6 +154,12 @@ export const TableRead = styled.table`
     }
   }
 
+  .contents{
+    strong{
+      font-weight: 900;
+    }
+  }
+
   .contents textarea {
     width: 100%;
     min-height: 300px;
@@ -201,7 +215,7 @@ export const TableRead = styled.table`
         height: 100px;
       }
 
-      button[type='submit'] {
+      button {
         background: ${(props) => props.theme.colors.navy};
         color: white;
         width: 120px;
@@ -272,9 +286,6 @@ export const TableRead = styled.table`
 
       & .modify-input {
         margin-right: 20px;
-      }
-      & .modify {
-        margin-right: 5px;
       }
     }
   }

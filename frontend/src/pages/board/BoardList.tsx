@@ -66,7 +66,6 @@ const CustomerSupport = () => {
             const totalPages = parseInt(response.headers['totalpages'], 10);
             const totalData = parseInt(response.headers['totaldata'], 10);
             setBoard(response.data || []);
-            console.log(response.data);
             setTotalData(totalData);
             setTotalPages(totalPages);
           })
@@ -140,7 +139,7 @@ const CustomerSupport = () => {
           let image = { boardId: boardId, imageUrl: URL.createObjectURL(blob) };
           setImageUrl((prevImages) => [...prevImages, image]);
         } else if (response.status === 204) {
-          console.log('해당 boardId가 없음 : ', boardId);
+          console.error('해당 boardId가 없음 : ', boardId);
         } else {
           console.error('요청 에러 : ', response.status);
         }
@@ -247,13 +246,14 @@ const CustomerSupport = () => {
                     boards.map((item) => (
                       <li key={item.boardId}>
                         <div className="thumbnail">
-                          <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>
+                          <Link to={`/board/${board}/detail?boardId=${item.boardId}`}>
                             {imageUrl.find((image) => image.boardId === item.boardId) && (
                               <img src={imageUrl.find((image: any) => image.boardId === item.boardId).imageUrl} alt={`Image for ${item.title}`} />
                             )}
                           </Link>
                         </div>
-                        <p className="title">
+                        <p className="titlew">
+                          <span>[{item.category}]</span>
                           <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</Link>
                         </p>
                         <p className="writer">{item.boardWriter}</p>

@@ -43,10 +43,6 @@ const AdminIndex = () => {
       });
   }, []);
 
-  console.log(notice);
-  console.log(review);
-  console.log(qna);
-
   return (
     <div>
       <AdminHeader />

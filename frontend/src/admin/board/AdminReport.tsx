@@ -40,14 +40,12 @@ const AdminReport = () => {
         setReport(modifiedData);
         setTotalPage(totalPages);
         setTotalData(totalData);
-        console.log('get 성공');
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
 
-  console.log(report);
 
   const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked: boolean = e.target.checked;

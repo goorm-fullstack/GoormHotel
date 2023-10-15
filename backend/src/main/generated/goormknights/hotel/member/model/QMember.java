@@ -59,7 +59,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath roomId = createString("roomId");
 
-    public final DateTimePath<java.time.LocalDateTime> signupDate = createDateTime("signupDate", java.time.LocalDateTime.class);
+    public final DatePath<java.time.LocalDate> signupDate = createDate("signupDate", java.time.LocalDate.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;

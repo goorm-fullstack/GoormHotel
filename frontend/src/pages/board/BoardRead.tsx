@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as S from './Style';
-import { useLocation, useParams } from 'react-router-dom';
-import { PageTitle, BtnWrapper, LinkBtn } from '../../Style/commonStyles';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { PageTitle, BtnWrapper, LinkBtn, SubmitBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
-import axios from 'axios';
 import queryString from "query-string";
-import e from 'express';
-import {Cookies} from "react-cookie";
 import Instance from '../../utils/api/axiosInstance';
 
 const BoardRead = () => {
@@ -29,15 +26,13 @@ const BoardRead = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedReplyContent, setEditedReplyContent] = useState('');
   const [editingReplyId, setEditingReplyId] = useState(0); // 수정 중인 댓글 ID를 추적
+  const [user, setUser] = useState('');
+  const [scroll, setScroll] = useState(0);
+  const [memberPk, setMemberPk] = useState<number>(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   const isLogin = localStorage.getItem("memberId");
-
-  const cookies = new Cookies();
-  const getCookie = (name: string) => {
-    return cookies.get(name);
-  }
-  const cookie = getCookie("JSESSIONID");
-  console.log(cookie);
 
   const parseBoardContent = (content: any) => {
     const parser = new DOMParser();
@@ -46,9 +41,6 @@ const BoardRead = () => {
 
     return paragraphs.map((p) => p.textContent);
   };
-
-  const boardContent =
-    boardData && boardData.boardContent ? parseBoardContent(boardData.boardContent).map((paragraph, index) => <p key={index}>{paragraph}</p>) : '';
 
   useEffect(() => {
     Instance
@@ -64,7 +56,18 @@ const BoardRead = () => {
       .catch((error) => {
         console.error('Error:', error.message);
       });
-  }, []);
+
+      setUser(isLogin as string);
+
+      Instance.get(`/member/${user}`)
+      .then((response) => {
+        const memberPk = response.data;
+        setMemberPk(memberPk);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      })
+  }, [user]);
 
   useEffect(() => {
     let pageTitle;
@@ -142,25 +145,17 @@ const BoardRead = () => {
     }
   };
 
-  const findReply = async (replyId : number) => {
-    try{
-      const response = await Instance.get(`/reply/replyId/${replyId}`);
-      if(!response){
-        return ;
-      }
-      return response.data.replyPassword;
-    }
-    catch (e) {
-      console.error(e);
-    }
-  }
-
-  const handleDelete = (replyId: number, replyWriter: string, replyPassword: string) => {
-
-    if( (isLogin === replyWriter) && !replyPassword){                   // 쿠키 아이디와 작성자 이름이 같고 댓글 비밀번호가 없을 때
-      const isConfirm = window.confirm('삭제하시겠습니까?');
-      if(isConfirm){
-        Instance
+  // 진환 작업 부분
+  // 회원 비회원 구분 삭제
+  const handleDelete = async (replyId: number) => {
+    const isConfirm = window.confirm('삭제하시겠습니까?');
+    if(isConfirm){
+      if(user === null){
+        const response = await Instance.get(`reply/replyId/${replyId}`);
+        const replyPassword = response.data.replyPassword;
+        const password = window.prompt('비밀번호를 입력하세요.');
+        if(replyPassword === password){
+          Instance
           .put(`/reply/softdelete/${replyId}`)
           .then((response) => {
             alert('삭제되었습니다.');
@@ -169,35 +164,74 @@ const BoardRead = () => {
           .catch((error) => {
             console.error('댓글 삭제에 실패했습니다.', error);
           });
-      }
-    }
-
-    if(!isLogin){                                                                      //쿠키 아이디가 없을 때
-      if(!replyPassword){                                                             //replyPassword(회원이 작성한 댓글이라면)가 없다면
-        alert("삭제가 불가능한 댓글입니다.");                                             //삭제 불가능
-        return;
-      }
-
-      const inputPassword = prompt("비밀번호를 입력하세요.");
-      if(replyPassword != inputPassword){                                             //입력받은 비밀번호와 replyPassword가 다르면
-        alert("비밀번호가 틀렸습니다.");                                                 //댓글 삭제 실패
-        return;
-      }
-
-      if(replyPassword === inputPassword){                                           //입력받은 비밀번호와 replyPassword가 일치하다면
-        return (                                                                     //댓글 삭제
+        }else{
+          alert('해당 글을 삭제할 권한이 없습니다.');
+        }
+      }else{
+        const response = await Instance.get(`reply/replyId/${replyId}`);
+        const id = response.data.replyWriter;
+        const replyMemberPk = response.data.memberPk;
+        if(id === user && memberPk === replyMemberPk){
           Instance
-            .put(`/reply/softdelete/${replyId}`)
-            .then((response) => {
-              alert('삭제되었습니다.');
-              fetchReply(boardData.boardId);
-            })
-            .catch((error) => {
-              console.error('댓글 삭제에 실패했습니다.', error);
-            })
-        )
+          .put(`/reply/softdelete/${replyId}`)
+          .then((response) => {
+            alert('삭제되었습니다.');
+            fetchReply(boardData.boardId);
+          })
+          .catch((error) => {
+            console.error('댓글 삭제에 실패했습니다.', error);
+          });
+        }else{
+          alert('해당 글을 삭제할 권한이 없습니다.');
+        }
       }
     }
+  }
+
+  //동규님 삭제 작업 부분
+  // const handleDelete = (replyId: number, replyWriter: string, replyPassword: string) => {
+
+  //   if( (isLogin === replyWriter) && !replyPassword){                   // 쿠키 아이디와 작성자 이름이 같고 댓글 비밀번호가 없을 때
+  //     const isConfirm = window.confirm('삭제하시겠습니까?');
+  //     if(isConfirm){
+  //       Instance
+  //         .put(`/reply/softdelete/${replyId}`)
+  //         .then((response) => {
+  //           alert('삭제되었습니다.');
+  //           fetchReply(boardData.boardId);
+  //         })
+  //         .catch((error) => {
+  //           console.error('댓글 삭제에 실패했습니다.', error);
+  //         });
+  //     }
+  //   }
+
+  //   if(!isLogin){                                                                      //쿠키 아이디가 없을 때
+  //     if(!replyPassword){                                                             //replyPassword(회원이 작성한 댓글이라면)가 없다면
+  //       alert("삭제가 불가능한 댓글입니다.");                                             //삭제 불가능
+  //       return;
+  //     }
+
+  //     const inputPassword = prompt("비밀번호를 입력하세요.");
+  //     if(replyPassword != inputPassword){                                             //입력받은 비밀번호와 replyPassword가 다르면
+  //       alert("비밀번호가 틀렸습니다.");                                                 //댓글 삭제 실패
+  //       return;
+  //     }
+
+  //     if(replyPassword === inputPassword){                                           //입력받은 비밀번호와 replyPassword가 일치하다면
+  //       return (                                                                     //댓글 삭제
+  //         Instance
+  //           .put(`/reply/softdelete/${replyId}`)
+  //           .then((response) => {
+  //             alert('삭제되었습니다.');
+  //             fetchReply(boardData.boardId);
+  //           })
+  //           .catch((error) => {
+  //             console.error('댓글 삭제에 실패했습니다.', error);
+  //           })
+  //       )
+  //     }
+  //   }
 
     // const isConfirm = window.confirm('삭제하시겠습니까?');
     // if(isConfirm){
@@ -211,131 +245,175 @@ const BoardRead = () => {
     //     console.error('댓글 삭제에 실패했습니다.', error);
     //   });
     // }
-  };
+  // };
 
-  const handleUpdate = (replyId: any) => {
+  const scrollToPosition = (number: number) => {
+    window.scrollTo({
+      top: number,
+      behavior: 'smooth'
+    });
+  }
+
+  const handleUpdate = async (replyId: any) => {
+    const response = await Instance.get(`/reply/replyId/${replyId}`);
+    const writer = response.data.replyWriter;
+    const content = response.data.replyContent;
     setIsEditing(true);
     setEditingReplyId(replyId);
-    const replyToEdit = reply.find((replyItem) => replyItem.replyId === replyId);
-    if (replyToEdit) {
-      setReplyContentModify(replyToEdit.replyContent);
-      setReplyWriterModify(replyToEdit.replyWriter);
-    }
+    setReplyWriterModify(writer);
+    setReplyContentModify(content);
+    setScroll(window.scrollY);
+    scrollToPosition(300);
   };
 
   const handleCancelUpdate = () => {
     setIsEditing(false);
   };
 
-  const handleSaveUpdate = (replyId: number, e: React.FormEvent<HTMLFormElement>) => {
+  const handleSaveUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = {
-      replyWriter: replyWriterModify,
-      replyContent: replyContentModify,
-    };
-    Instance
-      .put(`/reply/${replyId}`, data)
-      .then((response) => {
-        alert('수정되었습니다.');
-        setIsEditing(false);
-        setEditedReplyContent('');
-        fetchReply(boardData.boardId);
-      })
-      .catch((error) => {
-        console.error('댓글 수정에 실패했습니다.', error);
-      });
+
+    if(user !== null){
+      const response = await Instance.get(`/reply/replyId/${editingReplyId}`);
+      const id = response.data.replyWriter;
+      const pk = response.data.memberPk;
+      if(replyWriterModify === id && memberPk === pk){
+        const data = {
+          replyWriter: replyWriterModify,
+          replyContent: replyContent,
+        }
+        Instance
+            .put(`/reply/${editingReplyId}`, data)
+            .then((response) => {
+              alert('수정되었습니다.');
+              setEditedReplyContent('');
+              setReplyContentModify('');
+              setReplyContent('');
+              scrollToPosition(scroll);
+              setIsEditing(false);
+              fetchReply(boardData.boardId);
+            })
+            .catch((error) => {
+              console.error('댓글 수정에 실패했습니다.', error);
+            });
+      }
+    }else{
+      const response = await Instance.get(`/reply/replyId/${editingReplyId}`);
+      const password = response.data.replyPassword;
+      if(password === replyPassword){
+        const data = {
+          replyWriter: replyWriterModify,
+          replyContent: replyContentModify,
+        }
+        Instance
+          .put(`/reply/${editingReplyId}`, data)
+          .then((response) => {
+            alert('수정되었습니다.');
+            scrollToPosition(scroll);
+            setEditedReplyContent('');
+            setIsEditing(false);
+            fetchReply(boardData.boardId);
+          })
+          .catch((error) => {
+            console.error('댓글 수정에 실패했습니다.', error);
+          });
+      }else{
+        alert('해당 글의 수정 권한이 없습니다.');
+        window.location.reload();
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      const response = await Instance.post('/reply/writeform', {
+    if(user !== null){
+      Instance.post('/reply/writeform', {
         boardId: boardId,
         replyContent: replyContent,
-        replyWriter: isLogin ? isLogin : replyWriter,
-        replyPassword: replyPassword,
-      });
-      setReplyWriter('');
-      setReplyPassword('');
-      setReplyContent('');
-      fetchReply(parseInt(boardId ? boardId : '', 10));
-    } catch (error) {
-      console.error('댓글 작성에 실패했습니다.', error);
+        replyWriter: inputRef && inputRef.current ? inputRef.current.value : '',
+        memberPk: memberPk,
+      })
+      .then(() => {
+        setReplyWriter('');
+        setReplyPassword('');
+        setReplyContent('');
+        fetchReply(parseInt(boardId ? boardId : '', 10));
+      })
+      .catch((error) => {
+        console.error('댓글 작성에 실패했습니다.', error);
+      })
+    }else{
+      console.log(replyContent);
+      Instance.post('/reply/writeform', {
+      boardId: boardId,
+      replyContent: replyContent,
+      replyWriter: replyWriter,
+      replyPassword: replyPassword,
+      })
+      .then(() => {
+        setReplyWriter('');
+        setReplyPassword('');
+        setReplyContent('');
+        fetchReply(parseInt(boardId ? boardId : '', 10));
+      })
+      .catch((error) => {
+        console.error(error);
+      })
     }
-  };
-
-  const replyWriteOption = () => {
-    if(!isLogin){
-      return(
-        <>
-          <div>
-            <input
-              type="text"
-              placeholder="작성자명"
-              name="replyWriter"
-              value={replyWriter}
-              onChange={(e) => setReplyWriter(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="비밀번호"
-              name="replyPassword"
-              value={replyPassword}
-              onChange={(e) => setReplyPassword(e.target.value)}
-            />
-            {/*<input type="password" placeholder="식별 비밀번호?" />*/}
-          </div>
-        </>
-      )
-    }
-    return (
-      <div>
-        <input
-          type="text"
-          placeholder="작성자명"
-          name="replyWriter"
-          value={isLogin}
-          onChange={(e) => setReplyWriter(e.target.value)}
-          readOnly
-        />
-      </div>
-    );
   }
 
-  const replyUpdateOption = () => {
 
+  const handleDelteBoard = async () => {
+    if(user !== null){
+      const response = await Instance.get(`/boards/${boardId}`);
+      const id = response.data.boardWriter;
+      const pk = response.data.memberPk;
+      if(user === id && memberPk === pk){
+        const isConfirm = window.confirm('삭제하시겠습니까?');
+        if(isConfirm){
+          Instance
+            .put(`/boards/softdelete/${boardId}`)
+            .then(() => {
+              alert('삭제되었습니다.');
+              navigate(-1);
+            })
+            .catch((error) => {
+              console.error(error.message);
+            });
+        };
+      }else{
+        alert('해당 글을 삭제할 권한이 없습니다.');
+      }
+    }else{
+      const prom = window.prompt('비밀번호를 입력하세요.');
+      const response = await Instance.get(`/boards/${boardId}`);
+      const password = response.data.boardPassword;
+      if(prom === password){
+        const isConfirm = window.confirm('삭제하시겠습니까?');
+        if(isConfirm){
+          Instance
+            .put(`/boards/softdelete/${boardId}`)
+            .then(() => {
+              alert('삭제되었습니다.');
+              navigate(-1);
+            })
+            .catch((error) => {
+              console.error(error.message);
+            });
+        };
+      }else{
+        alert('해당 글을 삭제할 권한이 없습니다.');
+      }
+    }
   }
-
-  // 유저 정보 불러오기 지우지 마세요!! (회원 여부 확인)
-  // useEffect(() => {
-  //   const handleUserInfo = async () => {
-  //     try{
-  //       await axios.get('/')
-  //       .then((response) => {
-  //         setUserId(response.data.userId);
-  //       })
-  //       .catch((error) => {
-  //         console.error(error.message);
-  //       })
-  //     }
-  //   }
-  //   handleUserInfo();
-  // }, [])
-
-  const OEmbedComponent = ({ url }: { url: string }) => {
-    return (
-        <div>
-          <iframe src={url} title="Embedded Media" />
-        </div>
-    );
-  };
 
   return (
     <>
       <SubHeader kind="board" />
       <S.Container>
         {title}
+        <LinkBtn to={`/board/report/write?boardId=${boardId}`}>신고하기</LinkBtn>
         <div>
           <S.TableRead>
             <tbody>
@@ -390,15 +468,76 @@ const BoardRead = () => {
               <tr className="commentwrite">
                 <td>
                   <div>
-                    <form onSubmit={handleSubmit}>
+                    {!isEditing ? 
+                    (<form onSubmit={handleSubmit}>
                       <div>
-                        {replyWriteOption()}
+                        {user === null ?
+                        <>
+                          <input
+                            type="text"
+                            placeholder="작성자명"
+                            name="replyWriter"
+                            value={replyWriter}
+                            onChange={(e) => setReplyWriter(e.target.value)}
+                            required
+                          />
+                          {/* 비회원일시 */}
+                          <input name='replyPassword' type="password" placeholder="비밀번호" value={replyPassword} onChange={(e) => setReplyPassword(e.target.value)} required />
+                        </> :
+                        <input
+                          type="text"
+                          name="replyWriter"
+                          value={user}
+                          readOnly
+                          required
+                          ref={inputRef}
+                        />
+                        }
                       </div>
                       <div className="tawrap">
-                        <textarea name="replyContent" value={replyContent} onChange={(e) => setReplyContent(e.target.value)}></textarea>
+                        <textarea name="replyContent" value={replyContent} onChange={(e) => setReplyContent(e.target.value)} required></textarea>
                         <button type="submit">작성하기</button>
                       </div>
-                    </form>
+                    </form>) :
+                    (<form onSubmit={handleSaveUpdate}>
+                      <div>
+                        {user === null ?
+                        <>
+                          <input
+                            type="text"
+                            defaultValue={replyWriterModify}
+                            name="replyWriter"
+                            value={replyWriterModify}
+                            onChange={(e) => setReplyWriterModify(e.target.value)}
+                            required
+                          />
+                          {/* 비회원일시 */}
+                          <input name='password' type="password" placeholder="작성 시 입력한 비밀번호" value={replyPassword} onChange={(e) => setReplyPassword(e.target.value)} required />
+                          <div className="tawrap">
+                            <textarea name="replyContent" defaultValue={replyContentModify} value={replyContentModify} onChange={(e) => setReplyContentModify(e.target.value)} required></textarea>
+                            <button type="submit">수정하기</button>
+                            <button type="button" onClick={handleCancelUpdate}>취소</button>
+                          </div>
+                        </> :
+                        <>
+                          <input
+                            type="text"
+                            name="replyWriter"
+                            value={user}
+                            readOnly
+                            required
+                            ref={inputRef}
+                          />
+                          <div className="tawrap">
+                            <textarea name="replyContent" defaultValue={replyContentModify} onChange={(e) => setReplyContent(e.target.value)} required></textarea>
+                            <button type="submit">수정하기</button>
+                            <button type="submit" onClick={handleCancelUpdate}>취소</button>
+                          </div>
+                        </>
+                        }
+                      </div>
+                    </form>)
+                    }
                   </div>
                 </td>
               </tr>
@@ -409,8 +548,10 @@ const BoardRead = () => {
                   <ul>
                     {reply.length === 0 && (
                       <li>
-                        <div>
-                          <p className="empty">작성된 댓글이 없습니다.</p>
+                        {/* <div>
+                          <p className="empty">작성된 댓글이 없습니다.</p> */}
+                        <div className="cwinfo">
+                          <strong>작성된 댓글이 없습니다.</strong>
                         </div>
                       </li>
                     )}
@@ -427,42 +568,28 @@ const BoardRead = () => {
                             <button type="button" className="modify" onClick={() => handleUpdate(replyItem.replyId)}>
                               수정
                             </button>
-                            <button type="button" className="delete" onClick={() => handleDelete(replyItem.replyId, replyItem.replyWriter, replyItem.replyPassword)}>
+                            <button type="button" className="delete" onClick={() => handleDelete(replyItem.replyId)}>
                               삭제
                             </button>
+                            <button type="button" className="delete" onClick={() => navigate(`/board/report/write?replyId=${replyItem.replyId}`)}>
+                              신고
+                            </button>
                           </div>
-                          {editingReplyId === replyItem.replyId && isEditing ? (
-                            <form onSubmit={(e) => handleSaveUpdate(replyItem.replyId, e)}>
-                              <input
-                                className="modify-input"
-                                type="text"
-                                defaultValue={'수정할 작성자를 입력하세요'}
-                                onChange={(e) => setReplyWriterModify(e.target.value)}
-                              />
-                              <input
-                                className="modify-input"
-                                defaultValue={'수정할 내용을 입력하세요'}
-                                onChange={(e) => setReplyContentModify(e.target.value)}
-                              />
-                              <button type="submit" className="modify">
-                                저장
-                              </button>
-                              <button type="button" className="delete" onClick={handleCancelUpdate}>
-                                취소
-                              </button>
-                            </form>
-                          ) : (
-                            <p>{replyItem.replyContent}</p>
-                          )}
+                          <p>{replyItem.replyContent}</p>
                         </li>
                       ))}
-                  </ul>
-                </td>
-              </tr>
+                    </ul>
+                  </td>
+                </tr>
               }
             </tbody>
           </S.TableRead>
-          <BtnWrapper className="center mt40">
+          {board !== 'notice' &&
+          <BtnWrapper className='center mt40'>
+            <SubmitBtn className='center' onClick={handleDelteBoard}>삭제</SubmitBtn>
+          </BtnWrapper>
+          }
+          <BtnWrapper className='center mt40'>
             <LinkBtn to={listLink}>목록</LinkBtn>
           </BtnWrapper>
         </div>

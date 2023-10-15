@@ -45,7 +45,7 @@ const Home = () => {
     rooms: 1,
     adults: 1,
     children: 0,
-    nights: 0,
+    nights: 1,
   });
   const [roomData, setRoomData] = useState<RoomData[]>([]);
   const [diningData, setDiningData] = useState<DiningData[]>([]);
@@ -126,11 +126,9 @@ const Home = () => {
           const response = await Instance.get(`/image/${item.name}`, {
             responseType: 'arraybuffer',
           });
-          console.log(response);
           const blob = new Blob([response.data], {
             type: response.headers['content-type'],
           });
-          console.log('blob = ', blob);
           return URL.createObjectURL(blob);
         })
       );
@@ -139,11 +137,9 @@ const Home = () => {
           const response = await Instance.get(`/image/${item.name}`, {
             responseType: 'arraybuffer',
           });
-          console.log(response);
           const blob = new Blob([response.data], {
             type: response.headers['content-type'],
           });
-          console.log('blob = ', blob);
           return URL.createObjectURL(blob);
         })
       );
@@ -166,7 +162,7 @@ const Home = () => {
         <S.ReserveContainer>
           <Reservation updateReservationData={updateReservationData} />
           <BtnWrapper className="searchbtnwrap">
-            <S.ReservationButton to="/offers/1" state={{ reservationData: reservationData }}>
+            <S.ReservationButton to="/offers/1?type=room" state={{ reservationData: reservationData }}>
               상품 검색
             </S.ReservationButton>
           </BtnWrapper>

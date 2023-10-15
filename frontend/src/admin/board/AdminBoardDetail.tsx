@@ -27,7 +27,6 @@ const AdminBoardDetail = () => {
   const [editedReplyContent, setEditedReplyContent] = useState('');
   const [editingReplyId, setEditingReplyId] = useState(0); // 수정 중인 댓글 ID를 추적
   const navigate = useNavigate();
-  console.log(id);
 
   const isComment = () => {
     if (board === 'qna' && boardData) {

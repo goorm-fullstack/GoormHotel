@@ -214,6 +214,7 @@ public class BoardController {
                 .body(allBoardReplyDeleted.getContent());
     }
 
+    //답글 유무 확인용
     @PutMapping("/updateIsComment/{boardId}")
     public ResponseEntity<Object> updateIsCommentValue(@PathVariable Long boardId) {
         try {
@@ -222,5 +223,19 @@ public class BoardController {
         } catch (NoBoardException e) {
             return ResponseEntity.notFound().build();
         }
+
+    // 마이페이지용
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
+    @GetMapping("/mypage/{writer}")
+    public ResponseEntity<List<Object>> myPage(@PathVariable String writer, Pageable pageable){
+        Page<Object> allBoardAndReply = boardService.findAllBoardAndReply(writer, pageable);
+
+        int totalPages = allBoardAndReply.getTotalPages();
+        long totalElements = allBoardAndReply.getTotalElements();
+
+        return ResponseEntity.ok()
+                .header("TotalPages", String.valueOf(totalPages))
+                .header("TotalData", String.valueOf(totalElements))
+                .body(allBoardAndReply.getContent());
     }
 }

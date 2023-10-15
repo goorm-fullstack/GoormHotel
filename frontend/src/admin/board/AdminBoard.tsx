@@ -85,7 +85,6 @@ const AdminBoard = () => {
         setBoard(response.data);
         setTotalPage(totalPages);
         setTotalBoard(totalData);
-        console.log('get 성공');
       })
       .catch((error) => {
         console.error(error);
