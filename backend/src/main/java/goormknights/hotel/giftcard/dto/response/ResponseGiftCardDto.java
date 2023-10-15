@@ -3,6 +3,7 @@ package goormknights.hotel.giftcard.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.member.model.Member;
+import goormknights.hotel.reservation.model.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,11 +18,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResponseGiftCardDto {
-    private int id;
+    private Long id;
     private String uuid;
     private String title;//상품권 이름
     private int money;//현재 잔액
-    private Member member;
+    private Reservation reservation;
     private char isZeroMoney;
     @JsonFormat(pattern = "yyyy.MM.dd")
     private LocalDate issueDate;//발행일
@@ -31,7 +32,7 @@ public class ResponseGiftCardDto {
         this.id = giftcard.getId();
         this.uuid = giftcard.getUuid();
         this.money = giftcard.getMoney();
-        this.member = giftcard.getMember();
+        this.reservation = giftcard.getReservation();
         this.isZeroMoney = giftcard.getIsZeroMoney();
         this.title = giftcard.getTitle();
         this.issueDate = giftcard.getIssueDate();

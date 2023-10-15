@@ -42,11 +42,10 @@ const AdminDetailGiftCard = () => {
 
   useEffect(() => {
     Instance.get('/api/giftcard/' + id).then((response) => {
-      console.log(response.data);
-      setGiftCard(response.data.message);
-      setTitle(response.data.message.title);
-      setExpire(response.data.message.expire);
-      setIsUsed(response.data.message.isZeroMoney);
+      setGiftCard(response.data);
+      setTitle(response.data.title);
+      setExpire(response.data.expire);
+      setIsUsed(response.data.isZeroMoney);
     });
   }, []);
 
@@ -72,12 +71,10 @@ const AdminDetailGiftCard = () => {
   };
 
   const handleDataUpdate = () => {
-    console.log(expire + ' ' + title + ' ' + used);
     if (giftcard) {
       giftcard.expire = parseInt(expire);
       giftcard.title = title;
       giftcard.isZeroMoney = used;
-      console.log(giftcard);
       Instance.post('/api/giftcard/update', giftcard).then((response) => {
         if (response.status === 200) {
           window.location.reload();

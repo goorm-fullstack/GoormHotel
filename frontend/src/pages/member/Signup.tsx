@@ -33,8 +33,6 @@ const Signup = () => {
   const navigate = useNavigate();
   const [emailCode, setEmailCode] = useState('');
 
-  console.log(formData);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({

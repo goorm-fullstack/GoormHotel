@@ -94,7 +94,6 @@ const BoardWrite = () => {
     form.append('file', fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '');
     form.append('isComment', isComment);
     formData.boardContent = boardContent;
-    console.log(formData.category);
 
     Object.keys(formData).forEach((key) => {
       form.append(key, formData[key]);

@@ -16,7 +16,6 @@ const AdminLogin: React.FC = () => {
       adminId: adminId,
       password: adminPassword,
     };
-    console.log('로그인 정보:', JSON.stringify(loginInfo));
     try {
       const response = await Instance.post('/login/manager', loginInfo, {
         headers: {
@@ -26,8 +25,6 @@ const AdminLogin: React.FC = () => {
       });
 
       if (response.status === 200) {
-        alert('로그인 성공');
-        console.log(document.cookie);
         window.location.href = '/admin';
       } else {
         alert('아이디 또는 비밀번호가 일치하지 않습니다.');
