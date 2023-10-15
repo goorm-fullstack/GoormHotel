@@ -34,21 +34,15 @@ const BoardRead = () => {
 
   const isLogin = localStorage.getItem("memberId");
 
-  const parseBoardContent = (content: any) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(content, 'text/html');
-    const paragraphs = Array.from(doc.querySelectorAll('p'));
-
-    return paragraphs.map((p) => p.textContent);
-  };
-
   useEffect(() => {
     Instance
       .get(`/boards/${boardId}`)
       .then((response) => {
+        console.log(response);
         if (response.headers['filename']) {
           const fileName = response.headers['filename'];
-          setFile(fileName);
+          const decodedFileName = decodeURI(fileName).replaceAll('+', ' ');
+          setFile(decodedFileName);
         }
         setBoardData(response.data);
         fetchReply(response.data.boardId);
@@ -67,7 +61,7 @@ const BoardRead = () => {
       .catch((error) => {
         console.error(error.message);
       })
-  }, [user]);
+  }, [boardId]);
 
   useEffect(() => {
     let pageTitle;
@@ -407,6 +401,9 @@ const BoardRead = () => {
       }
     }
   }
+
+  console.log(file);
+  console.log(boardData?.boardWriter);
 
   return (
     <>

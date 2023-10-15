@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -53,10 +55,11 @@ public class BoardController {
     public ResponseEntity<ResponseBoardDto> getBoardById(@PathVariable Long boardId) {
         Board byId = boardService.findById(boardId);
 
-        String fileName = "";
+        String fileName = null;
         if(byId.getBoardFile() != null){
-            fileName = byId.getBoardFile().getOriginalboardFileName();
+            fileName = URLEncoder.encode(byId.getBoardFile().getOriginalboardFileName(), StandardCharsets.UTF_8);
         }
+        log.info("fileName={}", fileName);
 
         return ResponseEntity.ok()
                 .header("FileName", fileName)
