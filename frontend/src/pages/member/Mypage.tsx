@@ -56,6 +56,7 @@ const Mypage = () => {
           const response = await Instance.get(`/member/api/${storedMemberId}`);
           if (response.status === 200) {
             const { password, ...otherData } = response.data;
+            console.log(otherData)
             setMember(otherData);
             setFindMemberData({ memberId: otherData.memberId, name: otherData.name, email: otherData.email });
           }
