@@ -26,25 +26,43 @@ const AdminReport = () => {
   }, []);
 
   useEffect(() => {
-    Instance
-      .get('/report/list')
-      .then((response) => {
-        // 데이터를 가져올 때 reportCheck와 reportResult를 문자열로 처리
-        const modifiedData: ReportData[] = response.data.map((item: ReportData) => ({
-          ...item,
-          reportCheck: item.reportCheck.toString(),
-          reportResult: item.reportResult.toString(),
-        }));
-        const totalPages = parseInt(response.headers['totalpages'], 10);
-        const totalData = parseInt(response.headers['totaldata'], 10);
-        setReport(modifiedData);
-        setTotalPage(totalPages);
-        setTotalData(totalData);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    Instance.get('/report/list')
+        .then(async (response) => {
+          // ...
+          const modifiedDataPromises = response.data.map(async (item: ReportData) => {
+            let boardId = null;
+
+            if(item.replyId){
+              try {
+                const response2 = await Instance.get(`/reply/replyId/${item.replyId}`);
+                boardId = parseInt(response2.data.boardId);
+              } catch (error) {
+                console.error("Error fetching boardId:", error);
+              }
+            }
+
+            return {
+              ...item,
+              reportCheck: item.reportCheck.toString(),
+              reportResult: item.reportResult.toString(),
+              boardId,  // Add boardId here
+            };
+          });
+
+          // Since modifiedDataPromises is an array of promises, we'll wait for all of them to resolve
+          const modifiedData = await Promise.all(modifiedDataPromises);
+          const totalPages = parseInt(response.headers['totalpages'], 10);
+          const totalData = parseInt(response.headers['totaldata'], 10);
+          setReport(modifiedData);
+          setTotalPage(totalPages);
+          setTotalData(totalData);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
   }, []);
+
+  console.log(report);
 
 
   const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {

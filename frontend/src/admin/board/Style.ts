@@ -210,7 +210,16 @@ export const TableRead = styled.table`
 
   // 댓글 목록
   .commentslist {
+    td{
+      padding: 0;
+    }
+    ul{
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
     li {
+      padding-left: 40px;
+      padding-right: 40px;
       margin-top: 30px;
       padding-top: 30px;
       border-top: 1px solid ${(props) => props.theme.colors.graylightborder};
@@ -243,19 +252,20 @@ export const TableRead = styled.table`
           }
         }
       }
+
       p {
         margin-top: 12px;
         line-height: 1.4;
+
+        &.empty {
+          // 댓글 없음
+          text-align: center;
+          margin-top: 0;
+        }
       }
+
       & .modify-input {
         margin-right: 20px;
-      }
-      & .modify {
-        margin-right: 5px;
-      }
-      & .empty{
-        text-align: center;
-        margin-top: 0;
       }
     }
   }
