@@ -39,7 +39,7 @@ const MyBoardList = () => {
         const dateB = new Date(b.boardWriteDate ? b.boardWriteDate : b.replyWriteDate); // b의 LocalDateTime
         return (dateA as any) - (dateB as any); // 오름차순 정렬
       });
-      const filteredData = sortedData.filter((item: any) => (item.boardWriter === user || item.replyWriter === user) && item.memberPk !== null);
+      const filteredData = sortedData.filter((item: any) => (item.boardWriter === user || item.replyWriter === user) && (item.boardPassword === '' || item.replyPassword === null));
       setSortData(filteredData);
     }
     sortByDateTime();

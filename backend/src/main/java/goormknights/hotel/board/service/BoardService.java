@@ -327,12 +327,12 @@ public class BoardService {
         List<Object> list = new ArrayList<>();
 
         for (Board board : all) {
-            if(board.getBoardDeleteTime() == null && board.getBoardWriter().equals(writer)){
+            if(board.getBoardDeleteTime() == null && board.getBoardWriter().equals(writer) && board.getBoardPassword().equals("")){
                 list.add(board);
             }
         }
         for (Reply reply : all1) {
-            if(reply.getReplyDeleteTime() == null && reply.getReplyWriter().equals(writer)){
+            if(reply.getReplyDeleteTime() == null && reply.getReplyWriter().equals(writer) && reply.getReplyPassword() == null){
                 list.add(reply);
             }
         }
