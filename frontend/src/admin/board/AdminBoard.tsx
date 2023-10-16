@@ -151,6 +151,20 @@ const AdminBoard = () => {
     }
   };
 
+  console.log(board);
+
+  const setCommentBoard = (boardId : number) => {
+    Instance.get(`/boards/findParentBoardId/${boardId}`)
+        .then((response) => {
+          console.log(response.data);
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error.message);
+        })
+  }
+
+
   //   useEffect(() => {
   //     Instance.get('/report/list')
   //         .then(async (response) => {
@@ -242,8 +256,8 @@ const AdminBoard = () => {
                   </td>
                 </tr>
               )}
-              {board &&
-                board.map((board, idx: number) => (
+              {board && board
+                .map((board, idx: number) => (
                   <tr key={board.boardId}>
                     <td className="center">
                       <InputCheckbox
