@@ -6,14 +6,13 @@ import AdminLayout from '../common/AdminLayout';
 import { Container } from '../member/Style';
 import { NormalBtn } from '../../Style/commonStyles';
 import Instance from '../../utils/api/axiosInstance';
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 const AdminBoardDetail = () => {
   const loc = useLocation();
   const [imageUrl, setImageUrl] = useState<any>('');
   const { board, id } = useParams();
-  //   const location = useLocation();
-  //   const queryParam = queryString.parse(location.search);
-  //   const boardId = String(queryParam.boardId);
   const [boardData, setBoardData] = useState<any>(null);
   const [listLink, setListLink] = useState('');
   const [title, setTitle] = useState<any>();
@@ -209,13 +208,58 @@ const AdminBoardDetail = () => {
     }
   };
 
-  console.log(boardData);
+
+  const boardReport = () => {
+    if (!boardData) {
+      return alert('boardData is null!');
+    }
+
+    const boardId = boardData.boardId;
+    console.log(boardId);
+    const isConfirm = window.confirm('신고하시겠습니까?');
+
+    if (isConfirm) {
+      const data = {
+        boardId: boardId,
+        reportWriter: '관리자',
+        reportReason: '관리자 임의 배정',
+      };
+      Instance
+          .post(`/report/writeform`, data)
+          .then(() => {
+            alert('신고처리되었습니다.');
+            navigate(`/admin/report/1`);
+          })
+          .catch((error) => {
+            console.error(error.message);
+          });
+    }
+  }
+
+  const handleDeleteBoard = () => {
+    const isConfirm = window.confirm('삭제하시겠습니까?');
+    if(isConfirm){
+      Instance.put(`/boards/softdelete/${boardData.boardId}`)
+          .then(() => {
+            alert('삭제되었습니다.');
+            navigate(-1);
+          })
+          .catch((error) => {
+            console.error(error.message);
+          })
+    }
+  }
+
 
   return (
     <>
       <AdminLayout subMenus="board">
         <Container>
           {title}
+          <S.WriteBtnWrapper className='right double'>
+            <NormalBtn className='red' onClick={boardReport}>신고하기</NormalBtn>
+            <NormalBtn className='red' onClick={handleDeleteBoard}>삭제</NormalBtn>
+          </S.WriteBtnWrapper>
           <div>
             <S.TableRead>
               <tbody>
