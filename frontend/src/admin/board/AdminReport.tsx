@@ -181,7 +181,6 @@ const AdminReport = () => {
                         </td>
                         <td className="center">{totalData - idx}</td>
                         <td className="center">
-                          {/* todo: 페이지 이동(상세페이지 인것 같음)을 어떻게 할 건지 필요 */}
                           {report.replyId != null ? (
                               <S.LinkStyle
                                   to={`/admin/board/${boardTitleList.find((item) => item.board === reportDetails[report.replyId]?.boardTitle)?.english}/detail/${reportDetails[report.replyId]?.boardId}`}>
