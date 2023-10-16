@@ -126,20 +126,6 @@ public class AdminService {
         return false;
     }
 
-    // 어드민 세션 체크
-    public Map<String, Object> checkAdmin(HttpSession session) {
-        HashMap<String, Object> response = new HashMap<>();
-        Manager admin = (Manager) session.getAttribute("admin");
-        if (admin != null) {
-            response.put("status", "success");
-            response.put("role", session.getAttribute("role"));
-            response.put("authorities", session.getAttribute("authorities"));
-        } else {
-            response.put("status", "fail");
-        }
-        return response;
-    }
-
     // 회원 정보 조회
     public MemberInfoDetailDTO memberInfoDetail(String memberId) {
         Optional<Member> memberOptional = memberRepository.findByMemberId(memberId);
