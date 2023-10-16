@@ -27,6 +27,14 @@ const AdminBoardDetail = () => {
   const [editingReplyId, setEditingReplyId] = useState(0); // 수정 중인 댓글 ID를 추적
   const navigate = useNavigate();
 
+  const adminId = localStorage.getItem("adminId");
+
+  useEffect(() => {
+    if (adminId) {
+      setReplyWriter(adminId);
+    }
+  }, [adminId]);
+
   const isComment = () => {
     if (board === 'qna' && boardData) {
       return (
@@ -200,7 +208,7 @@ const AdminBoardDetail = () => {
         replyContent: replyContent,
         replyWriter: replyWriter,
       });
-      setReplyWriter('');
+
       setReplyContent('');
       fetchReply(parseInt(id ? id : '', 10));
     } catch (error) {
@@ -310,11 +318,12 @@ const AdminBoardDetail = () => {
                         <form onSubmit={handleSubmit}>
                           <div>
                             <input
-                              type="text"
-                              placeholder="작성자명"
-                              name="replyWriter"
-                              value={replyWriter}
-                              onChange={(e) => setReplyWriter(e.target.value)}
+                                type="text"
+                                placeholder="작성자명"
+                                name="replyWriter"
+                                value={replyWriter}
+                                onChange={(e) => setReplyWriter(e.target.value)}
+                                readOnly
                             />
                             {/*<input type="password" placeholder="식별 비밀번호?" />*/}
                           </div>
