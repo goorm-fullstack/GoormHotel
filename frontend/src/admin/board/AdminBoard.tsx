@@ -117,14 +117,40 @@ const AdminBoard = () => {
     if (isConfirm) {
       checkedItems.forEach((boardId) => {
         Instance
-          .put(`/boards/softdelete/${boardId}`)
-          .then(() => {
-            alert('삭제되었습니다.');
-            window.location.reload();
-          })
-          .catch((error) => {
-            console.error(error.message);
-          });
+            .get(`/boards/${boardId}`)
+            .then((response) => {
+              if(response.data.parentBoardId === 0){        //답글이 아니라면
+                Instance
+                    .put(`/boards/softdelete/${boardId}`)
+                    .then(() => {
+                      alert('삭제되었습니다.');
+                      window.location.reload();
+                    })
+                    .catch((error) => {
+                      console.error(error.message);
+                    });
+              }
+              if(response.data.parentBoardId != 0){       //답글이라면
+                Instance            //parentBoardId의 isComment값 true => false 변경
+                    .put(`/boards/updateIsComment/${response.data.parentBoardId}`)
+                    .then()
+                    .catch((error) => {
+                      console.error(error);
+                    });
+                Instance            //답글 소프트딜리트
+                    .put(`/boards/softdelete/${boardId}`)
+                    .then(() => {
+                      alert('삭제되었습니다.');
+                      window.location.reload();
+                    })
+                    .catch((error) => {
+                      console.error(error.message);
+                    });
+              }
+                }
+            )
+
+
       });
     }
   };
