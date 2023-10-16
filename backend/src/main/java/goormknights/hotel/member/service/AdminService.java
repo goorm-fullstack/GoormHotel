@@ -126,10 +126,9 @@ public class AdminService {
         return false;
     }
 
-    // 회원 정보 조회
-    public MemberInfoDetailDTO memberInfoDetail(String memberId) {
+    // 어드민 회원 상세 정보 얻기
+    public MemberInfoDetailDTO memberInfoDetail(String memberId) throws Exception {
         Optional<Member> memberOptional = memberRepository.findByMemberId(memberId);
-
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
             MemberInfoDetailDTO memberInfoDetailDTO = new MemberInfoDetailDTO();
@@ -142,9 +141,10 @@ public class AdminService {
             memberInfoDetailDTO.setGender(member.getGender());
             memberInfoDetailDTO.setMailAuth(member.getMailAuth());
             memberInfoDetailDTO.setSignupDate(member.getSignupDate());
+            memberInfoDetailDTO.setRole(member.getRole());
             return memberInfoDetailDTO;
         } else {
-            return null;
+            throw new Exception("회원이 없습니다");
         }
     }
 
