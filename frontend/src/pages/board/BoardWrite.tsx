@@ -5,7 +5,6 @@ import { PageTitle, BtnWrapper, SubmitBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import { ItemThumbnail } from '../../admin/item/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
-import {Cookies} from "react-cookie";
 import Instance from '../../utils/api/axiosInstance';
 
 type FormData = {
@@ -27,14 +26,7 @@ const BoardWrite = () => {
   const [boardContent, setBoardContent] = useState('')
   const inputRef = useRef<HTMLInputElement>(null);
 
-  ////////////변경 있을 수 있음////////////
   const isLogin = localStorage.getItem("memberId");
-  const cookies = new Cookies();
-  const getCookie = (name: string) => {
-    return cookies.get(name);
-  }
-  const cookie = getCookie("JSESSIONID");
-  ////////////////변경 있을 수 있음//////////
 
 
   const [formData, setFormData] = useState<FormData>({
@@ -63,7 +55,6 @@ const BoardWrite = () => {
   const [categoryError, setCategoryError] = useState<string>('');
   const [reportTitle, setReportTitle] = useState<any>('');
   const [user, setUser] = useState('');
-  const [memberPk, setMemberPk] = useState<number>(0);
 
   useEffect(() => {
     const user = localStorage.getItem('memberId');
@@ -92,9 +83,6 @@ const BoardWrite = () => {
             console.error('Error:', error.message);
           });
         }
-
-        const memberPk = await Instance.get(`/member/${user}`);
-        setMemberPk(memberPk.data);
       }
       handleInfo();
     }
@@ -167,9 +155,7 @@ const BoardWrite = () => {
       form.append('isComment', isComment);
       formData.boardContent = boardContent;
 
-      formData.boardWriter = inputRef && inputRef.current ? inputRef.current.value : '';
-
-      if(user !== null) formData.memberPk = String(memberPk);
+      formData.boardWriter = inputRef && inputRef.current ? inputRef.current.value : formData.boardWriter;
   
       Object.keys(formData).forEach((key) => {
         form.append(key, formData[key]);
@@ -220,37 +206,6 @@ const BoardWrite = () => {
     }
   };
 
-  const writerOption = () => {
-    if (!isLogin) {
-      return (
-        <>
-          <tr>
-            <th>작성자</th>
-            <td>
-              <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} required />
-            </td>
-          </tr>
-          <tr>
-            <th>비밀번호</th>
-            <td>
-              <input type="password" name="boardPassword" value={formData.boardPassword} onChange={handleChange} required />
-            </td>
-          </tr>
-        </>
-      )
-    }
-    return (
-      <>
-        <tr>
-          <th>작성자</th>
-          <td>
-            <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} required readOnly />
-          </td>
-        </tr>
-      </>
-    )
-  }
-
   return (
     <>
       <SubHeader kind="board" />
@@ -273,23 +228,7 @@ const BoardWrite = () => {
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <S.Table className="horizontal">
               <tbody>
-                {board !== 'report' ?
-                (<tr>
-                  <th style={{ width: '240px' }}>제목</th>
-                  <td>
-                    <input type="text" className="title long" name="title" value={formData.title} onChange={handleChange} required />
-                  </td>
-                </tr>) :
-                (
-                <tr>
-                  <th style={{ width: '240px' }}>신고대상 글</th>
-                  <td>
-                    <input type="text" className="title long" name="title" value={reportTitle ? reportTitle : ''} readOnly required />
-                  </td>
-                </tr>
-                )
-                }
-                {board !== 'report' ?
+              {board !== 'report' ?
                 (<tr>
                   <th style={{ width: '240px' }}>카테고리</th>
                   <td>
@@ -333,6 +272,22 @@ const BoardWrite = () => {
                 </td>
               </tr>)
               }
+                {board !== 'report' ?
+                (<tr>
+                  <th style={{ width: '240px' }}>제목</th>
+                  <td>
+                    <input type="text" className="title long" name="title" value={formData.title} onChange={handleChange} required />
+                  </td>
+                </tr>) :
+                (
+                <tr>
+                  <th style={{ width: '240px' }}>신고대상 글</th>
+                  <td>
+                    <input type="text" className="title long" name="title" value={reportTitle ? reportTitle : ''} readOnly required />
+                  </td>
+                </tr>
+                )
+                }
                 <tr>
                   <th>작성자</th>
                   <td>
@@ -352,11 +307,6 @@ const BoardWrite = () => {
                 }
                 {board !== 'report' ?
                 (<>
-                  <tr className="contents">
-                    <td colSpan={2} className="writeWrapper">
-                      <TextEditor setValue={setBoardContent} />
-                    </td>
-                  </tr>
                   <tr className="conbtm">
                     {board === 'review' ? (
                       <>
@@ -375,63 +325,16 @@ const BoardWrite = () => {
                       </>
                     )}
                   </tr>
-                </>) :
-                (<>
-                  <tr className="contents" style={{display: 'none'}}>
+                  <tr className="contents">
                     <td colSpan={2} className="writeWrapper">
                       <TextEditor setValue={setBoardContent} />
                     </td>
                   </tr>
-                  <tr className="conbtm" style={{display: 'none'}}>
-                    
-                  </tr>
+                </>) :
+                (<>
                 </>)
                 }
               </tbody>
-              {/* 동규님 작업 부분 */}
-              {/* </tr> */}
-              {/* <tr>
-                <th style={{ width: '240px' }}>제목</th>
-                <td>
-                  <input type="text" className="title long" name="title" value={formData.title} onChange={handleChange} required />
-                </td>
-              </tr> */}
-              {/* {writerOption()} */}
-              {/*<tr>*/}
-              {/*  <th>작성자</th>*/}
-              {/*  <td>*/}
-              {/*    <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} required />*/}
-              {/*  </td>*/}
-              {/*</tr>*/}
-              {/*<tr>*/}
-              {/*  <th>비밀번호</th>*/}
-              {/*  <td>*/}
-              {/*    <input type="password" name="boardPassword" value={formData.boardPassword} onChange={handleChange} required />*/}
-              {/*  </td>*/}
-              {/*</tr>*/}
-              {/* <tr className="contents">
-                <td colSpan={2} className="writeWrapper">
-                  <TextEditor setValue={setBoardContent} />
-                </td>
-              </tr>
-               <tr className="conbtm"> */}
-                 {/* {board === 'review' ? ( */}
-                  {/* <>
-                    <th>대표 이미지</th>
-                    <td>
-                      <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required />
-                      {imgFile !== '' ? <ItemThumbnail src={imgFile} alt="후기 이미지" /> : <ItemThumbnail style={{ display: 'none' }} />}
-                    </td>
-                  </>
-                ) : (
-                  <>
-                    <th>첨부파일</th>
-                    <td>
-                      <input type="file" accept="*" ref={fileRef} />
-                    </td>
-                  </>
-                )}
-              </tr> */}
             </S.Table>
             <BtnWrapper className="center double mt40">
               {board !== 'report' ?

@@ -28,7 +28,6 @@ const BoardRead = () => {
   const [editingReplyId, setEditingReplyId] = useState(0); // 수정 중인 댓글 ID를 추적
   const [user, setUser] = useState('');
   const [scroll, setScroll] = useState(0);
-  const [memberPk, setMemberPk] = useState<number>(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
@@ -38,7 +37,6 @@ const BoardRead = () => {
     Instance
       .get(`/boards/${boardId}`)
       .then((response) => {
-        console.log(response);
         if (response.headers['filename']) {
           const fileName = response.headers['filename'];
           const decodedFileName = decodeURI(fileName).replaceAll('+', ' ');
@@ -53,18 +51,7 @@ const BoardRead = () => {
 
       const user = localStorage.getItem('memberId');
       setUser(user as string);
-
-      Instance.get(`/member/${user}`)
-      .then((response) => {
-        const memberPk = response.data;
-        setMemberPk(memberPk);
-      })
-      .catch((error) => {
-        console.error(error.message);
-      })
   }, [boardId]);
-
-  console.log(file);
 
   useEffect(() => {
     let pageTitle;
@@ -119,7 +106,9 @@ const BoardRead = () => {
       }
     };
 
-    fetchImageUrl();
+    if(board === 'review'){
+      fetchImageUrl();
+    }
   }, [boardId]);
 
   const handleDownLoad = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -142,7 +131,6 @@ const BoardRead = () => {
     }
   };
 
-  // 진환 작업 부분
   // 회원 비회원 구분 삭제
   const handleDelete = async (replyId: number) => {
     const isConfirm = window.confirm('삭제하시겠습니까?');
@@ -150,6 +138,10 @@ const BoardRead = () => {
       if(user === null){
         const response = await Instance.get(`reply/replyId/${replyId}`);
         const replyPassword = response.data.replyPassword;
+        if(replyPassword === null){
+          alert('해당 글을 삭제할 수 없습니다.');
+          return;
+        }
         const password = window.prompt('비밀번호를 입력하세요.');
         if(replyPassword === password){
           Instance
@@ -162,13 +154,16 @@ const BoardRead = () => {
             console.error('댓글 삭제에 실패했습니다.', error);
           });
         }else{
-          alert('해당 글을 삭제할 권한이 없습니다.');
+          alert('해당 글을 삭제할 수 없습니다.');
         }
       }else{
         const response = await Instance.get(`reply/replyId/${replyId}`);
+        if(response.data.replyPassword !== null){
+          alert('해당 글을 삭제할 수 없습니다.');
+          return;
+        }
         const id = response.data.replyWriter;
-        const replyMemberPk = response.data.memberPk;
-        if(id === user && memberPk === replyMemberPk){
+        if(id === user){
           Instance
           .put(`/reply/softdelete/${replyId}`)
           .then((response) => {
@@ -179,7 +174,7 @@ const BoardRead = () => {
             console.error('댓글 삭제에 실패했습니다.', error);
           });
         }else{
-          alert('해당 글을 삭제할 권한이 없습니다.');
+          alert('해당 글을 삭제할 수 없습니다.');
         }
       }
     }
@@ -194,6 +189,13 @@ const BoardRead = () => {
 
   const handleUpdate = async (replyId: any) => {
     const response = await Instance.get(`/reply/replyId/${replyId}`);
+    if(user === null && response.data.replyPassword === null){
+      alert('해당 글을 수정할 수 없습니다.');
+      return;
+    }else if(user !== null && (user !== response.data.replyWriter || response.data.replyPassword !== null)){
+      alert('해당 글을 수정할 수 없습니다.');
+      return;
+    }
     const writer = response.data.replyWriter;
     const content = response.data.replyContent;
     setIsEditing(true);
@@ -214,8 +216,7 @@ const BoardRead = () => {
     if(user !== null){
       const response = await Instance.get(`/reply/replyId/${editingReplyId}`);
       const id = response.data.replyWriter;
-      const pk = response.data.memberPk;
-      if(replyWriterModify === id && memberPk === pk){
+      if(replyWriterModify === id){
         const data = {
           replyWriter: replyWriterModify,
           replyContent: replyContent,
@@ -271,7 +272,6 @@ const BoardRead = () => {
         boardId: boardId,
         replyContent: replyContent,
         replyWriter: inputRef && inputRef.current ? inputRef.current.value : '',
-        memberPk: memberPk,
       })
       .then(() => {
         setReplyWriter('');
@@ -283,7 +283,6 @@ const BoardRead = () => {
         console.error('댓글 작성에 실패했습니다.', error);
       })
     }else{
-      console.log(replyContent);
       Instance.post('/reply/writeform', {
       boardId: boardId,
       replyContent: replyContent,
@@ -306,9 +305,12 @@ const BoardRead = () => {
   const handleDelteBoard = async () => {
     if(user !== null){
       const response = await Instance.get(`/boards/${boardId}`);
+      if(response.data.boardPassword !== ''){
+        alert('해당 글을 삭제할 수 없습니다.');
+        return;
+      }
       const id = response.data.boardWriter;
-      const pk = response.data.memberPk;
-      if(user === id && memberPk === pk){
+      if(user === id){
         const isConfirm = window.confirm('삭제하시겠습니까?');
         if(isConfirm){
           Instance
@@ -322,12 +324,16 @@ const BoardRead = () => {
             });
         };
       }else{
-        alert('해당 글을 삭제할 권한이 없습니다.');
+        alert('해당 글을 삭제할 수 없습니다.');
       }
     }else{
-      const prom = window.prompt('비밀번호를 입력하세요.');
       const response = await Instance.get(`/boards/${boardId}`);
       const password = response.data.boardPassword;
+      if(password === ''){
+        alert('해당 글을 삭제할 수 없습니다.');
+        return;
+      }
+      const prom = window.prompt('비밀번호를 입력하세요.');
       if(prom === password){
         const isConfirm = window.confirm('삭제하시겠습니까?');
         if(isConfirm){
@@ -342,14 +348,21 @@ const BoardRead = () => {
             });
         };
       }else{
-        alert('해당 글을 삭제할 권한이 없습니다.');
+        alert('해당 글을 삭제할 수 없습니다.');
       }
     }
   }
 
   const boardReport = () => {
+    if(boardData.report.length !== 0){
+      alert('신고된 글입니다.');
+      return;
+    }
     navigate(`/board/report/write?boardId=${boardId}`);
   }
+
+  console.log(boardData);
+  console.log(reply);
 
   return (
     <>
@@ -495,7 +508,7 @@ const BoardRead = () => {
                     {reply.length === 0 && (
                       <li>
                         <div className="cwinfo">
-                          <strong>작성된 댓글이 없습니다.</strong>
+                          <p className='empty'>작성된 댓글이 없습니다.</p>
                         </div>
                       </li>
                     )}
@@ -515,7 +528,13 @@ const BoardRead = () => {
                             <button type="button" className="delete" onClick={() => handleDelete(replyItem.replyId)}>
                               삭제
                             </button>
-                            <button type="button" className="delete" onClick={() => navigate(`/board/report/write?replyId=${replyItem.replyId}`)}>
+                            <button type="button" className="delete" onClick={() => {
+                              if(replyItem.report.length !== 0){
+                                alert('신고된 글입니다.');
+                                return;
+                              }
+                              navigate(`/board/report/write?replyId=${replyItem.replyId}`)
+                              }}>
                               신고
                             </button>
                           </div>

@@ -170,6 +170,14 @@ const CustomerSupport = () => {
     setTypeDetail(selectedTypeDetail);
   };
 
+  useEffect(() => {
+    setKeyword('');
+    if(searchKeyword.current){
+      searchKeyword.current.value = '';
+    }
+    setTypeDetail('all');
+  }, [board])
+
   const generateOptions = (item: TypeDetail, selectedType: string) => {
     if (item.type === selectedType) {
       return (
@@ -199,12 +207,11 @@ const CustomerSupport = () => {
   const handleSearch = () => {
     if (!word.trim()) {
       alert('검색어를 입력해주세요.');
+      window.location.reload();
     } else {
       setKeyword(word);
     }
   };
-
-  // todo: 회원 여부 확인 필요
 
   return (
     <>
