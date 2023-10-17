@@ -122,7 +122,7 @@ const AdminMember = () => {
                   <td className="center">
                     <InputCheckbox type="checkbox" checked={checkedItems.includes(item.id)} onChange={() => handleCheckboxChange(item.id)} />
                   </td>
-                  <td className="center">{index}</td>
+                  <td className="center">{index+1}</td>
                   <td className="center">
                     <Link to={`/admin/member/detail/${item.memberId}`} className="u">
                       {item.memberId}
