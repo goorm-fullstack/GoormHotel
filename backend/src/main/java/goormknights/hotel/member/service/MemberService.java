@@ -51,6 +51,11 @@ public class MemberService {
             throw new AlreadyExistsEmailException();
         }
 
+        Optional<Member> memberIdOptional = memberRepository.findByMemberId(signupDTO.getMemberId());
+        if (memberIdOptional.isPresent()) {
+            throw new AlreadyExistsEmailException();
+        }
+
         String encryptedPassword = passwordEncoder.encode(signupDTO.getPassword());
 
         var member = Member.builder()
