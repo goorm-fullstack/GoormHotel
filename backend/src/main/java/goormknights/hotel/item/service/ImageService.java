@@ -50,10 +50,10 @@ public class ImageService {
         int second = now.getSecond();
         int millis = now.get(ChronoField.MILLI_OF_SECOND);
 
-//        String absolutePath = "./";
+        String absolutePath = "./";
         String newFileName = "image" + hour + minute + second + millis;
         String fileExtension = '.' + img.getOriginalFilename().replaceAll("^.*\\\\.(.*)$", "$1");
-//        String path = "images/" + year + month + day;
+        String path = "images/" + year + month + day;
 
 //        File file = new File("");
 //        if (!file.exists()) file.mkdirs();
