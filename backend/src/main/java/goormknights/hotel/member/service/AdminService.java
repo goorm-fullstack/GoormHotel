@@ -95,33 +95,25 @@ public class AdminService {
                     .httpOnly(false)
                     .secure(true)
                     .path("/")      // path
-                    .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                     .maxAge(3600)
-                    .sameSite("None")  // sameSite
                     .build();
             ResponseCookie roleCookie = ResponseCookie.from("role", optionalManager.get().getRole().toString())
                     .httpOnly(false)
                     .secure(true)
                     .path("/")      // path
-                    .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                     .maxAge(3600)
-                    .sameSite("None")  // sameSite
                     .build();
             ResponseCookie authCookie = ResponseCookie.from("auth", optionalManager.get().getAuth())
                     .httpOnly(false)
                     .secure(true)
                     .path("/")      // path
-                    .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                     .maxAge(3600)
-                    .sameSite("None")  // sameSite
                     .build();
             ResponseCookie nicknameCookie = ResponseCookie.from("adminNickname", URLEncoder.encode(optionalManager.get().getAdminNickname(), "UTF-8"))
                     .httpOnly(false)
                     .secure(true)
                     .path("/")      // path
-                    .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                     .maxAge(3600)
-                    .sameSite("None")  // sameSite
                     .build();
 
             response.addCookie(cookie);
