@@ -66,12 +66,12 @@ public class AdminController {
 
     // 회원디테일 정보 조회
     @GetMapping("/admin/member/{memberId}")
-    public ResponseEntity<?> memberInfoDetail(@PathVariable String memberId) {
-        MemberInfoDetailDTO memberInfo = adminService.memberInfoDetail(memberId);
-        if (memberInfo != null) {
-            return ResponseEntity.ok(memberInfo);
-        } else {
-            return ResponseEntity.status(404).body("Member not found");
+    public ResponseEntity<MemberInfoDetailDTO> memberInfoDetail(@PathVariable String memberId) {
+        try {
+            MemberInfoDetailDTO memberInfoDetailDTO = adminService.memberInfoDetail(memberId);
+            return ResponseEntity.ok(memberInfoDetailDTO);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
         }
     }
 
