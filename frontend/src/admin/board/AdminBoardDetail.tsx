@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './Style';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import {Link, useLocation, useNavigate, useParams} from 'react-router-dom';
 import { PageTitle, BtnWrapper } from '../../Style/commonStyles';
 import AdminLayout from '../common/AdminLayout';
 import { Container } from '../member/Style';
@@ -27,7 +27,16 @@ const AdminBoardDetail = () => {
   const [editedReplyContent, setEditedReplyContent] = useState('');
   const [editingReplyId, setEditingReplyId] = useState(0); // 수정 중인 댓글 ID를 추적
   const navigate = useNavigate();
-  console.log(id);
+
+  const isComment = () => {
+    if (board === 'qna' && boardData) {
+      return (
+          <>
+            <Link to={`/admin/board/write?parentBoardId=${boardData.boardId}`}>답글 작성</Link>
+          </>
+      )
+    }
+  }
 
   const parseBoardContent = (content: any) => {
     const parser = new DOMParser();
@@ -199,6 +208,8 @@ const AdminBoardDetail = () => {
     }
   };
 
+  console.log(boardData);
+
   return (
     <>
       <AdminLayout subMenus="board">
@@ -210,8 +221,9 @@ const AdminBoardDetail = () => {
                 <tr>
                   <td className="titlew">
                     <p className="title">
-                      <span>{boardData ? boardData.category : ''}</span>
+                      <span>{`[${boardData ? boardData.category : ''}]`}</span>
                       {boardData ? boardData.title : ''}
+                      {isComment()}
                     </p>
                     {(() => {
                       if (board !== 'notice' && boardData) {
@@ -329,6 +341,7 @@ const AdminBoardDetail = () => {
             </S.TableRead>
             <BtnWrapper className="center mt40">
               <NormalBtn onClick={() => navigate(-1)}>목록</NormalBtn>
+              <NormalBtn onClick={() => `/board/report/write?boardId=${boardData.boardId}`}>신고하기</NormalBtn>
             </BtnWrapper>
           </div>
         </Container>

@@ -46,6 +46,9 @@ public class Reply {
     @Column
     private String replyPassword;               //비회원 댓글 비밀번호
 
+    @Column
+    private Long memberPk; // 회원인 경우 멤버 pk저장
+
     public void setBoard(Board board) {
         this.board = board;
     }
@@ -55,7 +58,7 @@ public class Reply {
     }
 
     @Builder(toBuilder = true)
-    public Reply(String replyPassword, Long replyId, String replyContent, String replyWriter, LocalDateTime replyWriteDate, Board board, List<Report> report, LocalDateTime replyDeleteTime) {
+    public Reply(String replyPassword, Long replyId, String replyContent, String replyWriter, LocalDateTime replyWriteDate, Board board, List<Report> report, LocalDateTime replyDeleteTime, Long memberPk) {
         this.replyId = replyId;
         this.replyContent = replyContent;
         this.replyWriter = replyWriter;
@@ -64,6 +67,7 @@ public class Reply {
         this.report = report;
         this.replyDeleteTime = replyDeleteTime;
         this.replyPassword = replyPassword;
+        this.memberPk = memberPk;
     }
 
     public ResponseReplyDto toResponseReplyDto() {
@@ -78,6 +82,7 @@ public class Reply {
                 .replyDeleteTime(replyDeleteTime)
                 .boardTitle(board.getBoardTitle())
                 .replyPassword(replyPassword)
+                .memberPk(memberPk)
                 .build();
     }
 
@@ -86,9 +91,11 @@ public class Reply {
                 .replyId(reply.getReplyId())
                 .replyContent(requestReplyDto.getReplyContent())
                 .replyWriter(requestReplyDto.getReplyWriter())
-                .replyWriteDate(requestReplyDto.getReplyWriteDate())
+                .replyWriteDate(reply.getReplyWriteDate())
                 .board(reply.getBoard())
                 .report(reply.getReport())
+                .memberPk(reply.getMemberPk())
+                .replyPassword(reply.getReplyPassword())
                 .build();
     }
 }

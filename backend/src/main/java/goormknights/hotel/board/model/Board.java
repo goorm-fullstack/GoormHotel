@@ -4,8 +4,6 @@ import goormknights.hotel.board.dto.request.RequestBoardDto;
 import goormknights.hotel.board.dto.request.RequestFileDto;
 import goormknights.hotel.board.dto.request.RequestImageDto;
 import goormknights.hotel.board.dto.response.ResponseBoardDto;
-import goormknights.hotel.member.model.Manager;
-import goormknights.hotel.member.model.Member;
 import goormknights.hotel.reply.model.Reply;
 import goormknights.hotel.report.model.Report;
 import jakarta.persistence.*;
@@ -29,7 +27,7 @@ public class Board {
     @Column(nullable = false)
     private String title;  //제목
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 3000)
     private String boardContent;    //내용
 
     @Column(nullable = false)
@@ -40,6 +38,9 @@ public class Board {
 
     @Column
     private String boardPassword;           //작성자 비밀번호
+
+    @Column
+    private Long memberPk; // 회원인 경우 회원의 pk저장
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "board_image_id")
@@ -64,11 +65,14 @@ public class Board {
     @Setter
     private LocalDateTime boardDeleteTime;      //게시글 삭제 날짜
 
+    @Setter
     @Column(nullable = false)
     private String isComment;      //답글 여부
 
+    private Long parentBoardId;     //부모 글 Id
+
     @Builder(toBuilder = true)
-    public Board(String boardPassword, String isComment, Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, BoardFile boardFile, String boardTitle, String category, List<Reply> replies, List<Report> report) {
+    public Board(Long memberPk, Long parentBoardId, String boardPassword, String isComment, Long boardId, String title, String boardContent, String boardWriter, LocalDateTime boardWriteDate, BoardImage boardImage, BoardFile boardFile, String boardTitle, String category, List<Reply> replies, List<Report> report) {
         this.boardId = boardId;
         this.title = title;
         this.boardContent = boardContent;
@@ -82,6 +86,8 @@ public class Board {
         this.report = report;
         this.boardPassword = boardPassword;
         this.isComment = isComment;
+        this.parentBoardId = parentBoardId;
+        this.memberPk = memberPk;
     }
 
     public ResponseBoardDto toResponseBoardDto(){
@@ -96,6 +102,9 @@ public class Board {
                 .boardDeleteTime(boardDeleteTime)
                 .isComment(isComment)
                 .boardPassword(boardPassword)
+                .parentBoardId(parentBoardId)
+                .memberPk(memberPk)
+                .report(report.stream().map(Report::toResponseReportDto).toList())
                 .build();
     }
 
@@ -109,9 +118,12 @@ public class Board {
                 .boardFile(requestFileDto.toEntity())
                 .boardTitle(requestBoardDto.getBoardTitle())
                 .category(requestBoardDto.getCategory())
-                .boardWriteDate(requestBoardDto.getBoardWriteDate())
+                .boardWriteDate(board.getBoardWriteDate())
                 .replies(board.getReplies())
                 .report(board.getReport())
+                .isComment(requestBoardDto.getIsComment())
+                .memberPk(board.getMemberPk())
+                .boardPassword(board.getBoardPassword())
                 .build();
     }
 }

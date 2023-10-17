@@ -63,10 +63,6 @@ public class Member extends BaseEntity implements Serializable {
     @JsonIgnore
     private List<Reservation> reservationList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
-    @JsonIgnore
-    private List<GiftCard> giftCardList =  new ArrayList<>();
-
     private String roomId;
 
     @Builder

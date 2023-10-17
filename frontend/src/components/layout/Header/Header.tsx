@@ -92,7 +92,7 @@ const Header = () => {
             <Link to="/facilities">부대시설</Link>
           </li>
           <li>
-            <Link to="/offers/1" state={{ state: null }}>
+            <Link to="/offers/1?type=" state={{ state: null }}>
               스페셜오퍼
             </Link>
           </li>
@@ -101,7 +101,7 @@ const Header = () => {
           </li>
         </ul>
         <BtnWrapper>
-          <S.NavReserveBtn to="/offers/1" state={{ state: null }}>
+          <S.NavReserveBtn to="/offers/1?type=" state={{ state: null }}>
             예약하기
           </S.NavReserveBtn>
         </BtnWrapper>

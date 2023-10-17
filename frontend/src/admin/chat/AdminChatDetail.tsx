@@ -50,7 +50,7 @@ const AdminChatDetail = () => {
         setRecentTime(response.data.chatMessages[response.data.chatMessages.length - 1].createTime);
       })
       .catch((error) => {
-        console.log('에러 ' + error);
+        console.error('에러 ' + error);
       });
   }, []);
 
@@ -66,7 +66,6 @@ const AdminChatDetail = () => {
       ws.current = new WebSocket(webSocketURL);
       ws.current.onopen = () => {
         setSocketConnected(true);
-        console.log('WebSocket connected');
 
         // WebSocket 연결이 성공하면 ENTER 메시지 전송
         ws.current?.send(
@@ -79,12 +78,10 @@ const AdminChatDetail = () => {
         );
       };
       ws.current.onclose = (error) => {
-        console.log('disconnect from ' + webSocketURL);
-        console.log(error);
+        console.error(error);
       };
       ws.current.onerror = (error) => {
-        console.log('connection error ' + webSocketURL);
-        console.log(error);
+        console.error(error);
       };
 
       // 메시지 핸들러 설정
@@ -104,7 +101,6 @@ const AdminChatDetail = () => {
     }
     // 컴포넌트 언마운트 시 WebSocket 연결 닫기
     return () => {
-      console.log('Cleaning up WebSocket');
       if (ws.current && ws.current.readyState === WebSocket.OPEN) {
         ws.current.close();
       }
@@ -140,7 +136,7 @@ const AdminChatDetail = () => {
   const handleClosedClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setStatus('CLOSED');
     Instance.get('/chat/closed/' + roomId).then((response) => {
-      console.log(response);
+      
     });
   };
 

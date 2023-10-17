@@ -21,13 +21,14 @@ public class ResponseReplyDto {
     private String boardTitle;
     private LocalDateTime replyDeleteTime;
     private String replyPassword;
+    private Long memberPk;
 
     public void setReport(List<ResponseReportDto> report) {
         this.report = report;
     }
 
     @Builder
-    public ResponseReplyDto(String replyPassword, Long replyId, Long boardId, String replyContent, LocalDateTime replyWriteDate, String replyWriter, List<ResponseReportDto> report, ResponseBoardDto responseBoardDto, LocalDateTime replyDeleteTime, String boardTitle) {
+    public ResponseReplyDto(String replyPassword, Long replyId, Long boardId, String replyContent, LocalDateTime replyWriteDate, String replyWriter, List<ResponseReportDto> report, ResponseBoardDto responseBoardDto, LocalDateTime replyDeleteTime, String boardTitle, Long memberPk) {
         this.replyId = replyId;
         this.boardId = boardId;
         this.replyContent = replyContent;
@@ -38,6 +39,7 @@ public class ResponseReplyDto {
         this.replyDeleteTime = replyDeleteTime;
         this.boardTitle = boardTitle;
         this.replyPassword = replyPassword;
+        this.memberPk = memberPk;
     }
 
 

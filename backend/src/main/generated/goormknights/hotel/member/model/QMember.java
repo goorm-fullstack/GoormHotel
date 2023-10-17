@@ -35,8 +35,6 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath gender = createString("gender");
 
-    public final ListPath<goormknights.hotel.giftcard.model.GiftCard, goormknights.hotel.giftcard.model.QGiftCard> giftCardList = this.<goormknights.hotel.giftcard.model.GiftCard, goormknights.hotel.giftcard.model.QGiftCard>createList("giftCardList", goormknights.hotel.giftcard.model.GiftCard.class, goormknights.hotel.giftcard.model.QGiftCard.class, PathInits.DIRECT2);
-
     public final StringPath grade = createString("grade");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
@@ -59,7 +57,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath roomId = createString("roomId");
 
-    public final DateTimePath<java.time.LocalDateTime> signupDate = createDateTime("signupDate", java.time.LocalDateTime.class);
+    public final DatePath<java.time.LocalDate> signupDate = createDate("signupDate", java.time.LocalDate.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;

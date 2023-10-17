@@ -51,7 +51,6 @@ const AdminComment = () => {
         const replyData: ReplyData[] = response.data;
         const totalPages = parseInt(response.headers['totalpages'], 10);
         const totalData = parseInt(response.headers['totaldata'], 10);
-        console.log(totalData);
 
         // 게시물의 title을 가져오는 함수
         const getBoardTitle = async (boardId: number) => {
@@ -87,7 +86,6 @@ const AdminComment = () => {
         setReply(updatedReplyData);
         setTotalPage(totalPages);
         setTotalReply(totalData);
-        console.log('get 성공');
       } catch (error) {
         console.error('댓글 목록을 불러오는 중 오류 발생', error);
       }
@@ -96,7 +94,6 @@ const AdminComment = () => {
     fetchData();
   }, []);
 
-  console.log(reply);
 
   // 전체 선택
   const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,7 +120,6 @@ const AdminComment = () => {
   const handleDeleteItems = () => {
     const isConfirm = window.confirm('삭제하시겠습니까?');
     const deletions = checkedItems.map((item) => {
-      console.log(item);
       const url = `/reply/softdelete/${item}`;
       if (isConfirm) {
         return Instance.put(url);
@@ -195,7 +191,6 @@ const AdminComment = () => {
         console.error('Error:', error.message);
       });
   };
-  console.log(reply);
 
   if (authItem && authItem.includes('AUTH_C')) {
     return (

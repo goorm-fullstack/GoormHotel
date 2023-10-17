@@ -65,6 +65,18 @@ public class ImageService {
         byte[] bytes = null;
         try (InputStream inputStream = Files.newInputStream(source)) {
             bytes = inputStream.readAllBytes();
+
+            String mimeType = Files.probeContentType(source);
+
+            log.info("mimeType={}", mimeType);
+
+            return RequestImageDto.builder()
+                    .originFileName(img.getOriginalFilename())
+                    .fileName(newFileName + fileExtension)
+                    .filePath(absolutePath + path + "\\" + newFileName + fileExtension)
+                    .mimeType(mimeType)
+                    .data(bytes)
+                    .build();
         }
         String mimeType = Files.probeContentType(source);
 
