@@ -45,7 +45,7 @@ const ReservationPage = () => {
   const [memberData, setMemberData] = useState();
   const userLoggedIn = localStorage.getItem("memberId");
   const location = useLocation();
-  const { reservationData, selectedProduct } = location.state;
+  const { reservationData, selectedProduct, selectData, indexImg } = location.state;
   const navigate = useNavigate();
   const [nights, setNights] = useState(1);
   const [giftcardList, setGiftCardList] = useState<GiftCard[]>([]);
@@ -55,6 +55,11 @@ const ReservationPage = () => {
   const [click, setClick] = useState(false);
   const [memberId, setMemberId] = useState(0);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [notice, setNotice] = useState('');
+  const [isLogined, setIsLogined] = useState(false); 
 
   const [formData, setFormData] = useState({
     checkIn: reservationData?.checkInDate || '',
@@ -63,27 +68,29 @@ const ReservationPage = () => {
     adult: reservationData?.adults || 1,
     children: reservationData?.children || 0,
     stay: reservationData?.nights,
-    name: '',
-    phone: '',
-    email: '',
-    notice: '',
-    sumPrice: selectedProduct.price,
+    notice: notice,
+    sumPrice: selectedProduct ? selectedProduct.price : selectData.price,
     discountPrice: '0',
     totalPrice: '12345',
   });
 
+  const isLoggined = localStorage.getItem('memberId'); // 로그인 유무 확인
+
   //member데이터를 불러오는 로직
   useEffect(() => {
-    const params = {
+    if(userLoggedIn) {
+      const params = {
       id: localStorage.getItem('memberId'),
-    };
-    Instance.get('/member/find', { params }).then((response) => {
-      console.log(response.data);
-      setMemberData(response.data);
-      setCouponList(response.data.couponList);
-      setGiftCardList(response.data.giftCardList);
-      setMemberId(response.data.id);
-    });
+      };
+      Instance.get('/member/find', { params }).then((response) => {
+        setMemberData(response.data);
+        setCouponList(response.data.couponList);
+        setMemberId(response.data.id);
+      });
+      setIsLogined(true)
+    } else {
+      setIsLogined(false);
+    }
   }, []);
 
   const handleChangeData = (field: string, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,16 +106,13 @@ const ReservationPage = () => {
   };
 
   const registerGiftCard = () => {
-    if (memberData !== undefined) {
-      Instance.post(`/api/giftcard/register?memberId=${memberId}&uuid=${giftCardNumber}`).then((response) => {
-        if (response.status === 200) {
-          setClick(true);
-        }
-      });
-    }
-    const params = {
-      id: localStorage.getItem('memberId'),
-    };
+    Instance.post(`/api/giftcard/register?&uuid=${giftCardNumber}`).then((response) => {
+      if (response.status === 200) {
+        const registerGiftCard = response.data;
+        setGiftCardList((g) => [...g, registerGiftCard])
+        setClick(true);
+      }
+    });
     setClick(!click);
   };
 
@@ -130,14 +134,39 @@ const ReservationPage = () => {
       checkOut: formatDateForServer(formData.checkOut),
     };
 
-    if (confirmed) {
-      try {
-        await Instance.post(`http://127.0.0.1:8080/reservation/save?memberId=1`, serverFormattedData);
-
-        navigate('/');
-        window.alert('예약이 완료되었습니다');
-      } catch (error) {
-        console.error('예약 요청 실패', error);
+    if(isLogined) {
+      if (confirmed) {
+        try {
+          await Instance.post(`/reservation/save`, {
+            params : memberId,
+            data : serverFormattedData
+          });
+          navigate('/');
+          window.alert('예약이 완료되었습니다');
+        } catch (error) {
+          console.error('예약 요청 실패', error);
+        }
+      }
+    } else {
+      if(window.confirm('로그인되지 않았습니다. 비회원으로 예약을 진행하시겠습니까?')) {
+        try {
+          let anonymousSignupDto = {
+            name : name,
+            email : email,
+            phoneNumber : phoneNumber
+          };
+          const serverFormattedData = {
+            ...formData,
+            checkIn: formatDateForServer(new Date(2023,11,25,3,50)),//테스트 데이터
+            checkOut: formatDateForServer(new Date(2023,11,25,3,50)),
+            anonymousSignupDto : anonymousSignupDto
+          };
+          await Instance.post(`/reservation/save/anonymous`, serverFormattedData);
+          navigate('/');
+          window.alert('예약이 완료되었습니다');
+        } catch (error) {
+          console.error('예약 요청 실패', error);
+        }
       }
     }
   };
@@ -176,19 +205,19 @@ const ReservationPage = () => {
             <S.Section>
               <ContentsTitleXSmall>상품 상세 설정</ContentsTitleXSmall>
               <S.OptionWrap>
-                <Reservation updateReservationData={updateReservationData} />
+                <Reservation updateReservationData={updateReservationData} selectedProduct={selectedProduct} />
               </S.OptionWrap>
             </S.Section>
 
             <S.Section className="privacy">
               <ContentsTitleXSmall>고객 정보 입력</ContentsTitleXSmall>
               <div className="flex">
-                <input placeholder="고객명" type="text" value={formData.name} onChange={(e) => handleChangeData('name', e)} required />
-                <input placeholder="연락처" type="text" value={formData.phone} onChange={(e) => handleChangeData('phone', e)} required />
-                <input placeholder="이메일" type="text" value={formData.email} onChange={(e) => handleChangeData('email', e)} required />
+                <input placeholder="고객명" type="text" value={name} onChange={(e) => setName(e.target.value)} required readOnly={isLogined}/>
+                <input placeholder="연락처" type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} required readOnly={isLogined}/>
+                <input placeholder="이메일" type="text" value={email} onChange={(e) => setEmail(e.target.value)} required readOnly={isLogined}/>
               </div>
               <div className="full">
-                <input placeholder="요청사항" type="text" value={formData.notice} onChange={(e) => handleChangeData('notice', e)} />
+                <input placeholder="요청사항" type="text" value={notice} onChange={(e) => setNotice(e.target.value)} />
               </div>
             </S.Section>
 
@@ -293,7 +322,7 @@ const ReservationPage = () => {
 
           <S.Right>
             <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
-            <Item selectedProduct={selectedProduct} />
+            {indexImg ? <Item selectedProduct={selectedProduct ? selectedProduct : selectData} indexImg={indexImg} /> : <Item selectedProduct={selectedProduct ? selectedProduct : selectData} />}
             <BtnWrapper className="full mt20">
               <SubmitBtn type="submit" className="shadow" onClick={handleReservation}>
                 예약 및 결제하기

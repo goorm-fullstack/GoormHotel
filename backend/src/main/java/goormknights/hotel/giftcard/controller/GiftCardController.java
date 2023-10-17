@@ -4,12 +4,12 @@ import goormknights.hotel.giftcard.dto.request.RequestGiftCardDto;
 import goormknights.hotel.giftcard.dto.request.StateChangeData;
 import goormknights.hotel.giftcard.dto.response.ResponseGiftCardDto;
 import goormknights.hotel.giftcard.service.GiftCardService;
-import goormknights.hotel.global.dto.ResponseEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class GiftCardController {
     @GetMapping("/{uuid}")
     public ResponseEntity<ResponseGiftCardDto> getGiftCardByUuid(@PathVariable String uuid) {
         ResponseGiftCardDto giftCard = giftCardService.getGiftCard(uuid);
-        return new ResponseEntity<>(HttpStatus.OK.value(), giftCard);
+        return ResponseEntity.ok(giftCard);
     }
 
     /**
@@ -46,33 +46,32 @@ public class GiftCardController {
     @PostMapping("/issue")
     public ResponseEntity<String> issuedGiftCard(@ModelAttribute RequestGiftCardDto requestGiftCardDto) {
         giftCardService.issuedGiftCard(requestGiftCardDto);
-        return new ResponseEntity<String>(HttpStatus.OK.value(), "상품권 발행이 완료되었습니다.");
+        return ResponseEntity.ok("상품권 발행 완료");
     }
 
     // 사용자가 상품권을 등록하는 요청
     @PostMapping("/register")
-    public ResponseEntity<String> registerationGiftCard(@RequestParam long memberId, @RequestParam String uuid) {
-        System.out.println("memberId : "+memberId);
-        giftCardService.registering(memberId, uuid);
-        return new ResponseEntity<>(HttpStatus.OK.value(), "상품권 등록이 완료되었습니다.");
+    public ResponseEntity<ResponseGiftCardDto> registerationGiftCard(@RequestParam String uuid) {
+        ResponseGiftCardDto giftCardDto = giftCardService.registering(uuid);
+        return ResponseEntity.ok(giftCardDto);
     }
 
     @PostMapping("/usable")
     public ResponseEntity<String> changeStateUsable(@RequestBody StateChangeData stateChangeData) {
         giftCardService.stateUsable(stateChangeData);
-        return new ResponseEntity<>(HttpStatus.OK.value(), "변경 완료");
+        return ResponseEntity.ok("변경 완료");
     }
 
     @PostMapping("/unusable")
     public ResponseEntity<String> changeStateUnusable(@RequestBody StateChangeData stateChangeData) {
         giftCardService.stateUnusable(stateChangeData);
-        return new ResponseEntity<>(HttpStatus.OK.value(), "변경 완료");
+        return ResponseEntity.ok("변경 완료");
     }
 
     @PostMapping("/update")
     public ResponseEntity<String> updateGiftCard(@RequestBody RequestGiftCardDto giftCardDto) {
         System.out.println(giftCardDto.toString());
         giftCardService.updateGiftCard(giftCardDto);
-        return new ResponseEntity<>(HttpStatus.OK.value(), "업데이트 완료");
+        return ResponseEntity.ok("변경 완료");
     }
 }

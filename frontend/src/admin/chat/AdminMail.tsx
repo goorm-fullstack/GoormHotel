@@ -22,8 +22,6 @@ const AdminMail = () => {
   const navigate = useNavigate();
   const authItem = localStorage.getItem('auth');
 
-  console.log(mailto);
-
   useEffect(() => {
     if (!(authItem && authItem.includes('AUTH_C'))) {
       alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
@@ -31,14 +29,12 @@ const AdminMail = () => {
     }
   }, []);
 
-  console.log(mailto);
 
   useEffect(() => {
     if (mailto !== null && typeof mailto !== 'undefined') {
       if (!Array.isArray(mailto)) {
         setReceiverValue(mailto); // 여기서는 배열의 첫 번째 값을 사용하거나 원하는 로직을 추가할 수 있습니다.
       }
-      console.log(mailto);
     }
   }, []);
 
@@ -61,7 +57,6 @@ const AdminMail = () => {
     if (checked) {
       Instance.get('/subscribe').then((response) => {
         setSubScribe(response.data);
-        console.log(response.data);
       });
     } else {
       setSubScribe([]);
@@ -73,7 +68,6 @@ const AdminMail = () => {
     if (checked) {
       Instance.get('/member').then((response) => {
         setMembers(response.data.email);
-        console.log(response.data);
       });
     } else {
       setMembers([]);
@@ -94,7 +88,6 @@ const AdminMail = () => {
 
     data = Array.from(new Set(data)); //중복을 제거
     //setReceiverList(data);//최종 결과
-    console.log(data);
     return data;
   };
 
@@ -102,7 +95,6 @@ const AdminMail = () => {
   const handleSubmit = () => {
     const form = new FormData();
     const receiverData = splitComma();
-    console.log(receiverData);
     if (fileRef.current !== null && fileRef.current.files !== null) {
       form.append('multipartFile', fileRef.current.files[0]);
     }

@@ -24,11 +24,15 @@ public class QReply extends EntityPathBase<Reply> {
 
     public final goormknights.hotel.board.model.QBoard board;
 
+    public final NumberPath<Long> memberPk = createNumber("memberPk", Long.class);
+
     public final StringPath replyContent = createString("replyContent");
 
     public final DateTimePath<java.time.LocalDateTime> replyDeleteTime = createDateTime("replyDeleteTime", java.time.LocalDateTime.class);
 
     public final NumberPath<Long> replyId = createNumber("replyId", Long.class);
+
+    public final StringPath replyPassword = createString("replyPassword");
 
     public final DateTimePath<java.time.LocalDateTime> replyWriteDate = createDateTime("replyWriteDate", java.time.LocalDateTime.class);
 

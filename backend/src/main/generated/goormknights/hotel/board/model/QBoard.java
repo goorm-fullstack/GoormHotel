@@ -32,6 +32,8 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final QBoardImage boardImage;
 
+    public final StringPath boardPassword = createString("boardPassword");
+
     public final StringPath boardTitle = createString("boardTitle");
 
     public final DateTimePath<java.time.LocalDateTime> boardWriteDate = createDateTime("boardWriteDate", java.time.LocalDateTime.class);
@@ -41,6 +43,10 @@ public class QBoard extends EntityPathBase<Board> {
     public final StringPath category = createString("category");
 
     public final StringPath isComment = createString("isComment");
+
+    public final NumberPath<Long> memberPk = createNumber("memberPk", Long.class);
+
+    public final NumberPath<Long> parentBoardId = createNumber("parentBoardId", Long.class);
 
     public final ListPath<goormknights.hotel.reply.model.Reply, goormknights.hotel.reply.model.QReply> replies = this.<goormknights.hotel.reply.model.Reply, goormknights.hotel.reply.model.QReply>createList("replies", goormknights.hotel.reply.model.Reply.class, goormknights.hotel.reply.model.QReply.class, PathInits.DIRECT2);
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface GiftCardRepository extends JpaRepository<GiftCard, Integer> {
+public interface GiftCardRepository extends JpaRepository<GiftCard, Long> {
     Optional<GiftCard> findByUuid(String code);
     Page<GiftCard> findAll(Pageable pageable);
 }

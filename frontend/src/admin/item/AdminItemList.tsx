@@ -65,11 +65,7 @@ const AdminItemList = () => {
     ],
   ];
   const typeArray: Type[][] = [[{ type: '전체', value: 'all' }], [{ type: '객실', value: 'room' }], [{ type: '다이닝', value: 'dining' }]];
-
   const { searchJsx, url } = Search('/category', typeArray, typeDetailArray); // Search컴포넌트에서 값 받아와서 사용
-  console.log(url);
-  // const { page } = useParams<{ page: string }>(); // url 파라미터
-
   const [items, setItems] = useState<(RoomData | DiningData)[]>([]); // get 요청으로 받아온 전체 데이터 상태관리
   const [selectedItems, setSelectedItems] = useState<SelectItem[]>([]); // 선택된 상품 상태관리
   const [totalPages, setTotalPages] = useState<number>(0); // 전체 페이지 상태관리
@@ -98,9 +94,7 @@ const AdminItemList = () => {
   const handleLoadItems = async () => {
     try {
       const response = await Instance.get(url);
-      console.log(url);
       const data: any[] = response.data;
-      console.log(data);
       const totalPages = parseInt(response.headers['totalpages'], 10);
       const totalData = parseInt(response.headers['totaldata'], 10);
       setItems(data);
@@ -164,8 +158,6 @@ const AdminItemList = () => {
 
   useEffect(() => {
     handleLoadItems();
-    console.log(url);
-    // console.log(page);
   }, [url]);
 
   // 서버에 저장된 이미지 요청
@@ -176,23 +168,19 @@ const AdminItemList = () => {
           const response = await Instance.get(`/image/${item.name}`, {
             responseType: 'arraybuffer',
           });
-          console.log(response);
           const blob = new Blob([response.data], {
             type: response.headers['content-type'],
           });
-          console.log('blob = ', blob);
           return URL.createObjectURL(blob);
         })
       );
       setImageUrls(urls);
-      console.log(urls);
     };
 
     fetchImageUrls();
   }, [items]);
 
   if (authItem && authItem.includes('AUTH_B')) {
-    console.log(items);
 
     if (!Array.isArray(items)) {
       console.error('Items is not an array');

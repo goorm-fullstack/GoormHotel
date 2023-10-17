@@ -3,10 +3,12 @@ package goormknights.hotel.member.controller;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.member.dto.request.AdminSignupDTO;
+import goormknights.hotel.member.dto.request.MemberEditAdminDTO;
 import goormknights.hotel.member.dto.request.RequestManagerDto;
 import goormknights.hotel.member.dto.response.ManagerListDTO;
 import goormknights.hotel.member.dto.response.MemberInfoDetailDTO;
 import goormknights.hotel.member.dto.response.ResponseManagerDto;
+import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.model.Manager;
 import goormknights.hotel.member.repository.ManagerRepository;
 import goormknights.hotel.member.service.AdminService;
@@ -66,12 +68,28 @@ public class AdminController {
 
     // 회원디테일 정보 조회
     @GetMapping("/admin/member/{memberId}")
-    public ResponseEntity<?> memberInfoDetail(@PathVariable String memberId) {
-        MemberInfoDetailDTO memberInfo = adminService.memberInfoDetail(memberId);
-        if (memberInfo != null) {
-            return ResponseEntity.ok(memberInfo);
-        } else {
-            return ResponseEntity.status(404).body("Member not found");
+    public ResponseEntity<MemberInfoDetailDTO> memberInfoDetail(@PathVariable String memberId) {
+        try {
+            MemberInfoDetailDTO memberInfoDetailDTO = adminService.memberInfoDetail(memberId);
+            return ResponseEntity.ok(memberInfoDetailDTO);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // 회원 정보 변경(어드민 버전)
+    @PutMapping("/change-member/{memberId}")
+    public ResponseEntity<?> editMember(@PathVariable String memberId, @RequestBody MemberEditAdminDTO memberEditAdminDTO) {
+        System.out.println("Received data: " + memberEditAdminDTO.toString());
+        try {
+            adminService.edit(memberId, memberEditAdminDTO);
+            return ResponseEntity.ok().build(); // 200 OK
+        } catch (MemberNotFound e) {
+            return ResponseEntity.notFound().build(); // 404 Not Found
+        } catch (Exception e) {
+            System.out.println("Exception caught: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build(); // 400 Bad Request
         }
     }
 

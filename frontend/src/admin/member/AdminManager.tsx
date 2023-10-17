@@ -112,9 +112,7 @@ const AdminManager = () => {
       if (response.status === 200) {
         alert('성공적으로 등록되었습니다.');
         const newManagerData = await Instance.get('/api/admin-getlist');
-        console.log('Backend Response:', response);
         if (newManagerData.status === 200) {
-          console.log('Backend Response:', response, newManagerData);
           setManagerData(newManagerData.data);
         }
       }
@@ -136,10 +134,8 @@ const AdminManager = () => {
   };
 
   const handleInputNickName = (manager : ManagerData) => {
-    console.log("call");
     Instance.post('/api/manager/' + manager.adminId).then((response) => {
       setSelectedManager(response.data);
-      console.log(response.data);
       checkAuthA(response.data.auth);
       checkAuthB(response.data.auth);
       checkAuthC(response.data.auth);
@@ -149,7 +145,6 @@ const AdminManager = () => {
   const checkAuthA = (str: string) => {
     if (str !== undefined) {
       if (str.includes('AUTH_A')) {
-        console.log(1);
         setAuthA(true);
       } else {
         setAuthA(false);
@@ -160,7 +155,6 @@ const AdminManager = () => {
   const checkAuthB = (str: string) => {
     if (str !== undefined) {
       if (str.includes('AUTH_B')) {
-        console.log(2);
         setAuthB(true);
       } else {
         setAuthB(false);
@@ -171,7 +165,6 @@ const AdminManager = () => {
   const checkAuthC = (str: string) => {
     if (str !== undefined) {
       if (str.includes('AUTH_C')) {
-        console.log(3);
         setAuthC(true);
       } else {
         setAuthC(false);
