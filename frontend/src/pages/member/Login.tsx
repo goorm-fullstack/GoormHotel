@@ -47,6 +47,7 @@ const Login: React.FC = () => {
         localStorage.clear(); //일단 이전 기록을 좀 지우자~
         if (getCookie('role') === 'BLACKED') {
           alert('차단된 회원입니다. 자세한 사항은 고객센터로 문의 바랍니다.');
+          localStorage.clear();
         } else {
           alert('로그인 성공');
           const memberId = getCookie('memberId');
