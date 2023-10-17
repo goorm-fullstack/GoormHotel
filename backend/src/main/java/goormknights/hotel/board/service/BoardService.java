@@ -340,4 +340,9 @@ public class BoardService {
         return new PageImpl<>(list, pageable, list.size());
     }
 
+    public Board findByParentBoardId(Long parentBoardId){
+
+        return boardRepository.findByParentBoardId(parentBoardId).orElseThrow(() -> new NoBoardException("작성되지 않은 게시판입니다."));
+    }
+
 }
