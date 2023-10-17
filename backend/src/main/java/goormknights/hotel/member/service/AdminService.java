@@ -95,6 +95,7 @@ public class AdminService {
                     .httpOnly(false)
                     .secure(true)
                     .path("/")      // path
+                    .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
                     .build();
@@ -102,6 +103,7 @@ public class AdminService {
                     .httpOnly(false)
                     .secure(true)
                     .path("/")      // path
+                    .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
                     .build();
@@ -109,6 +111,7 @@ public class AdminService {
                     .httpOnly(false)
                     .secure(true)
                     .path("/")      // path
+                    .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
                     .build();
@@ -116,6 +119,7 @@ public class AdminService {
                     .httpOnly(false)
                     .secure(true)
                     .path("/")      // path
+                    .domain("web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app")
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
                     .build();
