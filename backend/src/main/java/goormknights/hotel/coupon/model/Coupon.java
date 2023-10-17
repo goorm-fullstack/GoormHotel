@@ -16,7 +16,7 @@ import java.util.UUID;
 public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private String uuid;
     private int discountRate;
@@ -40,7 +40,7 @@ public class Coupon {
 
     @Builder
     public Coupon(
-            int id, String uuid,
+            Long id, String uuid,
             int discountRate,
             Member member,
             char isUsed,

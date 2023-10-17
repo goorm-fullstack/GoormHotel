@@ -30,7 +30,7 @@ public class ReportService {
     private final ReplyRepository replyRepository;
 
     //신고 기능(Create)
-    public Report reportCreate(RequestReportDto requestReportDto){
+    public void reportCreate(RequestReportDto requestReportDto){
 
         Long boardId = requestReportDto.getBoardId();
         log.info("boardId={}", boardId);
@@ -42,21 +42,19 @@ public class ReportService {
 
             Report report = requestReportDto.toEntity();
             report.setReply(byReplyId);
+            byReplyId.getReport().add(report);
 
-            Report save = reportRepository.save(report);
-            byReplyId.getReport().add(save);
-
-            return save;
+            reportRepository.save(report);
+            replyRepository.save(byReplyId);
         }
         else{
             Board byBoardId = boardRepository.findByBoardId(boardId);
             Report report = requestReportDto.toEntity();
             report.setBoard(byBoardId);
+            byBoardId.getReport().add(report);
 
-            Report save = reportRepository.save(report);
-            byBoardId.getReport().add(save);
-
-            return save;
+            reportRepository.save(report);
+            boardRepository.save(byBoardId);
         }
 
 

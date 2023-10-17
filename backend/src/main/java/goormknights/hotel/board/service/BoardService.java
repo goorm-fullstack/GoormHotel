@@ -71,7 +71,7 @@ public class BoardService {
         List<Board> byBoardWriter = boardRepository.findAllByBoardWriter(boardWriter, pageable);
         List<ResponseBoardDto> response = new ArrayList<>();
         for (Board board : byBoardWriter) {
-            if(board.getBoardDeleteTime()==null && board.getReport().size() == 0){
+            if(board.getBoardDeleteTime()==null){
                 response.add(board.toResponseBoardDto());
             }
         }
@@ -85,7 +85,7 @@ public class BoardService {
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
-            if(board.getBoardDeleteTime()==null && board.getReport().size() == 0){
+            if(board.getBoardDeleteTime()==null){
                 response.add(board.toResponseBoardDto());
             }
         }
@@ -99,7 +99,7 @@ public class BoardService {
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
-            if(board.getBoardDeleteTime()==null && board.getReport().size() == 0){
+            if(board.getBoardDeleteTime()==null){
                 response.add(board.toResponseBoardDto());
             }
         }
@@ -113,7 +113,7 @@ public class BoardService {
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : boards){
-            if(board.getBoardDeleteTime()==null && board.getReport().size() == 0){
+            if(board.getBoardDeleteTime()==null){
                 response.add(board.toResponseBoardDto());
             }
         }
@@ -150,7 +150,7 @@ public class BoardService {
         Page<Board> all = boardRepository.findAll(pageable);
         List<Board> list = new ArrayList<>();
         for (Board board : all) {
-            if(board.getBoardDeleteTime() == null && board.getReport().size() == 0){
+            if(board.getBoardDeleteTime() == null){
                 list.add(board);
             }
         }
@@ -158,7 +158,7 @@ public class BoardService {
     }
 
     // 게시물 수정
-    public Board updateBoard(Long boardId, RequestBoardDto requestBoardDto, MultipartFile multipartFile, MultipartFile file, boolean bool) throws IOException {
+    public Board updateBoard(Long boardId, RequestBoardDto requestBoardDto, MultipartFile multipartFile, MultipartFile file) throws IOException {
         Board beforeBoard = boardRepository.findByBoardId(boardId);
         RequestImageDto requestImageDto;
         RequestFileDto requestFileDto;
@@ -210,7 +210,7 @@ public class BoardService {
         List<ResponseBoardDto> response = new ArrayList<>();
 
         for (Board board : allByBoardTitle) {
-            if(board.getBoardDeleteTime()==null && board.getReport().size() == 0){
+            if(board.getBoardDeleteTime()==null){
                 ResponseBoardDto responseBoardDto = board.toResponseBoardDto();
                 response.add(responseBoardDto);
             }
@@ -226,25 +226,25 @@ public class BoardService {
 
         if(category == null && keyword == null){
             for (Board board : allByBoardTitle) {
-                if(board.getBoardDeleteTime() == null && board.getReport().size() == 0){
+                if(board.getBoardDeleteTime() == null){
                     response.add(board.toResponseBoardDto());
                 }
             }
         }else if(category != null && keyword == null){
             for (Board board : allByBoardTitle) {
-                if(board.getBoardDeleteTime() == null && board.getReport().size() == 0 && board.getCategory().equals(category)){
+                if(board.getBoardDeleteTime() == null && board.getCategory().equals(category)){
                     response.add(board.toResponseBoardDto());
                 }
             }
         }else if(category == null && keyword != null){
             for (Board board : allByBoardTitle) {
-                if(board.getBoardDeleteTime() == null && board.getReport().size() == 0 && (board.getTitle().contains(keyword) || board.getBoardContent().contains(keyword))){
+                if(board.getBoardDeleteTime() == null && (board.getTitle().contains(keyword) || board.getBoardContent().contains(keyword))){
                     response.add(board.toResponseBoardDto());
                 }
             }
         }else{
             for (Board board : allByBoardTitle) {
-                if(board.getBoardDeleteTime() == null && board.getReport().size() == 0 && board.getCategory().equals(category) && (board.getTitle().contains(keyword) || board.getBoardContent().contains(keyword))){
+                if(board.getBoardDeleteTime() == null && board.getCategory().equals(category) && (board.getTitle().contains(keyword) || board.getBoardContent().contains(keyword))){
                     response.add(board.toResponseBoardDto());
                 }
             }
@@ -295,6 +295,45 @@ public class BoardService {
         for (Reply reply : all1) {
             if(reply.getReplyDeleteTime() != null){
                 list.add(reply.toResponseReplyDto());
+            }
+        }
+
+        return new PageImpl<>(list, pageable, list.size());
+    }
+
+    //답글 추가, 삭제용
+    public Board updateIsComment(Long boardId) {
+        Board board = boardRepository.findByBoardId(boardId);
+        if (board == null) {
+            throw new NoBoardException("게시판을 찾을 수 없습니다.");
+        }
+
+        // isComment 값을 토글
+        if ("false".equals(board.getIsComment())) {
+            board.setIsComment("true");
+        }
+        else if ("true".equals(board.getIsComment())) {
+            board.setIsComment("false");
+        }
+
+        return boardRepository.save(board);
+    }
+
+
+    // 작성자명으로 데이터 가져오기 (마이페이지용)
+    public Page<Object> findAllBoardAndReply(String writer, Pageable pageable){
+        Page<Board> all = boardRepository.findAll(pageable);
+        Page<Reply> all1 = replyRepository.findAll(pageable);
+        List<Object> list = new ArrayList<>();
+
+        for (Board board : all) {
+            if(board.getBoardDeleteTime() == null && board.getBoardWriter().equals(writer) && board.getBoardPassword().equals("")){
+                list.add(board);
+            }
+        }
+        for (Reply reply : all1) {
+            if(reply.getReplyDeleteTime() == null && reply.getReplyWriter().equals(writer) && reply.getReplyPassword() == null){
+                list.add(reply);
             }
         }
 

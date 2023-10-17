@@ -45,14 +45,12 @@ public class Member extends BaseEntity implements Serializable {
     private Boolean privacyCheck;
 
     private String gender;
-    private LocalDate birth; // YYYY-MM-DD
-    private LocalDate signupDate = LocalDate.now(); // YYYY-MM-DD
+    private LocalDate birth;
+    private LocalDate signupDate = LocalDate.now();
 
     private String grade;           // Bronze, Silver, Gold
-    private String auth;            // ROLE_ANONYMOUS, ROLE_MEMBER,ROLE_ADMIN
+    private String auth;
     private Boolean mailAuth; // 이메일 인증 여부
-    // 정확하게 기억나지 않는데 병합 전 authority처럼 전체 단어 사용했다가 예약어랑 겹쳐서 오류 발생
-    // -> auth로 변수명 변경하여 해결한 적이 있어 변경해둡니다. - 문소희
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
@@ -65,14 +63,7 @@ public class Member extends BaseEntity implements Serializable {
     @JsonIgnore
     private List<Reservation> reservationList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
-    @JsonIgnore
-    private List<GiftCard> giftCardList =  new ArrayList<>();
-
     private String roomId;
-
-    //    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    //    private List<Post> posts;
 
     @Builder
     public Member(String email, String memberId, String password, String name, String phoneNumber,

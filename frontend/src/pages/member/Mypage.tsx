@@ -1,10 +1,126 @@
-import React from 'react';
+import React, {useEffect, useState } from 'react';
 import * as S from './Style';
 import { PageTitle, ContentsTitleXSmall, AuthBtn, Auth, BtnWrapper, SubmitBtn } from '../../Style/commonStyles';
 import Coupon from '../../components/Coupon/Coupon';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Instance from '../../utils/api/axiosInstance';
+
+interface Member {
+  name: string;
+  email: string;
+  memberId: string;
+  password: string;
+  confirmPassword: string;
+  phoneNumber: string;
+  birth: number[];
+  gender: string;
+  code?: string;
+}
+
+interface RequestCode {
+  code: string;
+}
+
+interface FindMemberDTO {
+  memberId: string;
+  name: string;
+  email: string;
+  code?: string;
+}
 
 const Mypage = () => {
+  const [member, setMember] = useState<Member>({name: '', email: '', memberId: '', password: '',
+    confirmPassword: '', phoneNumber: '', birth: [], gender: '', code: ''});
+  const [findMemberData, setFindMemberData] = useState<FindMemberDTO>({ memberId: '', name: '', email: '' });
+  const [isPasswordChanged, setPasswordChanged] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    let finalValue: any = value;
+    if (name === "birth") {
+      finalValue = value.split('-').map(n => Number(n));
+    }
+    if (name === "password") {
+      setPasswordChanged(true);
+    }
+    setMember({ ...member, [name]: finalValue });
+  };
+
+  // 마이페이지 로딩
+  useEffect(() => {
+    const fetchMemberInfo = async () => {
+      const storedMemberId = localStorage.getItem('memberId');
+      if (storedMemberId) {
+        try {
+          const response = await Instance.get(`/member/api/${storedMemberId}`);
+          if (response.status === 200) {
+            const { password, ...otherData } = response.data;
+            setMember(otherData);
+            setFindMemberData({ memberId: otherData.memberId, name: otherData.name, email: otherData.email });
+          }
+        } catch (error: any) {
+          alert('로그인 상태가 아니거나 회원이 없습니다.')
+        }
+      }
+    };
+    fetchMemberInfo();
+  }, []);
+
+// 회원정보 수정 제출
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // birth 배열을 문자열로 변환
+    const birthString = member.birth.map(n => n.toString().padStart(2, '0')).join('-');
+
+    if (isPasswordChanged && !member.code) {
+      alert('비밀번호를 변경하려면 인증번호가 필요합니다.');
+      return;
+    }
+
+    try {
+      const payload = isPasswordChanged ? { ...member, birth: birthString, needCodeValidation: true } : { ...member, birth: birthString };
+      console.log("Sending payload: ", payload);
+      const response = await Instance.put<Member>(`/member/api/change-member/${member.memberId}`, payload);
+
+      if (response.status === 200) {
+        alert('회원정보 수정이 완료되었습니다');
+        navigate('/mypage');
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        alert('회원이 없습니다');
+      } else {
+        alert('에러 발생');
+      }
+    }
+  };
+
+  // 인증번호 요청
+  const handleCodeRequest = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!findMemberData.email || !findMemberData.memberId || !findMemberData.name) {
+      console.log('findMemberData: ', findMemberData);
+      alert('빈 필드가 있습니다.');
+      return;
+    }
+    try {
+      const response = await Instance.post<RequestCode>('/api/mail/changepw-code', findMemberData);
+      if (response.status === 200) {
+        console.log(findMemberData)
+        alert('인증 코드가 발송되었습니다.');
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        console.log(findMemberData)
+        alert('회원이 없습니다');
+      } else {
+        alert('에러 발생');
+      }
+    }
+  };
+
   return (
     <>
       <S.Container>
@@ -13,20 +129,20 @@ const Mypage = () => {
           <div className="editinfo">
             <ContentsTitleXSmall>회원 정보 수정</ContentsTitleXSmall>
             <form>
-              <input placeholder="아이디" />
-              <input placeholder="비밀번호" />
-              <input placeholder="비밀번호 확인" />
-              <input placeholder="이름" />
+              <input name="memberId" placeholder="아이디" onChange={handleChange} value={member.memberId} />
+              <input name="password" placeholder="비밀번호" type="password" onChange={handleChange} value={member.password} />
+              <input name="confirmPassword" placeholder="비밀번호 확인" type="password" onChange={handleChange} value={member.confirmPassword} />
+              <input name="name" placeholder="이름" onChange={handleChange} value={member.name} />
               <Auth>
-                <input placeholder="이메일" />
-                <AuthBtn>인증번호 요청</AuthBtn>
+                <input name="email" placeholder="이메일" onChange={handleChange} value={member.email} />
+                <AuthBtn onClick={handleCodeRequest}>인증번호 요청</AuthBtn>
               </Auth>
-              <input placeholder="인증번호를 입력하세요" />
-              <input placeholder="연락처" />
-              <input placeholder="생년월일(선택입력)" />
-              <input placeholder="성별(선택입력)" />
+              <input name="code" placeholder="인증번호를 입력하세요." onChange={handleChange} value={member.code} />
+              <input name="phoneNumber" placeholder="연락처" onChange={handleChange} value={member.phoneNumber} />
+              <input name="birth" placeholder="생년월일(선택입력)" onChange={handleChange} value={member.birth.join('-')}  />
+              <input name="gender" placeholder="성별(선택입력)" onChange={handleChange} value={member.gender} />
               <BtnWrapper className="mt20 full">
-                <SubmitBtn type="submit">회원 정보 수정</SubmitBtn>
+                <SubmitBtn onClick={handleSubmit}>회원 정보 수정</SubmitBtn>
               </BtnWrapper>
             </form>
           </div>
@@ -36,6 +152,13 @@ const Mypage = () => {
               <p>
                 현재까지의 예약 내역을 확인할 수 있습니다.
                 <Link to="/myhistory/1">자세히보기</Link>
+              </p>
+            </div>
+            <div className="historyWrapper">
+              <ContentsTitleXSmall>나의 활동</ContentsTitleXSmall>
+              <p>
+                현재까지의 게시글, 댓글의 작성 내용을 확인할 수 있습니다.
+                <Link to="/myboard/1">자세히보기</Link>
               </p>
             </div>
             <div>

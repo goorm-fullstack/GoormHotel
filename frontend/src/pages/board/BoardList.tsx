@@ -66,7 +66,6 @@ const CustomerSupport = () => {
             const totalPages = parseInt(response.headers['totalpages'], 10);
             const totalData = parseInt(response.headers['totaldata'], 10);
             setBoard(response.data || []);
-            console.log(response.data);
             setTotalData(totalData);
             setTotalPages(totalPages);
           })
@@ -140,7 +139,7 @@ const CustomerSupport = () => {
           let image = { boardId: boardId, imageUrl: URL.createObjectURL(blob) };
           setImageUrl((prevImages) => [...prevImages, image]);
         } else if (response.status === 204) {
-          console.log('해당 boardId가 없음 : ', boardId);
+          console.error('해당 boardId가 없음 : ', boardId);
         } else {
           console.error('요청 에러 : ', response.status);
         }
@@ -171,6 +170,14 @@ const CustomerSupport = () => {
     setTypeDetail(selectedTypeDetail);
   };
 
+  useEffect(() => {
+    setKeyword('');
+    if(searchKeyword.current){
+      searchKeyword.current.value = '';
+    }
+    setTypeDetail('all');
+  }, [board])
+
   const generateOptions = (item: TypeDetail, selectedType: string) => {
     if (item.type === selectedType) {
       return (
@@ -200,12 +207,11 @@ const CustomerSupport = () => {
   const handleSearch = () => {
     if (!word.trim()) {
       alert('검색어를 입력해주세요.');
+      window.location.reload();
     } else {
       setKeyword(word);
     }
   };
-
-  // todo: 회원 여부 확인 필요
 
   return (
     <>
@@ -253,7 +259,8 @@ const CustomerSupport = () => {
                             )}
                           </Link>
                         </div>
-                        <p className="title">
+                        <p className="titlew">
+                          <span>[{item.category}]</span>
                           <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</Link>
                         </p>
                         <p className="writer">{item.boardWriter}</p>

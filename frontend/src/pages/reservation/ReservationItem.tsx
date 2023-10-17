@@ -86,6 +86,8 @@ const ReservationItem = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const reservationData = location.state ? location.state.reservationData : null;
+  const selectData = location.state ? location.state.selectData : null;
+  const indexImg = location.state ? location.state.indexImg : null;
   const [selectedType, setSelectedType] = useState<string[]>(['all', 'room', 'dining']);
   const [selectedCategory, setSelectedCategory] = useState<string>(productCategories[0].english);
   const [products, setProducts] = useState<(RoomData | DiningData)[]>([]);
@@ -123,7 +125,9 @@ const ReservationItem = () => {
           return URL.createObjectURL(blob);
         })
       );
-      setImageUrls(urls);
+      if (selectedType.length !== 0) {
+        setImageUrls(urls);
+      }
     };
 
     if (products.length > 0) {
@@ -132,73 +136,76 @@ const ReservationItem = () => {
   }, [products]);
 
   useEffect(() => {
-    const currentPage: number = parseInt(page ? page : '1', 10);
-    if (selectedType.includes('all')) {
-      if (selectedCategory !== '') {
-        Instance.get(`/category?page=${currentPage}`, {
-          params: {
-            typeDetail: selectedCategory,
-          },
-        })
-          .then((response) => {
-            const totalPages = parseInt(response.headers['totalpages'], 10);
-            const totalData = parseInt(response.headers['totaldata'], 10);
-            setProducts(response.data);
-            setTotalData(totalData);
-            setTotalPage(totalPages);
+    console.log(selectedType.length);
+    if (selectedType.length !== 0) {
+      const currentPage: number = parseInt(page ? page : '1', 10);
+      if (selectedType.includes('all')) {
+        if (selectedCategory !== '') {
+          Instance.get(`/category?page=${currentPage}`, {
+            params: {
+              typeDetail: selectedCategory,
+            },
           })
-          .catch((error) => {
-            console.error(error);
-          });
+            .then((response) => {
+              const totalPages = parseInt(response.headers['totalpages'], 10);
+              const totalData = parseInt(response.headers['totaldata'], 10);
+              setProducts(response.data);
+              setTotalData(totalData);
+              setTotalPage(totalPages);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        } else {
+          Instance.get(`/category?page=${currentPage}`)
+            .then((response) => {
+              const totalPages = parseInt(response.headers['totalpages'], 10);
+              const totalData = parseInt(response.headers['totaldata'], 10);
+              setProducts(response.data);
+              setTotalData(totalData);
+              setTotalPage(totalPages);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
       } else {
-        Instance.get(`/category?page=${currentPage}`)
-          .then((response) => {
-            const totalPages = parseInt(response.headers['totalpages'], 10);
-            const totalData = parseInt(response.headers['totaldata'], 10);
-            setProducts(response.data);
-            setTotalData(totalData);
-            setTotalPage(totalPages);
+        if (selectedCategory !== '') {
+          Instance.get(`/category?page=${currentPage}`, {
+            params: {
+              type: selectedType[0],
+              typeDetail: selectedCategory,
+            },
           })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-    } else {
-      if (selectedCategory !== '') {
-        Instance.get(`/category?page=${currentPage}`, {
-          params: {
-            type: selectedType[0],
-            typeDetail: selectedCategory,
-          },
-        })
-          .then((response) => {
-            const totalPages = parseInt(response.headers['totalpages'], 10);
-            const totalData = parseInt(response.headers['totaldata'], 10);
-            setProducts(response.data);
-            setTotalData(totalData);
-            setTotalPage(totalPages);
-            setClick(!click);
+            .then((response) => {
+              const totalPages = parseInt(response.headers['totalpages'], 10);
+              const totalData = parseInt(response.headers['totaldata'], 10);
+              setProducts(response.data);
+              setTotalData(totalData);
+              setTotalPage(totalPages);
+              setClick(!click);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        } else {
+          Instance.get(`/category?page=${currentPage}`, {
+            params: {
+              type: selectedType[0],
+            },
           })
-          .catch((error) => {
-            console.error(error);
-          });
-      } else {
-        Instance.get(`/category?page=${currentPage}`, {
-          params: {
-            type: selectedType[0],
-          },
-        })
-          .then((response) => {
-            const totalPages = parseInt(response.headers['totalpages'], 10);
-            const totalData = parseInt(response.headers['totaldata'], 10);
-            setProducts(response.data);
-            setTotalData(totalData);
-            setTotalPage(totalPages);
-            setClick(!click);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+            .then((response) => {
+              const totalPages = parseInt(response.headers['totalpages'], 10);
+              const totalData = parseInt(response.headers['totaldata'], 10);
+              setProducts(response.data);
+              setTotalData(totalData);
+              setTotalPage(totalPages);
+              setClick(!click);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
       }
     }
   }, [selectedType, selectedCategory]);
@@ -207,8 +214,11 @@ const ReservationItem = () => {
     if (location.search) {
       const type = location.search.replace('?type=', '');
       setSelectedType([`${type}`]);
+      if (type === '') {
+        setSelectedType(['all', 'room', 'dining']);
+      }
     }
-  }, []);
+  }, [location.search]);
 
   const handleReservationClick = (productInfo: RoomData | DiningData, imageUrl: string) => {
     setSelectedProduct({ ...productInfo, imageUrl });
@@ -248,23 +258,20 @@ const ReservationItem = () => {
   };
 
   const nameOfTypeDetail = (product: RoomData | DiningData) => {
-    const foundCategory = [...diningCategories, ...productCategories].find((category) => product.typeDetail.includes(category.english));
+    const foundCategory = [...diningCategories, ...productCategories].find((category) => product.typeDetail === category.english);
+    console.log(foundCategory);
     return foundCategory ? foundCategory.korean : 'none';
   };
 
   const handleSubmitClick = () => {
-    if (!isLogined) {
-      if (window.confirm('로그인이 진행되지 않았습니다. 비회원으로 주문을 진행하시겠습니까?')) {
-        navigate('/anonymous/signup');
-      }
-    } else {
-      navigate('/offers/step2', {
-        state: {
-          reservationData: reservationData,
-          selectedProduct: selectedProduct,
-        },
-      });
-    }
+    navigate('/offers/step2', {
+      state: {
+        reservationData: reservationData,
+        selectedProduct: selectedProduct,
+        selectData: selectData,
+        indexImg: indexImg,
+      },
+    });
   };
 
   return (
@@ -292,7 +299,7 @@ const ReservationItem = () => {
               </div>
               <div className="categorywrap">
                 <p>
-                  전체 <strong>{totalData}</strong> 개
+                  전체 <strong>{selectedType.length !== 0 ? totalData : 0}</strong> 개
                 </p>
                 <select id="productType" value={selectedCategory} onChange={handleCategoryChange}>
                   {selectedType.length === 1 && selectedType[0] === 'room' ? (
@@ -315,7 +322,9 @@ const ReservationItem = () => {
             </S.SelectWrapper>
             <S.RoomItemWrapper>
               {products.length === 0 && <div className="empty">등록된 상품이 없습니다.</div>}
+              {selectedType.length === 0 && <div className="empty">카테고리를 선택해주세요.</div>}
               {products.length > 0 &&
+                selectedType.length !== 0 &&
                 products.map((product, index) => (
                   <S.RoomItem key={index}>
                     <div
@@ -361,27 +370,29 @@ const ReservationItem = () => {
             <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
             <S.SelectItem>
               {(() => {
-                if (selectedProduct) {
+                if (selectedProduct || selectData) {
                   return (
                     <S.SelectedItem>
                       <div
                         className="imgwrap"
                         style={{
-                          backgroundImage: `url(${selectedProduct.imageUrl})`,
+                          backgroundImage: `url(${selectedProduct ? selectedProduct.imageUrl : indexImg})`,
                         }}
                       />
                       <h4>
-                        {selectedProduct.name}
+                        {selectedProduct ? selectedProduct.name : selectData.name}
                         <CircleCloseBtn onClick={handleDeleteClick}></CircleCloseBtn>
                       </h4>
-                      <p>{selectedProduct.type === 'room' ? '객실' : '다이닝'}</p>
-                      <p>{nameOfTypeDetail(selectedProduct)}</p>
-                      <p>성인 {selectedProduct.capacity}인 기준</p>
+                      <p>
+                        {selectedProduct ? (selectedProduct.type === 'room' ? '객실' : '다이닝') : selectData.type === 'room' ? '객실' : '다이닝'}
+                      </p>
+                      <p>{selectedProduct ? nameOfTypeDetail(selectedProduct) : nameOfTypeDetail(selectData)}</p>
+                      <p>성인 {selectedProduct ? selectedProduct.capacity : selectData.capacity}인 기준</p>
                       <table>
                         <tbody>
                           <tr>
                             <th>기본가</th>
-                            <td>{numberWithCommas(selectedProduct.price)} 원</td>
+                            <td>{selectedProduct ? numberWithCommas(selectedProduct.price) : numberWithCommas(selectData.price)} 원</td>
                           </tr>
                         </tbody>
                       </table>
@@ -390,7 +401,7 @@ const ReservationItem = () => {
                         <tbody>
                           <tr>
                             <th>성인</th>
-                            <td>{numberWithCommas(selectedProduct.priceAdult)} 원</td>
+                            <td>{selectedProduct ? numberWithCommas(selectedProduct.priceAdult) : numberWithCommas(selectData.priceAdult)} 원</td>
                             {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 
 
                             예약 정보 입력 페이지에서 기준 인원 초과하여 인원 추가하는 경우 
@@ -398,7 +409,9 @@ const ReservationItem = () => {
                           </tr>
                           <tr>
                             <th>어린이</th>
-                            <td>{numberWithCommas(selectedProduct.priceChildren)} 원</td>
+                            <td>
+                              {selectedProduct ? numberWithCommas(selectedProduct.priceChildren) : numberWithCommas(selectData.priceChildren)} 원
+                            </td>
                             {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 */}
                           </tr>
                         </tbody>

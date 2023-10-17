@@ -2,6 +2,7 @@ package goormknights.hotel.board.controller;
 
 import goormknights.hotel.board.dto.request.RequestBoardDto;
 import goormknights.hotel.board.dto.response.ResponseBoardDto;
+import goormknights.hotel.board.exception.NoBoardException;
 import goormknights.hotel.board.model.Board;
 import goormknights.hotel.board.service.BoardImageService;
 import goormknights.hotel.board.service.BoardService;
@@ -20,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -52,10 +55,11 @@ public class BoardController {
     public ResponseEntity<ResponseBoardDto> getBoardById(@PathVariable Long boardId) {
         Board byId = boardService.findById(boardId);
 
-        String fileName = "";
+        String fileName = null;
         if(byId.getBoardFile() != null){
-            fileName = byId.getBoardFile().getOriginalboardFileName();
+            fileName = URLEncoder.encode(byId.getBoardFile().getOriginalboardFileName(), StandardCharsets.UTF_8);
         }
+        log.info("fileName={}", fileName);
 
         return ResponseEntity.ok()
                 .header("FileName", fileName)
@@ -72,7 +76,7 @@ public class BoardController {
     // 게시물 수정
     @PutMapping("/{boardId}")
     public ResponseEntity<ResponseBoardDto> updateBoard(@PathVariable Long boardId, @ModelAttribute RequestBoardDto requestBoardDto, @RequestParam(required = false) MultipartFile multipartFile, @RequestParam(required = false) MultipartFile file) throws IOException {
-        boardService.updateBoard(boardId, requestBoardDto, multipartFile, file, false);
+        boardService.updateBoard(boardId, requestBoardDto, multipartFile, file);
 
         return ResponseEntity.ok().build();
     }
@@ -211,5 +215,31 @@ public class BoardController {
                 .header("TotalPages", String.valueOf(totalPages))
                 .header("TotalData", String.valueOf(totalElements))
                 .body(allBoardReplyDeleted.getContent());
+    }
+
+    //답글 유무 확인용
+    @PutMapping("/updateIsComment/{boardId}")
+    public ResponseEntity<Object> updateIsCommentValue(@PathVariable Long boardId) {
+        try {
+            Board updatedBoard = boardService.updateIsComment(boardId);
+            return ResponseEntity.ok(updatedBoard.toResponseBoardDto());
+        } catch (NoBoardException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // 마이페이지용
+    @CrossOrigin(exposedHeaders = {"TotalPages", "TotalData"})
+    @GetMapping("/mypage/{writer}")
+    public ResponseEntity<List<Object>> myPage(@PathVariable String writer, Pageable pageable){
+        Page<Object> allBoardAndReply = boardService.findAllBoardAndReply(writer, pageable);
+
+        int totalPages = allBoardAndReply.getTotalPages();
+        long totalElements = allBoardAndReply.getTotalElements();
+
+        return ResponseEntity.ok()
+                .header("TotalPages", String.valueOf(totalPages))
+                .header("TotalData", String.valueOf(totalElements))
+                .body(allBoardAndReply.getContent());
     }
 }

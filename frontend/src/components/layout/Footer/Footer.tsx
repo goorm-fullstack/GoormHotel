@@ -14,7 +14,8 @@ const Footer = () => {
   const handleSubScribeBtnClick = () => {
     if (email !== '') {
       Instance.post('/subscribe', { emailAddress: email }).then(() => {
-        console.log('구독신청 완료');
+        alert('구독신청 완료');
+        setEmail('');
       });
     }
   };

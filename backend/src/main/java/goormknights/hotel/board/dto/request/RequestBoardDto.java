@@ -30,11 +30,15 @@ public class RequestBoardDto {
 
     private String boardPassword;       //작성자 비밀번호
 
+    private Long memberPk; // 회원의 pk
+
     private String category;        //게시판-카테고리
 
     private LocalDateTime boardDeleteTime;      //소프트딜리트 시간
 
     private String isComment;      //답글 여부
+
+    private long parentBoardId;     //부모 글 Id
 
     public Board toEntity() {
         return Board.builder()
@@ -46,6 +50,8 @@ public class RequestBoardDto {
                 .category(category)
                 .isComment(isComment)
                 .boardPassword(boardPassword)
+                .parentBoardId(parentBoardId)
+                .memberPk(memberPk)
                 .build();
     }
 }

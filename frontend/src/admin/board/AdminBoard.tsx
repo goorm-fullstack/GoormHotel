@@ -22,6 +22,7 @@ export interface BoardData {
   blackList: string;
   boardDeleteTime: number[];
   isComment: string;
+  parentBoardId: number; // parentBoardId 속성 추가
 }
 
 export interface ReplyData {
@@ -84,7 +85,6 @@ const AdminBoard = () => {
         setBoard(response.data);
         setTotalPage(totalPages);
         setTotalBoard(totalData);
-        console.log('get 성공');
       })
       .catch((error) => {
         console.error(error);
@@ -150,6 +150,8 @@ const AdminBoard = () => {
       });
     }
   };
+
+  console.log(board);
 
   if (authItem && authItem.includes('AUTH_C')) {
     return (
@@ -221,7 +223,7 @@ const AdminBoard = () => {
                     <td className="center">
                       <S.LinkStyle
                         to={`/admin/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}>
-                        {board.isComment === 'true' ? <IsReply>답글</IsReply> : null}
+                        {board.parentBoardId != 0 ? <IsReply>답글</IsReply> : null}
                         {board.title}
                       </S.LinkStyle>
                     </td>

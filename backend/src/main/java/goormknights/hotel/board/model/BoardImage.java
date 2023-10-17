@@ -31,7 +31,7 @@ public class BoardImage {
     //@Builder.Default
     private Boolean boardImageDelete = false;       //사진 softdelete
 
-    @Column(nullable = false)
+    @Column
     private String mimeType;        //이미지 mimeType
 
     @Column(nullable = false)

@@ -3,6 +3,22 @@ import AdminLayout from '../common/AdminLayout';
 import { PageTitle, BtnWrapper, SubmitBtn, LinkBtn } from '../../Style/commonStyles';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Container, Table } from './Style';
+import Instance from '../../utils/api/axiosInstance';
+
+interface Member {
+  name: string;
+  email: string;
+  memberId: string;
+  password: string;
+  confirmPassword: string;
+  phoneNumber: string;
+  birth: number[];
+  gender: string;
+  grade: string;
+  mailAuth: boolean;
+  signupDate: any;
+  role: string;
+}
 
 const AdminMemberDetail = () => {
   const { memberId } = useParams();
@@ -11,12 +27,47 @@ const AdminMemberDetail = () => {
     memberGrade: '',
     password: '',
     confirmPassword: '',
+    mailAuth: '',
     email: '',
     contact: '',
     gender: '선택 안함',
     birthday: '입력 안함',
+    role: '',
   });
+  const [member, setMember] = useState<Partial<Member>>({});
   // const [joinDate, setJoinDate] = useState(null);
+
+  // 회원정보상세 로딩
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const response = await Instance.get(`/api/admin/member/${memberId}`);
+        if (response.status === 200) {
+          const { password, ...otherData } = response.data;
+          setMember(otherData);
+          console.log(otherData);
+          setFormData({
+            memberName: otherData.name,
+            memberGrade: otherData.grade,
+            password: '',
+            confirmPassword: '',
+            email: otherData.email,
+            contact: otherData.phoneNumber,
+            mailAuth: otherData.mailAuth,
+            gender: otherData.gender || '선택 안함',
+            birthday: otherData.birth ? new Date(otherData.birth).toISOString().split('T')[0] : '',
+            role: otherData.role
+          });
+        }
+      } catch (error: any) {
+        alert('데이터를 불러오는 데 실패했습니다.');
+        console.log("Error details:", error);
+      }
+    };
+
+    fetchMembers();
+  }, [memberId]);
+
   const navigate = useNavigate();
   const authItem = localStorage.getItem('auth');
 
@@ -26,8 +77,6 @@ const AdminMemberDetail = () => {
       navigate('/admin');
     }
   }, []);
-
-  console.log(formData);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -91,7 +140,7 @@ const AdminMemberDetail = () => {
                 <th>이메일</th>
                 <td>
                   <input type="email" placeholder="이메일" name="email" value={formData.email} onChange={handleChange} />
-                  <span className="mailcheck">상태 : 인증완료</span>
+                  <span className="mailcheck">상태 : {member.mailAuth ? '인증완료' : '인증안됨'}</span>
                 </td>
               </tr>
               <tr>
@@ -103,10 +152,10 @@ const AdminMemberDetail = () => {
               <tr>
                 <th>성별</th>
                 <td>
-                  <select>
-                    <option>선택안함</option>
-                    <option>남성</option>
-                    <option>여성</option>
+                  <select name="gender" value={formData.gender} onChange={handleChange}>
+                    <option value="선택안함">선택안함</option>
+                    <option value="남성">남성</option>
+                    <option value="여성">여성</option>
                   </select>
                   {/* <input type="text" placeholder="선택 안함" name="gender" value={formData.gender} onChange={handleChange} /> */}
                 </td>
@@ -119,7 +168,7 @@ const AdminMemberDetail = () => {
               </tr>
               <tr>
                 <th>가입일</th>
-                <td>2023.09.09</td>
+                <td>{`${member.signupDate?.[0] ?? 'N/A'}.${member.signupDate?.[1] ?? 'N/A'}.${member.signupDate?.[2] ?? 'N/A'}`}</td>
               </tr>
             </tbody>
           </Table>

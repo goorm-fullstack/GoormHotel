@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './Style';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation} from 'react-router-dom';
 import { BtnWrapper, SubmitBtn, PageTitle, InputCheckbox, LinkBtn, CheckLabel } from '../../Style/commonStyles';
-import kakao from '../../images/icon/ico_kakao.png';
-import naver from '../../images/icon/ico_naver.png';
-import google from '../../images/icon/ico_google.png';
 import Instance from '../../utils/api/axiosInstance';
 
 const Login: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const isReservation: boolean = queryParams.get('type') === 'reservation';
 
@@ -23,11 +19,9 @@ const Login: React.FC = () => {
   // 쿠키를 파싱하는 함수
   function getCookie(name: string): string | undefined {
     const cookieString = document.cookie;
-    console.log(cookieString);
     const cookies = cookieString.split('; ');
 
     for (let i = 0; i < cookies.length; i++) {
-      console.log(cookies[i]);
       const cookie = cookies[i].split('=');
       if (cookie[0] === name) {
         return cookie[1];
@@ -41,7 +35,6 @@ const Login: React.FC = () => {
       memberId: memberId,
       password: memberPassword,
     };
-    console.log('로그인 정보:', JSON.stringify(loginInfo));
     try {
       const response = await Instance.post('/login/member', loginInfo, {
         headers: {

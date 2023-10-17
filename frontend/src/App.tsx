@@ -53,9 +53,8 @@ import AdminMail from './admin/chat/AdminMail';
 import AdminIndex from './admin/Home/AdminIndex';
 import AdminSubScribe from './admin/chat/AdminSubScribe';
 import { useAuth } from './utils/api/AuthContext';
-import Instance from './utils/api/axiosInstance';
-import AnonymousSignup from './pages/member/AnonymousSignup';
 import AdminBoardDetail from './admin/board/AdminBoardDetail';
+import MyBoardList from './pages/board/MyBoardList';
 
 const App: React.FC = () => {
   const { setAuthState, setMemberAuthState } = useAuth();
@@ -101,11 +100,9 @@ const App: React.FC = () => {
   // 쿠키를 파싱하는 함수
   function getCookie(name: string): string | undefined {
     const cookieString = document.cookie;
-    console.log(cookieString);
     const cookies = cookieString.split('; ');
 
     for (let i = 0; i < cookies.length; i++) {
-      console.log(cookies[i]);
       const cookie = cookies[i].split('=');
       if (cookie[0] === name) {
         return cookie[1];
@@ -130,10 +127,6 @@ const App: React.FC = () => {
     const auth = getCookie("auth");
     const adminNickName = getCookie("adminNickname");
 
-    console.log('adminId 쿠키 값:', adminId);
-    console.log('role 쿠키 값:', role);
-    console.log('auth 쿠키 값:', auth);
-
     // 로컬 스토리지에 정보를 저장한다.
     // 어드민 로그인이라면
     if (adminId && role && auth && adminNickName) {
@@ -150,19 +143,6 @@ const App: React.FC = () => {
       localStorage.setItem('role', role);
       setMemberAuthState({ memberId, role });
       setIsMember(true);
-    } else {
-      // 서버에서 상태 가져오기(테스트 필요)
-      Instance.get('/api/adminCheck')
-        .then((response) => {
-          setAuthState({
-            adminId: response.data.adminId,
-            role: response.data.role,
-            auth: response.data.auth,
-          });
-        })
-        .catch((error) => {
-          console.log('로그인 상태를 가져오지 못했습니다.', error);
-        });
     }
   }, []);
 
@@ -220,18 +200,19 @@ const App: React.FC = () => {
             <Route path="/sitemap" element={<Sitemap />} />
             <Route path="/findidpw" element={<FindAccount />} />
             <Route path="/findid/result" element={<FindIdResult />} />
-            <Route path="/findpw/result" element={<FindPwResult />} />
+            <Route path="/findpw/result/:resetToken" element={<FindPwResult />} />
             <Route path="/membership" element={<Membership />} />
             <Route path="/reservation/:number" element={<ReservationCheck />} />
             <Route path="/offers/:page" element={<ReservationItem />} />
             <Route path="/myhistory/:page" element={<ReservationList />} />
+            <Route path="/myboard/:page" element={<MyBoardList />} />
             <Route path="/facilities" element={<Facilities />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/signup/result" element={<JoinComplete />} />
             <Route path="/board/:board/:page" element={<CustomerSupport />} />
             <Route path="/board/:board/write" element={<BoardWrite />} />
-            <Route path="/board/:board/detail/:boardId" element={<BoardRead />} />
+            <Route path="/board/:board/detail/:title" element={<BoardRead />} />
           </Routes>
         </S.AppContainer>
         <S.FloatingWrapper>
