@@ -55,10 +55,10 @@ public class ImageService {
         String fileExtension = '.' + img.getOriginalFilename().replaceAll("^.*\\\\.(.*)$", "$1");
         String path = "images/" + year + month + day;
 
-//        File file = new File("");
-//        if (!file.exists()) file.mkdirs();
+        File file = new File("");
+        if (!file.exists()) file.mkdirs();
 
-        File file = new File( "/" + newFileName + fileExtension);
+        file = new File( "/" + newFileName + fileExtension);
         img.transferTo(file);
 
         Path source = Paths.get("/" + newFileName + fileExtension);
@@ -78,16 +78,5 @@ public class ImageService {
                     .data(bytes)
                     .build();
         }
-        String mimeType = Files.probeContentType(source);
-
-        log.info("mimeType={}", mimeType);
-
-        return RequestImageDto.builder()
-                .originFileName(img.getOriginalFilename())
-                .fileName(newFileName + fileExtension)
-                .filePath(newFileName + fileExtension)
-                .mimeType(mimeType)
-                .data(bytes)
-                .build();
     }
 }
