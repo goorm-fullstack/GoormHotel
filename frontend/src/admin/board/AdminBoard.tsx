@@ -117,14 +117,40 @@ const AdminBoard = () => {
     if (isConfirm) {
       checkedItems.forEach((boardId) => {
         Instance
-          .put(`/boards/softdelete/${boardId}`)
-          .then(() => {
-            alert('삭제되었습니다.');
-            window.location.reload();
-          })
-          .catch((error) => {
-            console.error(error.message);
-          });
+            .get(`/boards/${boardId}`)
+            .then((response) => {
+              if(response.data.parentBoardId === 0){        //답글이 아니라면
+                Instance
+                    .put(`/boards/softdelete/${boardId}`)
+                    .then(() => {
+                      alert('삭제되었습니다.');
+                      window.location.reload();
+                    })
+                    .catch((error) => {
+                      console.error(error.message);
+                    });
+              }
+              if(response.data.parentBoardId != 0){       //답글이라면
+                Instance            //parentBoardId의 isComment값 true => false 변경
+                    .put(`/boards/updateIsComment/${response.data.parentBoardId}`)
+                    .then()
+                    .catch((error) => {
+                      console.error(error);
+                    });
+                Instance            //답글 소프트딜리트
+                    .put(`/boards/softdelete/${boardId}`)
+                    .then(() => {
+                      alert('삭제되었습니다.');
+                      window.location.reload();
+                    })
+                    .catch((error) => {
+                      console.error(error.message);
+                    });
+              }
+                }
+            )
+
+
       });
     }
   };
@@ -152,6 +178,55 @@ const AdminBoard = () => {
   };
 
   console.log(board);
+
+  const setCommentBoard = (boardId : number) => {
+    Instance.get(`/boards/findParentBoardId/${boardId}`)
+        .then((response) => {
+          console.log(response.data);
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error.message);
+        })
+  }
+
+
+  //   useEffect(() => {
+  //     Instance.get('/report/list')
+  //         .then(async (response) => {
+  //           // ...
+  //           const modifiedDataPromises = response.data.map(async (item: ReportData) => {
+  //             let boardId = null;
+  //
+  //             if(item.replyId){
+  //               try {
+  //                 const response2 = await Instance.get(`/reply/replyId/${item.replyId}`);
+  //                 boardId = parseInt(response2.data.boardId);
+  //               } catch (error) {
+  //                 console.error("Error fetching boardId:", error);
+  //               }
+  //             }
+  //
+  //             return {
+  //               ...item,
+  //               reportCheck: item.reportCheck.toString(),
+  //               reportResult: item.reportResult.toString(),
+  //               boardId,  // Add boardId here
+  //             };
+  //           });
+  //
+  //           // Since modifiedDataPromises is an array of promises, we'll wait for all of them to resolve
+  //           const modifiedData = await Promise.all(modifiedDataPromises);
+  //           const totalPages = parseInt(response.headers['totalpages'], 10);
+  //           const totalData = parseInt(response.headers['totaldata'], 10);
+  //           setReport(modifiedData);
+  //           setTotalPage(totalPages);
+  //           setTotalData(totalData);
+  //         })
+  //         .catch((error) => {
+  //           console.error(error);
+  //         });
+  //   }, []);
 
   if (authItem && authItem.includes('AUTH_C')) {
     return (
@@ -207,8 +282,8 @@ const AdminBoard = () => {
                   </td>
                 </tr>
               )}
-              {board &&
-                board.map((board, idx: number) => (
+              {board && board
+                .map((board, idx: number) => (
                   <tr key={board.boardId}>
                     <td className="center">
                       <InputCheckbox

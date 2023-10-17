@@ -87,18 +87,42 @@ const AdminDeleteComment = () => {
     const isConfirm = window.confirm('복구하시겠습니까?');
     if (isConfirm) {
       checkedItems.forEach((boardId) => {
-        if (boardId.startsWith('board')) {
-          const id = boardId.replace('board', '');
+        if(boardId.startsWith('board')){      //게시글이라면
+          boardId = boardId.replace('board', '');
           Instance
-            .put(`/boards/undelete/${id}`)
-            .then(() => {
-              alert('복구되었습니다.');
-              window.location.reload();
-            })
-            .catch((error) => {
-              console.error(error.message);
-            });
-        } else {
+              .get(`/boards/${boardId}`)
+              .then((response) => {
+                if(response.data.parentBoardId === 0){      //답글이 아니라면
+                  Instance
+                      .put(`/boards/undelete/${response.data.boardId}`)
+                      .then(() => {
+                        alert('복구되었습니다.');
+                        window.location.reload();
+                      })
+                      .catch((error) => {
+                        console.log(error.message);
+                      });
+                }
+                if(response.data.parentBoardId != 0){     //답글이라면
+                  Instance            //parentBoardId의 isComment값 false => true 변경
+                      .put(`/boards/updateIsComment/${response.data.parentBoardId}`)
+                      .then()
+                      .catch((error) => {
+                        console.error(error.message);
+                      });
+                  Instance
+                      .put(`/boards/undelete/${response.data.boardId}`)
+                      .then(() => {
+                        alert('복구되었습니다.');
+                        window.location.reload();
+                      })
+                      .catch((error) => {
+                        console.log(error.message);
+                      });
+                }
+              })
+        }
+        else {
           const id = boardId.replace('reply', '');
           Instance
             .put(`/reply/undelete/${id}`)
