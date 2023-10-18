@@ -141,7 +141,6 @@ export const Table = styled(commonTable)`
       }
       blockquote {
         display: inline-block;
-        border: 1px solid ${(props) => props.theme.colors.graylight};
         padding-top: 7px;
         padding-left: 20px;
         padding-right: 20px;
@@ -309,11 +308,16 @@ export const TableRead = styled.table`
     }
     blockquote {
       display: inline-block;
-      border: 1px solid ${(props) => props.theme.colors.graylight};
       padding-top: 7px;
       padding-left: 20px;
       padding-right: 20px;
       border-left: 10px solid ${(props) => props.theme.colors.graydark};
+    }
+    .table {
+      td {
+        padding: 3px;
+        border: 1px solid ${(props) => props.theme.colors.graydark};
+      }
     }
     ol {
       padding-left: 20px;
@@ -368,6 +372,18 @@ export const TableRead = styled.table`
       }
     }
     ul ul ul ul {
+      list-style-type: disc;
+      li {
+        list-style-type: disc;
+      }
+    }
+    ul ul ul ul ul {
+      list-style-type: circle;
+      li {
+        list-style-type: circle;
+      }
+    }
+    ul ul ul ul ul ul {
       list-style-type: square;
       li {
         list-style-type: square;
