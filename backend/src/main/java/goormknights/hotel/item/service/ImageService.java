@@ -50,18 +50,18 @@ public class ImageService {
         int second = now.getSecond();
         int millis = now.get(ChronoField.MILLI_OF_SECOND);
 
-        String absolutePath = "./";
+        String absolutePath = new File("").getAbsolutePath() + "\\";
         String newFileName = "image" + hour + minute + second + millis;
         String fileExtension = '.' + img.getOriginalFilename().replaceAll("^.*\\\\.(.*)$", "$1");
-        String path = "images/" + year + month + day;
+        String path = "images\\" + year + month + day;
 
-        File file = new File("");
+        File file = new File(path);
         if (!file.exists()) file.mkdirs();
 
-        file = new File( "/" + newFileName + fileExtension);
+        file = new File(absolutePath + path + "\\" + newFileName + fileExtension);
         img.transferTo(file);
 
-        Path source = Paths.get("/" + newFileName + fileExtension);
+        Path source = Paths.get(absolutePath + path + "\\" + newFileName + fileExtension);
         byte[] bytes = null;
         try (InputStream inputStream = Files.newInputStream(source)) {
             bytes = inputStream.readAllBytes();
