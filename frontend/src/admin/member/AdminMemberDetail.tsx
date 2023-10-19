@@ -68,6 +68,31 @@ const AdminMemberDetail = () => {
     fetchMembers();
   }, [memberId]);
 
+  const payload = {
+    ...formData
+  };
+
+  // 회원정보 수정 제출
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await Instance.put<Member>(`/member/api/change-member/${memberId}`, payload);
+
+
+      if (response.status === 200) {
+        alert('회원정보 수정이 완료되었습니다');
+        navigate(`/admin/member/detail/${memberId}`);
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        alert('회원이 없습니다');
+      } else {
+        alert('에러 발생');
+      }
+    }
+  };
+
   const navigate = useNavigate();
   const authItem = localStorage.getItem('auth');
 
@@ -173,7 +198,7 @@ const AdminMemberDetail = () => {
             </tbody>
           </Table>
           <BtnWrapper className="mt40 center double">
-            <SubmitBtn type="submit">수정</SubmitBtn>
+            <SubmitBtn type="submit" onClick={handleSubmit}>수정</SubmitBtn>
             <LinkBtn to="/admin/member/1">취소</LinkBtn>
           </BtnWrapper>
         </Container>

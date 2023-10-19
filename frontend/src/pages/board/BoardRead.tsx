@@ -97,7 +97,9 @@ const BoardRead = () => {
           responseType: 'arraybuffer',
         });
 
-        const blob = new Blob([response.data], { type: response.headers['content-type'] });
+        const blob = new Blob([response.data], {
+          type: response.headers['content-type'],
+        });
         const imageUrl = URL.createObjectURL(blob);
         setImageUrl(imageUrl); // 이미지 URL을 상태에 설정
       } catch (error) {
@@ -111,8 +113,12 @@ const BoardRead = () => {
   }, [boardId]);
 
   const handleDownLoad = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const result = await Instance.get(`/boards/download/${boardId}`, { responseType: 'blob' });
-    let blob = new Blob([result.data], { type: result.headers['content-type'] });
+    const result = await Instance.get(`/boards/download/${boardId}`, {
+      responseType: 'blob',
+    });
+    let blob = new Blob([result.data], {
+      type: result.headers['content-type'],
+    });
 
     let link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
@@ -239,9 +245,10 @@ const BoardRead = () => {
         Instance.put(`/reply/${editingReplyId}`, data)
           .then((response) => {
             alert('수정되었습니다.');
-            setReplyPassword('');
-            scrollToPosition(scroll);
             setEditedReplyContent('');
+            setReplyContentModify('');
+            setReplyContent('');
+            scrollToPosition(scroll);
             setIsEditing(false);
             fetchReply(boardData.boardId);
           })
@@ -409,7 +416,11 @@ const BoardRead = () => {
               )}
               <tr className="contents">
                 <td>
-                  <div dangerouslySetInnerHTML={{ __html: boardData && boardData.boardContent }} />
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: boardData && boardData.boardContent,
+                    }}
+                  />
                 </td>
               </tr>
               {board !== 'notice' && (

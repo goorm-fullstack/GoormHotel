@@ -242,4 +242,11 @@ public class BoardController {
                 .header("TotalData", String.valueOf(totalElements))
                 .body(allBoardAndReply.getContent());
     }
+
+    @GetMapping("/findParentBoardId/{parentBoardId}")
+    public ResponseEntity<Board> findByParentBoardId(@PathVariable Long parentBoardId){
+        Board board = boardService.findByParentBoardId(parentBoardId);
+
+        return ResponseEntity.ok(board);
+    }
 }
