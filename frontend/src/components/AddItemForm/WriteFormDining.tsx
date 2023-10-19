@@ -114,7 +114,7 @@ const WriteFormDining = () => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setDuplicateMessage(error.response?.data);
-        console.log(error.response?.data);
+        console.error(error.response?.data);
         setIsConfirm(false);
       }
     }

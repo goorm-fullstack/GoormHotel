@@ -4,6 +4,29 @@ import { Link } from 'react-router-dom';
 import { PageTitle } from '../../../Style/commonStyles';
 
 const Sitemap = () => {
+  const isLogin = localStorage.getItem("memberId");
+  const loginOption = () => {
+    if(!isLogin){
+      return(
+        <>
+          <li>
+            <Link to="/login">로그인</Link>
+          </li>
+          <li>
+            <Link to="/signup">회원가입</Link>
+          </li>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <li>
+          <Link to="/mypage">마이페이지</Link>
+        </li>
+      </>
+    )
+  }
   return (
     <>
       <S.Container>
@@ -72,15 +95,7 @@ const Sitemap = () => {
               <Link to="/mypage">마이페이지</Link>
             </h3>
             <ul>
-              <li>
-                <Link to="/login">로그인</Link>
-              </li>
-              <li>
-                <Link to="/signup">회원가입</Link>
-              </li>
-              <li>
-                <Link to="/mypage">마이페이지</Link>
-              </li>
+              {loginOption()}
               <li>
                 <Link to="/membership">멤버십 소개</Link>
               </li>

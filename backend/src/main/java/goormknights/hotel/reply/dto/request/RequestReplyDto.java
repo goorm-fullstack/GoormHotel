@@ -32,6 +32,8 @@ public class RequestReplyDto {
 
     private String replyPassword;
 
+    private Long memberPk;
+
     public Reply toEntity() {
         return Reply.builder()
                 .replyId(replyId)
@@ -40,6 +42,7 @@ public class RequestReplyDto {
                 .replyWriter(replyWriter)
                 .replyDeleteTime(replyDeleteTime)
                 .replyPassword(replyPassword)
+                .memberPk(memberPk)
                 .build();
     }
 }

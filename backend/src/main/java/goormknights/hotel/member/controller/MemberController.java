@@ -33,11 +33,11 @@ public class MemberController {
         return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
     }
 
-    // 비회원 회원가입
-    @PostMapping("/anonymous/signup")
-    public ResponseEntity<String> anonymousSignup(@RequestBody AnonymousSignupDto signupDTO, HttpServletRequest request, HttpServletResponse response){
-        memberService.anonymousSignup(signupDTO, signupDTO.getCode(), request, response);
-        return ResponseEntity.ok("비회원 회원가입 완료");
+    // 매니저 회원가입
+    @PostMapping("/admin-signup")
+    public ResponseEntity<String> adminSignup(@RequestBody AdminSignupDTO adminSignupDTO){
+        adminService.adminSignup(adminSignupDTO);
+        return new ResponseEntity<>("어드민계정 가입 성공", HttpStatus.OK);
     }
 
     // 아이디 찾기 제출
@@ -150,6 +150,14 @@ public class MemberController {
     public ResponseEntity<String> unBlacked(@RequestBody List<Long> id) {
         memberService.setUnBlacked(id);
         return ResponseEntity.ok("차단 해제 완료");
+    }
+
+    // 회원아이디로 멤버 pk 가져오기 - 진환
+    @GetMapping("/{memberId}")
+    public ResponseEntity<Long> findMemberByMemberId(@PathVariable String memberId){
+        Member member = memberService.findMember(memberId);
+        Long id = member.getId();
+        return ResponseEntity.ok(id);
     }
 }
 

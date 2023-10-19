@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -46,7 +47,7 @@ public class ReplyService {
         Page<Reply> all = replyRepository.findAll(pageable);
         List<Reply> list = new ArrayList<>();
         for (Reply reply : all) {
-            if(reply.getReplyDeleteTime() == null && reply.getReport().size() == 0){
+            if(reply.getReplyDeleteTime() == null){
                 list.add(reply);
             }
         }
@@ -59,7 +60,7 @@ public class ReplyService {
         List<ResponseReplyDto> response = new ArrayList<>();
 
         for (Reply reply : replies){
-            if(reply.getReplyDeleteTime()==null && reply.getReport().size() == 0){
+            if(reply.getReplyDeleteTime()==null){
                 response.add(reply.toResponseReplyDto());
             }
         }
@@ -74,10 +75,12 @@ public class ReplyService {
         List<ResponseReplyDto> response = new ArrayList<>();
 
         for(Reply reply : replies){
-            if(reply.getReplyDeleteTime()==null && reply.getReport().size() == 0){
+            if(reply.getReplyDeleteTime()==null){
                 response.add(reply.toResponseReplyDto());
             }
         }
+        response.sort(Comparator.comparing(ResponseReplyDto::getReplyWriteDate).reversed());
+
         return response;
     }
 

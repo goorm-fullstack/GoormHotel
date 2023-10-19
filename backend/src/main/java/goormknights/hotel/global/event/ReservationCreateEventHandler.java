@@ -23,26 +23,26 @@ public class ReservationCreateEventHandler implements ApplicationListener<Reserv
     @Transactional
     public void onApplicationEvent(ReservationCreateEvent event) {
         Reservation reservation = event.getReservation();
-        Member member = reservation.getMember();
-
-        int reservationCountByYear = member.getReservationCountByYear();
-
-        if(reservationCountByYear >= 9 && member.getGrade().equals("Bronze")) {
-            member.setGrade("Silver");
-            Coupon coupon = new Coupon();
-            coupon.setMember(member);
-            coupon.setDiscountRate();
-            Coupon save = couponRepository.save(coupon);
-            member.getCouponList().add(save);
-            memberRepository.save(member);
-        } else if(reservationCountByYear >= 49 && member.getGrade().equals("Silver")) {
-            member.setGrade("Gold");
-            Coupon coupon = new Coupon();
-            coupon.setMember(member);
-            coupon.setDiscountRate();
-            Coupon save = couponRepository.save(coupon);
-            memberRepository.save(member);
-            member.getCouponList().add(save);
+        if(reservation.getMember() != null) {
+            Member member = reservation.getMember();
+            int reservationCountByYear = member.getReservationCountByYear();
+            if(reservationCountByYear >= 9 && member.getGrade().equals("Bronze")) {
+                member.setGrade("Silver");
+                Coupon coupon = new Coupon();
+                coupon.setMember(member);
+                coupon.setDiscountRate();
+                Coupon save = couponRepository.save(coupon);
+                member.getCouponList().add(save);
+                memberRepository.save(member);
+            } else if(reservationCountByYear >= 49 && member.getGrade().equals("Silver")) {
+                member.setGrade("Gold");
+                Coupon coupon = new Coupon();
+                coupon.setMember(member);
+                coupon.setDiscountRate();
+                Coupon save = couponRepository.save(coupon);
+                memberRepository.save(member);
+                member.getCouponList().add(save);
+            }
         }
     }
 }

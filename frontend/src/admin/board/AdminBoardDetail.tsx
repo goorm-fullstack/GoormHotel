@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './Style';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import {Link, useLocation, useNavigate, useParams} from 'react-router-dom';
 import { PageTitle, BtnWrapper } from '../../Style/commonStyles';
 import AdminLayout from '../common/AdminLayout';
 import { Container } from '../member/Style';
 import { NormalBtn } from '../../Style/commonStyles';
 import Instance from '../../utils/api/axiosInstance';
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 const AdminBoardDetail = () => {
   const loc = useLocation();
   const [imageUrl, setImageUrl] = useState<any>('');
   const { board, id } = useParams();
-  //   const location = useLocation();
-  //   const queryParam = queryString.parse(location.search);
-  //   const boardId = String(queryParam.boardId);
   const [boardData, setBoardData] = useState<any>(null);
   const [listLink, setListLink] = useState('');
   const [title, setTitle] = useState<any>();
@@ -27,7 +26,24 @@ const AdminBoardDetail = () => {
   const [editedReplyContent, setEditedReplyContent] = useState('');
   const [editingReplyId, setEditingReplyId] = useState(0); // 수정 중인 댓글 ID를 추적
   const navigate = useNavigate();
-  console.log(id);
+
+  const adminId = localStorage.getItem("adminId");
+
+  useEffect(() => {
+    if (adminId) {
+      setReplyWriter(adminId);
+    }
+  }, [adminId]);
+
+  const isComment = () => {
+    if (board === 'qna' && boardData) {
+      return (
+          <>
+            <Link to={`/admin/board/write?parentBoardId=${boardData.boardId}`}>답글 작성</Link>
+          </>
+      )
+    }
+  }
 
   const parseBoardContent = (content: any) => {
     const parser = new DOMParser();
@@ -46,7 +62,8 @@ const AdminBoardDetail = () => {
       .then((response) => {
         if (response.headers['filename']) {
           const fileName = response.headers['filename'];
-          setFile(fileName);
+          const decodedFileName = decodeURI(fileName).replaceAll('+', ' ');
+          setFile(decodedFileName);
         }
         setBoardData(response.data);
         fetchReply(response.data.boardId);
@@ -191,7 +208,7 @@ const AdminBoardDetail = () => {
         replyContent: replyContent,
         replyWriter: replyWriter,
       });
-      setReplyWriter('');
+
       setReplyContent('');
       fetchReply(parseInt(id ? id : '', 10));
     } catch (error) {
@@ -199,19 +216,67 @@ const AdminBoardDetail = () => {
     }
   };
 
+
+  const boardReport = () => {
+    if (!boardData) {
+      return alert('boardData is null!');
+    }
+
+    const boardId = boardData.boardId;
+    console.log(boardId);
+    const isConfirm = window.confirm('신고하시겠습니까?');
+
+    if (isConfirm) {
+      const data = {
+        boardId: boardId,
+        reportWriter: '관리자',
+        reportReason: '관리자 임의 배정',
+      };
+      Instance
+          .post(`/report/writeform`, data)
+          .then(() => {
+            alert('신고처리되었습니다.');
+            navigate(`/admin/report/1`);
+          })
+          .catch((error) => {
+            console.error(error.message);
+          });
+    }
+  }
+
+  const handleDeleteBoard = () => {
+    const isConfirm = window.confirm('삭제하시겠습니까?');
+    if(isConfirm){
+      Instance.put(`/boards/softdelete/${boardData.boardId}`)
+          .then(() => {
+            alert('삭제되었습니다.');
+            navigate(-1);
+          })
+          .catch((error) => {
+            console.error(error.message);
+          })
+    }
+  }
+
+
   return (
     <>
       <AdminLayout subMenus="board">
         <Container>
           {title}
+          <S.WriteBtnWrapper className='right double'>
+            <NormalBtn className='red' onClick={boardReport}>신고하기</NormalBtn>
+            <NormalBtn className='red' onClick={handleDeleteBoard}>삭제</NormalBtn>
+          </S.WriteBtnWrapper>
           <div>
             <S.TableRead>
               <tbody>
                 <tr>
                   <td className="titlew">
                     <p className="title">
-                      <span>{boardData ? boardData.category : ''}</span>
+                      <span>{`[${boardData ? boardData.category : ''}]`}</span>
                       {boardData ? boardData.title : ''}
+                      {isComment()}
                     </p>
                     {(() => {
                       if (board !== 'notice' && boardData) {
@@ -253,11 +318,12 @@ const AdminBoardDetail = () => {
                         <form onSubmit={handleSubmit}>
                           <div>
                             <input
-                              type="text"
-                              placeholder="작성자명"
-                              name="replyWriter"
-                              value={replyWriter}
-                              onChange={(e) => setReplyWriter(e.target.value)}
+                                type="text"
+                                placeholder="작성자명"
+                                name="replyWriter"
+                                value={replyWriter}
+                                onChange={(e) => setReplyWriter(e.target.value)}
+                                readOnly
                             />
                             {/*<input type="password" placeholder="식별 비밀번호?" />*/}
                           </div>
@@ -276,9 +342,7 @@ const AdminBoardDetail = () => {
                       <ul>
                         {reply.length === 0 && (
                           <li>
-                            <div className="cwinfo">
-                              <strong>작성된 댓글이 없습니다.</strong>
-                            </div>
+                            <p className='empty'>작성된 댓글이 없습니다.</p>
                           </li>
                         )}
                         {reply.length > 0 &&
@@ -329,6 +393,7 @@ const AdminBoardDetail = () => {
             </S.TableRead>
             <BtnWrapper className="center mt40">
               <NormalBtn onClick={() => navigate(-1)}>목록</NormalBtn>
+              <NormalBtn onClick={() => `/board/report/write?boardId=${boardData.boardId}`}>신고하기</NormalBtn>
             </BtnWrapper>
           </div>
         </Container>

@@ -77,7 +77,6 @@ const AdminSubScribe = () => {
   };
 
   const handleClosedClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    console.log(checkedItems);
     checkedItems.map((id, index) => {
       Instance.post('/subscribe/cancel/' + id).then(() => {
         // 구독해지용

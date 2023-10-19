@@ -1,9 +1,14 @@
 package goormknights.hotel.reservation.service;
 
+import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.global.entity.Role;
+import goormknights.hotel.member.dto.request.AnonymousSignupDto;
 import goormknights.hotel.member.exception.MemberNotFound;
+import goormknights.hotel.member.model.Anonymous;
 import goormknights.hotel.member.model.Member;
+import goormknights.hotel.member.repository.AnonymousRepository;
 import goormknights.hotel.member.repository.MemberRepository;
+import goormknights.hotel.reservation.dto.request.RequestAnonymousReservationDto;
 import goormknights.hotel.reservation.dto.request.RequestReservationDto;
 import goormknights.hotel.reservation.model.Reservation;
 import goormknights.hotel.reservation.repository.ReservationRepository;
@@ -25,7 +30,7 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
-
+    private final AnonymousRepository anonymousRepository;
     /**
      * 예약 정보 저장
      *
@@ -37,15 +42,33 @@ public class ReservationService {
         if(customer.isEmpty()) {
             throw new MemberNotFound();
         }
+
+
         String generatedNumber = makeReservationNumber();
         Member member = customer.get();
         reservationDto.setMember(member);
-        if(member.getRole() == Role.ANONYMOUS) {
-            member.setMemberId(generatedNumber);
-        }
         reservationDto.setReservationNumber(generatedNumber);
         Reservation saveReservation = reservationRepository.save(reservationDto.toEntity());
         saveReservation.getMember().getReservationList().add(saveReservation);
+        List<GiftCard> giftCards = saveReservation.getGiftCard();
+        for(GiftCard giftCard : giftCards) {
+            giftCard.setReservation(saveReservation);
+        }
+    }
+
+    /**
+     * 비회원 예약하기 로직
+     */
+    public void saveReservation_Anonymous(RequestAnonymousReservationDto reservationDto) {
+        Anonymous anonymous = anonymousRepository.save(reservationDto.getAnonymousSignupDto().toEntity());
+        String generatedNumber = makeReservationNumber();
+        anonymous.setReservationNumber(generatedNumber);
+        reservationDto.setReservationNumber(generatedNumber);
+        Reservation saveReservation = reservationRepository.save(reservationDto.toEntity());
+        List<GiftCard> giftCards = saveReservation.getGiftCard();
+        for(GiftCard giftCard : giftCards) {
+            giftCard.setReservation(saveReservation);
+        }
     }
 
     /**

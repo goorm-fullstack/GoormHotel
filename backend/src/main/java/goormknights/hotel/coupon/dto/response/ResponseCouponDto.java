@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class ResponseCouponDto {
-    private int id;
+    private Long id;
     private String name;
     private String uuid;
     private int discountRate;

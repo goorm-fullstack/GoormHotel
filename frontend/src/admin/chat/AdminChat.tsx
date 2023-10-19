@@ -47,7 +47,6 @@ const AdminChat = () => {
 
     Instance.get('/chat/count').then((response) => {
       setCount(response.data);
-      console.log(response.data);
     });
   }, []);
 
@@ -75,7 +74,6 @@ const AdminChat = () => {
   const handleClosedClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     checkedItems.map((roomId, index) => {
       Instance.get('/chat/closed/' + roomId).then((response) => {
-        console.log(response);
         // 닫은 방을 다시 열려면 사용자가 채팅을 해야합니다. 수동으로 전환하지 마세요.
       });
     });

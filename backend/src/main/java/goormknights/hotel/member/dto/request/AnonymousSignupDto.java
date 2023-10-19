@@ -1,5 +1,6 @@
 package goormknights.hotel.member.dto.request;
 
+import goormknights.hotel.member.model.Anonymous;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,12 @@ public class AnonymousSignupDto {
     private String name;
     private String email;
     private String phoneNumber;
-    private String gender;
-    private LocalDate birth; // YYYY-MM-DD
-    private String code; // 이메일 인증 여부
+
+    public Anonymous toEntity() {
+        return Anonymous.builder()
+                .name(name)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .build();
+    }
 }

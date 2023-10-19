@@ -33,6 +33,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -128,20 +131,6 @@ public class AdminService {
             return true;
         }
         return false;
-    }
-
-    // 어드민 세션 체크
-    public Map<String, Object> checkAdmin(HttpSession session) {
-        HashMap<String, Object> response = new HashMap<>();
-        Manager admin = (Manager) session.getAttribute("admin");
-        if (admin != null) {
-            response.put("status", "success");
-            response.put("role", session.getAttribute("role"));
-            response.put("authorities", session.getAttribute("authorities"));
-        } else {
-            response.put("status", "fail");
-        }
-        return response;
     }
 
     // 어드민 회원 상세 정보 얻기

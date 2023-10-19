@@ -32,7 +32,6 @@ const AdminDeleteComment = () => {
       .get('/boards/deleted')
       .then((response) => {
         setBoard(response.data);
-        console.log('get 성공');
       })
       .catch((error) => {
         console.error(error);
@@ -44,7 +43,6 @@ const AdminDeleteComment = () => {
       .get('/reply/deleted')
       .then((response) => {
         setReply(response.data);
-        console.log('get 성공');
       })
       .catch((error) => {
         console.error(error);
@@ -89,18 +87,42 @@ const AdminDeleteComment = () => {
     const isConfirm = window.confirm('복구하시겠습니까?');
     if (isConfirm) {
       checkedItems.forEach((boardId) => {
-        if (boardId.startsWith('board')) {
-          const id = boardId.replace('board', '');
+        if(boardId.startsWith('board')){      //게시글이라면
+          boardId = boardId.replace('board', '');
           Instance
-            .put(`/boards/undelete/${id}`)
-            .then(() => {
-              alert('복구되었습니다.');
-              window.location.reload();
-            })
-            .catch((error) => {
-              console.log(error.message);
-            });
-        } else {
+              .get(`/boards/${boardId}`)
+              .then((response) => {
+                if(response.data.parentBoardId === 0){      //답글이 아니라면
+                  Instance
+                      .put(`/boards/undelete/${response.data.boardId}`)
+                      .then(() => {
+                        alert('복구되었습니다.');
+                        window.location.reload();
+                      })
+                      .catch((error) => {
+                        console.log(error.message);
+                      });
+                }
+                if(response.data.parentBoardId != 0){     //답글이라면
+                  Instance            //parentBoardId의 isComment값 false => true 변경
+                      .put(`/boards/updateIsComment/${response.data.parentBoardId}`)
+                      .then()
+                      .catch((error) => {
+                        console.error(error.message);
+                      });
+                  Instance
+                      .put(`/boards/undelete/${response.data.boardId}`)
+                      .then(() => {
+                        alert('복구되었습니다.');
+                        window.location.reload();
+                      })
+                      .catch((error) => {
+                        console.log(error.message);
+                      });
+                }
+              })
+        }
+        else {
           const id = boardId.replace('reply', '');
           Instance
             .put(`/reply/undelete/${id}`)
@@ -109,7 +131,7 @@ const AdminDeleteComment = () => {
               window.location.reload();
             })
             .catch((error) => {
-              console.log(error.message);
+              console.error(error.message);
             });
         }
       });
@@ -129,7 +151,7 @@ const AdminDeleteComment = () => {
               window.location.reload();
             })
             .catch((error) => {
-              console.log(error.message);
+              console.error(error.message);
             });
         } else {
           const id = boardId.replace('reply', '');
@@ -140,7 +162,7 @@ const AdminDeleteComment = () => {
               window.location.reload();
             })
             .catch((error) => {
-              console.log(error.message);
+              console.error(error.message);
             });
         }
       });
@@ -161,7 +183,6 @@ const AdminDeleteComment = () => {
     setParsedContent(parsedTextArray);
   }, [board]);
 
-  console.log(board);
 
   if (authItem && authItem.includes('AUTH_C')) {
     return (
@@ -196,7 +217,7 @@ const AdminDeleteComment = () => {
                   <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
                 </th>
                 <th>번호</th>
-                <th>분류</th>
+                <th>게시판</th>
                 <th>삭제된 글</th>
                 <th>작성자명(회원 ID)</th> {/** 회원 ID의 ID는 대문자로 통일합시다. */}
                 <th>삭제일</th>

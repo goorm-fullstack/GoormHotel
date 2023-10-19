@@ -42,11 +42,7 @@ const AdminIndex = () => {
         console.error(e);
       });
   }, []);
-
-  console.log(notice);
-  console.log(review);
-  console.log(qna);
-
+//http://localhost:3000/admin/board/qna/detail/1
   return (
     <div>
       <AdminHeader />
@@ -65,7 +61,7 @@ const AdminIndex = () => {
                     item && (
                       <li key={index}>
                         <p>
-                          <Link to={`/board/notice/detail/${item.title}`}>{item.title}</Link>
+                          <Link to={`/admin/board/notice/detail/${item.boardId}`}>{item.title}</Link>
                         </p>
                         <span>{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
                           item.boardWriteDate[2] < 10 ? '0' : ''
@@ -85,7 +81,7 @@ const AdminIndex = () => {
                     item && (
                       <li key={index}>
                         <p>
-                          <Link to="#">{item.title}</Link>
+                        <Link to={`/admin/board/qna/detail/${item.boardId}`}>{item.title}</Link>
                         </p>
                         <span>{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
                           item.boardWriteDate[2] < 10 ? '0' : ''
@@ -105,7 +101,7 @@ const AdminIndex = () => {
                     item && (
                       <li key={index}>
                         <p>
-                          <Link to="#">{item.title}</Link>
+                        <Link to={`/admin/board/review/detail/${item.boardId}`}>{item.title}</Link>
                         </p>
                         <span>{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
                           item.boardWriteDate[2] < 10 ? '0' : ''
