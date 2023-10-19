@@ -24,7 +24,6 @@ const BoardWrite = () => {
   const imgRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [boardContent, setBoardContent] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const isLogin = localStorage.getItem('memberId');
 
@@ -164,7 +163,6 @@ const BoardWrite = () => {
             'Content-Type': 'multipart/form-data',
           },
         });
-        alert('작성 완료되었습니다.');
         window.location.href = `/board/${board}/1`;
       } catch (e: any) {
         console.error('에러: ', e);

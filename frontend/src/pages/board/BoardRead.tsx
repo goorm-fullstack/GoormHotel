@@ -1,13 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as S from './Style';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { PageTitle, BtnWrapper, LinkBtn, SubmitBtn, NormalBtn } from '../../Style/commonStyles';
+import { PageTitle, BtnWrapper, LinkBtn, NormalBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import queryString from 'query-string';
 import Instance from '../../utils/api/axiosInstance';
 
 const BoardRead = () => {
-  const loc = useLocation();
   const [imageUrl, setImageUrl] = useState<any>('');
   const { board } = useParams();
   const location = useLocation();
@@ -28,7 +27,6 @@ const BoardRead = () => {
   const [editingReplyId, setEditingReplyId] = useState(0); // 수정 중인 댓글 ID를 추적
   const [user, setUser] = useState('');
   const [scroll, setScroll] = useState(0);
-  const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   const isLogin = localStorage.getItem('memberId');
