@@ -22,6 +22,12 @@ const AdminReport = () => {
   const [totalData, setTotalData] = useState<number>(0);
   const navigate = useNavigate();
   const authItem = localStorage.getItem("auth");
+  const truncateString = (str: string, maxLength: number) => {
+    if (str.length > maxLength) {
+      return str.substring(0, maxLength) + '...';
+    }
+    return str;
+  };
 
   useEffect(() => {
     if (!(authItem && authItem.includes("AUTH_C"))) {
@@ -98,12 +104,13 @@ const AdminReport = () => {
       Instance.get(`reply/replyId/${replyId}`)
         .then((response1) => {
           const boardId = response1.data.boardId;
+          const replyContent = response1.data.replyContent;
           Instance.get(`/boards/${boardId}`)
             .then((response2) => {
               const boardTitle = response2.data.boardTitle;
               setReportDetails((prevState) => ({
                 ...prevState,
-                [replyId]: { boardTitle, boardId },
+                [replyId]: { boardTitle, boardId, replyContent },
               }));
             })
             .catch((error) => {
@@ -191,28 +198,22 @@ const AdminReport = () => {
                     </td>
                     <td className="center">{totalData - idx}</td>
                     <td className="center">
-                      {report.replyId != null ? (
+                      {report.replyId == null ? (
                         <S.LinkStyle
                           to={`/admin/board/${
-                            boardTitleList.find(
-                              (item) =>
-                                item.board ===
-                                reportDetails[report.replyId]?.boardTitle
-                            )?.english
-                          }/detail/${reportDetails[report.replyId]?.boardId}`}
-                        >
-                          댓글 : {report.replyContent}
+                              boardTitleList.find(
+                                  (item) => item.board === report.boardTitle
+                              )?.english
+                          }/detail/${report.boardId}`}>
+                          {report.title}
                         </S.LinkStyle>
-                      ) : report.boardId != null ? (
-                        <S.LinkStyle
-                          to={`/admin/board/${
-                            boardTitleList.find(
-                              (item) => item.board === report.boardTitle
-                            )?.english
-                          }/detail/${report.boardId}`}
-                        >
-                          게시글 : {report.title}
-                        </S.LinkStyle>
+                      ) : report.boardId == null ? (
+                        <>
+                          <S.CommentText>{truncateString(report.replyContent, 8)}</S.CommentText>
+                          <S.ModalContainer>
+                            <S.ModalContent>{report.replyContent}</S.ModalContent>
+                          </S.ModalContainer>
+                        </>
                       ) : (
                         "신고된 내용이 없습니다."
                       )}

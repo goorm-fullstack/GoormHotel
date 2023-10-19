@@ -324,6 +324,7 @@ const AdminBoardDetail = () => {
                                 value={replyWriter}
                                 onChange={(e) => setReplyWriter(e.target.value)}
                                 readOnly
+                                style={{display: "none"}}
                             />
                             {/*<input type="password" placeholder="식별 비밀번호?" />*/}
                           </div>
@@ -393,7 +394,6 @@ const AdminBoardDetail = () => {
             </S.TableRead>
             <BtnWrapper className="center mt40">
               <NormalBtn onClick={() => navigate(-1)}>목록</NormalBtn>
-              <NormalBtn onClick={() => `/board/report/write?boardId=${boardData.boardId}`}>신고하기</NormalBtn>
             </BtnWrapper>
           </div>
         </Container>
