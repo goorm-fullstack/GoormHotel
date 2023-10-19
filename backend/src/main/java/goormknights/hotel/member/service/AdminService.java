@@ -172,6 +172,7 @@ public class AdminService {
                 .phoneNumber(memberEditAdminDTO.getPhoneNumber())
                 .birth(memberEditAdminDTO.getBirth())
                 .gender(memberEditAdminDTO.getGender())
+                .grade(memberEditAdminDTO.getGrade())
                 .build();
 
         member.edit(memberEditor);

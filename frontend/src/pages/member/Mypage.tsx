@@ -140,7 +140,7 @@ const Mypage = () => {
               </Auth>
               <input name="code" placeholder="인증번호를 입력하세요." onChange={handleChange} value={member.code} />
               <input name="phoneNumber" placeholder="연락처" onChange={handleChange} value={member.phoneNumber} />
-              <input name="birth" placeholder="생년월일(선택입력)" onChange={handleChange} value={member.birth.join('-')}  />
+              <input name="birth" placeholder="생년월일(선택입력)" onChange={handleChange} value={member.birth ? member.birth.join('-') : ''}  />
               <input name="gender" placeholder="성별(선택입력)" onChange={handleChange} value={member.gender} />
               <BtnWrapper className="mt20 full">
                 <SubmitBtn onClick={handleSubmit}>회원 정보 수정</SubmitBtn>

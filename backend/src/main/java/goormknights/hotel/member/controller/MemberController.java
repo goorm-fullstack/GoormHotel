@@ -6,9 +6,8 @@ import goormknights.hotel.member.dto.response.MemberInfoDTO;
 import goormknights.hotel.member.dto.response.ResponseMemberDto;
 import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.model.Member;
+import goormknights.hotel.member.service.AdminService;
 import goormknights.hotel.member.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,6 +24,7 @@ import java.util.List;
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
+    private final AdminService adminService;
 
     // 멤버 회원가입
     @PostMapping("/signup")
