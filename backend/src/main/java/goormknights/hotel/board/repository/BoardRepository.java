@@ -41,4 +41,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Optional<Board> findByParentBoardId(Long parentBoardId);
 
+
 }
