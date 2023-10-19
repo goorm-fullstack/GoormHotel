@@ -1,7 +1,6 @@
 package goormknights.hotel.member.service;
 
 import goormknights.hotel.auth.service.RedisUtil;
-import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.giftcard.repository.GiftCardRepository;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;

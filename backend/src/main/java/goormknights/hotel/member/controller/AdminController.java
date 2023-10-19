@@ -12,7 +12,6 @@ import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.model.Manager;
 import goormknights.hotel.member.repository.ManagerRepository;
 import goormknights.hotel.member.service.AdminService;
-import goormknights.hotel.member.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +35,6 @@ import java.util.stream.Collectors;
 public class AdminController {
 
     private final AdminService adminService;
-    private final MemberService memberService;
     private final ManagerRepository managerRepository;
 
     @GetMapping("/session")
