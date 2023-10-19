@@ -22,15 +22,18 @@ interface Member {
 const AdminMemberDetail = () => {
   const { memberId } = useParams();
   const [formData, setFormData] = useState({
-    memberName: '',
-    memberGrade: '',
+    name: '',
+    grade: '',
     password: '',
     confirmPassword: '',
+    mailAuth: '',
     email: '',
-    contact: '',
-    gender: '선택 안함',
-    birthday: '입력 안함',
+    phoneNumber: '',
+    gender: '',
+    birth: '',
+    role: '',
   });
+
   const [member, setMember] = useState<Partial<Member>>({});
   // const [joinDate, setJoinDate] = useState(null);
 
@@ -42,14 +45,64 @@ const AdminMemberDetail = () => {
         if (response.status === 200) {
           const { password, ...otherData } = response.data;
           setMember(otherData);
+          console.log(otherData);
+          setFormData({
+            name: otherData.name,
+            grade: otherData.grade,
+            password: '',
+            confirmPassword: '',
+            email: otherData.email,
+            phoneNumber: otherData.phoneNumber,
+            mailAuth: otherData.mailAuth,
+            gender: otherData.gender || '선택 안함',
+            birth: otherData.birth ? new Date(otherData.birth).toISOString().split('T')[0] : '',
+            role: otherData.role
+          });
         }
-      } catch (error) {
+      } catch (error: any) {
         alert('데이터를 불러오는 데 실패했습니다.');
+        console.log("Error details:", error);
       }
     };
 
     fetchMembers();
-  }, [memberId]);  // 'page'가 변경되면 useEffect 내의 코드가 다시 실행됩니다.
+  }, [memberId]);
+
+  const { ...payload } = formData;
+
+  // 회원정보 수정 제출
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await Instance.put<Member>(`/api/admin-change-member/${memberId}`, payload);
+
+      if (response.status === 200) {
+        alert('회원정보 수정이 완료되었습니다');
+        navigate(`/admin/member/detail/${memberId}`);
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        alert('회원이 없습니다');
+      } else {
+        alert('에러 발생');
+      }
+    }
+  };
+
+  // 회원 삭제
+  const handleDelete = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await Instance.delete(`/api/softdelete/${memberId}`);
+      if (response.status === 200) {
+        alert('회원이 삭제되었습니다.');
+        navigate('/admin/member/detail');
+      }
+    } catch (error: any) {
+      alert('회원 삭제 실패');
+    }
+  };
 
   const navigate = useNavigate();
   const authItem = localStorage.getItem('auth');
@@ -89,16 +142,16 @@ const AdminMemberDetail = () => {
               <tr>
                 <th>회원 이름</th>
                 <td>
-                  <input type="text" placeholder="회원이름" name="memberName" value={formData.memberName} onChange={handleChange} />
+                  <input type="text" placeholder="회원이름" name="name" value={formData.name} onChange={handleChange} />
                 </td>
               </tr>
               <tr>
                 <th>회원 등급</th>
                 <td>
-                  <select>
-                    <option>Bronze</option>
-                    <option>Silver</option>
-                    <option>Gold</option>
+                  <select value={formData.grade} onChange={(e) => setFormData({...formData, grade: e.target.value})}>
+                    <option value="Bronze">Bronze</option>
+                    <option value="Silver">Silver</option>
+                    <option value="Gold">Gold</option>
                   </select>
                   {/* <input type="text" placeholder="회원등급" name="memberGrade" value={formData.memberGrade} onChange={handleChange} /> */}
                 </td>
@@ -125,22 +178,22 @@ const AdminMemberDetail = () => {
                 <th>이메일</th>
                 <td>
                   <input type="email" placeholder="이메일" name="email" value={formData.email} onChange={handleChange} />
-                  <span className="mailcheck">상태 : 인증완료</span>
+                  <span className="mailAuth"> 상태 : {formData.mailAuth ? '인증완료' : '인증되지 않음'} </span>
                 </td>
               </tr>
               <tr>
                 <th>연락처</th>
                 <td>
-                  <input type="tel" placeholder="연락처" name="contact" value={formData.contact} onChange={handleChange} />
+                  <input type="tel" placeholder="연락처" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} />
                 </td>
               </tr>
               <tr>
                 <th>성별</th>
                 <td>
-                  <select>
-                    <option>선택안함</option>
-                    <option>남성</option>
-                    <option>여성</option>
+                  <select value={formData.gender} onChange={(e) => setFormData({...formData, gender: e.target.value})}>
+                    <option value="선택안함">선택안함</option>
+                    <option value="남성">남성</option>
+                    <option value="여성">여성</option>
                   </select>
                   {/* <input type="text" placeholder="선택 안함" name="gender" value={formData.gender} onChange={handleChange} /> */}
                 </td>
@@ -148,18 +201,19 @@ const AdminMemberDetail = () => {
               <tr>
                 <th>생일</th>
                 <td>
-                  <input type="date" placeholder="입력 안함" name="birthday" value={formData.birthday} onChange={handleChange} />
+                  <input type="date" placeholder="입력 안함" name="birth" value={formData.birth} onChange={handleChange} />
                 </td>
               </tr>
               <tr>
                 <th>가입일</th>
-                <td>2023.09.09</td>
+                <td>{member.signupDate ? new Date(member.signupDate).toLocaleDateString() : 'loading...'}</td>
               </tr>
             </tbody>
           </Table>
           <BtnWrapper className="mt40 center double">
-            <SubmitBtn type="submit">수정</SubmitBtn>
+            <SubmitBtn type="submit" onClick={handleSubmit}>수정</SubmitBtn>
             <LinkBtn to="/admin/member/1">취소</LinkBtn>
+            <SubmitBtn type="submit">회원 삭제</SubmitBtn>
           </BtnWrapper>
         </Container>
       </AdminLayout>

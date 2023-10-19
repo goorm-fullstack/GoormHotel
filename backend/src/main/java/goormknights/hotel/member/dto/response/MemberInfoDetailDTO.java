@@ -1,5 +1,6 @@
 package goormknights.hotel.member.dto.response;
 
+import goormknights.hotel.global.entity.Role;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,4 +17,5 @@ public class MemberInfoDetailDTO {
     private String gender;
     private Boolean mailAuth;
     private LocalDate signupDate;
+    private Role role;
 }
