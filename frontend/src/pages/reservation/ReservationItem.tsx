@@ -125,7 +125,7 @@ const ReservationItem = () => {
           return URL.createObjectURL(blob);
         })
       );
-      if(selectedType.length !== 0){
+      if (selectedType.length !== 0) {
         setImageUrls(urls);
       }
     };
@@ -136,50 +136,46 @@ const ReservationItem = () => {
   }, [products]);
 
   useEffect(() => {
-    console.log(selectedType.length);
-    if(selectedType.length !== 0){
+    if (selectedType.length !== 0) {
       const currentPage: number = parseInt(page ? page : '1', 10);
       if (selectedType.includes('all')) {
-        if(selectedCategory !== ''){
-          Instance
-          .get(`/category?page=${currentPage}`, {
+        if (selectedCategory !== '') {
+          Instance.get(`/category?page=${currentPage}`, {
             params: {
               typeDetail: selectedCategory,
             },
           })
-          .then((response) => {
-            const totalPages = parseInt(response.headers['totalpages'], 10);
-            const totalData = parseInt(response.headers['totaldata'], 10);
-            setProducts(response.data);
-            setTotalData(totalData);
-            setTotalPage(totalPages);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-        }else{
-          Instance
-          .get(`/category?page=${currentPage}`)
-          .then((response) => {
-            const totalPages = parseInt(response.headers['totalpages'], 10);
-            const totalData = parseInt(response.headers['totaldata'], 10);
-            setProducts(response.data);
-            setTotalData(totalData);
-            setTotalPage(totalPages);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+            .then((response) => {
+              const totalPages = parseInt(response.headers['totalpages'], 10);
+              const totalData = parseInt(response.headers['totaldata'], 10);
+              setProducts(response.data);
+              setTotalData(totalData);
+              setTotalPage(totalPages);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        } else {
+          Instance.get(`/category?page=${currentPage}`)
+            .then((response) => {
+              const totalPages = parseInt(response.headers['totalpages'], 10);
+              const totalData = parseInt(response.headers['totaldata'], 10);
+              setProducts(response.data);
+              setTotalData(totalData);
+              setTotalPage(totalPages);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
         }
       } else {
         if (selectedCategory !== '') {
-          Instance
-            .get(`/category?page=${currentPage}`, {
-              params: {
-                type: selectedType[0],
-                typeDetail: selectedCategory,
-              },
-            })
+          Instance.get(`/category?page=${currentPage}`, {
+            params: {
+              type: selectedType[0],
+              typeDetail: selectedCategory,
+            },
+          })
             .then((response) => {
               const totalPages = parseInt(response.headers['totalpages'], 10);
               const totalData = parseInt(response.headers['totaldata'], 10);
@@ -192,12 +188,11 @@ const ReservationItem = () => {
               console.error(error);
             });
         } else {
-          Instance
-            .get(`/category?page=${currentPage}`, {
-              params: {
-                type: selectedType[0],
-              },
-            })
+          Instance.get(`/category?page=${currentPage}`, {
+            params: {
+              type: selectedType[0],
+            },
+          })
             .then((response) => {
               const totalPages = parseInt(response.headers['totalpages'], 10);
               const totalData = parseInt(response.headers['totaldata'], 10);
@@ -218,7 +213,7 @@ const ReservationItem = () => {
     if (location.search) {
       const type = location.search.replace('?type=', '');
       setSelectedType([`${type}`]);
-      if(type === ''){
+      if (type === '') {
         setSelectedType(['all', 'room', 'dining']);
       }
     }
@@ -263,7 +258,6 @@ const ReservationItem = () => {
 
   const nameOfTypeDetail = (product: RoomData | DiningData) => {
     const foundCategory = [...diningCategories, ...productCategories].find((category) => product.typeDetail === category.english);
-    console.log(foundCategory);
     return foundCategory ? foundCategory.korean : 'none';
   };
 
@@ -327,7 +321,8 @@ const ReservationItem = () => {
             <S.RoomItemWrapper>
               {products.length === 0 && <div className="empty">등록된 상품이 없습니다.</div>}
               {selectedType.length === 0 && <div className="empty">카테고리를 선택해주세요.</div>}
-              {products.length > 0 && selectedType.length !== 0 &&
+              {products.length > 0 &&
+                selectedType.length !== 0 &&
                 products.map((product, index) => (
                   <S.RoomItem key={index}>
                     <div
@@ -386,7 +381,9 @@ const ReservationItem = () => {
                         {selectedProduct ? selectedProduct.name : selectData.name}
                         <CircleCloseBtn onClick={handleDeleteClick}></CircleCloseBtn>
                       </h4>
-                      <p>{selectedProduct ? (selectedProduct.type === 'room' ? '객실' : '다이닝') : (selectData.type === 'room' ? '객실' : '다이닝')}</p>
+                      <p>
+                        {selectedProduct ? (selectedProduct.type === 'room' ? '객실' : '다이닝') : selectData.type === 'room' ? '객실' : '다이닝'}
+                      </p>
                       <p>{selectedProduct ? nameOfTypeDetail(selectedProduct) : nameOfTypeDetail(selectData)}</p>
                       <p>성인 {selectedProduct ? selectedProduct.capacity : selectData.capacity}인 기준</p>
                       <table>
@@ -410,7 +407,9 @@ const ReservationItem = () => {
                           </tr>
                           <tr>
                             <th>어린이</th>
-                            <td>{selectedProduct ? numberWithCommas(selectedProduct.priceChildren) : numberWithCommas(selectData.priceChildren)} 원</td>
+                            <td>
+                              {selectedProduct ? numberWithCommas(selectedProduct.priceChildren) : numberWithCommas(selectData.priceChildren)} 원
+                            </td>
                             {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 */}
                           </tr>
                         </tbody>

@@ -66,6 +66,7 @@ const AdminBoard = () => {
   const [board, setBoard] = useState<BoardData[]>([]);
   const navigate = useNavigate();
   const authItem = localStorage.getItem('auth');
+  let count : number = 1;
 
   useEffect(() => {
     if (!(authItem && authItem.includes('AUTH_C'))) {
@@ -283,34 +284,38 @@ const AdminBoard = () => {
                 </tr>
               )}
               {board && board
-                .map((board, idx: number) => (
-                  <tr key={board.boardId}>
-                    <td className="center">
-                      <InputCheckbox
-                        type="checkbox"
-                        checked={checkedItems.includes(board.boardId)}
-                        onChange={() => handleCheckboxChange(board.boardId)}
-                      />
-                    </td>
-                    <td className="center">{totalBoard - idx}</td>
-                    <td className="center">{board.boardTitle}</td>
-                    <td className="center">{board.category}</td>
-                    <td className="center">
-                      <S.LinkStyle
-                        to={`/admin/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}>
-                        {board.parentBoardId != 0 ? <IsReply>답글</IsReply> : null}
-                        {board.title}
-                      </S.LinkStyle>
-                    </td>
-                    <td className="center">
-                      <S.LinkStyle to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</S.LinkStyle>
-                    </td>
-                    <td className="center">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
-                      board.boardWriteDate[2] < 10 ? '0' : ''
-                    }${board.boardWriteDate[2]}`}</td>
-                    <td>{board.blackList}</td>
-                  </tr>
-                ))}
+                  .map((board, idx: number) => {
+                    return (
+                        <tr key={board.boardId}>
+                          <td className="center">
+                            <InputCheckbox
+                                type="checkbox"
+                                checked={checkedItems.includes(board.boardId)}
+                                onChange={() => handleCheckboxChange(board.boardId)}
+                            />
+                          </td>
+                          <td className="center">
+                            {board.parentBoardId !== 0 ? '↳' : `${count++}`}
+                          </td>
+                          <td className="center">{board.boardTitle}</td>
+                          <td className="center">{board.category}</td>
+                          <td className="center">
+                            <S.LinkStyle
+                                to={`/admin/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}>
+                              {board.parentBoardId !== 0 ? <IsReply>답글</IsReply> : null}
+                              {board.title}
+                            </S.LinkStyle>
+                          </td>
+                          <td className="center">
+                            <S.LinkStyle to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</S.LinkStyle>
+                          </td>
+                          <td className="center">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
+                              board.boardWriteDate[2] < 10 ? '0' : ''
+                          }${board.boardWriteDate[2]}`}</td>
+                          <td>{board.blackList}</td>
+                        </tr>
+                    );
+                  })}
             </tbody>
           </Table>
           <Paging totalPage={totalPage} />

@@ -24,7 +24,6 @@ const BoardWrite = () => {
   const imgRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [boardContent, setBoardContent] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const isLogin = localStorage.getItem('memberId');
 
@@ -152,25 +151,21 @@ const BoardWrite = () => {
       form.append('isComment', isComment);
       formData.boardContent = boardContent;
 
-      formData.boardWriter = inputRef && inputRef.current ? inputRef.current.value : formData.boardWriter;
+      formData.boardWriter = user !== null ? user : formData.boardWriter;
 
       Object.keys(formData).forEach((key) => {
         form.append(key, formData[key]);
       });
 
-      const isConfirm = window.confirm('작성하시겠습니까?');
-      if (isConfirm) {
-        try {
-          await Instance.post('/boards/writeform', form, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-          alert('작성 완료되었습니다.');
-          window.location.href = `/board/${board}/1`;
-        } catch (e: any) {
-          console.error('에러: ', e);
-        }
+      try {
+        await Instance.post('/boards/writeform', form, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        window.location.href = `/board/${board}/1`;
+      } catch (e: any) {
+        console.error('에러: ', e);
       }
     } else {
       const form = new FormData();
@@ -182,7 +177,7 @@ const BoardWrite = () => {
         form.append('replyId', itemId);
       }
 
-      reportData.reportWriter = inputRef && inputRef.current ? inputRef.current.value : reportData.reportWriter;
+      reportData.reportWriter = user !== null ? user : reportData.reportWriter;
 
       Object.keys(reportData).forEach((key) => {
         form.append(key, reportData[key]);
@@ -287,26 +282,19 @@ const BoardWrite = () => {
                     </td>
                   </tr>
                 )}
-                {board !== 'report' ? (
+                {board !== 'report' && user === null && (
                   <tr>
                     <th>작성자</th>
                     <td>
-                      {user === null ? (
-                        <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} required />
-                      ) : (
-                        <input type="text" name="boardWriter" value={user} ref={inputRef} readOnly />
-                      )}
+                      <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} required />
                     </td>
                   </tr>
-                ) : (
+                )}
+                {user === null && board === 'report' && (
                   <tr>
                     <th>신고자</th>
                     <td>
-                      {user === null ? (
-                        <input type="text" name="reportWriter" value={reportData.reportWriter} onChange={handleReportChange} required />
-                      ) : (
-                        <input type="text" name="reportWriter" value={user} ref={inputRef} readOnly />
-                      )}
+                      <input type="text" name="reportWriter" value={reportData.reportWriter} onChange={handleReportChange} required />
                     </td>
                   </tr>
                 )}
