@@ -3,13 +3,16 @@ package goormknights.hotel.member.service;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.member.dto.request.AdminSignupDTO;
+import goormknights.hotel.member.dto.request.MemberEditAdminDTO;
 import goormknights.hotel.member.dto.request.RequestManagerDto;
 import goormknights.hotel.member.dto.response.MemberInfoDetailDTO;
 import goormknights.hotel.member.dto.response.ResponseManagerDto;
 import goormknights.hotel.member.exception.InvalidMemberException;
+import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.exception.NotExistMemberException;
 import goormknights.hotel.member.model.Manager;
 import goormknights.hotel.member.model.Member;
+import goormknights.hotel.member.model.MemberEditor;
 import goormknights.hotel.member.repository.ManagerRepository;
 import goormknights.hotel.member.repository.MemberRepository;
 import jakarta.servlet.http.Cookie;
@@ -28,7 +31,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -126,24 +131,9 @@ public class AdminService {
         return false;
     }
 
-    // 어드민 세션 체크
-    public Map<String, Object> checkAdmin(HttpSession session) {
-        HashMap<String, Object> response = new HashMap<>();
-        Manager admin = (Manager) session.getAttribute("admin");
-        if (admin != null) {
-            response.put("status", "success");
-            response.put("role", session.getAttribute("role"));
-            response.put("authorities", session.getAttribute("authorities"));
-        } else {
-            response.put("status", "fail");
-        }
-        return response;
-    }
-
-    // 회원 정보 조회
-    public MemberInfoDetailDTO memberInfoDetail(String memberId) {
+    // 어드민 회원 상세 정보 얻기
+    public MemberInfoDetailDTO memberInfoDetail(String memberId) throws Exception {
         Optional<Member> memberOptional = memberRepository.findByMemberId(memberId);
-
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
             MemberInfoDetailDTO memberInfoDetailDTO = new MemberInfoDetailDTO();
@@ -156,10 +146,35 @@ public class AdminService {
             memberInfoDetailDTO.setGender(member.getGender());
             memberInfoDetailDTO.setMailAuth(member.getMailAuth());
             memberInfoDetailDTO.setSignupDate(member.getSignupDate());
+            memberInfoDetailDTO.setRole(member.getRole());
             return memberInfoDetailDTO;
         } else {
-            return null;
+            throw new Exception("회원이 없습니다");
         }
+    }
+
+    // 회원 정보 수정(어드민 버전)
+    public void edit(String memberId, MemberEditAdminDTO memberEditAdminDTO){
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(MemberNotFound::new);
+
+        String encryptedPassword = memberEditAdminDTO.getPassword() != null ?
+                passwordEncoder.encode(memberEditAdminDTO.getPassword()) :
+                member.getPassword();
+
+        MemberEditor.MemberEditorBuilder editorBuilder = member.toEditor();
+        MemberEditor memberEditor = editorBuilder
+                .name(memberEditAdminDTO.getName())
+                .email(memberEditAdminDTO.getEmail())
+                .memberId(memberEditAdminDTO.getMemberId())
+                .password(encryptedPassword)
+                .phoneNumber(memberEditAdminDTO.getPhoneNumber())
+                .birth(memberEditAdminDTO.getBirth())
+                .gender(memberEditAdminDTO.getGender())
+                .build();
+
+        member.edit(memberEditor);
+        memberRepository.save(member);
     }
 
     public List<ResponseManagerDto> getList(Pageable pageable) {

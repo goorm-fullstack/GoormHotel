@@ -17,6 +17,7 @@ interface Member {
   grade: string;
   mailAuth: boolean;
   signupDate: any;
+  role: string;
 }
 
 const AdminMemberDetail = () => {
@@ -26,10 +27,12 @@ const AdminMemberDetail = () => {
     memberGrade: '',
     password: '',
     confirmPassword: '',
+    mailAuth: '',
     email: '',
     contact: '',
     gender: '선택 안함',
     birthday: '입력 안함',
+    role: '',
   });
   const [member, setMember] = useState<Partial<Member>>({});
   // const [joinDate, setJoinDate] = useState(null);
@@ -42,14 +45,53 @@ const AdminMemberDetail = () => {
         if (response.status === 200) {
           const { password, ...otherData } = response.data;
           setMember(otherData);
+          console.log(otherData);
+          setFormData({
+            memberName: otherData.name,
+            memberGrade: otherData.grade,
+            password: '',
+            confirmPassword: '',
+            email: otherData.email,
+            contact: otherData.phoneNumber,
+            mailAuth: otherData.mailAuth,
+            gender: otherData.gender || '선택 안함',
+            birthday: otherData.birth ? new Date(otherData.birth).toISOString().split('T')[0] : '',
+            role: otherData.role
+          });
         }
-      } catch (error) {
+      } catch (error: any) {
         alert('데이터를 불러오는 데 실패했습니다.');
+        console.log("Error details:", error);
       }
     };
 
     fetchMembers();
-  }, [memberId]);  // 'page'가 변경되면 useEffect 내의 코드가 다시 실행됩니다.
+  }, [memberId]);
+
+  const payload = {
+    ...formData
+  };
+
+  // 회원정보 수정 제출
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await Instance.put<Member>(`/member/api/change-member/${memberId}`, payload);
+
+
+      if (response.status === 200) {
+        alert('회원정보 수정이 완료되었습니다');
+        navigate(`/admin/member/detail/${memberId}`);
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        alert('회원이 없습니다');
+      } else {
+        alert('에러 발생');
+      }
+    }
+  };
 
   const navigate = useNavigate();
   const authItem = localStorage.getItem('auth');
@@ -123,7 +165,7 @@ const AdminMemberDetail = () => {
                 <th>이메일</th>
                 <td>
                   <input type="email" placeholder="이메일" name="email" value={formData.email} onChange={handleChange} />
-                  <span className="mailcheck">상태 : 인증완료</span>
+                  <span className="mailcheck">상태 : {member.mailAuth ? '인증완료' : '인증안됨'}</span>
                 </td>
               </tr>
               <tr>
@@ -135,10 +177,10 @@ const AdminMemberDetail = () => {
               <tr>
                 <th>성별</th>
                 <td>
-                  <select>
-                    <option>선택안함</option>
-                    <option>남성</option>
-                    <option>여성</option>
+                  <select name="gender" value={formData.gender} onChange={handleChange}>
+                    <option value="선택안함">선택안함</option>
+                    <option value="남성">남성</option>
+                    <option value="여성">여성</option>
                   </select>
                   {/* <input type="text" placeholder="선택 안함" name="gender" value={formData.gender} onChange={handleChange} /> */}
                 </td>
@@ -151,12 +193,12 @@ const AdminMemberDetail = () => {
               </tr>
               <tr>
                 <th>가입일</th>
-                <td>2023.09.09</td>
+                <td>{`${member.signupDate?.[0] ?? 'N/A'}.${member.signupDate?.[1] ?? 'N/A'}.${member.signupDate?.[2] ?? 'N/A'}`}</td>
               </tr>
             </tbody>
           </Table>
           <BtnWrapper className="mt40 center double">
-            <SubmitBtn type="submit">수정</SubmitBtn>
+            <SubmitBtn type="submit" onClick={handleSubmit}>수정</SubmitBtn>
             <LinkBtn to="/admin/member/1">취소</LinkBtn>
           </BtnWrapper>
         </Container>

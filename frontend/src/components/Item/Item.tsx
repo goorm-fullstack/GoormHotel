@@ -19,7 +19,7 @@ const typeDetailName = [
   { typeDetail: 'bakery', korean: '베이커리' },
 ];
 
-const Item = ({ selectedProduct }: any) => {
+const Item = ({ selectedProduct, indexImg }: any) => {
   const [type, setType] = useState('');
   const [typeDetail, setTypeDetail] = useState('');
   const [coupon, setCoupon] = useState();
@@ -48,7 +48,7 @@ const Item = ({ selectedProduct }: any) => {
     <>
       <S.SelectItem>
         <S.SelectedItem>
-          <div className="imgwrap" style={{ backgroundImage: `url(${Delux})` }} />
+          <div className="imgwrap" style={{ backgroundImage: `url(${indexImg ? indexImg : selectedProduct.imageUrl})` }} />
           <h4>{selectedProduct ? selectedProduct.name : '상품'}</h4>
           <p>{typeName[0].korean}</p>
           <p>{typeDetailName[0].korean}</p>

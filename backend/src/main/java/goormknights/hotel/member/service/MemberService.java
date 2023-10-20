@@ -1,10 +1,6 @@
 package goormknights.hotel.member.service;
 
 import goormknights.hotel.auth.service.RedisUtil;
-import goormknights.hotel.email.repository.EmailSender;
-import goormknights.hotel.email.service.EmailService;
-import goormknights.hotel.giftcard.model.GiftCard;
-import goormknights.hotel.giftcard.repository.GiftCardRepository;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.global.exception.InvalidVerificationCodeException;
@@ -12,7 +8,6 @@ import goormknights.hotel.member.dto.request.*;
 import goormknights.hotel.member.dto.response.MemberInfoDTO;
 import goormknights.hotel.member.dto.response.ResponseMemberDto;
 import goormknights.hotel.member.exception.MemberNotFound;
-import goormknights.hotel.member.exception.NotExistMemberException;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.model.MemberEditor;
 import goormknights.hotel.member.repository.MemberRepository;
@@ -30,7 +25,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -39,11 +37,7 @@ import java.util.*;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final VerificationService verificationService;
     private final RedisUtil redisUtil;
-    private final GiftCardRepository giftCardRepository;
-    private final EmailSender emailSender;
-    private final EmailService emailService;
 
     // 멤버 가입 및 저장
     public void signup(SignupDTO signupDTO, String code) {
@@ -54,6 +48,11 @@ public class MemberService {
 
         Optional<Member> memberOptional = memberRepository.findByEmail(signupDTO.getEmail());
         if (memberOptional.isPresent()) {
+            throw new AlreadyExistsEmailException();
+        }
+
+        Optional<Member> memberIdOptional = memberRepository.findByMemberId(signupDTO.getMemberId());
+        if (memberIdOptional.isPresent()) {
             throw new AlreadyExistsEmailException();
         }
 

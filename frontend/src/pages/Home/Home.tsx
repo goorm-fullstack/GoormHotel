@@ -11,6 +11,7 @@ import dining04 from '../../images/dining/RoomService.jpg';
 import FacilitiesSlider from '../../components/Slide/FacilitiesSlider';
 import { DiningData, RoomData } from '../../admin/item/AdminItemList';
 import Instance from '../../utils/api/axiosInstance';
+import { Link } from 'react-router-dom';
 
 const diningImages = [dining01, dining02, dining03, dining04];
 
@@ -179,27 +180,27 @@ const Home = () => {
             {roomData[0] && (
               <S.RoomItem>
                 <div className="imgw">
-                  <img src={imgUrlsRoom[0]} alt="객실" />
+                  <Link to="/offers/1?type=room" state={{ selectData: roomData[0], indexImg: imgUrlsRoom[0] }}><img src={imgUrlsRoom[0]} alt="객실" /></Link>
                 </div>
-                <S.ItemTitle>{nameOfTypeDetail(roomData[0])}</S.ItemTitle>
+                <S.ItemTitle><Link to="/offers/1?type=room">{nameOfTypeDetail(roomData[0])}</Link></S.ItemTitle>
                 <S.ItemDesc>{roomData[0].description}</S.ItemDesc>
               </S.RoomItem>
             )}
             {roomData[1] && (
               <S.RoomItem>
                 <div className="imgw">
-                  <img src={imgUrlsRoom[0]} alt="객실" />
+                <Link to="/offers/1?type=room" state={{ selectData: roomData[1], indexImg: imgUrlsRoom[1] }}><img src={imgUrlsRoom[1]} alt="객실" /></Link>
                 </div>
-                <S.ItemTitle>{nameOfTypeDetail(roomData[1])}</S.ItemTitle>
+                <S.ItemTitle><Link to="/offers/1?type=room">{nameOfTypeDetail(roomData[1])}</Link></S.ItemTitle>
                 <S.ItemDesc>{roomData[1].description}</S.ItemDesc>
               </S.RoomItem>
             )}
             {roomData[2] && (
               <S.RoomItem>
                 <div className="imgw">
-                  <img src={imgUrlsRoom[2]} alt="객실" />
+                <Link to="/offers/1?type=room" state={{ selectData: roomData[2], indexImg: imgUrlsRoom[2] }}><img src={imgUrlsRoom[2]} alt="객실" /></Link>
                 </div>
-                <S.ItemTitle>{nameOfTypeDetail(roomData[2])}</S.ItemTitle>
+                <S.ItemTitle><Link to="/offers/1?type=room">{nameOfTypeDetail(roomData[2])}</Link></S.ItemTitle>
                 <S.ItemDesc>{roomData[2].description}</S.ItemDesc>
               </S.RoomItem>
             )}
@@ -218,36 +219,36 @@ const Home = () => {
             {diningData[0] && (
               <S.DiningItem>
                 <div className="imgw">
-                  <img src={imageUrlsDining[0]} alt={`다이닝 ${diningImages[0]}`} />
+                  <Link to="/offers/1?type=dining" state={{ selectData: diningData[0], indexImg: imageUrlsDining[0] }}><img src={imageUrlsDining[0]} alt={`다이닝 ${diningImages[0]}`} /></Link>
                 </div>
-                <S.ItemTitle>{nameOfTypeDetail(diningData[0])}</S.ItemTitle>
+                <S.ItemTitle><Link to="/offers/1?type=dining" state={{ selectData: diningData[0] }}>{nameOfTypeDetail(diningData[0])}</Link></S.ItemTitle>
                 <S.ItemDesc>{diningData[0].description}</S.ItemDesc>
               </S.DiningItem>
             )}
             {diningData[1] && (
               <S.DiningItem>
                 <div className="imgw">
-                  <img src={imageUrlsDining[1]} alt={`다이닝 ${diningImages[1]}`} />
+                  <Link to="/offers/1?type=dining" state={{ selectData: diningData[1], indexImg: imageUrlsDining[1] }}><img src={imageUrlsDining[1]} alt={`다이닝 ${diningImages[1]}`} /></Link>
                 </div>
-                <S.ItemTitle>{nameOfTypeDetail(diningData[1])}</S.ItemTitle>
+                <S.ItemTitle><Link to="/offers/1?type=dining" state={{ selectData: diningData[1] }}>{nameOfTypeDetail(diningData[1])}</Link></S.ItemTitle>
                 <S.ItemDesc>{diningData[1].description}</S.ItemDesc>
               </S.DiningItem>
             )}
             {diningData[2] && (
               <S.DiningItem>
                 <div className="imgw">
-                  <img src={imageUrlsDining[2]} alt={`다이닝 ${diningImages[2]}`} />
+                  <Link to="/offers/1?type=dining" state={{ selectData: diningData[2], indexImg: imageUrlsDining[2] }}><img src={imageUrlsDining[2]} alt={`다이닝 ${diningImages[2]}`} /></Link>
                 </div>
-                <S.ItemTitle>{nameOfTypeDetail(diningData[2])}</S.ItemTitle>
+                <S.ItemTitle><Link to="/offers/1?type=dining" state={{ selectData: diningData[2] }}>{nameOfTypeDetail(diningData[2])}</Link></S.ItemTitle>
                 <S.ItemDesc>{diningData[2].description}</S.ItemDesc>
               </S.DiningItem>
             )}
             {diningData[3] && (
               <S.DiningItem>
                 <div className="imgw">
-                  <img src={imageUrlsDining[3]} alt={`다이닝 ${diningImages[3]}`} />
+                  <Link to="/offers/1?type=dining" state={{ selectData: diningData[3], indexImg: imageUrlsDining[3] }}><img src={imageUrlsDining[3]} alt={`다이닝 ${diningImages[3]}`} /></Link>
                 </div>
-                <S.ItemTitle>{nameOfTypeDetail(diningData[3])}</S.ItemTitle>
+                <S.ItemTitle><Link to="/offers/1?type=dining" state={{ selectData: diningData[3] }}>{nameOfTypeDetail(diningData[3])}</Link></S.ItemTitle>
                 <S.ItemDesc>{diningData[3].description}</S.ItemDesc>
               </S.DiningItem>
             )}

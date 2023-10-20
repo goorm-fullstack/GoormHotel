@@ -104,6 +104,7 @@ public class Board {
                 .boardPassword(boardPassword)
                 .parentBoardId(parentBoardId)
                 .memberPk(memberPk)
+                .report(report.stream().map(Report::toResponseReportDto).toList())
                 .build();
     }
 
