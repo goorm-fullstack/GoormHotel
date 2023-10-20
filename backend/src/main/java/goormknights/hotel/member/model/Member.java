@@ -131,6 +131,7 @@ public class Member extends BaseEntity implements Serializable {
         phoneNumber = memberEditor.getPhoneNumber();
         birth = memberEditor.getBirth();
         gender = memberEditor.getGender();
+        grade = memberEditor.getGrade();
     }
 
     public MemberEditor.MemberEditorBuilder toEditor() {
@@ -141,7 +142,8 @@ public class Member extends BaseEntity implements Serializable {
                 .password(getPassword())
                 .phoneNumber(getPhoneNumber())
                 .birth(getBirth())
-                .gender(getGender());
+                .gender(getGender())
+                .grade(getGrade());
     }
 
 //    특정 유저의 id 비교, 찾기에 활용
