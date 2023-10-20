@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -171,6 +172,7 @@ public class AdminService {
                 .phoneNumber(memberEditAdminDTO.getPhoneNumber())
                 .birth(memberEditAdminDTO.getBirth())
                 .gender(memberEditAdminDTO.getGender())
+                .grade(memberEditAdminDTO.getGrade())
                 .build();
 
         member.edit(memberEditor);
@@ -219,5 +221,15 @@ public class AdminService {
             Manager findManager = managerRepository.findByAdminId(id).orElseThrow();
             findManager.setIsActive(true);
         }
+    }
+
+    // 매니저의 회원 소프트 삭제
+    public void softdeleteMember(String memberId){
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(MemberNotFound::new);
+
+        LocalDateTime now = LocalDateTime.now();
+        member.setMemberDeleteTime(now);
+        memberRepository.save(member);
     }
 }
