@@ -6,7 +6,7 @@ import 'moment/locale/ko';
 import { ValuePiece } from '../common/DateButton/DateButton';
 import { useLocation } from 'react-router-dom';
 
-const Reservation = ({ updateReservationData }: any, {selectedProduct}: any) => {
+const Reservation = ({ updateReservationData }: any, { selectedProduct }: any) => {
   const location = useLocation();
   const prevReservationData = location.state?.reservationData;
   const [checkInValue, setCheckInValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
@@ -24,7 +24,7 @@ const Reservation = ({ updateReservationData }: any, {selectedProduct}: any) => 
   useEffect(() => {
     const processedCheckInDate: ValuePiece = Array.isArray(checkInValue) ? checkInValue[0] : checkInValue;
     const processedCheckOutDate: ValuePiece = Array.isArray(checkOutValue) ? checkOutValue[0] : checkOutValue;
-    if(prevReservationData === undefined){
+    if (prevReservationData === undefined) {
       processedCheckInDate?.setHours(0, 0, 0, 0);
       processedCheckOutDate?.setHours(0, 0, 0, 0);
     }
@@ -55,7 +55,7 @@ const Reservation = ({ updateReservationData }: any, {selectedProduct}: any) => 
       nights,
     };
 
-    if(updateReservationData !== undefined){
+    if (updateReservationData !== undefined) {
       updateReservationData(updatedData);
     }
   }, [checkInDate, checkOutDate, count, adults, children, nights]);
@@ -71,15 +71,15 @@ const Reservation = ({ updateReservationData }: any, {selectedProduct}: any) => 
   useEffect(() => {
     let today;
     let tomorrow;
-    if(prevReservationData === undefined){
+    if (prevReservationData === undefined) {
       today = new Date();
       tomorrow = new Date(today);
       tomorrow.setDate(today.getDate() + 1);
-    }else{
+    } else {
       today = new Date(prevReservationData.checkInDate);
       tomorrow = new Date(prevReservationData.checkOutDate);
     }
-  
+
     const formattedToday = formatAndSetDate(today);
     const formattedTomorrow = formatAndSetDate(tomorrow);
 
@@ -90,13 +90,13 @@ const Reservation = ({ updateReservationData }: any, {selectedProduct}: any) => 
   useEffect(() => {
     let today;
     let tomorrow;
-    if(prevReservationData === undefined){
+    if (prevReservationData === undefined) {
       today = new Date();
       tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
       setCheckInValue(today);
       setCheckOutValue(tomorrow);
-    }else{
+    } else {
       today = new Date(prevReservationData.checkInDate);
       tomorrow = new Date(prevReservationData.checkOutDate);
       setCheckInValue(today);
@@ -264,7 +264,9 @@ const Reservation = ({ updateReservationData }: any, {selectedProduct}: any) => 
       <S.ReserveDetail>
         <div className="option">
           <S.SelectWrapper>
-            <S.SelectLabel>{selectedProduct?.typeDetail === 'dining' ? '상품수' : '객실수'} {/* 객실이면 객실수, 다이닝이면 좌석수, index 페이지에서는 기본 객실수 */}</S.SelectLabel>
+            <S.SelectLabel>
+              {location.state && location.state.selectedProduct && location.state.selectedProduct.type === 'dining' ? '좌석수' : '객실수'}
+            </S.SelectLabel>
             <button type="button" onClick={handleOptionToggle}>
               {count}
             </button>
@@ -285,7 +287,9 @@ const Reservation = ({ updateReservationData }: any, {selectedProduct}: any) => 
             <table>
               <tbody>
                 <tr>
-                  <th>객실수</th>
+                  <th>
+                    {location.state && location.state.selectedProduct && location.state.selectedProduct?.type === 'dining' ? '좌석수' : '객실수'}
+                  </th>
                   <td>
                     <div>
                       <button type="button" className="btn-minus" onClick={() => handleMinusClick(setCount, 1)}>

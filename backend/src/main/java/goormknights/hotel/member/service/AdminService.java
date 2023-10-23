@@ -3,13 +3,16 @@ package goormknights.hotel.member.service;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.member.dto.request.AdminSignupDTO;
+import goormknights.hotel.member.dto.request.MemberEditAdminDTO;
 import goormknights.hotel.member.dto.request.RequestManagerDto;
 import goormknights.hotel.member.dto.response.MemberInfoDetailDTO;
 import goormknights.hotel.member.dto.response.ResponseManagerDto;
 import goormknights.hotel.member.exception.InvalidMemberException;
+import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.exception.NotExistMemberException;
 import goormknights.hotel.member.model.Manager;
 import goormknights.hotel.member.model.Member;
+import goormknights.hotel.member.model.MemberEditor;
 import goormknights.hotel.member.repository.ManagerRepository;
 import goormknights.hotel.member.repository.MemberRepository;
 import jakarta.servlet.http.Cookie;
@@ -28,7 +31,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -148,6 +154,31 @@ public class AdminService {
         }
     }
 
+    // 회원 정보 수정(어드민 버전)
+    public void edit(String memberId, MemberEditAdminDTO memberEditAdminDTO){
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(MemberNotFound::new);
+
+        String encryptedPassword = memberEditAdminDTO.getPassword() != null ?
+                passwordEncoder.encode(memberEditAdminDTO.getPassword()) :
+                member.getPassword();
+
+        MemberEditor.MemberEditorBuilder editorBuilder = member.toEditor();
+        MemberEditor memberEditor = editorBuilder
+                .name(memberEditAdminDTO.getName())
+                .email(memberEditAdminDTO.getEmail())
+                .memberId(memberEditAdminDTO.getMemberId())
+                .password(encryptedPassword)
+                .phoneNumber(memberEditAdminDTO.getPhoneNumber())
+                .birth(memberEditAdminDTO.getBirth())
+                .gender(memberEditAdminDTO.getGender())
+                .grade(memberEditAdminDTO.getGrade())
+                .build();
+
+        member.edit(memberEditor);
+        memberRepository.save(member);
+    }
+
     public List<ResponseManagerDto> getList(Pageable pageable) {
         Page<Manager> all = managerRepository.findAll(pageable);
         List<ResponseManagerDto> result = new ArrayList<>();
@@ -190,5 +221,15 @@ public class AdminService {
             Manager findManager = managerRepository.findByAdminId(id).orElseThrow();
             findManager.setIsActive(true);
         }
+    }
+
+    // 매니저의 회원 소프트 삭제
+    public void softdeleteMember(String memberId){
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(MemberNotFound::new);
+
+        LocalDateTime now = LocalDateTime.now();
+        member.setMemberDeleteTime(now);
+        memberRepository.save(member);
     }
 }

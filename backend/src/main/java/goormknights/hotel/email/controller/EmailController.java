@@ -73,7 +73,7 @@ public class EmailController {
                 .subject("[GoormHotel] 이메일 인증을 위한 인증 코드 발송")
                 .build();
 
-        String code = emailService.sendMemberMail(emailMessage, "email-auth");
+        String code = emailService.sendMemberMail(emailMessage, "code");
 
         EmailResponseDto emailResponseDto = new EmailResponseDto();
         emailResponseDto.setCode(code);
@@ -91,7 +91,7 @@ public class EmailController {
                     .subject("[GoormHotel] 이메일 인증을 위한 인증 코드 발송")
                     .build();
 
-            String code = emailService.sendMemberMail(emailMessage, "email-auth");
+            String code = emailService.sendMemberMail(emailMessage, "code");
             EmailResponseDto emailResponseDto = new EmailResponseDto();
             emailResponseDto.setCode(code);
 
@@ -112,7 +112,7 @@ public class EmailController {
                     .subject("[GoormHotel] 이메일 인증을 위한 인증 코드 발송")
                     .build();
 
-            String code = emailService.sendMemberMail(emailMessage, "email-auth");
+            String code = emailService.sendMemberMail(emailMessage, "code");
             EmailResponseDto emailResponseDto = new EmailResponseDto();
             emailResponseDto.setCode(code);
 
@@ -133,7 +133,7 @@ public class EmailController {
                     .subject("[GoormHotel] 이메일 인증을 위한 인증 코드 발송")
                     .build();
 
-            String code = emailService.sendMemberMail(emailMessage, "email-auth");
+            String code = emailService.sendMemberMail(emailMessage, "code");
             EmailResponseDto emailResponseDto = new EmailResponseDto();
             emailResponseDto.setCode(code);
 

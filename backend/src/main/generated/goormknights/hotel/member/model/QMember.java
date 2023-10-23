@@ -41,6 +41,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final BooleanPath mailAuth = createBoolean("mailAuth");
 
+    public final DateTimePath<java.time.LocalDateTime> memberDeleteTime = createDateTime("memberDeleteTime", java.time.LocalDateTime.class);
+
     public final StringPath memberId = createString("memberId");
 
     public final StringPath name = createString("name");

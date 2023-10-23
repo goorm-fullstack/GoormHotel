@@ -1,6 +1,9 @@
 package goormknights.hotel.member.dto.request;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
@@ -8,7 +11,7 @@ import java.time.LocalDate;
 @Setter
 @ToString
 @NoArgsConstructor
-public class MemberEditDTO {
+public class MemberEditAdminDTO {
     private String name;
     private String email;
     private String memberId;
@@ -16,5 +19,5 @@ public class MemberEditDTO {
     private String phoneNumber;
     private LocalDate birth;
     private String gender;
-    private String code;
+    private String grade;
 }

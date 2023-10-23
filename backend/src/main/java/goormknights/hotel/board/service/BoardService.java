@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -149,13 +150,24 @@ public class BoardService {
     public Page<Board> findAllBoards(Pageable pageable) {
         Page<Board> all = boardRepository.findAll(pageable);
         List<Board> list = new ArrayList<>();
+
         for (Board board : all) {
-            if(board.getBoardDeleteTime() == null){
-                list.add(board);
+            if(board.getBoardDeleteTime() == null && board.getParentBoardId().equals(0L)){         //삭제되지 않은 글 그리고 답글이 아닌 글
+                if(board.getIsComment().equals("true")){        //답글을 가지고 있다면
+                    Optional<Board> childBoardOptional = boardRepository.findByParentBoardId(board.getBoardId());       //답글 찾기
+                    Board childBoard = childBoardOptional.get();
+                    list.add(board);                        //부모 글 추가(위에 추가하기 위해)
+                    list.add(childBoard);                   //답글 먼처 추가(아래에 추가하기 위해서)
+                }
+                if(board.getIsComment().equals("false")){  //답글을 가지고 있지 않다면
+                    list.add(board);                       //게시글 추가
+                }
             }
         }
         return new PageImpl<>(list, pageable, list.size());
     }
+
+
 
     // 게시물 수정
     public Board updateBoard(Long boardId, RequestBoardDto requestBoardDto, MultipartFile multipartFile, MultipartFile file) throws IOException {
@@ -338,6 +350,11 @@ public class BoardService {
         }
 
         return new PageImpl<>(list, pageable, list.size());
+    }
+
+    public Board findByParentBoardId(Long parentBoardId){
+
+        return boardRepository.findByParentBoardId(parentBoardId).orElseThrow(() -> new NoBoardException("작성되지 않은 게시판입니다."));
     }
 
 }

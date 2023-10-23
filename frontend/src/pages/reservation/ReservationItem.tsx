@@ -259,7 +259,6 @@ const ReservationItem = () => {
 
   const nameOfTypeDetail = (product: RoomData | DiningData) => {
     const foundCategory = [...diningCategories, ...productCategories].find((category) => product.typeDetail === category.english);
-    console.log(foundCategory);
     return foundCategory ? foundCategory.korean : 'none';
   };
 
