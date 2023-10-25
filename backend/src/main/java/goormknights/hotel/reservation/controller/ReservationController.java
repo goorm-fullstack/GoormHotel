@@ -69,8 +69,7 @@ public class ReservationController {
     }
 
     /**
-     * 회원 memberId를 이용해 예약 건 조회
-     * 작업중 - 테스트 필요
+     * 회원 memberId를 이용해 예약 건 조회: 테스트 완료
      * @param memberId - 회원 아이디
      * @return 해당 memberId를 가진 회원이 예약했던 내역
      */
@@ -83,8 +82,7 @@ public class ReservationController {
     }
 
     /**
-     * 예약 번호를 이용해 예약 건 조회
-     * 작업중 - 테스트 필요
+     * 예약 번호를 이용해 예약 건 조회: 테스트 완료
      * @param reservationNumber - 예약 번호
      * @return 해당 예약 번호를 가진 예약 내역
      * 2023.09.17 일부 수정 -> 동일한 위치에서 @PathVariable를 사용하면 모호성으로 오류가 발생합니다.

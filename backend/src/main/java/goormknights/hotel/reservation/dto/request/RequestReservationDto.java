@@ -77,7 +77,7 @@ public class RequestReservationDto {
     // 할인 정보
     private Coupon coupon;
 
-    private String couponId;        // 적용한 쿠폰: user 입력 사항(쿠폰명, 쿠폰 번호, 할인율(%), 사용 유무, 발행일, 만료일)
+    private Long couponId;        // 적용한 쿠폰: user 입력 사항(쿠폰명, 쿠폰 번호, 할인율(%), 사용 유무, 발행일, 만료일)
 
     private List<GiftCard> giftCard;
 

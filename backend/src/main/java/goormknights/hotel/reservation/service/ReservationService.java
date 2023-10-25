@@ -1,5 +1,9 @@
 package goormknights.hotel.reservation.service;
 
+import goormknights.hotel.coupon.model.Coupon;
+import goormknights.hotel.coupon.repository.CouponRepository;
+import goormknights.hotel.giftcard.model.GiftCard;
+import goormknights.hotel.giftcard.repository.GiftCardRepository;
 import goormknights.hotel.item.exception.NotExistItemException;
 import goormknights.hotel.item.model.Item;
 import goormknights.hotel.item.repository.ItemRepository;
@@ -14,6 +18,7 @@ import goormknights.hotel.reservation.model.Reservation;
 import goormknights.hotel.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.startup.ListenerCreateRule;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,15 +37,37 @@ public class ReservationService {
     private final MemberRepository memberRepository;
     private final AnonymousRepository anonymousRepository;
     private final ItemRepository<Item> itemRepository;
+    private final CouponRepository couponRepository;
+    private final GiftCardRepository giftCardRepository;
 
     /**
      * 예약 정보 저장
      *
-     * @param reservationDto - user가 입력한 정보
+     * @param reservationDto - user 입력한 정보
      */
     public void saveReservation(RequestReservationDto reservationDto) {
 
-        // 상품 정보 세팅
+        setItemInfo(reservationDto); // 상품 정보 세팅
+        reservationDto.setReservationNumber(makeReservationNumber()); // 예약 번호 생성
+        setMemberInfo(reservationDto); // 회원/비회원 정보 세팅
+
+        // 쿠폰 세팅
+//        Optional<Coupon> isCoupon = couponRepository.findById(reservationDto.getCouponId());
+//        if(!(isCoupon.isEmpty())){
+//            reservationDto.setCoupon(isCoupon.get());
+//        }
+
+        // 상품권 세팅
+//        List<GiftCard> isGiftCards = giftCardRepository.findByUuid(reservationDto.getGiftCardId())
+
+        reservationRepository.save(reservationDto.toEntity()); // 저장
+    }
+
+    /**
+     * 예약 상품 정보 검증
+     * @param reservationDto 예약자 입력 정보
+     */
+    private void setItemInfo(RequestReservationDto reservationDto) {
         Item item = itemRepository.findById(reservationDto.getItemId()).orElseThrow(() -> new NotExistItemException("해당 id의 상품을 찾을 수 없습니다. id = " + reservationDto.getItemId()));
 
         if (item.getSpare() < reservationDto.getCount())
@@ -48,14 +75,14 @@ public class ReservationService {
 
         if (item.getSpareAdult() < reservationDto.getAdult() || item.getSpareChildren() < reservationDto.getChildren())
             throw new LimitExceededException("최대 숙박 인원을 초과하였습니다.");
-
         reservationDto.setItem(item);
+    }
 
-        // 예약 번호 생성
-        String generatedNumber = makeReservationNumber();
-        reservationDto.setReservationNumber(generatedNumber);
-
-        // 회원/비회원 정보 세팅
+    /**
+     * 회원 유무 체크 및 예약자 정보 세팅
+     * @param reservationDto 예약자 입력 정보
+     */
+    private void setMemberInfo(RequestReservationDto reservationDto) {
         Optional<Member> isMember = memberRepository.findByMemberId(reservationDto.getMemberId());
         if (isMember.isEmpty()) {
             Anonymous anonymous = saveAnonymous(reservationDto);
@@ -64,8 +91,6 @@ public class ReservationService {
             Member member = isMember.get();
             reservationDto.setMember(member);
         }
-
-        reservationRepository.save(reservationDto.toEntity()); // 저장
     }
 
     /**
@@ -148,7 +173,7 @@ public class ReservationService {
      * memberId로 예약 조회
      *
      * @param memberId - 회원 ID
-     * @return 해당 member가 예약한 예약 건 모두 반환
+     * @return 해당 member 예약한 예약 건 모두 반환
      */
     public Optional<Reservation> getReservationByMemberId(String memberId) {
         return reservationRepository.findByMemberId(memberId);
