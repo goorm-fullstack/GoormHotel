@@ -34,20 +34,9 @@ public class ReservationController {
      */
     @PostMapping("/save")
     public ResponseEntity<Object> saveReservation(
-            @Validated @RequestBody RequestReservationDto reservationDto,
-            @RequestParam long memberId
+            @Validated @RequestBody RequestReservationDto reservationDto
     ) {
-        reservationService.saveReservation(reservationDto, memberId);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/save/anonymous")
-    public ResponseEntity<Object> saveReservation_Anonymous(
-            @Validated @RequestBody RequestAnonymousReservationDto reservationDto
-            ) {
-
-        System.out.println(reservationDto.toString());
-        reservationService.saveReservation_Anonymous(reservationDto);
+        reservationService.saveReservation(reservationDto);
         return ResponseEntity.ok().build();
     }
 

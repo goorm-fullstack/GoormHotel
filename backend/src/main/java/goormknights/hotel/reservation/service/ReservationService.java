@@ -1,14 +1,14 @@
 package goormknights.hotel.reservation.service;
 
 import goormknights.hotel.giftcard.model.GiftCard;
-import goormknights.hotel.global.entity.Role;
+import goormknights.hotel.item.exception.NotExistItemException;
+import goormknights.hotel.item.model.Item;
+import goormknights.hotel.item.repository.ItemRepository;
 import goormknights.hotel.member.dto.request.AnonymousSignupDto;
-import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.model.Anonymous;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.repository.AnonymousRepository;
 import goormknights.hotel.member.repository.MemberRepository;
-import goormknights.hotel.reservation.dto.request.RequestAnonymousReservationDto;
 import goormknights.hotel.reservation.dto.request.RequestReservationDto;
 import goormknights.hotel.reservation.model.Reservation;
 import goormknights.hotel.reservation.repository.ReservationRepository;
@@ -31,44 +31,55 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
     private final AnonymousRepository anonymousRepository;
+    private final ItemRepository itemRepository;
+
     /**
      * 예약 정보 저장
-     *
      * @param reservationDto - user가 입력한 정보
-     * @param memberId
      */
-    public void saveReservation(RequestReservationDto reservationDto, long memberId) {
-        Optional<Member> customer = memberRepository.findById(memberId);
-        if(customer.isEmpty()) {
-            throw new MemberNotFound();
+    public void saveReservation(RequestReservationDto reservationDto) {
+
+        // 상품 정보 세팅
+        Optional<Item> itemInfo = itemRepository.findById(reservationDto.getItemId());
+        if(itemInfo.isEmpty()) { // 상품 없음
+            throw new NotExistItemException();
+        }
+        reservationDto.setItem(itemInfo.get());
+
+        // 예약 번호 생성
+        String generatedNumber = makeReservationNumber();
+        reservationDto.setReservationNumber(generatedNumber);
+
+        // 회원/비회원 정보 세팅
+        Optional<Member> isMember = memberRepository.findByMemberId(reservationDto.getMemberId());
+        if(isMember.isEmpty()) {
+            Anonymous anonymous = saveAnonymous(reservationDto);
+            reservationDto.setNonMember(anonymous);
+        } else {
+            Member member = isMember.get();
+            reservationDto.setMember(member);
         }
 
-
-        String generatedNumber = makeReservationNumber();
-        Member member = customer.get();
-        reservationDto.setMember(member);
-        reservationDto.setReservationNumber(generatedNumber);
         Reservation saveReservation = reservationRepository.save(reservationDto.toEntity());
-        saveReservation.getMember().getReservationList().add(saveReservation);
-        List<GiftCard> giftCards = saveReservation.getGiftCard();
-        for(GiftCard giftCard : giftCards) {
-            giftCard.setReservation(saveReservation);
+
+        if(!(isMember.isEmpty())) { // 회원인 경우 회원 엔티티에도 예약정보 추가
+            saveReservation.getMember().getReservationList().add(saveReservation);
         }
     }
 
     /**
-     * 비회원 예약하기 로직
+     * 비회원 정보 저장
+     * @param reservationDto 예약자 입력 정보
+     * @return anonymous
      */
-    public void saveReservation_Anonymous(RequestAnonymousReservationDto reservationDto) {
-        Anonymous anonymous = anonymousRepository.save(reservationDto.getAnonymousSignupDto().toEntity());
-        String generatedNumber = makeReservationNumber();
-        anonymous.setReservationNumber(generatedNumber);
-        reservationDto.setReservationNumber(generatedNumber);
-        Reservation saveReservation = reservationRepository.save(reservationDto.toEntity());
-        List<GiftCard> giftCards = saveReservation.getGiftCard();
-        for(GiftCard giftCard : giftCards) {
-            giftCard.setReservation(saveReservation);
-        }
+    private Anonymous saveAnonymous(RequestReservationDto reservationDto) {
+        AnonymousSignupDto nonMember = new AnonymousSignupDto();
+        nonMember.setName(reservationDto.getMemberName());
+        nonMember.setEmail(reservationDto.getEmail());
+        nonMember.setPhoneNumber(reservationDto.getPhoneNumber());
+        Anonymous anonymous = anonymousRepository.save(nonMember.toEntity());
+        anonymous.setReservationNumber(reservationDto.getReservationNumber());
+        return anonymous;
     }
 
     /**
