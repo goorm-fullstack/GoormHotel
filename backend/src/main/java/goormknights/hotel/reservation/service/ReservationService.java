@@ -60,11 +60,7 @@ public class ReservationService {
             reservationDto.setMember(member);
         }
 
-        Reservation saveReservation = reservationRepository.save(reservationDto.toEntity());
-
-        if(!(isMember.isEmpty())) { // 회원인 경우 회원 엔티티에도 예약정보 추가
-            saveReservation.getMember().getReservationList().add(saveReservation);
-        }
+        reservationRepository.save(reservationDto.toEntity()); // 저장
     }
 
     /**

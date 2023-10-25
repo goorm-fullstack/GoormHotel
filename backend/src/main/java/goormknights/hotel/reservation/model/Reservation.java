@@ -1,7 +1,6 @@
 package goormknights.hotel.reservation.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import goormknights.hotel.global.event.MemberEventListener;
 import goormknights.hotel.global.event.ReservationEventListener;
 import goormknights.hotel.member.model.Anonymous;
 import goormknights.hotel.member.model.Member;
