@@ -29,7 +29,7 @@ public class ReservationController {
     @PostMapping("/save")
     public ResponseEntity<Object> saveReservation(
             @Validated @RequestBody RequestReservationDto reservationDto
-    ) {
+    ) throws Throwable {
         reservationService.saveReservation(reservationDto);
         return ResponseEntity.ok().build();
     }
