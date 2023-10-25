@@ -38,7 +38,7 @@ public class ReservationService {
      *
      * @param reservationDto - user가 입력한 정보
      */
-    public void saveReservation(RequestReservationDto reservationDto) throws Throwable {
+    public void saveReservation(RequestReservationDto reservationDto) {
 
         // 상품 정보 세팅
         Item item = itemRepository.findById(reservationDto.getItemId()).orElseThrow(() -> new NotExistItemException("해당 id의 상품을 찾을 수 없습니다. id = " + reservationDto.getItemId()));
