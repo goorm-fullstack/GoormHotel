@@ -41,10 +41,6 @@ public class ReservationService {
     public void saveReservation(RequestReservationDto reservationDto) throws Throwable {
 
         // 상품 정보 세팅
-//        Optional<Item> itemInfo = itemRepository.findById(reservationDto.getItemId());
-//        if(itemInfo.isEmpty()) { // 상품 없음
-//            throw new NotExistItemException();
-//        }
         Item item = itemRepository.findById(reservationDto.getItemId()).orElseThrow(() -> new NotExistItemException("해당 id의 상품을 찾을 수 없습니다. id = " + reservationDto.getItemId()));
 
         if (item.getSpare() < reservationDto.getCount())
@@ -69,11 +65,7 @@ public class ReservationService {
             reservationDto.setMember(member);
         }
 
-        Reservation saveReservation = reservationRepository.save(reservationDto.toEntity());
-
-        if (!(isMember.isEmpty())) { // 회원인 경우 회원 엔티티에도 예약정보 추가
-            saveReservation.getMember().getReservationList().add(saveReservation);
-        }
+        reservationRepository.save(reservationDto.toEntity()); // 저장
     }
 
     /**

@@ -8,7 +8,6 @@ import goormknights.hotel.item.model.Item;
 import goormknights.hotel.reservation.model.Reservation;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
