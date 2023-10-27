@@ -9,7 +9,7 @@ export const SubHeader = styled.div`
   width: 100%;
   min-width: ${(props) => props.theme.wrapper.minwidth};
   background-color: white;
-  z-index: 99;
+  z-index: 1000;
   padding: 0 40px;
   top: 120px;
 
