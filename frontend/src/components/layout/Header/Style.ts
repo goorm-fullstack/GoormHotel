@@ -9,7 +9,7 @@ export const Header = styled.header`
   min-width: ${(props) => props.theme.wrapper.minwidth};
   height: 120px;
   padding: 0 40px;
-  z-index: 999;
+  z-index: 10000;
   background-color: ${(props) => props.theme.colors.charcoal};
   color: white;
   backdrop-filter: blur(3px);
