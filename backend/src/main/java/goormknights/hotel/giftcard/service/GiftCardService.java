@@ -3,15 +3,11 @@ package goormknights.hotel.giftcard.service;
 import goormknights.hotel.giftcard.dto.request.RequestGiftCardDto;
 import goormknights.hotel.giftcard.dto.request.StateChangeData;
 import goormknights.hotel.giftcard.dto.response.ResponseGiftCardDto;
-import goormknights.hotel.giftcard.exception.AlreadyUsedException;
+import goormknights.hotel.giftcard.exception.GiftCardAlreadyUsedException;
 import goormknights.hotel.giftcard.exception.NoSuchGiftCardException;
 import goormknights.hotel.giftcard.exception.NotAvailableException;
 import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.giftcard.repository.GiftCardRepository;
-import goormknights.hotel.member.exception.NotExistMemberException;
-import goormknights.hotel.member.model.Member;
-import goormknights.hotel.member.repository.MemberRepository;
-import goormknights.hotel.reservation.model.Reservation;
 import goormknights.hotel.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -101,7 +96,7 @@ public class GiftCardService {
         });
 
         if(giftCard.getReservation()!= null) {
-            throw new AlreadyUsedException("이미 등록된 상품권입니다.");
+            throw new GiftCardAlreadyUsedException("이미 등록된 상품권입니다.");
         }
 
         return new ResponseGiftCardDto(giftCard);

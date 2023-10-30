@@ -1,7 +1,10 @@
 package goormknights.hotel.reservation.service;
 
+import goormknights.hotel.coupon.exception.AlreadyUsedException;
 import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.coupon.repository.CouponRepository;
+import goormknights.hotel.giftcard.exception.GiftCardAlreadyUsedException;
+import goormknights.hotel.giftcard.exception.NoSuchGiftCardException;
 import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.giftcard.repository.GiftCardRepository;
 import goormknights.hotel.item.exception.NotExistItemException;
@@ -13,16 +16,17 @@ import goormknights.hotel.member.model.Member;
 import goormknights.hotel.member.repository.AnonymousRepository;
 import goormknights.hotel.member.repository.MemberRepository;
 import goormknights.hotel.reservation.dto.request.RequestReservationDto;
+import goormknights.hotel.reservation.dto.request.UpdateReservationDto;
 import goormknights.hotel.reservation.exception.LimitExceededException;
 import goormknights.hotel.reservation.model.Reservation;
 import goormknights.hotel.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.startup.ListenerCreateRule;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +46,6 @@ public class ReservationService {
 
     /**
      * 예약 정보 저장
-     *
      * @param reservationDto - user 입력한 정보
      */
     public void saveReservation(RequestReservationDto reservationDto) {
@@ -51,16 +54,35 @@ public class ReservationService {
         reservationDto.setReservationNumber(makeReservationNumber()); // 예약 번호 생성
         setMemberInfo(reservationDto); // 회원/비회원 정보 세팅
 
-        // 쿠폰 세팅
-//        Optional<Coupon> isCoupon = couponRepository.findById(reservationDto.getCouponId());
-//        if(!(isCoupon.isEmpty())){
-//            reservationDto.setCoupon(isCoupon.get());
-//        }
-
         // 상품권 세팅
-//        List<GiftCard> isGiftCards = giftCardRepository.findByUuid(reservationDto.getGiftCardId())
+        if(reservationDto.getGiftCardId() != null) setGiftCardInfo(reservationDto);
+
+        // 쿠폰 세팅
+        if(reservationDto.getCouponId() != null) {
+            Coupon useCoupon = couponRepository.findById(reservationDto.getCouponId()).orElseThrow();
+            if(useCoupon.getIsUsed() != 'N') {
+                throw new AlreadyUsedException("이미 사용했거나 사용할 수 없는 쿠폰입니다.");
+            }
+            useCoupon.setIsUsed();
+            reservationDto.setCoupon(useCoupon);
+        }
 
         reservationRepository.save(reservationDto.toEntity()); // 저장
+    }
+
+    /**
+     * 상품권 정보 검증 및 세팅
+     * @param reservationDto 예약자 입력 정보
+     */
+    private void setGiftCardInfo(RequestReservationDto reservationDto) {
+        List<GiftCard> useGiftCard = new ArrayList<>();
+        for(String s : reservationDto.getGiftCardId()) {
+            GiftCard useGiftCardItem = giftCardRepository.findByUuid(s).orElseThrow(() -> new NoSuchGiftCardException("일치하는 상품권이 없습니다."));
+            if(useGiftCardItem.getIsZeroMoney() != 'N') throw new GiftCardAlreadyUsedException("이미 사용한 상품권입니다.");
+            useGiftCardItem.paidByGiftCard(useGiftCardItem.getMoney());
+            useGiftCard.add(useGiftCardItem);
+        }
+        reservationDto.setGiftCard(useGiftCard);
     }
 
     /**
@@ -95,7 +117,6 @@ public class ReservationService {
 
     /**
      * 비회원 정보 저장
-     *
      * @param reservationDto 예약자 입력 정보
      * @return anonymous
      */
@@ -111,7 +132,6 @@ public class ReservationService {
 
     /**
      * 예약 번호 생성
-     *
      * @return reservationNumber - 예약 번호: 예약 날짜(yyyyMMdd)+랜덤 문자 8자리
      */
     private String makeReservationNumber() {
@@ -125,25 +145,21 @@ public class ReservationService {
     }
 
     /**
-     * 관리자 -> 예약 정보 수정: 예약 상태
-     *
-     * @param reservationDto - 관리자가 수정한 정보
+     * 예약 취소
      */
-    public void updateReservationState(RequestReservationDto reservationDto) {
-        Reservation reservation = reservationRepository.findById(reservationDto.getId()).orElse(null);
-        if (reservation != null) {
-            reservation.setState(reservationDto.getState()); // 예약 상태 업데이트
+    public void cancleReservation(String reservationNumber) {
+        Reservation reservation = reservationRepository.findByReservationNumber(reservationNumber).orElse(null);
+        if (reservation != null && reservation.getState().equals("예약")) {
+            reservation.setState("취소"); // 예약 상태 업데이트
             reservationRepository.save(reservation);
         }
     }
 
     /**
-     * 관리자 -> 예약 정보 수정: 요청사항
-     *
-     * @param reservationDto - 관리자가 수정한 정보
+     * 관리자 -> 예약 정보 수정
      */
-    public void updateReservationNotice(RequestReservationDto reservationDto) {
-        Reservation reservation = reservationRepository.findById(reservationDto.getId()).orElse(null);
+    public void updateReservationInfo(UpdateReservationDto reservationDto, String reservationNumber) {
+        Reservation reservation = reservationRepository.findByReservationNumber(reservationNumber).orElse(null);
         if (reservation != null) {
             reservation.setNotice(reservationDto.getNotice()); // 요청사항 업데이트
             reservationRepository.save(reservation);
@@ -152,7 +168,6 @@ public class ReservationService {
 
     /**
      * 전체 예약 조회
-     *
      * @return 전체 예약 결과 반환
      */
     public List<Reservation> getAllReservation() {
@@ -161,7 +176,6 @@ public class ReservationService {
 
     /**
      * 예약 번호로 예약 조회
-     *
      * @param reservationNumber - 예약번호
      * @return 입력한 예약 번호에 해당하는 예약 건 하나 반환
      */
@@ -171,7 +185,6 @@ public class ReservationService {
 
     /**
      * memberId로 예약 조회
-     *
      * @param memberId - 회원 ID
      * @return 해당 member 예약한 예약 건 모두 반환
      */
@@ -181,7 +194,6 @@ public class ReservationService {
 
     /**
      * ID(PK) 값으로 예약 조회
-     *
      * @param id - 인덱스 번호(PK)
      * @return 해당 id 값과 일치하는 예약 건 반환
      */
