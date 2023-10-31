@@ -43,19 +43,19 @@ public class HotelApplication {
 		// 		.typeDetail("dining")
 		// 		.build();
 
-		Member member = Member.builder()
-				.memberId("test")
-				.email("test@test.com")
-				.grade("Bronze")
-				.password(passwordEncoder.encode("1234"))
-				.name("test")
-				.phoneNumber("test")
-				.birth(LocalDate.now())
-				.gender("M")
-				.mailAuth(true)
-				.role(Role.USER)
-				.build();
-		memberRepository.save(member);
+//		Member member = Member.builder()
+//				.memberId("test")
+//				.email("test@test.com")
+//				.grade("Bronze")
+//				.password(passwordEncoder.encode("1234"))
+//				.name("test")
+//				.phoneNumber("test")
+//				.birth(LocalDate.now())
+//				.gender("M")
+//				.mailAuth(true)
+//				.role(Role.USER)
+//				.build();
+//		memberRepository.save(member);
 	// 	diningRepository.save(dining);
 	}
 }
