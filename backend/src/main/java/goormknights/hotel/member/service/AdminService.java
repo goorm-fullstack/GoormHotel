@@ -5,6 +5,7 @@ import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.member.dto.request.AdminSignupDTO;
 import goormknights.hotel.member.dto.request.MemberEditAdminDTO;
 import goormknights.hotel.member.dto.request.RequestManagerDto;
+import goormknights.hotel.member.dto.response.ManagerListDTO;
 import goormknights.hotel.member.dto.response.MemberInfoDetailDTO;
 import goormknights.hotel.member.dto.response.ResponseManagerDto;
 import goormknights.hotel.member.exception.InvalidMemberException;
@@ -179,11 +180,13 @@ public class AdminService {
         memberRepository.save(member);
     }
 
-    public List<ResponseManagerDto> getList(Pageable pageable) {
+    // 최고관리자는 조회에서 검색되지 않도록 합니다.
+    public List<ManagerListDTO> getList(Pageable pageable) {
         Page<Manager> all = managerRepository.findAll(pageable);
-        List<ResponseManagerDto> result = new ArrayList<>();
+        List<ManagerListDTO> result = new ArrayList<>();
         for(Manager manager : all) {
-            result.add(new ResponseManagerDto(manager));
+            if(manager.getRole() != Role.ADMIN)
+                result.add(new ManagerListDTO(manager));
         }
 
         return result;

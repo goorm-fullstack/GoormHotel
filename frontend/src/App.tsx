@@ -126,6 +126,7 @@ const App: React.FC = () => {
     const role = getCookie("role");
     const auth = getCookie("auth");
     const adminNickName = getCookie("adminNickname");
+    const roomId = getCookie("roomId");
 
     // 로컬 스토리지에 정보를 저장한다.
     // 어드민 로그인이라면
@@ -138,9 +139,10 @@ const App: React.FC = () => {
       setIsLogined(true);
     }
     // 회원 로그인이라면
-    else if (memberId && role) {
+    else if (memberId && role && roomId) {
       localStorage.setItem('memberId', memberId);
       localStorage.setItem('role', role);
+      localStorage.setItem('roomId', roomId);
       setMemberAuthState({ memberId, role });
       setIsMember(true);
     }

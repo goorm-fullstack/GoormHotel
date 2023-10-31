@@ -161,7 +161,7 @@ public class EmailService implements EmailSender {
     }
 
     // HTML
-    public String setContextForSignup(String code, String type) {
+    private String setContextForSignup(String code, String type) {
         try {
             InputStream is = getClass().getClassLoader().getResourceAsStream("templates/" + type + ".html");
             assert is != null;
