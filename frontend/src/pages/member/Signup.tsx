@@ -83,7 +83,7 @@ const Signup = () => {
         });
 
           if (response.status === 200) {
-            navigate('/signup/result');
+            navigate('/signup/result', { state: { name: formData.name } });
           }
       } catch (error: any) {
         if (error?.response?.data?.errorCode === 1001) {

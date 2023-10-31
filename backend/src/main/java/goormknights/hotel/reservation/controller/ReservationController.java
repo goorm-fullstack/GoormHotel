@@ -1,10 +1,7 @@
 package goormknights.hotel.reservation.controller;
 
-import goormknights.hotel.member.dto.request.AnonymousSignupDto;
-import goormknights.hotel.member.model.Member;
-import goormknights.hotel.member.repository.MemberRepository;
-import goormknights.hotel.reservation.dto.request.RequestAnonymousReservationDto;
 import goormknights.hotel.reservation.dto.request.RequestReservationDto;
+import goormknights.hotel.reservation.dto.request.UpdateReservationDto;
 import goormknights.hotel.reservation.dto.response.ResponseReservationDto;
 import goormknights.hotel.reservation.service.ReservationService;
 import goormknights.hotel.reservation.model.Reservation;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,73 +21,49 @@ import java.util.Optional;
 public class ReservationController {
 
     private final ReservationService reservationService;
-    private final MemberRepository memberRepository;//테스트용으로 사용
 
     /**
-     * 새로운 예약 건 저장: 테스트 완료
+     * 새로운 예약 건 저장
      * @param reservationDto - user가 입력한 정보
      * @return ResponseEntity
      */
     @PostMapping("/save")
     public ResponseEntity<Object> saveReservation(
-            @Validated @RequestBody RequestReservationDto reservationDto,
-            @RequestParam long memberId
-    ) {
-        reservationService.saveReservation(reservationDto, memberId);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/save/anonymous")
-    public ResponseEntity<Object> saveReservation_Anonymous(
-            @Validated @RequestBody RequestAnonymousReservationDto reservationDto
-            ) {
-
-        System.out.println(reservationDto.toString());
-        reservationService.saveReservation_Anonymous(reservationDto);
-        return ResponseEntity.ok().build();
-    }
-
-    /**
-     * 예약 정보 업데이트: 예약 상태
-     * 처리방법 고민중
-     * @param reservationDto - 관리자가 수정한 예약 상태 내용
-     * @return responseReservationDto
-     */
-    @PostMapping("/update/state")
-    public ResponseEntity<ResponseReservationDto> updateReservationState(
             @Validated @RequestBody RequestReservationDto reservationDto
-    ){
-        reservationService.updateReservationState(reservationDto);
-        ResponseReservationDto responseReservationDto
-                = reservationService.getReservationById(reservationDto.getId())
-                .orElseThrow().toResponseReservationDto();
-        return ResponseEntity.ok(responseReservationDto);
+    ) throws Throwable {
+        reservationService.saveReservation(reservationDto);
+        return ResponseEntity.ok().build();
     }
 
     /**
-     * 예약 정보 업데이트: 요청사항
-     * 처리방법 고민중
+     * 예약 취소
+     */
+    @PostMapping("/cancle/{reservationNumber}")
+    public ResponseEntity<Object> cancleReservation(
+            @PathVariable String reservationNumber
+    ){
+        reservationService.cancleReservation(reservationNumber);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 예약 정보 업데이트
      * @param reservationDto - 관리자가 수정한 요청사항 내용
-     * @return responseReservationDto
      */
-    @PostMapping("/update/notice")
-    public ResponseEntity<ResponseReservationDto> updateReservationNotice(
-            @Validated @RequestBody RequestReservationDto reservationDto
+    @PostMapping("/update/{reservationNumber}")
+    public ResponseEntity<Object> updateReservationNotice(
+            @Validated @RequestBody UpdateReservationDto reservationDto, @PathVariable String reservationNumber
     ){
-        reservationService.updateReservationNotice(reservationDto);
-        ResponseReservationDto responseReservationDto
-                = reservationService.getReservationById(reservationDto.getId())
-                .orElseThrow().toResponseReservationDto();
-        return ResponseEntity.ok(responseReservationDto);
+        reservationService.updateReservationInfo(reservationDto, reservationNumber);
+        return ResponseEntity.ok().build();
     }
 
     /**
      * 회원 memberId를 이용해 예약 건 조회
-     * 작업중 - 테스트 필요
      * @param memberId - 회원 아이디
      * @return 해당 memberId를 가진 회원이 예약했던 내역
      */
-    @GetMapping("/{memberId}")
+    @GetMapping("/list/{memberId}")
     public ResponseEntity<ResponseReservationDto> getReservationByMemberId(@PathVariable String memberId){
         ResponseReservationDto responseReservationDto
                 = reservationService.getReservationByMemberId(memberId)
@@ -101,12 +73,11 @@ public class ReservationController {
 
     /**
      * 예약 번호를 이용해 예약 건 조회
-     * 작업중 - 테스트 필요
      * @param reservationNumber - 예약 번호
      * @return 해당 예약 번호를 가진 예약 내역
      * 2023.09.17 일부 수정 -> 동일한 위치에서 @PathVariable를 사용하면 모호성으로 오류가 발생합니다.
      */
-    @GetMapping("/reservationNumber/{reservationNumber}")
+    @GetMapping("/detail/{reservationNumber}")
     public ResponseEntity<ResponseReservationDto> getReservationByNumber(@PathVariable String reservationNumber){
         ResponseReservationDto responseReservationDto
                 = reservationService.getReservationByNumber(reservationNumber)
@@ -115,7 +86,7 @@ public class ReservationController {
     }
 
     /**
-     * 전체 예약 조회: 테스트 완료
+     * 전체 예약 조회
      * @return 전체 예약 내역
      */
     @GetMapping

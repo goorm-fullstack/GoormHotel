@@ -14,11 +14,12 @@ public class MemberEditor {
     private final String phoneNumber;
     private final LocalDate birth;
     private final String gender;
+    private final String grade;
 
 
     @Builder
     public MemberEditor(String email, String memberId, String password, String name, String phoneNumber,
-                        LocalDate birth, String gender) {
+                        LocalDate birth, String gender, String grade) {
         this.email = email;
         this.memberId = memberId;
         this.password = password;
@@ -26,5 +27,6 @@ public class MemberEditor {
         this.phoneNumber = phoneNumber;
         this.birth = birth;
         this.gender = gender;
+        this.grade = grade;
     }
 }

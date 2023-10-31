@@ -44,6 +44,8 @@ public class QReservation extends EntityPathBase<Reservation> {
 
     public final goormknights.hotel.member.model.QMember member;
 
+    public final goormknights.hotel.member.model.QAnonymous nonMember;
+
     public final StringPath notice = createString("notice");
 
     public final DateTimePath<java.time.LocalDateTime> orderDate = createDateTime("orderDate", java.time.LocalDateTime.class);
@@ -79,6 +81,7 @@ public class QReservation extends EntityPathBase<Reservation> {
         this.coupon = inits.isInitialized("coupon") ? new goormknights.hotel.coupon.model.QCoupon(forProperty("coupon"), inits.get("coupon")) : null;
         this.item = inits.isInitialized("item") ? new goormknights.hotel.item.model.QItem(forProperty("item"), inits.get("item")) : null;
         this.member = inits.isInitialized("member") ? new goormknights.hotel.member.model.QMember(forProperty("member")) : null;
+        this.nonMember = inits.isInitialized("nonMember") ? new goormknights.hotel.member.model.QAnonymous(forProperty("nonMember")) : null;
     }
 
 }

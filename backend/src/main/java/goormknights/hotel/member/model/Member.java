@@ -10,6 +10,7 @@ import goormknights.hotel.member.exception.InvalidMemberException;
 import goormknights.hotel.reservation.model.Reservation;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -45,12 +46,15 @@ public class Member extends BaseEntity implements Serializable {
     private Boolean privacyCheck;
 
     private String gender;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birth;
     private LocalDate signupDate = LocalDate.now();
 
     private String grade;           // Bronze, Silver, Gold
     private String auth;
     private Boolean mailAuth; // 이메일 인증 여부
+
+    private LocalDateTime memberDeleteTime;
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
@@ -68,7 +72,7 @@ public class Member extends BaseEntity implements Serializable {
     @Builder
     public Member(String email, String memberId, String password, String name, String phoneNumber,
                   boolean privacyCheck, String grade, LocalDate birth,
-                  String gender, Boolean mailAuth, Role role) {
+                  String gender, Boolean mailAuth, Role role, LocalDateTime memberDeleteTime) {
         validateEmail(email);
         validateDisplayName(name);
 
@@ -84,6 +88,7 @@ public class Member extends BaseEntity implements Serializable {
         this.signupDate = LocalDate.now();
         this.mailAuth = mailAuth;
         this.role = role;
+        this.memberDeleteTime = memberDeleteTime;
     }
 
     private void validateEmail(final String email) {
@@ -126,6 +131,7 @@ public class Member extends BaseEntity implements Serializable {
         phoneNumber = memberEditor.getPhoneNumber();
         birth = memberEditor.getBirth();
         gender = memberEditor.getGender();
+        grade = memberEditor.getGrade();
     }
 
     public MemberEditor.MemberEditorBuilder toEditor() {
@@ -136,7 +142,8 @@ public class Member extends BaseEntity implements Serializable {
                 .password(getPassword())
                 .phoneNumber(getPhoneNumber())
                 .birth(getBirth())
-                .gender(getGender());
+                .gender(getGender())
+                .grade(getGrade());
     }
 
 //    특정 유저의 id 비교, 찾기에 활용
