@@ -17,6 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -156,18 +160,15 @@ public class EmailService implements EmailSender {
         }
     }
 
-    // thymeleaf를 통한 html 적용 + 오버로딩
+    // HTML
     public String setContextForSignup(String code, String type) {
-        Context context = new Context();
-        context.setVariable("code", code);
-        return templateEngine.process(type, context);
+        try {
+            InputStream is = getClass().getClassLoader().getResourceAsStream("templates/" + type + ".html");
+            assert is != null;
+            String htmlContent = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+            return htmlContent.replace("{code}", code);
+        } catch (IOException e) {
+            throw new RuntimeException("HTML파일 읽기 실패", e);
+        }
     }
-
-    public String setContextForSignup(String code, String type, String resetLink) {
-        Context context = new Context();
-        context.setVariable("code", code);
-        context.setVariable("resetLink", resetLink);
-        return templateEngine.process(type, context);
-    }
-
 }

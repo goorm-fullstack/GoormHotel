@@ -1,6 +1,7 @@
 package goormknights.hotel.member.service;
 
 import goormknights.hotel.auth.service.RedisUtil;
+import goormknights.hotel.giftcard.repository.GiftCardRepository;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.global.exception.InvalidVerificationCodeException;
@@ -38,6 +39,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final RedisUtil redisUtil;
+    private final GiftCardRepository giftCardRepository;
 
     // 멤버 가입 및 저장
     public void signup(SignupDTO signupDTO, String code) {
@@ -75,7 +77,21 @@ public class MemberService {
     }
 
     // 회원 정보 수정
-    public void edit(String memberId, MemberEditDTO memberEditDTO){
+    public void edit(String memberId, MemberEditDTO memberEditDTO, String code){
+
+        if (memberEditDTO.getPassword() != null) {
+            if (code == null || !verifyCode(memberEditDTO.getEmail(), code)) {
+                throw new InvalidVerificationCodeException();
+            }
+        }
+
+        Optional<Member> memberByEmail = memberRepository.findByEmail(memberEditDTO.getEmail());
+        Optional<Member> memberById = memberRepository.findByMemberId(memberEditDTO.getMemberId());
+        if ((memberByEmail.isPresent() && !memberByEmail.get().getMemberId().equals(memberId)) ||
+                (memberById.isPresent() && !memberById.get().getMemberId().equals(memberId))) {
+            throw new AlreadyExistsEmailException();
+        }
+
         Member member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(MemberNotFound::new);
 
@@ -215,6 +231,7 @@ public class MemberService {
             Member member = optionalMember.get();
 
             MemberInfoDTO memberInfoDTO = new MemberInfoDTO();
+            memberInfoDTO.setMemberId(member.getMemberId());
             memberInfoDTO.setName(member.getName());
             memberInfoDTO.setEmail(member.getEmail());
             memberInfoDTO.setPassword(member.getPassword());

@@ -19,4 +19,5 @@ public class MemberEditAdminDTO {
     private String phoneNumber;
     private LocalDate birth;
     private String gender;
+    private String grade;
 }

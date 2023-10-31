@@ -336,9 +336,9 @@ const ReservationPage = () => {
           <S.Right>
             <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
             {indexImg ? (
-              <Item selectedProduct={selectedProduct ? selectedProduct : selectData} indexImg={indexImg} />
+              <Item selectedProduct={selectedProduct ? selectedProduct : selectData} indexImg={indexImg} updateReservationData={formData} />
             ) : (
-              <Item selectedProduct={selectedProduct ? selectedProduct : selectData} />
+              <Item selectedProduct={selectedProduct ? selectedProduct : selectData} updateReservationData={formData} />
             )}
             <BtnWrapper className="full mt20">
               <SubmitBtn type="submit" className="shadow" onClick={handleReservation}>

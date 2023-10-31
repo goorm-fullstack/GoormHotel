@@ -1,9 +1,13 @@
 package goormknights.hotel.reservation.dto.response;
 
-import goormknights.hotel.member.model.Member;
 import goormknights.hotel.coupon.model.Coupon;
 import goormknights.hotel.giftcard.model.GiftCard;
+import goormknights.hotel.item.dto.response.ResponseDiningDto;
+import goormknights.hotel.item.dto.response.ResponseRoomDto;
+import goormknights.hotel.item.model.Dining;
 import goormknights.hotel.item.model.Item;
+import goormknights.hotel.item.model.Room;
+import goormknights.hotel.member.model.Member;
 import goormknights.hotel.reservation.model.Reservation;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -28,7 +32,8 @@ public class ResponseReservationDto {
     private Integer children;               // 어린이 수
     private Member member;              // 예약자 정보: 예약자명, 회원 유형(회원/비회원), 회원인 경우 ID, 연락처, 이메일
     private String notice;              // 고객 요청사항
-    private Item item;
+    private ResponseRoomDto roomItem;
+    private ResponseDiningDto diningItem;
     // 예약 상품 정보: 상품명, 상품 유형, 상품 분류, 기본가, 추가 가능 어른 수, 추가 가능 어린이 수, 어른 추가 비용, 어린이 추가 비용
     private Integer stay;                   // 총 예약일 수
     private Coupon coupon;              // 적용한 쿠폰: 쿠폰명, 쿠폰 번호, 할인율(%), 사용 유무, 발행일, 만료일
@@ -39,6 +44,13 @@ public class ResponseReservationDto {
     private String state;               // 예약 상태: 예약, 취소
 
     public ResponseReservationDto(Reservation reservation) {
+
+        Item item1 = reservation.getItem();
+        ResponseDiningDto responseDiningDto = null;
+        ResponseRoomDto responseRoomDto = null;
+        if (item1 instanceof Dining) responseDiningDto = ((Dining) item1).toResponseDiningDto();
+        if (item1 instanceof Room) responseRoomDto = ((Room) item1).toResponseRoomDto();
+
         this.id = reservation.getId();
         this.reservationNumber = reservation.getReservationNumber();
         this.orderDate = reservation.getOrderDate();
@@ -49,7 +61,8 @@ public class ResponseReservationDto {
         this.children = reservation.getChildren();
         this.member = reservation.getMember();
         this.notice = reservation.getNotice();
-        this.item = reservation.getItem();
+        this.roomItem = responseRoomDto;
+        this.diningItem = responseDiningDto;
         this.stay = reservation.getStay();
         this.coupon = reservation.getCoupon();
         this.giftCard = reservation.getGiftCard();

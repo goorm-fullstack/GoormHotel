@@ -32,6 +32,7 @@ public class ReservationTest {
     private RoomService roomService;
 
     private LocalDateTime now = LocalDateTime.now();
+
     private LocalDateTime future = now.plusDays(3);
 
 

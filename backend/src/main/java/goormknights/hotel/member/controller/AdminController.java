@@ -78,7 +78,7 @@ public class AdminController {
     }
 
     // 회원 정보 변경(어드민 버전)
-    @PutMapping("/change-member/{memberId}")
+    @PutMapping("/admin-change-member/{memberId}")
     public ResponseEntity<?> editMember(@PathVariable String memberId, @RequestBody MemberEditAdminDTO memberEditAdminDTO) {
         System.out.println("Received data: " + memberEditAdminDTO.toString());
         try {
@@ -181,5 +181,12 @@ public class AdminController {
     public ResponseEntity<String> unActivateStatus(@RequestBody String[] admins) {
         adminService.updateDisActivationStatus(admins);
         return ResponseEntity.ok("업데이트 완료");
+    }
+
+    // 회원 소프트 딜리트
+    @PutMapping("/softdelete/{memberId}")
+    public ResponseEntity<Object> softDeleteMember(@PathVariable String memberId) {
+        adminService.softdeleteMember(memberId);
+        return ResponseEntity.ok().build();
     }
 }
