@@ -252,7 +252,7 @@ const AdminDeleteComment = () => {
                     </td>
                     <td className="center">
                       {board.boardWriter}
-                      <S.LinkStyle to={`/admin/member/${board.boardWriter}`}>({board.boardWriter})</S.LinkStyle>
+                      <S.LinkStyle to={`/admin/member/detail/${board.boardWriter}`}>({board.boardWriter})</S.LinkStyle>
                     </td>
                     <td className="center">
                       {`${board.boardDeleteTime[0]}.${board.boardDeleteTime[1] < 10 ? '0' : ''}${board.boardDeleteTime[1]}.${
@@ -281,7 +281,7 @@ const AdminDeleteComment = () => {
                     </td>
                     <td className="center">
                       {reply.replyWriter}
-                      <S.LinkStyle to={`/admin/member/${reply.replyWriter}`}>({reply.replyWriter})</S.LinkStyle>
+                      <S.LinkStyle to={`/admin/member/detail/${reply.replyWriter}`}>({reply.replyWriter})</S.LinkStyle>
                     </td>
                     <td className="center">
                       {`${reply.replyDeleteTime[0]}.${reply.replyDeleteTime[1] < 10 ? '0' : ''}${reply.replyDeleteTime[1]}.${

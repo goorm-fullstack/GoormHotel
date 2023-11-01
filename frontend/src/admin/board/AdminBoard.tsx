@@ -307,7 +307,7 @@ const AdminBoard = () => {
                             </S.LinkStyle>
                           </td>
                           <td className="center">
-                            <S.LinkStyle to={`/admin/member/${board.boardWriter}`}>{board.boardWriter}</S.LinkStyle>
+                            <S.LinkStyle to={`/admin/member/detail/${board.boardWriter}`}>{board.boardWriter}</S.LinkStyle>
                           </td>
                           <td className="center">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
                               board.boardWriteDate[2] < 10 ? '0' : ''
