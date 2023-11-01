@@ -1,6 +1,7 @@
 package goormknights.hotel.member.service;
 
 import goormknights.hotel.auth.service.RedisUtil;
+import goormknights.hotel.giftcard.repository.GiftCardRepository;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.global.exception.InvalidVerificationCodeException;
@@ -75,7 +76,21 @@ public class MemberService {
     }
 
     // 회원 정보 수정
-    public void edit(String memberId, MemberEditDTO memberEditDTO){
+    public void edit(String memberId, MemberEditDTO memberEditDTO, String code){
+
+        if (memberEditDTO.getPassword() != null) {
+            if (code == null || !verifyCode(memberEditDTO.getEmail(), code)) {
+                throw new InvalidVerificationCodeException();
+            }
+        }
+
+        Optional<Member> memberByEmail = memberRepository.findByEmail(memberEditDTO.getEmail());
+        Optional<Member> memberById = memberRepository.findByMemberId(memberEditDTO.getMemberId());
+        if ((memberByEmail.isPresent() && !memberByEmail.get().getMemberId().equals(memberId)) ||
+                (memberById.isPresent() && !memberById.get().getMemberId().equals(memberId))) {
+            throw new AlreadyExistsEmailException();
+        }
+
         Member member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(MemberNotFound::new);
 
@@ -192,7 +207,16 @@ public class MemberService {
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
                     .build();
+
             ResponseCookie roleCookie = ResponseCookie.from("role", optionalMember.get().getRole().toString())
+                    .httpOnly(false)
+                    .secure(true)
+                    .path("/")      // path
+                    .maxAge(3600)
+                    .sameSite("None")  // sameSite
+                    .build();
+
+            ResponseCookie roomCookie = ResponseCookie.from("roomId", optionalMember.get().getRoomId())
                     .httpOnly(false)
                     .secure(true)
                     .path("/")      // path
@@ -203,6 +227,7 @@ public class MemberService {
             response.addCookie(cookie);
             response.addHeader(HttpHeaders.SET_COOKIE, memberIdCookie.toString());
             response.addHeader(HttpHeaders.SET_COOKIE, roleCookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, roomCookie.toString());
             return true;
         }
         return false;
@@ -215,6 +240,7 @@ public class MemberService {
             Member member = optionalMember.get();
 
             MemberInfoDTO memberInfoDTO = new MemberInfoDTO();
+            memberInfoDTO.setMemberId(member.getMemberId());
             memberInfoDTO.setName(member.getName());
             memberInfoDTO.setEmail(member.getEmail());
             memberInfoDTO.setPassword(member.getPassword());
@@ -286,5 +312,22 @@ public class MemberService {
     // 멤버 아이디로 회원 정보 찾기 - 진환
     public Member findMember(String memberId){
         return memberRepository.findByMemberId(memberId).orElseThrow(MemberNotFound::new);
+    }
+
+    public void saveRoomId(ChatMemberDto memberDto) {
+        Optional<Member> member = memberRepository.findByMemberId(memberDto.getMemberId());
+        if(member.isEmpty())
+            throw new MemberNotFound();
+
+        Member findMember = member.get();
+        findMember.setRoomId(memberDto.getRoomId());
+    }
+
+    public String getChatRoomId(String memberId) {
+        Optional<Member> member = memberRepository.findByMemberId(memberId);
+        if(member.isEmpty())
+            throw new MemberNotFound();
+
+        return member.get().getRoomId();
     }
 }

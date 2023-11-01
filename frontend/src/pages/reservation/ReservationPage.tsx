@@ -19,6 +19,7 @@ import PrivacyContents from '../../components/Agreement/PrivacyCon';
 import PaymentAgree from '../../components/Agreement/PayAgree';
 import { AgreementText } from '../member/Style';
 import Instance from '../../utils/api/axiosInstance';
+import type { RequestPayParams, RequestPayResponse } from '../../portone';
 
 interface GiftCard {
   id: number;
@@ -71,7 +72,14 @@ const ReservationPage = () => {
     notice: notice,
     sumPrice: selectedProduct ? selectedProduct.price : selectData.price,
     discountPrice: '0',
-    totalPrice: '12345',
+    totalPrice: selectedProduct ? selectedProduct.price : selectData.price,
+    memberName: '',
+    phoneNumber: '',
+    email: '',
+    itemId: '',
+    memberId: '',
+    couponId: '',
+    giftCardId: '',
   });
 
   const isLoggined = localStorage.getItem('memberId'); // 로그인 유무 확인
@@ -124,9 +132,24 @@ const ReservationPage = () => {
     return moment(date).format('YYYY-MM-DDTHH:mm:ss');
   };
 
-  //예약을 저장하는 함수
+  // 예약 및 결제
   const handleReservation = async () => {
-    const confirmed = window.confirm('예약을 진행하시겠습니까?');
+    if (!window.IMP) return;
+
+    const { IMP } = window;
+    IMP.init('imp32506271'); // 가맹점 식별코드
+
+    // 결제 데이터
+    const paydata: RequestPayParams = {
+      pg: 'kcp.AO09C', // PG사
+      pay_method: 'card', // 결제수단
+      merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
+      amount: 1000, // 테스트용 결제금액 고정
+      name: '구름호텔 상품 예약 및 결제 테스트', // 주문명
+      buyer_name: formData.memberName, // 구매자 이름
+      buyer_tel: formData.phoneNumber, // 구매자 전화번호
+      buyer_email: formData.email, // 구매자 이메일
+    };
 
     const serverFormattedData = {
       ...formData,
@@ -134,42 +157,27 @@ const ReservationPage = () => {
       checkOut: formatDateForServer(formData.checkOut),
     };
 
-    if (isLogined) {
-      if (confirmed) {
-        try {
-          await Instance.post(`/reservation/save`, {
-            params: memberId,
-            data: serverFormattedData,
-          });
-          navigate('/');
-          window.alert('예약이 완료되었습니다');
-        } catch (error) {
-          console.error('예약 요청 실패', error);
-        }
-      }
-    } else {
-      if (window.confirm('로그인되지 않았습니다. 비회원으로 예약을 진행하시겠습니까?')) {
-        try {
-          let anonymousSignupDto = {
-            name: name,
-            email: email,
-            phoneNumber: phoneNumber,
-          };
-          const serverFormattedData = {
-            ...formData,
-            checkIn: formatDateForServer(new Date(2023, 11, 25, 3, 50)), //테스트 데이터
-            checkOut: formatDateForServer(new Date(2023, 11, 25, 3, 50)),
-            anonymousSignupDto: anonymousSignupDto,
-          };
-          await Instance.post(`/reservation/save/anonymous`, serverFormattedData);
-          navigate('/');
-          window.alert('예약이 완료되었습니다');
-        } catch (error) {
-          console.error('예약 요청 실패', error);
-        }
-      }
+    IMP.request_pay(paydata, callback);
+    try {
+      await Instance.post(`/reservation/save`, {
+        data: serverFormattedData,
+      });
+      navigate('/');
+      window.alert('예약이 완료되었습니다');
+    } catch (error) {
+      console.error('예약 요청 실패', error);
     }
   };
+
+  function callback(response: RequestPayResponse) {
+    const { success, error_msg } = response;
+
+    if (success) {
+      console.log('결제 성공');
+    } else {
+      console.log(`결제 실패: ${error_msg}`);
+    }
+  }
 
   const updateReservationData = (newData: any) => {
     setFormData(newData);
@@ -215,8 +223,17 @@ const ReservationPage = () => {
             <S.Section className="privacy">
               <ContentsTitleXSmall>고객 정보 입력</ContentsTitleXSmall>
               <div className="flex">
-                <input placeholder="고객명" type="text" value={name} onChange={(e) => setName(e.target.value)} required readOnly={isLogined} />
                 <input
+                  name="memberName"
+                  placeholder="고객명"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  readOnly={isLogined}
+                />
+                <input
+                  name="phoneNumber"
                   placeholder="연락처"
                   type="text"
                   value={phoneNumber}
@@ -224,10 +241,18 @@ const ReservationPage = () => {
                   required
                   readOnly={isLogined}
                 />
-                <input placeholder="이메일" type="text" value={email} onChange={(e) => setEmail(e.target.value)} required readOnly={isLogined} />
+                <input
+                  name="email"
+                  placeholder="이메일"
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  readOnly={isLogined}
+                />
               </div>
               <div className="full">
-                <input placeholder="요청사항" type="text" value={notice} onChange={(e) => setNotice(e.target.value)} />
+                <input name="notice" placeholder="요청사항" type="text" value={notice} onChange={(e) => setNotice(e.target.value)} />
               </div>
             </S.Section>
 
@@ -254,30 +279,32 @@ const ReservationPage = () => {
                   </BtnWrapper>
                 </BtnWrapper>
                 <table>
-                  {/* 상품권 목록 출력하는 곳*/}
-                  {giftcardList.length !== 0 ? (
-                    <>
-                      {giftcardList.map((giftcard, index) => (
-                        <tr key={index}>
-                          <td>
-                            <CheckLabel>
-                              <InputCheckbox
-                                type="checkbox"
-                                checked={selectGiftCard.includes(giftcard.id)}
-                                onChange={() => handleGiftCardCheckboxChange(giftcard.id)}
-                              />
-                              {giftcard.title}
-                            </CheckLabel>
-                          </td>
-                          <td className="right">{giftcard.money}</td>
-                        </tr>
-                      ))}
-                    </>
-                  ) : (
-                    <tr>
-                      <td className="center empty">등록된 상품권이 없습니다.</td>
-                    </tr>
-                  )}
+                  <tbody>
+                    {/* 상품권 목록 출력하는 곳*/}
+                    {giftcardList.length !== 0 ? (
+                      <>
+                        {giftcardList.map((giftcard, index) => (
+                          <tr key={index}>
+                            <td>
+                              <CheckLabel>
+                                <InputCheckbox
+                                  type="checkbox"
+                                  checked={selectGiftCard.includes(giftcard.id)}
+                                  onChange={() => handleGiftCardCheckboxChange(giftcard.id)}
+                                />
+                                {giftcard.title}
+                              </CheckLabel>
+                            </td>
+                            <td className="right">{giftcard.money}</td>
+                          </tr>
+                        ))}
+                      </>
+                    ) : (
+                      <tr>
+                        <td className="center empty">등록된 상품권이 없습니다.</td>
+                      </tr>
+                    )}
+                  </tbody>
                 </table>
               </S.CouponInfo>
             </S.Section>
@@ -336,15 +363,16 @@ const ReservationPage = () => {
           <S.Right>
             <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
             {indexImg ? (
-              <Item selectedProduct={selectedProduct ? selectedProduct : selectData} indexImg={indexImg} />
+              <Item selectedProduct={selectedProduct ? selectedProduct : selectData} indexImg={indexImg} updateReservationData={formData} />
             ) : (
-              <Item selectedProduct={selectedProduct ? selectedProduct : selectData} />
+              <Item selectedProduct={selectedProduct ? selectedProduct : selectData} updateReservationData={formData} />
             )}
             <BtnWrapper className="full mt20">
               <SubmitBtn type="submit" className="shadow" onClick={handleReservation}>
                 예약 및 결제하기
               </SubmitBtn>
             </BtnWrapper>
+            <p className="notice">⁕ 테스트 결제금액은 1,000원으로 고정되어 있습니다.</p>
           </S.Right>
         </S.Wrapper>
       </S.Container>

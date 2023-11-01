@@ -6,11 +6,8 @@ import goormknights.hotel.member.dto.response.MemberInfoDTO;
 import goormknights.hotel.member.dto.response.ResponseMemberDto;
 import goormknights.hotel.member.exception.MemberNotFound;
 import goormknights.hotel.member.model.Member;
-import goormknights.hotel.member.repository.ManagerRepository;
 import goormknights.hotel.member.service.AdminService;
 import goormknights.hotel.member.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,7 +25,6 @@ import java.util.List;
 public class MemberController {
     private final MemberService memberService;
     private final AdminService adminService;
-    private final ManagerRepository managerRepository;
 
     // 멤버 회원가입
     @PostMapping("/signup")
@@ -101,7 +97,7 @@ public class MemberController {
     public ResponseEntity<?> editMember(@PathVariable String memberId, @RequestBody MemberEditDTO memberEditDTO) {
         System.out.println("Received data: " + memberEditDTO.toString());
         try {
-            memberService.edit(memberId, memberEditDTO);
+            memberService.edit(memberId, memberEditDTO, memberEditDTO.getCode());
             return ResponseEntity.ok().build(); // 200 OK
         } catch (MemberNotFound e) {
             return ResponseEntity.notFound().build(); // 404 Not Found
@@ -162,6 +158,18 @@ public class MemberController {
         Member member = memberService.findMember(memberId);
         Long id = member.getId();
         return ResponseEntity.ok(id);
+    }
+
+    @PostMapping("/chatroom")
+    public ResponseEntity<String> saveChatRoomId(@RequestBody ChatMemberDto memberDto) {
+        memberService.saveRoomId(memberDto);
+        return ResponseEntity.ok("저장 완료");
+    }
+
+    @GetMapping("/chatroom")
+    public ResponseEntity<String> getPrevRoomId(@RequestParam String memberId) {
+        String chatRoomId = memberService.getChatRoomId(memberId);
+        return ResponseEntity.ok(chatRoomId);
     }
 }
 

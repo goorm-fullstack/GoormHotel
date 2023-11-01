@@ -5,6 +5,7 @@ import { PageTitle } from '../../Style/commonStyles';
 import { useEffect, useState } from 'react';
 import Instance from '../../utils/api/axiosInstance';
 import { BoardData } from '../board/AdminBoard';
+import AdminCheck from '../adminCheck';
 
 const AdminIndex = () => {
   const [notice, setNotice] = useState<BoardData[]>([]);
@@ -42,7 +43,7 @@ const AdminIndex = () => {
         console.error(e);
       });
   }, []);
-//http://localhost:3000/admin/board/qna/detail/1
+  //http://localhost:3000/admin/board/qna/detail/1
   return (
     <div>
       <AdminHeader />
@@ -81,7 +82,7 @@ const AdminIndex = () => {
                     item && (
                       <li key={index}>
                         <p>
-                        <Link to={`/admin/board/qna/detail/${item.boardId}`}>{item.title}</Link>
+                          <Link to={`/admin/board/qna/detail/${item.boardId}`}>{item.title}</Link>
                         </p>
                         <span>{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
                           item.boardWriteDate[2] < 10 ? '0' : ''
@@ -101,7 +102,7 @@ const AdminIndex = () => {
                     item && (
                       <li key={index}>
                         <p>
-                        <Link to={`/admin/board/review/detail/${item.boardId}`}>{item.title}</Link>
+                          <Link to={`/admin/board/review/detail/${item.boardId}`}>{item.title}</Link>
                         </p>
                         <span>{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
                           item.boardWriteDate[2] < 10 ? '0' : ''
@@ -192,6 +193,7 @@ const AdminIndex = () => {
           </S.Sitemap>
         </S.Container>
       </S.AdminContainer>
+      <AdminCheck kind="ANY" />
     </div>
   );
 };

@@ -78,7 +78,7 @@ public class AdminController {
     }
 
     // 회원 정보 변경(어드민 버전)
-    @PutMapping("/change-member/{memberId}")
+    @PutMapping("/admin-change-member/{memberId}")
     public ResponseEntity<?> editMember(@PathVariable String memberId, @RequestBody MemberEditAdminDTO memberEditAdminDTO) {
         System.out.println("Received data: " + memberEditAdminDTO.toString());
         try {
@@ -121,20 +121,8 @@ public class AdminController {
 
     // 매니저 리스트 조회
     @GetMapping("/admin-getlist")
-    public List<ManagerListDTO> getAllManagers() {
-        List<Manager> allManagers = managerRepository.findAll();
-
-        return allManagers.stream().map(manager -> {
-            ManagerListDTO dto = new ManagerListDTO();
-            dto.setId(manager.getId());
-            dto.setAdminName(manager.getAdminName());
-            dto.setAdminId(manager.getAdminId());
-            dto.setAdminNickname(manager.getAdminNickname());
-            dto.setCreatedAt(manager.getCreatedAt());
-            dto.setIsActive(manager.getIsActive());
-            dto.setPassword(manager.getPassword());
-            return dto;
-        }).collect(Collectors.toList());
+    public List<ManagerListDTO> getAllManagers(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        return adminService.getList(pageable);
     }
 
     @PostMapping
@@ -160,12 +148,6 @@ public class AdminController {
         return ResponseEntity.ok("업데이트 완료");
     }
 
-    @GetMapping("/manager/list")
-    public ResponseEntity<List<ResponseManagerDto>> getManagerList(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        List<ResponseManagerDto> list = adminService.getList(pageable);
-        return ResponseEntity.ok(list);
-    }
-
     @GetMapping("/manager/count")
     public ResponseEntity<Long> getCount() {
         return ResponseEntity.ok(adminService.getCount());
@@ -181,5 +163,12 @@ public class AdminController {
     public ResponseEntity<String> unActivateStatus(@RequestBody String[] admins) {
         adminService.updateDisActivationStatus(admins);
         return ResponseEntity.ok("업데이트 완료");
+    }
+
+    // 회원 소프트 딜리트
+    @PutMapping("/softdelete/{memberId}")
+    public ResponseEntity<Object> softDeleteMember(@PathVariable String memberId) {
+        adminService.softdeleteMember(memberId);
+        return ResponseEntity.ok().build();
     }
 }
