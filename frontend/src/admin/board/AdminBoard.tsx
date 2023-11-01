@@ -10,6 +10,7 @@ import Instance from '../../utils/api/axiosInstance';
 
 export interface BoardData {
   boardId: number;
+  boardPassword: string;
   title: string;
   boardContent: string;
   boardWriteDate: number[];
@@ -27,6 +28,7 @@ export interface BoardData {
 
 export interface ReplyData {
   replyId: number;
+  replyPassword: string;
   boardId: number;
   replyContent: string;
   replyWriteDate: number[];
@@ -191,6 +193,20 @@ const AdminBoard = () => {
         })
   }
 
+  const isBoardWriter = (board: BoardData) => {
+    if (!board.boardPassword) {
+      return (
+          <S.LinkStyle to={`/admin/member/detail/${board.boardWriter}`}>
+            {board.boardWriter}
+          </S.LinkStyle>
+      );
+    }
+    return (
+        <p>{board.boardWriter}</p>
+    );
+  }
+
+
 
   //   useEffect(() => {
   //     Instance.get('/report/list')
@@ -307,7 +323,7 @@ const AdminBoard = () => {
                             </S.LinkStyle>
                           </td>
                           <td className="center">
-                            <S.LinkStyle to={`/admin/member/detail/${board.boardWriter}`}>{board.boardWriter}</S.LinkStyle>
+                            {isBoardWriter(board)}
                           </td>
                           <td className="center">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
                               board.boardWriteDate[2] < 10 ? '0' : ''
