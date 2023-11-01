@@ -41,11 +41,12 @@ const AdminBoardDetail = () => {
     if (board === 'qna' && boardData) {
       return (
           <>
-            <Link to={`/admin/board/write?parentBoardId=${boardData.boardId}`}>답글 작성</Link>
+            <NormalBtn onClick={() => { window.location.href = `/admin/board/write?parentBoardId=${boardData.boardId}` }}>답글 작성</NormalBtn>
           </>
       )
     }
   }
+
 
   const parseBoardContent = (content: any) => {
     const parser = new DOMParser();
@@ -325,7 +326,6 @@ const AdminBoardDetail = () => {
                     <p className="title">
                       <span>{`[${boardData ? boardData.category : ''}]`}</span>
                       {boardData ? boardData.title : ''}
-                      {isComment()}
                     </p>
                     {(() => {
                       if (board !== 'notice' && boardData) {
@@ -490,6 +490,7 @@ const AdminBoardDetail = () => {
             </S.TableRead>
             <BtnWrapper className="center mt40">
               <NormalBtn onClick={() => navigate(-1)}>목록</NormalBtn>
+              {isComment()}
             </BtnWrapper>
           </div>
         </Container>
