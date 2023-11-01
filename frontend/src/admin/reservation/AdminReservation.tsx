@@ -7,6 +7,7 @@ import { PageTitle, BtnWrapper, NormalBtn, InputCheckbox } from '../../Style/com
 import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
 import { RoomData, DiningData } from '../item/AdminItemList';
+import { response } from 'express';
 
 export interface ReservationData {
   id: number;
@@ -50,6 +51,11 @@ const AdminReservation = () => {
       alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
       navigate('/admin');
     }
+
+    // 페이징 코드 추가
+    Instance.get("/reservation/count").then((response) => {
+      setTotalPages(response.data);
+    })
   }, []);
 
   const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {

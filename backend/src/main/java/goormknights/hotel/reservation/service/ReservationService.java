@@ -17,11 +17,15 @@ import goormknights.hotel.member.repository.AnonymousRepository;
 import goormknights.hotel.member.repository.MemberRepository;
 import goormknights.hotel.reservation.dto.request.RequestReservationDto;
 import goormknights.hotel.reservation.dto.request.UpdateReservationDto;
+import goormknights.hotel.reservation.dto.response.MemberReservationDto;
+import goormknights.hotel.reservation.dto.response.ResponseReservationDto;
 import goormknights.hotel.reservation.exception.LimitExceededException;
 import goormknights.hotel.reservation.model.Reservation;
 import goormknights.hotel.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -171,8 +175,13 @@ public class ReservationService {
      * 전체 예약 조회
      * @return 전체 예약 결과 반환
      */
-    public List<Reservation> getAllReservation() {
-        return reservationRepository.findAll();
+    public List<ResponseReservationDto> getAllReservation(Pageable pageable) {
+        Page<Reservation> page = reservationRepository.findAll(pageable);
+        List<ResponseReservationDto> result = new ArrayList<>();
+        for(Reservation reservation : page) {
+            result.add(reservation.toResponseReservationDto());
+        }
+        return result;
     }
 
     /**
@@ -202,4 +211,27 @@ public class ReservationService {
         return reservationRepository.findById(id);
     }
 
+    public Long getCount() {
+        return reservationRepository.count() / 10;
+    }
+
+    /**
+     * FrontEnd ReservationList의 Reservation명세에 맞춰서 Dto 설게 완료
+     */
+    public List<MemberReservationDto> getReservationListByMemberId(String memberId, Pageable pageable) {
+        Page<Reservation> page = reservationRepository.findAll(pageable);
+        List<MemberReservationDto> result = new ArrayList<>();
+        for(Reservation reservation : page) {
+            result.add(new MemberReservationDto(reservation));
+        }
+        return result;
+    }
+
+    /**
+     * 멤버 아이디로 데이터를 검색 후에 총 개수를 세어줍니다.
+     */
+    public Long getCountByMemberId(String memberId) {
+        List<Reservation> byMemberID = reservationRepository.findAllByMemberId(memberId);
+        return (long) (byMemberID.size() / 10);
+    }
 }
