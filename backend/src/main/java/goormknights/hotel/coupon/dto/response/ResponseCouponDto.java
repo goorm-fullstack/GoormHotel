@@ -18,6 +18,7 @@ public class ResponseCouponDto {
     private int expire;//만료일
 
     public ResponseCouponDto(Coupon coupon) {
+        this.id = coupon.getId();
         this.uuid = coupon.getUuid();
         this.discountRate = coupon.getDiscountRate();
         this.member = coupon.getMember();

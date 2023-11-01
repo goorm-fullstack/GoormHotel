@@ -122,4 +122,14 @@ public class GiftCardService {
         GiftCard giftCard = giftCardRepository.findById(giftCardDto.getId()).orElseThrow(() -> new NoSuchGiftCardException("해당 상품권이 존재하지 않습니다"));
         giftCard.update(giftCardDto);
     }
+
+    public List<ResponseGiftCardDto> findByIdToList(List<Long> giftCardIdList) {
+        List<ResponseGiftCardDto> result = new ArrayList<>();
+        for(Long id : giftCardIdList) {
+            GiftCard giftCard = giftCardRepository.findById(id).orElseThrow();
+            result.add(giftCard.toResponseDto());
+        }
+
+        return result;
+    }
 }
