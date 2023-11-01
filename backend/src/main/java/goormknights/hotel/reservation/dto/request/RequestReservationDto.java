@@ -75,9 +75,6 @@ public class RequestReservationDto {
 
     private String notice;              // 고객 요청사항: user 입력 사항
 
-    // 할인 정보
-    private Coupon coupon;
-
     private Long couponId;        // 적용한 쿠폰: user 입력 사항(쿠폰명, 쿠폰 번호, 할인율(%), 사용 유무, 발행일, 만료일)
 
     private List<GiftCard> giftCard;
@@ -113,7 +110,6 @@ public class RequestReservationDto {
                 .notice(notice)
                 .item(item)
                 .stay(stay)
-                .coupon(coupon)
                 .giftCard(giftCard)
                 .sumPrice(sumPrice)
                 .discountPrice(discountPrice)
