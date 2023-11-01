@@ -30,38 +30,60 @@ const Login: React.FC = () => {
   }
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
-    const loginInfo = {
-      memberId: memberId,
-      password: memberPassword,
-    };
-    try {
-      const response = await Instance.post('/login/member', loginInfo, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      });
-
-      if (response.status === 200) {
-        localStorage.clear(); //일단 이전 기록을 좀 지우자~
-        if (getCookie('role') === 'BLACKED') {
-          alert('차단된 회원입니다. 자세한 사항은 고객센터로 문의 바랍니다.');
-        } else {
-          alert('로그인 성공');
-          const memberId = getCookie('memberId');
-          const role = getCookie('role');
-          if (memberId !== undefined && role !== undefined) {
-            localStorage.setItem('memberId', memberId);
-            localStorage.setItem('role', role);
+    if(isMemberActive) {
+      try {
+        const loginInfo = {
+          memberId: memberId,
+          password: memberPassword,
+        };
+        const response = await Instance.post('/login/member', loginInfo, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        });
+  
+        if (response.status === 200) {
+          localStorage.clear(); //일단 이전 기록을 좀 지우자~
+          if (getCookie('role') === 'BLACKED') {
+            alert('차단된 회원입니다. 자세한 사항은 고객센터로 문의 바랍니다.');
+          } else {
+            alert('로그인 성공');
+            const memberId = getCookie('memberId');
+            const role = getCookie('role');
+            if (memberId !== undefined && role !== undefined) {
+              localStorage.setItem('memberId', memberId);
+              localStorage.setItem('role', role);
+            }
+            window.location.href = '/';
           }
-          window.location.href = '/';
+        } else {
+          alert('아이디 또는 비밀번호가 일치하지 않습니다.');
         }
-      } else {
-        alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+      } catch (error) {
+        alert('아이디 또는 비밀번호가 일치하지 않습니다. 또는 서버 오류가 발생했습니다.');
       }
-    } catch (error) {
-      alert('아이디 또는 비밀번호가 일치하지 않습니다. 또는 서버 오류가 발생했습니다.');
+    } else {
+      try {
+        const loginInfo = {
+          reservationNumber: memberId,
+          phoneNumber: memberPassword,
+        };
+        const response = await Instance.post('/login/member', loginInfo, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        });
+  
+        if (response.status === 200) {
+          window.location.href=`/reservation/${memberId}`
+        } else {
+          alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+        }
+      } catch (error) {
+        alert('아이디 또는 비밀번호가 일치하지 않습니다. 또는 서버 오류가 발생했습니다.');
+      }
     }
   };
 

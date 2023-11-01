@@ -43,6 +43,7 @@ const AdminChat = () => {
   useEffect(() => {
     Instance.get(`/chat/getLastMessage?page=${page}`).then((response) => {
       setChatData(response.data);
+      console.log(response.data)
     });
 
     Instance.get('/chat/count').then((response) => {
@@ -135,19 +136,31 @@ const AdminChat = () => {
                     </td>
                     <td style={{ textAlign: 'center' }}>{item.id}</td>
                     <td style={{ textAlign: 'center' }}>
-                      {item.chatMessages[0].sender}(
+                      {item.chatMessages[0].sender !== 'anonymous' && item.chatMessages[0].sender ? (
                       <Link to={`/admin/member/${item.chatMessages[0].sender}`} className="memberId">
                         {item.chatMessages[0].sender}
                       </Link>
-                      )
+                      ) : (
+                        <p>{"비회원"}</p>
+                      )}
                     </td>
                     <td style={{ textAlign: 'center' }} className="lastChat">
                       <p>
-                        <Link to={`/admin/chat/detail/${item.roomId}`}>{item.chatMessages[0].message}</Link>
+                        {item.chatMessages[0].message !== '' ? (
+                          <Link to={`/admin/chat/detail/${item.roomId}`}>{item.chatMessages[0].message}</Link>
+                        ) : (
+                          <span>{"메시지가 없습니다."}</span>
+                        )}
                       </p>
                     </td>
                     <td style={{ textAlign: 'center' }}>{item.chatMessages[0].createTime}</td>
-                    <td style={{ textAlign: 'center' }}>{item.status}</td>
+                    <td style={{ textAlign: 'center' }}>
+                      {item.status === 'CONTINUE' ? (
+                        <span>{"진행중"}</span>
+                      ) : (
+                        <span>{"종료"}</span>
+                      )}
+                    </td>
                   </tr>
                 ))
               )}
