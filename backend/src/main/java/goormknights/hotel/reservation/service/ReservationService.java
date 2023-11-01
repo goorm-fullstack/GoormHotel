@@ -57,17 +57,16 @@ public class ReservationService {
         // 상품권 세팅
         if(reservationDto.getGiftCardId() != null) setGiftCardInfo(reservationDto);
 
-        // 쿠폰 세팅
-        if(reservationDto.getCouponId() != null) {
-            Coupon useCoupon = couponRepository.findById(reservationDto.getCouponId()).orElseThrow();
-            if(useCoupon.getIsUsed() != 'N') {
-                throw new AlreadyUsedException("이미 사용했거나 사용할 수 없는 쿠폰입니다.");
-            }
-            useCoupon.setIsUsed();
-            reservationDto.setCoupon(useCoupon);
+        Optional<Coupon> useCoupon = couponRepository.findById(reservationDto.getCouponId());
+
+        if(useCoupon.isEmpty() || useCoupon.get().getIsUsed() != 'N') {
+           throw new AlreadyUsedException("이미 사용했거나 사용할 수 없는 쿠폰입니다.");
         }
 
-        reservationRepository.save(reservationDto.toEntity()); // 저장
+        Reservation reservation =  reservationDto.toEntity();
+        reservation.setCoupon(useCoupon.get());
+
+        reservationRepository.save(reservation); // 저장
     }
 
     /**
