@@ -65,11 +65,9 @@ const Item = ({ selectedProduct, indexImg, updateReservationData, selectCoupon, 
     setTypeDetail(typeDetail ? typeDetail.korean : '');
     setSpareAdultPrice(spareAdultPrice);
     setSpareChildrenPrice(spareChildrenPrice);
-  }, []);
+  }, [selectedProduct, updateReservationData.adults, updateReservationData.children, updateReservationData.count]);
 
   useEffect(() => {
-    console.log(selectCoupon)
-    console.log(selectGiftCardList)
     if(selectCoupon !== 0 && selectGiftCardList.length > 0) {//상품권 존재, 쿠폰 존재
       Instance.get("/api/giftcard/get", {
         params : {
