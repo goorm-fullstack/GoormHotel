@@ -98,7 +98,6 @@ const ReservationPage = () => {
       Instance.get('/member/find', { params }).then((response) => {
         setMemberData(response.data);
         setCouponList(response.data.couponList);
-        console.log(response.data.couponList)
         setMemberId(response.data.id);
       });
       setIsLogined(true);
@@ -194,6 +193,8 @@ const ReservationPage = () => {
       checkOut: formatDateForServer(reservationNewData.checkOutDate),
     };
 
+    console.log(serverFormattedData);
+
     IMP.request_pay(paydata, callback);
     try {
       await Instance.post(`/reservation/save`, {
@@ -256,6 +257,8 @@ const ReservationPage = () => {
   const handleCheckBoxForAgree2 = () => {
     setChecked2(!checked2);
   };
+
+  console.log(selectCoupon);
 
   return (
     <div>
@@ -362,18 +365,17 @@ const ReservationPage = () => {
             <S.Section>
               <ContentsTitleXSmall>쿠폰 사용</ContentsTitleXSmall>
               <S.CouponSelect onChange={handleChange} disabled={!userLoggedIn} value={selectCoupon}>
-                {userLoggedIn ? (
+                {userLoggedIn !== null ? (
                   <>
                     <option value={0}>선택 안함</option>
                     {couponList.map((coupon: Coupon, index) => (
-                      <option value={coupon.id} key={coupon.id}>{coupon.name}</option>
-                      
+                      <option value={coupon.id} key={coupon.id}>
+                        {coupon.name}
+                      </option>
                     ))}
                   </>
                 ) : (
-                  <option disabled>
-                    로그인이 필요한 서비스입니다.
-                  </option>
+                  <option>로그인이 필요한 서비스입니다.</option>
                 )}
               </S.CouponSelect>
             </S.Section>
@@ -414,9 +416,20 @@ const ReservationPage = () => {
           <S.Right>
             <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
             {indexImg ? (
-              <Item selectedProduct={selectedProduct ? selectedProduct : selectData} indexImg={indexImg} updateReservationData={formData} selectCoupon={selectCoupon} selectGiftCardList = {selectGiftCard}/>
+              <Item
+                selectedProduct={selectedProduct ? selectedProduct : selectData}
+                indexImg={indexImg}
+                updateReservationData={reservationNewData !== undefined ? reservationNewData : reservationData !== undefined ? reservationData : ''}
+                selectCoupon={selectCoupon}
+                selectGiftCardList={selectGiftCard}
+              />
             ) : (
-              <Item selectedProduct={selectedProduct ? selectedProduct : selectData} updateReservationData={formData} selectCoupon={selectCoupon} selectGiftCardList = {selectGiftCard}/>
+              <Item
+                selectedProduct={selectedProduct ? selectedProduct : selectData}
+                updateReservationData={reservationNewData !== undefined ? reservationNewData : reservationData !== undefined ? reservationData : ''}
+                selectCoupon={selectCoupon}
+                selectGiftCardList={selectGiftCard}
+              />
             )}
             <BtnWrapper className="full mt20">
               <SubmitBtn type="submit" className="shadow" onClick={handleReservation}>
