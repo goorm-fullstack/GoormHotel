@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import * as S from './Style';
 import getChatRoomInfo from '../../../utils/chat/client';
+import Instance from '../../../utils/api/axiosInstance';
 
 interface ChatModalProps {
   closeChat: () => void; // closeChat 프로퍼티는 함수이며 반환값이 없음(void)
@@ -19,35 +20,84 @@ const ChatModal: React.FC<ChatModalProps> = ({ closeChat }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const webSocketURL = process.env.REACT_APP_WS_URL;
   let ws = useRef<WebSocket | null>(null);
+  let prevRoomId = useRef<String>("");
+  const memberId = localStorage.getItem("memberId");
 
-  useLayoutEffect(() => {
-    getChatRoomInfo('tester')
-      .then((roomId) => {
-        setRoomId(roomId); //방 아이디 설정
-        settingWebSocket(roomId); //웹소켓 설정
+  useEffect(() => {
+    if(memberId) {
+      Instance.get("/member/chatroom", {
+        params : {
+          "memberId" : memberId
+        }
+      }).then((response) => {
+        prevRoomId.current = response.data;
+        getChatRoomInfo('GoormHotel')
+        .then((roomId) => {
+          setRoomId(roomId); //방 아이디 설정
+          settingWebSocket(roomId, memberId); //웹소켓 설정
+        })
+        .catch((error) => {
+          console.error('오류 발생:', error);
+        });
       })
-      .catch((error) => {
-        console.error('오류 발생:', error);
-      });
+    } else {
+      console.log('anonymous')
+      getChatRoomInfo('GoormHotel')
+        .then((roomId) => {
+          setRoomId(roomId); //방 아이디 설정
+          settingWebSocket(roomId, "anonymous"); //웹소켓 설정
+        })
+        .catch((error) => {
+          console.error('오류 발생:', error);
+        });
+    }
   }, []);
 
   // 웹 소켓 설정을 UseEffect에서 분리
-  const settingWebSocket = (roomId: string) => {
+  const settingWebSocket = (roomId: string, memberId : string) => {
     // 이전 상태(prevRoomId)를 이용하여 새로운 상태를 반환
+    if(prevRoomId.current !== '' && memberId !== 'anonymous') {
+      Instance.get(`/chat/getPrevId/${prevRoomId.current}`).then((response) => {
+        const data = response.data.chatMessages;
+        for(var i = 0; i < data.length; i++) {
+          const chat = data[i].message;
+          const type = data[i].type;
+          if(type==='ENTER')
+            continue;
+          if(data[i].sender==='admin') {
+            setChatData((p) => [...p, { message: chat, isUser: false }]);
+          } else {
+            setChatData((p) => [...p, { message: chat, isUser: true }]);
+          }
+        }
+        Instance.post(`/chat/prevMessage/update/${roomId}`, data);
+      })
+    }
+
+
     if (!ws.current && webSocketURL !== undefined) {
       ws.current = new WebSocket(webSocketURL);
       ws.current.onopen = () => {
         setSocketConnected(true);
-
         // WebSocket 연결이 성공하면 ENTER 메시지 전송
         ws.current?.send(
           JSON.stringify({
             type: 'ENTER',
             roomId: roomId, // 이전 상태를 사용
-            sender: 'test',
-            message: '입장',
+            sender: memberId,
+            message: '',
           })
         );
+
+        if(memberId !== 'anonymous') {
+          const postData = {
+            "memberId" : memberId,
+            "roomId" : roomId
+          }
+          Instance.post("/member/chatroom", postData).then(() => {
+
+          });
+        }
       };
       ws.current.onclose = (error) => {
         console.error(error);
@@ -95,7 +145,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ closeChat }) => {
         JSON.stringify({
           type: 'TALK',
           roomId: roomId,
-          sender: 'test',
+          sender: memberId,
           message: newChat,
         })
       );

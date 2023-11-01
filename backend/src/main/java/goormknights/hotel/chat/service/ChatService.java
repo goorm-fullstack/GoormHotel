@@ -1,6 +1,7 @@
 package goormknights.hotel.chat.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import goormknights.hotel.chat.dto.request.RequestChatMessageDto;
 import goormknights.hotel.chat.model.ChatMessage;
 import goormknights.hotel.chat.model.ChatRoom;
 import goormknights.hotel.chat.model.ChatRoomDto;
@@ -74,6 +75,14 @@ public class ChatService {
         }
 
         return result;
+    }
+
+    // 이전 방 메시지를 현재 방의 메세지로 업데이트
+    public void updateMessageRoomId(List<RequestChatMessageDto> messageList, String newId) {
+        for(RequestChatMessageDto messageDto : messageList) {
+            ChatMessage message = chatMessageRepository.findById(messageDto.getId()).orElseThrow();
+            message.setRoomId(newId);
+        }
     }
 
     public Long calcRoomPageCount() {

@@ -39,7 +39,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final RedisUtil redisUtil;
-    private final GiftCardRepository giftCardRepository;
 
     // 멤버 가입 및 저장
     public void signup(SignupDTO signupDTO, String code) {
@@ -208,7 +207,16 @@ public class MemberService {
                     .maxAge(3600)
                     .sameSite("None")  // sameSite
                     .build();
+
             ResponseCookie roleCookie = ResponseCookie.from("role", optionalMember.get().getRole().toString())
+                    .httpOnly(false)
+                    .secure(true)
+                    .path("/")      // path
+                    .maxAge(3600)
+                    .sameSite("None")  // sameSite
+                    .build();
+
+            ResponseCookie roomCookie = ResponseCookie.from("roomId", optionalMember.get().getRoomId())
                     .httpOnly(false)
                     .secure(true)
                     .path("/")      // path
@@ -219,6 +227,7 @@ public class MemberService {
             response.addCookie(cookie);
             response.addHeader(HttpHeaders.SET_COOKIE, memberIdCookie.toString());
             response.addHeader(HttpHeaders.SET_COOKIE, roleCookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, roomCookie.toString());
             return true;
         }
         return false;
@@ -303,5 +312,22 @@ public class MemberService {
     // 멤버 아이디로 회원 정보 찾기 - 진환
     public Member findMember(String memberId){
         return memberRepository.findByMemberId(memberId).orElseThrow(MemberNotFound::new);
+    }
+
+    public void saveRoomId(ChatMemberDto memberDto) {
+        Optional<Member> member = memberRepository.findByMemberId(memberDto.getMemberId());
+        if(member.isEmpty())
+            throw new MemberNotFound();
+
+        Member findMember = member.get();
+        findMember.setRoomId(memberDto.getRoomId());
+    }
+
+    public String getChatRoomId(String memberId) {
+        Optional<Member> member = memberRepository.findByMemberId(memberId);
+        if(member.isEmpty())
+            throw new MemberNotFound();
+
+        return member.get().getRoomId();
     }
 }

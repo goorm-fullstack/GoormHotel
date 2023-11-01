@@ -121,20 +121,8 @@ public class AdminController {
 
     // 매니저 리스트 조회
     @GetMapping("/admin-getlist")
-    public List<ManagerListDTO> getAllManagers() {
-        List<Manager> allManagers = managerRepository.findAll();
-
-        return allManagers.stream().map(manager -> {
-            ManagerListDTO dto = new ManagerListDTO();
-            dto.setId(manager.getId());
-            dto.setAdminName(manager.getAdminName());
-            dto.setAdminId(manager.getAdminId());
-            dto.setAdminNickname(manager.getAdminNickname());
-            dto.setCreatedAt(manager.getCreatedAt());
-            dto.setIsActive(manager.getIsActive());
-            dto.setPassword(manager.getPassword());
-            return dto;
-        }).collect(Collectors.toList());
+    public List<ManagerListDTO> getAllManagers(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        return adminService.getList(pageable);
     }
 
     @PostMapping
@@ -158,12 +146,6 @@ public class AdminController {
     public ResponseEntity<String> updateByAdminId(@RequestBody RequestManagerDto managerDto) {
         adminService.updateManager(managerDto);
         return ResponseEntity.ok("업데이트 완료");
-    }
-
-    @GetMapping("/manager/list")
-    public ResponseEntity<List<ResponseManagerDto>> getManagerList(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        List<ResponseManagerDto> list = adminService.getList(pageable);
-        return ResponseEntity.ok(list);
     }
 
     @GetMapping("/manager/count")

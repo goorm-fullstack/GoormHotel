@@ -1,5 +1,6 @@
 package goormknights.hotel.chat.controller;
 
+import goormknights.hotel.chat.dto.request.RequestChatMessageDto;
 import goormknights.hotel.chat.dto.response.ResponseChatMessageDto;
 import goormknights.hotel.chat.dto.response.ResponseChatRoomDto;
 import goormknights.hotel.chat.model.ChatMessage;
@@ -65,6 +66,13 @@ public class ChatController {
         ResponseChatRoomDto responseChatRoomDto = new ResponseChatRoomDto(chatRoom, prevMessage);
         return ResponseEntity.ok(responseChatRoomDto);
     }
+
+    @PostMapping("/prevMessage/update/{roomId}")
+    public ResponseEntity<String> updatePreviousMessage(@RequestBody List<RequestChatMessageDto> messageDtoList, @PathVariable String roomId) {
+        chatService.updateMessageRoomId(messageDtoList, roomId);
+        return ResponseEntity.ok("업데이트 완료");
+    }
+
     @GetMapping("/closed/{roomId}")
     public ResponseEntity<String> closedChat(@PathVariable String roomId) {
         chatService.closed(roomId);
