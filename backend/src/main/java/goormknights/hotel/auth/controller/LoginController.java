@@ -40,7 +40,7 @@ public class LoginController {
     // 비회원 사용자 로그인
     @PostMapping("/anonymous")
     public ResponseEntity<?> anonymousLogin(@RequestBody AnonymousDto anonymousDto, HttpServletRequest request, HttpServletResponse response) {
-        if (anonymousService.annoymousLogin(anonymousDto, request, response)) {
+        if (anonymousService.anonymousLogin(anonymousDto, request, response)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>("로그인 실패", HttpStatus.UNAUTHORIZED);

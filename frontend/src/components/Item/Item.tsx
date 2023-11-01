@@ -19,13 +19,11 @@ const typeDetailName = [
   { typeDetail: 'bakery', korean: '베이커리' },
 ];
 
-const Item = ({ selectedProduct, indexImg, updateReservationData }: any) => {
+const Item = ({ selectedProduct, indexImg, updateReservationData, selectCoupon, selectGiftCardList }: any) => {
   const [type, setType] = useState('');
   const [typeDetail, setTypeDetail] = useState('');
   const [spareAdultPrice, setSpareAdultPrice] = useState(0);
   const [spareChildrenPrice, setSpareChildrenPrice] = useState(0);
-  const [coupon, setCoupon] = useState();
-  const [giftCard, setGiftCard] = useState<any>();
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
@@ -46,15 +44,34 @@ const Item = ({ selectedProduct, indexImg, updateReservationData }: any) => {
     setSpareChildrenPrice(spareChildrenPrice);
   }, [selectedProduct, updateReservationData.adults, updateReservationData.children, updateReservationData.count]);
 
-  // useEffect(() => {
-  //   if(!coupon && !giftCard){
-  //     setTotalPrice(selectedProduct.price);
-  //   }else if(!coupon && giftCard){
-  //     const currentPrice = selectedProduct.price - giftCard.money;
-  //   }else if(coupon && !giftCard){
-
-  //   }else
-  // }, [coupon, giftCard])
+  useEffect(() => {
+    if (selectCoupon === '' && !selectGiftCardList) {
+      //쿠폰도 상품권도 없음
+      setTotalPrice(selectedProduct.price);
+    } else if (selectCoupon === '' && selectGiftCardList) {
+      //쿠폰은 없고, 상품권은 있다.
+      let currentPrice = selectedProduct.price;
+      for (var i = 0; i < selectGiftCardList.length; i++) {
+        currentPrice -= selectGiftCardList[i].money;
+      }
+      setTotalPrice(currentPrice);
+    } else if (selectCoupon !== '' && !selectGiftCardList) {
+      //쿠폰이 있고, 상품권이 없다.
+      let currentPrice = selectedProduct.price;
+      let discountPrice = currentPrice / selectCoupon.discountRate;
+      currentPrice -= discountPrice;
+      setTotalPrice(currentPrice);
+    } else {
+      // 쿠폰도 상품권도 있다.
+      let currentPrice = selectedProduct.price;
+      let discountPrice = currentPrice / selectCoupon.discountRate;
+      currentPrice -= discountPrice;
+      for (var i = 0; i < selectGiftCardList.length; i++) {
+        currentPrice -= selectGiftCardList[i].money;
+      }
+      setTotalPrice(currentPrice);
+    }
+  }, []);
 
   return (
     <>
@@ -89,7 +106,6 @@ const Item = ({ selectedProduct, indexImg, updateReservationData }: any) => {
           </table>
         </S.SelectedItem>
       </S.SelectItem>
-
       <S.PaymentInfo>
         <table>
           <tr>

@@ -68,8 +68,15 @@ public class ChatService {
 
         for(ChatRoom chatRoom : allRoom) {
             List<ChatMessage> orderMessage = chatMessageRepository.findByRoomIdOrderByIdDesc(chatRoom.getRoomId());
+            String sender = "";
+            for(ChatMessage chatMessage : orderMessage) {
+                if(!chatMessage.getSender().equals("admin")) {
+                    sender = chatMessage.getSender();
+                }
+            }
             if(!orderMessage.isEmpty()) {
                 ChatMessage lastMessage = orderMessage.get(0);
+                lastMessage.setSender(sender);
                 result.add(lastMessage);
             }
         }
