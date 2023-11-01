@@ -55,7 +55,7 @@ const ReservationPage = () => {
   const [nights, setNights] = useState(1);
   const [giftcardList, setGiftCardList] = useState<GiftCard[]>([]);
   const [couponList, setCouponList] = useState<Coupon[]>([]);
-  const [selectCoupon, setSelectCoupon] = useState(''); //적용할 쿠폰
+  const [selectCoupon, setSelectCoupon] = useState(0); //적용할 쿠폰
   const [selectGiftCard, setSelectGiftCard] = useState<number[]>([]); //적용할 상품권
   const [click, setClick] = useState(false);
   const [memberId, setMemberId] = useState(0);
@@ -98,6 +98,7 @@ const ReservationPage = () => {
       Instance.get('/member/find', { params }).then((response) => {
         setMemberData(response.data);
         setCouponList(response.data.couponList);
+        console.log(response.data.couponList)
         setMemberId(response.data.id);
       });
       setIsLogined(true);
@@ -130,7 +131,8 @@ const ReservationPage = () => {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectCoupon(event.target.value);
+    const couponId = parseInt(event.target.value);
+    setSelectCoupon(couponId);
   };
 
   const formatDateForServer = (date: Date) => {
@@ -359,16 +361,17 @@ const ReservationPage = () => {
 
             <S.Section>
               <ContentsTitleXSmall>쿠폰 사용</ContentsTitleXSmall>
-              <S.CouponSelect value={selectCoupon} onChange={handleChange} disabled={!userLoggedIn}>
+              <S.CouponSelect onChange={handleChange} disabled={!userLoggedIn} value={selectCoupon}>
                 {userLoggedIn ? (
                   <>
-                    <option value="">선택 안함</option>
+                    <option value={0}>선택 안함</option>
                     {couponList.map((coupon: Coupon, index) => (
-                      <option value={coupon.id}>{coupon.name}</option>
+                      <option value={coupon.id} key={coupon.id}>{coupon.name}</option>
+                      
                     ))}
                   </>
                 ) : (
-                  <option disabled value="">
+                  <option disabled>
                     로그인이 필요한 서비스입니다.
                   </option>
                 )}

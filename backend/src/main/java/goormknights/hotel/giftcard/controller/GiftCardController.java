@@ -35,6 +35,11 @@ public class GiftCardController {
         return giftCardService.getGiftCardList(pageable);
     }
 
+    @GetMapping("/get")
+    public List<ResponseGiftCardDto> getByGiftCardIdList(@RequestParam List<Long> giftCardIdList) {
+        return giftCardService.findByIdToList(giftCardIdList);
+    }
+
     // 페이지 수를 반환하는 코드
     @GetMapping("/count")
     public Long getPageCount() {

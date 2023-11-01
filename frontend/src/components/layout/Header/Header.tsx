@@ -56,7 +56,7 @@ const Header = () => {
           )}
         </li>
         <li>{isLoggedIn ? <Link to="/mypage">마이페이지</Link> : <Link to="/signup">회원가입</Link>}</li>
-        <li>{isLoggedIn ? <Link to="/myhistory/1">예약 확인</Link> : <Link to="/login?type=reservation">로그인</Link>}</li>
+        <li>{isLoggedIn ? <Link to="/myhistory/1">예약 확인</Link> : <Link to="/login?type=reservation">예약 확인</Link>}</li>
         <li>
           <Link to="/membership">멤버십</Link>
         </li>
