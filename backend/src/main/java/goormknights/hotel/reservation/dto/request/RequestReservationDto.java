@@ -21,13 +21,6 @@ import java.util.List;
 @Builder
 public class RequestReservationDto {
 
-    // 예약 및 상품 정보
-    private Long id;                    // 인덱스 번호(PK)
-
-    private String reservationNumber;   // 예약 번호: 날짜 + 랜덤 숫자 조합
-
-    private Item item;
-
     private Long itemId;                // 상품 번호: 상품명, 상품 유형, 상품 분류, 기본가, 추가 가능 어른 수, 추가 가능 어린이 수, 어른 추가 비용, 어린이 추가 비용
 
     @PastOrPresent
@@ -58,10 +51,6 @@ public class RequestReservationDto {
     @Positive
     private Integer stay;                   // 총 예약일 수
 
-    // 예약자 정보: user 입력 사항(예약자명, 회원 유형(회원/비회원), 회원인 경우 ID, 연락처, 이메일)
-    private Member member;
-    private Anonymous nonMember;    // 비회원 예약자 정보
-
     private String memberId;              // 회원 아이디(로그인 중인 경우 값 있음, 없으면 값 없음)
 
     @NotBlank
@@ -76,8 +65,6 @@ public class RequestReservationDto {
     private String notice;              // 고객 요청사항: user 입력 사항
 
     private Long couponId;        // 적용한 쿠폰: user 입력 사항(쿠폰명, 쿠폰 번호, 할인율(%), 사용 유무, 발행일, 만료일)
-
-    private List<GiftCard> giftCard;
 
     private List<String> giftCardId;    // 적용한 상품권: user 입력 사항
 
@@ -97,20 +84,14 @@ public class RequestReservationDto {
 
     public Reservation toEntity() {
         return Reservation.builder()
-                .id(id)
-                .reservationNumber(reservationNumber)
                 .orderDate(orderDate)
                 .checkIn(checkIn)
                 .checkOut(checkOut)
                 .count(count)
                 .adult(adult)
                 .children(children)
-                .member(member)
-                .nonMember(nonMember)
                 .notice(notice)
-                .item(item)
                 .stay(stay)
-                .giftCard(giftCard)
                 .sumPrice(sumPrice)
                 .discountPrice(discountPrice)
                 .totalPrice(totalPrice)
@@ -121,8 +102,6 @@ public class RequestReservationDto {
     @Override
     public String toString() {
         return "RequestReservationDto{" +
-                "id=" + id +
-                ", reservationNumber='" + reservationNumber + '\'' +
                 ", itemId=" + itemId +
                 ", orderDate=" + orderDate +
                 ", checkIn=" + checkIn +
@@ -131,8 +110,6 @@ public class RequestReservationDto {
                 ", adult=" + adult +
                 ", children=" + children +
                 ", stay=" + stay +
-                ", member=" + member +
-                ", nonMember=" + nonMember +
                 ", memberId=" + memberId +
                 ", memberName=" + memberName +
                 ", phoneNumber=" + phoneNumber +

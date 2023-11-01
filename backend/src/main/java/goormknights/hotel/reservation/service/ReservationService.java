@@ -50,21 +50,23 @@ public class ReservationService {
      */
     public void saveReservation(RequestReservationDto reservationDto) {
 
-        setItemInfo(reservationDto); // 상품 정보 세팅
-        reservationDto.setReservationNumber(makeReservationNumber()); // 예약 번호 생성
-        setMemberInfo(reservationDto); // 회원/비회원 정보 세팅
+        Reservation reservation =  reservationDto.toEntity();
+        reservation.setReservationNumber(makeReservationNumber()); // 예약 번호 생성
+
+        setItemInfo(reservationDto, reservation); // 상품 정보 세팅
+        setMemberInfo(reservationDto, reservation); // 회원/비회원 정보 세팅
 
         // 상품권 세팅
-        if(reservationDto.getGiftCardId() != null) setGiftCardInfo(reservationDto);
+        if(reservationDto.getGiftCardId() != null) setGiftCardInfo(reservationDto, reservation);
 
-        Optional<Coupon> useCoupon = couponRepository.findById(reservationDto.getCouponId());
-
-        if(useCoupon.isEmpty() || useCoupon.get().getIsUsed() != 'N') {
-           throw new AlreadyUsedException("이미 사용했거나 사용할 수 없는 쿠폰입니다.");
+        // 쿠폰 세팅
+        if(reservationDto.getCouponId() != null){
+            Optional<Coupon> useCoupon = couponRepository.findById(reservationDto.getCouponId());
+            if(useCoupon.isEmpty() || useCoupon.get().getIsUsed() != 'N') {
+                throw new AlreadyUsedException("이미 사용했거나 사용할 수 없는 쿠폰입니다.");
+            }
+            reservation.setCoupon(useCoupon.get());
         }
-
-        Reservation reservation =  reservationDto.toEntity();
-        reservation.setCoupon(useCoupon.get());
 
         reservationRepository.save(reservation); // 저장
     }
@@ -73,7 +75,7 @@ public class ReservationService {
      * 상품권 정보 검증 및 세팅
      * @param reservationDto 예약자 입력 정보
      */
-    private void setGiftCardInfo(RequestReservationDto reservationDto) {
+    private void setGiftCardInfo(RequestReservationDto reservationDto, Reservation reservation) {
         List<GiftCard> useGiftCard = new ArrayList<>();
         for(String s : reservationDto.getGiftCardId()) {
             GiftCard useGiftCardItem = giftCardRepository.findByUuid(s).orElseThrow(() -> new NoSuchGiftCardException("일치하는 상품권이 없습니다."));
@@ -81,14 +83,14 @@ public class ReservationService {
             useGiftCardItem.paidByGiftCard(useGiftCardItem.getMoney());
             useGiftCard.add(useGiftCardItem);
         }
-        reservationDto.setGiftCard(useGiftCard);
+        reservation.setGiftCard(useGiftCard);
     }
 
     /**
      * 예약 상품 정보 검증
      * @param reservationDto 예약자 입력 정보
      */
-    private void setItemInfo(RequestReservationDto reservationDto) {
+    private void setItemInfo(RequestReservationDto reservationDto, Reservation reservation) {
         Item item = itemRepository.findById(reservationDto.getItemId()).orElseThrow(() -> new NotExistItemException("해당 id의 상품을 찾을 수 없습니다. id = " + reservationDto.getItemId()));
 
         if (item.getSpare() < reservationDto.getCount())
@@ -96,21 +98,21 @@ public class ReservationService {
 
         if (item.getSpareAdult() < reservationDto.getAdult() || item.getSpareChildren() < reservationDto.getChildren())
             throw new LimitExceededException("최대 숙박 인원을 초과하였습니다.");
-        reservationDto.setItem(item);
+        reservation.setItem(item);
     }
 
     /**
      * 회원 유무 체크 및 예약자 정보 세팅
      * @param reservationDto 예약자 입력 정보
      */
-    private void setMemberInfo(RequestReservationDto reservationDto) {
+    private void setMemberInfo(RequestReservationDto reservationDto, Reservation reservation) {
         Optional<Member> isMember = memberRepository.findByMemberId(reservationDto.getMemberId());
         if (isMember.isEmpty()) {
-            Anonymous anonymous = saveAnonymous(reservationDto);
-            reservationDto.setNonMember(anonymous);
+            Anonymous anonymous = saveAnonymous(reservationDto, reservation);
+            reservation.setNonMember(anonymous);
         } else {
             Member member = isMember.get();
-            reservationDto.setMember(member);
+            reservation.setMember(member);
         }
     }
 
@@ -119,13 +121,13 @@ public class ReservationService {
      * @param reservationDto 예약자 입력 정보
      * @return anonymous
      */
-    private Anonymous saveAnonymous(RequestReservationDto reservationDto) {
+    private Anonymous saveAnonymous(RequestReservationDto reservationDto, Reservation reservation) {
         AnonymousSignupDto nonMember = new AnonymousSignupDto();
         nonMember.setName(reservationDto.getMemberName());
         nonMember.setEmail(reservationDto.getEmail());
         nonMember.setPhoneNumber(reservationDto.getPhoneNumber());
         Anonymous anonymous = anonymousRepository.save(nonMember.toEntity());
-        anonymous.setReservationNumber(reservationDto.getReservationNumber());
+        anonymous.setReservationNumber(reservation.getReservationNumber());
         return anonymous;
     }
 
