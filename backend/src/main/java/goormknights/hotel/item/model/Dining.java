@@ -25,7 +25,7 @@ public class Dining extends Item {
     private String useTime; // 이용 시간(ex. 아침, 점심, 저녁)
 
     // 엔티티 수정
-    public Dining updateDining(RequestDiningDto requestDiningDto, RequestImageDto requestImageDto){
+    public Dining updateDining(RequestDiningDto requestDiningDto, RequestImageDto requestImageDto) {
         return this.toBuilder()
                 .priceChildren(requestDiningDto.getPriceChildren())
                 .price(requestDiningDto.getPrice())
@@ -43,8 +43,9 @@ public class Dining extends Item {
     }
 
     // 클라이언트에게 응답 시 ResponseDiningDto로 변경
-    public ResponseDiningDto toResponseDiningDto(){
+    public ResponseDiningDto toResponseDiningDto() {
         return ResponseDiningDto.builder()
+                .id(this.getId())
                 .type(this.getType())
                 .price(this.getPrice())
                 .name(this.getName())

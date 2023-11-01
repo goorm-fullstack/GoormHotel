@@ -20,6 +20,7 @@ const Reservation = ({ updateReservationData }: any, { selectedProduct }: any) =
   const [adults, setAdults] = useState<number>(prevReservationData ? prevReservationData.adults : 1);
   const [children, setChildren] = useState<number>(prevReservationData ? prevReservationData.children : 0);
   const [nights, setNights] = useState<number>(0);
+  const [countName, setCountName] = useState('상품수');
 
   useEffect(() => {
     const processedCheckInDate: ValuePiece = Array.isArray(checkInValue) ? checkInValue[0] : checkInValue;
@@ -187,14 +188,109 @@ const Reservation = ({ updateReservationData }: any, { selectedProduct }: any) =
     });
   };
 
-  const handlePlusClick = (stateUpdater: React.Dispatch<React.SetStateAction<number>>) => {
+  const handleCountPlusClick = (stateUpdater: React.Dispatch<React.SetStateAction<number>>) => {
     stateUpdater((prevState) => {
-      if (prevState < 9) {
-        return prevState + 1;
+      if (location.state !== null) {
+        if (location.state.selectedProduct) {
+          if (prevState === location.state.selectedProduct.spare) {
+            alert('해당 상품의 잔여 수량: ' + location.state.selectedProduct.spare + ' 입니다.');
+          }
+          if (prevState < 9 && prevState < location.state.selectedProduct.spare) {
+            return prevState + 1;
+          }
+        }
+        if (location.state.selectData) {
+          if (prevState === location.state.selectData.spare) {
+            alert('해당 상품의 잔여 수량: ' + location.state.selectData.spare + ' 입니다.');
+          }
+          if (prevState < 9 && prevState < location.state.selectData.spare) {
+            return prevState + 1;
+          }
+        }
+      } else {
+        if (prevState < 9) {
+          return prevState + 1;
+        }
       }
       return prevState;
     });
   };
+
+  const handleAdultPlusClick = (stateUpdater: React.Dispatch<React.SetStateAction<number>>) => {
+    stateUpdater((prevState) => {
+      if (location.state !== null) {
+        if (location.state.selectedProduct) {
+          if (prevState === location.state.selectedProduct.spareAdult) {
+            alert('해당 상품의 최대 성인 인원은 ' + location.state.selectedProduct.spareAdult + '명 입니다.');
+          }
+          if (prevState < 9 && prevState < location.state.selectedProduct.spareAdult) {
+            return prevState + 1;
+          }
+        }
+        if (location.state.selectData) {
+          if (prevState === location.state.selectData.spareAdult) {
+            alert('해당 상품의 최대 성인 인원은 ' + location.state.selectData.spareAdult + '명 입니다.');
+          }
+          if (prevState < 9 && prevState < location.state.selectData.spareAdult) {
+            return prevState + 1;
+          }
+        }
+      } else {
+        if (prevState < 9) {
+          return prevState + 1;
+        }
+      }
+      return prevState;
+    });
+  };
+
+  const handleChildrenPlusClick = (stateUpdater: React.Dispatch<React.SetStateAction<number>>) => {
+    stateUpdater((prevState) => {
+      if (location.state !== null) {
+        if (location.state.selectedProduct) {
+          if (prevState === location.state.selectedProduct.spareChildren) {
+            alert('해당 상품의 최대 어린이 인원은 ' + location.state.selectedProduct.spareChildren + '명 입니다.');
+          }
+          if (prevState < 9 && prevState < location.state.selectedProduct.spareChildren) {
+            return prevState + 1;
+          }
+        }
+        if (location.state.selectData) {
+          if (prevState === location.state.selectData.spareChildren) {
+            alert('해당 상품의 최대 어린이 인원은 ' + location.state.selectData.spareChildren + '명 입니다.');
+          }
+          if (prevState < 9 && prevState < location.state.selectData.spareChildren) {
+            return prevState + 1;
+          }
+        }
+      } else {
+        if (prevState < 9) {
+          return prevState + 1;
+        }
+      }
+      return prevState;
+    });
+  };
+
+  const handleCountName = () => {
+    if (location.state.selectedProduct !== undefined) {
+      location.state.selectedProduct.type === 'dining' ? setCountName('상품수') : setCountName('객실수');
+      count > location.state.selectedProduct.spare ? setCount(location.state.selectedProduct.spare) : setCount(count);
+      adults > location.state.selectedProduct.spareAdult ? setAdults(location.state.selectedProduct.spareAdult) : setAdults(adults);
+      children > location.state.selectedProduct.spareChildren ? setChildren(location.state.selectedProduct.spareChildren) : setChildren(children);
+    } else {
+      location.state.selectData.type === 'dining' ? setCountName('상품수') : setCountName('객실수');
+      count > location.state.selectData.spare ? setCount(location.state.selectData.spare) : setCount(count);
+      adults > location.state.selectData.spareAdlut ? setAdults(location.state.selectData.spareAdlut) : setAdults(adults);
+      children > location.state.selectData.spareChildren ? setChildren(location.state.selectData.spareChildren) : setChildren(children);
+    }
+  };
+
+  useEffect(() => {
+    if (location.state !== null) {
+      handleCountName();
+    }
+  }, []);
 
   return (
     <>
@@ -264,9 +360,7 @@ const Reservation = ({ updateReservationData }: any, { selectedProduct }: any) =
       <S.ReserveDetail>
         <div className="option">
           <S.SelectWrapper>
-            <S.SelectLabel>
-              {location.state && location.state.selectedProduct && location.state.selectedProduct.type === 'dining' ? '좌석수' : '객실수'}
-            </S.SelectLabel>
+            <S.SelectLabel>{countName}</S.SelectLabel>
             <button type="button" onClick={handleOptionToggle}>
               {count}
             </button>
@@ -287,16 +381,14 @@ const Reservation = ({ updateReservationData }: any, { selectedProduct }: any) =
             <table>
               <tbody>
                 <tr>
-                  <th>
-                    {location.state && location.state.selectedProduct && location.state.selectedProduct?.type === 'dining' ? '좌석수' : '객실수'}
-                  </th>
+                  <th>{countName}</th>
                   <td>
                     <div>
                       <button type="button" className="btn-minus" onClick={() => handleMinusClick(setCount, 1)}>
                         ─
                       </button>
                       <input type="text" value={count} readOnly />
-                      <button type="button" className="btn-plus" onClick={() => handlePlusClick(setCount)}>
+                      <button type="button" className="btn-plus" onClick={() => handleCountPlusClick(setCount)}>
                         ┼
                       </button>
                     </div>
@@ -310,7 +402,7 @@ const Reservation = ({ updateReservationData }: any, { selectedProduct }: any) =
                         ─
                       </button>
                       <input type="text" value={adults} readOnly />
-                      <button type="button" className="btn-plus" onClick={() => handlePlusClick(setAdults)}>
+                      <button type="button" className="btn-plus" onClick={() => handleAdultPlusClick(setAdults)}>
                         ┼
                       </button>
                     </div>
@@ -324,7 +416,7 @@ const Reservation = ({ updateReservationData }: any, { selectedProduct }: any) =
                         ─
                       </button>
                       <input type="text" value={children} readOnly />
-                      <button type="button" className="btn-plus" onClick={() => handlePlusClick(setChildren)}>
+                      <button type="button" className="btn-plus" onClick={() => handleChildrenPlusClick(setChildren)}>
                         ┼
                       </button>
                     </div>

@@ -44,7 +44,7 @@ const Item = ({ selectedProduct, indexImg, updateReservationData }: any) => {
     setTypeDetail(typeDetail ? typeDetail.korean : '');
     setSpareAdultPrice(spareAdultPrice);
     setSpareChildrenPrice(spareChildrenPrice);
-  }, []);
+  }, [selectedProduct, updateReservationData.adults, updateReservationData.children, updateReservationData.count]);
 
   // useEffect(() => {
   //   if(!coupon && !giftCard){
@@ -55,8 +55,6 @@ const Item = ({ selectedProduct, indexImg, updateReservationData }: any) => {
 
   //   }else
   // }, [coupon, giftCard])
-  console.log(selectedProduct);
-  console.log(updateReservationData);
 
   return (
     <>
