@@ -73,6 +73,8 @@ const Item = ({ selectedProduct, indexImg, updateReservationData, selectCoupon, 
     }
   }, []);
 
+  console.log(selectCoupon);
+
   return (
     <>
       <S.SelectItem>
