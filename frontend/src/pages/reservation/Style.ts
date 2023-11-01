@@ -319,6 +319,14 @@ export const Left = styled.div`
 
 export const Right = styled.div`
   width: 25%;
+
+  p.notice {
+    font-size: ${(props) => props.theme.font.sizexs};
+    color: ${(props) => props.theme.colors.graylight};
+    padding-top: 16px;
+    text-align: left;
+    line-height: 1.4;
+  }
 `;
 
 export const Section = styled.div`
