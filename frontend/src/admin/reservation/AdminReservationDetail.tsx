@@ -42,7 +42,7 @@ const AdminReservationDetail = () => {
   }, []);
 
   useEffect(() => {
-    Instance.get(`/reservation/reservationNumber/${reservationNumber}`).then((response) => {
+    Instance.get(`/reservation/detail/${reservationNumber}`).then((response) => {
       setReservationData(response.data);
 
       const formattedCheckIn = formatDate(response.data.checkIn);

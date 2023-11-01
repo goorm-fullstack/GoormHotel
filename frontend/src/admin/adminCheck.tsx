@@ -14,10 +14,12 @@ const AdminCheck = ({ kind }: AdminAuth) => {
     if (kind === 'ANY') {
       if (!adminId) {
         navigate('/admin/login');
+        // console.log('1');
       }
     } else {
       if (!adminId) {
         navigate('/admin/login');
+        // console.log('2');
       }
       if (!(authItem && authItem.includes(kind))) {
         alert('사용할 수 없는 페이지이거나 권한이 없습니다.');

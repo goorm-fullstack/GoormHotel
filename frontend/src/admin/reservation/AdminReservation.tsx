@@ -151,7 +151,7 @@ const AdminReservation = () => {
                   </td>
                   <td>{index + 1}</td>
                   <td>
-                    <Link to={`/admin/reservation/${reservation.reservationNumber}`} className="u">
+                    <Link to={`/admin/reservation/detail/${reservation.reservationNumber}`} className="u">
                       {reservation.reservationNumber}
                     </Link>
                   </td>
