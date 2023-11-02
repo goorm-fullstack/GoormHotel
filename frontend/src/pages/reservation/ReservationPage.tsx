@@ -89,6 +89,8 @@ const ReservationPage = () => {
 
   const isLoggined = localStorage.getItem('memberId'); // 로그인 유무 확인
 
+  console.log(reservationNewData);
+
   //member데이터를 불러오는 로직
   useEffect(() => {
     if (userLoggedIn) {
@@ -167,7 +169,7 @@ const ReservationPage = () => {
       discountPrice: '',
       totalPrice: selectedProduct ? selectedProduct.price : selectData.price,
       itemId: selectedProduct ? selectedProduct.id : selectData.id,
-      memberId: memberData && memberData.id ? memberData.id : '',
+      memberId: memberData && memberData.memberId,
       couponId: '',
       giftCardId: '',
       memberName: memberData ? memberData.name : '',

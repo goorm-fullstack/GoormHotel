@@ -6,21 +6,29 @@ import 'moment/locale/ko';
 import { ValuePiece } from '../common/DateButton/DateButton';
 import { useLocation } from 'react-router-dom';
 
-const Reservation = ({ updateReservationData }: any, { selectedProduct }: any) => {
+const Reservation = ({ updateReservationData, selectedProduct, reservation }: any) => {
   const location = useLocation();
   const prevReservationData = location.state?.reservationData;
   const [checkInValue, setCheckInValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
   const [checkOutValue, setCheckOutValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
-  const [checkInDate, setCheckInDate] = useState<string>(prevReservationData ? prevReservationData.checkInDate : '');
-  const [checkOutDate, setCheckOutDate] = useState<string>(prevReservationData ? prevReservationData.checkOutDate : '');
+  const [checkInDate, setCheckInDate] = useState<string>(
+    prevReservationData ? prevReservationData.checkInDate : reservation ? reservation.checkInDate : ''
+  );
+  const [checkOutDate, setCheckOutDate] = useState<string>(
+    prevReservationData ? prevReservationData.checkOutDate : reservation ? reservation.checkOutDate : ''
+  );
   const [checkInOpen, setCheckInOpen] = useState<boolean>(false);
   const [checkOutOpen, setCheckOutOpen] = useState<boolean>(false);
   const [optionOpen, setOptionOpen] = useState<boolean>(false);
-  const [count, setCount] = useState<number>(prevReservationData ? prevReservationData.count : 1);
-  const [adults, setAdults] = useState<number>(prevReservationData ? prevReservationData.adults : 1);
-  const [children, setChildren] = useState<number>(prevReservationData ? prevReservationData.children : 0);
+  const [count, setCount] = useState<number>(prevReservationData ? prevReservationData.count : reservation ? reservation.count : 1);
+  const [adults, setAdults] = useState<number>(prevReservationData ? prevReservationData.adults : reservation ? reservation.adults : 1);
+  const [children, setChildren] = useState<number>(prevReservationData ? prevReservationData.children : reservation ? reservation.children : 0);
   const [nights, setNights] = useState<number>(0);
   const [countName, setCountName] = useState('상품수');
+
+  useEffect(() => {
+    console.log(reservation);
+  }, [reservation]);
 
   useEffect(() => {
     const processedCheckInDate: ValuePiece = Array.isArray(checkInValue) ? checkInValue[0] : checkInValue;
@@ -72,17 +80,20 @@ const Reservation = ({ updateReservationData }: any, { selectedProduct }: any) =
   useEffect(() => {
     let today;
     let tomorrow;
-    if (prevReservationData === undefined) {
+    if (prevReservationData === undefined && reservation === undefined) {
       today = new Date();
       tomorrow = new Date(today);
       tomorrow.setDate(today.getDate() + 1);
-    } else {
+    } else if (prevReservationData !== undefined && reservation === undefined) {
       today = new Date(prevReservationData.checkInDate);
       tomorrow = new Date(prevReservationData.checkOutDate);
+    } else if (prevReservationData === undefined && reservation !== undefined) {
+      today = new Date(reservation.checkInDate);
+      tomorrow = new Date(reservation.checkOutDate);
     }
 
-    const formattedToday = formatAndSetDate(today);
-    const formattedTomorrow = formatAndSetDate(tomorrow);
+    const formattedToday = formatAndSetDate(today as Date);
+    const formattedTomorrow = formatAndSetDate(tomorrow as Date);
 
     setCheckInDate(formattedToday);
     setCheckOutDate(formattedTomorrow);
@@ -91,15 +102,20 @@ const Reservation = ({ updateReservationData }: any, { selectedProduct }: any) =
   useEffect(() => {
     let today;
     let tomorrow;
-    if (prevReservationData === undefined) {
+    if (prevReservationData === undefined && reservation === undefined) {
       today = new Date();
       tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
       setCheckInValue(today);
       setCheckOutValue(tomorrow);
-    } else {
+    } else if (prevReservationData !== undefined && reservation === undefined) {
       today = new Date(prevReservationData.checkInDate);
       tomorrow = new Date(prevReservationData.checkOutDate);
+      setCheckInValue(today);
+      setCheckOutValue(tomorrow);
+    } else if (prevReservationData === undefined && reservation !== undefined) {
+      today = new Date(reservation.checkInDate);
+      tomorrow = new Date(reservation.checkOutDate);
       setCheckInValue(today);
       setCheckOutValue(tomorrow);
     }
