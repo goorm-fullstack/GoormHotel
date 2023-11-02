@@ -35,6 +35,14 @@ const ReservationCheck = () => {
     fetchImg();
   }, [reservationData]);
 
+  const calcDiscountPrice = (discountRate : number) => {
+    const price = reservationData.sumPrice;
+    const rate = discountRate / 100;
+    const discount = Math.round(price * rate);
+    const result = Math.round(discount / 10) * 10;
+    return result
+  }
+
   return (
     <>
       <S.Container>
@@ -84,7 +92,7 @@ const ReservationCheck = () => {
                     reservationData.giftCard.map((giftCard: any, index: number) => (
                       <tr key={index}>
                         <td>{giftCard.title}</td>
-                        {/* <td className="right">{giftCard.price}</td> */} {/* 상품권 가격 표시 필요 */}
+                        <td className="right">{giftCard.money}</td> {/* 상품권 가격 표시 필요 */}
                       </tr>
                     ))}
                 </table>
@@ -98,7 +106,7 @@ const ReservationCheck = () => {
                   {reservationData.coupon !== null ? (
                     <tr>
                       <td>{reservationData.coupon.name}</td>
-                      {/* <td className="right">{reservationData.coupon.price}</td> */} {/* 쿠폰 가격 표시 필요 */}
+                      <td className="right">{calcDiscountPrice(reservationData.coupon.discountRate)}</td> {/* 쿠폰 가격 표시 필요 */}
                     </tr>
                   ) : (
                     <tr>
