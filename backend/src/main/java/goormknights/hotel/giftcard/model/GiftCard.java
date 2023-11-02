@@ -69,11 +69,8 @@ public class GiftCard {
     }
 
     // 사용자가 기프트 카드를 사용하는 경우
-    public void paidByGiftCard(int money) {
-        System.out.println("call money : "+money);
-        this.money = money;
-        if(this.money <= 0)
-            isZeroMoney = 'Y';
+    public void paidByGiftCard() {
+        isZeroMoney = 'Y';
     }
 
     public ResponseGiftCardDto toResponseDto() {

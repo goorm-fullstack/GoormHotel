@@ -84,7 +84,7 @@ public class ReservationService {
         for(String s : reservationDto.getGiftCardId()) {
             GiftCard useGiftCardItem = giftCardRepository.findByUuid(s).orElseThrow(() -> new NoSuchGiftCardException("일치하는 상품권이 없습니다."));
             if(useGiftCardItem.getIsZeroMoney() != 'N') throw new GiftCardAlreadyUsedException("이미 사용한 상품권입니다.");
-            useGiftCardItem.paidByGiftCard(useGiftCardItem.getMoney());
+            useGiftCardItem.paidByGiftCard();
             useGiftCard.add(useGiftCardItem);
         }
         reservation.setGiftCard(useGiftCard);
