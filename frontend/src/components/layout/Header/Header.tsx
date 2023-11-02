@@ -8,7 +8,8 @@ import { useAuth } from '../../../utils/api/AuthContext';
 const Header = () => {
   const location = useLocation().pathname;
   const { memberAuthState, setMemberAuthState } = useAuth();
-  const isLoggedIn = memberAuthState.memberId !== '';
+  // const isLoggedIn = memberAuthState.memberId !== '';
+  const isLoggedIn = localStorage.getItem('memberId');
   const navigate = useNavigate();
 
   // const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
