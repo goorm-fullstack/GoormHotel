@@ -6,17 +6,17 @@ import { useEffect } from 'react';
 import Instance from '../../utils/api/axiosInstance';
 
 interface Reservation {
-  reservationNumber : string,
-  reservationDate : string,
-  productName : string,
-  paymentAmount : number,
-  checkInDate : string,
-  checkOutDate : string
+  reservationNumber: string;
+  reservationDate: string;
+  productName: string;
+  paymentAmount: number;
+  checkInDate: string;
+  checkOutDate: string;
 }
 
 const ReservationList = () => {
   const [totalPages, setTotalPages] = useState(0);
-  const memberId = localStorage.getItem("memberId");
+  const memberId = localStorage.getItem('memberId');
   const [reservations, setReservation] = useState<Reservation[]>([
     {
       reservationNumber: '2023082555672148',
@@ -38,16 +38,16 @@ const ReservationList = () => {
   ]);
 
   useEffect(() => {
-    if(memberId) {
+    if (memberId) {
       // 페이징 코드 추가
       Instance.get(`/reservation/list/count/${memberId}`).then((response) => {
         setTotalPages(response.data);
-      })
+      });
       Instance.get(`/reservation/list/member/${memberId}`).then((response) => {
-        setReservation(response.data)
+        setReservation(response.data);
       });
     }
-  }, [])
+  }, []);
 
   return (
     <>

@@ -69,7 +69,7 @@ const Item = ({ selectedProduct, indexImg, updateReservationData, selectCoupon, 
   }, [selectedProduct, updateReservationData]);
 
   useEffect(() => {
-    if (selectCoupon !== 0) {
+    if (selectCoupon && selectCoupon !== 0) {
       Instance.get(`/api/coupon/get/${selectCoupon}`).then((response) => {
         if (response.status === 200) setCoupon(response.data);
       });
@@ -77,18 +77,19 @@ const Item = ({ selectedProduct, indexImg, updateReservationData, selectCoupon, 
   }, [selectCoupon]);
 
   useEffect(() => {
-    if (selectGiftCardList.length > 0) {
+    if (selectGiftCardList && selectGiftCardList.length > 0) {
       let requestGiftCardIdListDto = {
-        "giftCardIdList" : selectGiftCardList,
-      }
+        giftCardIdList: selectGiftCardList,
+      };
       Instance.post('/api/giftcard/get', requestGiftCardIdListDto).then((response) => {
         if (response.status === 200) setGiftCardList(response.data);
       });
     }
   }, [selectGiftCardList]);
 
+  // 쿠폰, 상품권과 함께 계산
   useEffect(() => {
-    if (selectCoupon !== 0 && selectGiftCardList.length > 0) {
+    if (selectCoupon !== 0 && selectGiftCardList && selectGiftCardList.length > 0) {
       //상품권 존재, 쿠폰 존재
       let currentPrice = selectedProduct.price + spareAdultPrice + spareChildrenPrice;
       let result = 0;
@@ -106,7 +107,7 @@ const Item = ({ selectedProduct, indexImg, updateReservationData, selectCoupon, 
       }
       setDiscountPrice(result + giftCardDiscount);
       setTotalPrice(currentPrice);
-    } else if (selectCoupon !== 0 && selectGiftCardList.length === 0) {
+    } else if (selectCoupon !== 0 && selectGiftCardList && selectGiftCardList.length === 0) {
       //상품권 없음, 쿠폰 존재
       let currentPrice = selectedProduct.price + spareAdultPrice + spareChildrenPrice;
       let result = 0;
@@ -134,7 +135,7 @@ const Item = ({ selectedProduct, indexImg, updateReservationData, selectCoupon, 
       setDiscountPrice(0);
       setTotalPrice(selectedProduct.price + spareAdultPrice + spareChildrenPrice);
     }
-  }, [selectCoupon, selectGiftCardList]);
+  }, [selectCoupon, selectGiftCardList, coupon, giftcardList, discountPrice, totalPrice, selectedProduct, spareAdultPrice, spareChildrenPrice]);
 
   return (
     <>

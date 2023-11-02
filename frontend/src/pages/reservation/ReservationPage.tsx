@@ -62,6 +62,8 @@ const ReservationPage = () => {
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [notice, setNotice] = useState('');
   const [isLogined, setIsLogined] = useState(false);
+  const [coupon, setCoupon] = useState<Coupon>();
+  const [giftCards, setGiftCards] = useState<GiftCard>();
 
   const [reservationNewData, setReservationNewData] = useState<any>();
 
@@ -138,6 +140,25 @@ const ReservationPage = () => {
     return moment(date).format('YYYY-MM-DDTHH:mm:ss');
   };
 
+  useEffect(() => {
+    if (selectCoupon && selectCoupon !== 0) {
+      Instance.get(`/api/coupon/get/${selectCoupon}`).then((response) => {
+        if (response.status === 200) setCoupon(response.data);
+      });
+    }
+  }, [selectCoupon]);
+
+  useEffect(() => {
+    if (selectGiftCard && selectGiftCard.length > 0) {
+      let requestGiftCardIdListDto = {
+        giftCardIdList: selectGiftCard,
+      };
+      Instance.post('/api/giftcard/get', requestGiftCardIdListDto).then((response) => {
+        if (response.status === 200) setGiftCards(response.data);
+      });
+    }
+  }, [selectGiftCard]);
+
   // 예약 및 결제
   const handleReservation = async () => {
     if (memberData.name === '' && memberData.phoneNumber === '' && memberData.email === '') {
@@ -155,6 +176,38 @@ const ReservationPage = () => {
     const { IMP } = window;
     IMP.init('imp32506271'); // 가맹점 식별코드
 
+    const originalPrice = selectedProduct ? (selectedProduct.price as number) : (selectData.price as number);
+    const adultCount = selectedProduct ? (selectedProduct.spareAdult as number) : (selectData.spareAdult as number);
+    const childrenCount = selectedProduct ? (selectedProduct.spareChildren as number) : (selectData.spareChildren as number);
+    const adultPrice = selectedProduct ? (selectedProduct.priceAdult as number) : (selectData.priceAdult as number);
+    const childrenPrice = selectedProduct ? (selectedProduct.priceChildren as number) : (selectData.priceChildren as number);
+    let adultPriceResult = 0;
+    let childrenPriceResult = 0;
+    if (reservationNewData.adults > adultCount) {
+      adultPriceResult = (reservationNewData.adults - adultCount) * adultPrice;
+    }
+    if (reservationNewData.children > childrenCount) {
+      childrenPriceResult = (reservationNewData.children - childrenCount) * childrenPrice;
+    }
+
+    const sumPrice = originalPrice + adultPriceResult + childrenPriceResult;
+
+    let totalPrice = sumPrice;
+    let result = 0;
+    if (coupon) {
+      const discountRate = coupon.discountRate / 100;
+      const discount = Math.round(totalPrice * discountRate);
+      result = Math.round(discount / 10) * 10;
+      totalPrice -= result;
+    }
+    let giftCardDiscount = 0;
+    for (var i = 0; i < giftcardList.length; i++) {
+      giftCardDiscount += giftcardList[i].money;
+      totalPrice -= giftcardList[i].money;
+    }
+
+    const discountPrice = result + giftCardDiscount;
+
     setFormData({
       checkIn: reservationNewData?.checkInDate || '',
       checkOut: reservationNewData?.checkOutDate || '',
@@ -163,12 +216,12 @@ const ReservationPage = () => {
       children: reservationNewData?.children || '0',
       stay: reservationNewData?.nights,
       notice: notice,
-      sumPrice: selectedProduct ? selectedProduct.price : selectData.price,
-      discountPrice: '',
-      totalPrice: selectedProduct ? selectedProduct.price : selectData.price,
+      sumPrice: sumPrice.toString(),
+      discountPrice: discountPrice.toString(),
+      totalPrice: totalPrice.toString(),
       itemId: selectedProduct ? selectedProduct.id : selectData.id,
-      memberId: memberData && memberData.id ? memberData.id : '',
-      couponId: '',
+      memberId: memberData && memberData.memberId,
+      couponId: selectCoupon.toString(),
       giftCardId: '',
       memberName: memberData ? memberData.name : '',
       phoneNumber: memberData ? memberData.phoneNumber : '',
@@ -193,8 +246,6 @@ const ReservationPage = () => {
       checkOut: formatDateForServer(reservationNewData.checkOutDate),
     };
 
-    console.log(serverFormattedData);
-
     IMP.request_pay(paydata, callback);
     try {
       await Instance.post(`/reservation/save`, {
@@ -206,6 +257,10 @@ const ReservationPage = () => {
       console.error('예약 요청 실패', error);
     }
   };
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
 
   function callback(response: RequestPayResponse) {
     const { success, error_msg } = response;
