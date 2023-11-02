@@ -10,21 +10,13 @@ import moment from 'moment';
 const ReservationCheck = () => {
   const number = useParams().number;
   const [reservationData, setReservationData] = useState<any>();
-  const [updateData, setUpdateData] = useState({
-    adults: 0,
-    checkInDate: '',
-    checkOutDate: '',
-    children: 0,
-    count: 0,
-    nights: 0,
-  });
+  const [updateData, setUpdateData] = useState<any>();
   const [roomItem, setRoomItem] = useState<any>();
   const [diningItem, setDiningItem] = useState<any>();
   const [imgUrl, setImgUrl] = useState('');
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
   const [reservationNewData, setReservationNewData] = useState();
-  let location = useLocation();
 
   // 예약 정보 가져오기
   useEffect(() => {
@@ -33,23 +25,10 @@ const ReservationCheck = () => {
         setReservationData(response.data);
         setRoomItem(response.data.roomItem);
         setDiningItem(response.data.diningItem);
-        setUpdateData({
-          adults: reservationData && reservationData.adult,
-          checkInDate: checkInDate !== '' ? checkInDate : '',
-          checkOutDate: checkOutDate !== '' ? checkOutDate : '',
-          children: reservationData && reservationData.children,
-          count: reservationData && reservationData.count,
-          nights: reservationData && reservationData.stay,
-        });
       });
     };
     fetchReservationData();
   }, [number, checkInDate, checkOutDate]);
-
-  console.log(reservationData);
-  console.log(roomItem);
-  console.log(diningItem);
-  console.log(updateData);
 
   // 예약 정보에 담긴 상품 이미지 가져오기
   useEffect(() => {
@@ -83,21 +62,20 @@ const ReservationCheck = () => {
 
       setCheckInDate(formattedCheckInDate);
       setCheckOutDate(formattedCheckOutDate);
+      setUpdateData({
+        adults: reservationData.adult,
+        checkInDate: formattedCheckInDate,
+        checkOutDate: formattedCheckOutDate,
+        children: reservationData.children,
+        count: reservationData.count,
+        nights: reservationData.stay,
+      });
     }
   }, [reservationData, roomItem, diningItem]);
 
   const updateReservationData = (newData: any) => {
     setReservationNewData(newData);
   };
-
-  useEffect(() => {
-    const newLocation = { ...location };
-    newLocation.state = updateData;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    location = newLocation;
-  }, [updateData]);
-
-  console.log(location.state);
 
   const calcDiscountPrice = (discountRate: number) => {
     const price = reservationData.sumPrice;
@@ -107,11 +85,18 @@ const ReservationCheck = () => {
     return result;
   };
 
+  useEffect(() => {
+    console.log(updateData);
+    console.log(checkInDate);
+    console.log(checkOutDate);
+    console.log(reservationData);
+  }, [updateData, checkInDate, checkOutDate, reservationData]);
+
   return (
     <>
       <S.Container>
         <PageTitle>예약 확인</PageTitle>
-        {reservationData && (
+        {reservationData && updateData && (
           <S.Wrapper>
             <S.Left>
               <S.Section>
@@ -157,7 +142,7 @@ const ReservationCheck = () => {
                       reservationData.giftCard.map((giftCard: any, index: number) => (
                         <tr key={index}>
                           <td>{giftCard.title}</td>
-                          <td className="right">{giftCard.money}</td>
+                          <td className="right">-{giftCard.money} 원</td>
                         </tr>
                       ))}
                   </table>
@@ -171,7 +156,7 @@ const ReservationCheck = () => {
                     {reservationData.coupon !== null ? (
                       <tr>
                         <td>{reservationData.coupon.name}</td>
-                        <td className="right">{calcDiscountPrice(reservationData.coupon.discountRate)}</td>
+                        <td className="right">-{calcDiscountPrice(reservationData.coupon.discountRate)} 원</td>
                       </tr>
                     ) : (
                       <tr>

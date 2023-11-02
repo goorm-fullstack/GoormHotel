@@ -87,6 +87,7 @@ const Item = ({ selectedProduct, indexImg, updateReservationData, selectCoupon, 
     }
   }, [selectGiftCardList]);
 
+  // 쿠폰, 상품권과 함께 계산
   useEffect(() => {
     if (selectCoupon !== 0 && selectGiftCardList && selectGiftCardList.length > 0) {
       //상품권 존재, 쿠폰 존재
@@ -134,7 +135,7 @@ const Item = ({ selectedProduct, indexImg, updateReservationData, selectCoupon, 
       setDiscountPrice(0);
       setTotalPrice(selectedProduct.price + spareAdultPrice + spareChildrenPrice);
     }
-  }, [selectCoupon, selectGiftCardList]);
+  }, [selectCoupon, selectGiftCardList, coupon, giftcardList, discountPrice, totalPrice, selectedProduct, spareAdultPrice, spareChildrenPrice]);
 
   return (
     <>
