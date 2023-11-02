@@ -19,14 +19,15 @@ import org.hibernate.annotations.OnDeleteAction;
 @DiscriminatorValue("room")
 @SuperBuilder(toBuilder = true)
 @OnDelete(action = OnDeleteAction.CASCADE)
-public class Room extends Item{
+public class Room extends Item {
 
     @Column(nullable = false)
     private String bed; // 침대 타입(ex. 싱글, 더블/트윈, 킹)
 
     // 클라이언트에게 응답 시 ResponseRoomDto로 변경
-    public ResponseRoomDto toResponseRoomDto(){
+    public ResponseRoomDto toResponseRoomDto() {
         return ResponseRoomDto.builder()
+                .id(this.getId())
                 .priceAdult(this.getPriceAdult())
                 .spareChildren(this.getSpareChildren())
                 .spareAdult(this.getSpareAdult())

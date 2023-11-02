@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ResponseRoomDto {
 
+    private Long id;
     private String name; // 상품명
     private int price; // 기본 비용
     private int priceAdult; // 어른 추가 비용
@@ -29,7 +30,8 @@ public class ResponseRoomDto {
     private String description;
 
     @Builder
-    public ResponseRoomDto( String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, String bed, int spare, int spareAdult, int spareChildren, int capacity, String description) {
+    public ResponseRoomDto(Long id, String name, int price, int priceAdult, int priceChildren, String type, String typeDetail, String bed, int spare, int spareAdult, int spareChildren, int capacity, String description) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.priceAdult = priceAdult;

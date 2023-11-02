@@ -2,11 +2,16 @@ package goormknights.hotel.reservation.controller;
 
 import goormknights.hotel.reservation.dto.request.RequestReservationDto;
 import goormknights.hotel.reservation.dto.request.UpdateReservationDto;
+import goormknights.hotel.reservation.dto.response.MemberReservationDto;
 import goormknights.hotel.reservation.dto.response.ResponseReservationDto;
 import goormknights.hotel.reservation.service.ReservationService;
 import goormknights.hotel.reservation.model.Reservation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -90,15 +95,33 @@ public class ReservationController {
      * @return 전체 예약 내역
      */
     @GetMapping
-    public ResponseEntity<Object> getAllReservation(){
-        List<Reservation> list = reservationService.getAllReservation();
-        List<ResponseReservationDto> dtoList = new ArrayList<>();
-
-        for(Reservation r : list) {
-            dtoList.add(r.toResponseReservationDto());
-        }
-
-        return ResponseEntity.ok(dtoList);
+    public ResponseEntity<List<ResponseReservationDto>> getAllReservation(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(reservationService.getAllReservation(pageable));
     }
 
+    /**
+     * 예약데이터 페이징 개수 세기
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> getCount() {
+        return ResponseEntity.ok(reservationService.getCount());
+    }
+
+    /**
+     * 멤버 아이디로 예약 조회
+     */
+    @GetMapping("/list/member/{memberId}")
+    public ResponseEntity<List<MemberReservationDto>> getReservationListByMemberId(
+            @PathVariable String memberId,
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        return ResponseEntity.ok(reservationService.getReservationListByMemberId(memberId, pageable));
+    }
+
+    @GetMapping("/list/count/{memberId}")
+    public ResponseEntity<Long> getReservationListCountByMemberId(
+            @PathVariable String memberId
+    ) {
+        return ResponseEntity.ok(reservationService.getCountByMemberId(memberId));
+    }
 }

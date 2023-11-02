@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as S from './Style';
 import moment from 'moment';
 import Item from '../../components/Item/Item';
@@ -43,7 +43,11 @@ interface Coupon {
 
 const ReservationPage = () => {
   const [giftCardNumber, setGiftCardNumber] = useState('');
-  const [memberData, setMemberData] = useState();
+  const [memberData, setMemberData] = useState<any>({
+    name: '',
+    phoneNumber: '',
+    email: '',
+  });
   const userLoggedIn = localStorage.getItem('memberId');
   const location = useLocation();
   const { reservationData, selectedProduct, selectData, indexImg } = location.state;
@@ -51,28 +55,29 @@ const ReservationPage = () => {
   const [nights, setNights] = useState(1);
   const [giftcardList, setGiftCardList] = useState<GiftCard[]>([]);
   const [couponList, setCouponList] = useState<Coupon[]>([]);
-  const [selectCoupon, setSelectCoupon] = useState(''); //적용할 쿠폰
+  const [selectCoupon, setSelectCoupon] = useState(0); //적용할 쿠폰
   const [selectGiftCard, setSelectGiftCard] = useState<number[]>([]); //적용할 상품권
   const [click, setClick] = useState(false);
   const [memberId, setMemberId] = useState(0);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
   const [notice, setNotice] = useState('');
   const [isLogined, setIsLogined] = useState(false);
+  const [coupon, setCoupon] = useState<Coupon>();
+  const [giftCards, setGiftCards] = useState<GiftCard>();
+
+  const [reservationNewData, setReservationNewData] = useState<any>();
 
   const [formData, setFormData] = useState({
-    checkIn: reservationData?.checkInDate || '',
-    checkOut: reservationData?.checkOutDate || '',
-    count: reservationData?.rooms || 1,
-    adult: reservationData?.adults || 1,
-    children: reservationData?.children || 0,
-    stay: reservationData?.nights,
-    notice: notice,
-    sumPrice: selectedProduct ? selectedProduct.price : selectData.price,
+    checkIn: '',
+    checkOut: '',
+    count: '',
+    adult: '',
+    children: '',
+    stay: '',
+    notice: '',
+    sumPrice: '',
     discountPrice: '0',
-    totalPrice: selectedProduct ? selectedProduct.price : selectData.price,
+    totalPrice: '',
     memberName: '',
     phoneNumber: '',
     email: '',
@@ -81,6 +86,8 @@ const ReservationPage = () => {
     couponId: '',
     giftCardId: '',
   });
+  const [checked1, setChecked1] = useState(false);
+  const [checked2, setChecked2] = useState(false);
 
   const isLoggined = localStorage.getItem('memberId'); // 로그인 유무 확인
 
@@ -125,19 +132,101 @@ const ReservationPage = () => {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectCoupon(event.target.value);
+    const couponId = parseInt(event.target.value);
+    setSelectCoupon(couponId);
   };
 
   const formatDateForServer = (date: Date) => {
     return moment(date).format('YYYY-MM-DDTHH:mm:ss');
   };
 
+  useEffect(() => {
+    if (selectCoupon && selectCoupon !== 0) {
+      Instance.get(`/api/coupon/get/${selectCoupon}`).then((response) => {
+        if (response.status === 200) setCoupon(response.data);
+      });
+    }
+  }, [selectCoupon]);
+
+  useEffect(() => {
+    if (selectGiftCard && selectGiftCard.length > 0) {
+      let requestGiftCardIdListDto = {
+        giftCardIdList: selectGiftCard,
+      };
+      Instance.post('/api/giftcard/get', requestGiftCardIdListDto).then((response) => {
+        if (response.status === 200) setGiftCards(response.data);
+      });
+    }
+  }, [selectGiftCard]);
+
   // 예약 및 결제
   const handleReservation = async () => {
+    if (memberData.name === '' && memberData.phoneNumber === '' && memberData.email === '') {
+      alert('고객 정보를 입력해주세요.');
+      return;
+    }
+
+    if (checked1 === false || checked2 === false) {
+      alert('약관 동의가 필요합니다.');
+      return;
+    }
+
     if (!window.IMP) return;
 
     const { IMP } = window;
     IMP.init('imp32506271'); // 가맹점 식별코드
+
+    const originalPrice = selectedProduct ? (selectedProduct.price as number) : (selectData.price as number);
+    const adultCount = selectedProduct ? (selectedProduct.spareAdult as number) : (selectData.spareAdult as number);
+    const childrenCount = selectedProduct ? (selectedProduct.spareChildren as number) : (selectData.spareChildren as number);
+    const adultPrice = selectedProduct ? (selectedProduct.priceAdult as number) : (selectData.priceAdult as number);
+    const childrenPrice = selectedProduct ? (selectedProduct.priceChildren as number) : (selectData.priceChildren as number);
+    let adultPriceResult = 0;
+    let childrenPriceResult = 0;
+    if (reservationNewData.adults > adultCount) {
+      adultPriceResult = (reservationNewData.adults - adultCount) * adultPrice;
+    }
+    if (reservationNewData.children > childrenCount) {
+      childrenPriceResult = (reservationNewData.children - childrenCount) * childrenPrice;
+    }
+
+    const sumPrice = originalPrice + adultPriceResult + childrenPriceResult;
+
+    let totalPrice = sumPrice;
+    let result = 0;
+    if (coupon) {
+      const discountRate = coupon.discountRate / 100;
+      const discount = Math.round(totalPrice * discountRate);
+      result = Math.round(discount / 10) * 10;
+      totalPrice -= result;
+    }
+    let giftCardDiscount = 0;
+    for (var i = 0; i < giftcardList.length; i++) {
+      giftCardDiscount += giftcardList[i].money;
+      totalPrice -= giftcardList[i].money;
+    }
+
+    const discountPrice = result + giftCardDiscount;
+
+    setFormData({
+      checkIn: reservationNewData?.checkInDate || '',
+      checkOut: reservationNewData?.checkOutDate || '',
+      count: reservationNewData?.count || '1',
+      adult: reservationNewData?.adults || '1',
+      children: reservationNewData?.children || '0',
+      stay: reservationNewData?.nights,
+      notice: notice,
+      sumPrice: sumPrice.toString(),
+      discountPrice: discountPrice.toString(),
+      totalPrice: totalPrice.toString(),
+      itemId: selectedProduct ? selectedProduct.id : selectData.id,
+      memberId: memberData && memberData.memberId,
+      couponId: selectCoupon.toString(),
+      giftCardId: '',
+      memberName: memberData ? memberData.name : '',
+      phoneNumber: memberData ? memberData.phoneNumber : '',
+      email: memberData ? memberData.email : '',
+    });
 
     // 결제 데이터
     const paydata: RequestPayParams = {
@@ -153,8 +242,8 @@ const ReservationPage = () => {
 
     const serverFormattedData = {
       ...formData,
-      checkIn: formatDateForServer(formData.checkIn),
-      checkOut: formatDateForServer(formData.checkOut),
+      checkIn: formatDateForServer(reservationNewData.checkInDate),
+      checkOut: formatDateForServer(reservationNewData.checkOutDate),
     };
 
     IMP.request_pay(paydata, callback);
@@ -169,6 +258,10 @@ const ReservationPage = () => {
     }
   };
 
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
+
   function callback(response: RequestPayResponse) {
     const { success, error_msg } = response;
 
@@ -180,7 +273,7 @@ const ReservationPage = () => {
   }
 
   const updateReservationData = (newData: any) => {
-    setFormData(newData);
+    setReservationNewData(newData);
   };
 
   const handleSelectGiftCardAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -204,6 +297,24 @@ const ReservationPage = () => {
     });
   };
 
+  const handleChangeUserInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setMemberData((prevData: any) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleCheckBoxForAgree1 = () => {
+    setChecked1(!checked1);
+  };
+
+  const handleCheckBoxForAgree2 = () => {
+    setChecked2(!checked2);
+  };
+
+  console.log(selectCoupon);
+
   return (
     <div>
       <S.Container>
@@ -224,31 +335,28 @@ const ReservationPage = () => {
               <ContentsTitleXSmall>고객 정보 입력</ContentsTitleXSmall>
               <div className="flex">
                 <input
-                  name="memberName"
-                  placeholder="고객명"
+                  name="name"
                   type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={handleChangeUserInfo}
+                  defaultValue={memberData ? memberData.name : ''}
+                  placeholder="고객명 (필수)"
                   required
-                  readOnly={isLogined}
                 />
                 <input
                   name="phoneNumber"
-                  placeholder="연락처"
+                  placeholder="연락처 (필수)"
                   type="text"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  onChange={handleChangeUserInfo}
+                  defaultValue={memberData ? memberData.phoneNumber : ''}
                   required
-                  readOnly={isLogined}
                 />
                 <input
                   name="email"
-                  placeholder="이메일"
+                  placeholder="이메일 (필수)"
                   type="text"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={handleChangeUserInfo}
+                  defaultValue={memberData ? memberData.email : ''}
                   required
-                  readOnly={isLogined}
                 />
               </div>
               <div className="full">
@@ -311,18 +419,18 @@ const ReservationPage = () => {
 
             <S.Section>
               <ContentsTitleXSmall>쿠폰 사용</ContentsTitleXSmall>
-              <S.CouponSelect value={selectCoupon} onChange={handleChange} disabled={!userLoggedIn}>
-                {userLoggedIn ? (
+              <S.CouponSelect onChange={handleChange} disabled={!userLoggedIn} value={selectCoupon}>
+                {userLoggedIn !== null ? (
                   <>
-                    <option value="">선택 안함</option>
+                    <option value={0}>선택 안함</option>
                     {couponList.map((coupon: Coupon, index) => (
-                      <option value={coupon.id}>{coupon.name}</option>
+                      <option value={coupon.id} key={coupon.id}>
+                        {coupon.name}
+                      </option>
                     ))}
                   </>
                 ) : (
-                  <option disabled value="">
-                    로그인이 필요한 서비스입니다.
-                  </option>
+                  <option>로그인이 필요한 서비스입니다.</option>
                 )}
               </S.CouponSelect>
             </S.Section>
@@ -335,7 +443,7 @@ const ReservationPage = () => {
                     개인정보처리방침 동의 <span>(필수)</span>
                   </h4>
                   <CheckLabel htmlFor="privacycheck">
-                    <InputCheckbox type="checkbox" id="privacycheck" required />
+                    <InputCheckbox type="checkbox" id="privacycheck" onChange={handleCheckBoxForAgree1} required />
                     동의합니다
                   </CheckLabel>
                 </RequiredTitle>
@@ -349,7 +457,7 @@ const ReservationPage = () => {
                     취소 환불 수수료에 관한 동의 <span>(필수)</span>
                   </h4>
                   <CheckLabel htmlFor="privacycheck">
-                    <InputCheckbox type="checkbox" id="privacycheck" required />
+                    <InputCheckbox type="checkbox" id="privacycheck" onChange={handleCheckBoxForAgree2} required />
                     동의합니다
                   </CheckLabel>
                 </RequiredTitle>
@@ -363,9 +471,20 @@ const ReservationPage = () => {
           <S.Right>
             <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
             {indexImg ? (
-              <Item selectedProduct={selectedProduct ? selectedProduct : selectData} indexImg={indexImg} updateReservationData={formData} selectCoupon={selectCoupon} selectGiftCardList = {selectGiftCard}/>
+              <Item
+                selectedProduct={selectedProduct ? selectedProduct : selectData}
+                indexImg={indexImg}
+                updateReservationData={reservationNewData !== undefined ? reservationNewData : reservationData !== undefined ? reservationData : ''}
+                selectCoupon={selectCoupon}
+                selectGiftCardList={selectGiftCard}
+              />
             ) : (
-              <Item selectedProduct={selectedProduct ? selectedProduct : selectData} updateReservationData={formData} selectCoupon={selectCoupon} selectGiftCardList = {selectGiftCard}/>
+              <Item
+                selectedProduct={selectedProduct ? selectedProduct : selectData}
+                updateReservationData={reservationNewData !== undefined ? reservationNewData : reservationData !== undefined ? reservationData : ''}
+                selectCoupon={selectCoupon}
+                selectGiftCardList={selectGiftCard}
+              />
             )}
             <BtnWrapper className="full mt20">
               <SubmitBtn type="submit" className="shadow" onClick={handleReservation}>

@@ -71,7 +71,8 @@ public class Reservation {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<GiftCard> giftCard = new ArrayList<>();    // 적용한 상품권
+    @JoinColumn
+    private List<GiftCard> giftCard;    // 적용한 상품권
 
     @Column(nullable = false)
     private Integer sumPrice;               // 총액

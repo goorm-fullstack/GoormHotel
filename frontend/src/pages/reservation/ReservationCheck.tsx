@@ -1,113 +1,196 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as S from './Style';
 import Reservation from '../../components/Reservation/Reservation';
 import Product from '../../components/Item/Item';
 import { PageTitle, ContentsTitleXSmall } from '../../Style/commonStyles';
+import { useLocation, useParams } from 'react-router';
+import Instance from '../../utils/api/axiosInstance';
+import moment from 'moment';
 
 const ReservationCheck = () => {
-  const [coupons, setCoupons] = useState([
-    {
-      name: '추석 맞이 특가 이벤트: 객실 금액 100,000원 할인 상품권',
-      price: '-100,000 원',
-    },
-    {
-      name: '추석 맞이 특가 이벤트: 전 상품 금액 50,000원 할인 상품권',
-      price: '-50,000 원',
-    },
-  ]);
+  const number = useParams().number;
+  const [reservationData, setReservationData] = useState<any>();
+  const [updateData, setUpdateData] = useState<any>();
+  const [roomItem, setRoomItem] = useState<any>();
+  const [diningItem, setDiningItem] = useState<any>();
+  const [imgUrl, setImgUrl] = useState('');
+  const [checkInDate, setCheckInDate] = useState('');
+  const [checkOutDate, setCheckOutDate] = useState('');
+  const [reservationNewData, setReservationNewData] = useState();
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [discountPrice, setDiscountPrice] = useState(0);//쿠폰 할인 금액
+  // 예약 정보 가져오기
+  useEffect(() => {
+    const fetchReservationData = () => {
+      Instance.get(`/reservation/detail/${number}`).then((response) => {
+        setReservationData(response.data);
+        setRoomItem(response.data.roomItem);
+        setDiningItem(response.data.diningItem);
+        setTotalPrice(response.data.sumPrice);
+      });
+    };
+    fetchReservationData();
+  }, [number, checkInDate, checkOutDate]);
+
+  // 예약 정보에 담긴 상품 이미지 가져오기
+  useEffect(() => {
+    const fetchImg = async () => {
+      if (reservationData) {
+        if (reservationData.roomItem !== null) {
+          const img = await Instance.get(`/image/${roomItem.name}`, {
+            responseType: 'arraybuffer',
+          });
+          const blob = new Blob([img.data], { type: img.headers['content-type'] });
+          const imageUrl = URL.createObjectURL(blob);
+          setImgUrl(imageUrl);
+        } else {
+          const img = await Instance.get(`/image/${diningItem.name}`, {
+            responseType: 'arraybuffer',
+          });
+          const blob = new Blob([img.data], { type: img.headers['content-type'] });
+          const imageUrl = URL.createObjectURL(blob);
+          setImgUrl(imageUrl);
+        }
+      }
+    };
+    fetchImg();
+    if (reservationData) {
+      const checkInDate = moment(reservationData.checkIn, 'YYYY, MM, DD, HH, mm, ss, SSS');
+      const formattedCheckInDate = checkInDate.format('YYYY.MM.DD (ddd)');
+
+      const checkOutDate = moment(reservationData.checkOut, 'YYYY, MM, DD, HH, mm, ss, SSS');
+      const formattedCheckOutDate = checkOutDate.format('YYYY.MM.DD (ddd)');
+
+      setCheckInDate(formattedCheckInDate);
+      setCheckOutDate(formattedCheckOutDate);
+      setUpdateData({
+        adults: reservationData.adult,
+        checkInDate: formattedCheckInDate,
+        checkOutDate: formattedCheckOutDate,
+        children: reservationData.children,
+        count: reservationData.count,
+        nights: reservationData.stay,
+      });
+      calcDiscountPrice(reservationData.coupon);
+    }
+  }, [reservationData, roomItem, diningItem]);
+
+  const updateReservationData = (newData: any) => {
+    setReservationNewData(newData);
+  };
+
+  const calcDiscountPrice = (discountRate: number) => {
+    const price = reservationData.sumPrice;
+    const rate = discountRate / 100;
+    const discount = Math.round(price * rate);
+    const result = Math.round(discount / 10) * 10;
+    setDiscountPrice(result);
+    setTotalPrice(result)
+  }
+
+  const calcGiftCardPrice = (money : number) => {
+    if(totalPrice >= money) {
+      setTotalPrice(totalPrice - money);
+      return money;
+    } else {
+      const result = totalPrice;
+      setTotalPrice(0);
+      return result;
+    }
+  }
+  
+  useEffect(() => {
+    console.log(updateData);
+    console.log(checkInDate);
+    console.log(checkOutDate);
+    console.log(reservationData);
+  }, [updateData, checkInDate, checkOutDate, reservationData]);
+
   return (
     <>
       <S.Container>
         <PageTitle>예약 확인</PageTitle>
-        <S.Wrapper>
-          <S.Left>
-            <S.Section>
-              <ContentsTitleXSmall>상품 상세</ContentsTitleXSmall>
-              <S.RevNumber>
-                [예약번호] <strong>2023092312315646</strong>
-              </S.RevNumber>
-              <S.OptionWrap className="checkoption">
-                <Reservation />
-              </S.OptionWrap>
-            </S.Section>
+        {reservationData && updateData && (
+          <S.Wrapper>
+            <S.Left>
+              <S.Section>
+                <ContentsTitleXSmall>상품 상세</ContentsTitleXSmall>
+                <S.RevNumber>
+                  [예약번호] <strong>{number}</strong>
+                </S.RevNumber>
+                <S.OptionWrap className="checkoption">
+                  <Reservation selectedProduct={roomItem !== null ? roomItem : diningItem} reservation={updateData} />
+                </S.OptionWrap>
+              </S.Section>
 
-            <S.Section className="userinfo">
-              <ContentsTitleXSmall>고객 정보</ContentsTitleXSmall>
-              <table>
-                <tr>
-                  <th>고객명</th>
-                  <td>홍길동</td>
-                  <th>연락처</th>
-                  <td>010-1234-1234</td>
-                </tr>
-                <tr>
-                  <th>이메일</th>
-                  <td colSpan={3}>goorm@goorm.com</td>
-                </tr>
-                <tr>
-                  <th>요청사항</th>
-                  <td colSpan={3}>내용</td>
-                </tr>
-              </table>
-            </S.Section>
-
-            <S.Section>
-              <ContentsTitleXSmall>사용한 상품권</ContentsTitleXSmall>
-              <S.CouponInfo className="used">
+              <S.Section className="userinfo">
+                <ContentsTitleXSmall>고객 정보</ContentsTitleXSmall>
                 <table>
-                  {coupons.map((coupon, index) => (
-                    <tr key={index}>
-                      <td>{coupon.name}</td>
-                      <td className="right">{coupon.price}</td>
+                  {reservationData.giftCard.length === 0 && (
+                    <tr>
+                      <td colSpan={2}>사용한 상품권이 없습니다.</td>
                     </tr>
+                  )}
+                  {reservationData.giftCard &&
+                    reservationData.giftCard.map((giftCard: any, index: number) => (
+                      <tr key={index}>
+                        <td>{giftCard.title}</td>
+                        <td className="right">{calcGiftCardPrice(giftCard.money)}</td> {/* 상품권 가격 표시 필요 */}
+                      </tr>
                   ))}
-                </table>
-              </S.CouponInfo>
-            </S.Section>
+                  </table>
+              </S.Section>
 
             <S.Section>
               <ContentsTitleXSmall>사용한 쿠폰</ContentsTitleXSmall>
               <S.CouponInfo className="used">
                 <table>
-                  {coupons.map((coupon, index) => (
-                    <tr key={index}>
-                      <td>{coupon.name}</td>
-                      <td className="right">{coupon.price}</td>
+                  {reservationData.coupon !== null ? (
+                    <tr>
+                      <td>{reservationData.coupon.name}</td>
+                      <td className="right">{discountPrice}</td> {/* 쿠폰 가격 표시 필요 */}
                     </tr>
-                  ))}
-                  <tr>
-                    {/* 사용한 쿠폰이 없는 경우 */}
-                    <td colSpan={2}>사용한 쿠폰이 없습니다.</td>
-                  </tr>
+                  ) : (
+                    <tr>
+                      {/* 사용한 쿠폰이 없는 경우 */}
+                      <td colSpan={2}>사용한 쿠폰이 없습니다.</td>
+                    </tr>
+                  )}
                 </table>
               </S.CouponInfo>
             </S.Section>
           </S.Left>
-
-          <S.Right>
-            <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
-            <Product />
-            <S.Payment>
-              <tr>
-                <th>결제수단</th>
-                <td>신용카드</td>
-              </tr>
-              <tr>
-                <th>결제일</th>
-                <td>2023.09.23</td>
-              </tr>
-              <tr>
-                <td colSpan={2} className="notice">
-                  ⁕ 결제된 금액은 포트원 정책에 따라 매일 자동 취소됩니다. 자세한 내용은{' '}
-                  <a href="https://developers.portone.io/docs/ko/readme/get-started" target="_blank">
-                    포트원 개발자센터 홈페이지
-                  </a>
-                  를 확인해주세요.
-                </td>
-              </tr>
-            </S.Payment>
-          </S.Right>
-        </S.Wrapper>
+            <S.Right>
+              <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
+              <Product
+                selectedProduct={reservationData && reservationData.roomItem !== null ? reservationData.roomItem : reservationData.diningItem}
+                indexImg={imgUrl}
+                updateReservationData={updateData}
+              />
+              <S.Payment>
+                <tr>
+                  <th>결제수단</th>
+                  <td>신용카드</td>
+                </tr>
+                <tr>
+                  <th>결제일</th>
+                  <td>{`${reservationData.orderDate[0]}-${reservationData.orderDate[1] < 10 ? '0' : ''}${reservationData.orderDate[1]}-${
+                    reservationData.orderDate[2] < 10 ? '0' : ''
+                  }${reservationData.orderDate[2]}`}</td>
+                </tr>
+                <tr>
+                  <td colSpan={2} className="notice">
+                    ⁕ 결제된 금액은 포트원 정책에 따라 매일 자동 취소됩니다. 자세한 내용은{' '}
+                    <a href="https://developers.portone.io/docs/ko/readme/get-started" target="_blank">
+                      포트원 개발자센터 홈페이지
+                    </a>
+                    를 확인해주세요.
+                  </td>
+                </tr>
+              </S.Payment>
+            </S.Right>
+          </S.Wrapper>
+        )}
       </S.Container>
     </>
   );
