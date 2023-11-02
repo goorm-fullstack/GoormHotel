@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "email": "example1902@naver.com",
-  "memberId": "yss1902",
+  "memberId": "test",
   "password": "1234",
   "name": "김영한",
   "phoneNumber": "01012121212",
