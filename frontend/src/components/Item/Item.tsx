@@ -78,11 +78,10 @@ const Item = ({ selectedProduct, indexImg, updateReservationData, selectCoupon, 
 
   useEffect(() => {
     if (selectGiftCardList && selectGiftCardList.length > 0) {
-      Instance.get('/api/giftcard/get', {
-        params: {
-          giftCardIdList: selectGiftCardList,
-        },
-      }).then((response) => {
+      let requestGiftCardIdListDto = {
+        giftCardIdList: selectGiftCardList,
+      };
+      Instance.post('/api/giftcard/get', requestGiftCardIdListDto).then((response) => {
         if (response.status === 200) setGiftCardList(response.data);
       });
     }

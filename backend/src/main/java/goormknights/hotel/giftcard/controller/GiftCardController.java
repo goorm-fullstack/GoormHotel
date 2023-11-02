@@ -1,6 +1,7 @@
 package goormknights.hotel.giftcard.controller;
 
 import goormknights.hotel.giftcard.dto.request.RequestGiftCardDto;
+import goormknights.hotel.giftcard.dto.request.RequestGiftCardIdListDto;
 import goormknights.hotel.giftcard.dto.request.StateChangeData;
 import goormknights.hotel.giftcard.dto.response.ResponseGiftCardDto;
 import goormknights.hotel.giftcard.service.GiftCardService;
@@ -35,9 +36,9 @@ public class GiftCardController {
         return giftCardService.getGiftCardList(pageable);
     }
 
-    @GetMapping("/get")
-    public List<ResponseGiftCardDto> getByGiftCardIdList(@RequestParam List<Long> giftCardIdList) {
-        return giftCardService.findByIdToList(giftCardIdList);
+    @PostMapping("/get")
+    public List<ResponseGiftCardDto> getByGiftCardIdList(@RequestBody RequestGiftCardIdListDto requestGiftCardIdListDto) {
+        return giftCardService.findByIdToList(requestGiftCardIdListDto.getGiftCardIdList());
     }
 
     // 페이지 수를 반환하는 코드
