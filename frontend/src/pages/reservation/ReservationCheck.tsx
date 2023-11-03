@@ -10,6 +10,7 @@ import moment from 'moment';
 const ReservationCheck = () => {
   const number = useParams().number;
   const [reservationData, setReservationData] = useState<any>();
+  const [giftcardList, setGiftCardList] = useState([]);
   const [updateData, setUpdateData] = useState<any>();
   const [roomItem, setRoomItem] = useState<any>();
   const [diningItem, setDiningItem] = useState<any>();
@@ -27,6 +28,7 @@ const ReservationCheck = () => {
         setRoomItem(response.data.roomItem);
         setDiningItem(response.data.diningItem);
         setTotalPrice(response.data.sumPrice);
+        setGiftCardList(response.data.giftCard);
       });
     };
     fetchReservationData();
@@ -71,7 +73,7 @@ const ReservationCheck = () => {
         count: reservationData.count,
         nights: reservationData.stay,
       });
-      calcDiscountPrice(reservationData.coupon);
+      calcDiscountPrice(reservationData.coupon.discountRate);
     }
   }, [reservationData, roomItem, diningItem]);
 
@@ -90,22 +92,13 @@ const ReservationCheck = () => {
 
   const calcGiftCardPrice = (money : number) => {
     if(totalPrice >= money) {
-      setTotalPrice(totalPrice - money);
       return money;
     } else {
       const result = totalPrice;
-      setTotalPrice(0);
       return result;
     }
   }
   
-  useEffect(() => {
-    console.log(updateData);
-    console.log(checkInDate);
-    console.log(checkOutDate);
-    console.log(reservationData);
-  }, [updateData, checkInDate, checkOutDate, reservationData]);
-
   return (
     <>
       <S.Container>
@@ -122,25 +115,49 @@ const ReservationCheck = () => {
                   <Reservation selectedProduct={roomItem !== null ? roomItem : diningItem} reservation={updateData} />
                 </S.OptionWrap>
               </S.Section>
-
               <S.Section className="userinfo">
                 <ContentsTitleXSmall>고객 정보</ContentsTitleXSmall>
                 <table>
-                  {reservationData.giftCard.length === 0 && (
-                    <tr>
-                      <td colSpan={2}>사용한 상품권이 없습니다.</td>
-                    </tr>
-                  )}
-                  {reservationData.giftCard &&
-                    reservationData.giftCard.map((giftCard: any, index: number) => (
+                  <tr>
+                    <th>고객명</th>
+                    <td>{reservationData.member.name}</td>
+                    <th>연락처</th>
+                    <td>{reservationData.member.phoneNumber}</td>
+                  </tr>
+                  <tr>
+                    <th>이메일</th>
+                    <td colSpan={3}>{reservationData.member.email}</td>
+                  </tr>
+                  <tr>
+                    <th>요청사항</th>
+                    <td colSpan={3}>{reservationData.notice}</td>
+                  </tr>
+                </table>
+              </S.Section>
+            
+            <S.Section>
+              <ContentsTitleXSmall>사용한 상품권</ContentsTitleXSmall>
+              <S.CouponInfo className="used">
+                <table>
+                  {giftcardList.length !== 0 ? (
+                    <>
+                      {reservationData.giftCard.map((giftCard: any, index: number) => (
                       <tr key={index}>
                         <td>{giftCard.title}</td>
-                        <td className="right">{calcGiftCardPrice(giftCard.money)}</td> {/* 상품권 가격 표시 필요 */}
+                        <td className="right">-{calcGiftCardPrice(giftCard.money)}</td> {/* 상품권 가격 표시 필요 */}
                       </tr>
-                  ))}
-                  </table>
-              </S.Section>
-
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      <tr>
+                        <td colSpan={2}>사용한 상품권이 없습니다.</td>
+                      </tr>
+                    </>
+                  )}
+                </table>
+              </S.CouponInfo>
+            </S.Section>
             <S.Section>
               <ContentsTitleXSmall>사용한 쿠폰</ContentsTitleXSmall>
               <S.CouponInfo className="used">
@@ -148,7 +165,7 @@ const ReservationCheck = () => {
                   {reservationData.coupon !== null ? (
                     <tr>
                       <td>{reservationData.coupon.name}</td>
-                      <td className="right">{discountPrice}</td> {/* 쿠폰 가격 표시 필요 */}
+                      <td className="right">-{discountPrice}</td> {/* 쿠폰 가격 표시 필요 */}
                     </tr>
                   ) : (
                     <tr>
