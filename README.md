@@ -50,7 +50,7 @@
     <td align="center"><img src="https://avatars.githubusercontent.com/u/121299334?v=4" width="70"></td>
     <td width="200">문소희(<a href="https://github.com/soheetech" target="_blank">@soheetech</a>)<br>Full-Stack</td>
     <td width="60" align="center">조원</td>
-    <td>스페셜 오퍼 상품 예약 및 결제 기능 구현, FE 전 페이지 점검 및 최종 수정, JS->TS 마이그레이션, CSS 모듈화 및 통합 작업 주도</td>
+    <td>스페셜 오퍼 상품 예약 및 결제 기능 구현, FE 영역 코드 개선 및 JS->TS 마이그레이션, CSS 모듈화 및 통합 작업 주도</td>
   </tr>
   <tr>
     <td align="center"><img src="https://avatars.githubusercontent.com/u/58635833?v=4" width="70"></td>
