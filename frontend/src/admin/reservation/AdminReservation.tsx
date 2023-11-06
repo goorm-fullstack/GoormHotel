@@ -19,6 +19,7 @@ export interface ReservationData {
   adult: number;
   children: number;
   member: any;
+  nonMember : any;
   notice: string;
   item: DiningData | RoomData;
   stay: number;
@@ -167,7 +168,7 @@ const AdminReservation = () => {
                   {reservation.member ? (
                     <td className='center'>{reservation.member.name}</td>
                   ) : (
-                    <td className='center'>Anonymous</td>
+                    <td className='center'>{reservation.nonMember.name}</td>
                   )}
                   <td className='center'>{checkInDateFormat}</td>
                   <td className='center'>{checkOutDateFormat}</td>

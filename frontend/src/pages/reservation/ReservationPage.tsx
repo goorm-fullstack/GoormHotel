@@ -20,6 +20,8 @@ import PaymentAgree from '../../components/Agreement/PayAgree';
 import { AgreementText } from '../member/Style';
 import Instance from '../../utils/api/axiosInstance';
 import type { RequestPayParams, RequestPayResponse } from '../../portone';
+import { response } from 'express';
+import { numberWithCommas } from '../../utils/function/comma';
 
 interface GiftCard {
   id: number;
@@ -83,8 +85,8 @@ const ReservationPage = () => {
     email: '',
     itemId: '',
     memberId: '',
-    couponId: '',
-    giftCardId: '',
+    couponId: selectCoupon,
+    giftCardId: [],
     site_key: '2MhMz5FPv6G1cuXcwtxuvX1__',
   });
   const [checked1, setChecked1] = useState(false);
@@ -222,8 +224,8 @@ const ReservationPage = () => {
       totalPrice: totalPrice.toString(),
       itemId: selectedProduct ? selectedProduct.id : selectData.id,
       memberId: memberData && memberData.memberId,
-      couponId: selectCoupon.toString(),
-      giftCardId: '',
+      couponId: selectCoupon,
+      giftCardId: [],
       memberName: memberData ? memberData.name : '',
       phoneNumber: memberData ? memberData.phoneNumber : '',
       email: memberData ? memberData.email : '',
@@ -255,8 +257,10 @@ const ReservationPage = () => {
         console.log('결제 성공');
         try {
           console.log(serverFormattedData);
-          await Instance.post(`/reservation/save`, {
-            data: serverFormattedData,
+          await Instance.post(`/reservation/save`, serverFormattedData).then((response) => {
+            if(response.status === 200) {
+              window.location.href = "/";
+            }
           });
         } catch (error) {
           console.error('예약 요청 실패', error);
@@ -402,7 +406,7 @@ const ReservationPage = () => {
                                 {giftcard.title}
                               </CheckLabel>
                             </td>
-                            <td className="right">{giftcard.money}</td>
+                            <td className="right">{numberWithCommas(giftcard.money)}원</td>
                           </tr>
                         ))}
                       </>
