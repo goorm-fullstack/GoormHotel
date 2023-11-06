@@ -141,36 +141,42 @@ const AdminReservation = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td colSpan={8} className="center empty">
-                  등록된 예약 건이 없습니다.
-                </td>
-              </tr>
-              {reservationList.map((reservation, index) => (
+              {reservationList.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="center empty">
+                    등록된 예약 건이 없습니다.
+                  </td>
+                </tr>
+              ) : (
+                <>
+                {reservationList.map((reservation, index) => (
                 <tr key={index}>
-                  <td>
+                  <td className='center'>
                     <InputCheckbox
                       type="checkbox"
                       checked={checkedItems.includes(reservation.reservationNumber)}
                       onChange={() => handleCheckboxChange(reservation.reservationNumber)}
                     />
                   </td>
-                  <td>{index + 1}</td>
-                  <td>
+                  <td className='center'>{index + 1}</td>
+                  <td className='center'>
                     <Link to={`/admin/reservation/detail/${reservation.reservationNumber}`} className="u">
                       {reservation.reservationNumber}
                     </Link>
                   </td>
-                  {reservation.member.name ? (
-                    <td>{reservation.member.name}</td>
+                  {reservation.member ? (
+                    <td className='center'>{reservation.member.name}</td>
                   ) : (
-                    <td>Anonymous</td>
+                    <td className='center'>Anonymous</td>
                   )}
-                  <td>{checkInDateFormat}</td>
-                  <td>{checkOutDateFormat}</td>
-                  <td>{orderDateFormat}</td>
-                </tr>
-              ))}
+                  <td className='center'>{checkInDateFormat}</td>
+                  <td className='center'>{checkOutDateFormat}</td>
+                  <td className='center'>{orderDateFormat}</td>
+                  <td className='center'>{reservation.state}</td>
+                  </tr>
+                ))}
+                </>
+              )}
             </tbody>
           </Table>
           <Paging totalPage={totalPages} />
