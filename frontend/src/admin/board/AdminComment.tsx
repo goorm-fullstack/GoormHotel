@@ -185,95 +185,91 @@ const AdminComment = () => {
       });
   };
 
-  if (authItem && authItem.includes('AUTH_C')) {
-    return (
-      <AdminLayout subMenus="board">
-        <Container>
-          <PageTitle>댓글 관리</PageTitle>
-          <TableHeader>
-            <p className={'total'}>
-              전체 <strong>{totalReply}</strong> 건
-            </p>
-            <BtnWrapper className="flexgap right">
-              <NormalBtn className="header" onClick={handleReport}>
-                신고된 글로 이동
-              </NormalBtn>
-              <NormalBtn className="header red" onClick={handleDeleteItems}>
-                댓글 삭제
-              </NormalBtn>
-            </BtnWrapper>
-          </TableHeader>
-          <Table>
-            <colgroup>
-              <col width="80px" />
-              <col width="100px" />
-              <col width="200px" />
-              <col width="200px" />
-              <col width="auto" />
-              <col width="150px" />
-              <col width="150px" />
-            </colgroup>
-            <thead>
+  return (
+    <AdminLayout subMenus="board">
+      <Container>
+        <PageTitle>댓글 관리</PageTitle>
+        <TableHeader>
+          <p className={'total'}>
+            전체 <strong>{totalReply}</strong> 건
+          </p>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn className="header" onClick={handleReport}>
+              신고된 글로 이동
+            </NormalBtn>
+            <NormalBtn className="header red" onClick={handleDeleteItems}>
+              댓글 삭제
+            </NormalBtn>
+          </BtnWrapper>
+        </TableHeader>
+        <Table>
+          <colgroup>
+            <col width="80px" />
+            <col width="100px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="auto" />
+            <col width="150px" />
+            <col width="150px" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>
+                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
+              </th>
+              <th>번호</th>
+              <th>게시판</th>
+              <th>게시글 제목</th>
+              <th>댓글 내용</th>
+              <th>작성자명(회원 ID)</th>
+              <th>작성일</th>
+            </tr>
+          </thead>
+          <tbody>
+            {reply.length === 0 && (
               <tr>
-                <th>
-                  <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
-                </th>
-                <th>번호</th>
-                <th>게시판</th>
-                <th>게시글 제목</th>
-                <th>댓글 내용</th>
-                <th>작성자명(회원 ID)</th>
-                <th>작성일</th>
+                <td colSpan={7} className="center empty">
+                  등록된 댓글이 없습니다.
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {reply.length === 0 && (
-                <tr>
-                  <td colSpan={7} className="center empty">
-                    등록된 댓글이 없습니다.
+            )}
+            {reply.length > 0 &&
+              reply.map((reply, idx) => (
+                <tr key={reply.replyId}>
+                  <td className="center">
+                    <InputCheckbox
+                      type="checkbox"
+                      checked={checkedItems.includes(reply.replyId)}
+                      onChange={() => handleCheckboxChange(reply.replyId)}
+                    />
                   </td>
+                  <td className="center">{totalReply - idx}</td>
+                  <td className="center">{reply.replyBoardTitle}</td>
+                  <td className="center">
+                    <S.LinkStyle
+                      to={`/admin/board/${boardTitleList.find((item) => item.board === reply.replyBoardTitle)?.english}/detail/${reply.boardId}`}>
+                      {reply.replyTitle}
+                    </S.LinkStyle>
+                  </td>
+                  <td className="center">
+                    <S.CommentText>{truncateString(reply.replyContent, 8)}</S.CommentText>
+                    <S.ModalContainer>
+                      <S.ModalContent>{reply.replyContent}</S.ModalContent>
+                    </S.ModalContainer>
+                  </td>
+                  <td className="center">{reply.replyWriter}</td>
+                  <td className="center">{`${reply.replyWriteDate[0]}.${reply.replyWriteDate[1] < 10 ? '0' : ''}${reply.replyWriteDate[1]}.${
+                    reply.replyWriteDate[2] < 10 ? '0' : ''
+                  }${reply.replyWriteDate[2]}`}</td>
                 </tr>
-              )}
-              {reply.length > 0 &&
-                reply.map((reply, idx) => (
-                  <tr key={reply.replyId}>
-                    <td className="center">
-                      <InputCheckbox
-                        type="checkbox"
-                        checked={checkedItems.includes(reply.replyId)}
-                        onChange={() => handleCheckboxChange(reply.replyId)}
-                      />
-                    </td>
-                    <td className="center">{totalReply - idx}</td>
-                    <td className="center">{reply.replyBoardTitle}</td>
-                    <td className="center">
-                      <S.LinkStyle
-                        to={`/admin/board/${boardTitleList.find((item) => item.board === reply.replyBoardTitle)?.english}/detail/${reply.boardId}`}>
-                        {reply.replyTitle}
-                      </S.LinkStyle>
-                    </td>
-                    <td className="center">
-                      <S.CommentText>{truncateString(reply.replyContent, 8)}</S.CommentText>
-                      <S.ModalContainer>
-                        <S.ModalContent>{reply.replyContent}</S.ModalContent>
-                      </S.ModalContainer>
-                    </td>
-                    <td className="center">{reply.replyWriter}</td>
-                    <td className="center">{`${reply.replyWriteDate[0]}.${reply.replyWriteDate[1] < 10 ? '0' : ''}${reply.replyWriteDate[1]}.${
-                      reply.replyWriteDate[2] < 10 ? '0' : ''
-                    }${reply.replyWriteDate[2]}`}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </Table>
-          <Paging totalPage={totalPage} />
-        </Container>
-        <AdminCheck kind="AUTH_C" />
-      </AdminLayout>
-    );
-  } else {
-    return null;
-  }
+              ))}
+          </tbody>
+        </Table>
+        <Paging totalPage={totalPage} />
+      </Container>
+      <AdminCheck kind="AUTH_C" />
+    </AdminLayout>
+  );
 };
 
 export default AdminComment;

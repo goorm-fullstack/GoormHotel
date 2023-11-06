@@ -185,116 +185,112 @@ const AdminDeleteComment = () => {
     return <p>{reply.replyWriter}</p>;
   };
 
-  if (authItem && authItem.includes('AUTH_C')) {
-    return (
-      <AdminLayout subMenus="board">
-        <Container>
-          <PageTitle>삭제된 글 관리</PageTitle>
-          <TableHeader>
-            <p className="total">
-              전체 <strong>{totalData}</strong> 건
-            </p>
-            <BtnWrapper className="flexgap right">
-              <NormalBtn type="button" className="header" onClick={unDeleteBtnClick}>
-                선택 글 복원하기
-              </NormalBtn>
-              <NormalBtn type="button" className="header red" onClick={realDeleteBtnClick}>
-                영구 삭제
-              </NormalBtn>
-            </BtnWrapper>
-          </TableHeader>
-          <Table>
-            <colgroup>
-              <col width="80px" />
-              <col width="100px" />
-              <col width="200px" />
-              <col width="auto" />
-              <col width="200px" />
-              <col width="150px" />
-            </colgroup>
-            <thead>
+  return (
+    <AdminLayout subMenus="board">
+      <Container>
+        <PageTitle>삭제된 글 관리</PageTitle>
+        <TableHeader>
+          <p className="total">
+            전체 <strong>{totalData}</strong> 건
+          </p>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn type="button" className="header" onClick={unDeleteBtnClick}>
+              선택 글 복원하기
+            </NormalBtn>
+            <NormalBtn type="button" className="header red" onClick={realDeleteBtnClick}>
+              영구 삭제
+            </NormalBtn>
+          </BtnWrapper>
+        </TableHeader>
+        <Table>
+          <colgroup>
+            <col width="80px" />
+            <col width="100px" />
+            <col width="200px" />
+            <col width="auto" />
+            <col width="200px" />
+            <col width="150px" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>
+                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
+              </th>
+              <th>번호</th>
+              <th>게시판</th>
+              <th>삭제된 글</th>
+              <th>작성자명(회원 ID)</th> {/** 회원 ID의 ID는 대문자로 통일합시다. */}
+              <th>삭제일</th>
+            </tr>
+          </thead>
+          <tbody>
+            {board.length === 0 && (
               <tr>
-                <th>
-                  <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
-                </th>
-                <th>번호</th>
-                <th>게시판</th>
-                <th>삭제된 글</th>
-                <th>작성자명(회원 ID)</th> {/** 회원 ID의 ID는 대문자로 통일합시다. */}
-                <th>삭제일</th>
+                <td colSpan={6} className="center empty">
+                  삭제된 글이 없습니다.
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {board.length === 0 && (
-                <tr>
-                  <td colSpan={6} className="center empty">
-                    삭제된 글이 없습니다.
+            )}
+            {parsedContent.length > 0 &&
+              board.length > 0 &&
+              board.map((board, index) => (
+                <tr key={board.boardId}>
+                  <td className="center">
+                    <InputCheckbox
+                      type="checkbox"
+                      checked={checkedItems.includes(`board${board.boardId}`)}
+                      onChange={() => handleCheckboxChange(`board${board.boardId}`)}
+                    />
+                  </td>
+                  <td className="center">{totalData - index}</td>
+                  <td className="center">{`${board.boardTitle}`}</td>
+                  <td className="center">
+                    <S.LinkStyle
+                      to={`/admin/${`board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}`}>
+                      {parsedContent[index][0]}
+                    </S.LinkStyle>
+                  </td>
+                  <td className="center">{isBoardWriter(board)}</td>
+                  <td className="center">
+                    {`${board.boardDeleteTime[0]}.${board.boardDeleteTime[1] < 10 ? '0' : ''}${board.boardDeleteTime[1]}.${
+                      board.boardDeleteTime[2] < 10 ? '0' : ''
+                    }${board.boardDeleteTime[2]}`}
                   </td>
                 </tr>
-              )}
-              {parsedContent.length > 0 &&
-                board.length > 0 &&
-                board.map((board, index) => (
-                  <tr key={board.boardId}>
-                    <td className="center">
-                      <InputCheckbox
-                        type="checkbox"
-                        checked={checkedItems.includes(`board${board.boardId}`)}
-                        onChange={() => handleCheckboxChange(`board${board.boardId}`)}
-                      />
-                    </td>
-                    <td className="center">{totalData - index}</td>
-                    <td className="center">{`${board.boardTitle}`}</td>
-                    <td className="center">
-                      <S.LinkStyle
-                        to={`/admin/${`board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}`}>
-                        {parsedContent[index][0]}
-                      </S.LinkStyle>
-                    </td>
-                    <td className="center">{isBoardWriter(board)}</td>
-                    <td className="center">
-                      {`${board.boardDeleteTime[0]}.${board.boardDeleteTime[1] < 10 ? '0' : ''}${board.boardDeleteTime[1]}.${
-                        board.boardDeleteTime[2] < 10 ? '0' : ''
-                      }${board.boardDeleteTime[2]}`}
-                    </td>
-                  </tr>
-                ))}
-              {reply.length > 0 &&
-                reply.map((reply, index) => (
-                  <tr key={reply.replyId}>
-                    <td className="center">
-                      <InputCheckbox
-                        type="checkbox"
-                        checked={checkedItems.includes(`reply${reply.replyId}`)}
-                        onChange={() => handleCheckboxChange(`reply${reply.replyId}`)}
-                      />
-                    </td>
-                    <td className="center">{totalData - board.length - index}</td>
-                    <td className="center">댓글</td>
-                    <td className="center">
-                      <S.LinkStyle
-                        to={`/admin/${`board/${boardTitleList.find((item) => item.board === reply.boardTitle)?.english}/detail/${reply.boardId}`}`}>
-                        {reply.replyContent}
-                      </S.LinkStyle>
-                    </td>
-                    <td className="center">{isReplyWriter(reply)}</td>
-                    <td className="center">
-                      {`${reply.replyDeleteTime[0]}.${reply.replyDeleteTime[1] < 10 ? '0' : ''}${reply.replyDeleteTime[1]}.${
-                        reply.replyDeleteTime[2] < 10 ? '0' : ''
-                      }${reply.replyDeleteTime[2]}`}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </Table>
-          <Paging totalPage={totalPage} />
-        </Container>
-        <AdminCheck kind="AUTH_C" />
-      </AdminLayout>
-    );
-  } else {
-    return null;
-  }
+              ))}
+            {reply.length > 0 &&
+              reply.map((reply, index) => (
+                <tr key={reply.replyId}>
+                  <td className="center">
+                    <InputCheckbox
+                      type="checkbox"
+                      checked={checkedItems.includes(`reply${reply.replyId}`)}
+                      onChange={() => handleCheckboxChange(`reply${reply.replyId}`)}
+                    />
+                  </td>
+                  <td className="center">{totalData - board.length - index}</td>
+                  <td className="center">댓글</td>
+                  <td className="center">
+                    <S.LinkStyle
+                      to={`/admin/${`board/${boardTitleList.find((item) => item.board === reply.boardTitle)?.english}/detail/${reply.boardId}`}`}>
+                      {reply.replyContent}
+                    </S.LinkStyle>
+                  </td>
+                  <td className="center">{isReplyWriter(reply)}</td>
+                  <td className="center">
+                    {`${reply.replyDeleteTime[0]}.${reply.replyDeleteTime[1] < 10 ? '0' : ''}${reply.replyDeleteTime[1]}.${
+                      reply.replyDeleteTime[2] < 10 ? '0' : ''
+                    }${reply.replyDeleteTime[2]}`}
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+        <Paging totalPage={totalPage} />
+      </Container>
+      <AdminCheck kind="AUTH_C" />
+    </AdminLayout>
+  );
 };
 
 export default AdminDeleteComment;
