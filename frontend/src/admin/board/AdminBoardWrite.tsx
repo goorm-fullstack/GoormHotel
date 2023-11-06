@@ -142,7 +142,6 @@ const AdminBoardWrite = () => {
         await Instance.put(`/boards/updateIsComment/${parentBoardId}`);
       }
 
-      alert('게시글이 작성되었습니다.');
       window.location.href = `/admin/board/1`;
     } catch (e: any) {
       console.error('에러: ', e.message);
