@@ -63,8 +63,11 @@ const AdminReservationDetail = () => {
       }
       
       setCustomerRequest(response.data.notice);
-      setApplyCoupon(response.data.coupon.name);
-      setApplyGiftCard(response.data.giftCard);
+      
+      if(response.data.coupon)
+        setApplyCoupon(response.data.coupon.name);
+      if(response.data.giftCard)
+        setApplyGiftCard(response.data.giftCard);
     });
   }, []);
 
