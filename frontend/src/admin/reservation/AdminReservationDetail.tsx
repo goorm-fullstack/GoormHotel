@@ -9,6 +9,7 @@ import { numberWithCommas } from '../../utils/function/comma';
 import { ReservationData } from './AdminReservation';
 import { ValuePiece } from '../../components/common/DateButton/DateButton';
 import moment from 'moment';
+import AdminCheck from '../adminCheck';
 
 const AdminReservationDetail = () => {
   const { reservationNumber } = useParams(); //예약 번호로 조회

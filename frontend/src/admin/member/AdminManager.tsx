@@ -6,6 +6,7 @@ import { Container, Table, TableHeader } from './Style';
 import Paging from '../../components/common/Paging/Paging';
 import { useNavigate } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
+import AdminCheck from '../adminCheck';
 
 interface ManagerData {
   id: number;
@@ -56,13 +57,6 @@ const AdminManager = () => {
     Instance.get('/api/manager/count').then((response) => {
       setTotalPages(response.data);
     });
-  }, []);
-
-  useEffect(() => {
-    if (!(authItem && authItem.includes('AUTH_A'))) {
-      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
-      navigate('/admin');
-    }
   }, []);
 
   const handleCheckboxChange = (memberId: string) => {
@@ -133,7 +127,7 @@ const AdminManager = () => {
     }
   };
 
-  const handleInputNickName = (manager : ManagerData) => {
+  const handleInputNickName = (manager: ManagerData) => {
     Instance.post('/api/manager/' + manager.adminId).then((response) => {
       setSelectedManager(response.data);
       checkAuthA(response.data.auth);
@@ -242,229 +236,222 @@ const AdminManager = () => {
     });
   };
 
-  if (authItem && authItem.includes('AUTH_A')) {
-    return (
-      <AdminLayout subMenus="member">
-        <Container>
-          <PageTitle>부운영자 관리</PageTitle>
-          <S.Section>
-            <ContentsTitleXSmall>부운영자 계정 등록</ContentsTitleXSmall>
-            <S.InputWrapper>
-              <form onSubmit={registerManager}>
-                <input type="text" placeholder="운영자 ID" name="adminId" onChange={handleInputChange} />
-                <input type="text" placeholder="운영자명" name="adminName" onChange={handleInputChange} />
-                <input type="text" placeholder="운영자 별명" name="adminNickname" onChange={handleInputChange} />
-                <input type="password" placeholder="접속 비밀번호" name="password" onChange={handleInputChange} />
-                <input type="password" placeholder="접속 비밀번호 확인" name="password" onChange={handleInputChange} />
-                <SubmitBtn className="header" type="submit">
-                  부운영자 등록
-                </SubmitBtn>
-              </form>
-            </S.InputWrapper>
-          </S.Section>
-          <S.Section>
-            <ContentsTitleXSmall>부운영자 계정 목록</ContentsTitleXSmall>
-            <TableHeader>
-              <p className="total">
-                전체 <strong>{managerData.length}</strong> 건
-              </p>
-              <BtnWrapper className="flexgap right">
-                <NormalBtn className="header" onClick={ClickActivationButton}>
-                  계정 사용 가능
-                </NormalBtn>
-                <NormalBtn className="header red" onClick={ClickDisActivationButton}>
-                  계정 사용 정지
-                </NormalBtn>
-              </BtnWrapper>
-            </TableHeader>
-            <Table>
-              <colgroup>
-                <col width="80px" />
-                <col width="100px" />
-                <col width="200px" />
-                <col width="200px" />
-                <col width="200px" />
-                <col width="200px" />
-                <col width="150px" />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>
-                    <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
-                  </th>
-                  <th>번호</th>
-                  <th>운영자명</th>
-                  <th>운영자 ID</th>
-                  <th>운영자 별명</th>
-                  <th>등록일</th>
-                  <th>사용여부</th>
-                </tr>
-              </thead>
-              <tbody>
-                {managerData.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="center empty">
-                      등록된 계정이 없습니다.
-                    </td>
-                  </tr>
-                ) : (
-                  managerData.map((item) => (
-                    <tr key={item.id}>
-                      <td className="center">
-                        <InputCheckbox
-                          type="checkbox"
-                          checked={checkedItems.includes(item.adminId)}
-                          onChange={() => handleCheckboxChange(item.adminId)}
-                        />
-                      </td>
-                      <td className="center">{item.id}</td>
-                      <td className="center">{item.adminName}</td>
-                      <td className="center">
-                        <button onClick={() => handleManagerClick(item as ManagerData)} className="u">
-                          {item.adminId}
-                        </button>
-                      </td>
-                      <td className="center">{item.adminNickname}</td>
-                      <td className="center">{item.createdAt}</td>
-                      <td className="center">{item.isActive ? '활성화' : '비활성화'}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </Table>
-            <Paging totalPage={totalPages} />
-          </S.Section>
-          <S.Section>
-            <ContentsTitleXSmall>부운영자 계정 설정</ContentsTitleXSmall>
-            <Table className="horizontal">
-              <colgroup>
-                <col width="240px" />
-                <col width="auto" />
-              </colgroup>
-              {selectedManager ? (
-                <tbody>
-                  <tr>
-                    <th>운영자 ID</th>
-                    <td>
-                      <input
-                        type="text"
-                        placeholder="운영자 ID"
-                        value={selectedManager.adminId}
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>운영자명</th>
-                    <td>
-                      <input
-                        type="text"
-                        placeholder="운영자명"
-                        value={selectedManager.adminName}
-                        onChange={(e) => handleInputChange('adminName', e.target.value)}
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>운영자 별명</th>
-                    <td>
-                      <input
-                        type="text"
-                        placeholder="운영자 별명"
-                        value={selectedManager.adminNickname}
-                        onChange={(e) => handleInputChange('adminNickname', e.target.value)}
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>접속 비밀번호</th>
-                    <td>
-                      <input type="password" placeholder="접속 비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>접근 권한</th>
-                    <td>
-                      <MultiCheck>
-                        <CheckLabel>
-                          <InputCheckbox type="checkbox" checked={authA} onChange={handleAuthACheckboxChange} />
-                          회원관리
-                        </CheckLabel>
-                        <CheckLabel>
-                          <InputCheckbox type="checkbox" checked={authB} onChange={handleAuthBCheckboxChange} />
-                          상품 및 예약 관리
-                        </CheckLabel>
-                        <CheckLabel>
-                          <InputCheckbox type="checkbox" checked={authC} onChange={handleAuthCCheckboxChange} />
-                          사이트 관리
-                        </CheckLabel>
-                      </MultiCheck>
-                    </td>
-                  </tr>
-                </tbody>
-              ) : (
-                <tbody>
-                  <tr>
-                    <th>운영자 ID</th>
-                    <td>
-                      <input type="text" placeholder="운영자 ID" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>운영자명</th>
-                    <td>
-                      <input type="text" placeholder="운영자명" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>운영자 별명</th>
-                    <td>
-                      <input type="text" placeholder="운영자 별명" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>접속 비밀번호</th>
-                    <td>
-                      <input type="password" placeholder="접속 비밀번호" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>접속 비밀번호 확인</th>
-                    <td>
-                      <input type="password" placeholder="접속 비밀번호 확인" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>접근 권한</th>
-                    <td>
-                      <MultiCheck>
-                        <CheckLabel>
-                          <InputCheckbox type="checkbox" placeholder="회원 관리" />
-                          회원관리
-                        </CheckLabel>
-                        <CheckLabel>
-                          <InputCheckbox type="checkbox" placeholder="회원 관리" />
-                          상품 및 예약 관리
-                        </CheckLabel>
-                        <CheckLabel>
-                          <InputCheckbox type="checkbox" placeholder="회원 관리" />
-                          사이트 관리
-                        </CheckLabel>
-                      </MultiCheck>
-                    </td>
-                  </tr>
-                </tbody>
-              )}
-            </Table>
-            <BtnWrapper className="mt40 center">
-              <SubmitBtn onClick={updateButtonClick}>수정</SubmitBtn>
+  return (
+    <AdminLayout subMenus="member">
+      <Container>
+        <PageTitle>부운영자 관리</PageTitle>
+        <S.Section>
+          <ContentsTitleXSmall>부운영자 계정 등록</ContentsTitleXSmall>
+          <S.InputWrapper>
+            <form onSubmit={registerManager}>
+              <input type="text" placeholder="운영자 ID" name="adminId" onChange={handleInputChange} />
+              <input type="text" placeholder="운영자명" name="adminName" onChange={handleInputChange} />
+              <input type="text" placeholder="운영자 별명" name="adminNickname" onChange={handleInputChange} />
+              <input type="password" placeholder="접속 비밀번호" name="password" onChange={handleInputChange} />
+              <input type="password" placeholder="접속 비밀번호 확인" name="password" onChange={handleInputChange} />
+              <SubmitBtn className="header" type="submit">
+                부운영자 등록
+              </SubmitBtn>
+            </form>
+          </S.InputWrapper>
+        </S.Section>
+        <S.Section>
+          <ContentsTitleXSmall>부운영자 계정 목록</ContentsTitleXSmall>
+          <TableHeader>
+            <p className="total">
+              전체 <strong>{managerData.length}</strong> 건
+            </p>
+            <BtnWrapper className="flexgap right">
+              <NormalBtn className="header" onClick={ClickActivationButton}>
+                계정 사용 가능
+              </NormalBtn>
+              <NormalBtn className="header red" onClick={ClickDisActivationButton}>
+                계정 사용 정지
+              </NormalBtn>
             </BtnWrapper>
-          </S.Section>
-        </Container>
-      </AdminLayout>
-    );
-  } else {
-    return null;
-  }
+          </TableHeader>
+          <Table>
+            <colgroup>
+              <col width="80px" />
+              <col width="100px" />
+              <col width="200px" />
+              <col width="200px" />
+              <col width="200px" />
+              <col width="200px" />
+              <col width="150px" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>
+                  <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
+                </th>
+                <th>번호</th>
+                <th>운영자명</th>
+                <th>운영자 ID</th>
+                <th>운영자 별명</th>
+                <th>등록일</th>
+                <th>사용여부</th>
+              </tr>
+            </thead>
+            <tbody>
+              {managerData.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="center empty">
+                    등록된 계정이 없습니다.
+                  </td>
+                </tr>
+              ) : (
+                managerData.map((item) => (
+                  <tr key={item.id}>
+                    <td className="center">
+                      <InputCheckbox
+                        type="checkbox"
+                        checked={checkedItems.includes(item.adminId)}
+                        onChange={() => handleCheckboxChange(item.adminId)}
+                      />
+                    </td>
+                    <td className="center">{item.id}</td>
+                    <td className="center">{item.adminName}</td>
+                    <td className="center">
+                      <button onClick={() => handleManagerClick(item as ManagerData)} className="u">
+                        {item.adminId}
+                      </button>
+                    </td>
+                    <td className="center">{item.adminNickname}</td>
+                    <td className="center">{item.createdAt}</td>
+                    <td className="center">{item.isActive ? '활성화' : '비활성화'}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </Table>
+          <Paging totalPage={totalPages} />
+        </S.Section>
+        <S.Section>
+          <ContentsTitleXSmall>부운영자 계정 설정</ContentsTitleXSmall>
+          <Table className="horizontal">
+            <colgroup>
+              <col width="240px" />
+              <col width="auto" />
+            </colgroup>
+            {selectedManager ? (
+              <tbody>
+                <tr>
+                  <th>운영자 ID</th>
+                  <td>
+                    <input type="text" placeholder="운영자 ID" value={selectedManager.adminId} />
+                  </td>
+                </tr>
+                <tr>
+                  <th>운영자명</th>
+                  <td>
+                    <input
+                      type="text"
+                      placeholder="운영자명"
+                      value={selectedManager.adminName}
+                      onChange={(e) => handleInputChange('adminName', e.target.value)}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>운영자 별명</th>
+                  <td>
+                    <input
+                      type="text"
+                      placeholder="운영자 별명"
+                      value={selectedManager.adminNickname}
+                      onChange={(e) => handleInputChange('adminNickname', e.target.value)}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>접속 비밀번호</th>
+                  <td>
+                    <input type="password" placeholder="접속 비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} />
+                  </td>
+                </tr>
+                <tr>
+                  <th>접근 권한</th>
+                  <td>
+                    <MultiCheck>
+                      <CheckLabel>
+                        <InputCheckbox type="checkbox" checked={authA} onChange={handleAuthACheckboxChange} />
+                        회원관리
+                      </CheckLabel>
+                      <CheckLabel>
+                        <InputCheckbox type="checkbox" checked={authB} onChange={handleAuthBCheckboxChange} />
+                        상품 및 예약 관리
+                      </CheckLabel>
+                      <CheckLabel>
+                        <InputCheckbox type="checkbox" checked={authC} onChange={handleAuthCCheckboxChange} />
+                        사이트 관리
+                      </CheckLabel>
+                    </MultiCheck>
+                  </td>
+                </tr>
+              </tbody>
+            ) : (
+              <tbody>
+                <tr>
+                  <th>운영자 ID</th>
+                  <td>
+                    <input type="text" placeholder="운영자 ID" />
+                  </td>
+                </tr>
+                <tr>
+                  <th>운영자명</th>
+                  <td>
+                    <input type="text" placeholder="운영자명" />
+                  </td>
+                </tr>
+                <tr>
+                  <th>운영자 별명</th>
+                  <td>
+                    <input type="text" placeholder="운영자 별명" />
+                  </td>
+                </tr>
+                <tr>
+                  <th>접속 비밀번호</th>
+                  <td>
+                    <input type="password" placeholder="접속 비밀번호" />
+                  </td>
+                </tr>
+                <tr>
+                  <th>접속 비밀번호 확인</th>
+                  <td>
+                    <input type="password" placeholder="접속 비밀번호 확인" />
+                  </td>
+                </tr>
+                <tr>
+                  <th>접근 권한</th>
+                  <td>
+                    <MultiCheck>
+                      <CheckLabel>
+                        <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                        회원관리
+                      </CheckLabel>
+                      <CheckLabel>
+                        <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                        상품 및 예약 관리
+                      </CheckLabel>
+                      <CheckLabel>
+                        <InputCheckbox type="checkbox" placeholder="회원 관리" />
+                        사이트 관리
+                      </CheckLabel>
+                    </MultiCheck>
+                  </td>
+                </tr>
+              </tbody>
+            )}
+          </Table>
+          <BtnWrapper className="mt40 center">
+            <SubmitBtn onClick={updateButtonClick}>수정</SubmitBtn>
+          </BtnWrapper>
+        </S.Section>
+      </Container>
+      <AdminCheck kind="AUTH_A" />
+    </AdminLayout>
+  );
 };
 
 export default AdminManager;
