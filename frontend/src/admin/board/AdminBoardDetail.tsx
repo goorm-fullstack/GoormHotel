@@ -336,7 +336,7 @@ const AdminBoardDetail = () => {
                         return (
                           <p>
                             <span>{boardData.boardWriter}</span>
-                            <span>{`${boardData.boardWriteDate[0]}.${boardData.boardWriteDate[1] < 10 ? '0' : ''}${boardData.boardWriteDate[1]}.${
+                            <span>{`${boardData.boardWriteDate[0]}/${boardData.boardWriteDate[1] < 10 ? '0' : ''}${boardData.boardWriteDate[1]}/${
                               boardData.boardWriteDate[2] < 10 ? '0' : ''
                             }${boardData.boardWriteDate[2]}`}</span>
                           </p>
@@ -465,9 +465,9 @@ const AdminBoardDetail = () => {
                             <li key={index}>
                               <div className="cwinfo">
                                 <strong>{replyItem.replyWriter}</strong>
-                                <span className="date">{`${replyItem.replyWriteDate[0]}.${replyItem.replyWriteDate[1] < 10 ? '0' : ''}${
+                                <span className="date">{`${replyItem.replyWriteDate[0]}/${replyItem.replyWriteDate[1] < 10 ? '0' : ''}${
                                   replyItem.replyWriteDate[1]
-                                }.${replyItem.replyWriteDate[2] < 10 ? '0' : ''}${replyItem.replyWriteDate[2]}`}</span>
+                                }/${replyItem.replyWriteDate[2] < 10 ? '0' : ''}${replyItem.replyWriteDate[2]}`}</span>
                                 <button type="button" className="modify" onClick={() => handleUpdate(replyItem.replyId)}>
                                   수정
                                 </button>

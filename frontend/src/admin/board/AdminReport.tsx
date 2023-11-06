@@ -315,7 +315,7 @@ const AdminReport = () => {
                     {/*<LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>*/}
                   </td>
                   <td className="center">{report.reportReason}</td>
-                  <td className="center">{`${report.reportDate[0]}.${report.reportDate[1] < 10 ? '0' : ''}${report.reportDate[1]}.${
+                  <td className="center">{`${report.reportDate[0]}/${report.reportDate[1] < 10 ? '0' : ''}${report.reportDate[1]}/${
                     report.reportDate[2] < 10 ? '0' : ''
                   }${report.reportDate[2]}`}</td>
                   <td className="center">{report.reportResult}</td>

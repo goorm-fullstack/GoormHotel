@@ -258,7 +258,7 @@ const AdminComment = () => {
                     </S.ModalContainer>
                   </td>
                   <td className="center">{reply.replyWriter}</td>
-                  <td className="center">{`${reply.replyWriteDate[0]}.${reply.replyWriteDate[1] < 10 ? '0' : ''}${reply.replyWriteDate[1]}.${
+                  <td className="center">{`${reply.replyWriteDate[0]}/${reply.replyWriteDate[1] < 10 ? '0' : ''}${reply.replyWriteDate[1]}/${
                     reply.replyWriteDate[2] < 10 ? '0' : ''
                   }${reply.replyWriteDate[2]}`}</td>
                 </tr>

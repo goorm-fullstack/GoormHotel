@@ -96,10 +96,10 @@ const MyBoardList = () => {
                   </td>
                   <td className="center">
                     {data.boardWriteDate
-                      ? `${data.boardWriteDate[0]}-${data.boardWriteDate[1] < 10 ? '0' : ''}${data.boardWriteDate[1]}-${
+                      ? `${data.boardWriteDate[0]}/${data.boardWriteDate[1] < 10 ? '0' : ''}${data.boardWriteDate[1]}/${
                           data.boardWriteDate[2] < 10 ? '0' : ''
                         }${data.boardWriteDate[2]}`
-                      : `${data.replyWriteDate[0]}-${data.replyWriteDate[1] < 10 ? '0' : ''}${data.replyWriteDate[1]}-${
+                      : `${data.replyWriteDate[0]}/${data.replyWriteDate[1] < 10 ? '0' : ''}${data.replyWriteDate[1]}/${
                           data.replyWriteDate[2] < 10 ? '0' : ''
                         }${data.replyWriteDate[2]}`}
                   </td>
