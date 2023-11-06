@@ -229,99 +229,95 @@ const AdminBoard = () => {
   //         });
   //   }, []);
 
-  if (authItem && authItem.includes('AUTH_C')) {
-    return (
-      <AdminLayout subMenus="board">
-        <Container>
-          <PageTitle>게시글 관리</PageTitle>
-          <TableHeader>
-            <p className="total">
-              전체 <strong>{totalBoard}</strong> 건
-            </p>
-            <BtnWrapper className="flexgap right">
-              <LinkBtn className="header" to="/admin/board/write" state={{ checkedItems: checkedItems }}>
-                게시글 작성
-              </LinkBtn>
-              <NormalBtn className="header" onClick={ReportBoard}>
-                신고된 글로 이동
-              </NormalBtn>
-              <NormalBtn className="header red" onClick={DeleteBoard}>
-                게시글 삭제
-              </NormalBtn>
-            </BtnWrapper>
-          </TableHeader>
-          <Table>
-            <colgroup>
-              <col width="80px" />
-              <col width="100px" />
-              <col width="200px" />
-              <col width="200px" />
-              <col width="auto" />
-              <col width="200px" />
-              <col width="150px" />
-            </colgroup>
-            <thead>
+  return (
+    <AdminLayout subMenus="board">
+      <Container>
+        <PageTitle>게시글 관리</PageTitle>
+        <TableHeader>
+          <p className="total">
+            전체 <strong>{totalBoard}</strong> 건
+          </p>
+          <BtnWrapper className="flexgap right">
+            <LinkBtn className="header" to="/admin/board/write" state={{ checkedItems: checkedItems }}>
+              게시글 작성
+            </LinkBtn>
+            <NormalBtn className="header" onClick={ReportBoard}>
+              신고된 글로 이동
+            </NormalBtn>
+            <NormalBtn className="header red" onClick={DeleteBoard}>
+              게시글 삭제
+            </NormalBtn>
+          </BtnWrapper>
+        </TableHeader>
+        <Table>
+          <colgroup>
+            <col width="80px" />
+            <col width="100px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="auto" />
+            <col width="200px" />
+            <col width="150px" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>
+                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
+              </th>
+              <th>번호</th>
+              <th>게시판</th>
+              <th>카테고리</th>
+              <th>제목</th>
+              <th>작성자명(회원 ID)</th>
+              <th>작성일</th>
+              <th>블랙리스트</th>
+            </tr>
+          </thead>
+          <tbody>
+            {board.length === 0 && (
               <tr>
-                <th>
-                  <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
-                </th>
-                <th>번호</th>
-                <th>게시판</th>
-                <th>카테고리</th>
-                <th>제목</th>
-                <th>작성자명(회원 ID)</th>
-                <th>작성일</th>
-                <th>블랙리스트</th>
+                {/* colSpan 개수, className 맞추셔야 한다고 계속해서 말씀드리고 있습니다. */}
+                <td colSpan={8} className="center empty">
+                  등록된 게시글이 없습니다.
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {board.length === 0 && (
-                <tr>
-                  {/* colSpan 개수, className 맞추셔야 한다고 계속해서 말씀드리고 있습니다. */}
-                  <td colSpan={8} className="center empty">
-                    등록된 게시글이 없습니다.
-                  </td>
-                </tr>
-              )}
-              {board &&
-                board.map((board, idx: number) => {
-                  return (
-                    <tr key={board.boardId}>
-                      <td className="center">
-                        <InputCheckbox
-                          type="checkbox"
-                          checked={checkedItems.includes(board.boardId)}
-                          onChange={() => handleCheckboxChange(board.boardId)}
-                        />
-                      </td>
-                      <td className="center">{board.parentBoardId !== 0 ? '↳' : `${count++}`}</td>
-                      <td className="center">{board.boardTitle}</td>
-                      <td className="center">{board.category}</td>
-                      <td className="center">
-                        <S.LinkStyle
-                          to={`/admin/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}>
-                          {board.parentBoardId !== 0 ? <IsReply>답글</IsReply> : null}
-                          {board.title}
-                        </S.LinkStyle>
-                      </td>
-                      <td className="center">{isBoardWriter(board)}</td>
-                      <td className="center">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
-                        board.boardWriteDate[2] < 10 ? '0' : ''
-                      }${board.boardWriteDate[2]}`}</td>
-                      <td>{board.blackList}</td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </Table>
-          <Paging totalPage={totalPage} />
-        </Container>
-        <AdminCheck kind="AUTH_C" />
-      </AdminLayout>
-    );
-  } else {
-    return null;
-  }
+            )}
+            {board &&
+              board.map((board, idx: number) => {
+                return (
+                  <tr key={board.boardId}>
+                    <td className="center">
+                      <InputCheckbox
+                        type="checkbox"
+                        checked={checkedItems.includes(board.boardId)}
+                        onChange={() => handleCheckboxChange(board.boardId)}
+                      />
+                    </td>
+                    <td className="center">{board.parentBoardId !== 0 ? '↳' : `${count++}`}</td>
+                    <td className="center">{board.boardTitle}</td>
+                    <td className="center">{board.category}</td>
+                    <td className="center">
+                      <S.LinkStyle
+                        to={`/admin/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}>
+                        {board.parentBoardId !== 0 ? <IsReply>답글</IsReply> : null}
+                        {board.title}
+                      </S.LinkStyle>
+                    </td>
+                    <td className="center">{isBoardWriter(board)}</td>
+                    <td className="center">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
+                      board.boardWriteDate[2] < 10 ? '0' : ''
+                    }${board.boardWriteDate[2]}`}</td>
+                    <td>{board.blackList}</td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </Table>
+        <Paging totalPage={totalPage} />
+      </Container>
+      <AdminCheck kind="AUTH_C" />
+    </AdminLayout>
+  );
 };
 
 export default AdminBoard;
