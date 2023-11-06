@@ -82,7 +82,6 @@ const AdminMemberDetail = () => {
       const response = await Instance.put<Member>(`/api/admin-change-member/${memberId}`, payload);
 
       if (response.status === 200) {
-        alert('회원정보 수정이 완료되었습니다');
         navigate(`/admin/member/detail`);
         // navigate(`/admin/member/detail/${memberId}`);
       }
@@ -101,7 +100,6 @@ const AdminMemberDetail = () => {
     try {
       const response = await Instance.delete(`/api/softdelete/${memberId}`);
       if (response.status === 200) {
-        alert('회원이 삭제되었습니다.');
         navigate('/admin/member/detail');
       }
     } catch (error: any) {

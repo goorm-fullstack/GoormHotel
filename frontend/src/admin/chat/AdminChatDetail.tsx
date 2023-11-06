@@ -160,7 +160,7 @@ const AdminChatDetail = () => {
               </td>
             </tr>
             <tr>
-              <th colSpan={2} className="center">
+              <th colSpan={2} className="center innerheader">
                 채팅 기록
               </th>
             </tr>

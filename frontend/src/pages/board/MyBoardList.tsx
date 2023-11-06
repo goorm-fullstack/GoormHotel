@@ -4,6 +4,7 @@ import { PageTitle } from '../../Style/commonStyles';
 import Paging from '../../components/common/Paging/Paging';
 import Instance from '../../utils/api/axiosInstance';
 import { Link } from 'react-router-dom';
+import MemberCheck from '../../components/MemberCheck';
 
 const MyBoardList = () => {
   const [totalPages, setTotalPages] = useState(0);
@@ -110,6 +111,7 @@ const MyBoardList = () => {
         </S.Table>
         <Paging totalPage={totalPages} />
       </S.Container>
+      <MemberCheck />
     </>
   );
 };

@@ -61,58 +61,54 @@ const CustomerSupport = () => {
         boardTitle = '이용후기';
       }
       if (boardTitle !== '') {
-        if(typeDetail === 'all' && keyword === ''){
-          Instance
-          .get(`/boards/find/category?boardTitle=${boardTitle}`)
-          .then((response) => {
-            const totalPages = parseInt(response.headers['totalpages'], 10);
-            const totalData = parseInt(response.headers['totaldata'], 10);
-            setBoard(response.data || []);
-            setTotalData(totalData);
-            setTotalPages(totalPages);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-        }else if(typeDetail !== 'all' && keyword === ''){
-          Instance
-          .get(`/boards/find/category?boardTitle=${boardTitle}&category=${typeDetail}`)
-          .then((response) => {
-            const totalPages = parseInt(response.headers['totalpages'], 10);
-            const totalData = parseInt(response.headers['totaldata'], 10);
-            setBoard(response.data || []);
-            setTotalData(totalData);
-            setTotalPages(totalPages);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-        }else if(typeDetail === 'all' && keyword !== ''){
-          Instance
-          .get(`/boards/find/category?boardTitle=${boardTitle}&keyword=${keyword}`)
-          .then((response) => {
-            const totalPages = parseInt(response.headers['totalpages'], 10);
-            const totalData = parseInt(response.headers['totaldata'], 10);
-            setBoard(response.data || []);
-            setTotalData(totalData);
-            setTotalPages(totalPages);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-        }else{
-          Instance
-          .get(`/boards/find/category?boardTitle=${boardTitle}&category=${typeDetail}&keyword=${keyword}`)
-          .then((response) => {
-            const totalPages = parseInt(response.headers['totalpages'], 10);
-            const totalData = parseInt(response.headers['totaldata'], 10);
-            setBoard(response.data || []);
-            setTotalData(totalData);
-            setTotalPages(totalPages);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        if (typeDetail === 'all' && keyword === '') {
+          Instance.get(`/boards/find/category?boardTitle=${boardTitle}`)
+            .then((response) => {
+              const totalPages = parseInt(response.headers['totalpages'], 10);
+              const totalData = parseInt(response.headers['totaldata'], 10);
+              setBoard(response.data || []);
+              setTotalData(totalData);
+              setTotalPages(totalPages);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        } else if (typeDetail !== 'all' && keyword === '') {
+          Instance.get(`/boards/find/category?boardTitle=${boardTitle}&category=${typeDetail}`)
+            .then((response) => {
+              const totalPages = parseInt(response.headers['totalpages'], 10);
+              const totalData = parseInt(response.headers['totaldata'], 10);
+              setBoard(response.data || []);
+              setTotalData(totalData);
+              setTotalPages(totalPages);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        } else if (typeDetail === 'all' && keyword !== '') {
+          Instance.get(`/boards/find/category?boardTitle=${boardTitle}&keyword=${keyword}`)
+            .then((response) => {
+              const totalPages = parseInt(response.headers['totalpages'], 10);
+              const totalData = parseInt(response.headers['totaldata'], 10);
+              setBoard(response.data || []);
+              setTotalData(totalData);
+              setTotalPages(totalPages);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        } else {
+          Instance.get(`/boards/find/category?boardTitle=${boardTitle}&category=${typeDetail}&keyword=${keyword}`)
+            .then((response) => {
+              const totalPages = parseInt(response.headers['totalpages'], 10);
+              const totalData = parseInt(response.headers['totaldata'], 10);
+              setBoard(response.data || []);
+              setTotalData(totalData);
+              setTotalPages(totalPages);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
         }
       }
     };
@@ -174,18 +170,18 @@ const CustomerSupport = () => {
 
   useEffect(() => {
     setKeyword('');
-    if(searchKeyword.current){
+    if (searchKeyword.current) {
       searchKeyword.current.value = '';
     }
     setTypeDetail('all');
-  }, [board])
+  }, [board]);
 
   const generateOptions = (item: TypeDetail, selectedType: string) => {
     if (item.type === selectedType) {
       return (
-          <option key={item.value} value={item.value}>
-            {item.typeDetail}
-          </option>
+        <option key={item.value} value={item.value}>
+          {item.typeDetail}
+        </option>
       );
     }
   };
@@ -310,7 +306,7 @@ const CustomerSupport = () => {
                             {/** 답글 여부에 따라 보이거나 안 보이게 처리 */}
                             <Link to={{ pathname: `/board/${board}/detail/${item.title}`, search: `boardId=${item.boardId}` }}>{item.title}</Link>
                           </td>
-                          <td className="center">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
+                          <td className="center">{`${item.boardWriteDate[0]}/${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}/${
                             item.boardWriteDate[2] < 10 ? '0' : ''
                           }${item.boardWriteDate[2]}`}</td>
                         </tr>

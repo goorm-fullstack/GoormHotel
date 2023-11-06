@@ -163,7 +163,6 @@ const AdminBoardDetail = () => {
     if (isConfirm) {
       Instance.put(`/reply/softdelete/${replyId}`)
         .then((response) => {
-          alert('삭제되었습니다.');
           fetchReply(boardData.boardId);
         })
         .catch((error) => {
@@ -215,7 +214,6 @@ const AdminBoardDetail = () => {
         };
         Instance.put(`/reply/${editingReplyId}`, data)
           .then((response) => {
-            alert('수정되었습니다.');
             setEditedReplyContent('');
             setReplyContentModify('');
             setReplyContent('');
@@ -237,7 +235,6 @@ const AdminBoardDetail = () => {
         };
         Instance.put(`/reply/${editingReplyId}`, data)
           .then((response) => {
-            alert('수정되었습니다.');
             setEditedReplyContent('');
             setReplyContentModify('');
             setReplyContent('');
@@ -289,7 +286,6 @@ const AdminBoardDetail = () => {
       };
       Instance.post(`/report/writeform`, data)
         .then(() => {
-          alert('신고처리되었습니다.');
           navigate(`/admin/report/1`);
         })
         .catch((error) => {
@@ -303,7 +299,6 @@ const AdminBoardDetail = () => {
     if (isConfirm) {
       Instance.put(`/boards/softdelete/${boardData.boardId}`)
         .then(() => {
-          alert('삭제되었습니다.');
           navigate(-1);
         })
         .catch((error) => {

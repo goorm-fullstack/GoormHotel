@@ -104,7 +104,6 @@ const AdminManager = () => {
       });
 
       if (response.status === 200) {
-        alert('성공적으로 등록되었습니다.');
         const newManagerData = await Instance.get('/api/admin-getlist');
         if (newManagerData.status === 200) {
           setManagerData(newManagerData.data);

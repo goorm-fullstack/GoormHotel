@@ -120,17 +120,14 @@ const AdminReport = () => {
                   if (isConfirm) {
                     Instance.put(`/report/black/${reportId}`)
                       .then(() => {
-                        alert('블랙리스트 상태 변경 성공');
                         Instance.put(`/boards/softdelete/${board.boardId}`)
-                          .then(() => {
-                            alert('게시글 삭제 완료');
-                          })
+                          .then(() => {})
                           .catch(() => {
-                            alert('게시글 삭제 실패');
+                            console.log('게시글 삭제 실패');
                           });
                       })
                       .catch(() => {
-                        alert('게시글 블랙리스트 상태 변경 실패');
+                        console.log('게시글 블랙리스트 상태 변경 실패');
                       });
                     // Instance.put(`/boards/softdelete/${board.boardId}`)
                     //   .then(() => {
@@ -155,18 +152,18 @@ const AdminReport = () => {
                         .then(() => {
                           Instance.put(`/report/black/${reportId}`)
                             .then(() => {
-                              alert('게시글글 블랙리스트 추가 성공');
+                              console.log('게시글글 블랙리스트 추가 성공');
                             })
                             .catch(() => {
-                              alert('게시글글 블랙리스트 추가 실패');
+                              console.log('게시글글 블랙리스트 추가 실패');
                             });
                         })
                         .catch(() => {
-                          alert('게시글글글 블랙리스트 추가 실패');
+                          console.log('게시글글글 블랙리스트 추가 실패');
                         });
                     })
                     .catch((e) => {
-                      alert(e.message);
+                      console.log(e.message);
                     });
                 }
               })
@@ -182,17 +179,16 @@ const AdminReport = () => {
                 if (isConfirm) {
                   Instance.put(`/reply/softdelete/${reply.replyId}`)
                     .then(() => {
-                      alert('댓글 삭제 완료');
                       Instance.put(`report/black/${reportId}`)
                         .then(() => {
-                          alert('댓글 블랙리스트 성공');
+                          console.log('댓글 블랙리스트 성공');
                         })
                         .catch(() => {
-                          alert('댓글 블랙리스트 실패');
+                          console.log('댓글 블랙리스트 실패');
                         });
                     })
                     .catch(() => {
-                      alert('댓글 삭제 실패');
+                      console.log('댓글 삭제 실패');
                     });
                 }
               } else {
@@ -202,22 +198,22 @@ const AdminReport = () => {
                     Instance.post(`/member/blacked/${member}`).then(() => {
                       Instance.put(`report/black/${reportId}`)
                         .then(() => {
-                          alert('댓글 블랙리스트 추가 성공');
+                          console.log('댓글 블랙리스트 추가 성공');
                         })
                         .catch(() => {
-                          alert('댓글 블랙리스트 추가 실패');
+                          console.log('댓글 블랙리스트 추가 실패');
                         });
                     });
                   })
                   .catch(() => {
-                    alert('댓글 블랙리스트 추가 실패');
+                    console.log('댓글 블랙리스트 추가 실패');
                   });
               }
             });
           }
         })
         .catch((e) => {
-          alert(e);
+          console.log(e);
         });
     });
   };

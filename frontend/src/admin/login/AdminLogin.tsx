@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as S from './Style';
 import adminLogo from '../../images/common/logo_admin.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PageTitle, SubmitBtn, BtnWrapper, CheckLabel, InputCheckbox } from '../../Style/commonStyles';
 import Instance from '../../utils/api/axiosInstance';
 
@@ -9,6 +9,14 @@ const AdminLogin: React.FC = () => {
   const [adminId, setAdminId] = useState<string>('');
   const [adminPassword, setAdminPassword] = useState<string>('');
   const [rememberId, setRememberId] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const getLoginState = localStorage.getItem('adminId');
+
+  useEffect(() => {
+    if (getLoginState) {
+      navigate('/admin');
+    }
+  }, []);
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

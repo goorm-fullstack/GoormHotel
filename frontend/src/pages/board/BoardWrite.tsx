@@ -191,7 +191,6 @@ const BoardWrite = () => {
               'Content-Type': 'application/json',
             },
           });
-          alert('신고 완료되었습니다.');
           navigate(-2);
         } catch (e: any) {
           console.log('에러: ', e);

@@ -83,9 +83,9 @@ const AdminReservation = () => {
       // setCheckOut(response.data.checkOut);
       // setOrderDate(response.data.orderDate);
 
-      const checkInDate = moment(response.data.checkIn).format('YYYY.MM.DD');
-      const checkOutDate = moment(response.data.checkOut).format('YYYY.MM.DD');
-      const orderDate = moment(response.data.orderDate).format('YYYY.MM.DD');
+      const checkInDate = moment(response.data.checkIn).format('yyyy/MM/DD');
+      const checkOutDate = moment(response.data.checkOut).format('yyyy/MM/DD');
+      const orderDate = moment(response.data.orderDate).format('yyyy/MM/DD');
 
       setCheckInDateFormat(checkInDate);
       setCheckOutDateFormat(checkOutDate);

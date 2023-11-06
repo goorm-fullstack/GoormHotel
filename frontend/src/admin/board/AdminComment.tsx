@@ -174,7 +174,6 @@ const AdminComment = () => {
         const successfulReportions = response.filter((response) => response?.status === 200);
         if (successfulReportions.length === reportions.length) {
           setCheckedItems([]);
-          alert('신고처리 되었습니다.');
           window.location.reload();
         } else {
           throw new Error('신고를 완료하지 못했습니다.');

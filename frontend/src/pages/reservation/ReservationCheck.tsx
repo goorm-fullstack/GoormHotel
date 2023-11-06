@@ -20,7 +20,7 @@ const ReservationCheck = () => {
   const [checkOutDate, setCheckOutDate] = useState('');
   const [reservationNewData, setReservationNewData] = useState();
   const [totalPrice, setTotalPrice] = useState(0);
-  const [discountPrice, setDiscountPrice] = useState(0);//쿠폰 할인 금액
+  const [discountPrice, setDiscountPrice] = useState(0); //쿠폰 할인 금액
   // 예약 정보 가져오기
   useEffect(() => {
     const fetchReservationData = () => {
@@ -75,8 +75,7 @@ const ReservationCheck = () => {
         count: reservationData.count,
         nights: reservationData.stay,
       });
-      if(reservationData.coupon)
-        calcDiscountPrice(reservationData.coupon.discountRate);
+      if (reservationData.coupon) calcDiscountPrice(reservationData.coupon.discountRate);
     }
   }, [reservationData, roomItem, diningItem]);
 
@@ -90,18 +89,18 @@ const ReservationCheck = () => {
     const discount = Math.round(price * rate);
     const result = Math.round(discount / 10) * 10;
     setDiscountPrice(result);
-    setTotalPrice(result)
-  }
+    setTotalPrice(result);
+  };
 
-  const calcGiftCardPrice = (money : number) => {
-    if(totalPrice >= money) {
+  const calcGiftCardPrice = (money: number) => {
+    if (totalPrice >= money) {
       return money;
     } else {
       const result = totalPrice;
       return result;
     }
-  }
-  
+  };
+
   return (
     <>
       <S.Container>
@@ -121,87 +120,91 @@ const ReservationCheck = () => {
               <S.Section className="userinfo">
                 <ContentsTitleXSmall>고객 정보</ContentsTitleXSmall>
                 <table>
-                  <tr>
-                    {reservationData.member !== null ? (
-                      <>
-                      <th>고객명</th>
-                      <td>{reservationData.member.name}</td>
-                      <th>연락처</th>
-                      <td>{reservationData.member.phoneNumber}</td>
-                      </>
-                    ) : (
-                      <>
-                      <th>고객명</th>
-                      <td>{reservationData.nonMember.name}</td>
-                      <th>연락처</th>
-                      <td>{reservationData.nonMember.phoneNumber}</td>
-                      </>
-                    )}
-                    
-                  </tr>
-                  <tr>
-                    {reservationData.member ? (
-                      <>
-                        <th>이메일</th>
-                        <td colSpan={3}>{reservationData.member.email}</td>
-                      </>
-                    ) : (
-                      <>
-                      <th>이메일</th>
-                      <td colSpan={3}>{reservationData.nonMember.email}</td>
-                      </>
-                    )}
-                    
-                  </tr>
-                  <tr>
-                    <th>요청사항</th>
-                    <td colSpan={3}>{reservationData.notice}</td>
-                  </tr>
+                  <tbody>
+                    <tr>
+                      {reservationData.member !== null ? (
+                        <>
+                          <th>고객명</th>
+                          <td>{reservationData.member.name}</td>
+                          <th>연락처</th>
+                          <td>{reservationData.member.phoneNumber}</td>
+                        </>
+                      ) : (
+                        <>
+                          <th>고객명</th>
+                          <td>{reservationData.nonMember.name}</td>
+                          <th>연락처</th>
+                          <td>{reservationData.nonMember.phoneNumber}</td>
+                        </>
+                      )}
+                    </tr>
+                    <tr>
+                      {reservationData.member ? (
+                        <>
+                          <th>이메일</th>
+                          <td colSpan={3}>{reservationData.member.email}</td>
+                        </>
+                      ) : (
+                        <>
+                          <th>이메일</th>
+                          <td colSpan={3}>{reservationData.nonMember.email}</td>
+                        </>
+                      )}
+                    </tr>
+                    <tr>
+                      <th>요청사항</th>
+                      <td colSpan={3}>{reservationData.notice}</td>
+                    </tr>
+                  </tbody>
                 </table>
               </S.Section>
-            
-            <S.Section>
-              <ContentsTitleXSmall>사용한 상품권</ContentsTitleXSmall>
-              <S.CouponInfo className="used">
-                <table>
-                  {giftcardList.length !== 0 ? (
-                    <>
-                      {reservationData.giftCard.map((giftCard: any, index: number) => (
-                      <tr key={index}>
-                        <td>{giftCard.title}</td>
-                        <td className="right">-{numberWithCommas(calcGiftCardPrice(giftCard.money))}원</td> {/* 상품권 가격 표시 필요 */}
-                      </tr>
-                      ))}
-                    </>
-                  ) : (
-                    <>
-                      <tr>
-                        <td colSpan={2}>사용한 상품권이 없습니다.</td>
-                      </tr>
-                    </>
-                  )}
-                </table>
-              </S.CouponInfo>
-            </S.Section>
-            <S.Section>
-              <ContentsTitleXSmall>사용한 쿠폰</ContentsTitleXSmall>
-              <S.CouponInfo className="used">
-                <table>
-                  {reservationData.coupon !== null ? (
-                    <tr>
-                      <td>{reservationData.coupon.name}</td>
-                      <td className="right">-{numberWithCommas(discountPrice)}원</td> {/* 쿠폰 가격 표시 필요 */}
-                    </tr>
-                  ) : (
-                    <tr>
-                      {/* 사용한 쿠폰이 없는 경우 */}
-                      <td colSpan={2}>사용한 쿠폰이 없습니다.</td>
-                    </tr>
-                  )}
-                </table>
-              </S.CouponInfo>
-            </S.Section>
-          </S.Left>
+
+              <S.Section>
+                <ContentsTitleXSmall>사용한 상품권</ContentsTitleXSmall>
+                <S.CouponInfo className="used">
+                  <table>
+                    <tbody>
+                      {giftcardList.length !== 0 ? (
+                        <>
+                          {reservationData.giftCard.map((giftCard: any, index: number) => (
+                            <tr key={index}>
+                              <td>{giftCard.title}</td>
+                              <td className="right">-{numberWithCommas(calcGiftCardPrice(giftCard.money))}원</td> {/* 상품권 가격 표시 필요 */}
+                            </tr>
+                          ))}
+                        </>
+                      ) : (
+                        <>
+                          <tr>
+                            <td colSpan={2}>사용한 상품권이 없습니다.</td>
+                          </tr>
+                        </>
+                      )}
+                    </tbody>
+                  </table>
+                </S.CouponInfo>
+              </S.Section>
+              <S.Section>
+                <ContentsTitleXSmall>사용한 쿠폰</ContentsTitleXSmall>
+                <S.CouponInfo className="used">
+                  <table>
+                    <tbody>
+                      {reservationData.coupon !== null ? (
+                        <tr>
+                          <td>{reservationData.coupon.name}</td>
+                          <td className="right">-{numberWithCommas(discountPrice)}원</td> {/* 쿠폰 가격 표시 필요 */}
+                        </tr>
+                      ) : (
+                        <tr>
+                          {/* 사용한 쿠폰이 없는 경우 */}
+                          <td colSpan={2}>사용한 쿠폰이 없습니다.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </S.CouponInfo>
+              </S.Section>
+            </S.Left>
             <S.Right>
               <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
               <Product
@@ -210,25 +213,27 @@ const ReservationCheck = () => {
                 updateReservationData={updateData}
               />
               <S.Payment>
-                <tr>
-                  <th>결제수단</th>
-                  <td>신용카드</td>
-                </tr>
-                <tr>
-                  <th>결제일</th>
-                  <td>{`${reservationData.orderDate[0]}-${reservationData.orderDate[1] < 10 ? '0' : ''}${reservationData.orderDate[1]}-${
-                    reservationData.orderDate[2] < 10 ? '0' : ''
-                  }${reservationData.orderDate[2]}`}</td>
-                </tr>
-                <tr>
-                  <td colSpan={2} className="notice">
-                    ⁕ 결제된 금액은 포트원 정책에 따라 매일 자동 취소됩니다. 자세한 내용은{' '}
-                    <a href="https://developers.portone.io/docs/ko/readme/get-started" target="_blank">
-                      포트원 개발자센터 홈페이지
-                    </a>
-                    를 확인해주세요.
-                  </td>
-                </tr>
+                <tbody>
+                  <tr>
+                    <th>결제수단</th>
+                    <td>신용카드</td>
+                  </tr>
+                  <tr>
+                    <th>결제일</th>
+                    <td>{`${reservationData.orderDate[0]}/${reservationData.orderDate[1] < 10 ? '0' : ''}${reservationData.orderDate[1]}/${
+                      reservationData.orderDate[2] < 10 ? '0' : ''
+                    }${reservationData.orderDate[2]}`}</td>
+                  </tr>
+                  <tr>
+                    <td colSpan={2} className="notice">
+                      ⁕ 결제된 금액은 포트원 정책에 따라 매일 자동 취소됩니다. 자세한 내용은{' '}
+                      <a href="https://developers.portone.io/docs/ko/readme/get-started" target="_blank">
+                        포트원 개발자센터 홈페이지
+                      </a>
+                      를 확인해주세요.
+                    </td>
+                  </tr>
+                </tbody>
               </S.Payment>
             </S.Right>
           </S.Wrapper>

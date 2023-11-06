@@ -57,8 +57,8 @@ const Coupon = ({ grade }: CouponProps) => {
       <div className="couponinfo">
         <p className={`${grade} ctitle`}>{grade} 등급 혜택</p>
         <p className="cname">객실 5% 할인 쿠폰</p>
-        <p className="publish">발행일: 2023-08-01</p>
-        <p className="publish use">사용기한: 2023-08-01~2023-08-31</p>
+        <p className="publish">발행일: 2023/08/01</p>
+        <p className="publish use">사용기한: 2023/08/01~2023/08/31</p>
       </div>
     </S.CouponWrapper>
   );

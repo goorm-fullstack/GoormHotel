@@ -51,7 +51,7 @@ const AdminDetailGiftCard = () => {
     const month = String(expireDate.getMonth() + 1).padStart(2, '0');
     const day1 = String(expireDate.getDate()).padStart(2, '0');
 
-    const formattedExpireDate = `${year}.${month}.${day1}`;
+    const formattedExpireDate = `${year}/${month}/${day1}`;
     return formattedExpireDate;
   };
 
@@ -129,7 +129,7 @@ const AdminDetailGiftCard = () => {
                     </td>
                   </tr>
                   <tr>
-                    <th>사용여부</th>
+                    <th>사용여부(Y/N)</th>
                     <td>
                       {/* 최대 길이는 한자리 */}
                       <input type="text" maxLength={1} value={used} readOnly={updateClick} onChange={handleUsedChange} required />

@@ -86,7 +86,6 @@ const AdminDeleteComment = () => {
               //답글이 아니라면
               Instance.put(`/boards/undelete/${response.data.boardId}`)
                 .then(() => {
-                  alert('복구되었습니다.');
                   window.location.reload();
                 })
                 .catch((error) => {
@@ -105,7 +104,6 @@ const AdminDeleteComment = () => {
                 });
               Instance.put(`/boards/undelete/${response.data.boardId}`)
                 .then(() => {
-                  alert('복구되었습니다.');
                   window.location.reload();
                 })
                 .catch((error) => {
@@ -117,7 +115,6 @@ const AdminDeleteComment = () => {
           const id = boardId.replace('reply', '');
           Instance.put(`/reply/undelete/${id}`)
             .then(() => {
-              alert('복구되었습니다.');
               window.location.reload();
             })
             .catch((error) => {
@@ -136,7 +133,6 @@ const AdminDeleteComment = () => {
           const id = boardId.replace('board', '');
           Instance.delete(`/boards/${id}`)
             .then(() => {
-              alert('삭제되었습니다.');
               window.location.reload();
             })
             .catch((error) => {
@@ -146,7 +142,6 @@ const AdminDeleteComment = () => {
           const id = boardId.replace('reply', '');
           Instance.delete(`/reply/${id}`)
             .then(() => {
-              alert('삭제되었습니다.');
               window.location.reload();
             })
             .catch((error) => {

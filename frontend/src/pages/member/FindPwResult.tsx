@@ -23,7 +23,7 @@ const FindPwResult = () => {
       });
 
       if (response.status === 200) {
-        alert('비밀번호가 성공적으로 변경되었습니다.');
+        alert('비밀번호가 변경되었습니다. 로그인 페이지로 이동합니다.');
         navigate('/login');
       }
     } catch (error) {
@@ -43,20 +43,8 @@ const FindPwResult = () => {
             기존에 사용하시던 비밀번호는 사용할 수 없습니다.
           </p>
           <form action="#" method="post">
-            <input
-                type="password"
-                placeholder="비밀번호"
-                name="password"
-                required
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="비밀번호 확인"
-                name="confirmPassword"
-                required
-                onChange={(e) => setConfirmPassword(e.target.value)}
-            />
+            <input type="password" placeholder="비밀번호" name="password" required onChange={(e) => setPassword(e.target.value)} />
+            <input type="password" placeholder="비밀번호 확인" name="confirmPassword" required onChange={(e) => setConfirmPassword(e.target.value)} />
             <BtnWrapper className="mt20 full">
               <SubmitBtn onClick={handleResetPassword}>비밀번호 재설정</SubmitBtn>
             </BtnWrapper>

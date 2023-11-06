@@ -117,7 +117,6 @@ const AdminBoard = () => {
             //답글이 아니라면
             Instance.put(`/boards/softdelete/${boardId}`)
               .then(() => {
-                alert('삭제되었습니다.');
                 window.location.reload();
               })
               .catch((error) => {
@@ -139,7 +138,6 @@ const AdminBoard = () => {
               `/boards/softdelete/${boardId}`
             )
               .then(() => {
-                alert('삭제되었습니다.');
                 window.location.reload();
               })
               .catch((error) => {
@@ -162,7 +160,6 @@ const AdminBoard = () => {
         };
         Instance.post(`/report/writeform`, data)
           .then(() => {
-            alert('신고처리되었습니다.');
             window.location.reload();
           })
           .catch((error) => {

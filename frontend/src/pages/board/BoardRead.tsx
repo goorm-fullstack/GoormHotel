@@ -149,7 +149,6 @@ const BoardRead = () => {
         if (replyPassword === password) {
           Instance.put(`/reply/softdelete/${replyId}`)
             .then((response) => {
-              alert('삭제되었습니다.');
               fetchReply(boardData.boardId);
             })
             .catch((error) => {
@@ -168,7 +167,6 @@ const BoardRead = () => {
         if (id === user) {
           Instance.put(`/reply/softdelete/${replyId}`)
             .then((response) => {
-              alert('삭제되었습니다.');
               fetchReply(boardData.boardId);
             })
             .catch((error) => {
@@ -220,7 +218,6 @@ const BoardRead = () => {
         };
         Instance.put(`/reply/${editingReplyId}`, data)
           .then((response) => {
-            alert('수정되었습니다.');
             setEditedReplyContent('');
             setReplyContentModify('');
             setReplyContent('');
@@ -242,7 +239,6 @@ const BoardRead = () => {
         };
         Instance.put(`/reply/${editingReplyId}`, data)
           .then((response) => {
-            alert('수정되었습니다.');
             setEditedReplyContent('');
             setReplyContentModify('');
             setReplyContent('');
@@ -310,7 +306,6 @@ const BoardRead = () => {
         if (isConfirm) {
           Instance.put(`/boards/softdelete/${boardId}`)
             .then(() => {
-              alert('삭제되었습니다.');
               navigate(-1);
             })
             .catch((error) => {
@@ -333,7 +328,6 @@ const BoardRead = () => {
         if (isConfirm) {
           Instance.put(`/boards/softdelete/${boardId}`)
             .then(() => {
-              alert('삭제되었습니다.');
               navigate(-1);
             })
             .catch((error) => {

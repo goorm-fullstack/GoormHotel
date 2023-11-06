@@ -274,13 +274,10 @@ export const LinkBtn = styled(commonLinkBtn)`
     color: ${(props) => props.theme.colors.red};
 
     &:hover {
-    background-color: white;
-    color: ${(props) => props.theme.colors.red};
+      background-color: white;
+      color: ${(props) => props.theme.colors.red};
+    }
   }
-    
-  }
-
-
 `;
 
 export const SubmitLinkBtn = styled(commonLinkBtn)`
@@ -339,7 +336,6 @@ export const NormalLinkBtn = styled(commonLinkBtn)`
   }
 `;
 
-
 export const SubmitBtn = styled(commonButton)`
   background-color: ${(props) => props.theme.colors.gold};
   color: white;
@@ -352,7 +348,6 @@ export const SubmitBtn = styled(commonButton)`
     width: 200px;
     font-size: ${(props) => props.theme.font.sizes};
   }
-
 `;
 
 export const MoreLink = styled(commonLinkBtn)`
@@ -532,6 +527,10 @@ export const commonTable = styled.table`
     }
     th {
       text-align: center;
+
+      &.innerheader {
+        border-top-color: ${(props) => props.theme.colors.graylightborder};
+      }
     }
     tr:hover td {
       background-color: white;

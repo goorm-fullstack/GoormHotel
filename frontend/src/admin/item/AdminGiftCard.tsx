@@ -76,7 +76,7 @@ const AdminGiftCard = () => {
     const month = String(expireDate.getMonth() + 1).padStart(2, '0');
     const day1 = String(expireDate.getDate()).padStart(2, '0');
 
-    const formattedExpireDate = `${year}.${month}.${day1}`;
+    const formattedExpireDate = `${year}/${month}/${day1}`;
     return formattedExpireDate;
   };
 

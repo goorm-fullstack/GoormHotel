@@ -4,6 +4,7 @@ import { PageTitle, ContentsTitleXSmall, AuthBtn, Auth, BtnWrapper, SubmitBtn } 
 import Coupon from '../../components/Coupon/Coupon';
 import { Link, useNavigate } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
+import MemberCheck from '../../components/MemberCheck';
 
 interface Member {
   name: string;
@@ -95,7 +96,6 @@ const Mypage = () => {
       const response = await Instance.put<Member>(`/member/api/change-member/${member.memberId}`, payload);
 
       if (response.status === 200) {
-        alert('회원정보 수정이 완료되었습니다');
         navigate('/mypage');
       }
     } catch (error: any) {
@@ -112,7 +112,7 @@ const Mypage = () => {
     e.preventDefault();
     if (!findMemberData.email || !findMemberData.memberId || !findMemberData.name) {
       console.log('findMemberData: ', findMemberData);
-      alert('빈 필드가 있습니다.');
+      alert('필수 입력 값을 모두 입력해주세요.');
       return;
     }
     try {
@@ -183,6 +183,7 @@ const Mypage = () => {
           </div>
         </S.Mypage>
       </S.Container>
+      <MemberCheck />
     </>
   );
 };

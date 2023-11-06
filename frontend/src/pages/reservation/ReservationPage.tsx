@@ -275,7 +275,6 @@ const ReservationPage = () => {
             phoneNumber: memberData ? memberData.phoneNumber : '',
             email: memberData ? memberData.email : '',
           }).then((response) => {
-            alert('예약되었습니다.');
             window.location.href = `/reservation/${response.data}`;
           });
         } catch (error) {

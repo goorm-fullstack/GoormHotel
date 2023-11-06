@@ -13,8 +13,8 @@ import {
 } from '../../Style/commonStyles';
 import AgreementContents from '../../components/Agreement/AgreementCon';
 import PrivacyContents from '../../components/Agreement/PrivacyCon';
-import Instance from "../../utils/api/axiosInstance";
-import {useNavigate} from "react-router-dom";
+import Instance from '../../utils/api/axiosInstance';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const [termsAgree, setTermsAgree] = useState(false);
@@ -58,11 +58,11 @@ const Signup = () => {
       });
 
       if (response.status === 200) {
-        alert('인증번호가 이메일로 발송되었습니다.');
+        alert('인증번호가 메일로 발송되었습니다.');
         // const receivedCode = response.data.code; (발송된 코드 활용?)
       }
     } catch (error: any) {
-      alert('이메일 발송 실패: ' + error?.response?.data?.message || '알 수 없는 에러');
+      alert('메일 발송 실패: ' + error?.response?.data?.message || '알 수 없는 에러');
     }
   };
 
@@ -82,9 +82,9 @@ const Signup = () => {
           code: formData.certificationCode,
         });
 
-          if (response.status === 200) {
-            navigate('/signup/result', { state: { name: formData.name } });
-          }
+        if (response.status === 200) {
+          navigate('/signup/result', { state: { name: formData.name } });
+        }
       } catch (error: any) {
         if (error?.response?.data?.errorCode === 1001) {
           alert('코드가 일치하지 않습니다');
