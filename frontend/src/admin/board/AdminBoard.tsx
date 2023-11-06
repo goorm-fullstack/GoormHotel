@@ -304,7 +304,7 @@ const AdminBoard = () => {
                       </S.LinkStyle>
                     </td>
                     <td className="center">{isBoardWriter(board)}</td>
-                    <td className="center">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
+                    <td className="center">{`${board.boardWriteDate[0]}/${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}/${
                       board.boardWriteDate[2] < 10 ? '0' : ''
                     }${board.boardWriteDate[2]}`}</td>
                     <td>{board.blackList}</td>

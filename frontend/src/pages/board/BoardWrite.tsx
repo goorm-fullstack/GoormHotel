@@ -232,8 +232,10 @@ const BoardWrite = () => {
                             return (
                               <select name="category" value={formData.category} onChange={handleChange} required>
                                 <option value="">선택</option>
-                                <option value="문의1">문의1</option>
-                                <option value="문의2">문의2</option>
+                                <option value="칭찬">칭찬</option>
+                                <option value="문의">문의</option>
+                                <option value="제안">제안</option>
+                                <option value="기타">기타</option>
                               </select>
                             );
                           case 'review':

@@ -151,7 +151,6 @@ const AdminBoardWrite = () => {
         await Instance.put(`/boards/updateIsComment/${parentBoardId}`);
       }
 
-      alert('게시글이 작성되었습니다.');
       window.location.href = `/admin/board/1`;
     } catch (e: any) {
       console.error('에러: ', e.message);
@@ -169,7 +168,7 @@ const AdminBoardWrite = () => {
           <th>작성자</th>
           <td>
             <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} style={{ display: 'none' }} />
-            <p>{adminNickname && decodeURIComponent(adminNickname)} 매니저</p>
+            {adminNickname ? <p>{decodeURIComponent(adminNickname)} 매니저</p> : <p>매니저</p>}
           </td>
         </tr>
       );
@@ -199,8 +198,10 @@ const AdminBoardWrite = () => {
         return (
           <>
             <option value="">선택</option>
-            <option value="문의1">문의1</option>
-            <option value="문의2">문의2</option>
+            <option value="칭찬">칭찬</option>
+            <option value="문의">문의</option>
+            <option value="제안">제안</option>
+            <option value="기타">기타</option>
           </>
         );
       case '이용후기':

@@ -252,7 +252,7 @@ const AdminDeleteComment = () => {
                   </td>
                   <td className="center">{isBoardWriter(board)}</td>
                   <td className="center">
-                    {`${board.boardDeleteTime[0]}.${board.boardDeleteTime[1] < 10 ? '0' : ''}${board.boardDeleteTime[1]}.${
+                    {`${board.boardDeleteTime[0]}/${board.boardDeleteTime[1] < 10 ? '0' : ''}${board.boardDeleteTime[1]}/${
                       board.boardDeleteTime[2] < 10 ? '0' : ''
                     }${board.boardDeleteTime[2]}`}
                   </td>
@@ -278,7 +278,7 @@ const AdminDeleteComment = () => {
                   </td>
                   <td className="center">{isReplyWriter(reply)}</td>
                   <td className="center">
-                    {`${reply.replyDeleteTime[0]}.${reply.replyDeleteTime[1] < 10 ? '0' : ''}${reply.replyDeleteTime[1]}.${
+                    {`${reply.replyDeleteTime[0]}/${reply.replyDeleteTime[1] < 10 ? '0' : ''}${reply.replyDeleteTime[1]}/${
                       reply.replyDeleteTime[2] < 10 ? '0' : ''
                     }${reply.replyDeleteTime[2]}`}
                   </td>
