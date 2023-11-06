@@ -164,6 +164,8 @@ const ReservationPage = () => {
 
   // 예약 및 결제
   const handleReservation = async () => {
+    console.log(giftCardUuid);
+    console.log(selectCoupon);
     if (memberData.name === '' && memberData.phoneNumber === '' && memberData.email === '') {
       alert('고객 정보를 입력해주세요.');
       return;
@@ -250,6 +252,8 @@ const ReservationPage = () => {
       if (success) {
         console.log('결제 성공');
         try {
+          console.log(giftCardUuid);
+          console.log(selectCoupon);
           Instance.post(`/reservation/save`, {
             checkIn: formatDateForServer(reservationNewData?.checkInDate),
             checkOut: formatDateForServer(reservationNewData?.checkOutDate),
@@ -302,12 +306,19 @@ const ReservationPage = () => {
     }
   };
 
-  const handleGiftCardCheckboxChange = (id: number) => {
+  const handleGiftCardCheckboxChange = (giftcard: any) => {
     setSelectGiftCard((prevItems) => {
-      if (prevItems.includes(id)) {
-        return prevItems.filter((item) => item !== id);
+      if (prevItems.includes(giftcard.id)) {
+        return prevItems.filter((item) => item !== giftcard.id);
       } else {
-        return [...prevItems, id];
+        return [...prevItems, giftcard.id];
+      }
+    });
+    setGiftCardUuid((prevItems) => {
+      if (prevItems.includes(giftcard.uuid)) {
+        return prevItems.filter((item) => item !== giftcard.uuid);
+      } else {
+        return [...prevItems, giftcard.uuid];
       }
     });
   };
@@ -413,7 +424,7 @@ const ReservationPage = () => {
                                 <InputCheckbox
                                   type="checkbox"
                                   checked={selectGiftCard.includes(giftcard.id)}
-                                  onChange={() => handleGiftCardCheckboxChange(giftcard.id)}
+                                  onChange={() => handleGiftCardCheckboxChange(giftcard)}
                                 />
                                 {giftcard.title}
                               </CheckLabel>
