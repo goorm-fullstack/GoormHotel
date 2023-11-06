@@ -162,10 +162,6 @@ const ReservationPage = () => {
     }
   }, [selectGiftCard]);
 
-  // useEffect(() => {
-  //   setReservations(formData);
-  // }, [formData]);
-
   // 예약 및 결제
   const handleReservation = async () => {
     if (memberData.name === '' && memberData.phoneNumber === '' && memberData.email === '') {
@@ -248,45 +244,37 @@ const ReservationPage = () => {
       buyer_email: memberData.email, // 구매자 이메일
     };
 
-    console.log(reservations);
-
-    try {
-      Instance.post(`/reservation/save`, {
-        checkIn: formatDateForServer(reservationNewData?.checkInDate),
-        checkOut: formatDateForServer(reservationNewData?.checkOutDate),
-        count: reservationNewData?.count,
-        adult: reservationNewData?.adults,
-        children: reservationNewData?.children,
-        stay: reservationNewData?.nights,
-        notice: notice,
-        sumPrice: sumPrice,
-        discountPrice: discountPrice,
-        totalPrice: totalPrice,
-        itemId: selectedProduct ? selectedProduct.id : selectData.id,
-        memberId: memberData && memberData.memberId,
-        couponId: selectCoupon,
-        giftCardId: giftCardUuid,
-        memberName: memberData ? memberData.name : '',
-        phoneNumber: memberData ? memberData.phoneNumber : '',
-        email: memberData ? memberData.email : '',
-      });
-    } catch (error) {
-      console.error('예약 요청 실패', error);
-    }
-
-    // const serverFormattedData = {
-    //   ...formData,
-    //   checkIn: formatDateForServer(reservationNewData.checkInDate),
-    //   checkOut: formatDateForServer(reservationNewData.checkOutDate),
-    // };
-
-    // setFormData(serverFormattedData);
-
     IMP.request_pay(paydata, async function callback(response: RequestPayResponse) {
       const { success, error_msg } = response;
 
       if (success) {
         console.log('결제 성공');
+        try {
+          Instance.post(`/reservation/save`, {
+            checkIn: formatDateForServer(reservationNewData?.checkInDate),
+            checkOut: formatDateForServer(reservationNewData?.checkOutDate),
+            count: reservationNewData?.count,
+            adult: reservationNewData?.adults,
+            children: reservationNewData?.children,
+            stay: reservationNewData?.nights,
+            notice: notice,
+            sumPrice: sumPrice,
+            discountPrice: discountPrice,
+            totalPrice: totalPrice,
+            itemId: selectedProduct ? selectedProduct.id : selectData.id,
+            memberId: memberData && memberData.memberId,
+            couponId: selectCoupon !== 0 ? selectCoupon : null,
+            giftCardId: giftCardUuid,
+            memberName: memberData ? memberData.name : '',
+            phoneNumber: memberData ? memberData.phoneNumber : '',
+            email: memberData ? memberData.email : '',
+          }).then((response) => {
+            alert('예약되었습니다.');
+            window.location.href = `/reservation/${response.data}`;
+          });
+        } catch (error) {
+          console.error('예약 요청 실패', error);
+        }
       } else {
         console.log(`결제 실패: ${error_msg}`);
       }

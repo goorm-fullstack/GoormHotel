@@ -31,12 +31,12 @@ public class ReservationController {
      * @return ResponseEntity
      */
     @PostMapping("/save")
-    public ResponseEntity<Object> saveReservation(
+    public ResponseEntity<String> saveReservation(
             @RequestBody RequestReservationDto reservationDto
     ) {
         log.info("reservationDto={}", reservationDto);
-        reservationService.saveReservation(reservationDto);
-        return ResponseEntity.ok().build();
+        String s = reservationService.saveReservation(reservationDto);
+        return ResponseEntity.ok(s);
     }
 
     /**
