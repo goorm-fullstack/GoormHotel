@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from "react";
-import * as S from "./Style";
-import AdminLayout from "../common/AdminLayout";
-import {
-  PageTitle,
-  InputCheckbox,
-  BtnWrapper,
-  NormalBtn,
-} from "../../Style/commonStyles";
-import { Container, Table, TableHeader } from "../member/Style";
-import Paging from "../../components/common/Paging/Paging";
-import { ReportData } from "./AdminBoard";
-import { useNavigate } from "react-router-dom";
-import { boardTitleList } from "./AdminBoard";
-import Instance from "../../utils/api/axiosInstance";
+import React, { useEffect, useState } from 'react';
+import * as S from './Style';
+import AdminLayout from '../common/AdminLayout';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
+import { Container, Table, TableHeader } from '../member/Style';
+import Paging from '../../components/common/Paging/Paging';
+import { ReportData } from './AdminBoard';
+import { useNavigate } from 'react-router-dom';
+import { boardTitleList } from './AdminBoard';
+import Instance from '../../utils/api/axiosInstance';
+import AdminCheck from '../adminCheck';
 
 const AdminReport = () => {
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
@@ -21,7 +17,7 @@ const AdminReport = () => {
   const [totalPage, setTotalPage] = useState<number>(0);
   const [totalData, setTotalData] = useState<number>(0);
   const navigate = useNavigate();
-  const authItem = localStorage.getItem("auth");
+  const authItem = localStorage.getItem('auth');
   const truncateString = (str: string, maxLength: number) => {
     if (str.length > maxLength) {
       return str.substring(0, maxLength) + '...';
@@ -30,35 +26,25 @@ const AdminReport = () => {
   };
 
   useEffect(() => {
-    if (!(authItem && authItem.includes("AUTH_C"))) {
-      alert("사용할 수 없는 페이지이거나 권한이 없습니다.");
-      navigate("/admin");
-    }
-  }, []);
-
-  useEffect(() => {
-    Instance.get("/report/list")
+    Instance.get('/report/list')
       .then((response) => {
         // 데이터를 가져올 때 reportCheck와 reportResult를 문자열로 처리
-        const modifiedData: ReportData[] = response.data.map(
-          (item: ReportData) => ({
-            ...item,
-            reportCheck: item.reportCheck.toString(),
-            reportResult: item.reportResult.toString(),
-          })
-        );
-        const totalPages = parseInt(response.headers["totalpages"], 10);
-        const totalData = parseInt(response.headers["totaldata"], 10);
+        const modifiedData: ReportData[] = response.data.map((item: ReportData) => ({
+          ...item,
+          reportCheck: item.reportCheck.toString(),
+          reportResult: item.reportResult.toString(),
+        }));
+        const totalPages = parseInt(response.headers['totalpages'], 10);
+        const totalData = parseInt(response.headers['totaldata'], 10);
         setReport(modifiedData);
         setTotalPage(totalPages);
         setTotalData(totalData);
-        console.log("get 성공");
+        console.log('get 성공');
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
-
 
   const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked: boolean = e.target.checked;
@@ -76,7 +62,7 @@ const AdminReport = () => {
     checkedItems.forEach((boardId) => {
       Instance.put(`/report/check/${boardId}`)
         .then(() => {
-          alert("처리되었습니다.");
+          alert('처리되었습니다.');
           window.location.reload();
         })
         .catch((error) => {
@@ -86,21 +72,15 @@ const AdminReport = () => {
   };
 
   const handleCheckboxChange = (memberId: number) => {
-    const updatedCheckedItems = checkedItems.includes(memberId)
-      ? checkedItems.filter((id) => id !== memberId)
-      : [...checkedItems, memberId];
+    const updatedCheckedItems = checkedItems.includes(memberId) ? checkedItems.filter((id) => id !== memberId) : [...checkedItems, memberId];
 
     setCheckedItems(updatedCheckedItems);
     setSelectAllChecked(updatedCheckedItems.length === report.length);
   };
 
-
-
-  const [reportDetails, setReportDetails] = useState<
-    Record<number, { boardTitle: string; boardId: number }>
-  >({});
+  const [reportDetails, setReportDetails] = useState<Record<number, { boardTitle: string; boardId: number }>>({});
   const fetchBoardDetails = (replyId: number) => {
-    if (replyId !== null && typeof replyId !== "undefined") {
+    if (replyId !== null && typeof replyId !== 'undefined') {
       // Check if replyId is valid
       Instance.get(`reply/replyId/${replyId}`)
         .then((response1) => {
@@ -131,27 +111,27 @@ const AdminReport = () => {
       Instance.get(`/report/find/${reportId}`)
         .then((response) => {
           const report = response.data;
-          if(report.boardId){
+          if (report.boardId) {
             Instance.get(`boards/${report.boardId}`)
               .then((response) => {
                 const board = response.data;
-                if(board.boardPassword != null){
-                  const isConfirm = window.confirm("비회원 게시글입니다. 삭제하시겠습니까?");
-                  if(isConfirm){
+                if (board.boardPassword != null) {
+                  const isConfirm = window.confirm('비회원 게시글입니다. 삭제하시겠습니까?');
+                  if (isConfirm) {
                     Instance.put(`/report/black/${reportId}`)
-                    .then(() => {
-                      alert("블랙리스트 상태 변경 성공");
-                      Instance.put(`/boards/softdelete/${board.boardId}`)
                       .then(() => {
-                        alert("게시글 삭제 완료");
+                        alert('블랙리스트 상태 변경 성공');
+                        Instance.put(`/boards/softdelete/${board.boardId}`)
+                          .then(() => {
+                            alert('게시글 삭제 완료');
+                          })
+                          .catch(() => {
+                            alert('게시글 삭제 실패');
+                          });
                       })
                       .catch(() => {
-                        alert("게시글 삭제 실패");
-                      })
-                    })
-                    .catch(() => {
-                      alert("게시글 블랙리스트 상태 변경 실패");
-                    })
+                        alert('게시글 블랙리스트 상태 변경 실패');
+                      });
                     // Instance.put(`/boards/softdelete/${board.boardId}`)
                     //   .then(() => {
                     //     Instance.put(`/report/black/${reportId}`)
@@ -167,84 +147,80 @@ const AdminReport = () => {
                     //     alert("삭제 실패");
                     //   })
                   }
-                }
-                else{
+                } else {
                   Instance.get(`/member/${board.boardWriter}`)
-                  .then((response) => {
-                    const member = response.data;
-                    Instance.post(`/member/blacked/${member}`)
-                      .then(() => {
-                        Instance.put(`/report/black/${reportId}`)
-                          .then(() => {
-                            alert("게시글글 블랙리스트 추가 성공");
-                          })
-                          .catch(() => {
-                            alert("게시글글 블랙리스트 추가 실패");
-                          })
-                      })
-                      .catch(() => {
-                        alert("게시글글글 블랙리스트 추가 실패");
-                      })
-                  })
-                  .catch((e) => {
-                    alert(e.message);
-                  })
+                    .then((response) => {
+                      const member = response.data;
+                      Instance.post(`/member/blacked/${member}`)
+                        .then(() => {
+                          Instance.put(`/report/black/${reportId}`)
+                            .then(() => {
+                              alert('게시글글 블랙리스트 추가 성공');
+                            })
+                            .catch(() => {
+                              alert('게시글글 블랙리스트 추가 실패');
+                            });
+                        })
+                        .catch(() => {
+                          alert('게시글글글 블랙리스트 추가 실패');
+                        });
+                    })
+                    .catch((e) => {
+                      alert(e.message);
+                    });
                 }
               })
               .catch((e) => {
                 console.error(e.message);
-              })
+              });
           }
-          if(report.replyId){
-            Instance.get(`reply/replyId/${report.replyId}`)
-              .then((response) => {
-                const reply = response.data;
-                if(reply.replyPassword){
-                  const isConfirm = window.confirm("비회원 댓글입니다. 삭제하시겠습니까?");
-                  if(isConfirm){
-                    Instance.put(`/reply/softdelete/${reply.replyId}`)
-                      .then(() => {
-                        alert("댓글 삭제 완료");
-                        Instance.put(`report/black/${reportId}`)
+          if (report.replyId) {
+            Instance.get(`reply/replyId/${report.replyId}`).then((response) => {
+              const reply = response.data;
+              if (reply.replyPassword) {
+                const isConfirm = window.confirm('비회원 댓글입니다. 삭제하시겠습니까?');
+                if (isConfirm) {
+                  Instance.put(`/reply/softdelete/${reply.replyId}`)
+                    .then(() => {
+                      alert('댓글 삭제 완료');
+                      Instance.put(`report/black/${reportId}`)
                         .then(() => {
-                          alert("댓글 블랙리스트 성공");
+                          alert('댓글 블랙리스트 성공');
                         })
                         .catch(() => {
-                          alert("댓글 블랙리스트 실패")
-                        })
-                      })
-                      .catch(() => {
-                        alert("댓글 삭제 실패");
-                      })
-                  }
+                          alert('댓글 블랙리스트 실패');
+                        });
+                    })
+                    .catch(() => {
+                      alert('댓글 삭제 실패');
+                    });
                 }
-                else{
-                  Instance.get(`/member/${reply.replyWriter}`)
+              } else {
+                Instance.get(`/member/${reply.replyWriter}`)
                   .then((response) => {
                     const member = response.data;
-                    Instance.post(`/member/blacked/${member}`)
-                      .then(() => {
-                        Instance.put(`report/black/${reportId}`)
-                          .then(() => {
-                            alert("댓글 블랙리스트 추가 성공");
-                          })
-                          .catch(() => {
-                            alert("댓글 블랙리스트 추가 실패");
-                          })
-                      })
+                    Instance.post(`/member/blacked/${member}`).then(() => {
+                      Instance.put(`report/black/${reportId}`)
+                        .then(() => {
+                          alert('댓글 블랙리스트 추가 성공');
+                        })
+                        .catch(() => {
+                          alert('댓글 블랙리스트 추가 실패');
+                        });
+                    });
                   })
                   .catch(() => {
-                    alert("댓글 블랙리스트 추가 실패");
-                  })
-                }
-              })
+                    alert('댓글 블랙리스트 추가 실패');
+                  });
+              }
+            });
           }
         })
         .catch((e) => {
           alert(e);
-        })
-    })
-  }
+        });
+    });
+  };
 
   useEffect(() => {
     report.forEach((reportItem) => {
@@ -254,7 +230,7 @@ const AdminReport = () => {
     });
   }, [report, reportDetails]);
 
-  if (authItem && authItem.includes("AUTH_C")) {
+  if (authItem && authItem.includes('AUTH_C')) {
     return (
       <AdminLayout subMenus="board">
         <Container>
@@ -267,7 +243,9 @@ const AdminReport = () => {
               <NormalBtn className="header" onClick={checkedBoard}>
                 확인(이상 없음)
               </NormalBtn>
-              <NormalBtn className="header red" onClick={handleAddBlackList}>블랙리스트 추가</NormalBtn>
+              <NormalBtn className="header red" onClick={handleAddBlackList}>
+                블랙리스트 추가
+              </NormalBtn>
             </BtnWrapper>
           </TableHeader>
           <Table>
@@ -284,11 +262,7 @@ const AdminReport = () => {
             <thead>
               <tr>
                 <th>
-                  <InputCheckbox
-                    type="checkbox"
-                    checked={selectAllChecked}
-                    onChange={handleSelectAllChange}
-                  />
+                  <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
                 </th>
                 <th>번호</th>
                 <th>신고된 글</th>
@@ -323,11 +297,7 @@ const AdminReport = () => {
                     <td className="center">
                       {report.replyId == null ? (
                         <S.LinkStyle
-                          to={`/admin/board/${
-                              boardTitleList.find(
-                                  (item) => item.board === report.boardTitle
-                              )?.english
-                          }/detail/${report.boardId}`}>
+                          to={`/admin/board/${boardTitleList.find((item) => item.board === report.boardTitle)?.english}/detail/${report.boardId}`}>
                           {report.title}
                         </S.LinkStyle>
                       ) : report.boardId == null ? (
@@ -338,7 +308,7 @@ const AdminReport = () => {
                           </S.ModalContainer>
                         </>
                       ) : (
-                        "신고된 내용이 없습니다."
+                        '신고된 내용이 없습니다.'
                       )}
                     </td>
                     <td className="center">
@@ -346,17 +316,15 @@ const AdminReport = () => {
                       {/*<LinkStyle to={`/admin/member/${item.author.id}`}>({item.author.id})</LinkStyle>*/}
                     </td>
                     <td className="center">{report.reportReason}</td>
-                    <td className="center">{`${report.reportDate[0]}.${
-                      report.reportDate[1] < 10 ? "0" : ""
-                    }${report.reportDate[1]}.${
-                      report.reportDate[2] < 10 ? "0" : ""
+                    <td className="center">{`${report.reportDate[0]}.${report.reportDate[1] < 10 ? '0' : ''}${report.reportDate[1]}.${
+                      report.reportDate[2] < 10 ? '0' : ''
                     }${report.reportDate[2]}`}</td>
                     <td className="center">{report.reportResult}</td>
                     {(() => {
                       switch (report.reportResult) {
-                        case "이상 없음":
+                        case '이상 없음':
                           return <td className="center">Y</td>;
-                        case "처리 중":
+                        case '처리 중':
                           return <td className="center">N</td>;
                         default:
                           return <td className="center">Y</td>;
@@ -368,6 +336,7 @@ const AdminReport = () => {
           </Table>
           <Paging totalPage={totalPage} />
         </Container>
+        <AdminCheck kind="AUTH_C" />
       </AdminLayout>
     );
   } else {

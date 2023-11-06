@@ -7,6 +7,7 @@ import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
 import { IsReply } from '../../pages/board/Style';
 import Instance from '../../utils/api/axiosInstance';
+import AdminCheck from '../adminCheck';
 
 export interface BoardData {
   boardId: number;
@@ -68,20 +69,12 @@ const AdminBoard = () => {
   const [board, setBoard] = useState<BoardData[]>([]);
   const navigate = useNavigate();
   const authItem = localStorage.getItem('auth');
-  let count : number = 1;
-
-  useEffect(() => {
-    if (!(authItem && authItem.includes('AUTH_C'))) {
-      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
-      navigate('/admin');
-    }
-  }, []);
+  let count: number = 1;
 
   // 전체 게시글 목록 조회
   useEffect(() => {
     const currentPage: number = parseInt(page ? page : '1', 10);
-    Instance
-      .get(`/boards/list?page=${currentPage}`)
+    Instance.get(`/boards/list?page=${currentPage}`)
       .then((response) => {
         const totalPages = parseInt(response.headers['totalpages'], 10);
         const totalData = parseInt(response.headers['totaldata'], 10);
@@ -119,41 +112,41 @@ const AdminBoard = () => {
     const isConfirm = window.confirm('삭제하시겠습니까?');
     if (isConfirm) {
       checkedItems.forEach((boardId) => {
-        Instance
-            .get(`/boards/${boardId}`)
-            .then((response) => {
-              if(response.data.parentBoardId === 0){        //답글이 아니라면
-                Instance
-                    .put(`/boards/softdelete/${boardId}`)
-                    .then(() => {
-                      alert('삭제되었습니다.');
-                      window.location.reload();
-                    })
-                    .catch((error) => {
-                      console.error(error.message);
-                    });
-              }
-              if(response.data.parentBoardId != 0){       //답글이라면
-                Instance            //parentBoardId의 isComment값 true => false 변경
-                    .put(`/boards/updateIsComment/${response.data.parentBoardId}`)
-                    .then()
-                    .catch((error) => {
-                      console.error(error);
-                    });
-                Instance            //답글 소프트딜리트
-                    .put(`/boards/softdelete/${boardId}`)
-                    .then(() => {
-                      alert('삭제되었습니다.');
-                      window.location.reload();
-                    })
-                    .catch((error) => {
-                      console.error(error.message);
-                    });
-              }
-                }
+        Instance.get(`/boards/${boardId}`).then((response) => {
+          if (response.data.parentBoardId === 0) {
+            //답글이 아니라면
+            Instance.put(`/boards/softdelete/${boardId}`)
+              .then(() => {
+                alert('삭제되었습니다.');
+                window.location.reload();
+              })
+              .catch((error) => {
+                console.error(error.message);
+              });
+          }
+          if (response.data.parentBoardId != 0) {
+            //답글이라면
+            Instance.put(
+              //parentBoardId의 isComment값 true => false 변경
+              `/boards/updateIsComment/${response.data.parentBoardId}`
             )
-
-
+              .then()
+              .catch((error) => {
+                console.error(error);
+              });
+            Instance.put(
+              //답글 소프트딜리트
+              `/boards/softdelete/${boardId}`
+            )
+              .then(() => {
+                alert('삭제되었습니다.');
+                window.location.reload();
+              })
+              .catch((error) => {
+                console.error(error.message);
+              });
+          }
+        });
       });
     }
   };
@@ -167,8 +160,7 @@ const AdminBoard = () => {
           reportWriter: '관리자',
           reportReason: '관리자 임의 배정',
         };
-        Instance
-          .post(`/report/writeform`, data)
+        Instance.post(`/report/writeform`, data)
           .then(() => {
             alert('신고처리되었습니다.');
             window.location.reload();
@@ -182,31 +174,23 @@ const AdminBoard = () => {
 
   console.log(board);
 
-  const setCommentBoard = (boardId : number) => {
+  const setCommentBoard = (boardId: number) => {
     Instance.get(`/boards/findParentBoardId/${boardId}`)
-        .then((response) => {
-          console.log(response.data);
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error.message);
-        })
-  }
+      .then((response) => {
+        console.log(response.data);
+        return response.data;
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
 
   const isBoardWriter = (board: BoardData) => {
     if (!board.boardPassword) {
-      return (
-          <S.LinkStyle to={`/admin/member/detail/${board.boardWriter}`}>
-            {board.boardWriter}
-          </S.LinkStyle>
-      );
+      return <S.LinkStyle to={`/admin/member/detail/${board.boardWriter}`}>{board.boardWriter}</S.LinkStyle>;
     }
-    return (
-        <p>{board.boardWriter}</p>
-    );
-  }
-
-
+    return <p>{board.boardWriter}</p>;
+  };
 
   //   useEffect(() => {
   //     Instance.get('/report/list')
@@ -299,43 +283,40 @@ const AdminBoard = () => {
                   </td>
                 </tr>
               )}
-              {board && board
-                  .map((board, idx: number) => {
-                    return (
-                        <tr key={board.boardId}>
-                          <td className="center">
-                            <InputCheckbox
-                                type="checkbox"
-                                checked={checkedItems.includes(board.boardId)}
-                                onChange={() => handleCheckboxChange(board.boardId)}
-                            />
-                          </td>
-                          <td className="center">
-                            {board.parentBoardId !== 0 ? '↳' : `${count++}`}
-                          </td>
-                          <td className="center">{board.boardTitle}</td>
-                          <td className="center">{board.category}</td>
-                          <td className="center">
-                            <S.LinkStyle
-                                to={`/admin/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}>
-                              {board.parentBoardId !== 0 ? <IsReply>답글</IsReply> : null}
-                              {board.title}
-                            </S.LinkStyle>
-                          </td>
-                          <td className="center">
-                            {isBoardWriter(board)}
-                          </td>
-                          <td className="center">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
-                              board.boardWriteDate[2] < 10 ? '0' : ''
-                          }${board.boardWriteDate[2]}`}</td>
-                          <td>{board.blackList}</td>
-                        </tr>
-                    );
-                  })}
+              {board &&
+                board.map((board, idx: number) => {
+                  return (
+                    <tr key={board.boardId}>
+                      <td className="center">
+                        <InputCheckbox
+                          type="checkbox"
+                          checked={checkedItems.includes(board.boardId)}
+                          onChange={() => handleCheckboxChange(board.boardId)}
+                        />
+                      </td>
+                      <td className="center">{board.parentBoardId !== 0 ? '↳' : `${count++}`}</td>
+                      <td className="center">{board.boardTitle}</td>
+                      <td className="center">{board.category}</td>
+                      <td className="center">
+                        <S.LinkStyle
+                          to={`/admin/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}>
+                          {board.parentBoardId !== 0 ? <IsReply>답글</IsReply> : null}
+                          {board.title}
+                        </S.LinkStyle>
+                      </td>
+                      <td className="center">{isBoardWriter(board)}</td>
+                      <td className="center">{`${board.boardWriteDate[0]}-${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}-${
+                        board.boardWriteDate[2] < 10 ? '0' : ''
+                      }${board.boardWriteDate[2]}`}</td>
+                      <td>{board.blackList}</td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </Table>
           <Paging totalPage={totalPage} />
         </Container>
+        <AdminCheck kind="AUTH_C" />
       </AdminLayout>
     );
   } else {

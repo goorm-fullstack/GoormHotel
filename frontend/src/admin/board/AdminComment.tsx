@@ -7,6 +7,7 @@ import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
 import { boardTitleList } from './AdminBoard';
 import Instance from '../../utils/api/axiosInstance';
+import AdminCheck from '../adminCheck';
 
 const AdminComment = () => {
   const { page } = useParams<{ page: string }>();
@@ -35,13 +36,6 @@ const AdminComment = () => {
     replyBoardTitle: string;
     replyTitle: string;
   }
-
-  useEffect(() => {
-    if (!(authItem && authItem.includes('AUTH_C'))) {
-      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
-      navigate('/admin');
-    }
-  }, []);
 
   useEffect(() => {
     const currentPage: number = parseInt(page ? page : '1', 10);
@@ -93,7 +87,6 @@ const AdminComment = () => {
 
     fetchData();
   }, []);
-
 
   // 전체 선택
   const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -275,6 +268,7 @@ const AdminComment = () => {
           </Table>
           <Paging totalPage={totalPage} />
         </Container>
+        <AdminCheck kind="AUTH_C" />
       </AdminLayout>
     );
   } else {

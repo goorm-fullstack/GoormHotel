@@ -8,6 +8,7 @@ import { BoardData, ReplyData } from './AdminBoard';
 import { useNavigate } from 'react-router-dom';
 import { boardTitleList } from './AdminBoard';
 import Instance from '../../utils/api/axiosInstance';
+import AdminCheck from '../adminCheck';
 
 const AdminDeleteComment = () => {
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
@@ -21,15 +22,7 @@ const AdminDeleteComment = () => {
   const authItem = localStorage.getItem('auth');
 
   useEffect(() => {
-    if (!(authItem && authItem.includes('AUTH_C'))) {
-      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
-      navigate('/admin');
-    }
-  }, []);
-
-  useEffect(() => {
-    Instance
-      .get('/boards/deleted')
+    Instance.get('/boards/deleted')
       .then((response) => {
         setBoard(response.data);
       })
@@ -39,8 +32,7 @@ const AdminDeleteComment = () => {
   }, []);
 
   useEffect(() => {
-    Instance
-      .get('/reply/deleted')
+    Instance.get('/reply/deleted')
       .then((response) => {
         setReply(response.data);
       })
@@ -50,8 +42,7 @@ const AdminDeleteComment = () => {
   }, []);
 
   useEffect(() => {
-    Instance
-      .get('/boards/deletedall')
+    Instance.get('/boards/deletedall')
       .then((response) => {
         const totalPages = parseInt(response.headers['totalpages'], 10);
         const totalData = parseInt(response.headers['totaldata'], 10);
@@ -87,45 +78,44 @@ const AdminDeleteComment = () => {
     const isConfirm = window.confirm('복구하시겠습니까?');
     if (isConfirm) {
       checkedItems.forEach((boardId) => {
-        if(boardId.startsWith('board')){      //게시글이라면
+        if (boardId.startsWith('board')) {
+          //게시글이라면
           boardId = boardId.replace('board', '');
-          Instance
-              .get(`/boards/${boardId}`)
-              .then((response) => {
-                if(response.data.parentBoardId === 0){      //답글이 아니라면
-                  Instance
-                      .put(`/boards/undelete/${response.data.boardId}`)
-                      .then(() => {
-                        alert('복구되었습니다.');
-                        window.location.reload();
-                      })
-                      .catch((error) => {
-                        console.log(error.message);
-                      });
-                }
-                if(response.data.parentBoardId != 0){     //답글이라면
-                  Instance            //parentBoardId의 isComment값 false => true 변경
-                      .put(`/boards/updateIsComment/${response.data.parentBoardId}`)
-                      .then()
-                      .catch((error) => {
-                        console.error(error.message);
-                      });
-                  Instance
-                      .put(`/boards/undelete/${response.data.boardId}`)
-                      .then(() => {
-                        alert('복구되었습니다.');
-                        window.location.reload();
-                      })
-                      .catch((error) => {
-                        console.log(error.message);
-                      });
-                }
-              })
-        }
-        else {
+          Instance.get(`/boards/${boardId}`).then((response) => {
+            if (response.data.parentBoardId === 0) {
+              //답글이 아니라면
+              Instance.put(`/boards/undelete/${response.data.boardId}`)
+                .then(() => {
+                  alert('복구되었습니다.');
+                  window.location.reload();
+                })
+                .catch((error) => {
+                  console.log(error.message);
+                });
+            }
+            if (response.data.parentBoardId != 0) {
+              //답글이라면
+              Instance.put(
+                //parentBoardId의 isComment값 false => true 변경
+                `/boards/updateIsComment/${response.data.parentBoardId}`
+              )
+                .then()
+                .catch((error) => {
+                  console.error(error.message);
+                });
+              Instance.put(`/boards/undelete/${response.data.boardId}`)
+                .then(() => {
+                  alert('복구되었습니다.');
+                  window.location.reload();
+                })
+                .catch((error) => {
+                  console.log(error.message);
+                });
+            }
+          });
+        } else {
           const id = boardId.replace('reply', '');
-          Instance
-            .put(`/reply/undelete/${id}`)
+          Instance.put(`/reply/undelete/${id}`)
             .then(() => {
               alert('복구되었습니다.');
               window.location.reload();
@@ -144,8 +134,7 @@ const AdminDeleteComment = () => {
       checkedItems.forEach((boardId) => {
         if (boardId.startsWith('board')) {
           const id = boardId.replace('board', '');
-          Instance
-            .delete(`/boards/${id}`)
+          Instance.delete(`/boards/${id}`)
             .then(() => {
               alert('삭제되었습니다.');
               window.location.reload();
@@ -155,8 +144,7 @@ const AdminDeleteComment = () => {
             });
         } else {
           const id = boardId.replace('reply', '');
-          Instance
-            .delete(`/reply/${id}`)
+          Instance.delete(`/reply/${id}`)
             .then(() => {
               alert('삭제되었습니다.');
               window.location.reload();
@@ -185,30 +173,17 @@ const AdminDeleteComment = () => {
 
   const isBoardWriter = (board: BoardData) => {
     if (!board.boardPassword) {
-      return (
-          <S.LinkStyle to={`/admin/member/detail/${board.boardWriter}`}>
-            {board.boardWriter}
-          </S.LinkStyle>
-      );
+      return <S.LinkStyle to={`/admin/member/detail/${board.boardWriter}`}>{board.boardWriter}</S.LinkStyle>;
     }
-    return (
-        <p>{board.boardWriter}</p>
-    );
-  }
+    return <p>{board.boardWriter}</p>;
+  };
 
   const isReplyWriter = (reply: ReplyData) => {
     if (!reply.replyPassword) {
-      return (
-          <S.LinkStyle to={`/admin/member/detail/${reply.replyWriter}`}>
-            {reply.replyWriter}
-          </S.LinkStyle>
-      );
+      return <S.LinkStyle to={`/admin/member/detail/${reply.replyWriter}`}>{reply.replyWriter}</S.LinkStyle>;
     }
-    return (
-        <p>{reply.replyWriter}</p>
-    );
-  }
-
+    return <p>{reply.replyWriter}</p>;
+  };
 
   if (authItem && authItem.includes('AUTH_C')) {
     return (
@@ -276,9 +251,7 @@ const AdminDeleteComment = () => {
                         {parsedContent[index][0]}
                       </S.LinkStyle>
                     </td>
-                    <td className="center">
-                      {isBoardWriter(board)}
-                    </td>
+                    <td className="center">{isBoardWriter(board)}</td>
                     <td className="center">
                       {`${board.boardDeleteTime[0]}.${board.boardDeleteTime[1] < 10 ? '0' : ''}${board.boardDeleteTime[1]}.${
                         board.boardDeleteTime[2] < 10 ? '0' : ''
@@ -304,9 +277,7 @@ const AdminDeleteComment = () => {
                         {reply.replyContent}
                       </S.LinkStyle>
                     </td>
-                    <td className="center">
-                      {isReplyWriter(reply)}
-                    </td>
+                    <td className="center">{isReplyWriter(reply)}</td>
                     <td className="center">
                       {`${reply.replyDeleteTime[0]}.${reply.replyDeleteTime[1] < 10 ? '0' : ''}${reply.replyDeleteTime[1]}.${
                         reply.replyDeleteTime[2] < 10 ? '0' : ''
@@ -318,6 +289,7 @@ const AdminDeleteComment = () => {
           </Table>
           <Paging totalPage={totalPage} />
         </Container>
+        <AdminCheck kind="AUTH_C" />
       </AdminLayout>
     );
   } else {
