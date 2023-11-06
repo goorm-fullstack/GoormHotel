@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import 'react-calendar/dist/Calendar.css'; // css import
-import moment from 'moment';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
 import AdminLayout from '../common/AdminLayout';
@@ -9,6 +8,7 @@ import { Container, Table } from '../member/Style';
 import { numberWithCommas } from '../../utils/function/comma';
 import { ReservationData } from './AdminReservation';
 import { ValuePiece } from '../../components/common/DateButton/DateButton';
+import moment from 'moment';
 
 const AdminReservationDetail = () => {
   const { reservationNumber } = useParams(); //예약 번호로 조회
@@ -24,7 +24,9 @@ const AdminReservationDetail = () => {
   const [applyGiftCard, setApplyGiftCard] = useState<any[]>([]); //적용 상품권
   const [totalPrice, setTotalPrice] = useState(''); //결제 금액
   const [updateClick, setUpdateClick] = useState(true);
-  const [reservationData, setReservationData] = useState<ReservationData>();
+  const [reservationData, setReservationData] = useState<any>();
+  const [itemType, setItemType] = useState<any>();
+  const [itemName, setItemName] = useState<any>();
 
   // 캘린더 관련
   const [checkInOpen, setCheckInOpen] = useState(false);
@@ -41,6 +43,8 @@ const AdminReservationDetail = () => {
     }
   }, []);
 
+  console.log(reservationData);
+
   useEffect(() => {
     Instance.get(`/reservation/detail/${reservationNumber}`).then((response) => {
       setReservationData(response.data);
@@ -52,7 +56,9 @@ const AdminReservationDetail = () => {
       setCheckInDate(formattedCheckIn);
       setCheckOutDate(formattedCheckOut);
       setReservationDate(formattedReservationDate);
-      if(response.data.member) {
+      setItemType(response.data.diningItem !== null ? response.data.diningItem.type : response.data.roomItem.type);
+      setItemName(response.data.diningItem !== null ? response.data.diningItem.name : response.data.roomItem.name);
+      if (response.data.member) {
         setCustomerName(response.data.member.name);
         setPhoneNumber(response.data.member.phoneNumber);
         setEmailAddress(response.data.member.email);
@@ -61,18 +67,16 @@ const AdminReservationDetail = () => {
         setPhoneNumber(response.data.nonMember.phoneNumber);
         setEmailAddress(response.data.nonMember.email);
       }
-      
+
       setCustomerRequest(response.data.notice);
-      
-      if(response.data.coupon)
-        setApplyCoupon(response.data.coupon.name);
-      if(response.data.giftCard)
-        setApplyGiftCard(response.data.giftCard);
+
+      if (response.data.coupon) setApplyCoupon(response.data.coupon.name);
+      if (response.data.giftCard) setApplyGiftCard(response.data.giftCard);
     });
   }, []);
 
   const formatDate = (date: Date) => {
-    const formattedDate = moment(date).format('YYYY.MM.DD');
+    const formattedDate = moment(date).format('yyyy/MM/DD');
     return `${formattedDate}`;
   };
 
@@ -148,54 +152,50 @@ const AdminReservationDetail = () => {
               <tr>
                 <th>예약 번호</th>
                 <td>
-                  {reservationNumber}(상태: 예약 또는 취소){' '}
-                  <NormalBtn type="button" className="red mini">
-                    예약취소{/** 예약 상태면 예약취소, 취소 상태면 재예약 */}
-                  </NormalBtn>
+                  {reservationNumber}(상태: {reservationData && reservationData.state})
+                  {reservationData && reservationData.state === '예약' ? (
+                    <NormalBtn type="button" className="red mini">
+                      예약취소
+                    </NormalBtn>
+                  ) : (
+                    <NormalBtn type="button" className="red mini" style={{ display: 'none' }}>
+                      예약취소
+                    </NormalBtn>
+                  )}
                 </td>
               </tr>
               <tr>
                 <th>예약일</th>
-                <td>{reservationDate}</td>
+                <td>{reservationData && moment(reservationData?.orderDate, 'YYYY, MM, DD, HH, mm, ss, SSS').format('yyyy/MM/DD')}</td>
               </tr>
               <tr>
                 <th>체크인</th>
-                <td>
-                  <input type="date" />
-                </td>
+                <td>{reservationData && moment(reservationData?.checkIn, 'YYYY, MM, DD, HH, mm, ss, SSS').format('yyyy/MM/DD')}</td>
               </tr>
               <tr>
                 <th>체크아웃</th>
-                <td>
-                  <input type="date" />
-                </td>
+                <td>{reservationData && moment(reservationData?.checkOut, 'YYYY, MM, DD, HH, mm, ss, SSS').format('yyyy/MM/DD')}</td>
               </tr>
               <tr>
                 <th>예약 상품</th>
                 <td>
                   {/** 클릭 시 관리자 해당 상품 상세 페이지로 이동 */}
-                  <Link to="/admin/item/detail/type/000" className="u">
-                    [스페셜 오퍼] 상품명
+                  <Link to={`/admin/item/detail/${itemType}/${itemType}/${itemName}`} className="u">
+                    [스페셜 오퍼]{itemName}
                   </Link>
                 </td>
               </tr>
               <tr>
                 <th>예약자명</th>
-                <td>
-                  <input type="text" value={customerName} readOnly={updateClick} onChange={handleNameInputChange} />
-                </td>
+                <td>{customerName}</td>
               </tr>
               <tr>
                 <th>연락처</th>
-                <td>
-                  <input type="text" value={phoneNumber} readOnly={updateClick} onChange={handlePhoneNumberInputChange} />
-                </td>
+                <td>{phoneNumber}</td>
               </tr>
               <tr>
                 <th>이메일</th>
-                <td>
-                  <input type="email" value={emailAddress} readOnly={updateClick} onChange={handleEmailInputChange} />
-                </td>
+                <td>{emailAddress}</td>
               </tr>
               <tr>
                 <th>요청사항</th>
@@ -207,9 +207,7 @@ const AdminReservationDetail = () => {
                 <th>적용 쿠폰</th>
                 <td>
                   {reservationData && reservationData.coupon !== null ? (
-                    <span>
-                      {reservationData.coupon.name}(적용 금액 : {numberWithCommas(reservationData.coupon.discountPrice)})
-                    </span>
+                    <span>{reservationData.coupon.name}</span>
                   ) : (
                     <span>적용된 쿠폰이 없습니다.</span>
                   )}
@@ -219,13 +217,13 @@ const AdminReservationDetail = () => {
                 <th>적용 상품권</th>
                 <td>
                   {reservationData && reservationData.giftCard !== null && reservationData.giftCard.length > 0
-                    ? reservationData.giftCard.map((gift, index) => (
-                        <span key={index}>
-                          {gift.name}(적용 금액 : {numberWithCommas(gift.money)}){index < reservationData.giftCard.length - 1 ? ', ' : ''}
-                        </span>
-                      ))
+                    ? reservationData.giftCard.map((gift: any, index: number) => <span key={index}>{gift.name}</span>)
                     : '적용된 상품권이 없습니다.'}
                 </td>
+              </tr>
+              <tr>
+                <th>할인 금액</th>
+                <td className="red">-{reservationData && numberWithCommas(reservationData.discountPrice)} 원</td>
               </tr>
               <tr>
                 <th>결제 금액</th>
