@@ -19,29 +19,29 @@ import java.time.LocalDate;
 @EnableJpaAuditing
 @RequiredArgsConstructor
 public class HotelApplication {
-	private final DiningRepository diningRepository;
-	private final MemberRepository memberRepository;
-	private final PasswordEncoder passwordEncoder;
+    private final DiningRepository diningRepository;
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
-	public static void main(String[] args) {
-		SpringApplication.run(HotelApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(HotelApplication.class, args);
+    }
 
-	@PostConstruct
-	void init() {
-		// Dining dining = Dining.builder()
-		// 		.name("test")
-		// 		.price(1000)
-		// 		.capacity(4)
-		// 		.description("test")
-		// 		.priceAdult(1000)
-		// 		.priceChildren(100)
-		// 		.spare(4)
-		// 		.spareAdult(1)
-		// 		.spareChildren(1)
-		// 		.type("dining")
-		// 		.typeDetail("dining")
-		// 		.build();
+    @PostConstruct
+    void init() {
+        // Dining dining = Dining.builder()
+        // 		.name("test")
+        // 		.price(1000)
+        // 		.capacity(4)
+        // 		.description("test")
+        // 		.priceAdult(1000)
+        // 		.priceChildren(100)
+        // 		.spare(4)
+        // 		.spareAdult(1)
+        // 		.spareChildren(1)
+        // 		.type("dining")
+        // 		.typeDetail("dining")
+        // 		.build();
 
 //		Member member = Member.builder()
 //				.memberId("test")

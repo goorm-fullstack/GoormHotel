@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import * as S from './Style';
 import { numberWithCommas } from '../../utils/function/comma';
 import Delux from '../../images/room/Deluxe.jpg';
+import Instance from '../../utils/api/axiosInstance';
 
 const typeName = [
   { type: 'dining', korean: '다이닝' },
@@ -19,14 +20,35 @@ const typeDetailName = [
   { typeDetail: 'bakery', korean: '베이커리' },
 ];
 
-const Item = ({ selectedProduct, indexImg, updateReservationData }: any) => {
+interface GiftCard {
+  id: number;
+  uuid: string;
+  money: number;
+  isZeroMoney: string;
+  title: string;
+  issueDate: string;
+  expire: number;
+}
+
+interface Coupon {
+  id: number;
+  uuid: string;
+  discountRate: number;
+  name: string;
+  isUsed: string;
+  issueDate: Array<Number>;
+  expire: number;
+}
+
+const Item = ({ selectedProduct, indexImg, updateReservationData, selectCoupon, selectGiftCardList }: any) => {
   const [type, setType] = useState('');
   const [typeDetail, setTypeDetail] = useState('');
   const [spareAdultPrice, setSpareAdultPrice] = useState(0);
   const [spareChildrenPrice, setSpareChildrenPrice] = useState(0);
-  const [coupon, setCoupon] = useState();
-  const [giftCard, setGiftCard] = useState<any>();
+  const [discountPrice, setDiscountPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [coupon, setCoupon] = useState<Coupon>();
+  const [giftcardList, setGiftCardList] = useState<GiftCard[]>([]);
 
   useEffect(() => {
     const type = typeName.find((item) => item.type === selectedProduct.type);
@@ -44,19 +66,76 @@ const Item = ({ selectedProduct, indexImg, updateReservationData }: any) => {
     setTypeDetail(typeDetail ? typeDetail.korean : '');
     setSpareAdultPrice(spareAdultPrice);
     setSpareChildrenPrice(spareChildrenPrice);
-  }, []);
+  }, [selectedProduct, updateReservationData]);
 
-  // useEffect(() => {
-  //   if(!coupon && !giftCard){
-  //     setTotalPrice(selectedProduct.price);
-  //   }else if(!coupon && giftCard){
-  //     const currentPrice = selectedProduct.price - giftCard.money;
-  //   }else if(coupon && !giftCard){
+  useEffect(() => {
+    if (selectCoupon && selectCoupon !== 0) {
+      Instance.get(`/api/coupon/get/${selectCoupon}`).then((response) => {
+        if (response.status === 200) setCoupon(response.data);
+      });
+    }
+  }, [selectCoupon]);
 
-  //   }else
-  // }, [coupon, giftCard])
-  console.log(selectedProduct);
-  console.log(updateReservationData);
+  useEffect(() => {
+    if (selectGiftCardList && selectGiftCardList.length > 0) {
+      let requestGiftCardIdListDto = {
+        giftCardIdList: selectGiftCardList,
+      };
+      Instance.post('/api/giftcard/get', requestGiftCardIdListDto).then((response) => {
+        if (response.status === 200) setGiftCardList(response.data);
+      });
+    }
+  }, [selectGiftCardList]);
+
+  // 쿠폰, 상품권과 함께 계산
+  useEffect(() => {
+    if (selectCoupon !== 0 && selectGiftCardList && selectGiftCardList.length > 0) {
+      //상품권 존재, 쿠폰 존재
+      let currentPrice = selectedProduct.price + spareAdultPrice + spareChildrenPrice;
+      let result = 0;
+      if (coupon) {
+        const discountRate = coupon.discountRate / 100;
+        const discount = Math.round(currentPrice * discountRate);
+        result = Math.round(discount / 10) * 10;
+        currentPrice -= result;
+      }
+
+      let giftCardDiscount = 0;
+      for (var i = 0; i < giftcardList.length; i++) {
+        giftCardDiscount += giftcardList[i].money;
+        currentPrice -= giftcardList[i].money;
+      }
+      setDiscountPrice(result + giftCardDiscount);
+      setTotalPrice(currentPrice);
+    } else if (selectCoupon !== 0 && selectGiftCardList && selectGiftCardList.length === 0) {
+      //상품권 없음, 쿠폰 존재
+      let currentPrice = selectedProduct.price + spareAdultPrice + spareChildrenPrice;
+      let result = 0;
+      if (coupon) {
+        const discountRate = coupon.discountRate / 100;
+        const discount = Math.round(currentPrice * discountRate);
+        result = Math.round(discount / 10) * 10;
+        currentPrice -= result;
+      }
+      setDiscountPrice(result);
+      setTotalPrice(currentPrice);
+    } else if (selectCoupon === 0 && selectGiftCardList.length > 0) {
+      //쿠폰 없음, 상품권 있음
+      let currentPrice = selectedProduct.price + spareAdultPrice + spareChildrenPrice;
+
+      let giftCardDiscount = 0;
+      for (var i = 0; i < giftcardList.length; i++) {
+        giftCardDiscount += giftcardList[i].money;
+        currentPrice -= giftcardList[i].money;
+      }
+      setDiscountPrice(giftCardDiscount);
+      setTotalPrice(currentPrice);
+    } else {
+      //쿠폰, 상품권 없음
+      setDiscountPrice(0);
+      setTotalPrice(selectedProduct.price + spareAdultPrice + spareChildrenPrice);
+    }
+  }, [selectCoupon, selectGiftCardList, coupon, giftcardList, discountPrice, totalPrice, selectedProduct, spareAdultPrice, spareChildrenPrice]);
 
   return (
     <>
@@ -91,7 +170,6 @@ const Item = ({ selectedProduct, indexImg, updateReservationData }: any) => {
           </table>
         </S.SelectedItem>
       </S.SelectItem>
-
       <S.PaymentInfo>
         <table>
           <tr>
@@ -100,12 +178,12 @@ const Item = ({ selectedProduct, indexImg, updateReservationData }: any) => {
           </tr>
           <tr className="discount">
             <th>할인액</th>
-            <td>-200,000 원</td>
+            <td>-{numberWithCommas(discountPrice)} 원</td>
           </tr>
           <tr className="total">
             <th>최종금액</th>
             <td>
-              <strong>300,000</strong> 원
+              <strong>{numberWithCommas(totalPrice)}</strong> 원
             </td>
           </tr>
         </table>

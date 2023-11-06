@@ -183,6 +183,32 @@ const AdminDeleteComment = () => {
     setParsedContent(parsedTextArray);
   }, [board]);
 
+  const isBoardWriter = (board: BoardData) => {
+    if (!board.boardPassword) {
+      return (
+          <S.LinkStyle to={`/admin/member/detail/${board.boardWriter}`}>
+            {board.boardWriter}
+          </S.LinkStyle>
+      );
+    }
+    return (
+        <p>{board.boardWriter}</p>
+    );
+  }
+
+  const isReplyWriter = (reply: ReplyData) => {
+    if (!reply.replyPassword) {
+      return (
+          <S.LinkStyle to={`/admin/member/detail/${reply.replyWriter}`}>
+            {reply.replyWriter}
+          </S.LinkStyle>
+      );
+    }
+    return (
+        <p>{reply.replyWriter}</p>
+    );
+  }
+
 
   if (authItem && authItem.includes('AUTH_C')) {
     return (
@@ -251,8 +277,7 @@ const AdminDeleteComment = () => {
                       </S.LinkStyle>
                     </td>
                     <td className="center">
-                      {board.boardWriter}
-                      <S.LinkStyle to={`/admin/member/${board.boardWriter}`}>({board.boardWriter})</S.LinkStyle>
+                      {isBoardWriter(board)}
                     </td>
                     <td className="center">
                       {`${board.boardDeleteTime[0]}.${board.boardDeleteTime[1] < 10 ? '0' : ''}${board.boardDeleteTime[1]}.${
@@ -280,8 +305,7 @@ const AdminDeleteComment = () => {
                       </S.LinkStyle>
                     </td>
                     <td className="center">
-                      {reply.replyWriter}
-                      <S.LinkStyle to={`/admin/member/${reply.replyWriter}`}>({reply.replyWriter})</S.LinkStyle>
+                      {isReplyWriter(reply)}
                     </td>
                     <td className="center">
                       {`${reply.replyDeleteTime[0]}.${reply.replyDeleteTime[1] < 10 ? '0' : ''}${reply.replyDeleteTime[1]}.${

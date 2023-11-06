@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -142,5 +143,12 @@ public class ReportService {
                 .reply(byReportIdAndReportDelete.getReply())
                 .build();
         reportRepository.save(build);
+    }
+
+    //신고 index로 정보 찾기
+    public ResponseReportDto findByReportId(Long reportId){
+        Report report = reportRepository.findByReportId(reportId);
+
+        return report.toResponseReportDto();
     }
 }

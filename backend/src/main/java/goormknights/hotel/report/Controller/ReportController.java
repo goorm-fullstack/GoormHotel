@@ -5,6 +5,7 @@ import goormknights.hotel.report.dto.request.RequestReportDto;
 import goormknights.hotel.report.dto.response.ResponseReportDto;
 import goormknights.hotel.report.model.Report;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -81,5 +82,12 @@ public class ReportController {
         reportService.toBlackList(reportId);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/find/{reportId}")
+    public ResponseEntity<ResponseReportDto> getReportByReportId(@PathVariable Long reportId){
+        ResponseReportDto responseReportDto = reportService.findByReportId(reportId);
+
+        return ResponseEntity.ok(responseReportDto);
     }
 }

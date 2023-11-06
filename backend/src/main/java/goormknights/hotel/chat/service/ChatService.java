@@ -1,6 +1,7 @@
 package goormknights.hotel.chat.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import goormknights.hotel.chat.dto.request.RequestChatMessageDto;
 import goormknights.hotel.chat.model.ChatMessage;
 import goormknights.hotel.chat.model.ChatRoom;
 import goormknights.hotel.chat.model.ChatRoomDto;
@@ -67,13 +68,28 @@ public class ChatService {
 
         for(ChatRoom chatRoom : allRoom) {
             List<ChatMessage> orderMessage = chatMessageRepository.findByRoomIdOrderByIdDesc(chatRoom.getRoomId());
+            String sender = "";
+            for(ChatMessage chatMessage : orderMessage) {
+                if(!chatMessage.getSender().equals("admin")) {
+                    sender = chatMessage.getSender();
+                }
+            }
             if(!orderMessage.isEmpty()) {
                 ChatMessage lastMessage = orderMessage.get(0);
+                lastMessage.setSender(sender);
                 result.add(lastMessage);
             }
         }
 
         return result;
+    }
+
+    // 이전 방 메시지를 현재 방의 메세지로 업데이트
+    public void updateMessageRoomId(List<RequestChatMessageDto> messageList, String newId) {
+        for(RequestChatMessageDto messageDto : messageList) {
+            ChatMessage message = chatMessageRepository.findById(messageDto.getId()).orElseThrow();
+            message.setRoomId(newId);
+        }
     }
 
     public Long calcRoomPageCount() {

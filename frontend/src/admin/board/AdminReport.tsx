@@ -59,7 +59,6 @@ const AdminReport = () => {
       });
   }, []);
 
-  console.log(report);
 
   const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked: boolean = e.target.checked;
@@ -95,6 +94,8 @@ const AdminReport = () => {
     setSelectAllChecked(updatedCheckedItems.length === report.length);
   };
 
+
+
   const [reportDetails, setReportDetails] = useState<
     Record<number, { boardTitle: string; boardId: number }>
   >({});
@@ -123,6 +124,128 @@ const AdminReport = () => {
     }
   };
 
+  console.log(report);
+
+  const handleAddBlackList = () => {
+    checkedItems.forEach((reportId) => {
+      Instance.get(`/report/find/${reportId}`)
+        .then((response) => {
+          const report = response.data;
+          if(report.boardId){
+            Instance.get(`boards/${report.boardId}`)
+              .then((response) => {
+                const board = response.data;
+                if(board.boardPassword != null){
+                  const isConfirm = window.confirm("비회원 게시글입니다. 삭제하시겠습니까?");
+                  if(isConfirm){
+                    Instance.put(`/report/black/${reportId}`)
+                    .then(() => {
+                      alert("블랙리스트 상태 변경 성공");
+                      Instance.put(`/boards/softdelete/${board.boardId}`)
+                      .then(() => {
+                        alert("게시글 삭제 완료");
+                      })
+                      .catch(() => {
+                        alert("게시글 삭제 실패");
+                      })
+                    })
+                    .catch(() => {
+                      alert("게시글 블랙리스트 상태 변경 실패");
+                    })
+                    // Instance.put(`/boards/softdelete/${board.boardId}`)
+                    //   .then(() => {
+                    //     Instance.put(`/report/black/${reportId}`)
+                    //     .then(() => {
+                    //       alert("블랙리스트 상태 변경 성공");
+                    //     })
+                    //     .catch(() => {
+                    //       alert("블랙리스트 상태 변경 실패");
+                    //     })
+                    //     alert("삭제 완료");
+                    //   })
+                    //   .catch(() => {
+                    //     alert("삭제 실패");
+                    //   })
+                  }
+                }
+                else{
+                  Instance.get(`/member/${board.boardWriter}`)
+                  .then((response) => {
+                    const member = response.data;
+                    Instance.post(`/member/blacked/${member}`)
+                      .then(() => {
+                        Instance.put(`/report/black/${reportId}`)
+                          .then(() => {
+                            alert("게시글글 블랙리스트 추가 성공");
+                          })
+                          .catch(() => {
+                            alert("게시글글 블랙리스트 추가 실패");
+                          })
+                      })
+                      .catch(() => {
+                        alert("게시글글글 블랙리스트 추가 실패");
+                      })
+                  })
+                  .catch((e) => {
+                    alert(e.message);
+                  })
+                }
+              })
+              .catch((e) => {
+                console.error(e.message);
+              })
+          }
+          if(report.replyId){
+            Instance.get(`reply/replyId/${report.replyId}`)
+              .then((response) => {
+                const reply = response.data;
+                if(reply.replyPassword){
+                  const isConfirm = window.confirm("비회원 댓글입니다. 삭제하시겠습니까?");
+                  if(isConfirm){
+                    Instance.put(`/reply/softdelete/${reply.replyId}`)
+                      .then(() => {
+                        alert("댓글 삭제 완료");
+                        Instance.put(`report/black/${reportId}`)
+                        .then(() => {
+                          alert("댓글 블랙리스트 성공");
+                        })
+                        .catch(() => {
+                          alert("댓글 블랙리스트 실패")
+                        })
+                      })
+                      .catch(() => {
+                        alert("댓글 삭제 실패");
+                      })
+                  }
+                }
+                else{
+                  Instance.get(`/member/${reply.replyWriter}`)
+                  .then((response) => {
+                    const member = response.data;
+                    Instance.post(`/member/blacked/${member}`)
+                      .then(() => {
+                        Instance.put(`report/black/${reportId}`)
+                          .then(() => {
+                            alert("댓글 블랙리스트 추가 성공");
+                          })
+                          .catch(() => {
+                            alert("댓글 블랙리스트 추가 실패");
+                          })
+                      })
+                  })
+                  .catch(() => {
+                    alert("댓글 블랙리스트 추가 실패");
+                  })
+                }
+              })
+          }
+        })
+        .catch((e) => {
+          alert(e);
+        })
+    })
+  }
+
   useEffect(() => {
     report.forEach((reportItem) => {
       if (reportItem.replyId !== null && !reportDetails[reportItem.replyId]) {
@@ -144,7 +267,7 @@ const AdminReport = () => {
               <NormalBtn className="header" onClick={checkedBoard}>
                 확인(이상 없음)
               </NormalBtn>
-              <NormalBtn className="header red">블랙리스트 추가</NormalBtn>
+              <NormalBtn className="header red" onClick={handleAddBlackList}>블랙리스트 추가</NormalBtn>
             </BtnWrapper>
           </TableHeader>
           <Table>

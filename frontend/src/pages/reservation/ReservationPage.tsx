@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as S from './Style';
 import moment from 'moment';
 import Item from '../../components/Item/Item';
@@ -19,6 +19,7 @@ import PrivacyContents from '../../components/Agreement/PrivacyCon';
 import PaymentAgree from '../../components/Agreement/PayAgree';
 import { AgreementText } from '../member/Style';
 import Instance from '../../utils/api/axiosInstance';
+import type { RequestPayParams, RequestPayResponse } from '../../portone';
 
 interface GiftCard {
   id: number;
@@ -42,7 +43,11 @@ interface Coupon {
 
 const ReservationPage = () => {
   const [giftCardNumber, setGiftCardNumber] = useState('');
-  const [memberData, setMemberData] = useState();
+  const [memberData, setMemberData] = useState<any>({
+    name: '',
+    phoneNumber: '',
+    email: '',
+  });
   const userLoggedIn = localStorage.getItem('memberId');
   const location = useLocation();
   const { reservationData, selectedProduct, selectData, indexImg } = location.state;
@@ -50,29 +55,39 @@ const ReservationPage = () => {
   const [nights, setNights] = useState(1);
   const [giftcardList, setGiftCardList] = useState<GiftCard[]>([]);
   const [couponList, setCouponList] = useState<Coupon[]>([]);
-  const [selectCoupon, setSelectCoupon] = useState(''); //적용할 쿠폰
+  const [selectCoupon, setSelectCoupon] = useState(0); //적용할 쿠폰
   const [selectGiftCard, setSelectGiftCard] = useState<number[]>([]); //적용할 상품권
   const [click, setClick] = useState(false);
   const [memberId, setMemberId] = useState(0);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
   const [notice, setNotice] = useState('');
   const [isLogined, setIsLogined] = useState(false);
+  const [coupon, setCoupon] = useState<Coupon>();
+  const [giftCards, setGiftCards] = useState<GiftCard>();
+
+  const [reservationNewData, setReservationNewData] = useState<any>();
 
   const [formData, setFormData] = useState({
-    checkIn: reservationData?.checkInDate || '',
-    checkOut: reservationData?.checkOutDate || '',
-    count: reservationData?.rooms || 1,
-    adult: reservationData?.adults || 1,
-    children: reservationData?.children || 0,
-    stay: reservationData?.nights,
-    notice: notice,
-    sumPrice: selectedProduct ? selectedProduct.price : selectData.price,
+    checkIn: '',
+    checkOut: '',
+    count: '',
+    adult: '',
+    children: '',
+    stay: '',
+    notice: '',
+    sumPrice: '',
     discountPrice: '0',
-    totalPrice: '12345',
+    totalPrice: '',
+    memberName: '',
+    phoneNumber: '',
+    email: '',
+    itemId: '',
+    memberId: '',
+    couponId: '',
+    giftCardId: '',
   });
+  const [checked1, setChecked1] = useState(false);
+  const [checked2, setChecked2] = useState(false);
 
   const isLoggined = localStorage.getItem('memberId'); // 로그인 유무 확인
 
@@ -117,62 +132,148 @@ const ReservationPage = () => {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectCoupon(event.target.value);
+    const couponId = parseInt(event.target.value);
+    setSelectCoupon(couponId);
   };
 
   const formatDateForServer = (date: Date) => {
     return moment(date).format('YYYY-MM-DDTHH:mm:ss');
   };
 
-  //예약을 저장하는 함수
+  useEffect(() => {
+    if (selectCoupon && selectCoupon !== 0) {
+      Instance.get(`/api/coupon/get/${selectCoupon}`).then((response) => {
+        if (response.status === 200) setCoupon(response.data);
+      });
+    }
+  }, [selectCoupon]);
+
+  useEffect(() => {
+    if (selectGiftCard && selectGiftCard.length > 0) {
+      let requestGiftCardIdListDto = {
+        giftCardIdList: selectGiftCard,
+      };
+      Instance.post('/api/giftcard/get', requestGiftCardIdListDto).then((response) => {
+        if (response.status === 200) setGiftCards(response.data);
+      });
+    }
+  }, [selectGiftCard]);
+
+  // 예약 및 결제
   const handleReservation = async () => {
-    const confirmed = window.confirm('예약을 진행하시겠습니까?');
+    if (memberData.name === '' && memberData.phoneNumber === '' && memberData.email === '') {
+      alert('고객 정보를 입력해주세요.');
+      return;
+    }
+
+    if (checked1 === false || checked2 === false) {
+      alert('약관 동의가 필요합니다.');
+      return;
+    }
+
+    if (!window.IMP) return;
+
+    const { IMP } = window;
+    IMP.init('imp32506271'); // 가맹점 식별코드
+
+    const originalPrice = selectedProduct ? (selectedProduct.price as number) : (selectData.price as number);
+    const adultCount = selectedProduct ? (selectedProduct.spareAdult as number) : (selectData.spareAdult as number);
+    const childrenCount = selectedProduct ? (selectedProduct.spareChildren as number) : (selectData.spareChildren as number);
+    const adultPrice = selectedProduct ? (selectedProduct.priceAdult as number) : (selectData.priceAdult as number);
+    const childrenPrice = selectedProduct ? (selectedProduct.priceChildren as number) : (selectData.priceChildren as number);
+    let adultPriceResult = 0;
+    let childrenPriceResult = 0;
+    if (reservationNewData.adults > adultCount) {
+      adultPriceResult = (reservationNewData.adults - adultCount) * adultPrice;
+    }
+    if (reservationNewData.children > childrenCount) {
+      childrenPriceResult = (reservationNewData.children - childrenCount) * childrenPrice;
+    }
+
+    const sumPrice = originalPrice + adultPriceResult + childrenPriceResult;
+
+    let totalPrice = sumPrice;
+    let result = 0;
+    if (coupon) {
+      const discountRate = coupon.discountRate / 100;
+      const discount = Math.round(totalPrice * discountRate);
+      result = Math.round(discount / 10) * 10;
+      totalPrice -= result;
+    }
+    let giftCardDiscount = 0;
+    for (var i = 0; i < giftcardList.length; i++) {
+      giftCardDiscount += giftcardList[i].money;
+      totalPrice -= giftcardList[i].money;
+    }
+
+    const discountPrice = result + giftCardDiscount;
+
+    setFormData({
+      checkIn: reservationNewData?.checkInDate || '',
+      checkOut: reservationNewData?.checkOutDate || '',
+      count: reservationNewData?.count || '1',
+      adult: reservationNewData?.adults || '1',
+      children: reservationNewData?.children || '0',
+      stay: reservationNewData?.nights,
+      notice: notice,
+      sumPrice: sumPrice.toString(),
+      discountPrice: discountPrice.toString(),
+      totalPrice: totalPrice.toString(),
+      itemId: selectedProduct ? selectedProduct.id : selectData.id,
+      memberId: memberData && memberData.memberId,
+      couponId: selectCoupon.toString(),
+      giftCardId: '',
+      memberName: memberData ? memberData.name : '',
+      phoneNumber: memberData ? memberData.phoneNumber : '',
+      email: memberData ? memberData.email : '',
+    });
+
+    // 결제 데이터
+    const paydata: RequestPayParams = {
+      pg: 'kcp.AO09C', // PG사
+      pay_method: 'card', // 결제수단
+      merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
+      amount: 1000, // 테스트용 결제금액 고정
+      name: '구름호텔 상품 예약 및 결제 테스트', // 주문명
+      buyer_name: formData.memberName, // 구매자 이름
+      buyer_tel: formData.phoneNumber, // 구매자 전화번호
+      buyer_email: formData.email, // 구매자 이메일
+    };
 
     const serverFormattedData = {
       ...formData,
-      checkIn: formatDateForServer(formData.checkIn),
-      checkOut: formatDateForServer(formData.checkOut),
+      checkIn: formatDateForServer(reservationNewData.checkInDate),
+      checkOut: formatDateForServer(reservationNewData.checkOutDate),
     };
 
-    if (isLogined) {
-      if (confirmed) {
-        try {
-          await Instance.post(`/reservation/save`, {
-            params: memberId,
-            data: serverFormattedData,
-          });
-          navigate('/');
-          window.alert('예약이 완료되었습니다');
-        } catch (error) {
-          console.error('예약 요청 실패', error);
-        }
-      }
-    } else {
-      if (window.confirm('로그인되지 않았습니다. 비회원으로 예약을 진행하시겠습니까?')) {
-        try {
-          let anonymousSignupDto = {
-            name: name,
-            email: email,
-            phoneNumber: phoneNumber,
-          };
-          const serverFormattedData = {
-            ...formData,
-            checkIn: formatDateForServer(new Date(2023, 11, 25, 3, 50)), //테스트 데이터
-            checkOut: formatDateForServer(new Date(2023, 11, 25, 3, 50)),
-            anonymousSignupDto: anonymousSignupDto,
-          };
-          await Instance.post(`/reservation/save/anonymous`, serverFormattedData);
-          navigate('/');
-          window.alert('예약이 완료되었습니다');
-        } catch (error) {
-          console.error('예약 요청 실패', error);
-        }
-      }
+    IMP.request_pay(paydata, callback);
+    try {
+      await Instance.post(`/reservation/save`, {
+        data: serverFormattedData,
+      });
+      navigate('/');
+      window.alert('예약이 완료되었습니다');
+    } catch (error) {
+      console.error('예약 요청 실패', error);
     }
   };
 
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
+
+  function callback(response: RequestPayResponse) {
+    const { success, error_msg } = response;
+
+    if (success) {
+      console.log('결제 성공');
+    } else {
+      console.log(`결제 실패: ${error_msg}`);
+    }
+  }
+
   const updateReservationData = (newData: any) => {
-    setFormData(newData);
+    setReservationNewData(newData);
   };
 
   const handleSelectGiftCardAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -196,6 +297,24 @@ const ReservationPage = () => {
     });
   };
 
+  const handleChangeUserInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setMemberData((prevData: any) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleCheckBoxForAgree1 = () => {
+    setChecked1(!checked1);
+  };
+
+  const handleCheckBoxForAgree2 = () => {
+    setChecked2(!checked2);
+  };
+
+  console.log(selectCoupon);
+
   return (
     <div>
       <S.Container>
@@ -215,19 +334,33 @@ const ReservationPage = () => {
             <S.Section className="privacy">
               <ContentsTitleXSmall>고객 정보 입력</ContentsTitleXSmall>
               <div className="flex">
-                <input placeholder="고객명" type="text" value={name} onChange={(e) => setName(e.target.value)} required readOnly={isLogined} />
                 <input
-                  placeholder="연락처"
+                  name="name"
                   type="text"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  onChange={handleChangeUserInfo}
+                  defaultValue={memberData ? memberData.name : ''}
+                  placeholder="고객명 (필수)"
                   required
-                  readOnly={isLogined}
                 />
-                <input placeholder="이메일" type="text" value={email} onChange={(e) => setEmail(e.target.value)} required readOnly={isLogined} />
+                <input
+                  name="phoneNumber"
+                  placeholder="연락처 (필수)"
+                  type="text"
+                  onChange={handleChangeUserInfo}
+                  defaultValue={memberData ? memberData.phoneNumber : ''}
+                  required
+                />
+                <input
+                  name="email"
+                  placeholder="이메일 (필수)"
+                  type="text"
+                  onChange={handleChangeUserInfo}
+                  defaultValue={memberData ? memberData.email : ''}
+                  required
+                />
               </div>
               <div className="full">
-                <input placeholder="요청사항" type="text" value={notice} onChange={(e) => setNotice(e.target.value)} />
+                <input name="notice" placeholder="요청사항" type="text" value={notice} onChange={(e) => setNotice(e.target.value)} />
               </div>
             </S.Section>
 
@@ -254,48 +387,50 @@ const ReservationPage = () => {
                   </BtnWrapper>
                 </BtnWrapper>
                 <table>
-                  {/* 상품권 목록 출력하는 곳*/}
-                  {giftcardList.length !== 0 ? (
-                    <>
-                      {giftcardList.map((giftcard, index) => (
-                        <tr key={index}>
-                          <td>
-                            <CheckLabel>
-                              <InputCheckbox
-                                type="checkbox"
-                                checked={selectGiftCard.includes(giftcard.id)}
-                                onChange={() => handleGiftCardCheckboxChange(giftcard.id)}
-                              />
-                              {giftcard.title}
-                            </CheckLabel>
-                          </td>
-                          <td className="right">{giftcard.money}</td>
-                        </tr>
-                      ))}
-                    </>
-                  ) : (
-                    <tr>
-                      <td className="center empty">등록된 상품권이 없습니다.</td>
-                    </tr>
-                  )}
+                  <tbody>
+                    {/* 상품권 목록 출력하는 곳*/}
+                    {giftcardList.length !== 0 ? (
+                      <>
+                        {giftcardList.map((giftcard, index) => (
+                          <tr key={index}>
+                            <td>
+                              <CheckLabel>
+                                <InputCheckbox
+                                  type="checkbox"
+                                  checked={selectGiftCard.includes(giftcard.id)}
+                                  onChange={() => handleGiftCardCheckboxChange(giftcard.id)}
+                                />
+                                {giftcard.title}
+                              </CheckLabel>
+                            </td>
+                            <td className="right">{giftcard.money}</td>
+                          </tr>
+                        ))}
+                      </>
+                    ) : (
+                      <tr>
+                        <td className="center empty">등록된 상품권이 없습니다.</td>
+                      </tr>
+                    )}
+                  </tbody>
                 </table>
               </S.CouponInfo>
             </S.Section>
 
             <S.Section>
               <ContentsTitleXSmall>쿠폰 사용</ContentsTitleXSmall>
-              <S.CouponSelect value={selectCoupon} onChange={handleChange} disabled={!userLoggedIn}>
-                {userLoggedIn ? (
+              <S.CouponSelect onChange={handleChange} disabled={!userLoggedIn} value={selectCoupon}>
+                {userLoggedIn !== null ? (
                   <>
-                    <option value="">선택 안함</option>
+                    <option value={0}>선택 안함</option>
                     {couponList.map((coupon: Coupon, index) => (
-                      <option value={coupon.id}>{coupon.name}</option>
+                      <option value={coupon.id} key={coupon.id}>
+                        {coupon.name}
+                      </option>
                     ))}
                   </>
                 ) : (
-                  <option disabled value="">
-                    로그인이 필요한 서비스입니다.
-                  </option>
+                  <option>로그인이 필요한 서비스입니다.</option>
                 )}
               </S.CouponSelect>
             </S.Section>
@@ -308,7 +443,7 @@ const ReservationPage = () => {
                     개인정보처리방침 동의 <span>(필수)</span>
                   </h4>
                   <CheckLabel htmlFor="privacycheck">
-                    <InputCheckbox type="checkbox" id="privacycheck" required />
+                    <InputCheckbox type="checkbox" id="privacycheck" onChange={handleCheckBoxForAgree1} required />
                     동의합니다
                   </CheckLabel>
                 </RequiredTitle>
@@ -322,7 +457,7 @@ const ReservationPage = () => {
                     취소 환불 수수료에 관한 동의 <span>(필수)</span>
                   </h4>
                   <CheckLabel htmlFor="privacycheck">
-                    <InputCheckbox type="checkbox" id="privacycheck" required />
+                    <InputCheckbox type="checkbox" id="privacycheck" onChange={handleCheckBoxForAgree2} required />
                     동의합니다
                   </CheckLabel>
                 </RequiredTitle>
@@ -336,15 +471,27 @@ const ReservationPage = () => {
           <S.Right>
             <ContentsTitleXSmall>상품 개요</ContentsTitleXSmall>
             {indexImg ? (
-              <Item selectedProduct={selectedProduct ? selectedProduct : selectData} indexImg={indexImg} updateReservationData={formData} />
+              <Item
+                selectedProduct={selectedProduct ? selectedProduct : selectData}
+                indexImg={indexImg}
+                updateReservationData={reservationNewData !== undefined ? reservationNewData : reservationData !== undefined ? reservationData : ''}
+                selectCoupon={selectCoupon}
+                selectGiftCardList={selectGiftCard}
+              />
             ) : (
-              <Item selectedProduct={selectedProduct ? selectedProduct : selectData} updateReservationData={formData} />
+              <Item
+                selectedProduct={selectedProduct ? selectedProduct : selectData}
+                updateReservationData={reservationNewData !== undefined ? reservationNewData : reservationData !== undefined ? reservationData : ''}
+                selectCoupon={selectCoupon}
+                selectGiftCardList={selectGiftCard}
+              />
             )}
             <BtnWrapper className="full mt20">
               <SubmitBtn type="submit" className="shadow" onClick={handleReservation}>
                 예약 및 결제하기
               </SubmitBtn>
             </BtnWrapper>
+            <p className="notice">⁕ 테스트 결제금액은 1,000원으로 고정되어 있습니다.</p>
           </S.Right>
         </S.Wrapper>
       </S.Container>

@@ -8,7 +8,8 @@ import { useAuth } from '../../../utils/api/AuthContext';
 const Header = () => {
   const location = useLocation().pathname;
   const { memberAuthState, setMemberAuthState } = useAuth();
-  const isLoggedIn = memberAuthState.memberId !== '';
+  // const isLoggedIn = memberAuthState.memberId !== '';
+  const isLoggedIn = localStorage.getItem('memberId');
   const navigate = useNavigate();
 
   // const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -56,9 +57,7 @@ const Header = () => {
           )}
         </li>
         <li>{isLoggedIn ? <Link to="/mypage">마이페이지</Link> : <Link to="/signup">회원가입</Link>}</li>
-        <li>
-          <Link to="/login?type=reservation">예약 확인</Link>
-        </li>
+        <li>{isLoggedIn ? <Link to="/myhistory/1">예약 확인</Link> : <Link to="/login?type=reservation">예약 확인</Link>}</li>
         <li>
           <Link to="/membership">멤버십</Link>
         </li>

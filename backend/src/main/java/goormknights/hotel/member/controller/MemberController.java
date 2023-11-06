@@ -159,5 +159,17 @@ public class MemberController {
         Long id = member.getId();
         return ResponseEntity.ok(id);
     }
+
+    @PostMapping("/chatroom")
+    public ResponseEntity<String> saveChatRoomId(@RequestBody ChatMemberDto memberDto) {
+        memberService.saveRoomId(memberDto);
+        return ResponseEntity.ok("저장 완료");
+    }
+
+    @GetMapping("/chatroom")
+    public ResponseEntity<String> getPrevRoomId(@RequestParam String memberId) {
+        String chatRoomId = memberService.getChatRoomId(memberId);
+        return ResponseEntity.ok(chatRoomId);
+    }
 }
 

@@ -2,15 +2,27 @@ import React, { useState } from 'react';
 import * as S from './Style';
 import { PageTitle } from '../../Style/commonStyles';
 import Paging from '../../components/common/Paging/Paging';
+import { useEffect } from 'react';
+import Instance from '../../utils/api/axiosInstance';
+
+interface Reservation {
+  reservationNumber: string;
+  reservationDate: string;
+  productName: string;
+  paymentAmount: number;
+  checkInDate: string;
+  checkOutDate: string;
+}
 
 const ReservationList = () => {
   const [totalPages, setTotalPages] = useState(0);
-  const reservations = [
+  const memberId = localStorage.getItem('memberId');
+  const [reservations, setReservation] = useState<Reservation[]>([
     {
       reservationNumber: '2023082555672148',
       reservationDate: '2023-09-10',
       productName: '디럭스 디럭스',
-      paymentAmount: '500,000 원',
+      paymentAmount: 500000,
       checkInDate: '2023-09-15',
       checkOutDate: '2023-09-20',
     },
@@ -19,11 +31,23 @@ const ReservationList = () => {
       reservationDate: '2023-09-12',
       productName:
         '풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스',
-      paymentAmount: '300,000 원',
+      paymentAmount: 500000,
       checkInDate: '2023-09-17',
       checkOutDate: '2023-09-22',
     },
-  ];
+  ]);
+
+  useEffect(() => {
+    if (memberId) {
+      // 페이징 코드 추가
+      Instance.get(`/reservation/list/count/${memberId}`).then((response) => {
+        setTotalPages(response.data);
+      });
+      Instance.get(`/reservation/list/member/${memberId}`).then((response) => {
+        setReservation(response.data);
+      });
+    }
+  }, []);
 
   return (
     <>

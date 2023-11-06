@@ -17,11 +17,15 @@ import goormknights.hotel.member.repository.AnonymousRepository;
 import goormknights.hotel.member.repository.MemberRepository;
 import goormknights.hotel.reservation.dto.request.RequestReservationDto;
 import goormknights.hotel.reservation.dto.request.UpdateReservationDto;
+import goormknights.hotel.reservation.dto.response.MemberReservationDto;
+import goormknights.hotel.reservation.dto.response.ResponseReservationDto;
 import goormknights.hotel.reservation.exception.LimitExceededException;
 import goormknights.hotel.reservation.model.Reservation;
 import goormknights.hotel.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,46 +54,47 @@ public class ReservationService {
      */
     public void saveReservation(RequestReservationDto reservationDto) {
 
-        setItemInfo(reservationDto); // 상품 정보 세팅
-        reservationDto.setReservationNumber(makeReservationNumber()); // 예약 번호 생성
-        setMemberInfo(reservationDto); // 회원/비회원 정보 세팅
+        Reservation reservation =  reservationDto.toEntity();
+        reservation.setReservationNumber(makeReservationNumber()); // 예약 번호 생성
+
+        setItemInfo(reservationDto, reservation); // 상품 정보 세팅
+        setMemberInfo(reservationDto, reservation); // 회원/비회원 정보 세팅
 
         // 상품권 세팅
-        if(reservationDto.getGiftCardId() != null) setGiftCardInfo(reservationDto);
+        if(reservationDto.getGiftCardId() != null) setGiftCardInfo(reservationDto, reservation);
 
         // 쿠폰 세팅
-        if(reservationDto.getCouponId() != null) {
-            Coupon useCoupon = couponRepository.findById(reservationDto.getCouponId()).orElseThrow();
-            if(useCoupon.getIsUsed() != 'N') {
+        if(reservationDto.getCouponId() != null){
+            Optional<Coupon> useCoupon = couponRepository.findById(reservationDto.getCouponId());
+            if(useCoupon.isEmpty() || useCoupon.get().getIsUsed() != 'N') {
                 throw new AlreadyUsedException("이미 사용했거나 사용할 수 없는 쿠폰입니다.");
             }
-            useCoupon.setIsUsed();
-            reservationDto.setCoupon(useCoupon);
+            reservation.setCoupon(useCoupon.get());
         }
 
-        reservationRepository.save(reservationDto.toEntity()); // 저장
+        reservationRepository.save(reservation); // 저장
     }
 
     /**
      * 상품권 정보 검증 및 세팅
      * @param reservationDto 예약자 입력 정보
      */
-    private void setGiftCardInfo(RequestReservationDto reservationDto) {
+    private void setGiftCardInfo(RequestReservationDto reservationDto, Reservation reservation) {
         List<GiftCard> useGiftCard = new ArrayList<>();
         for(String s : reservationDto.getGiftCardId()) {
             GiftCard useGiftCardItem = giftCardRepository.findByUuid(s).orElseThrow(() -> new NoSuchGiftCardException("일치하는 상품권이 없습니다."));
             if(useGiftCardItem.getIsZeroMoney() != 'N') throw new GiftCardAlreadyUsedException("이미 사용한 상품권입니다.");
-            useGiftCardItem.paidByGiftCard(useGiftCardItem.getMoney());
+            useGiftCardItem.paidByGiftCard();
             useGiftCard.add(useGiftCardItem);
         }
-        reservationDto.setGiftCard(useGiftCard);
+        reservation.setGiftCard(useGiftCard);
     }
 
     /**
      * 예약 상품 정보 검증
      * @param reservationDto 예약자 입력 정보
      */
-    private void setItemInfo(RequestReservationDto reservationDto) {
+    private void setItemInfo(RequestReservationDto reservationDto, Reservation reservation) {
         Item item = itemRepository.findById(reservationDto.getItemId()).orElseThrow(() -> new NotExistItemException("해당 id의 상품을 찾을 수 없습니다. id = " + reservationDto.getItemId()));
 
         if (item.getSpare() < reservationDto.getCount())
@@ -97,21 +102,21 @@ public class ReservationService {
 
         if (item.getSpareAdult() < reservationDto.getAdult() || item.getSpareChildren() < reservationDto.getChildren())
             throw new LimitExceededException("최대 숙박 인원을 초과하였습니다.");
-        reservationDto.setItem(item);
+        reservation.setItem(item);
     }
 
     /**
      * 회원 유무 체크 및 예약자 정보 세팅
      * @param reservationDto 예약자 입력 정보
      */
-    private void setMemberInfo(RequestReservationDto reservationDto) {
+    private void setMemberInfo(RequestReservationDto reservationDto, Reservation reservation) {
         Optional<Member> isMember = memberRepository.findByMemberId(reservationDto.getMemberId());
         if (isMember.isEmpty()) {
-            Anonymous anonymous = saveAnonymous(reservationDto);
-            reservationDto.setNonMember(anonymous);
+            Anonymous anonymous = saveAnonymous(reservationDto, reservation);
+            reservation.setNonMember(anonymous);
         } else {
             Member member = isMember.get();
-            reservationDto.setMember(member);
+            reservation.setMember(member);
         }
     }
 
@@ -120,13 +125,13 @@ public class ReservationService {
      * @param reservationDto 예약자 입력 정보
      * @return anonymous
      */
-    private Anonymous saveAnonymous(RequestReservationDto reservationDto) {
+    private Anonymous saveAnonymous(RequestReservationDto reservationDto, Reservation reservation) {
         AnonymousSignupDto nonMember = new AnonymousSignupDto();
         nonMember.setName(reservationDto.getMemberName());
         nonMember.setEmail(reservationDto.getEmail());
         nonMember.setPhoneNumber(reservationDto.getPhoneNumber());
         Anonymous anonymous = anonymousRepository.save(nonMember.toEntity());
-        anonymous.setReservationNumber(reservationDto.getReservationNumber());
+        anonymous.setReservationNumber(reservation.getReservationNumber());
         return anonymous;
     }
 
@@ -170,8 +175,13 @@ public class ReservationService {
      * 전체 예약 조회
      * @return 전체 예약 결과 반환
      */
-    public List<Reservation> getAllReservation() {
-        return reservationRepository.findAll();
+    public List<ResponseReservationDto> getAllReservation(Pageable pageable) {
+        Page<Reservation> page = reservationRepository.findAll(pageable);
+        List<ResponseReservationDto> result = new ArrayList<>();
+        for(Reservation reservation : page) {
+            result.add(reservation.toResponseReservationDto());
+        }
+        return result;
     }
 
     /**
@@ -201,4 +211,27 @@ public class ReservationService {
         return reservationRepository.findById(id);
     }
 
+    public Long getCount() {
+        return reservationRepository.count() / 10;
+    }
+
+    /**
+     * FrontEnd ReservationList의 Reservation명세에 맞춰서 Dto 설게 완료
+     */
+    public List<MemberReservationDto> getReservationListByMemberId(String memberId, Pageable pageable) {
+        Page<Reservation> page = reservationRepository.findAll(pageable);
+        List<MemberReservationDto> result = new ArrayList<>();
+        for(Reservation reservation : page) {
+            result.add(new MemberReservationDto(reservation));
+        }
+        return result;
+    }
+
+    /**
+     * 멤버 아이디로 데이터를 검색 후에 총 개수를 세어줍니다.
+     */
+    public Long getCountByMemberId(String memberId) {
+        List<Reservation> byMemberID = reservationRepository.findAllByMemberId(memberId);
+        return (long) (byMemberID.size() / 10);
+    }
 }
