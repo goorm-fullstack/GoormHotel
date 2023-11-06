@@ -24,6 +24,7 @@ const ReservationCheck = () => {
   useEffect(() => {
     const fetchReservationData = () => {
       Instance.get(`/reservation/detail/${number}`).then((response) => {
+        console.log(response.data);
         setReservationData(response.data);
         setRoomItem(response.data.roomItem);
         setDiningItem(response.data.diningItem);
@@ -73,7 +74,8 @@ const ReservationCheck = () => {
         count: reservationData.count,
         nights: reservationData.stay,
       });
-      calcDiscountPrice(reservationData.coupon.discountRate);
+      if(reservationData.coupon)
+        calcDiscountPrice(reservationData.coupon.discountRate);
     }
   }, [reservationData, roomItem, diningItem]);
 
@@ -119,14 +121,36 @@ const ReservationCheck = () => {
                 <ContentsTitleXSmall>고객 정보</ContentsTitleXSmall>
                 <table>
                   <tr>
-                    <th>고객명</th>
-                    <td>{reservationData.member.name}</td>
-                    <th>연락처</th>
-                    <td>{reservationData.member.phoneNumber}</td>
+                    {reservationData.member !== null ? (
+                      <>
+                      <th>고객명</th>
+                      <td>{reservationData.member.name}</td>
+                      <th>연락처</th>
+                      <td>{reservationData.member.phoneNumber}</td>
+                      </>
+                    ) : (
+                      <>
+                      <th>고객명</th>
+                      <td>{reservationData.nonMember.name}</td>
+                      <th>연락처</th>
+                      <td>{reservationData.nonMember.phoneNumber}</td>
+                      </>
+                    )}
+                    
                   </tr>
                   <tr>
-                    <th>이메일</th>
-                    <td colSpan={3}>{reservationData.member.email}</td>
+                    {reservationData.member ? (
+                      <>
+                        <th>이메일</th>
+                        <td colSpan={3}>{reservationData.member.email}</td>
+                      </>
+                    ) : (
+                      <>
+                      <th>이메일</th>
+                      <td colSpan={3}>{reservationData.nonMember.email}</td>
+                      </>
+                    )}
+                    
                   </tr>
                   <tr>
                     <th>요청사항</th>

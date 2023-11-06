@@ -132,6 +132,7 @@ public class ReservationService {
         nonMember.setPhoneNumber(reservationDto.getPhoneNumber());
         Anonymous anonymous = anonymousRepository.save(nonMember.toEntity());
         anonymous.setReservationNumber(reservation.getReservationNumber());
+        reservation.setNonMember(anonymous);
         return anonymous;
     }
 
