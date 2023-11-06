@@ -3,6 +3,7 @@ import * as S from './Style';
 import { Link, useLocation} from 'react-router-dom';
 import { BtnWrapper, SubmitBtn, PageTitle, InputCheckbox, LinkBtn, CheckLabel } from '../../Style/commonStyles';
 import Instance from '../../utils/api/axiosInstance';
+import { response } from 'express';
 
 const Login: React.FC = () => {
   const location = useLocation();
@@ -115,7 +116,19 @@ const Login: React.FC = () => {
     setRememberId(!rememberId);
   };
 
-  const ClickAnonymousLogin = () => {};
+  const ClickAnonymousLogin = () => {
+    let data = {
+      "reservationNumber" : reservationNumber,
+      "phoneNumber" : contactNumber
+    }
+    Instance.post("/anonymous/login", data).then((response) => {
+      if(response.status === 200) {
+        window.location.href = `/reservation/${reservationNumber}`
+      } else {
+        alert("해당 예약 정보가 존재하지 않습니다.");
+      }
+    })
+  };
 
   useEffect(() => {
     if (isReservation) {

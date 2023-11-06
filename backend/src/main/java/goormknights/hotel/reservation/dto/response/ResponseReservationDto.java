@@ -7,6 +7,7 @@ import goormknights.hotel.item.dto.response.ResponseRoomDto;
 import goormknights.hotel.item.model.Dining;
 import goormknights.hotel.item.model.Item;
 import goormknights.hotel.item.model.Room;
+import goormknights.hotel.member.model.Anonymous;
 import goormknights.hotel.member.model.Member;
 import goormknights.hotel.reservation.model.Reservation;
 import lombok.AccessLevel;
@@ -31,6 +32,7 @@ public class ResponseReservationDto {
     private Integer adult;                  // 어른 수
     private Integer children;               // 어린이 수
     private Member member;              // 예약자 정보: 예약자명, 회원 유형(회원/비회원), 회원인 경우 ID, 연락처, 이메일
+    private Anonymous nonMember;
     private String notice;              // 고객 요청사항
     private ResponseRoomDto roomItem;
     private ResponseDiningDto diningItem;
@@ -60,6 +62,7 @@ public class ResponseReservationDto {
         this.adult = reservation.getAdult();
         this.children = reservation.getChildren();
         this.member = reservation.getMember();
+        this.nonMember = reservation.getNonMember();
         this.notice = reservation.getNotice();
         this.roomItem = responseRoomDto;
         this.diningItem = responseDiningDto;

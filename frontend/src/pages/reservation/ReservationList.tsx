@@ -6,36 +6,20 @@ import { useEffect } from 'react';
 import Instance from '../../utils/api/axiosInstance';
 
 interface Reservation {
-  reservationNumber: string;
-  reservationDate: string;
-  productName: string;
-  paymentAmount: number;
-  checkInDate: string;
-  checkOutDate: string;
+  id : number,
+  reservationNumber : string,
+  productName : string,
+  checkInDate : string,
+  checkOutDate : string,
+  reservationDate : string,
+  paymentAmount : number
 }
+
 
 const ReservationList = () => {
   const [totalPages, setTotalPages] = useState(0);
   const memberId = localStorage.getItem('memberId');
-  const [reservations, setReservation] = useState<Reservation[]>([
-    {
-      reservationNumber: '2023082555672148',
-      reservationDate: '2023-09-10',
-      productName: '디럭스 디럭스',
-      paymentAmount: 500000,
-      checkInDate: '2023-09-15',
-      checkOutDate: '2023-09-20',
-    },
-    {
-      reservationNumber: '2023082555672149',
-      reservationDate: '2023-09-12',
-      productName:
-        '풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스풀 빌라 디럭스',
-      paymentAmount: 500000,
-      checkInDate: '2023-09-17',
-      checkOutDate: '2023-09-22',
-    },
-  ]);
+  const [reservations, setReservation] = useState<Reservation[]>([]);
 
   useEffect(() => {
     if (memberId) {
@@ -44,6 +28,7 @@ const ReservationList = () => {
         setTotalPages(response.data);
       });
       Instance.get(`/reservation/list/member/${memberId}`).then((response) => {
+        console.log(response.data);
         setReservation(response.data);
       });
     }
