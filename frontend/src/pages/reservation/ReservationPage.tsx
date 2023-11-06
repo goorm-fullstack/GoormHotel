@@ -86,6 +86,7 @@ const ReservationPage = () => {
     couponId: '',
     giftCardId: '',
   });
+  const [reservations, setReservations] = useState<any>();
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
 
@@ -159,6 +160,10 @@ const ReservationPage = () => {
     }
   }, [selectGiftCard]);
 
+  // useEffect(() => {
+  //   setReservations(formData);
+  // }, [formData]);
+
   // 예약 및 결제
   const handleReservation = async () => {
     if (memberData.name === '' && memberData.phoneNumber === '' && memberData.email === '') {
@@ -208,25 +213,25 @@ const ReservationPage = () => {
 
     const discountPrice = result + giftCardDiscount;
 
-    setFormData({
-      checkIn: reservationNewData?.checkInDate || '',
-      checkOut: reservationNewData?.checkOutDate || '',
-      count: reservationNewData?.count || '1',
-      adult: reservationNewData?.adults || '1',
-      children: reservationNewData?.children || '0',
+    const reservations = {
+      checkIn: formatDateForServer(reservationNewData?.checkInDate),
+      checkOut: formatDateForServer(reservationNewData?.checkOutDate),
+      count: reservationNewData?.count,
+      adult: reservationNewData?.adults,
+      children: reservationNewData?.children,
       stay: reservationNewData?.nights,
       notice: notice,
-      sumPrice: sumPrice.toString(),
-      discountPrice: discountPrice.toString(),
-      totalPrice: totalPrice.toString(),
+      sumPrice: sumPrice,
+      discountPrice: discountPrice,
+      totalPrice: totalPrice,
       itemId: selectedProduct ? selectedProduct.id : selectData.id,
       memberId: memberData && memberData.memberId,
-      couponId: selectCoupon.toString(),
+      couponId: selectCoupon,
       giftCardId: '',
       memberName: memberData ? memberData.name : '',
       phoneNumber: memberData ? memberData.phoneNumber : '',
       email: memberData ? memberData.email : '',
-    });
+    };
 
     // 결제 데이터
     const paydata: RequestPayParams = {
@@ -235,32 +240,51 @@ const ReservationPage = () => {
       merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
       amount: 1000, // 테스트용 결제금액 고정
       name: '구름호텔 상품 예약 및 결제 테스트', // 주문명
-      buyer_name: formData.memberName, // 구매자 이름
-      buyer_tel: formData.phoneNumber, // 구매자 전화번호
-      buyer_email: formData.email, // 구매자 이메일
+      buyer_name: memberData.memberName, // 구매자 이름
+      buyer_tel: memberData.phoneNumber, // 구매자 전화번호
+      buyer_email: memberData.email, // 구매자 이메일
     };
 
-    const serverFormattedData = {
-      ...formData,
-      checkIn: formatDateForServer(reservationNewData.checkInDate),
-      checkOut: formatDateForServer(reservationNewData.checkOutDate),
-    };
+    console.log(reservations);
 
-    IMP.request_pay(paydata, callback);
     try {
-      await Instance.post(`/reservation/save`, {
-        data: serverFormattedData,
+      Instance.post(`/reservation/save`, {
+        checkIn: formatDateForServer(reservationNewData?.checkInDate),
+        checkOut: formatDateForServer(reservationNewData?.checkOutDate),
+        count: reservationNewData?.count,
+        adult: reservationNewData?.adults,
+        children: reservationNewData?.children,
+        stay: reservationNewData?.nights,
+        notice: notice,
+        sumPrice: sumPrice,
+        discountPrice: discountPrice,
+        totalPrice: totalPrice,
+        itemId: selectedProduct ? selectedProduct.id : selectData.id,
+        memberId: memberData && memberData.memberId,
+        couponId: selectCoupon,
+        giftCardId: selectGiftCard,
+        memberName: memberData ? memberData.name : '',
+        phoneNumber: memberData ? memberData.phoneNumber : '',
+        email: memberData ? memberData.email : '',
       });
-      navigate('/');
-      window.alert('예약이 완료되었습니다');
     } catch (error) {
       console.error('예약 요청 실패', error);
     }
+
+    // const serverFormattedData = {
+    //   ...formData,
+    //   checkIn: formatDateForServer(reservationNewData.checkInDate),
+    //   checkOut: formatDateForServer(reservationNewData.checkOutDate),
+    // };
+
+    // setFormData(serverFormattedData);
+
+    IMP.request_pay(paydata, callback);
   };
 
   useEffect(() => {
-    console.log(formData);
-  }, [formData]);
+    setReservations(formData);
+  }, [formData, reservations]);
 
   function callback(response: RequestPayResponse) {
     const { success, error_msg } = response;
