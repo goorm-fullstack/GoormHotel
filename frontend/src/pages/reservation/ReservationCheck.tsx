@@ -6,6 +6,7 @@ import { PageTitle, ContentsTitleXSmall } from '../../Style/commonStyles';
 import { useLocation, useParams } from 'react-router';
 import Instance from '../../utils/api/axiosInstance';
 import moment from 'moment';
+import { numberWithCommas } from '../../utils/function/comma';
 
 const ReservationCheck = () => {
   const number = useParams().number;
@@ -168,7 +169,7 @@ const ReservationCheck = () => {
                       {reservationData.giftCard.map((giftCard: any, index: number) => (
                       <tr key={index}>
                         <td>{giftCard.title}</td>
-                        <td className="right">-{calcGiftCardPrice(giftCard.money)}</td> {/* 상품권 가격 표시 필요 */}
+                        <td className="right">-{numberWithCommas(calcGiftCardPrice(giftCard.money))}원</td> {/* 상품권 가격 표시 필요 */}
                       </tr>
                       ))}
                     </>
@@ -189,7 +190,7 @@ const ReservationCheck = () => {
                   {reservationData.coupon !== null ? (
                     <tr>
                       <td>{reservationData.coupon.name}</td>
-                      <td className="right">-{discountPrice}</td> {/* 쿠폰 가격 표시 필요 */}
+                      <td className="right">-{numberWithCommas(discountPrice)}원</td> {/* 쿠폰 가격 표시 필요 */}
                     </tr>
                   ) : (
                     <tr>

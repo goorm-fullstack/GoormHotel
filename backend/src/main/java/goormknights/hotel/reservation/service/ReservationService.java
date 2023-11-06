@@ -50,40 +50,42 @@ public class ReservationService {
 
     /**
      * 예약 정보 저장
+     *
      * @param reservationDto - user 입력한 정보
      */
-    public void saveReservation(RequestReservationDto reservationDto) {
+    public String saveReservation(RequestReservationDto reservationDto) {
 
-        Reservation reservation =  reservationDto.toEntity();
+        Reservation reservation = reservationDto.toEntity();
         reservation.setReservationNumber(makeReservationNumber()); // 예약 번호 생성
 
         setItemInfo(reservationDto, reservation); // 상품 정보 세팅
         setMemberInfo(reservationDto, reservation); // 회원/비회원 정보 세팅
 
         // 상품권 세팅
-        if(reservationDto.getGiftCardId() != null) setGiftCardInfo(reservationDto, reservation);
+        if (reservationDto.getGiftCardId() != null) setGiftCardInfo(reservationDto, reservation);
 
         // 쿠폰 세팅
-        if(reservationDto.getCouponId() != null){
+        if (reservationDto.getCouponId() != null) {
             Optional<Coupon> useCoupon = couponRepository.findById(reservationDto.getCouponId());
-            if(useCoupon.isEmpty() || useCoupon.get().getIsUsed() != 'N') {
+            if (useCoupon.isEmpty() || useCoupon.get().getIsUsed() != 'N') {
                 throw new AlreadyUsedException("이미 사용했거나 사용할 수 없는 쿠폰입니다.");
             }
             reservation.setCoupon(useCoupon.get());
         }
 
-        reservationRepository.save(reservation); // 저장
+        return reservationRepository.save(reservation).getReservationNumber(); // 저장
     }
 
     /**
      * 상품권 정보 검증 및 세팅
+     *
      * @param reservationDto 예약자 입력 정보
      */
     private void setGiftCardInfo(RequestReservationDto reservationDto, Reservation reservation) {
         List<GiftCard> useGiftCard = new ArrayList<>();
-        for(String s : reservationDto.getGiftCardId()) {
+        for (String s : reservationDto.getGiftCardId()) {
             GiftCard useGiftCardItem = giftCardRepository.findByUuid(s).orElseThrow(() -> new NoSuchGiftCardException("일치하는 상품권이 없습니다."));
-            if(useGiftCardItem.getIsZeroMoney() != 'N') throw new GiftCardAlreadyUsedException("이미 사용한 상품권입니다.");
+            if (useGiftCardItem.getIsZeroMoney() != 'N') throw new GiftCardAlreadyUsedException("이미 사용한 상품권입니다.");
             useGiftCardItem.paidByGiftCard();
             useGiftCard.add(useGiftCardItem);
         }
@@ -92,6 +94,7 @@ public class ReservationService {
 
     /**
      * 예약 상품 정보 검증
+     *
      * @param reservationDto 예약자 입력 정보
      */
     private void setItemInfo(RequestReservationDto reservationDto, Reservation reservation) {
@@ -107,6 +110,7 @@ public class ReservationService {
 
     /**
      * 회원 유무 체크 및 예약자 정보 세팅
+     *
      * @param reservationDto 예약자 입력 정보
      */
     private void setMemberInfo(RequestReservationDto reservationDto, Reservation reservation) {
@@ -122,6 +126,7 @@ public class ReservationService {
 
     /**
      * 비회원 정보 저장
+     *
      * @param reservationDto 예약자 입력 정보
      * @return anonymous
      */
@@ -138,6 +143,7 @@ public class ReservationService {
 
     /**
      * 예약 번호 생성
+     *
      * @return reservationNumber - 예약 번호: 예약 날짜(yyyyMMdd)+랜덤 문자 8자리
      */
     private String makeReservationNumber() {
@@ -174,12 +180,13 @@ public class ReservationService {
 
     /**
      * 전체 예약 조회
+     *
      * @return 전체 예약 결과 반환
      */
     public List<ResponseReservationDto> getAllReservation(Pageable pageable) {
         Page<Reservation> page = reservationRepository.findAll(pageable);
         List<ResponseReservationDto> result = new ArrayList<>();
-        for(Reservation reservation : page) {
+        for (Reservation reservation : page) {
             result.add(reservation.toResponseReservationDto());
         }
         return result;
@@ -187,6 +194,7 @@ public class ReservationService {
 
     /**
      * 예약 번호로 예약 조회
+     *
      * @param reservationNumber - 예약번호
      * @return 입력한 예약 번호에 해당하는 예약 건 하나 반환
      */
@@ -196,6 +204,7 @@ public class ReservationService {
 
     /**
      * memberId로 예약 조회
+     *
      * @param memberId - 회원 ID
      * @return 해당 member 예약한 예약 건 모두 반환
      */
@@ -205,6 +214,7 @@ public class ReservationService {
 
     /**
      * ID(PK) 값으로 예약 조회
+     *
      * @param id - 인덱스 번호(PK)
      * @return 해당 id 값과 일치하는 예약 건 반환
      */
@@ -222,8 +232,9 @@ public class ReservationService {
     public List<MemberReservationDto> getReservationListByMemberId(String memberId, Pageable pageable) {
         Page<Reservation> page = reservationRepository.findAll(pageable);
         List<MemberReservationDto> result = new ArrayList<>();
-        for(Reservation reservation : page) {
-            result.add(new MemberReservationDto(reservation));
+        for (Reservation reservation : page) {
+            if (reservation.getMember().getMemberId().equals(memberId) || reservation.getNonMember().getName().equals(memberId))
+                result.add(new MemberReservationDto(reservation));
         }
         return result;
     }

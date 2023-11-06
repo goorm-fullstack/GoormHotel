@@ -15,8 +15,10 @@ const CustomerSupport = () => {
     [{ type: 'all', typeDetail: '카테고리', value: 'all' }],
     [
       { type: 'qna', typeDetail: '전체', value: 'all' },
-      { type: 'qna', typeDetail: '문의1', value: '문의1' },
-      { type: 'qna', typeDetail: '문의2', value: '문의2' },
+      { type: 'qna', typeDetail: '칭찬', value: '칭찬' },
+      { type: 'qna', typeDetail: '문의', value: '문의' },
+      { type: 'qna', typeDetail: '제안', value: '제안' },
+      { type: 'qna', typeDetail: '기타', value: '기타' },
     ],
     [
       { type: 'review', typeDetail: '전체', value: 'all' },
@@ -264,7 +266,7 @@ const CustomerSupport = () => {
                           <Link to={`/board/${board}/detail/${item.title}?boardId=${item.boardId}`}>{item.title}</Link>
                         </p>
                         <p className="writer">{item.boardWriter}</p>
-                        <p className="date">{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
+                        <p className="date">{`${item.boardWriteDate[0]}/${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}/${
                           item.boardWriteDate[2] < 10 ? '0' : ''
                         }${item.boardWriteDate[2]}`}</p>
                       </li>

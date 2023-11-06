@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './Style';
-import {Link, useLocation, useNavigate, useParams} from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PageTitle, BtnWrapper } from '../../Style/commonStyles';
 import AdminLayout from '../common/AdminLayout';
 import { Container } from '../member/Style';
 import { NormalBtn } from '../../Style/commonStyles';
 import Instance from '../../utils/api/axiosInstance';
-import {Simulate} from "react-dom/test-utils";
+import { Simulate } from 'react-dom/test-utils';
 import error = Simulate.error;
+import AdminCheck from '../adminCheck';
 
 const AdminBoardDetail = () => {
   const loc = useLocation();
@@ -29,7 +30,7 @@ const AdminBoardDetail = () => {
   const navigate = useNavigate();
   const [scroll, setScroll] = useState(0);
 
-  const adminId = localStorage.getItem("adminId");
+  const adminId = localStorage.getItem('adminId');
 
   useEffect(() => {
     if (adminId) {
@@ -40,13 +41,17 @@ const AdminBoardDetail = () => {
   const isComment = () => {
     if (board === 'qna' && boardData) {
       return (
-          <>
-            <NormalBtn onClick={() => { window.location.href = `/admin/board/write?parentBoardId=${boardData.boardId}` }}>답글 작성</NormalBtn>
-          </>
-      )
+        <>
+          <NormalBtn
+            onClick={() => {
+              window.location.href = `/admin/board/write?parentBoardId=${boardData.boardId}`;
+            }}>
+            답글 작성
+          </NormalBtn>
+        </>
+      );
     }
-  }
-
+  };
 
   const parseBoardContent = (content: any) => {
     const parser = new DOMParser();
@@ -60,8 +65,7 @@ const AdminBoardDetail = () => {
     boardData && boardData.boardContent ? parseBoardContent(boardData.boardContent).map((paragraph, index) => <p key={index}>{paragraph}</p>) : '';
 
   useEffect(() => {
-    Instance
-      .get(`/boards/${id}`)
+    Instance.get(`/boards/${id}`)
       .then((response) => {
         if (response.headers['filename']) {
           const fileName = response.headers['filename'];
@@ -154,8 +158,7 @@ const AdminBoardDetail = () => {
   const handleDelete = (replyId: number) => {
     const isConfirm = window.confirm('삭제하시겠습니까?');
     if (isConfirm) {
-      Instance
-        .put(`/reply/softdelete/${replyId}`)
+      Instance.put(`/reply/softdelete/${replyId}`)
         .then((response) => {
           alert('삭제되었습니다.');
           fetchReply(boardData.boardId);
@@ -208,18 +211,18 @@ const AdminBoardDetail = () => {
           replyContent: replyContent,
         };
         Instance.put(`/reply/${editingReplyId}`, data)
-            .then((response) => {
-              alert('수정되었습니다.');
-              setEditedReplyContent('');
-              setReplyContentModify('');
-              setReplyContent('');
-              scrollToPosition(scroll);
-              setIsEditing(false);
-              fetchReply(boardData.boardId);
-            })
-            .catch((error) => {
-              console.error('댓글 수정에 실패했습니다.', error);
-            });
+          .then((response) => {
+            alert('수정되었습니다.');
+            setEditedReplyContent('');
+            setReplyContentModify('');
+            setReplyContent('');
+            scrollToPosition(scroll);
+            setIsEditing(false);
+            fetchReply(boardData.boardId);
+          })
+          .catch((error) => {
+            console.error('댓글 수정에 실패했습니다.', error);
+          });
       }
     } else {
       const response = await Instance.get(`/reply/replyId/${editingReplyId}`);
@@ -230,18 +233,18 @@ const AdminBoardDetail = () => {
           replyContent: replyContentModify,
         };
         Instance.put(`/reply/${editingReplyId}`, data)
-            .then((response) => {
-              alert('수정되었습니다.');
-              setEditedReplyContent('');
-              setReplyContentModify('');
-              setReplyContent('');
-              scrollToPosition(scroll);
-              setIsEditing(false);
-              fetchReply(boardData.boardId);
-            })
-            .catch((error) => {
-              console.error('댓글 수정에 실패했습니다.', error);
-            });
+          .then((response) => {
+            alert('수정되었습니다.');
+            setEditedReplyContent('');
+            setReplyContentModify('');
+            setReplyContent('');
+            scrollToPosition(scroll);
+            setIsEditing(false);
+            fetchReply(boardData.boardId);
+          })
+          .catch((error) => {
+            console.error('댓글 수정에 실패했습니다.', error);
+          });
       } else {
         alert('해당 글의 수정 권한이 없습니다.');
         window.location.reload();
@@ -266,7 +269,6 @@ const AdminBoardDetail = () => {
     }
   };
 
-
   const boardReport = () => {
     if (!boardData) {
       return alert('boardData is null!');
@@ -282,41 +284,43 @@ const AdminBoardDetail = () => {
         reportWriter: '관리자',
         reportReason: '관리자 임의 배정',
       };
-      Instance
-          .post(`/report/writeform`, data)
-          .then(() => {
-            alert('신고처리되었습니다.');
-            navigate(`/admin/report/1`);
-          })
-          .catch((error) => {
-            console.error(error.message);
-          });
+      Instance.post(`/report/writeform`, data)
+        .then(() => {
+          alert('신고처리되었습니다.');
+          navigate(`/admin/report/1`);
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
     }
-  }
+  };
 
   const handleDeleteBoard = () => {
     const isConfirm = window.confirm('삭제하시겠습니까?');
-    if(isConfirm){
+    if (isConfirm) {
       Instance.put(`/boards/softdelete/${boardData.boardId}`)
-          .then(() => {
-            alert('삭제되었습니다.');
-            navigate(-1);
-          })
-          .catch((error) => {
-            console.error(error.message);
-          })
+        .then(() => {
+          alert('삭제되었습니다.');
+          navigate(-1);
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
     }
-  }
-
+  };
 
   return (
     <>
       <AdminLayout subMenus="board">
         <Container>
           {title}
-          <S.WriteBtnWrapper className='right double'>
-            <NormalBtn className='red' onClick={boardReport}>신고하기</NormalBtn>
-            <NormalBtn className='red' onClick={handleDeleteBoard}>삭제</NormalBtn>
+          <S.WriteBtnWrapper className="right double">
+            <NormalBtn className="red" onClick={boardReport}>
+              신고하기
+            </NormalBtn>
+            <NormalBtn className="red" onClick={handleDeleteBoard}>
+              삭제
+            </NormalBtn>
           </S.WriteBtnWrapper>
           <div>
             <S.TableRead>
@@ -332,7 +336,7 @@ const AdminBoardDetail = () => {
                         return (
                           <p>
                             <span>{boardData.boardWriter}</span>
-                            <span>{`${boardData.boardWriteDate[0]}.${boardData.boardWriteDate[1] < 10 ? '0' : ''}${boardData.boardWriteDate[1]}.${
+                            <span>{`${boardData.boardWriteDate[0]}/${boardData.boardWriteDate[1] < 10 ? '0' : ''}${boardData.boardWriteDate[1]}/${
                               boardData.boardWriteDate[2] < 10 ? '0' : ''
                             }${boardData.boardWriteDate[2]}`}</span>
                           </p>
@@ -365,79 +369,83 @@ const AdminBoardDetail = () => {
                     <td>
                       <div>
                         {!isEditing ? (
-                            <form onSubmit={handleSubmit}>
-                              <div>
-                                {adminId === null && (
-                                    <>
-                                      <input
-                                          type="text"
-                                          placeholder="작성자명"
-                                          name="replyWriter"
-                                          value={replyWriter}
-                                          onChange={(e) => setReplyWriter(e.target.value)}
-                                          required
-                                      />
-                                      {/* 비회원일시 */}
-                                      <input
-                                          name="replyPassword"
-                                          type="password"
-                                          placeholder="비밀번호"
-                                          value={replyPassword}
-                                          onChange={(e) => setReplyPassword(e.target.value)}
-                                          required
-                                      />
-                                    </>
-                                )}
-                              </div>
-                              <div className="tawrap">
-                                <textarea name="replyContent" value={replyContent} onChange={(e) => setReplyContent(e.target.value)} required></textarea>
-                                <button type="submit">작성하기</button>
-                              </div>
-                            </form>
+                          <form onSubmit={handleSubmit}>
+                            <div>
+                              {adminId === null && (
+                                <>
+                                  <input
+                                    type="text"
+                                    placeholder="작성자명"
+                                    name="replyWriter"
+                                    value={replyWriter}
+                                    onChange={(e) => setReplyWriter(e.target.value)}
+                                    required
+                                  />
+                                  {/* 비회원일시 */}
+                                  <input
+                                    name="replyPassword"
+                                    type="password"
+                                    placeholder="비밀번호"
+                                    value={replyPassword}
+                                    onChange={(e) => setReplyPassword(e.target.value)}
+                                    required
+                                  />
+                                </>
+                              )}
+                            </div>
+                            <div className="tawrap">
+                              <textarea
+                                name="replyContent"
+                                value={replyContent}
+                                onChange={(e) => setReplyContent(e.target.value)}
+                                required></textarea>
+                              <button type="submit">작성하기</button>
+                            </div>
+                          </form>
                         ) : (
-                            <form onSubmit={handleSaveUpdate}>
-                              <div>
-                                {adminId === null ? (
-                                    <>
-                                      <input
-                                          type="text"
-                                          defaultValue={replyWriterModify}
-                                          name="replyWriter"
-                                          value={replyWriterModify}
-                                          onChange={(e) => setReplyWriterModify(e.target.value)}
-                                          required
-                                      />
-                                      {/* 비회원일시 */}
-                                      <input
-                                          name="password"
-                                          type="password"
-                                          placeholder="작성 시 입력한 비밀번호"
-                                          value={replyPassword}
-                                          onChange={(e) => setReplyPassword(e.target.value)}
-                                          required
-                                      />
-                                      <div className="tawrap">
-                                  <textarea
+                          <form onSubmit={handleSaveUpdate}>
+                            <div>
+                              {adminId === null ? (
+                                <>
+                                  <input
+                                    type="text"
+                                    defaultValue={replyWriterModify}
+                                    name="replyWriter"
+                                    value={replyWriterModify}
+                                    onChange={(e) => setReplyWriterModify(e.target.value)}
+                                    required
+                                  />
+                                  {/* 비회원일시 */}
+                                  <input
+                                    name="password"
+                                    type="password"
+                                    placeholder="작성 시 입력한 비밀번호"
+                                    value={replyPassword}
+                                    onChange={(e) => setReplyPassword(e.target.value)}
+                                    required
+                                  />
+                                  <div className="tawrap">
+                                    <textarea
                                       name="replyContent"
                                       defaultValue={replyContentModify}
                                       value={replyContentModify}
                                       onChange={(e) => setReplyContentModify(e.target.value)}
                                       required></textarea>
-                                        <button type="submit">수정하기</button>
-                                      </div>
-                                    </>
-                                ) : (
-                                    <div className="tawrap">
-                                <textarea
+                                    <button type="submit">수정하기</button>
+                                  </div>
+                                </>
+                              ) : (
+                                <div className="tawrap">
+                                  <textarea
                                     name="replyContent"
                                     defaultValue={replyContentModify}
                                     onChange={(e) => setReplyContent(e.target.value)}
                                     required></textarea>
-                                      <button type="submit">수정하기</button>
-                                    </div>
-                                )}
-                              </div>
-                            </form>
+                                  <button type="submit">수정하기</button>
+                                </div>
+                              )}
+                            </div>
+                          </form>
                         )}
                       </div>
                     </td>
@@ -449,7 +457,7 @@ const AdminBoardDetail = () => {
                       <ul>
                         {reply.length === 0 && (
                           <li>
-                            <p className='empty'>작성된 댓글이 없습니다.</p>
+                            <p className="empty">작성된 댓글이 없습니다.</p>
                           </li>
                         )}
                         {reply.length > 0 &&
@@ -457,9 +465,9 @@ const AdminBoardDetail = () => {
                             <li key={index}>
                               <div className="cwinfo">
                                 <strong>{replyItem.replyWriter}</strong>
-                                <span className="date">{`${replyItem.replyWriteDate[0]}.${replyItem.replyWriteDate[1] < 10 ? '0' : ''}${
-                                    replyItem.replyWriteDate[1]
-                                }.${replyItem.replyWriteDate[2] < 10 ? '0' : ''}${replyItem.replyWriteDate[2]}`}</span>
+                                <span className="date">{`${replyItem.replyWriteDate[0]}/${replyItem.replyWriteDate[1] < 10 ? '0' : ''}${
+                                  replyItem.replyWriteDate[1]
+                                }/${replyItem.replyWriteDate[2] < 10 ? '0' : ''}${replyItem.replyWriteDate[2]}`}</span>
                                 <button type="button" className="modify" onClick={() => handleUpdate(replyItem.replyId)}>
                                   수정
                                 </button>
@@ -495,6 +503,7 @@ const AdminBoardDetail = () => {
           </div>
         </Container>
       </AdminLayout>
+      <AdminCheck kind="AUTH_C" />
     </>
   );
 };

@@ -20,6 +20,8 @@ import PaymentAgree from '../../components/Agreement/PayAgree';
 import { AgreementText } from '../member/Style';
 import Instance from '../../utils/api/axiosInstance';
 import type { RequestPayParams, RequestPayResponse } from '../../portone';
+import { response } from 'express';
+import { numberWithCommas } from '../../utils/function/comma';
 
 interface GiftCard {
   id: number;
@@ -57,6 +59,7 @@ const ReservationPage = () => {
   const [couponList, setCouponList] = useState<Coupon[]>([]);
   const [selectCoupon, setSelectCoupon] = useState(0); //적용할 쿠폰
   const [selectGiftCard, setSelectGiftCard] = useState<number[]>([]); //적용할 상품권
+  const [giftCardUuid, setGiftCardUuid] = useState<string[]>([]);
   const [click, setClick] = useState(false);
   const [memberId, setMemberId] = useState(0);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
@@ -83,10 +86,11 @@ const ReservationPage = () => {
     email: '',
     itemId: '',
     memberId: '',
-    couponId: '',
-    giftCardId: '',
+    couponId: selectCoupon,
+    giftCardId: [],
     site_key: '2MhMz5FPv6G1cuXcwtxuvX1__',
   });
+  const [reservations, setReservations] = useState<any>();
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
 
@@ -162,6 +166,8 @@ const ReservationPage = () => {
 
   // 예약 및 결제
   const handleReservation = async () => {
+    console.log(giftCardUuid);
+    console.log(selectCoupon);
     if (memberData.name === '' && memberData.phoneNumber === '' && memberData.email === '') {
       alert('고객 정보를 입력해주세요.');
       return;
@@ -209,26 +215,26 @@ const ReservationPage = () => {
 
     const discountPrice = result + giftCardDiscount;
 
-    setFormData({
-      checkIn: reservationNewData?.checkInDate || '',
-      checkOut: reservationNewData?.checkOutDate || '',
-      count: reservationNewData?.count || '1',
-      adult: reservationNewData?.adults || '1',
-      children: reservationNewData?.children || '0',
+    const reservations = {
+      checkIn: formatDateForServer(reservationNewData?.checkInDate),
+      checkOut: formatDateForServer(reservationNewData?.checkOutDate),
+      count: reservationNewData?.count,
+      adult: reservationNewData?.adults,
+      children: reservationNewData?.children,
       stay: reservationNewData?.nights,
       notice: notice,
-      sumPrice: sumPrice.toString(),
-      discountPrice: discountPrice.toString(),
-      totalPrice: totalPrice.toString(),
+      sumPrice: sumPrice,
+      discountPrice: discountPrice,
+      totalPrice: totalPrice,
       itemId: selectedProduct ? selectedProduct.id : selectData.id,
       memberId: memberData && memberData.memberId,
-      couponId: selectCoupon.toString(),
+      couponId: selectCoupon,
       giftCardId: '',
       memberName: memberData ? memberData.name : '',
       phoneNumber: memberData ? memberData.phoneNumber : '',
       email: memberData ? memberData.email : '',
       site_key: '2MhMz5FPv6G1cuXcwtxuvX1__',
-    });
+    };
 
     // 결제 데이터
     const paydata: RequestPayParams = {
@@ -237,15 +243,9 @@ const ReservationPage = () => {
       merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
       amount: 1000, // 테스트용 결제금액 고정
       name: '구름호텔 상품 예약 및 결제 테스트', // 주문명
-      buyer_name: formData.memberName, // 구매자 이름
-      buyer_tel: formData.phoneNumber, // 구매자 전화번호
-      buyer_email: formData.email, // 구매자 이메일
-    };
-
-    const serverFormattedData = {
-      ...formData,
-      checkIn: formatDateForServer(reservationNewData.checkInDate),
-      checkOut: formatDateForServer(reservationNewData.checkOutDate),
+      buyer_name: memberData.memberName, // 구매자 이름
+      buyer_tel: memberData.phoneNumber, // 구매자 전화번호
+      buyer_email: memberData.email, // 구매자 이메일
     };
 
     IMP.request_pay(paydata, async function callback(response: RequestPayResponse) {
@@ -254,9 +254,29 @@ const ReservationPage = () => {
       if (success) {
         console.log('결제 성공');
         try {
-          console.log(serverFormattedData);
-          await Instance.post(`/reservation/save`, {
-            data: serverFormattedData,
+          console.log(giftCardUuid);
+          console.log(selectCoupon);
+          Instance.post(`/reservation/save`, {
+            checkIn: formatDateForServer(reservationNewData?.checkInDate),
+            checkOut: formatDateForServer(reservationNewData?.checkOutDate),
+            count: reservationNewData?.count,
+            adult: reservationNewData?.adults,
+            children: reservationNewData?.children,
+            stay: reservationNewData?.nights,
+            notice: notice,
+            sumPrice: sumPrice,
+            discountPrice: discountPrice,
+            totalPrice: totalPrice,
+            itemId: selectedProduct ? selectedProduct.id : selectData.id,
+            memberId: memberData && memberData.memberId,
+            couponId: selectCoupon !== 0 ? selectCoupon : null,
+            giftCardId: giftCardUuid,
+            memberName: memberData ? memberData.name : '',
+            phoneNumber: memberData ? memberData.phoneNumber : '',
+            email: memberData ? memberData.email : '',
+          }).then((response) => {
+            alert('예약되었습니다.');
+            window.location.href = `/reservation/${response.data}`;
           });
         } catch (error) {
           console.error('예약 요청 실패', error);
@@ -268,8 +288,8 @@ const ReservationPage = () => {
   };
 
   useEffect(() => {
-    console.log(formData);
-  }, [formData]);
+    setReservations(formData);
+  }, [formData, reservations]);
 
   const updateReservationData = (newData: any) => {
     setReservationNewData(newData);
@@ -281,17 +301,26 @@ const ReservationPage = () => {
     if (checked) {
       const allGiftCardIds = giftcardList?.map((item) => item.id);
       setSelectGiftCard(allGiftCardIds);
+      const allGiftCardUuids = giftcardList?.map((item) => item.uuid);
+      setGiftCardUuid(allGiftCardUuids);
     } else {
       setSelectGiftCard([]);
     }
   };
 
-  const handleGiftCardCheckboxChange = (id: number) => {
+  const handleGiftCardCheckboxChange = (giftcard: any) => {
     setSelectGiftCard((prevItems) => {
-      if (prevItems.includes(id)) {
-        return prevItems.filter((item) => item !== id);
+      if (prevItems.includes(giftcard.id)) {
+        return prevItems.filter((item) => item !== giftcard.id);
       } else {
-        return [...prevItems, id];
+        return [...prevItems, giftcard.id];
+      }
+    });
+    setGiftCardUuid((prevItems) => {
+      if (prevItems.includes(giftcard.uuid)) {
+        return prevItems.filter((item) => item !== giftcard.uuid);
+      } else {
+        return [...prevItems, giftcard.uuid];
       }
     });
   };
@@ -397,12 +426,12 @@ const ReservationPage = () => {
                                 <InputCheckbox
                                   type="checkbox"
                                   checked={selectGiftCard.includes(giftcard.id)}
-                                  onChange={() => handleGiftCardCheckboxChange(giftcard.id)}
+                                  onChange={() => handleGiftCardCheckboxChange(giftcard)}
                                 />
                                 {giftcard.title}
                               </CheckLabel>
                             </td>
-                            <td className="right">{giftcard.money}</td>
+                            <td className="right">{numberWithCommas(giftcard.money)}원</td>
                           </tr>
                         ))}
                       </>
