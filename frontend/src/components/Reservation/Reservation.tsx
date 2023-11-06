@@ -122,7 +122,7 @@ const Reservation = ({ updateReservationData, selectedProduct, reservation }: an
   }, []);
 
   const formatAndSetDate = (date: Date) => {
-    const formattedDate = moment(date).format('YYYY.MM.DD');
+    const formattedDate = moment(date).format('yyyy/MM/DD');
     const dayOfWeek = moment(date).format('ddd');
     return `${formattedDate} (${dayOfWeek})`;
   };
@@ -150,7 +150,7 @@ const Reservation = ({ updateReservationData, selectedProduct, reservation }: an
     const checkOutDateValue: ValuePiece = checkOutValue && Array.isArray(checkOutValue) ? checkOutValue[0] : checkOutValue;
 
     if (processedSelectedDate) {
-      const formattedDate = moment(processedSelectedDate).format('YYYY.MM.DD');
+      const formattedDate = moment(processedSelectedDate).format('yyyy/MM/DD');
       const dayOfWeek = moment(processedSelectedDate).format('ddd');
       setCheckInDate(`${formattedDate} (${dayOfWeek})`);
 
@@ -180,7 +180,7 @@ const Reservation = ({ updateReservationData, selectedProduct, reservation }: an
     // processedSelectedDate?.setHours(12, 0, 0, 0);
     setCheckOutValue(selectedDate);
     setCheckOutOpen(false);
-    const formattedDate = moment(processedSelectedDate).format('YYYY.MM.DD');
+    const formattedDate = moment(processedSelectedDate).format('yyyy/MM/DD');
     const dayOfWeek = moment(processedSelectedDate).format('ddd');
     setCheckOutDate(`${formattedDate} (${dayOfWeek})`);
   };

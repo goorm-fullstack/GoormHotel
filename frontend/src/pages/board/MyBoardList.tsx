@@ -27,9 +27,9 @@ const MyBoardList = () => {
       setTotalPages(totalPage);
       setReplyData(reply.data);
       setBoardData(board.data);
-    }
+    };
     fetchData();
-  }, [])
+  }, []);
 
   useEffect(() => {
     const sortByDateTime = () => {
@@ -39,29 +39,31 @@ const MyBoardList = () => {
         const dateB = new Date(b.boardWriteDate ? b.boardWriteDate : b.replyWriteDate); // b의 LocalDateTime
         return (dateA as any) - (dateB as any); // 오름차순 정렬
       });
-      const filteredData = sortedData.filter((item: any) => (item.boardWriter === user || item.replyWriter === user) && (item.boardPassword === '' || item.replyPassword === null));
+      const filteredData = sortedData.filter(
+        (item: any) => (item.boardWriter === user || item.replyWriter === user) && (item.boardPassword === '' || item.replyPassword === null)
+      );
       setSortData(filteredData);
-    }
+    };
     sortByDateTime();
-  }, [replyData, boardData])
+  }, [replyData, boardData]);
 
   const findBoardEnglish = (korean: any) => {
-    if(korean === '이용후기') return 'review';
-    if(korean === '문의하기') return 'qna';
+    if (korean === '이용후기') return 'review';
+    if (korean === '문의하기') return 'qna';
     else return 'notice';
-  }
+  };
 
   return (
     <>
       <S.Container>
-        <PageTitle>활동 내용</PageTitle>
+        <PageTitle>작성한 글</PageTitle>
         <S.Table className="userpage">
           <thead>
             <tr>
               <th style={{ width: '110px' }}>번호</th>
               <th style={{ width: '110px' }}>게시판</th>
               <th style={{ width: '110px' }}>카테고리</th>
-              <th style={{ width: '220px' }}>글 제목 또는 내용</th>
+              <th style={{ width: '220px' }}>제목</th>
               <th style={{ width: '140px' }}>작성일</th>
             </tr>
           </thead>
@@ -69,25 +71,38 @@ const MyBoardList = () => {
             {sortData.length === 0 ? (
               <tr>
                 <td colSpan={5} className="center empty">
-                  활동 정보가 없습니다.
+                  작성한 글이 없습니다.
                 </td>
               </tr>
             ) : (
               sortData.map((data: any, index) => (
                 <tr key={index}>
                   <td className="center">{totalData - index}</td>
-                  <td className="center">
-                    {data.boardTitle ? data.boardTitle : '댓글'}
-                  </td>
+                  <td className="center">{data.boardTitle ? data.boardTitle : '댓글'}</td>
                   <td className="center">
                     <p className="textover">{data.category ? data.category : '댓글'}</p>
                   </td>
-                  <td className="center"><Link to={data.title ? `/board/${findBoardEnglish(data.boardTitle)}/detail/${data.title}?boardId=${data.boardId}` : `/board/${findBoardEnglish(data.responseBoardDto.boardTitle)}/detail/${data.responseBoardDto.title}?boardId=${data.responseBoardDto.boardId}`}>{data.title ? data.title : data.replyContent}</Link></td>
-                  <td className="center">{data.boardWriteDate ? `${data.boardWriteDate[0]}-${data.boardWriteDate[1] < 10 ? '0' : ''}${data.boardWriteDate[1]}-${
-                      data.boardWriteDate[2] < 10 ? '0' : ''
-                    }${data.boardWriteDate[2]}` : `${data.replyWriteDate[0]}-${data.replyWriteDate[1] < 10 ? '0' : ''}${data.replyWriteDate[1]}-${
-                      data.replyWriteDate[2] < 10 ? '0' : ''
-                    }${data.replyWriteDate[2]}`}</td>
+                  <td className="center">
+                    <Link
+                      to={
+                        data.title
+                          ? `/board/${findBoardEnglish(data.boardTitle)}/detail/${data.title}?boardId=${data.boardId}`
+                          : `/board/${findBoardEnglish(data.responseBoardDto.boardTitle)}/detail/${data.responseBoardDto.title}?boardId=${
+                              data.responseBoardDto.boardId
+                            }`
+                      }>
+                      {data.title ? data.title : data.replyContent}
+                    </Link>
+                  </td>
+                  <td className="center">
+                    {data.boardWriteDate
+                      ? `${data.boardWriteDate[0]}-${data.boardWriteDate[1] < 10 ? '0' : ''}${data.boardWriteDate[1]}-${
+                          data.boardWriteDate[2] < 10 ? '0' : ''
+                        }${data.boardWriteDate[2]}`
+                      : `${data.replyWriteDate[0]}-${data.replyWriteDate[1] < 10 ? '0' : ''}${data.replyWriteDate[1]}-${
+                          data.replyWriteDate[2] < 10 ? '0' : ''
+                        }${data.replyWriteDate[2]}`}
+                  </td>
                 </tr>
               ))
             )}
