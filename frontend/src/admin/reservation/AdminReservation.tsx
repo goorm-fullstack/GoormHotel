@@ -8,6 +8,7 @@ import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
 import { RoomData, DiningData } from '../item/AdminItemList';
 import { response } from 'express';
+import AdminCheck from '../adminCheck';
 
 export interface ReservationData {
   id: number;
@@ -47,15 +48,10 @@ const AdminReservation = () => {
   const authItem = localStorage.getItem('auth');
 
   useEffect(() => {
-    if (!(authItem && authItem.includes('AUTH_B'))) {
-      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
-      navigate('/admin');
-    }
-
     // 페이징 코드 추가
-    Instance.get("/reservation/count").then((response) => {
+    Instance.get('/reservation/count').then((response) => {
       setTotalPages(response.data);
-    })
+    });
   }, []);
 
   const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,90 +98,83 @@ const AdminReservation = () => {
   //   return `${formattedDate}`;
   // };
 
-  if (authItem && authItem.includes('AUTH_B')) {
-    return (
-      <AdminLayout subMenus="reservation">
-        <Container>
-          <PageTitle>예약 목록 </PageTitle>
-          <TableHeader>
-            <p className="total">
-              전체 <strong>{totalCount}</strong> 건
-            </p>
-            <BtnWrapper className="flexgap right">
-              <NormalBtn className="header">선택 재예약</NormalBtn>
-              <NormalBtn className="header red">선택 예약 취소</NormalBtn>
-            </BtnWrapper>
-          </TableHeader>
-          <Table>
-            <colgroup>
-              <col width="80px" />
-              <col width="100px" />
-              <col width="200px" />
-              <col width="200px" />
-              <col width="200px" />
-              <col width="200px" />
-              <col width="150px" />
-            </colgroup>
-            <thead>
+  return (
+    <AdminLayout subMenus="reservation">
+      <Container>
+        <PageTitle>예약 목록 </PageTitle>
+        <TableHeader>
+          <p className="total">
+            전체 <strong>{totalCount}</strong> 건
+          </p>
+          <BtnWrapper className="flexgap right">
+            <NormalBtn className="header">선택 재예약</NormalBtn>
+            <NormalBtn className="header red">선택 예약 취소</NormalBtn>
+          </BtnWrapper>
+        </TableHeader>
+        <Table>
+          <colgroup>
+            <col width="80px" />
+            <col width="100px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="200px" />
+            <col width="150px" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>
+                <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
+              </th>
+              <th>번호</th>
+              <th>예약 번호</th>
+              <th>예약자명(회원 ID)</th>
+              <th>체크인</th>
+              <th>체크아웃</th>
+              <th>예약일</th>
+              <th>상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            {reservationList.length === 0 ? (
               <tr>
-                <th>
-                  <InputCheckbox type="checkbox" checked={selectAllChecked} onChange={handleSelectAllChange} />
-                </th>
-                <th>번호</th>
-                <th>예약 번호</th>
-                <th>예약자명(회원 ID)</th>
-                <th>체크인</th>
-                <th>체크아웃</th>
-                <th>예약일</th>
-                <th>상태</th>
+                <td colSpan={8} className="center empty">
+                  등록된 예약 건이 없습니다.
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {reservationList.length === 0 ? (
-                <tr>
-                  <td colSpan={8} className="center empty">
-                    등록된 예약 건이 없습니다.
-                  </td>
-                </tr>
-              ) : (
-                <>
+            ) : (
+              <>
                 {reservationList.map((reservation, index) => (
-                <tr key={index}>
-                  <td className='center'>
-                    <InputCheckbox
-                      type="checkbox"
-                      checked={checkedItems.includes(reservation.reservationNumber)}
-                      onChange={() => handleCheckboxChange(reservation.reservationNumber)}
-                    />
-                  </td>
-                  <td className='center'>{index + 1}</td>
-                  <td className='center'>
-                    <Link to={`/admin/reservation/detail/${reservation.reservationNumber}`} className="u">
-                      {reservation.reservationNumber}
-                    </Link>
-                  </td>
-                  {reservation.member ? (
-                    <td className='center'>{reservation.member.name}</td>
-                  ) : (
-                    <td className='center'>Anonymous</td>
-                  )}
-                  <td className='center'>{checkInDateFormat}</td>
-                  <td className='center'>{checkOutDateFormat}</td>
-                  <td className='center'>{orderDateFormat}</td>
-                  <td className='center'>{reservation.state}</td>
+                  <tr key={index}>
+                    <td className="center">
+                      <InputCheckbox
+                        type="checkbox"
+                        checked={checkedItems.includes(reservation.reservationNumber)}
+                        onChange={() => handleCheckboxChange(reservation.reservationNumber)}
+                      />
+                    </td>
+                    <td className="center">{index + 1}</td>
+                    <td className="center">
+                      <Link to={`/admin/reservation/detail/${reservation.reservationNumber}`} className="u">
+                        {reservation.reservationNumber}
+                      </Link>
+                    </td>
+                    {reservation.member ? <td className="center">{reservation.member.name}</td> : <td className="center">Anonymous</td>}
+                    <td className="center">{checkInDateFormat}</td>
+                    <td className="center">{checkOutDateFormat}</td>
+                    <td className="center">{orderDateFormat}</td>
+                    <td className="center">{reservation.state}</td>
                   </tr>
                 ))}
-                </>
-              )}
-            </tbody>
-          </Table>
-          <Paging totalPage={totalPages} />
-        </Container>
-      </AdminLayout>
-    );
-  } else {
-    return null;
-  }
+              </>
+            )}
+          </tbody>
+        </Table>
+        <Paging totalPage={totalPages} />
+      </Container>
+      <AdminCheck kind="AUTH_B" />
+    </AdminLayout>
+  );
 };
 
 export default AdminReservation;

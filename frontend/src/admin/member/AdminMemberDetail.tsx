@@ -4,6 +4,7 @@ import { PageTitle, BtnWrapper, SubmitBtn, LinkBtn } from '../../Style/commonSty
 import { useNavigate, useParams } from 'react-router-dom';
 import { Container, Table } from './Style';
 import Instance from '../../utils/api/axiosInstance';
+import AdminCheck from '../adminCheck';
 
 interface Member {
   name: string;
@@ -56,12 +57,12 @@ const AdminMemberDetail = () => {
             mailAuth: otherData.mailAuth,
             gender: otherData.gender || '선택 안함',
             birth: otherData.birth ? new Date(otherData.birth).toISOString().split('T')[0] : '',
-            role: otherData.role
+            role: otherData.role,
           });
         }
       } catch (error: any) {
         alert('데이터를 불러오는 데 실패했습니다.');
-        console.log("Error details:", error);
+        console.log('Error details:', error);
       }
     };
 
@@ -73,7 +74,8 @@ const AdminMemberDetail = () => {
     e.preventDefault();
 
     const payload = {
-      ...formData, memberId
+      ...formData,
+      memberId,
     };
 
     try {
@@ -110,13 +112,6 @@ const AdminMemberDetail = () => {
   const navigate = useNavigate();
   const authItem = localStorage.getItem('auth');
 
-  useEffect(() => {
-    if (!(authItem && authItem.includes('AUTH_A'))) {
-      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
-      navigate('/admin');
-    }
-  }, []);
-
   console.log(formData);
 
   const handleChange = (e: any) => {
@@ -127,103 +122,98 @@ const AdminMemberDetail = () => {
     });
   };
 
-  if (authItem && authItem.includes('AUTH_A')) {
-    return (
-      <AdminLayout subMenus="member">
-        <Container>
-          <PageTitle>회원 정보 상세</PageTitle>
-          <Table className="horizontal">
-            <colgroup>
-              <col width="240px" />
-              <col width="auto" />
-            </colgroup>
-            <tbody>
-              <tr>
-                <th>회원 ID</th>
-                <td>{memberId}</td>
-              </tr>
-              <tr>
-                <th>회원 이름</th>
-                <td>
-                  <input type="text" placeholder="회원이름" name="name" value={formData.name} onChange={handleChange} />
-                </td>
-              </tr>
-              <tr>
-                <th>회원 등급</th>
-                <td>
-                  <select value={formData.grade} onChange={(e) => setFormData({...formData, grade: e.target.value})}>
-                    <option value="Bronze">Bronze</option>
-                    <option value="Silver">Silver</option>
-                    <option value="Gold">Gold</option>
-                  </select>
-                  {/* <input type="text" placeholder="회원등급" name="memberGrade" value={formData.memberGrade} onChange={handleChange} /> */}
-                </td>
-              </tr>
-              <tr>
-                <th>비밀번호</th>
-                <td>
-                  <input type="password" placeholder="비밀번호" name="password" value={formData.password} onChange={handleChange} />
-                </td>
-              </tr>
-              <tr>
-                <th>비밀번호 확인</th>
-                <td>
-                  <input
-                    type="password"
-                    placeholder="비밀번호 확인"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <th>이메일</th>
-                <td>
-                  <input type="email" placeholder="이메일" name="email" value={formData.email} onChange={handleChange} />
-                  <span className="mailAuth"> 상태 : {formData.mailAuth ? '인증완료' : '인증되지 않음'} </span>
-                </td>
-              </tr>
-              <tr>
-                <th>연락처</th>
-                <td>
-                  <input type="tel" placeholder="연락처" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} />
-                </td>
-              </tr>
-              <tr>
-                <th>성별</th>
-                <td>
-                  <select value={formData.gender} onChange={(e) => setFormData({...formData, gender: e.target.value})}>
-                    <option value="선택안함">선택안함</option>
-                    <option value="남성">남성</option>
-                    <option value="여성">여성</option>
-                  </select>
-                  {/* <input type="text" placeholder="선택 안함" name="gender" value={formData.gender} onChange={handleChange} /> */}
-                </td>
-              </tr>
-              <tr>
-                <th>생일</th>
-                <td>
-                  <input type="date" placeholder="입력 안함" name="birth" value={formData.birth} onChange={handleChange} />
-                </td>
-              </tr>
-              <tr>
-                <th>가입일</th>
-                <td>{member.signupDate ? new Date(member.signupDate).toLocaleDateString() : 'loading...'}</td>
-              </tr>
-            </tbody>
-          </Table>
-          <BtnWrapper className="mt40 center double">
-            <SubmitBtn type="submit" onClick={handleSubmit}>수정</SubmitBtn>
-            <LinkBtn to="/admin/member/1">취소</LinkBtn>
-            <SubmitBtn type="submit" onClick={handleDelete}>회원 삭제</SubmitBtn>
-          </BtnWrapper>
-        </Container>
-      </AdminLayout>
-    );
-  } else {
-    return null;
-  }
+  return (
+    <AdminLayout subMenus="member">
+      <Container>
+        <PageTitle>회원 정보 상세</PageTitle>
+        <Table className="horizontal">
+          <colgroup>
+            <col width="240px" />
+            <col width="auto" />
+          </colgroup>
+          <tbody>
+            <tr>
+              <th>회원 ID</th>
+              <td>{memberId}</td>
+            </tr>
+            <tr>
+              <th>회원 이름</th>
+              <td>
+                <input type="text" placeholder="회원이름" name="name" value={formData.name} onChange={handleChange} />
+              </td>
+            </tr>
+            <tr>
+              <th>회원 등급</th>
+              <td>
+                <select value={formData.grade} onChange={(e) => setFormData({ ...formData, grade: e.target.value })}>
+                  <option value="Bronze">Bronze</option>
+                  <option value="Silver">Silver</option>
+                  <option value="Gold">Gold</option>
+                </select>
+                {/* <input type="text" placeholder="회원등급" name="memberGrade" value={formData.memberGrade} onChange={handleChange} /> */}
+              </td>
+            </tr>
+            <tr>
+              <th>비밀번호</th>
+              <td>
+                <input type="password" placeholder="비밀번호" name="password" value={formData.password} onChange={handleChange} />
+              </td>
+            </tr>
+            <tr>
+              <th>비밀번호 확인</th>
+              <td>
+                <input type="password" placeholder="비밀번호 확인" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} />
+              </td>
+            </tr>
+            <tr>
+              <th>이메일</th>
+              <td>
+                <input type="email" placeholder="이메일" name="email" value={formData.email} onChange={handleChange} />
+                <span className="mailAuth"> 상태 : {formData.mailAuth ? '인증완료' : '인증되지 않음'} </span>
+              </td>
+            </tr>
+            <tr>
+              <th>연락처</th>
+              <td>
+                <input type="tel" placeholder="연락처" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} />
+              </td>
+            </tr>
+            <tr>
+              <th>성별</th>
+              <td>
+                <select value={formData.gender} onChange={(e) => setFormData({ ...formData, gender: e.target.value })}>
+                  <option value="선택안함">선택안함</option>
+                  <option value="남성">남성</option>
+                  <option value="여성">여성</option>
+                </select>
+                {/* <input type="text" placeholder="선택 안함" name="gender" value={formData.gender} onChange={handleChange} /> */}
+              </td>
+            </tr>
+            <tr>
+              <th>생일</th>
+              <td>
+                <input type="date" placeholder="입력 안함" name="birth" value={formData.birth} onChange={handleChange} />
+              </td>
+            </tr>
+            <tr>
+              <th>가입일</th>
+              <td>{member.signupDate ? new Date(member.signupDate).toLocaleDateString() : 'loading...'}</td>
+            </tr>
+          </tbody>
+        </Table>
+        <BtnWrapper className="mt40 center double">
+          <SubmitBtn type="submit" onClick={handleSubmit}>
+            수정
+          </SubmitBtn>
+          <LinkBtn to="/admin/member/1">취소</LinkBtn>
+          <SubmitBtn type="submit" onClick={handleDelete}>
+            회원 삭제
+          </SubmitBtn>
+        </BtnWrapper>
+      </Container>
+      <AdminCheck kind="AUTH_A" />
+    </AdminLayout>
+  );
 };
 
 export default AdminMemberDetail;

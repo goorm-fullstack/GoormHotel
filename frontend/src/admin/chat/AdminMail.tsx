@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Container, Table } from '../member/Style';
 import Instance from '../../utils/api/axiosInstance';
 import queryString from 'query-string';
+import AdminCheck from '../adminCheck';
 
 const AdminMail = () => {
   const location = useLocation();
@@ -21,14 +22,6 @@ const AdminMail = () => {
   const mailto = queryParams.mailto;
   const navigate = useNavigate();
   const authItem = localStorage.getItem('auth');
-
-  useEffect(() => {
-    if (!(authItem && authItem.includes('AUTH_C'))) {
-      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
-      navigate('/admin');
-    }
-  }, []);
-
 
   useEffect(() => {
     if (mailto !== null && typeof mailto !== 'undefined') {
@@ -111,80 +104,70 @@ const AdminMail = () => {
     window.location.href = `/admin/mail`;
   };
 
-  if (authItem && authItem.includes('AUTH_C')) {
-    return (
-      <AdminLayout subMenus="chat">
-        <Container>
-          <PageTitle>메일 작성</PageTitle>
-          <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <Table className="horizontal">
-              <colgroup>
-                <col width="240px" />
-                <col width="auto" />
-              </colgroup>
-              <tbody>
-                <tr>
-                  <th>받는사람</th>
-                  <td>
-                    <MultiCheck className="fit">
-                      <input type="text" className="long" onChange={(e) => setReceiverValue(e.target.value)} value={receiverValue} required />
-                      <CheckLabel>
-                        <InputCheckbox type="checkbox" onChange={(e) => handleClickMember(e.target.checked)} /> 전체 회원
-                      </CheckLabel>
-                      <CheckLabel>
-                        <InputCheckbox
-                          type="checkbox"
-                          onChange={(e) => {
-                            handleClickSubScribe(e.target.checked);
-                          }}
-                        />{' '}
-                        전체 구독자
-                      </CheckLabel>
-                    </MultiCheck>
-                  </td>
-                </tr>
-                <tr>
-                  <th>참조</th>
-                  <td>
-                    <input type="text" className="long" name="carbonCopy" value={carbonCopy} onChange={(e) => setCarbonCopy(e.target.value)} />
-                  </td>
-                </tr>
-                <tr>
-                  <th>제목</th>
-                  <td>
-                    <input
-                      type="text"
-                      className="subject long"
-                      name="subject"
-                      value={subject}
-                      onChange={(e) => setSubject(e.target.value)}
-                      required
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <th>파일첨부</th>
-                  <td>
-                    <input type="file" name="multipleFile" onChange={saveFile} ref={fileRef} />
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan={2} className="writeWrapper">
-                    <TextEditor setValue={setMessage} />
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
-            <BtnWrapper className="mt40 center">
-              <SubmitBtn type="submit">보내기</SubmitBtn>
-            </BtnWrapper>
-          </form>
-        </Container>
-      </AdminLayout>
-    );
-  } else {
-    return null;
-  }
+  return (
+    <AdminLayout subMenus="chat">
+      <Container>
+        <PageTitle>메일 작성</PageTitle>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <Table className="horizontal">
+            <colgroup>
+              <col width="240px" />
+              <col width="auto" />
+            </colgroup>
+            <tbody>
+              <tr>
+                <th>받는사람</th>
+                <td>
+                  <MultiCheck className="fit">
+                    <input type="text" className="long" onChange={(e) => setReceiverValue(e.target.value)} value={receiverValue} required />
+                    <CheckLabel>
+                      <InputCheckbox type="checkbox" onChange={(e) => handleClickMember(e.target.checked)} /> 전체 회원
+                    </CheckLabel>
+                    <CheckLabel>
+                      <InputCheckbox
+                        type="checkbox"
+                        onChange={(e) => {
+                          handleClickSubScribe(e.target.checked);
+                        }}
+                      />{' '}
+                      전체 구독자
+                    </CheckLabel>
+                  </MultiCheck>
+                </td>
+              </tr>
+              <tr>
+                <th>참조</th>
+                <td>
+                  <input type="text" className="long" name="carbonCopy" value={carbonCopy} onChange={(e) => setCarbonCopy(e.target.value)} />
+                </td>
+              </tr>
+              <tr>
+                <th>제목</th>
+                <td>
+                  <input type="text" className="subject long" name="subject" value={subject} onChange={(e) => setSubject(e.target.value)} required />
+                </td>
+              </tr>
+              <tr>
+                <th>파일첨부</th>
+                <td>
+                  <input type="file" name="multipleFile" onChange={saveFile} ref={fileRef} />
+                </td>
+              </tr>
+              <tr>
+                <td colSpan={2} className="writeWrapper">
+                  <TextEditor setValue={setMessage} />
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+          <BtnWrapper className="mt40 center">
+            <SubmitBtn type="submit">보내기</SubmitBtn>
+          </BtnWrapper>
+        </form>
+      </Container>
+      <AdminCheck kind="AUTH_C" />
+    </AdminLayout>
+  );
 };
 
 export default AdminMail;
