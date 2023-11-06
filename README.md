@@ -288,7 +288,7 @@ BACKEND
 
 ## 💾 ERD
 
-![GoormHotel](https://github.com/goorm-fullstack/GoormHotel/assets/121299334/5eef9b84-916f-407f-a905-4dd43908550d)
+![GoormHotel](https://github.com/goorm-fullstack/GoormHotel/assets/121299334/422972a4-bab8-4745-9d52-cd738319afad)
 
 <br>
 
