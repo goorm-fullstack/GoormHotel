@@ -4,13 +4,13 @@
 
 <br>
 
-[**💻 구름 호텔(Goorm Hotel) 웹 사이트 바로가기**](https://web-goormhotel-front-2rrqq2blmrcd5gx.sel5.cloudtype.app/)
+[**💻 구름 호텔(Goorm Hotel) 웹 사이트 바로가기**](http://35.192.60.247/)
 
 <br>
 
 ## 📌 프로젝트 개요
 
-- **프로젝트 기간:** 2023.08.21 ~ 2023.10.10
+- **프로젝트 기간:** 2023.08.21 ~ 2023.11.05
 - **주요 목표와 하위 목표**
   - 호텔 서비스를 제공할 수 있는 UI 설계 및 구현
     - 크로스 브라우징을 통해 다양한 브라우저에서 일관된 사용자 경험 제공
@@ -50,7 +50,7 @@
     <td align="center"><img src="https://avatars.githubusercontent.com/u/121299334?v=4" width="70"></td>
     <td width="200">문소희(<a href="https://github.com/soheetech" target="_blank">@soheetech</a>)<br>Full-Stack</td>
     <td width="60" align="center">조원</td>
-    <td>스페셜 오퍼 상품 예약 및 결제 기능 구현, FE 전 페이지 점검 및 최종 수정, JS->TS 마이그레이션, CSS 모듈화 및 통합 작업 주도</td>
+    <td>스페셜 오퍼 상품 예약 및 결제 기능 구현, FE 영역 코드 개선 및 JS->TS 마이그레이션, CSS 모듈화 및 통합 작업 주도</td>
   </tr>
   <tr>
     <td align="center"><img src="https://avatars.githubusercontent.com/u/58635833?v=4" width="70"></td>
@@ -102,21 +102,193 @@
 
 ## ✍🏻 Architecture
 
-![구름호텔아키텍처](https://github.com/goorm-fullstack/GoormHotel/assets/121299334/36c470cf-02f3-4830-8a40-13f3cb609b61)
+![구름호텔아키텍처](https://github.com/goorm-fullstack/GoormHotel/assets/121299334/4e735943-4dc6-4c1c-99ad-8ea078223232)
 
 <br>
 
 ## 📁 Repository 구조
 
+<table style="width: 100% !important;">
+<tr>
+<th align="center">
+<img width="384" height="1">
+<p>Front-End</p>
+</th>
+<th align="center">
+<img width="384" height="1">
+<p>Back-End</p>
+</th>
+</tr>
+<tr>
+<td valign="top">
+
 ```
-GoormHotel
+FRONTEND
+├─node_modules
+├─public
+└─src
+  ├─admin
+  │ ├─board
+  │ ├─chat
+  │ ├─common
+  │ ├─Home
+  │ ├─item
+  │ ├─login
+  │ ├─member
+  │ └─reservation
+  ├─components
+  │ ├─AddItemForm
+  │ ├─Agreement
+  │ ├─common
+  │ │  ├─DateButton
+  │ │  ├─Paging
+  │ │  ├─Search
+  │ │  └─TextEditor
+  │ ├─Coupon
+  │ ├─Item
+  │ ├─layout
+  │ │  ├─ChatModal
+  │ │  ├─Footer
+  │ │  ├─Header
+  │ │  └─SubHeader
+  │ ├─Reservation
+  │ └─Slide
+  ├─images
+  ├─pages
+  │ ├─about
+  │ │ ├─About
+  │ │ ├─Facilities
+  │ │ ├─Location
+  │ │ ├─Membership
+  │ │ └─Sitemap
+  │ ├─agreement
+  │ ├─board
+  │ ├─Home
+  │ ├─member
+  │ └─reservation
+  ├─Style
+  └─utils
+      ├─adaptor
+      ├─api
+      ├─chat
+      └─function
 ```
+
+</td>
+<td>
+
+```
+BACKEND
+├─bin
+...
+└─src
+  ├─main
+  │ ├─generated
+  │ ├─java
+  │ │ └─goormknights
+  │ │   └─hotel
+  │ │     ├─auth
+  │ │     │ ├─config
+  │ │     │ ├─controller
+  │ │     │ ├─dto
+  │ │     │ └─service
+  │ │     ├─board
+  │ │     │ ├─controller
+  │ │     │ ├─dto
+  │ │     │ ├─exception
+  │ │     │ ├─model
+  │ │     │ ├─repository
+  │ │     │ └─service
+  │ │     ├─chat
+  │ │     │ ├─config
+  │ │     │ ├─controller
+  │ │     │ ├─dto
+  │ │     │ ├─model
+  │ │     │ ├─repository
+  │ │     │ └─service
+  │ │     ├─coupon
+  │ │     │ ├─controller
+  │ │     │ ├─dto
+  │ │     │ ├─exception
+  │ │     │ ├─model
+  │ │     │ ├─repository
+  │ │     │ └─service
+  │ │     ├─email
+  │ │     │ ├─controller
+  │ │     │ ├─dto
+  │ │     │ ├─exception
+  │ │     │ ├─model
+  │ │     │ ├─repository
+  │ │     │ └─service
+  │ │     ├─giftcard
+  │ │     │ ├─controller
+  │ │     │ ├─dto
+  │ │     │ ├─exception
+  │ │     │ ├─model
+  │ │     │ ├─repository
+  │ │     │ └─service
+  │ │     ├─global
+  │ │     │ ├─config
+  │ │     │ ├─controller
+  │ │     │ ├─dto
+  │ │     │ ├─entity
+  │ │     │ ├─event
+  │ │     │ ├─exception
+  │ │     │ └─schedule
+  │ │     ├─item
+  │ │     │ ├─controller
+  │ │     │ ├─dto
+  │ │     │ ├─exception
+  │ │     │ ├─model
+  │ │     │ ├─repository
+  │ │     │ └─service
+  │ │     ├─member
+  │ │     │ ├─controller
+  │ │     │ ├─dto
+  │ │     │ ├─exception
+  │ │     │ ├─model
+  │ │     │ ├─repository
+  │ │     │ └─service
+  │ │     ├─reply
+  │ │     │ ├─controller
+  │ │     │ ├─dto
+  │ │     │ ├─exception
+  │ │     │ ├─model
+  │ │     │ ├─repository
+  │ │     │ └─service
+  │ │     ├─report
+  │ │     │ ├─Controller
+  │ │     │ ├─dto
+  │ │     │ ├─exception
+  │ │     │ ├─model
+  │ │     │ ├─repository
+  │ │     │ └─Service
+  │ │     ├─reservation
+  │ │     │ ├─controller
+  │ │     │ ├─dto
+  │ │     │ ├─exception
+  │ │     │ ├─model
+  │ │     │ ├─repository
+  │ │     │ └─service
+  │ │     └─subscribe
+  │ │       ├─controller
+  │ │       ├─dto
+  │ │       ├─model
+  │ │       ├─repository
+  │ │       └─service
+  │ └─resources
+  └─test
+```
+
+</td>
+</tr>
+</table>
 
 <br>
 
 ## 💾 ERD
 
-![GoormHotel](https://github.com/goorm-fullstack/GoormHotel/assets/121299334/94a5bff8-835a-49b9-b33b-db8143064728)
+![GoormHotel](https://github.com/goorm-fullstack/GoormHotel/assets/121299334/422972a4-bab8-4745-9d52-cd738319afad)
 
 <br>
 

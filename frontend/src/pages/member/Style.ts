@@ -188,7 +188,7 @@ export const Mypage = styled.div`
     padding-left: 80px;
 
     .historyWrapper {
-      margin-bottom: 60px;
+      margin-bottom: 50px;
 
       p {
         background-color: ${(props) => props.theme.colors.graybg};
