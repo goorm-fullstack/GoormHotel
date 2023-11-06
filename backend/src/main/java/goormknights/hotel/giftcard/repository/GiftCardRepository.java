@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface GiftCardRepository extends JpaRepository<GiftCard, Long> {
-    Optional<GiftCard> findByUuid(String code);
+    Optional<GiftCard> findByUuid(String uuid);
     Page<GiftCard> findAll(Pageable pageable);
 }

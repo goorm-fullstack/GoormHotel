@@ -32,7 +32,7 @@ const DateBtn = () => {
     if (processedDate) {
       setSelectValue(selectedDate);
       setCalendarOpen(false);
-      const formattedDate = moment(processedDate).format('YYYY.MM.DD');
+      const formattedDate = moment(processedDate).format('yyyy/MM/DD');
       const dayOfWeek = moment(processedDate).format('ddd');
       setSelectDate(`${formattedDate} (${dayOfWeek})`);
     }

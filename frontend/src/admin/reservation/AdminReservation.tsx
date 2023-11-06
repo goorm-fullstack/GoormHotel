@@ -161,7 +161,11 @@ const AdminReservation = () => {
                       {reservation.reservationNumber}
                     </Link>
                   </td>
-                  <td>{reservation.member.name}</td>
+                  {reservation.member.name ? (
+                    <td>{reservation.member.name}</td>
+                  ) : (
+                    <td>Anonymous</td>
+                  )}
                   <td>{checkInDateFormat}</td>
                   <td>{checkOutDateFormat}</td>
                   <td>{orderDateFormat}</td>

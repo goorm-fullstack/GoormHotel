@@ -85,6 +85,7 @@ const ReservationPage = () => {
     memberId: '',
     couponId: '',
     giftCardId: '',
+    site_key: '2MhMz5FPv6G1cuXcwtxuvX1__',
   });
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
@@ -226,6 +227,7 @@ const ReservationPage = () => {
       memberName: memberData ? memberData.name : '',
       phoneNumber: memberData ? memberData.phoneNumber : '',
       email: memberData ? memberData.email : '',
+      site_key: '2MhMz5FPv6G1cuXcwtxuvX1__',
     });
 
     // 결제 데이터
@@ -246,31 +248,28 @@ const ReservationPage = () => {
       checkOut: formatDateForServer(reservationNewData.checkOutDate),
     };
 
-    IMP.request_pay(paydata, callback);
-    try {
-      await Instance.post(`/reservation/save`, {
-        data: serverFormattedData,
-      });
-      navigate('/');
-      window.alert('예약이 완료되었습니다');
-    } catch (error) {
-      console.error('예약 요청 실패', error);
-    }
+    IMP.request_pay(paydata, async function callback(response: RequestPayResponse) {
+      const { success, error_msg } = response;
+
+      if (success) {
+        console.log('결제 성공');
+        try {
+          console.log(serverFormattedData);
+          await Instance.post(`/reservation/save`, {
+            data: serverFormattedData,
+          });
+        } catch (error) {
+          console.error('예약 요청 실패', error);
+        }
+      } else {
+        console.log(`결제 실패: ${error_msg}`);
+      }
+    });
   };
 
   useEffect(() => {
     console.log(formData);
   }, [formData]);
-
-  function callback(response: RequestPayResponse) {
-    const { success, error_msg } = response;
-
-    if (success) {
-      console.log('결제 성공');
-    } else {
-      console.log(`결제 실패: ${error_msg}`);
-    }
-  }
 
   const updateReservationData = (newData: any) => {
     setReservationNewData(newData);
@@ -456,8 +455,8 @@ const ReservationPage = () => {
                   <h4>
                     취소 환불 수수료에 관한 동의 <span>(필수)</span>
                   </h4>
-                  <CheckLabel htmlFor="privacycheck">
-                    <InputCheckbox type="checkbox" id="privacycheck" onChange={handleCheckBoxForAgree2} required />
+                  <CheckLabel htmlFor="canclecheck">
+                    <InputCheckbox type="checkbox" id="canclecheck" onChange={handleCheckBoxForAgree2} required />
                     동의합니다
                   </CheckLabel>
                 </RequiredTitle>
@@ -491,7 +490,7 @@ const ReservationPage = () => {
                 예약 및 결제하기
               </SubmitBtn>
             </BtnWrapper>
-            <p className="notice">⁕ 테스트 결제금액은 1,000원으로 고정되어 있습니다.</p>
+            <p className="notice">⁕ 테스트 결제금액은 1,000원으로 고정되어 있으며 실제로 출금되지 않습니다.</p>
           </S.Right>
         </S.Wrapper>
       </S.Container>
