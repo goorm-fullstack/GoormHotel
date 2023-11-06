@@ -20,6 +20,8 @@ import PaymentAgree from '../../components/Agreement/PayAgree';
 import { AgreementText } from '../member/Style';
 import Instance from '../../utils/api/axiosInstance';
 import type { RequestPayParams, RequestPayResponse } from '../../portone';
+import { response } from 'express';
+import { numberWithCommas } from '../../utils/function/comma';
 
 interface GiftCard {
   id: number;
@@ -84,8 +86,8 @@ const ReservationPage = () => {
     email: '',
     itemId: '',
     memberId: '',
-    couponId: '',
-    giftCardId: '',
+    couponId: selectCoupon,
+    giftCardId: [],
     site_key: '2MhMz5FPv6G1cuXcwtxuvX1__',
   });
   const [reservations, setReservations] = useState<any>();
@@ -418,7 +420,7 @@ const ReservationPage = () => {
                                 {giftcard.title}
                               </CheckLabel>
                             </td>
-                            <td className="right">{giftcard.money}</td>
+                            <td className="right">{numberWithCommas(giftcard.money)}원</td>
                           </tr>
                         ))}
                       </>
