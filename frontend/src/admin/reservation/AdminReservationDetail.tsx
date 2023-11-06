@@ -52,9 +52,16 @@ const AdminReservationDetail = () => {
       setCheckInDate(formattedCheckIn);
       setCheckOutDate(formattedCheckOut);
       setReservationDate(formattedReservationDate);
-      setCustomerName(response.data.member.name);
-      setPhoneNumber(response.data.member.phoneNumber);
-      setEmailAddress(response.data.member.email);
+      if(response.data.member) {
+        setCustomerName(response.data.member.name);
+        setPhoneNumber(response.data.member.phoneNumber);
+        setEmailAddress(response.data.member.email);
+      } else {
+        setCustomerName(response.data.nonMember.name);
+        setPhoneNumber(response.data.nonMember.phoneNumber);
+        setEmailAddress(response.data.nonMember.email);
+      }
+      
       setCustomerRequest(response.data.notice);
       setApplyCoupon(response.data.coupon.name);
       setApplyGiftCard(response.data.giftCard);
