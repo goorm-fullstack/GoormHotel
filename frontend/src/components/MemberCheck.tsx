@@ -12,7 +12,7 @@ const MemberCheck = () => {
       // console.log('2');
     }
     if (!(role && role.includes('USER'))) {
-      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
+      alert('로그인 페이지로 이동합니다.');
       navigate('/login');
     }
   }, []);
