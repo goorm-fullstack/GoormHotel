@@ -69,6 +69,7 @@ const AdminBoardDetail = () => {
       .then((response) => {
         if (response.headers['filename']) {
           const fileName = response.headers['filename'];
+          console.log(fileName);
           const decodedFileName = decodeURI(fileName).replaceAll('+', ' ');
           setFile(decodedFileName);
         }
@@ -132,7 +133,9 @@ const AdminBoardDetail = () => {
       }
     };
 
-    fetchImageUrl();
+    if (board !== 'review') {
+      fetchImageUrl();
+    }
   }, [id]);
 
   const handleDownLoad = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -345,7 +348,7 @@ const AdminBoardDetail = () => {
                     })()}
                   </td>
                 </tr>
-                {board !== 'review' && file && (
+                {board === 'review' && file && (
                   <tr>
                     <td>
                       <button className="fileb" type="button" onClick={handleDownLoad}>
@@ -354,7 +357,7 @@ const AdminBoardDetail = () => {
                     </td>
                   </tr>
                 )}
-                {board === 'review' && (
+                {board !== 'review' && (
                   <tr>
                     <td>
                       <img className="reviewImg" src={imageUrl} alt="이미지" />
