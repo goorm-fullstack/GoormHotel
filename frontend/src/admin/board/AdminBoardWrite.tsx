@@ -159,7 +159,11 @@ const AdminBoardWrite = () => {
           <th>작성자</th>
           <td>
             <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} style={{ display: 'none' }} />
-            <p>{adminNickname} 매니저</p>
+            {adminNickname ? (
+                <p>{decodeURIComponent(adminNickname)} 매니저</p>
+            ) : (
+                <p>매니저</p>
+            )}
           </td>
         </tr>
       );
