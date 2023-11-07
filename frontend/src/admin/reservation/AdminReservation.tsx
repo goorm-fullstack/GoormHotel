@@ -153,7 +153,7 @@ const AdminReservation = () => {
                         onChange={() => handleCheckboxChange(reservation.reservationNumber)}
                       />
                     </td>
-                    <td className="center">{index + 1}</td>
+                    <td className="center">{reservationList.length - index}</td>
                     <td className="center">
                       <Link to={`/admin/reservation/detail/${reservation.reservationNumber}`} className="u">
                         {reservation.reservationNumber}
