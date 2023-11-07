@@ -1,10 +1,12 @@
 package goormknights.hotel.member.dto.response;
 
+import goormknights.hotel.coupon.model.Coupon;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,4 +23,5 @@ public class MemberInfoDTO {
     private String phoneNumber;
     private LocalDate birth;
     private String gender;
+    private List<Coupon> couponList;
 }
