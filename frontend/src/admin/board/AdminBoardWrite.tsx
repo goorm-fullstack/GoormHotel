@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
 import boardWrite from '../../pages/board/BoardWrite';
 import AdminCheck from '../adminCheck';
+import PrevButton from '../PrevButton';
 
 const AdminBoardWrite = () => {
   const adminAuth = localStorage.getItem('auth');
@@ -83,6 +84,15 @@ const AdminBoardWrite = () => {
       };
     } else {
       console.error('The selected file is not a Blob.');
+    }
+  };
+
+  const changeFile = () => {
+    const file = fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '';
+
+    if (file instanceof File && file.size > 83886080) {
+      if (fileRef.current) fileRef.current.value = '';
+      alert('업로드할 파일은 10MB이하여야 합니다.');
     }
   };
 
@@ -165,11 +175,7 @@ const AdminBoardWrite = () => {
           <th>작성자</th>
           <td>
             <input type="text" name="boardWriter" value={formData.boardWriter} onChange={handleChange} style={{ display: 'none' }} />
-            {adminNickname ? (
-                <p>{decodeURIComponent(adminNickname)} 매니저</p>
-            ) : (
-                <p>매니저</p>
-            )}
+            {adminNickname ? <p>{decodeURIComponent(adminNickname)} 매니저</p> : <p>매니저</p>}
           </td>
         </tr>
       );
@@ -227,7 +233,7 @@ const AdminBoardWrite = () => {
           <tr>
             <th>게시판</th>
             <td>
-              <select name="boardTitle" value={formData.boardTitle} onChange={handleChange}>
+              <select name="boardTitle" value={formData.boardTitle} onChange={handleChange} required>
                 <option value="">선택</option>
                 <option value="공지사항">공지사항</option>
                 <option value="문의하기">문의하기</option>
@@ -238,7 +244,7 @@ const AdminBoardWrite = () => {
           <tr>
             <th>카테고리</th>
             <td>
-              <select name="category" value={formData.category} onChange={handleChange}>
+              <select name="category" value={formData.category} onChange={handleChange} required>
                 {categoryOption()};
               </select>
             </td>
@@ -287,13 +293,22 @@ const AdminBoardWrite = () => {
                 </td>
               </tr>
               {writerOption()}
-              <tr>
-                <th>파일첨부</th>
-                <td>
-                  <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
-                  {imgFile !== '' ? <img src={imgFile} alt="후기 이미지" /> : <img style={{ display: 'none' }} />}
-                </td>
-              </tr>
+              {formData.boardTitle === 'review' ? (
+                <tr>
+                  <th>대표 이미지</th>
+                  <td>
+                    <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
+                    {imgFile !== '' ? <img src={imgFile} alt="후기 이미지" /> : <img style={{ display: 'none' }} />}
+                  </td>
+                </tr>
+              ) : (
+                <tr>
+                  <th>파일첨부</th>
+                  <td>
+                    <input type="file" accept="*" ref={fileRef} onChange={changeFile} />
+                  </td>
+                </tr>
+              )}
               <tr>
                 <td colSpan={2} className="writeWrapper">
                   <TextEditor setValue={setBoardContent} setDefaultValue={testFunc} />
@@ -301,9 +316,9 @@ const AdminBoardWrite = () => {
               </tr>
             </tbody>
           </Table>
-          <BtnWrapper className="center mt40">
+          <BtnWrapper className="center mt40 double">
             <SubmitBtn type="submit">작성하기</SubmitBtn>
-            <NormalBtn onClick={() => navigate(-1)}>목록</NormalBtn>
+            <PrevButton />
           </BtnWrapper>
         </form>
       </Container>

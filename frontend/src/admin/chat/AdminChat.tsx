@@ -85,10 +85,8 @@ const AdminChat = () => {
           </p>
           <BtnWrapper className="flexgap right">
             <NormalBtn className="header" onClick={handleClosedClick}>
-              채팅 상태 변경
+              선택 채팅 종료
             </NormalBtn>
-            <NormalBtn className="header">블랙리스트 해제</NormalBtn>
-            <NormalBtn className="header red">블랙리스트 추가</NormalBtn>
           </BtnWrapper>
         </TableHeader>
         <Table>
@@ -130,7 +128,7 @@ const AdminChat = () => {
                   <td style={{ textAlign: 'center' }}>{item.id}</td>
                   <td style={{ textAlign: 'center' }}>
                     {item.chatMessages[0].sender !== 'anonymous' && item.chatMessages[0].sender ? (
-                      <Link to={`/admin/member/${item.chatMessages[0].sender}`} className="memberId">
+                      <Link to={`/admin/member/${item.chatMessages[0].sender}`} className="memberId u">
                         {item.chatMessages[0].sender}
                       </Link>
                     ) : (
@@ -140,7 +138,9 @@ const AdminChat = () => {
                   <td style={{ textAlign: 'center' }} className="lastChat">
                     <p>
                       {item.chatMessages[0].message !== '' ? (
-                        <Link to={`/admin/chat/detail/${item.roomId}`}>{item.chatMessages[0].message}</Link>
+                        <Link className="u" to={`/admin/chat/detail/${item.roomId}`}>
+                          {item.chatMessages[0].message}
+                        </Link>
                       ) : (
                         <span>{'메시지가 없습니다.'}</span>
                       )}

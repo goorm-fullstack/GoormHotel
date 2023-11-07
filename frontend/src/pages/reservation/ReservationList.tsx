@@ -4,17 +4,17 @@ import { PageTitle } from '../../Style/commonStyles';
 import Paging from '../../components/common/Paging/Paging';
 import { useEffect } from 'react';
 import Instance from '../../utils/api/axiosInstance';
+import MemberCheck from '../../components/MemberCheck';
 
 interface Reservation {
-  id : number,
-  reservationNumber : string,
-  productName : string,
-  checkInDate : string,
-  checkOutDate : string,
-  reservationDate : string,
-  paymentAmount : number
+  id: number;
+  reservationNumber: string;
+  productName: string;
+  checkInDate: string;
+  checkOutDate: string;
+  reservationDate: string;
+  paymentAmount: number;
 }
-
 
 const ReservationList = () => {
   const [totalPages, setTotalPages] = useState(0);
@@ -80,6 +80,7 @@ const ReservationList = () => {
         </S.Table>
         <Paging totalPage={totalPages} />
       </S.Container>
+      <MemberCheck />
     </>
   );
 };

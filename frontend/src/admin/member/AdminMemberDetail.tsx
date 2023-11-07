@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../common/AdminLayout';
-import { PageTitle, BtnWrapper, SubmitBtn, LinkBtn } from '../../Style/commonStyles';
+import { PageTitle, BtnWrapper, SubmitBtn, LinkBtn, NormalBtn } from '../../Style/commonStyles';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Container, Table } from './Style';
 import Instance from '../../utils/api/axiosInstance';
 import AdminCheck from '../adminCheck';
+import * as S from './Style';
+import PrevButton from '../PrevButton';
 
 interface Member {
   name: string;
@@ -82,7 +84,6 @@ const AdminMemberDetail = () => {
       const response = await Instance.put<Member>(`/api/admin-change-member/${memberId}`, payload);
 
       if (response.status === 200) {
-        alert('회원정보 수정이 완료되었습니다');
         navigate(`/admin/member/detail`);
         // navigate(`/admin/member/detail/${memberId}`);
       }
@@ -101,8 +102,7 @@ const AdminMemberDetail = () => {
     try {
       const response = await Instance.delete(`/api/softdelete/${memberId}`);
       if (response.status === 200) {
-        alert('회원이 삭제되었습니다.');
-        navigate('/admin/member/detail');
+        navigate('/admin/member/1');
       }
     } catch (error: any) {
       alert('회원 삭제 실패');
@@ -126,6 +126,13 @@ const AdminMemberDetail = () => {
     <AdminLayout subMenus="member">
       <Container>
         <PageTitle>회원 정보 상세</PageTitle>
+        <S.TableHeader className="detail right">
+          <BtnWrapper className="flexgap right">
+            <NormalBtn type="button" className="red mini" onClick={handleDelete}>
+              회원 삭제
+            </NormalBtn>
+          </BtnWrapper>
+        </S.TableHeader>
         <Table className="horizontal">
           <colgroup>
             <col width="240px" />
@@ -134,7 +141,7 @@ const AdminMemberDetail = () => {
           <tbody>
             <tr>
               <th>회원 ID</th>
-              <td>{memberId}</td>
+              <td>{memberId} </td>
             </tr>
             <tr>
               <th>회원 이름</th>
@@ -205,10 +212,7 @@ const AdminMemberDetail = () => {
           <SubmitBtn type="submit" onClick={handleSubmit}>
             수정
           </SubmitBtn>
-          <LinkBtn to="/admin/member/1">취소</LinkBtn>
-          <SubmitBtn type="submit" onClick={handleDelete}>
-            회원 삭제
-          </SubmitBtn>
+          <PrevButton />
         </BtnWrapper>
       </Container>
       <AdminCheck kind="AUTH_A" />

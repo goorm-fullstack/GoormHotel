@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import AdminLayout from '../common/AdminLayout';
 import * as S from './Style';
-import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, LinkBtn } from '../../Style/commonStyles';
+import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn, LinkBtn, NormalLinkBtn } from '../../Style/commonStyles';
 import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
 import { IsReply } from '../../pages/board/Style';
@@ -117,7 +117,6 @@ const AdminBoard = () => {
             //답글이 아니라면
             Instance.put(`/boards/softdelete/${boardId}`)
               .then(() => {
-                alert('삭제되었습니다.');
                 window.location.reload();
               })
               .catch((error) => {
@@ -139,7 +138,6 @@ const AdminBoard = () => {
               `/boards/softdelete/${boardId}`
             )
               .then(() => {
-                alert('삭제되었습니다.');
                 window.location.reload();
               })
               .catch((error) => {
@@ -162,7 +160,6 @@ const AdminBoard = () => {
         };
         Instance.post(`/report/writeform`, data)
           .then(() => {
-            alert('신고처리되었습니다.');
             window.location.reload();
           })
           .catch((error) => {
@@ -187,7 +184,11 @@ const AdminBoard = () => {
 
   const isBoardWriter = (board: BoardData) => {
     if (!board.boardPassword) {
-      return <S.LinkStyle to={`/admin/member/detail/${board.boardWriter}`}>{board.boardWriter}</S.LinkStyle>;
+      return (
+        <Link className="u" to={`/admin/member/detail/${board.boardWriter}`}>
+          {board.boardWriter}
+        </Link>
+      );
     }
     return <p>{board.boardWriter}</p>;
   };
@@ -238,11 +239,11 @@ const AdminBoard = () => {
             전체 <strong>{totalBoard}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
-            <LinkBtn className="header" to="/admin/board/write" state={{ checkedItems: checkedItems }}>
+            <NormalLinkBtn className="header" to="/admin/board/write" state={{ checkedItems: checkedItems }}>
               게시글 작성
-            </LinkBtn>
+            </NormalLinkBtn>
             <NormalBtn className="header" onClick={ReportBoard}>
-              신고된 글로 이동
+              신고하기
             </NormalBtn>
             <NormalBtn className="header red" onClick={DeleteBoard}>
               게시글 삭제
@@ -270,7 +271,6 @@ const AdminBoard = () => {
               <th>제목</th>
               <th>작성자명(회원 ID)</th>
               <th>작성일</th>
-              <th>블랙리스트</th>
             </tr>
           </thead>
           <tbody>
@@ -297,17 +297,17 @@ const AdminBoard = () => {
                     <td className="center">{board.boardTitle}</td>
                     <td className="center">{board.category}</td>
                     <td className="center">
-                      <S.LinkStyle
+                      <Link
+                        className="u"
                         to={`/admin/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}>
                         {board.parentBoardId !== 0 ? <IsReply>답글</IsReply> : null}
                         {board.title}
-                      </S.LinkStyle>
+                      </Link>
                     </td>
                     <td className="center">{isBoardWriter(board)}</td>
                     <td className="center">{`${board.boardWriteDate[0]}/${board.boardWriteDate[1] < 10 ? '0' : ''}${board.boardWriteDate[1]}/${
                       board.boardWriteDate[2] < 10 ? '0' : ''
                     }${board.boardWriteDate[2]}`}</td>
-                    <td>{board.blackList}</td>
                   </tr>
                 );
               })}

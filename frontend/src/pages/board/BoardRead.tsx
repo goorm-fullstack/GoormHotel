@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './Style';
-import {Link, useLocation, useNavigate, useParams} from 'react-router-dom';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import { PageTitle, BtnWrapper, LinkBtn, NormalBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import queryString from 'query-string';
@@ -149,7 +149,6 @@ const BoardRead = () => {
         if (replyPassword === password) {
           Instance.put(`/reply/softdelete/${replyId}`)
             .then((response) => {
-              alert('삭제되었습니다.');
               fetchReply(boardData.boardId);
             })
             .catch((error) => {
@@ -168,7 +167,6 @@ const BoardRead = () => {
         if (id === user) {
           Instance.put(`/reply/softdelete/${replyId}`)
             .then((response) => {
-              alert('삭제되었습니다.');
               fetchReply(boardData.boardId);
             })
             .catch((error) => {
@@ -220,7 +218,6 @@ const BoardRead = () => {
         };
         Instance.put(`/reply/${editingReplyId}`, data)
           .then((response) => {
-            alert('수정되었습니다.');
             setEditedReplyContent('');
             setReplyContentModify('');
             setReplyContent('');
@@ -242,7 +239,6 @@ const BoardRead = () => {
         };
         Instance.put(`/reply/${editingReplyId}`, data)
           .then((response) => {
-            alert('수정되었습니다.');
             setEditedReplyContent('');
             setReplyContentModify('');
             setReplyContent('');
@@ -310,7 +306,6 @@ const BoardRead = () => {
         if (isConfirm) {
           Instance.put(`/boards/softdelete/${boardId}`)
             .then(() => {
-              alert('삭제되었습니다.');
               navigate(-1);
             })
             .catch((error) => {
@@ -333,7 +328,6 @@ const BoardRead = () => {
         if (isConfirm) {
           Instance.put(`/boards/softdelete/${boardId}`)
             .then(() => {
-              alert('삭제되었습니다.');
               navigate(-1);
             })
             .catch((error) => {
@@ -389,16 +383,6 @@ const BoardRead = () => {
       <SubHeader kind="board" />
       <S.Container>
         {title}
-        <S.WriteBtnWrapper className="right double">
-          <NormalBtn className="red" onClick={boardReport}>
-            신고하기
-          </NormalBtn>
-          <NormalBtn className="red" onClick={handleDelteBoard}>
-            삭제
-          </NormalBtn>
-          <NormalBtn className="" onClick={boardUpdate}>수정하기</NormalBtn>
-          {/*<Link to={`/board/${board}/write?boardId=${boardId}`}>수정하기</Link>*/}
-        </S.WriteBtnWrapper>
         <div>
           <S.TableRead>
             <tbody>
@@ -451,6 +435,15 @@ const BoardRead = () => {
                       __html: boardData && boardData.boardContent,
                     }}
                   />
+                  <BtnWrapper className="right flexgap">
+                    <NormalBtn className="mini" onClick={boardReport}>
+                      신고하기
+                    </NormalBtn>
+                    <NormalBtn className="mini" onClick={handleDelteBoard}>
+                      삭제
+                    </NormalBtn>
+                    <NormalBtn className="" onClick={boardUpdate}>수정하기</NormalBtn>
+                  </BtnWrapper>
                 </td>
               </tr>
               {board !== 'notice' && (

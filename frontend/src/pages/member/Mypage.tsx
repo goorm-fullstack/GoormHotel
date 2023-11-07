@@ -4,6 +4,7 @@ import { PageTitle, ContentsTitleXSmall, AuthBtn, Auth, BtnWrapper, SubmitBtn } 
 import Coupon from '../../components/Coupon/Coupon';
 import { Link, useNavigate } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
+import MemberCheck from '../../components/MemberCheck';
 
 interface Member {
   name: string;
@@ -42,6 +43,7 @@ const Mypage = () => {
   });
   const [findMemberData, setFindMemberData] = useState<FindMemberDTO>({ memberId: '', name: '', email: '' });
   const [isPasswordChanged, setPasswordChanged] = useState(false);
+  const [couponList, setCouponList] = useState([]);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,6 +69,7 @@ const Mypage = () => {
             const { password, ...otherData } = response.data;
             console.log(otherData);
             setMember(otherData);
+            setCouponList(otherData.couponList);
             setFindMemberData({ memberId: otherData.memberId, name: otherData.name, email: otherData.email });
           }
         } catch (error: any) {
@@ -95,7 +98,6 @@ const Mypage = () => {
       const response = await Instance.put<Member>(`/member/api/change-member/${member.memberId}`, payload);
 
       if (response.status === 200) {
-        alert('회원정보 수정이 완료되었습니다');
         navigate('/mypage');
       }
     } catch (error: any) {
@@ -112,7 +114,7 @@ const Mypage = () => {
     e.preventDefault();
     if (!findMemberData.email || !findMemberData.memberId || !findMemberData.name) {
       console.log('findMemberData: ', findMemberData);
-      alert('빈 필드가 있습니다.');
+      alert('필수 입력 값을 모두 입력해주세요.');
       return;
     }
     try {
@@ -173,7 +175,7 @@ const Mypage = () => {
             </div>
             <div>
               <ContentsTitleXSmall>멤버십 쿠폰</ContentsTitleXSmall>
-              <Coupon grade="bronze" />
+              <Coupon grade="bronze" couponList = {couponList} />
               <ul className="guide">
                 <li>⁕&nbsp;&nbsp;상기 멤버십 서비스 혜택은 변경 및 종료될 수 있습니다.</li>
                 <li>⁕&nbsp;&nbsp;특전의 세부 이용 조건은 약관을 통해 확인하실 수 있습니다.</li>
@@ -183,6 +185,7 @@ const Mypage = () => {
           </div>
         </S.Mypage>
       </S.Container>
+      <MemberCheck />
     </>
   );
 };

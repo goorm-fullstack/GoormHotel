@@ -1,11 +1,25 @@
 import React from 'react';
 import * as S from './Style';
+import { formatDate } from '../../utils/function/dateFormatter';
+
+
+interface Coupon {
+  id : number;
+  uuid : string;
+  discountRate : number;
+  name : string;
+  member : any;
+  isUsed : string;
+  issueDate : string;
+  expire : number;
+}
 
 type CouponProps = {
   grade: string;
+  couponList : Array<Coupon>;
 };
 
-const Coupon = ({ grade }: CouponProps) => {
+const Coupon = ({ grade, couponList }: CouponProps) => {
   return (
     <S.CouponWrapper>
       <svg className={grade} data-name="Layer 1" id="Layer_1" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
@@ -55,10 +69,21 @@ const Coupon = ({ grade }: CouponProps) => {
         <path d="M98.91,14.83a1.28,1.28,0,1,0-1.28,1.28A1.28,1.28,0,0,0,98.91,14.83Z" />
       </svg>
       <div className="couponinfo">
-        <p className={`${grade} ctitle`}>{grade} 등급 혜택</p>
-        <p className="cname">객실 5% 할인 쿠폰</p>
-        <p className="publish">발행일: 2023-08-01</p>
-        <p className="publish use">사용기한: 2023-08-01~2023-08-31</p>
+        {couponList.length > 0 ? (
+          (couponList.map((coupon) => (
+            <>
+              <p className={`${grade} ctitle`}>{grade} 등급 혜택</p>
+              <p className="cname">{coupon.name}</p>
+              <p className="publish">발행일: {formatDate((coupon.issueDate).toString())}</p>
+              <p className="publish use">사용기한: {coupon.expire}일</p>
+          </>
+          )))
+        ) : (
+          <>
+            <p>쿠폰이 없습니다.</p>
+          </>
+        )}
+        
       </div>
     </S.CouponWrapper>
   );

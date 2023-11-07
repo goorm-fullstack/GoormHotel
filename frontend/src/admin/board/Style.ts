@@ -13,18 +13,13 @@ export const ModalContainer = styled.div`
   padding-top: 27px;
   padding-left: 21px;
   z-index: 10;
-  right: 550px;
+  left: 50%;
+  transform: translateX(-50%);
   margin-top: 10px;
 `;
 
-export const CommentText = styled.div`
+export const CommentText = styled.p`
   cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-    text-decoration-color: #444444;
-    text-underline-offset: 10px;
-  }
 
   &:hover + ${ModalContainer} {
     display: block;
@@ -164,7 +159,7 @@ export const TableRead = styled.table`
     font-size: ${(props) => props.theme.font.sizes};
   }
   td.titlew p span {
-    margin-right: 20px;
+    margin-right: 8px;
     color: ${(props) => props.theme.colors.graylight};
   }
   td.titlew .title {
@@ -210,10 +205,10 @@ export const TableRead = styled.table`
 
   // 댓글 목록
   .commentslist {
-    td{
+    td {
       padding: 0;
     }
-    ul{
+    ul {
       padding-top: 40px;
       padding-bottom: 40px;
     }

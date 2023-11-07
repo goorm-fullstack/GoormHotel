@@ -146,15 +146,22 @@ export const LoginWrapper = styled.div`
   }
 `;
 
-export const MemberBtn = styled.button<{ isActive: boolean }>`
+export const MemberBtn = styled.button`
   // 로그인 탭 버튼
-  background-color: ${({ isActive }) => (isActive ? '#FFFFFF' : '#f7f7f7')};
-  border: 1px solid ${({ isActive }) => (isActive ? '#baa085' : '#ddd')};
-  color: ${({ isActive }) => (isActive ? '#9c836a' : '#888')};
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  color: #888;
   width: 50%;
   height: 100%;
-  border-bottom-color: ${({ isActive }) => (isActive ? 'transparent' : '#baa085')};
+  border-bottom-color: #baa085;
   font-size: ${(props) => props.theme.font.sizes};
+
+  &[data-active='true'] {
+    background-color: #ffffff;
+    border: 1px solid #baa085;
+    color: #9c836a;
+    border-bottom-color: transparent;
+  }
 `;
 
 export const Mypage = styled.div`

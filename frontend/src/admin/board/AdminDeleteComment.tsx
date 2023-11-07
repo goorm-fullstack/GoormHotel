@@ -5,7 +5,7 @@ import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/com
 import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
 import { BoardData, ReplyData } from './AdminBoard';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { boardTitleList } from './AdminBoard';
 import Instance from '../../utils/api/axiosInstance';
 import AdminCheck from '../adminCheck';
@@ -86,7 +86,6 @@ const AdminDeleteComment = () => {
               //답글이 아니라면
               Instance.put(`/boards/undelete/${response.data.boardId}`)
                 .then(() => {
-                  alert('복구되었습니다.');
                   window.location.reload();
                 })
                 .catch((error) => {
@@ -105,7 +104,6 @@ const AdminDeleteComment = () => {
                 });
               Instance.put(`/boards/undelete/${response.data.boardId}`)
                 .then(() => {
-                  alert('복구되었습니다.');
                   window.location.reload();
                 })
                 .catch((error) => {
@@ -117,7 +115,6 @@ const AdminDeleteComment = () => {
           const id = boardId.replace('reply', '');
           Instance.put(`/reply/undelete/${id}`)
             .then(() => {
-              alert('복구되었습니다.');
               window.location.reload();
             })
             .catch((error) => {
@@ -136,7 +133,6 @@ const AdminDeleteComment = () => {
           const id = boardId.replace('board', '');
           Instance.delete(`/boards/${id}`)
             .then(() => {
-              alert('삭제되었습니다.');
               window.location.reload();
             })
             .catch((error) => {
@@ -146,7 +142,6 @@ const AdminDeleteComment = () => {
           const id = boardId.replace('reply', '');
           Instance.delete(`/reply/${id}`)
             .then(() => {
-              alert('삭제되었습니다.');
               window.location.reload();
             })
             .catch((error) => {
@@ -173,14 +168,22 @@ const AdminDeleteComment = () => {
 
   const isBoardWriter = (board: BoardData) => {
     if (!board.boardPassword) {
-      return <S.LinkStyle to={`/admin/member/detail/${board.boardWriter}`}>{board.boardWriter}</S.LinkStyle>;
+      return (
+        <Link className="u" to={`/admin/member/detail/${board.boardWriter}`}>
+          {board.boardWriter}
+        </Link>
+      );
     }
     return <p>{board.boardWriter}</p>;
   };
 
   const isReplyWriter = (reply: ReplyData) => {
     if (!reply.replyPassword) {
-      return <S.LinkStyle to={`/admin/member/detail/${reply.replyWriter}`}>{reply.replyWriter}</S.LinkStyle>;
+      return (
+        <Link className="u" to={`/admin/member/detail/${reply.replyWriter}`}>
+          {reply.replyWriter}
+        </Link>
+      );
     }
     return <p>{reply.replyWriter}</p>;
   };
@@ -245,10 +248,11 @@ const AdminDeleteComment = () => {
                   <td className="center">{totalData - index}</td>
                   <td className="center">{`${board.boardTitle}`}</td>
                   <td className="center">
-                    <S.LinkStyle
+                    <Link
+                      className="u"
                       to={`/admin/${`board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}`}>
                       {parsedContent[index][0]}
-                    </S.LinkStyle>
+                    </Link>
                   </td>
                   <td className="center">{isBoardWriter(board)}</td>
                   <td className="center">
@@ -271,10 +275,11 @@ const AdminDeleteComment = () => {
                   <td className="center">{totalData - board.length - index}</td>
                   <td className="center">댓글</td>
                   <td className="center">
-                    <S.LinkStyle
+                    <Link
+                      className="u"
                       to={`/admin/${`board/${boardTitleList.find((item) => item.board === reply.boardTitle)?.english}/detail/${reply.boardId}`}`}>
                       {reply.replyContent}
-                    </S.LinkStyle>
+                    </Link>
                   </td>
                   <td className="center">{isReplyWriter(reply)}</td>
                   <td className="center">

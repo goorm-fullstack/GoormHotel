@@ -6,6 +6,7 @@ import Instance from '../../utils/api/axiosInstance';
 import { PageTitle, BtnWrapper, CloseButton, NormalBtn } from '../../Style/commonStyles';
 import { Container, Table } from '../member/Style';
 import AdminCheck from '../adminCheck';
+import PrevButton from '../PrevButton';
 
 interface ChatMessage {
   sender: string;
@@ -24,6 +25,7 @@ const AdminChatDetail = () => {
   const [status, setStatus] = useState('');
   const navigate = useNavigate();
   const authItem = localStorage.getItem('auth');
+  const [sender, setSender] = useState('');
 
   const navigateToChatList = () => {
     navigate('/admin/chat/1');
@@ -42,6 +44,7 @@ const AdminChatDetail = () => {
         setStatus(response.data.status);
         setChatData(response.data.chatMessages);
         setRecentTime(response.data.chatMessages[response.data.chatMessages.length - 1].createTime);
+        setSender(response.data.chatMessages[0].sender);
       })
       .catch((error) => {
         console.error('에러 ' + error);
@@ -118,6 +121,21 @@ const AdminChatDetail = () => {
     }
   };
 
+  const handleClickSendButton = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if (newChat.trim() !== '' && socketConnected) {
+      setChatData((p) => [...p, { message: newChat, sender: 'admin', type: 'TALK' }]);
+      ws.current?.send(
+        JSON.stringify({
+          type: 'TALK',
+          roomId: roomId,
+          sender: 'admin',
+          message: newChat,
+        })
+      );
+      setNewChat('');
+    }
+  };
+
   const handleFormSubmit = (e: React.FormEvent<HTMLDivElement>) => {
     e.preventDefault();
 
@@ -143,8 +161,8 @@ const AdminChatDetail = () => {
           </colgroup>
           <tbody>
             <tr>
-              <th>회원 아이디(회원 ID)</th>
-              <td>({roomId})</td>
+              <th>회원 ID</th>
+              <td>{sender}</td>
             </tr>
             <tr>
               <th>최근 발송일</th>
@@ -160,7 +178,7 @@ const AdminChatDetail = () => {
               </td>
             </tr>
             <tr>
-              <th colSpan={2} className="center">
+              <th colSpan={2} className="center innerheader">
                 채팅 기록
               </th>
             </tr>
@@ -191,14 +209,14 @@ const AdminChatDetail = () => {
                     value={newChat}
                     onChange={(e) => setNewChat(e.target.value)}
                     onKeyDown={handleInputKeyPress}></textarea>
-                  <button type="submit">전송</button>
+                  <button type="submit" onClick={handleClickSendButton}>전송</button>
                 </div>
               </S.ChatWrapper>
             </tr>
           </tbody>
         </Table>
         <BtnWrapper className="center mt40">
-          <NormalBtn onClick={navigateToChatList}>목록</NormalBtn>
+          <PrevButton />
         </BtnWrapper>
       </Container>
       <AdminCheck kind="AUTH_C" />
