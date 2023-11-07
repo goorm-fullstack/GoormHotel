@@ -28,5 +28,5 @@ public class ChatMessage {
     private String roomId;
     private String sender;
     private String message;
-    private String createTime = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+    private String createTime = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 }
