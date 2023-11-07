@@ -74,6 +74,7 @@ const AdminSubScribe = () => {
     checkedItems.map((id, index) => {
       Instance.post('/subscribe/cancel/' + id).then(() => {
         // 구독해지용
+        window.location.reload();
       });
     });
   };
