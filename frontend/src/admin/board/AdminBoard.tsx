@@ -69,7 +69,7 @@ const AdminBoard = () => {
   const [board, setBoard] = useState<BoardData[]>([]);
   const navigate = useNavigate();
   const authItem = localStorage.getItem('auth');
-  let count: number = 1;
+  let count: number = board.length;
 
   // 전체 게시글 목록 조회
   useEffect(() => {
@@ -113,7 +113,7 @@ const AdminBoard = () => {
     if (isConfirm) {
       checkedItems.forEach((boardId) => {
         Instance.get(`/boards/${boardId}`).then((response) => {
-          if (response.data.parentBoardId === 0) {
+          if (response.data.parentBoardId === null) {
             //답글이 아니라면
             Instance.put(`/boards/softdelete/${boardId}`)
               .then(() => {
@@ -123,7 +123,7 @@ const AdminBoard = () => {
                 console.error(error.message);
               });
           }
-          if (response.data.parentBoardId != 0) {
+          if (response.data.parentBoardId !== null) {
             //답글이라면
             Instance.put(
               //parentBoardId의 isComment값 true => false 변경
@@ -293,14 +293,14 @@ const AdminBoard = () => {
                         onChange={() => handleCheckboxChange(board.boardId)}
                       />
                     </td>
-                    <td className="center">{board.parentBoardId !== 0 ? '↳' : `${count++}`}</td>
+                    <td className="center">{board.parentBoardId !== null ? '↳' : `${count - idx}`}</td>
                     <td className="center">{board.boardTitle}</td>
                     <td className="center">{board.category}</td>
                     <td className="center">
                       <Link
                         className="u"
                         to={`/admin/board/${boardTitleList.find((item) => item.board === board.boardTitle)?.english}/detail/${board.boardId}`}>
-                        {board.parentBoardId !== 0 ? <IsReply>답글</IsReply> : null}
+                        {board.parentBoardId !== null ? <IsReply>답글</IsReply> : null}
                         {board.title}
                       </Link>
                     </td>
