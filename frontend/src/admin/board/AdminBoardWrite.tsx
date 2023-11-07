@@ -152,6 +152,12 @@ const AdminBoardWrite = () => {
     }
   };
 
+  const testFunc = () => {
+
+    return '';
+
+  }
+
   const writerOption = () => {
     if (adminRole === 'MANAGER') {
       return (
@@ -290,7 +296,7 @@ const AdminBoardWrite = () => {
               </tr>
               <tr>
                 <td colSpan={2} className="writeWrapper">
-                  <TextEditor setValue={setBoardContent} />
+                  <TextEditor setValue={setBoardContent} setDefaultValue={testFunc} />
                 </td>
               </tr>
             </tbody>

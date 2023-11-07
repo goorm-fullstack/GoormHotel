@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './Style';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import {Link, useLocation, useNavigate, useParams} from 'react-router-dom';
 import { PageTitle, BtnWrapper, LinkBtn, NormalBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import queryString from 'query-string';
@@ -361,7 +361,7 @@ const BoardRead = () => {
       }
       else{
         if(boardData.boardWriter == isLogin){
-          navigate(`/board/${board}/write?boardId=${boardId}`);
+          navigate(`/board/update/${board}/${boardId}`);
         }
         else{
           alert("수정 불가능합니다.");
@@ -375,7 +375,7 @@ const BoardRead = () => {
       else{
         const input = prompt("게시글 비밀번호를 입력하세요.");
         if(boardData.boardPassword == input){
-          navigate(`/board/${board}/write?boardId=${boardId}`);
+          navigate(`/board/update/${board}/${boardId}`);
         }
         else{
           alert("비밀번호를 틀렸습니다. 다시 시도해주세요.");
@@ -397,6 +397,7 @@ const BoardRead = () => {
             삭제
           </NormalBtn>
           <NormalBtn className="" onClick={boardUpdate}>수정하기</NormalBtn>
+          {/*<Link to={`/board/${board}/write?boardId=${boardId}`}>수정하기</Link>*/}
         </S.WriteBtnWrapper>
         <div>
           <S.TableRead>
