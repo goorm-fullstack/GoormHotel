@@ -188,6 +188,14 @@ const AdminDeleteComment = () => {
     return <p>{reply.replyWriter}</p>;
   };
 
+  // 댓글 내용 줄이기
+  const truncateString = (str: string, maxLength: number) => {
+    if (str.length > maxLength) {
+      return str.substring(0, maxLength) + '...';
+    }
+    return str;
+  };
+
   return (
     <AdminLayout subMenus="board">
       <Container>
@@ -274,12 +282,11 @@ const AdminDeleteComment = () => {
                   </td>
                   <td className="center">{totalData - board.length - index}</td>
                   <td className="center">댓글</td>
-                  <td className="center">
-                    <Link
-                      className="u"
-                      to={`/admin/${`board/${boardTitleList.find((item) => item.board === reply.boardTitle)?.english}/detail/${reply.boardId}`}`}>
-                      {reply.replyContent}
-                    </Link>
+                  <td className="center commonetwrap">
+                    <S.CommentText>{truncateString(reply.replyContent, 8)}</S.CommentText>
+                    <S.ModalContainer>
+                      <S.ModalContent>{reply.replyContent}</S.ModalContent>
+                    </S.ModalContainer>
                   </td>
                   <td className="center">{isReplyWriter(reply)}</td>
                   <td className="center">

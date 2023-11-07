@@ -385,13 +385,6 @@ const AdminBoardDetail = () => {
                       </td>
                     </tr>
                 )}
-                {/*{board !== 'review' && (*/}
-                {/*  <tr>*/}
-                {/*    <td>*/}
-                {/*      <img className="reviewImg" src={imageUrl} alt="이미지" />*/}
-                {/*    </td>*/}
-                {/*  </tr>*/}
-                {/*)}*/}
                 <tr className="contents">
                   <td>{boardContent}</td>
                 </tr>

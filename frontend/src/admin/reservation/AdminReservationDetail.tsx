@@ -74,9 +74,7 @@ const AdminReservationDetail = () => {
   };
 
   const handleNoticeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!updateClick) {
-      setCustomerRequest(e.target.value);
-    }
+    setCustomerRequest(e.target.value);
   };
 
   const handleCheckInDateChange = (selectedDate: ValuePiece | [ValuePiece, ValuePiece]) => {
@@ -99,8 +97,11 @@ const AdminReservationDetail = () => {
     let updateReservationDto = {
       notice : customerRequest
     }
-    await Instance.post(`/reservation/update/${reservationNumber}`, updateReservationDto);
-    setUpdateClick(!updateClick);
+    const confirmed: boolean = window.confirm('수정하시겠습니까?');
+    if(confirmed) {
+      await Instance.post(`/reservation/update/${reservationNumber}`, updateReservationDto);
+      window.location.reload();
+    }
   }
 
   // 예약 취소
@@ -179,11 +180,7 @@ const AdminReservationDetail = () => {
             <tr>
               <th>요청사항</th>
               <td>
-                {updateClick ? (
-                  <input type="text" value={customerRequest} readOnly className="long" />
-                ) : (
-                  <input type="text" value={customerRequest} onChange={handleNoticeInputChange} className="long" />
-                )}
+                <input type="text" value={customerRequest} onChange={handleNoticeInputChange} className="long" />
               </td>
             </tr>
             <tr>
@@ -215,11 +212,7 @@ const AdminReservationDetail = () => {
           </tbody>
         </Table>
         <BtnWrapper className="center double mt40">
-          {updateClick ? (
-            <SubmitBtn type="button" onClick={() => {setUpdateClick(!updateClick)}}>수정</SubmitBtn>
-          ) : (
-            <SubmitBtn type="button" onClick={handleUpdateClick}>수정</SubmitBtn>
-          )}
+          <SubmitBtn type="button" onClick={handleUpdateClick}>수정</SubmitBtn>
           <PrevButton />
         </BtnWrapper>
       </Container>

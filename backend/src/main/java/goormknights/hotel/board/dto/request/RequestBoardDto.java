@@ -1,7 +1,6 @@
 package goormknights.hotel.board.dto.request;
 
 import goormknights.hotel.board.model.Board;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +21,7 @@ public class RequestBoardDto {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Builder.Default
-    private LocalDateTime boardWriteDate  = LocalDateTime.now();    //작성일
+    private LocalDateTime boardWriteDate = LocalDateTime.now();    //작성일
 
     private String boardWriter; //작성자
 

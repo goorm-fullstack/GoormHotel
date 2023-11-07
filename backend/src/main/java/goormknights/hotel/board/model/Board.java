@@ -90,7 +90,7 @@ public class Board {
         this.memberPk = memberPk;
     }
 
-    public ResponseBoardDto toResponseBoardDto(){
+    public ResponseBoardDto toResponseBoardDto() {
         return ResponseBoardDto.builder()
                 .boardId(boardId)
                 .title(title)
@@ -103,19 +103,20 @@ public class Board {
                 .isComment(isComment)
                 .boardPassword(boardPassword)
                 .parentBoardId(parentBoardId)
+                .boardImage(boardImage != null ? boardImage.getBoardImageId() : null)
                 .memberPk(memberPk)
                 .report(report.stream().map(Report::toResponseReportDto).toList())
                 .build();
     }
 
-    public Board updateBoard(Board board, RequestBoardDto requestBoardDto, RequestImageDto requestImageDto, RequestFileDto requestFileDto){
-        if(requestImageDto == null && requestFileDto != null){
+    public Board updateBoard(Board board, RequestBoardDto requestBoardDto, RequestImageDto requestImageDto, RequestFileDto requestFileDto) {
+        if (requestImageDto == null && requestFileDto != null) {
             return Board.builder()
                     .boardId(board.getBoardId())
                     .title(requestBoardDto.getTitle())
                     .boardContent(requestBoardDto.getBoardContent())
                     .boardWriter(requestBoardDto.getBoardWriter())
-                    .boardImage(null)
+                    .boardImage(board.getBoardImage() != null ? board.getBoardImage() : null)
                     .boardFile(requestFileDto.toEntity())
                     .boardTitle(requestBoardDto.getBoardTitle())
                     .category(requestBoardDto.getCategory())
@@ -126,15 +127,14 @@ public class Board {
                     .memberPk(board.getMemberPk())
                     .boardPassword(board.getBoardPassword())
                     .build();
-        }
-        else if(requestFileDto == null && requestImageDto != null){
+        } else if (requestFileDto == null && requestImageDto != null) {
             return Board.builder()
                     .boardId(board.getBoardId())
                     .title(requestBoardDto.getTitle())
                     .boardContent(requestBoardDto.getBoardContent())
                     .boardWriter(requestBoardDto.getBoardWriter())
                     .boardImage(requestImageDto.toEntity())
-                    .boardFile(null)
+                    .boardFile(board.getBoardFile() != null ? board.getBoardFile() : null)
                     .boardTitle(requestBoardDto.getBoardTitle())
                     .category(requestBoardDto.getCategory())
                     .boardWriteDate(board.getBoardWriteDate())
@@ -144,15 +144,14 @@ public class Board {
                     .memberPk(board.getMemberPk())
                     .boardPassword(board.getBoardPassword())
                     .build();
-        }
-        else if(requestFileDto == null && requestImageDto == null){
+        } else if (requestFileDto == null && requestImageDto == null) {
             return Board.builder()
                     .boardId(board.getBoardId())
                     .title(requestBoardDto.getTitle())
                     .boardContent(requestBoardDto.getBoardContent())
                     .boardWriter(requestBoardDto.getBoardWriter())
-                    .boardImage(null)
-                    .boardFile(null)
+                    .boardImage(board.getBoardImage() != null ? board.getBoardImage() : null)
+                    .boardFile(board.getBoardFile() != null ? board.getBoardFile() : null)
                     .boardTitle(requestBoardDto.getBoardTitle())
                     .category(requestBoardDto.getCategory())
                     .boardWriteDate(board.getBoardWriteDate())
@@ -162,8 +161,7 @@ public class Board {
                     .memberPk(board.getMemberPk())
                     .boardPassword(board.getBoardPassword())
                     .build();
-        }
-        else{
+        } else {
             return Board.builder()
                     .boardId(board.getBoardId())
                     .title(requestBoardDto.getTitle())

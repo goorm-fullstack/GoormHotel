@@ -1,9 +1,7 @@
 package goormknights.hotel.board.dto.response;
 
-import goormknights.hotel.board.model.BoardImage;
 import goormknights.hotel.reply.dto.response.ResponseReplyDto;
 import goormknights.hotel.report.dto.response.ResponseReportDto;
-import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 
@@ -36,7 +34,7 @@ public class ResponseBoardDto {
 
     private List<ResponseReportDto> report;     //신고 정보
 
-    private BoardImage boardImage;      //이미지 넣기
+    private Long boardImage;      //이미지 넣기
 
     private LocalDateTime boardDeleteTime; // 삭제 날짜
 
@@ -45,7 +43,7 @@ public class ResponseBoardDto {
     private Long parentBoardId;         //답글의 부모 게시글 번호
 
     @Builder
-    public ResponseBoardDto(Long memberPk, Long parentBoardId, String boardPassword, Long boardId, String title, String boardContent, LocalDateTime boardWriteDate, String boardWriter, String boardTitle, String category, List<ResponseReplyDto> reply, List<ResponseReportDto> report, BoardImage boardImage, LocalDateTime boardDeleteTime, String isComment) {
+    public ResponseBoardDto(Long memberPk, Long parentBoardId, String boardPassword, Long boardId, String title, String boardContent, LocalDateTime boardWriteDate, String boardWriter, String boardTitle, String category, List<ResponseReplyDto> reply, List<ResponseReportDto> report, Long boardImage, LocalDateTime boardDeleteTime, String isComment) {
         this.boardId = boardId;
         this.title = title;
         this.boardContent = boardContent;
