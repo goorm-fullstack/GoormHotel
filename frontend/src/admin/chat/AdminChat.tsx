@@ -148,7 +148,7 @@ const AdminChat = () => {
                       )}
                     </p>
                   </td>
-                  <td style={{ textAlign: 'center' }}>{formatDate(item.chatMessages[0].createTime)}</td>
+                  <td style={{ textAlign: 'center' }}>{item.chatMessages[0].createTime}</td>
                   <td style={{ textAlign: 'center' }}>{item.status === 'CONTINUE' ? <span>{'진행중'}</span> : <span>{'종료'}</span>}</td>
                 </tr>
               ))
