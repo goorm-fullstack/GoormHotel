@@ -5,6 +5,8 @@ import Paging from '../../components/common/Paging/Paging';
 import { useEffect } from 'react';
 import Instance from '../../utils/api/axiosInstance';
 import MemberCheck from '../../components/MemberCheck';
+import { formatDate } from '../../utils/function/dateFormatter';
+import { numberWithCommas } from '../../utils/function/comma';
 
 interface Reservation {
   id: number;
@@ -69,10 +71,10 @@ const ReservationList = () => {
                   <td className="center">
                     <p className="textover">{reservation.productName}</p>
                   </td>
-                  <td className="center">{reservation.checkInDate}</td>
-                  <td className="center">{reservation.checkOutDate}</td>
-                  <td className="center">{reservation.reservationDate}</td>
-                  <td className="center">{reservation.paymentAmount}</td>
+                  <td className="center">{formatDate((reservation.checkInDate).toString())}</td>
+                  <td className="center">{formatDate((reservation.checkOutDate).toString())}</td>
+                  <td className="center">{formatDate((reservation.reservationDate).toString())}</td>
+                  <td className="center">{numberWithCommas(reservation.paymentAmount)}</td>
                 </tr>
               ))
             )}

@@ -9,6 +9,7 @@ import { InputWrapper, Section } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
 import Instance from '../../utils/api/axiosInstance';
 import AdminCheck from '../adminCheck';
+import { formatDate } from '../../utils/function/dateFormatter';
 
 interface Giftcard {
   id: number;
@@ -206,7 +207,7 @@ const AdminGiftCard = () => {
                             onChange={() => handleCheckboxChange(item.id)}
                           />
                         </td>
-                        <td className="center">{idx + 1}</td>
+                        <td className="center">{giftcardList.length - idx}</td>
                         <td className="center">
                           <p className="textover">{item.title}</p>
                         </td>
@@ -218,7 +219,7 @@ const AdminGiftCard = () => {
                           </p>
                         </td>
                         <td className="center">{item.money}</td>
-                        <td className="center">{item.issueDate}</td>
+                        <td className="center">{formatDate((item.issueDate).toString())}</td>
                         <td className="center">{calcExpireDate(item.issueDate, item.expire)}</td>
                         <td className="center">{item.isZeroMoney}</td>
                       </tr>
