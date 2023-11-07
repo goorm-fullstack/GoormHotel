@@ -76,6 +76,8 @@ public class BoardController {
     // 게시물 수정
     @PutMapping("/{boardId}")
     public ResponseEntity<ResponseBoardDto> updateBoard(@PathVariable Long boardId, @ModelAttribute RequestBoardDto requestBoardDto, @RequestParam(required = false) MultipartFile multipartFile, @RequestParam(required = false) MultipartFile file) throws IOException {
+        System.out.println(multipartFile);
+        System.out.println(file);
         boardService.updateBoard(boardId, requestBoardDto, multipartFile, file);
 
         return ResponseEntity.ok().build();

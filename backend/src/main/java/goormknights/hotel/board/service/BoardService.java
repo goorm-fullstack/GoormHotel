@@ -172,41 +172,62 @@ public class BoardService {
     // 게시물 수정
     public Board updateBoard(Long boardId, RequestBoardDto requestBoardDto, MultipartFile multipartFile, MultipartFile file) throws IOException {
         Board beforeBoard = boardRepository.findByBoardId(boardId);
-        RequestImageDto requestImageDto;
-        RequestFileDto requestFileDto;
+        RequestImageDto requestImageDto = null;
+        RequestFileDto requestFileDto = null;
         if(multipartFile == null && file != null) {
-            requestImageDto = RequestImageDto.builder()
-                    .boardImageName(beforeBoard.getBoardImage().getBoardImageName())
-                    .boardImagePath(beforeBoard.getBoardImage().getBoardImagePath())
-                    .mimeType(beforeBoard.getBoardImage().getMimeType())
-                    .data(beforeBoard.getBoardImage().getData())
-                    .originalboardImageName(beforeBoard.getBoardImage().getOriginalboardImageName())
-                    .build();
+            if(beforeBoard.getBoardImage() != null){
+                requestImageDto = RequestImageDto.builder()
+                        .boardImageName(beforeBoard.getBoardImage().getBoardImageName())
+                        .boardImagePath(beforeBoard.getBoardImage().getBoardImagePath())
+                        .mimeType(beforeBoard.getBoardImage().getMimeType())
+                        .data(beforeBoard.getBoardImage().getData())
+                        .originalboardImageName(beforeBoard.getBoardImage().getOriginalboardImageName())
+                        .build();
+            }
+            else{
+                requestImageDto = null;
+            }
             requestFileDto = boardFileService.requestFileDto(file);
         }else if(multipartFile != null && file == null){
             requestImageDto = boardImageService.requestImageDto(multipartFile);
-            requestFileDto = RequestFileDto.builder()
-                    .boardFileName(beforeBoard.getBoardFile().getBoardFileName())
-                    .boardFilePath(beforeBoard.getBoardFile().getBoardFilePath())
-                    .originalboardFileName(beforeBoard.getBoardFile().getOriginalboardFileName())
-                    .data(beforeBoard.getBoardFile().getData())
-                    .mimeType(beforeBoard.getBoardFile().getMimeType())
-                    .build();
+            if(beforeBoard.getBoardFile() != null){
+                requestFileDto = RequestFileDto.builder()
+                        .boardFileName(beforeBoard.getBoardFile().getBoardFileName())
+                        .boardFilePath(beforeBoard.getBoardFile().getBoardFilePath())
+                        .originalboardFileName(beforeBoard.getBoardFile().getOriginalboardFileName())
+                        .data(beforeBoard.getBoardFile().getData())
+                        .mimeType(beforeBoard.getBoardFile().getMimeType())
+                        .build();
+            }
+            else{
+                requestFileDto = null;
+            }
         }else if(multipartFile == null && file == null){
-            requestImageDto = RequestImageDto.builder()
-                    .boardImageName(beforeBoard.getBoardImage().getBoardImageName())
-                    .boardImagePath(beforeBoard.getBoardImage().getBoardImagePath())
-                    .mimeType(beforeBoard.getBoardImage().getMimeType())
-                    .data(beforeBoard.getBoardImage().getData())
-                    .originalboardImageName(beforeBoard.getBoardImage().getOriginalboardImageName())
-                    .build();
-            requestFileDto = RequestFileDto.builder()
-                    .boardFileName(beforeBoard.getBoardFile().getBoardFileName())
-                    .boardFilePath(beforeBoard.getBoardFile().getBoardFilePath())
-                    .originalboardFileName(beforeBoard.getBoardFile().getOriginalboardFileName())
-                    .data(beforeBoard.getBoardFile().getData())
-                    .mimeType(beforeBoard.getBoardFile().getMimeType())
-                    .build();
+            if(requestImageDto != null){
+                requestImageDto = RequestImageDto.builder()
+                        .boardImageName(beforeBoard.getBoardImage().getBoardImageName())
+                        .boardImagePath(beforeBoard.getBoardImage().getBoardImagePath())
+                        .mimeType(beforeBoard.getBoardImage().getMimeType())
+                        .data(beforeBoard.getBoardImage().getData())
+                        .originalboardImageName(beforeBoard.getBoardImage().getOriginalboardImageName())
+                        .build();
+            }
+            else{
+                requestImageDto = null;
+            }
+            if(requestFileDto != null){
+                requestFileDto = RequestFileDto.builder()
+                        .boardFileName(beforeBoard.getBoardFile().getBoardFileName())
+                        .boardFilePath(beforeBoard.getBoardFile().getBoardFilePath())
+                        .originalboardFileName(beforeBoard.getBoardFile().getOriginalboardFileName())
+                        .data(beforeBoard.getBoardFile().getData())
+                        .mimeType(beforeBoard.getBoardFile().getMimeType())
+                        .build();
+            }
+            else{
+                requestFileDto = null;
+
+            }
         }else{
             requestImageDto = boardImageService.requestImageDto(multipartFile);
             requestFileDto = boardFileService.requestFileDto(file);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './Style';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import { PageTitle, BtnWrapper, LinkBtn, NormalBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import queryString from 'query-string';
@@ -348,6 +348,36 @@ const BoardRead = () => {
     navigate(`/board/report/write?boardId=${boardId}`);
   };
 
+  const boardUpdate = () => {
+    if(isLogin){
+      if(boardData.boardPassword){
+        alert("수정 불가능합니다.");
+      }
+      else{
+        if(boardData.boardWriter == isLogin){
+          navigate(`/board/update/${board}/${boardId}`);
+        }
+        else{
+          alert("수정 불가능합니다.");
+        }
+      }
+    }
+    else{
+      if(!boardData.boardPassword){
+        alert("수정 불가능합니다.");
+      }
+      else{
+        const input = prompt("게시글 비밀번호를 입력하세요.");
+        if(boardData.boardPassword == input){
+          navigate(`/board/update/${board}/${boardId}`);
+        }
+        else{
+          alert("비밀번호를 틀렸습니다. 다시 시도해주세요.");
+        }
+      }
+    }
+  }
+
   return (
     <>
       <SubHeader kind="board" />
@@ -406,12 +436,9 @@ const BoardRead = () => {
                     }}
                   />
                   <BtnWrapper className="right flexgap">
-                    <NormalBtn className="mini" onClick={boardReport}>
-                      신고하기
-                    </NormalBtn>
-                    <NormalBtn className="mini" onClick={handleDelteBoard}>
-                      삭제
-                    </NormalBtn>
+                    <NormalBtn className="mini" onClick={boardUpdate}>수정</NormalBtn>
+                    <NormalBtn className="mini" onClick={handleDelteBoard}>삭제</NormalBtn>
+                    <NormalBtn className="mini" onClick={boardReport}>신고</NormalBtn>
                   </BtnWrapper>
                 </td>
               </tr>

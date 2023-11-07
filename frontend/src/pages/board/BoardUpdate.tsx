@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as S from './Style';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { PageTitle, BtnWrapper, SubmitBtn, LinkBtn, NormalBtn } from '../../Style/commonStyles';
+import { PageTitle, BtnWrapper, SubmitBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import { ItemThumbnail } from '../../admin/item/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
@@ -15,11 +15,11 @@ type ReportData = {
   [key: string]: string;
 };
 
-const BoardWrite = () => {
+const BoardUpdate = () => {
   const board = useParams().board;
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const boardId = queryParams.get('boardId');
+  const boardId = useParams().boardId;
   const id = location.search;
   const navigate = useNavigate();
   const [imgFile, setImgFile] = useState<string>('');
@@ -46,8 +46,6 @@ const BoardWrite = () => {
           });
     }
   }, [boardId]);
-
-  console.log(boardData);
 
   const isLogin = localStorage.getItem('memberId');
 
@@ -159,81 +157,34 @@ const BoardWrite = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+
     e.preventDefault();
 
-    if (board !== 'report') {     //게시글 작성
-      if (!formData.category) {
-        setCategoryError('카테고리를 선택하세요'); // 오류 메시지 설정
-        return;
-      }
-
-      const isComment = 'false';
-
-      const form = new FormData();
-      form.append('multipartFile', imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '');
-      form.append('file', fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '');
-      form.append('isComment', isComment);
-      formData.boardContent = boardContent;
-
-      formData.boardWriter = user !== null ? user : formData.boardWriter;
-
-      Object.keys(formData).forEach((key) => {
-        form.append(key, formData[key]);
-      });
-
-      try {
-        if(!boardId){
-          await Instance.post('/boards/writeform', form, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-          window.location.href = `/board/${board}/1`;
-        }
-        else{
-          await Instance.put(`/boards/${boardId}`, form, {
-            headers: {
-              'Content-Type' : 'multipart/form-data'
-            },
-          });
-          navigate(-1);
-        }
-      }
-      catch (e: any) {
-        console.error('에러: ', e);
-      }
+    if (!formData.category) {
+      setCategoryError('카테고리를 선택하세요'); // 오류 메시지 설정
+      return;
     }
 
-    else {      //신고
-      const form = new FormData();
-      const itemId = id.includes('boardId') ? id.replace('?boardId=', '') : id.replace('?replyId=', '');
+    const isComment = 'false';
 
-      if (id.includes('boardId')) {
-        form.append('boardId', itemId);
-      } else {
-        form.append('replyId', itemId);
-      }
+    const form = new FormData();
+    form.append('multipartFile', imgRef.current && imgRef.current.files ? imgRef.current.files[0] : '');
+    form.append('file', fileRef.current && fileRef.current.files ? fileRef.current.files[0] : '');
+    form.append('isComment', isComment);
+    formData.boardContent = boardContent;
 
-      reportData.reportWriter = user !== null ? user : reportData.reportWriter;
+    formData.boardWriter = user !== null ? user : formData.boardWriter;
 
-      Object.keys(reportData).forEach((key) => {
-        form.append(key, reportData[key]);
-      });
+    Object.keys(formData).forEach((key) => {
+      form.append(key, formData[key]);
+    });
 
-      const isConfirm = window.confirm('신고하시겠습니까?');
-      if (isConfirm) {
-        try {
-          await Instance.post('/report/writeform', form, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-          navigate(-2);
-        } catch (e: any) {
-          console.log('에러: ', e);
-        }
-      }
-    }
+    await Instance.put(`/boards/${boardId}`, form, {
+      headers: {
+        'Content-Type' : 'multipart/form-data'
+      },
+    });
+    navigate(-1);
   };
 
   const testFunc = () => {
@@ -241,6 +192,16 @@ const BoardWrite = () => {
     return boardContent;
 
   }
+
+  useEffect(() => {
+    if (boardData && boardData.title) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        title: boardData.title,
+        category: boardData.category,
+      }));
+    }
+  }, [boardData]);
 
   return (
     <>
@@ -272,7 +233,7 @@ const BoardWrite = () => {
                         switch (board) {
                           case 'qna':
                             return (
-                              <select name="category" value={boardData?.category || formData.category} onChange={handleChange} required>
+                              <select name="category" value={formData.category} onChange={handleChange} required>
                                 <option value="">선택</option>
                                 <option value="칭찬">칭찬</option>
                                 <option value="문의">문의</option>
@@ -282,7 +243,7 @@ const BoardWrite = () => {
                             );
                           case 'review':
                             return (
-                              <select name="category" value={boardData?.category || formData.category} onChange={handleChange} required>
+                              <select name="category" value={formData.category} onChange={handleChange} required>
                                 <option value="">선택</option>
                                 <option value="객실">객실</option>
                                 <option value="다이닝">다이닝</option>
@@ -357,7 +318,7 @@ const BoardWrite = () => {
                         <>
                           <th>대표 이미지</th>
                           <td>
-                            <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required /> (용량 제한 : 10MB)
+                            <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required /> 용량 제한 : 10MB
                             {imgFile !== '' ? (
                               <ItemThumbnail className="preview" src={imgFile} alt="후기 이미지" />
                             ) : (
@@ -369,7 +330,7 @@ const BoardWrite = () => {
                         <>
                           <th>첨부파일</th>
                           <td>
-                            <input type="file" accept="*" ref={fileRef} onChange={changeFile} /> (용량 제한 : 10MB)
+                            <input type="file" accept="*" ref={fileRef} onChange={changeFile} /> 용량 제한 : 10MB
                           </td>
                         </>
                       )}
@@ -387,9 +348,9 @@ const BoardWrite = () => {
             </S.Table>
             <BtnWrapper className="center double mt40">
               {board !== 'report' ? <SubmitBtn type="submit">작성하기</SubmitBtn> : <SubmitBtn type="submit">신고하기</SubmitBtn>}
-              <NormalBtn type="button" onClick={() => navigate(-1)}>
+              <SubmitBtn type="button" onClick={() => navigate(-1)}>
                 취소
-              </NormalBtn>
+              </SubmitBtn>
             </BtnWrapper>
           </form>
         </div>
@@ -398,4 +359,4 @@ const BoardWrite = () => {
   );
 };
 
-export default BoardWrite;
+export default BoardUpdate;

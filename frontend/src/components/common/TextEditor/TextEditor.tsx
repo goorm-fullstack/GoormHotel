@@ -7,6 +7,7 @@ import UploadAdapter from '../../../utils/adaptor/UploadAdaptor';
 // 사용할 Props를 미리 정의해줍니다.
 interface Props {
   setValue: (data: string) => void;
+  setDefaultValue: () => string;
 }
 
 // 텍스트 에디터의 Component의 제네릭 타입으로 사용할 Props를 지정합니다.
@@ -31,7 +32,7 @@ class TextEditor extends React.Component<Props> {
       <EditorWrapper>
         <CKEditor
           editor={ClassicEditor}
-          data=""
+          data={this.props.setDefaultValue()}
           config={{
             extraPlugins: [MyCustomUploadAdapterPlugin],
           }}
