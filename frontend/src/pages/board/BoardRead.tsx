@@ -436,13 +436,9 @@ const BoardRead = () => {
                     }}
                   />
                   <BtnWrapper className="right flexgap">
-                    <NormalBtn className="mini" onClick={boardReport}>
-                      신고하기
-                    </NormalBtn>
-                    <NormalBtn className="mini" onClick={handleDelteBoard}>
-                      삭제
-                    </NormalBtn>
-                    <NormalBtn className="" onClick={boardUpdate}>수정하기</NormalBtn>
+                    <NormalBtn className="mini" onClick={boardUpdate}>수정</NormalBtn>
+                    <NormalBtn className="mini" onClick={handleDelteBoard}>삭제</NormalBtn>
+                    <NormalBtn className="mini" onClick={boardReport}>신고</NormalBtn>
                   </BtnWrapper>
                 </td>
               </tr>
