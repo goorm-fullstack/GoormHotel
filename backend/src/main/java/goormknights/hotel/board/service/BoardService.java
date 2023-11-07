@@ -152,7 +152,7 @@ public class BoardService {
         List<Board> list = new ArrayList<>();
 
         for (Board board : all) {
-            if (board.getBoardDeleteTime() == null && board.getParentBoardId().equals(0L)) {         //삭제되지 않은 글 그리고 답글이 아닌 글
+            if (board.getBoardDeleteTime() == null && board.getParentBoardId() == null) {         //삭제되지 않은 글 그리고 답글이 아닌 글
                 if (board.getIsComment().equals("true")) {        //답글을 가지고 있다면
                     Optional<Board> childBoardOptional = boardRepository.findByParentBoardId(board.getBoardId());       //답글 찾기
                     Board childBoard = childBoardOptional.get();
@@ -173,8 +173,8 @@ public class BoardService {
         Board beforeBoard = boardRepository.findByBoardId(boardId);
         RequestImageDto requestImageDto = null;
         RequestFileDto requestFileDto = null;
-        if(multipartFile == null && file != null) {
-            if(beforeBoard.getBoardImage() != null){
+        if (multipartFile == null && file != null) {
+            if (beforeBoard.getBoardImage() != null) {
                 requestImageDto = RequestImageDto.builder()
                         .boardImageName(beforeBoard.getBoardImage().getBoardImageName())
                         .boardImagePath(beforeBoard.getBoardImage().getBoardImagePath())
@@ -182,14 +182,13 @@ public class BoardService {
                         .data(beforeBoard.getBoardImage().getData())
                         .originalboardImageName(beforeBoard.getBoardImage().getOriginalboardImageName())
                         .build();
-            }
-            else{
+            } else {
                 requestImageDto = null;
             }
             requestFileDto = boardFileService.requestFileDto(file);
         } else if (multipartFile != null && file == null) {
             requestImageDto = boardImageService.requestImageDto(multipartFile);
-            if(beforeBoard.getBoardFile() != null){
+            if (beforeBoard.getBoardFile() != null) {
                 requestFileDto = RequestFileDto.builder()
                         .boardFileName(beforeBoard.getBoardFile().getBoardFileName())
                         .boardFilePath(beforeBoard.getBoardFile().getBoardFilePath())
@@ -197,12 +196,11 @@ public class BoardService {
                         .data(beforeBoard.getBoardFile().getData())
                         .mimeType(beforeBoard.getBoardFile().getMimeType())
                         .build();
-            }
-            else{
+            } else {
                 requestFileDto = null;
             }
-        }else if(multipartFile == null && file == null){
-            if(requestImageDto != null){
+        } else if (multipartFile == null && file == null) {
+            if (requestImageDto != null) {
                 requestImageDto = RequestImageDto.builder()
                         .boardImageName(beforeBoard.getBoardImage().getBoardImageName())
                         .boardImagePath(beforeBoard.getBoardImage().getBoardImagePath())
@@ -210,11 +208,10 @@ public class BoardService {
                         .data(beforeBoard.getBoardImage().getData())
                         .originalboardImageName(beforeBoard.getBoardImage().getOriginalboardImageName())
                         .build();
-            }
-            else{
+            } else {
                 requestImageDto = null;
             }
-            if(requestFileDto != null){
+            if (requestFileDto != null) {
                 requestFileDto = RequestFileDto.builder()
                         .boardFileName(beforeBoard.getBoardFile().getBoardFileName())
                         .boardFilePath(beforeBoard.getBoardFile().getBoardFilePath())
@@ -222,12 +219,11 @@ public class BoardService {
                         .data(beforeBoard.getBoardFile().getData())
                         .mimeType(beforeBoard.getBoardFile().getMimeType())
                         .build();
-            }
-            else{
+            } else {
                 requestFileDto = null;
 
             }
-        }else{
+        } else {
             requestImageDto = boardImageService.requestImageDto(multipartFile);
             requestFileDto = boardFileService.requestFileDto(file);
         }
