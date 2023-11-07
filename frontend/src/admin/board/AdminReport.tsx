@@ -5,7 +5,7 @@ import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/com
 import { Container, Table, TableHeader } from '../member/Style';
 import Paging from '../../components/common/Paging/Paging';
 import { ReportData } from './AdminBoard';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { boardTitleList } from './AdminBoard';
 import Instance from '../../utils/api/axiosInstance';
 import AdminCheck from '../adminCheck';
@@ -62,7 +62,6 @@ const AdminReport = () => {
     checkedItems.forEach((boardId) => {
       Instance.put(`/report/check/${boardId}`)
         .then(() => {
-          alert('처리되었습니다.');
           window.location.reload();
         })
         .catch((error) => {
@@ -289,12 +288,13 @@ const AdminReport = () => {
                     />
                   </td>
                   <td className="center">{totalData - idx}</td>
-                  <td className="center">
+                  <td className="center commonetwrap">
                     {report.replyId == null ? (
-                      <S.LinkStyle
+                      <Link
+                        className="u"
                         to={`/admin/board/${boardTitleList.find((item) => item.board === report.boardTitle)?.english}/detail/${report.boardId}`}>
                         {report.title}
-                      </S.LinkStyle>
+                      </Link>
                     ) : report.boardId == null ? (
                       <>
                         <S.CommentText>{truncateString(report.replyContent, 8)}</S.CommentText>

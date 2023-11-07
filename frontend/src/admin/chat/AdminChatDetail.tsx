@@ -6,6 +6,7 @@ import Instance from '../../utils/api/axiosInstance';
 import { PageTitle, BtnWrapper, CloseButton, NormalBtn } from '../../Style/commonStyles';
 import { Container, Table } from '../member/Style';
 import AdminCheck from '../adminCheck';
+import PrevButton from '../PrevButton';
 
 interface ChatMessage {
   sender: string;
@@ -200,7 +201,7 @@ const AdminChatDetail = () => {
           </tbody>
         </Table>
         <BtnWrapper className="center mt40">
-          <NormalBtn onClick={navigateToChatList}>목록</NormalBtn>
+          <PrevButton />
         </BtnWrapper>
       </Container>
       <AdminCheck kind="AUTH_C" />

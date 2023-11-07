@@ -233,8 +233,10 @@ public class ReservationService {
         Page<Reservation> page = reservationRepository.findAll(pageable);
         List<MemberReservationDto> result = new ArrayList<>();
         for (Reservation reservation : page) {
-            if (reservation.getMember().getMemberId().equals(memberId) || reservation.getNonMember().getName().equals(memberId))
-                result.add(new MemberReservationDto(reservation));
+            if(notNullAllowMember(reservation)) {
+                Member member = reservation.getMember();
+                addMemberReservationInfo(member, memberId, reservation, result);
+            }
         }
         return result;
     }
@@ -245,5 +247,21 @@ public class ReservationService {
     public Long getCountByMemberId(String memberId) {
         List<Reservation> byMemberID = reservationRepository.findAllByMemberId(memberId);
         return (long) (byMemberID.size() / 10);
+    }
+
+    /**
+     * 예약 정보에서 멤버가 null이 아닌 경우에 true가 반환됨
+     */
+    private static boolean notNullAllowMember(Reservation reservation) {
+        return reservation.getMember() != null;
+    }
+
+    /**
+     * 찾는 사용자 정보와 예약 정보의 사용자 정보와 같은지 비교
+     */
+    private void addMemberReservationInfo(Member member, String memberId, Reservation reservation, List<MemberReservationDto> result) {
+        if(member.getMemberId().equals(memberId)) {
+            result.add(new MemberReservationDto(reservation));
+        }
     }
 }

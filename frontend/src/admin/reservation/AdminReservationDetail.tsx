@@ -4,12 +4,13 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, BtnWrapper, SubmitBtn, NormalBtn } from '../../Style/commonStyles';
-import { Container, Table } from '../member/Style';
+import { Container, Table, TableHeader } from '../member/Style';
 import { numberWithCommas } from '../../utils/function/comma';
 import { ReservationData } from './AdminReservation';
 import { ValuePiece } from '../../components/common/DateButton/DateButton';
 import moment from 'moment';
 import AdminCheck from '../adminCheck';
+import PrevButton from '../PrevButton';
 
 const AdminReservationDetail = () => {
   const { reservationNumber } = useParams(); //예약 번호로 조회
@@ -132,10 +133,34 @@ const AdminReservationDetail = () => {
     setCheckOutDate(`${formattedDate}`);
   };
 
+  // 예약 취소
+  const handleCancle = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await Instance.post(`/reservation/cancle/${reservationNumber}`);
+      if (response.status === 200) {
+        window.location.reload();
+      }
+    } catch (error: any) {
+      alert('예약 취소 실패');
+    }
+  };
+
   return (
     <AdminLayout subMenus="reservation">
       <Container>
         <PageTitle>예약 상세</PageTitle>
+        {reservationData && reservationData.state === '예약' ? (
+          <TableHeader className="detail right">
+            <BtnWrapper className="flexgap right">
+              <NormalBtn type="button" className="red mini" onClick={handleCancle}>
+                예약취소
+              </NormalBtn>
+            </BtnWrapper>
+          </TableHeader>
+        ) : (
+          <></>
+        )}
         <Table className="horizontal">
           <colgroup>
             <col width="240px" />
@@ -146,15 +171,6 @@ const AdminReservationDetail = () => {
               <th>예약 번호</th>
               <td>
                 {reservationNumber}(상태: {reservationData && reservationData.state})
-                {reservationData && reservationData.state === '예약' ? (
-                  <NormalBtn type="button" className="red mini">
-                    예약취소
-                  </NormalBtn>
-                ) : (
-                  <NormalBtn type="button" className="red mini" style={{ display: 'none' }}>
-                    예약취소
-                  </NormalBtn>
-                )}
               </td>
             </tr>
             <tr>
@@ -226,9 +242,7 @@ const AdminReservationDetail = () => {
         </Table>
         <BtnWrapper className="center double mt40">
           <SubmitBtn type="button">수정</SubmitBtn>
-          <NormalBtn type="button" onClick={() => navigate(-1)}>
-            목록
-          </NormalBtn>
+          <PrevButton />
         </BtnWrapper>
       </Container>
       <AdminCheck kind="AUTH_B" />

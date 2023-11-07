@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
 import boardWrite from '../../pages/board/BoardWrite';
 import AdminCheck from '../adminCheck';
+import PrevButton from '../PrevButton';
 
 const AdminBoardWrite = () => {
   const adminAuth = localStorage.getItem('auth');
@@ -309,9 +310,9 @@ const AdminBoardWrite = () => {
               </tr>
             </tbody>
           </Table>
-          <BtnWrapper className="center mt40">
+          <BtnWrapper className="center mt40 double">
             <SubmitBtn type="submit">작성하기</SubmitBtn>
-            <NormalBtn onClick={() => navigate(-1)}>목록</NormalBtn>
+            <PrevButton />
           </BtnWrapper>
         </form>
       </Container>

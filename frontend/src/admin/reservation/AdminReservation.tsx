@@ -108,7 +108,6 @@ const AdminReservation = () => {
             전체 <strong>{totalCount}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
-            <NormalBtn className="header">선택 재예약</NormalBtn>
             <NormalBtn className="header red">선택 예약 취소</NormalBtn>
           </BtnWrapper>
         </TableHeader>
@@ -154,7 +153,7 @@ const AdminReservation = () => {
                         onChange={() => handleCheckboxChange(reservation.reservationNumber)}
                       />
                     </td>
-                    <td className="center">{index + 1}</td>
+                    <td className="center">{reservationList.length - index}</td>
                     <td className="center">
                       <Link to={`/admin/reservation/detail/${reservation.reservationNumber}`} className="u">
                         {reservation.reservationNumber}

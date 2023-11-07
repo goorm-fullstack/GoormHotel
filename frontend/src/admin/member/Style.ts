@@ -43,4 +43,12 @@ export const TableHeader = styled.div`
   strong {
     color: ${(props) => props.theme.colors.goldhover};
   }
+
+  &.detail {
+    margin-top: -56px;
+  }
+
+  &.right {
+    justify-content: flex-end;
+  }
 `;
