@@ -7,7 +7,7 @@ const PrevButton = () => {
 
   return (
     <NormalBtn type="button" onClick={() => navigate(-1)}>
-      취소
+      목록
     </NormalBtn>
   );
 };

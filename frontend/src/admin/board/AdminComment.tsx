@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import * as S from './Style';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/commonStyles';
@@ -194,7 +194,7 @@ const AdminComment = () => {
           </p>
           <BtnWrapper className="flexgap right">
             <NormalBtn className="header" onClick={handleReport}>
-              신고된 글로 이동
+              신고하기
             </NormalBtn>
             <NormalBtn className="header red" onClick={handleDeleteItems}>
               댓글 삭제
@@ -245,12 +245,13 @@ const AdminComment = () => {
                   <td className="center">{totalReply - idx}</td>
                   <td className="center">{reply.replyBoardTitle}</td>
                   <td className="center">
-                    <S.LinkStyle
+                    <Link
+                      className="u"
                       to={`/admin/board/${boardTitleList.find((item) => item.board === reply.replyBoardTitle)?.english}/detail/${reply.boardId}`}>
                       {reply.replyTitle}
-                    </S.LinkStyle>
+                    </Link>
                   </td>
-                  <td className="center">
+                  <td className="center commonetwrap">
                     <S.CommentText>{truncateString(reply.replyContent, 8)}</S.CommentText>
                     <S.ModalContainer>
                       <S.ModalContent>{reply.replyContent}</S.ModalContent>

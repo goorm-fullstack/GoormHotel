@@ -102,7 +102,7 @@ const AdminMemberDetail = () => {
     try {
       const response = await Instance.delete(`/api/softdelete/${memberId}`);
       if (response.status === 200) {
-        navigate('/admin/member/detail');
+        navigate('/admin/member/1');
       }
     } catch (error: any) {
       alert('회원 삭제 실패');

@@ -5,9 +5,9 @@ import 'react-calendar/dist/Calendar.css';
 import 'moment/locale/ko';
 import Instance from '../../utils/api/axiosInstance';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Container } from '../../components/Slide/Style';
-import { Table } from '../member/Style';
+import { Container, Table } from '../member/Style';
 import AdminCheck from '../adminCheck';
+import PrevButton from '../PrevButton';
 
 interface Member {
   name: string;
@@ -155,7 +155,7 @@ const AdminDetailGiftCard = () => {
             ) : (
               <SubmitBtn onClick={handleDataUpdate}>완료</SubmitBtn>
             )}
-            <LinkBtn to="/admin/giftcard/1">취소</LinkBtn>
+            <PrevButton />
           </BtnWrapper>
         </form>
       </Container>

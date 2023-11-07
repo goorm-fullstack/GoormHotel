@@ -3,7 +3,7 @@ import * as S from './Style';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PageTitle, BtnWrapper } from '../../Style/commonStyles';
 import AdminLayout from '../common/AdminLayout';
-import { Container } from '../member/Style';
+import { Container, TableHeader } from '../member/Style';
 import { NormalBtn } from '../../Style/commonStyles';
 import Instance from '../../utils/api/axiosInstance';
 import { Simulate } from 'react-dom/test-utils';
@@ -312,14 +312,16 @@ const AdminBoardDetail = () => {
       <AdminLayout subMenus="board">
         <Container>
           {title}
-          <S.WriteBtnWrapper className="right double">
-            <NormalBtn className="red" onClick={boardReport}>
-              신고하기
-            </NormalBtn>
-            <NormalBtn className="red" onClick={handleDeleteBoard}>
-              삭제
-            </NormalBtn>
-          </S.WriteBtnWrapper>
+          <TableHeader className="detail right">
+            <BtnWrapper className="flexgap right">
+              <NormalBtn className="mini" onClick={boardReport}>
+                신고하기
+              </NormalBtn>
+              <NormalBtn className="red mini" onClick={handleDeleteBoard}>
+                글 삭제
+              </NormalBtn>
+            </BtnWrapper>
+          </TableHeader>
           <div>
             <S.TableRead>
               <tbody>

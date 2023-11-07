@@ -108,7 +108,6 @@ const AdminReservation = () => {
             전체 <strong>{totalCount}</strong> 건
           </p>
           <BtnWrapper className="flexgap right">
-            <NormalBtn className="header">선택 재예약</NormalBtn>
             <NormalBtn className="header red">선택 예약 취소</NormalBtn>
           </BtnWrapper>
         </TableHeader>
