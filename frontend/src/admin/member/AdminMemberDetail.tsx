@@ -7,6 +7,7 @@ import Instance from '../../utils/api/axiosInstance';
 import AdminCheck from '../adminCheck';
 import * as S from './Style';
 import PrevButton from '../PrevButton';
+import { formatDate } from '../../utils/function/dateFormatter';
 
 interface Member {
   name: string;
@@ -204,7 +205,7 @@ const AdminMemberDetail = () => {
             </tr>
             <tr>
               <th>가입일</th>
-              <td>{member.signupDate ? new Date(member.signupDate).toLocaleDateString() : 'loading...'}</td>
+              <td>{member.signupDate ? formatDate((member.signupDate).toString()) : 'loading...'}</td>
             </tr>
           </tbody>
         </Table>

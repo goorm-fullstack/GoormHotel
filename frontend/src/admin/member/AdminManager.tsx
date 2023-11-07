@@ -108,6 +108,7 @@ const AdminManager = () => {
         const newManagerData = await Instance.get('/api/admin-getlist');
         if (newManagerData.status === 200) {
           setManagerData(newManagerData.data);
+          window.location.reload();
         }
       }
     } catch (error) {
