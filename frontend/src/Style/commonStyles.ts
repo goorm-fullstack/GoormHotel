@@ -485,6 +485,10 @@ export const commonTable = styled.table`
       // 데이터가 없는 경우 td에 추가
       padding: 19px 12px;
     }
+
+    &.commonetwrap {
+      position: relative;
+    }
   }
   td.center {
     // 텍스트 중앙 정렬
