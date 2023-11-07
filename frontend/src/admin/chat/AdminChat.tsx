@@ -125,7 +125,7 @@ const AdminChat = () => {
                       onChange={() => handleCheckboxChange(item.chatMessages[0].roomId)}
                     />
                   </td>
-                  <td style={{ textAlign: 'center' }}>{item.id}</td>
+                  <td style={{ textAlign: 'center' }}>{chatData.length - index}</td>
                   <td style={{ textAlign: 'center' }}>
                     {item.chatMessages[0].sender !== 'anonymous' && item.chatMessages[0].sender ? (
                       <Link to={`/admin/member/${item.chatMessages[0].sender}`} className="memberId u">

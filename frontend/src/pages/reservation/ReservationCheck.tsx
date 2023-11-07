@@ -60,10 +60,10 @@ const ReservationCheck = () => {
     fetchImg();
     if (reservationData) {
       const checkInDate = moment(reservationData.checkIn, 'YYYY, MM, DD, HH, mm, ss, SSS');
-      const formattedCheckInDate = checkInDate.format('YYYY.MM.DD (ddd)');
+      const formattedCheckInDate = checkInDate.format('YYYY/MM/DD (ddd)');
 
       const checkOutDate = moment(reservationData.checkOut, 'YYYY, MM, DD, HH, mm, ss, SSS');
-      const formattedCheckOutDate = checkOutDate.format('YYYY.MM.DD (ddd)');
+      const formattedCheckOutDate = checkOutDate.format('YYYY/MM/DD (ddd)');
 
       setCheckInDate(formattedCheckInDate);
       setCheckOutDate(formattedCheckOutDate);
