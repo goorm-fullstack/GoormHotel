@@ -103,7 +103,6 @@ const AdminReport = () => {
     }
   };
 
-  console.log(report);
 
   const handleAddBlackList = () => {
     checkedItems.forEach((reportId) => {

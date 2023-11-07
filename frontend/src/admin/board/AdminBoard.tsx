@@ -169,7 +169,6 @@ const AdminBoard = () => {
     }
   };
 
-  console.log(board);
 
   const setCommentBoard = (boardId: number) => {
     Instance.get(`/boards/findParentBoardId/${boardId}`)

@@ -49,8 +49,6 @@ const BoardUpdate = () => {
     }
   }, [boardId]);
 
-  console.log(boardData);
-
   useEffect(() => {
     if (boardData && boardData.boardImage !== null)
       Instance.get(`/boards/image/${boardId}`, { responseType: 'arraybuffer' }).then((response) => {

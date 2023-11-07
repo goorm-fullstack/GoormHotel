@@ -47,7 +47,6 @@ const BoardWrite = () => {
     }
   }, [boardId]);
 
-  console.log(boardData);
 
   const isLogin = localStorage.getItem('memberId');
 
