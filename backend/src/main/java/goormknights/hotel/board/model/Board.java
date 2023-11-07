@@ -109,21 +109,78 @@ public class Board {
     }
 
     public Board updateBoard(Board board, RequestBoardDto requestBoardDto, RequestImageDto requestImageDto, RequestFileDto requestFileDto){
-        return Board.builder()
-                .boardId(board.getBoardId())
-                .title(requestBoardDto.getTitle())
-                .boardContent(requestBoardDto.getBoardContent())
-                .boardWriter(requestBoardDto.getBoardWriter())
-                .boardImage(requestImageDto.toEntity())
-                .boardFile(requestFileDto.toEntity())
-                .boardTitle(requestBoardDto.getBoardTitle())
-                .category(requestBoardDto.getCategory())
-                .boardWriteDate(board.getBoardWriteDate())
-                .replies(board.getReplies())
-                .report(board.getReport())
-                .isComment(requestBoardDto.getIsComment())
-                .memberPk(board.getMemberPk())
-                .boardPassword(board.getBoardPassword())
-                .build();
+        if(requestImageDto == null && requestFileDto != null){
+            return Board.builder()
+                    .boardId(board.getBoardId())
+                    .title(requestBoardDto.getTitle())
+                    .boardContent(requestBoardDto.getBoardContent())
+                    .boardWriter(requestBoardDto.getBoardWriter())
+                    .boardImage(null)
+                    .boardFile(requestFileDto.toEntity())
+                    .boardTitle(requestBoardDto.getBoardTitle())
+                    .category(requestBoardDto.getCategory())
+                    .boardWriteDate(board.getBoardWriteDate())
+                    .replies(board.getReplies())
+                    .report(board.getReport())
+                    .isComment(requestBoardDto.getIsComment())
+                    .memberPk(board.getMemberPk())
+                    .boardPassword(board.getBoardPassword())
+                    .build();
+        }
+        else if(requestFileDto == null && requestImageDto != null){
+            return Board.builder()
+                    .boardId(board.getBoardId())
+                    .title(requestBoardDto.getTitle())
+                    .boardContent(requestBoardDto.getBoardContent())
+                    .boardWriter(requestBoardDto.getBoardWriter())
+                    .boardImage(requestImageDto.toEntity())
+                    .boardFile(null)
+                    .boardTitle(requestBoardDto.getBoardTitle())
+                    .category(requestBoardDto.getCategory())
+                    .boardWriteDate(board.getBoardWriteDate())
+                    .replies(board.getReplies())
+                    .report(board.getReport())
+                    .isComment(requestBoardDto.getIsComment())
+                    .memberPk(board.getMemberPk())
+                    .boardPassword(board.getBoardPassword())
+                    .build();
+        }
+        else if(requestFileDto == null && requestImageDto == null){
+            return Board.builder()
+                    .boardId(board.getBoardId())
+                    .title(requestBoardDto.getTitle())
+                    .boardContent(requestBoardDto.getBoardContent())
+                    .boardWriter(requestBoardDto.getBoardWriter())
+                    .boardImage(null)
+                    .boardFile(null)
+                    .boardTitle(requestBoardDto.getBoardTitle())
+                    .category(requestBoardDto.getCategory())
+                    .boardWriteDate(board.getBoardWriteDate())
+                    .replies(board.getReplies())
+                    .report(board.getReport())
+                    .isComment(requestBoardDto.getIsComment())
+                    .memberPk(board.getMemberPk())
+                    .boardPassword(board.getBoardPassword())
+                    .build();
+        }
+        else{
+            return Board.builder()
+                    .boardId(board.getBoardId())
+                    .title(requestBoardDto.getTitle())
+                    .boardContent(requestBoardDto.getBoardContent())
+                    .boardWriter(requestBoardDto.getBoardWriter())
+                    .boardImage(requestImageDto.toEntity())
+                    .boardFile(requestFileDto.toEntity())
+                    .boardTitle(requestBoardDto.getBoardTitle())
+                    .category(requestBoardDto.getCategory())
+                    .boardWriteDate(board.getBoardWriteDate())
+                    .replies(board.getReplies())
+                    .report(board.getReport())
+                    .isComment(requestBoardDto.getIsComment())
+                    .memberPk(board.getMemberPk())
+                    .boardPassword(board.getBoardPassword())
+                    .build();
+        }
+
     }
 }
