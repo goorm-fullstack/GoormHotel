@@ -110,6 +110,8 @@ const BoardRead = () => {
     }
   }, [boardId]);
 
+  console.log(boardData);
+
   const handleDownLoad = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const result = await Instance.get(`/boards/download/${boardId}`, {
       responseType: 'blob',

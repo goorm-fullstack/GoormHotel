@@ -2,7 +2,6 @@ package goormknights.hotel.member.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import goormknights.hotel.coupon.model.Coupon;
-import goormknights.hotel.giftcard.model.GiftCard;
 import goormknights.hotel.global.entity.BaseEntity;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.event.MemberEventListener;
@@ -20,8 +19,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Getter @Setter
-@Entity @Table(name = "members")
+@Getter
+@Setter
+@Entity
+@Table(name = "members")
 @EntityListeners(MemberEventListener.class)//내가 만든 이벤트 리스너와 연결
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -106,15 +107,16 @@ public class Member extends BaseEntity implements Serializable {
 
     public int getReservationCountByYear() {
         LocalDateTime now = LocalDateTime.now().plusHours(1);
-        LocalDateTime before = LocalDateTime.of(now.getYear()-1, now.getMonth(), now.getDayOfMonth(), now.getHour(), now.getMinute());
+        LocalDateTime before = LocalDateTime.of(now.getYear() - 1, now.getMonth(), now.getDayOfMonth(), now.getHour(), now.getMinute());
         int count = 0;
-        for(Reservation reservation : reservationList) {
-            if(reservation.getOrderDate().isAfter(before) && reservation.getOrderDate().isBefore(now)) {
-                count+=1;
+        for (Reservation reservation : reservationList) {
+            if (reservation.getOrderDate().isAfter(before) && reservation.getOrderDate().isBefore(now)) {
+                count += 1;
             }
         }
         return count;
     }
+
     public void setGrade(String grade) {
         this.grade = grade;
     }

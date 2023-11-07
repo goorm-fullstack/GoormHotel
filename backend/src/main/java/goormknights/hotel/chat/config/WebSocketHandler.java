@@ -14,9 +14,6 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RequiredArgsConstructor
 @Component
 @Slf4j
@@ -28,8 +25,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
     // 클라이언트로부터 메시지 수신지 동작한다.
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws JsonProcessingException {
+        log.info("message={}", message);
         String payload = message.getPayload();
+        log.info("payload={}", payload);
         ChatMessage chatMessage = objectMapper.readValue(payload, ChatMessage.class);
+        log.info("chatMessage={}", chatMessage);
         chatMessageRepository.save(chatMessage);
         ChatRoom chatRoom = chatService.findRoomById(chatMessage.getRoomId());
         chatService.setStatus(chatRoom.getRoomId(), chatRoom.getStatus());
@@ -44,12 +44,12 @@ public class WebSocketHandler extends TextWebSocketHandler {
     // 클라이언트가 소켓 연결시에 동작
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        log.info(session+" 입장");
+        log.info(session + " 입장");
     }
 
     // 클라이언트가 소켓 종료시 동작
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        log.info(session+" 연결 해제");
+        log.info(session + " 연결 해제");
     }
 }

@@ -6,6 +6,7 @@ import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import { ItemThumbnail } from '../../admin/item/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
 import Instance from '../../utils/api/axiosInstance';
+import { response } from 'express';
 
 type FormData = {
   [key: string]: string;
@@ -28,24 +29,36 @@ const BoardUpdate = () => {
   const [boardContent, setBoardContent] = useState('');
   const [boardData, setBoardData] = useState<any>(null);
   const [file, setFile] = useState('');
+  const [previousImg, setPreviousImg] = useState('');
 
   useEffect(() => {
     if (boardId) {
       Instance.get(`/boards/${boardId}`)
-          .then((response) => {
-            if (response.headers['filename']) {
-              const fileName = response.headers['filename'];
-              const decodedFileName = decodeURI(fileName).replaceAll('+', ' ');
-              setFile(decodedFileName);
-            }
-            setBoardData(response.data);
-            setBoardContent(response.data.boardContent);
-          })
-          .catch((error) => {
-            console.error('Error: ', error.message);
-          });
+        .then((response) => {
+          if (response.headers['filename']) {
+            const fileName = response.headers['filename'];
+            const decodedFileName = decodeURI(fileName).replaceAll('+', ' ');
+            setFile(decodedFileName);
+          }
+          setBoardData(response.data);
+          setBoardContent(response.data.boardContent);
+        })
+        .catch((error) => {
+          console.error('Error: ', error.message);
+        });
     }
   }, [boardId]);
+
+  console.log(boardData);
+
+  useEffect(() => {
+    if (boardData && boardData.boardImage !== null)
+      Instance.get(`/boards/image/${boardId}`, { responseType: 'arraybuffer' }).then((response) => {
+        const blob = new Blob([response.data], { type: response.headers['content-type'] });
+        const imageUrl = URL.createObjectURL(blob);
+        setPreviousImg(imageUrl);
+      });
+  }, [boardData]);
 
   const isLogin = localStorage.getItem('memberId');
 
@@ -157,7 +170,6 @@ const BoardUpdate = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-
     e.preventDefault();
 
     if (!formData.category) {
@@ -181,17 +193,15 @@ const BoardUpdate = () => {
 
     await Instance.put(`/boards/${boardId}`, form, {
       headers: {
-        'Content-Type' : 'multipart/form-data'
+        'Content-Type': 'multipart/form-data',
       },
     });
     navigate(-1);
   };
 
   const testFunc = () => {
-
     return boardContent;
-
-  }
+  };
 
   useEffect(() => {
     if (boardData && boardData.title) {
@@ -276,7 +286,7 @@ const BoardUpdate = () => {
                   <tr>
                     <th style={{ width: '240px' }}>제목</th>
                     <td>
-                      <input type="text" className="title long" name="title" value = {formData.title} onChange={handleChange} required />
+                      <input type="text" className="title long" name="title" value={formData.title} onChange={handleChange} required />
                     </td>
                   </tr>
                 ) : (
@@ -318,9 +328,9 @@ const BoardUpdate = () => {
                         <>
                           <th>대표 이미지</th>
                           <td>
-                            <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required /> 용량 제한 : 10MB
-                            {imgFile !== '' ? (
-                              <ItemThumbnail className="preview" src={imgFile} alt="후기 이미지" />
+                            <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} /> 용량 제한 : 10MB
+                            {previousImg !== '' ? (
+                              <ItemThumbnail className="preview" src={previousImg} alt="후기 이미지" />
                             ) : (
                               <ItemThumbnail style={{ display: 'none' }} />
                             )}
@@ -331,13 +341,14 @@ const BoardUpdate = () => {
                           <th>첨부파일</th>
                           <td>
                             <input type="file" accept="*" ref={fileRef} onChange={changeFile} /> 용량 제한 : 10MB
+                            {file !== '' ? <span style={{ marginLeft: '30px' }}>기존 파일: {file}</span> : ''}
                           </td>
                         </>
                       )}
                     </tr>
                     <tr className="contents">
                       <td colSpan={2} className="writeWrapper">
-                          <TextEditor setValue={setBoardContent} setDefaultValue={testFunc}/>
+                        <TextEditor setValue={setBoardContent} setDefaultValue={testFunc} />
                       </td>
                     </tr>
                   </>
@@ -347,7 +358,7 @@ const BoardUpdate = () => {
               </tbody>
             </S.Table>
             <BtnWrapper className="center double mt40">
-              {board !== 'report' ? <SubmitBtn type="submit">작성하기</SubmitBtn> : <SubmitBtn type="submit">신고하기</SubmitBtn>}
+              {board !== 'report' ? <SubmitBtn type="submit">수정하기</SubmitBtn> : <SubmitBtn type="submit">신고하기</SubmitBtn>}
               <SubmitBtn type="button" onClick={() => navigate(-1)}>
                 취소
               </SubmitBtn>

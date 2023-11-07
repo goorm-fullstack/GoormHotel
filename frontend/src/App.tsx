@@ -56,6 +56,7 @@ import { useAuth } from './utils/api/AuthContext';
 import AdminBoardDetail from './admin/board/AdminBoardDetail';
 import MyBoardList from './pages/board/MyBoardList';
 import BoardUpdate from "./pages/board/BoardUpdate";
+import AdminBoardUpdate from "./admin/board/AdminBoardUpdate";
 
 const App: React.FC = () => {
   const { setAuthState, setMemberAuthState } = useAuth();
@@ -174,6 +175,7 @@ const App: React.FC = () => {
           <Route path="/admin/board/:page" element={<AdminBoard />} />
           <Route path="/admin/board/write" element={<AdminBoardWrite />} />
           <Route path="/admin/board/:board/detail/:id" element={<AdminBoardDetail />} />
+          <Route path="/admin/board/update/:board/:boardId" element={<AdminBoardUpdate />} />
 {/*           <Route path="/admin/board/write" element={<AdminBoardWrite />} /> */}
           <Route path="/admin/deletepost/:page" element={<AdminDeleteComment />} />
           <Route path="/admin/chat/:page" element={<AdminChat />} />

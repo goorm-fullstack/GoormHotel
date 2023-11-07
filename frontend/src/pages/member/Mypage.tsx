@@ -175,7 +175,7 @@ const Mypage = () => {
             </div>
             <div>
               <ContentsTitleXSmall>멤버십 쿠폰</ContentsTitleXSmall>
-              <Coupon grade="bronze" couponList = {couponList} />
+              <Coupon grade="bronze" couponList={couponList} />
               <ul className="guide">
                 <li>⁕&nbsp;&nbsp;상기 멤버십 서비스 혜택은 변경 및 종료될 수 있습니다.</li>
                 <li>⁕&nbsp;&nbsp;특전의 세부 이용 조건은 약관을 통해 확인하실 수 있습니다.</li>
