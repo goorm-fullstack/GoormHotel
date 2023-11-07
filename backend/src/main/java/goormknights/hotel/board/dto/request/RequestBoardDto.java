@@ -38,7 +38,7 @@ public class RequestBoardDto {
 
     private String isComment;      //답글 여부
 
-    private long parentBoardId;     //부모 글 Id
+    private Long parentBoardId;     //부모 글 Id
 
     public Board toEntity() {
         return Board.builder()
