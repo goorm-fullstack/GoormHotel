@@ -1,7 +1,6 @@
 package goormknights.hotel.member.service;
 
 import goormknights.hotel.auth.service.RedisUtil;
-import goormknights.hotel.giftcard.repository.GiftCardRepository;
 import goormknights.hotel.global.entity.Role;
 import goormknights.hotel.global.exception.AlreadyExistsEmailException;
 import goormknights.hotel.global.exception.InvalidVerificationCodeException;
@@ -76,7 +75,7 @@ public class MemberService {
     }
 
     // 회원 정보 수정
-    public void edit(String memberId, MemberEditDTO memberEditDTO, String code){
+    public void edit(String memberId, MemberEditDTO memberEditDTO, String code) {
 
         if (memberEditDTO.getPassword() != null) {
             if (code == null || !verifyCode(memberEditDTO.getEmail(), code)) {
@@ -238,7 +237,7 @@ public class MemberService {
         Optional<Member> optionalMember = memberRepository.findByMemberId(memberId);
         if (optionalMember.isPresent()) {
             Member member = optionalMember.get();
-
+            
             MemberInfoDTO memberInfoDTO = new MemberInfoDTO();
             memberInfoDTO.setMemberId(member.getMemberId());
             memberInfoDTO.setName(member.getName());
@@ -272,7 +271,7 @@ public class MemberService {
     }
 
     public void setBlackList(List<Long> ids) {
-        for(Long id : ids) {
+        for (Long id : ids) {
             Member blackMember = memberRepository.findById(id).orElseThrow(MemberNotFound::new);
             blackMember.setRole(Role.BLACKED);
         }
@@ -282,7 +281,7 @@ public class MemberService {
         Page<Member> memberPage = memberRepository.findAll(pageable);
         List<ResponseMemberDto> result = new ArrayList<>();
 
-        for(Member member : memberPage) {
+        for (Member member : memberPage) {
             result.add(new ResponseMemberDto(member));
         }
 
@@ -295,7 +294,7 @@ public class MemberService {
 
     // 블랙 해제
     public void setUnBlacked(List<Long> ids) {
-        for(Long id : ids) {
+        for (Long id : ids) {
             Member blackMember = memberRepository.findById(id).orElseThrow(MemberNotFound::new);
             blackMember.setRole(Role.USER);
         }
@@ -304,20 +303,20 @@ public class MemberService {
 
     public ResponseMemberDto findByMemberId(String id) {
         Optional<Member> member = memberRepository.findByMemberId(id);
-        if(member.isEmpty()) {
+        if (member.isEmpty()) {
             throw new MemberNotFound();
         }
         return new ResponseMemberDto(member.get());
     }
 
     // 멤버 아이디로 회원 정보 찾기 - 진환
-    public Member findMember(String memberId){
+    public Member findMember(String memberId) {
         return memberRepository.findByMemberId(memberId).orElseThrow(MemberNotFound::new);
     }
 
     public void saveRoomId(ChatMemberDto memberDto) {
         Optional<Member> member = memberRepository.findByMemberId(memberDto.getMemberId());
-        if(member.isEmpty())
+        if (member.isEmpty())
             throw new MemberNotFound();
 
         Member findMember = member.get();
@@ -326,7 +325,7 @@ public class MemberService {
 
     public String getChatRoomId(String memberId) {
         Optional<Member> member = memberRepository.findByMemberId(memberId);
-        if(member.isEmpty())
+        if (member.isEmpty())
             throw new MemberNotFound();
 
         return member.get().getRoomId();
