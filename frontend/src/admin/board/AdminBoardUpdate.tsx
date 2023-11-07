@@ -326,6 +326,7 @@ const AdminBoardUpdate = () => {
                   <th>파일첨부</th>
                   <td>
                     <input type="file" accept="*" ref={fileRef} onChange={changeFile} />
+                    {file !== '' ? <span style={{ marginLeft: '30px' }}>기존 파일: {file}</span> : ''}
                   </td>
                 </tr>
               )}
