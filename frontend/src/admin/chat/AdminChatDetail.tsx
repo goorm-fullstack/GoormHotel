@@ -121,6 +121,21 @@ const AdminChatDetail = () => {
     }
   };
 
+  const handleClickSendButton = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if (newChat.trim() !== '' && socketConnected) {
+      setChatData((p) => [...p, { message: newChat, sender: 'admin', type: 'TALK' }]);
+      ws.current?.send(
+        JSON.stringify({
+          type: 'TALK',
+          roomId: roomId,
+          sender: 'admin',
+          message: newChat,
+        })
+      );
+      setNewChat('');
+    }
+  };
+
   const handleFormSubmit = (e: React.FormEvent<HTMLDivElement>) => {
     e.preventDefault();
 
@@ -146,8 +161,8 @@ const AdminChatDetail = () => {
           </colgroup>
           <tbody>
             <tr>
-              <th>회원 아이디(회원 ID)</th>
-              <td>({sender})</td>
+              <th>회원 ID</th>
+              <td>{sender}</td>
             </tr>
             <tr>
               <th>최근 발송일</th>
@@ -194,7 +209,7 @@ const AdminChatDetail = () => {
                     value={newChat}
                     onChange={(e) => setNewChat(e.target.value)}
                     onKeyDown={handleInputKeyPress}></textarea>
-                  <button type="submit">전송</button>
+                  <button type="submit" onClick={handleClickSendButton}>전송</button>
                 </div>
               </S.ChatWrapper>
             </tr>

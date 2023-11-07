@@ -6,7 +6,7 @@ Content-Type: application/json
   "adminId": "admin",
   "password": "123",
   "adminName": "김영한",
-  "adminNickname": "Tiger",
+  "adminNickname": "호랑이",
   "auth": "AUTH_A-AUTH_B-AUTH_C"
 }
 

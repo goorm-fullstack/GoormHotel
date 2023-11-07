@@ -74,6 +74,7 @@ const AdminSubScribe = () => {
     checkedItems.map((id, index) => {
       Instance.post('/subscribe/cancel/' + id).then(() => {
         // 구독해지용
+        window.location.reload();
       });
     });
   };
@@ -124,7 +125,7 @@ const AdminSubScribe = () => {
                   <td className="center">
                     <InputCheckbox type="checkbox" checked={checkedItems.includes(item.id)} onChange={() => handleCheckboxChange(item.id)} />
                   </td>
-                  <td className="center">{item.id}</td>
+                  <td className="center">{subScribeData.length - index}</td>
                   <td className="lastChat center">
                     <Link to={`/admin/mail?mailto=${item.emailAddress}`}>{item.emailAddress}</Link>
                   </td>

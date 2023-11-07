@@ -6,7 +6,6 @@ import Instance from '../../utils/api/axiosInstance';
 import Paging from '../../components/common/Paging/Paging';
 import { Container, Table, TableHeader } from '../member/Style';
 import AdminCheck from '../adminCheck';
-import { formatDate } from '../../utils/function/dateFormatter';
 
 interface ChatMessage {
   id: number;
@@ -88,7 +87,6 @@ const AdminChat = () => {
             <NormalBtn className="header" onClick={handleClosedClick}>
               선택 채팅 종료
             </NormalBtn>
-            <NormalBtn className="header red">블랙리스트 추가</NormalBtn>
           </BtnWrapper>
         </TableHeader>
         <Table>
@@ -127,7 +125,7 @@ const AdminChat = () => {
                       onChange={() => handleCheckboxChange(item.chatMessages[0].roomId)}
                     />
                   </td>
-                  <td style={{ textAlign: 'center' }}>{item.id}</td>
+                  <td style={{ textAlign: 'center' }}>{chatData.length - index}</td>
                   <td style={{ textAlign: 'center' }}>
                     {item.chatMessages[0].sender !== 'anonymous' && item.chatMessages[0].sender ? (
                       <Link to={`/admin/member/${item.chatMessages[0].sender}`} className="memberId u">

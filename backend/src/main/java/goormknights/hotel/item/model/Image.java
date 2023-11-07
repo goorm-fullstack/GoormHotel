@@ -31,7 +31,7 @@ public class Image {
     @Column(nullable = false)
     private String mimeType; // 이미지 mimeType
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGBLOB")
     @Lob
     private byte[] data; // 이미지 바이트 정보
 

@@ -35,8 +35,6 @@ const AdminReservationDetail = () => {
   const [checkOutOpen, setCheckOutOpen] = useState(false);
   const [checkInValue, setCheckInValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
   const [checkOutValue, setCheckOutValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
-  const navigate = useNavigate();
-  const authItem = localStorage.getItem('auth');
 
   console.log(reservationData);
 
@@ -75,45 +73,9 @@ const AdminReservationDetail = () => {
     return `${formattedDate}`;
   };
 
-  const isDateDisabled = (date: Date) => {
-    return moment(date).isBefore(moment(), 'day');
-  };
-
   const handleNoticeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!updateClick) {
       setCustomerRequest(e.target.value);
-    }
-  };
-
-  const handleNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!updateClick) {
-      setCustomerName(e.target.value);
-    }
-  };
-
-  const handlePhoneNumberInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!updateClick) {
-      setPhoneNumber(e.target.value);
-    }
-  };
-
-  const handleEmailInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!updateClick) {
-      setEmailAddress(e.target.value);
-    }
-  };
-
-  const handleCheckInToggle = () => {
-    if (!updateClick) {
-      setCheckInOpen(!checkInOpen);
-      setCheckOutOpen(false);
-    }
-  };
-
-  const handleCheckOutToggle = () => {
-    if (!updateClick) {
-      setCheckOutOpen(!checkOutOpen);
-      setCheckInOpen(false);
     }
   };
 
@@ -132,6 +94,14 @@ const AdminReservationDetail = () => {
     const formattedDate = moment(processedSelectedDate).format('yyyy/MM/DD');
     setCheckOutDate(`${formattedDate}`);
   };
+
+  const handleUpdateClick = async (e: React.FormEvent) => {
+    let updateReservationDto = {
+      notice : customerRequest
+    }
+    await Instance.post(`/reservation/update/${reservationNumber}`, updateReservationDto);
+    setUpdateClick(!updateClick);
+  }
 
   // 예약 취소
   const handleCancle = async (e: React.FormEvent) => {
@@ -209,7 +179,11 @@ const AdminReservationDetail = () => {
             <tr>
               <th>요청사항</th>
               <td>
-                <input type="text" value={customerRequest} readOnly={updateClick} onChange={handleNoticeInputChange} className="long" />
+                {updateClick ? (
+                  <input type="text" value={customerRequest} readOnly className="long" />
+                ) : (
+                  <input type="text" value={customerRequest} onChange={handleNoticeInputChange} className="long" />
+                )}
               </td>
             </tr>
             <tr>
@@ -241,7 +215,11 @@ const AdminReservationDetail = () => {
           </tbody>
         </Table>
         <BtnWrapper className="center double mt40">
-          <SubmitBtn type="button">수정</SubmitBtn>
+          {updateClick ? (
+            <SubmitBtn type="button" onClick={() => {setUpdateClick(!updateClick)}}>수정</SubmitBtn>
+          ) : (
+            <SubmitBtn type="button" onClick={handleUpdateClick}>수정</SubmitBtn>
+          )}
           <PrevButton />
         </BtnWrapper>
       </Container>

@@ -55,6 +55,7 @@ import AdminSubScribe from './admin/chat/AdminSubScribe';
 import { useAuth } from './utils/api/AuthContext';
 import AdminBoardDetail from './admin/board/AdminBoardDetail';
 import MyBoardList from './pages/board/MyBoardList';
+import BoardUpdate from "./pages/board/BoardUpdate";
 
 const App: React.FC = () => {
   const { setAuthState, setMemberAuthState } = useAuth();
@@ -215,6 +216,7 @@ const App: React.FC = () => {
             <Route path="/board/:board/:page" element={<CustomerSupport />} />
             <Route path="/board/:board/write" element={<BoardWrite />} />
             <Route path="/board/:board/detail/:title" element={<BoardRead />} />
+            <Route path="/board/update/:board/:boardId" element={<BoardUpdate />} />
           </Routes>
         </S.AppContainer>
         <S.FloatingWrapper>
