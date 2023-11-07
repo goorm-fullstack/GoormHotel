@@ -21,10 +21,10 @@ const ChatModal: React.FC<ChatModalProps> = ({ closeChat }) => {
   const webSocketURL = process.env.REACT_APP_WS_URL;
   let ws = useRef<WebSocket | null>(null);
   let prevRoomId = useRef<String>("");
-  const memberId = localStorage.getItem("memberId");
+  const memberId = localStorage.getItem("memberId") || 'anonymous';
 
   useEffect(() => {
-    if(memberId) {
+    if(memberId && memberId !== 'anonymous') {
       Instance.get("/member/chatroom", {
         params : {
           "memberId" : memberId

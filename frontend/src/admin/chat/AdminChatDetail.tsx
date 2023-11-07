@@ -24,6 +24,7 @@ const AdminChatDetail = () => {
   const [status, setStatus] = useState('');
   const navigate = useNavigate();
   const authItem = localStorage.getItem('auth');
+  const [sender, setSender] = useState('');
 
   const navigateToChatList = () => {
     navigate('/admin/chat/1');
@@ -42,6 +43,7 @@ const AdminChatDetail = () => {
         setStatus(response.data.status);
         setChatData(response.data.chatMessages);
         setRecentTime(response.data.chatMessages[response.data.chatMessages.length - 1].createTime);
+        setSender(response.data.chatMessages[0].sender);
       })
       .catch((error) => {
         console.error('에러 ' + error);
@@ -144,7 +146,7 @@ const AdminChatDetail = () => {
           <tbody>
             <tr>
               <th>회원 아이디(회원 ID)</th>
-              <td>({roomId})</td>
+              <td>({sender})</td>
             </tr>
             <tr>
               <th>최근 발송일</th>

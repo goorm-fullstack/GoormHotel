@@ -247,6 +247,7 @@ public class MemberService {
             memberInfoDTO.setPhoneNumber(member.getPhoneNumber());
             memberInfoDTO.setBirth(member.getBirth());
             memberInfoDTO.setGender(member.getGender());
+            memberInfoDTO.setCouponList(member.getCouponList());
             return memberInfoDTO;
         } else {
             throw new Exception("회원이 없습니다");
