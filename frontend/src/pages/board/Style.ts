@@ -73,7 +73,7 @@ export const BoardGallery = styled.ul`
     color: ${(props) => props.theme.colors.graylight};
   }
   p.titlew span {
-    margin-right: 20px;
+    margin-right: 8px;
     color: ${(props) => props.theme.colors.graylight};
   }
 `;
@@ -293,7 +293,7 @@ export const TableRead = styled.table`
     font-size: ${(props) => props.theme.font.sizes};
   }
   td.titlew p span {
-    margin-right: 20px;
+    margin-right: 8px;
     color: ${(props) => props.theme.colors.graylight};
   }
   td.titlew .title {

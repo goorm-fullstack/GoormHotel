@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as S from './Style';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { PageTitle, BtnWrapper, SubmitBtn } from '../../Style/commonStyles';
+import { PageTitle, BtnWrapper, SubmitBtn, LinkBtn, NormalBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import { ItemThumbnail } from '../../admin/item/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
@@ -314,7 +314,7 @@ const BoardWrite = () => {
                         <>
                           <th>대표 이미지</th>
                           <td>
-                            <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required /> 용량 제한 : 10MB
+                            <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} required /> (용량 제한 : 10MB)
                             {imgFile !== '' ? (
                               <ItemThumbnail className="preview" src={imgFile} alt="후기 이미지" />
                             ) : (
@@ -326,7 +326,7 @@ const BoardWrite = () => {
                         <>
                           <th>첨부파일</th>
                           <td>
-                            <input type="file" accept="*" ref={fileRef} onChange={changeFile} /> 용량 제한 : 10MB
+                            <input type="file" accept="*" ref={fileRef} onChange={changeFile} /> (용량 제한 : 10MB)
                           </td>
                         </>
                       )}
@@ -344,9 +344,9 @@ const BoardWrite = () => {
             </S.Table>
             <BtnWrapper className="center double mt40">
               {board !== 'report' ? <SubmitBtn type="submit">작성하기</SubmitBtn> : <SubmitBtn type="submit">신고하기</SubmitBtn>}
-              <SubmitBtn type="button" onClick={() => navigate(-1)}>
+              <NormalBtn type="button" onClick={() => navigate(-1)}>
                 취소
-              </SubmitBtn>
+              </NormalBtn>
             </BtnWrapper>
           </form>
         </div>
