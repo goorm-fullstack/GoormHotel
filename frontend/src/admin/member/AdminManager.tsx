@@ -7,6 +7,7 @@ import Paging from '../../components/common/Paging/Paging';
 import { useNavigate } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
 import AdminCheck from '../adminCheck';
+import { formatDate } from '../../utils/function/dateFormatter';
 
 interface ManagerData {
   id: number;
@@ -104,7 +105,6 @@ const AdminManager = () => {
       });
 
       if (response.status === 200) {
-        alert('성공적으로 등록되었습니다.');
         const newManagerData = await Instance.get('/api/admin-getlist');
         if (newManagerData.status === 200) {
           setManagerData(newManagerData.data);
@@ -318,7 +318,7 @@ const AdminManager = () => {
                       </button>
                     </td>
                     <td className="center">{item.adminNickname}</td>
-                    <td className="center">{item.createdAt}</td>
+                    <td className="center">{formatDate((item.createdAt).toString())}</td>
                     <td className="center">{item.isActive ? '활성화' : '비활성화'}</td>
                   </tr>
                 ))

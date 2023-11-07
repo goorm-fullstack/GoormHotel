@@ -64,7 +64,7 @@ const AdminIndex = () => {
                         <p>
                           <Link to={`/admin/board/notice/detail/${item.boardId}`}>{item.title}</Link>
                         </p>
-                        <span>{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
+                        <span>{`${item.boardWriteDate[0]}/${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}/${
                           item.boardWriteDate[2] < 10 ? '0' : ''
                         }${item.boardWriteDate[2]}`}</span>
                       </li>
@@ -84,7 +84,7 @@ const AdminIndex = () => {
                         <p>
                           <Link to={`/admin/board/qna/detail/${item.boardId}`}>{item.title}</Link>
                         </p>
-                        <span>{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
+                        <span>{`${item.boardWriteDate[0]}/${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}/${
                           item.boardWriteDate[2] < 10 ? '0' : ''
                         }${item.boardWriteDate[2]}`}</span>
                       </li>
@@ -104,7 +104,7 @@ const AdminIndex = () => {
                         <p>
                           <Link to={`/admin/board/review/detail/${item.boardId}`}>{item.title}</Link>
                         </p>
-                        <span>{`${item.boardWriteDate[0]}.${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}.${
+                        <span>{`${item.boardWriteDate[0]}/${item.boardWriteDate[1] < 10 ? '0' : ''}${item.boardWriteDate[1]}/${
                           item.boardWriteDate[2] < 10 ? '0' : ''
                         }${item.boardWriteDate[2]}`}</span>
                       </li>

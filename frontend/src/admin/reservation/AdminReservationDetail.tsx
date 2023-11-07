@@ -4,12 +4,13 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
 import AdminLayout from '../common/AdminLayout';
 import { PageTitle, BtnWrapper, SubmitBtn, NormalBtn } from '../../Style/commonStyles';
-import { Container, Table } from '../member/Style';
+import { Container, Table, TableHeader } from '../member/Style';
 import { numberWithCommas } from '../../utils/function/comma';
 import { ReservationData } from './AdminReservation';
 import { ValuePiece } from '../../components/common/DateButton/DateButton';
 import moment from 'moment';
 import AdminCheck from '../adminCheck';
+import PrevButton from '../PrevButton';
 
 const AdminReservationDetail = () => {
   const { reservationNumber } = useParams(); //예약 번호로 조회
@@ -36,13 +37,6 @@ const AdminReservationDetail = () => {
   const [checkOutValue, setCheckOutValue] = useState<ValuePiece | [ValuePiece, ValuePiece]>(new Date());
   const navigate = useNavigate();
   const authItem = localStorage.getItem('auth');
-
-  useEffect(() => {
-    if (!(authItem && authItem.includes('AUTH_B'))) {
-      alert('사용할 수 없는 페이지이거나 권한이 없습니다.');
-      navigate('/admin');
-    }
-  }, []);
 
   console.log(reservationData);
 
@@ -127,7 +121,7 @@ const AdminReservationDetail = () => {
     setCheckInValue(selectedDate);
     setCheckInOpen(false);
     const processedSelectedDate: ValuePiece = Array.isArray(selectedDate) ? selectedDate[0] : selectedDate;
-    const formattedDate = moment(processedSelectedDate).format('YYYY.MM.DD');
+    const formattedDate = moment(processedSelectedDate).format('yyyy/MM/DD');
     setCheckInDate(`${formattedDate}`);
   };
 
@@ -135,115 +129,125 @@ const AdminReservationDetail = () => {
     setCheckOutValue(selectedDate);
     setCheckOutOpen(false);
     const processedSelectedDate: ValuePiece = Array.isArray(selectedDate) ? selectedDate[0] : selectedDate;
-    const formattedDate = moment(processedSelectedDate).format('YYYY.MM.DD');
+    const formattedDate = moment(processedSelectedDate).format('yyyy/MM/DD');
     setCheckOutDate(`${formattedDate}`);
   };
 
-  if (authItem && authItem.includes('AUTH_B')) {
-    return (
-      <AdminLayout subMenus="reservation">
-        <Container>
-          <PageTitle>예약 상세</PageTitle>
-          <Table className="horizontal">
-            <colgroup>
-              <col width="240px" />
-              <col width="auto" />
-            </colgroup>
-            <tbody>
-              <tr>
-                <th>예약 번호</th>
-                <td>
-                  {reservationNumber}(상태: {reservationData && reservationData.state})
-                  {reservationData && reservationData.state === '예약' ? (
-                    <NormalBtn type="button" className="red mini">
-                      예약취소
-                    </NormalBtn>
-                  ) : (
-                    <NormalBtn type="button" className="red mini" style={{ display: 'none' }}>
-                      예약취소
-                    </NormalBtn>
-                  )}
-                </td>
-              </tr>
-              <tr>
-                <th>예약일</th>
-                <td>{reservationData && moment(reservationData?.orderDate, 'YYYY, MM, DD, HH, mm, ss, SSS').format('yyyy/MM/DD')}</td>
-              </tr>
-              <tr>
-                <th>체크인</th>
-                <td>{reservationData && moment(reservationData?.checkIn, 'YYYY, MM, DD, HH, mm, ss, SSS').format('yyyy/MM/DD')}</td>
-              </tr>
-              <tr>
-                <th>체크아웃</th>
-                <td>{reservationData && moment(reservationData?.checkOut, 'YYYY, MM, DD, HH, mm, ss, SSS').format('yyyy/MM/DD')}</td>
-              </tr>
-              <tr>
-                <th>예약 상품</th>
-                <td>
-                  {/** 클릭 시 관리자 해당 상품 상세 페이지로 이동 */}
-                  <Link to={`/admin/item/detail/${itemType}/${itemType}/${itemName}`} className="u">
-                    [스페셜 오퍼]{itemName}
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <th>예약자명</th>
-                <td>{customerName}</td>
-              </tr>
-              <tr>
-                <th>연락처</th>
-                <td>{phoneNumber}</td>
-              </tr>
-              <tr>
-                <th>이메일</th>
-                <td>{emailAddress}</td>
-              </tr>
-              <tr>
-                <th>요청사항</th>
-                <td>
-                  <input type="text" value={customerRequest} readOnly={updateClick} onChange={handleNoticeInputChange} className="long" />
-                </td>
-              </tr>
-              <tr>
-                <th>적용 쿠폰</th>
-                <td>
-                  {reservationData && reservationData.coupon !== null ? (
-                    <span>{reservationData.coupon.name}</span>
-                  ) : (
-                    <span>적용된 쿠폰이 없습니다.</span>
-                  )}
-                </td>
-              </tr>
-              <tr>
-                <th>적용 상품권</th>
-                <td>
-                  {reservationData && reservationData.giftCard !== null && reservationData.giftCard.length > 0
-                    ? reservationData.giftCard.map((gift: any, index: number) => <span key={index}>{gift.name}</span>)
-                    : '적용된 상품권이 없습니다.'}
-                </td>
-              </tr>
-              <tr>
-                <th>할인 금액</th>
-                <td className="red">-{reservationData && numberWithCommas(reservationData.discountPrice)} 원</td>
-              </tr>
-              <tr>
-                <th>결제 금액</th>
-                <td>{reservationData && numberWithCommas(reservationData.totalPrice)} 원</td>
-              </tr>
-            </tbody>
-          </Table>
-          <BtnWrapper className="center double mt40">
-            <SubmitBtn type="button">수정</SubmitBtn>
-            <NormalBtn type="button" onClick={() => navigate(-1)}>
-              목록
-            </NormalBtn>
-          </BtnWrapper>
-        </Container>
-      </AdminLayout>
-    );
-  } else {
-    return null;
-  }
+  // 예약 취소
+  const handleCancle = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await Instance.post(`/reservation/cancle/${reservationNumber}`);
+      if (response.status === 200) {
+        window.location.reload();
+      }
+    } catch (error: any) {
+      alert('예약 취소 실패');
+    }
+  };
+
+  return (
+    <AdminLayout subMenus="reservation">
+      <Container>
+        <PageTitle>예약 상세</PageTitle>
+        {reservationData && reservationData.state === '예약' ? (
+          <TableHeader className="detail right">
+            <BtnWrapper className="flexgap right">
+              <NormalBtn type="button" className="red mini" onClick={handleCancle}>
+                예약취소
+              </NormalBtn>
+            </BtnWrapper>
+          </TableHeader>
+        ) : (
+          <></>
+        )}
+        <Table className="horizontal">
+          <colgroup>
+            <col width="240px" />
+            <col width="auto" />
+          </colgroup>
+          <tbody>
+            <tr>
+              <th>예약 번호</th>
+              <td>
+                {reservationNumber}(상태: {reservationData && reservationData.state})
+              </td>
+            </tr>
+            <tr>
+              <th>예약일</th>
+              <td>{reservationData && moment(reservationData?.orderDate, 'YYYY, MM, DD, HH, mm, ss, SSS').format('yyyy/MM/DD')}</td>
+            </tr>
+            <tr>
+              <th>체크인</th>
+              <td>{reservationData && moment(reservationData?.checkIn, 'YYYY, MM, DD, HH, mm, ss, SSS').format('yyyy/MM/DD')}</td>
+            </tr>
+            <tr>
+              <th>체크아웃</th>
+              <td>{reservationData && moment(reservationData?.checkOut, 'YYYY, MM, DD, HH, mm, ss, SSS').format('yyyy/MM/DD')}</td>
+            </tr>
+            <tr>
+              <th>예약 상품</th>
+              <td>
+                {/** 클릭 시 관리자 해당 상품 상세 페이지로 이동 */}
+                <Link to={`/admin/item/detail/${itemType}/${itemType}/${itemName}`} className="u">
+                  [스페셜 오퍼]{itemName}
+                </Link>
+              </td>
+            </tr>
+            <tr>
+              <th>예약자명</th>
+              <td>{customerName}</td>
+            </tr>
+            <tr>
+              <th>연락처</th>
+              <td>{phoneNumber}</td>
+            </tr>
+            <tr>
+              <th>이메일</th>
+              <td>{emailAddress}</td>
+            </tr>
+            <tr>
+              <th>요청사항</th>
+              <td>
+                <input type="text" value={customerRequest} readOnly={updateClick} onChange={handleNoticeInputChange} className="long" />
+              </td>
+            </tr>
+            <tr>
+              <th>적용 쿠폰</th>
+              <td>
+                {reservationData && reservationData.coupon !== null ? (
+                  <span>{reservationData.coupon.name}</span>
+                ) : (
+                  <span>적용된 쿠폰이 없습니다.</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <th>적용 상품권</th>
+              <td>
+                {reservationData && reservationData.giftCard !== null && reservationData.giftCard.length > 0
+                  ? reservationData.giftCard.map((gift: any, index: number) => <span key={index}>{gift.name}</span>)
+                  : '적용된 상품권이 없습니다.'}
+              </td>
+            </tr>
+            <tr>
+              <th>할인 금액</th>
+              <td className="red">-{reservationData && numberWithCommas(reservationData.discountPrice)} 원</td>
+            </tr>
+            <tr>
+              <th>결제 금액</th>
+              <td>{reservationData && numberWithCommas(reservationData.totalPrice)} 원</td>
+            </tr>
+          </tbody>
+        </Table>
+        <BtnWrapper className="center double mt40">
+          <SubmitBtn type="button">수정</SubmitBtn>
+          <PrevButton />
+        </BtnWrapper>
+      </Container>
+      <AdminCheck kind="AUTH_B" />
+    </AdminLayout>
+  );
 };
 
 export default AdminReservationDetail;

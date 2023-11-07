@@ -6,6 +6,7 @@ import { PageTitle, InputCheckbox, BtnWrapper, NormalBtn } from '../../Style/com
 import Paging from '../../components/common/Paging/Paging';
 import Instance from '../../utils/api/axiosInstance';
 import AdminCheck from '../adminCheck';
+import { formatDate } from '../../utils/function/dateFormatter';
 
 interface Member {
   id: number;
@@ -125,7 +126,7 @@ const AdminMember = () => {
                 </td>
                 <td className="center">{item.name}</td>
                 <td className="center">{item.grade}</td>
-                <td className="center">{item.signupDate}</td>
+                <td className="center">{formatDate((item.signupDate).toString())}</td>
                 {item.role === 'BLACKED' ? <td className="center">Y</td> : <td className="center">N</td>}
               </tr>
             ))}

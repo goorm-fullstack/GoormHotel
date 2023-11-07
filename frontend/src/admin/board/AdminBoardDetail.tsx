@@ -3,7 +3,7 @@ import * as S from './Style';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PageTitle, BtnWrapper } from '../../Style/commonStyles';
 import AdminLayout from '../common/AdminLayout';
-import { Container } from '../member/Style';
+import { Container, TableHeader } from '../member/Style';
 import { NormalBtn } from '../../Style/commonStyles';
 import Instance from '../../utils/api/axiosInstance';
 import { Simulate } from 'react-dom/test-utils';
@@ -69,6 +69,7 @@ const AdminBoardDetail = () => {
       .then((response) => {
         if (response.headers['filename']) {
           const fileName = response.headers['filename'];
+          console.log(fileName);
           const decodedFileName = decodeURI(fileName).replaceAll('+', ' ');
           setFile(decodedFileName);
         }
@@ -132,7 +133,9 @@ const AdminBoardDetail = () => {
       }
     };
 
-    fetchImageUrl();
+    if (board !== 'review') {
+      fetchImageUrl();
+    }
   }, [id]);
 
   const handleDownLoad = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -160,7 +163,6 @@ const AdminBoardDetail = () => {
     if (isConfirm) {
       Instance.put(`/reply/softdelete/${replyId}`)
         .then((response) => {
-          alert('삭제되었습니다.');
           fetchReply(boardData.boardId);
         })
         .catch((error) => {
@@ -212,7 +214,6 @@ const AdminBoardDetail = () => {
         };
         Instance.put(`/reply/${editingReplyId}`, data)
           .then((response) => {
-            alert('수정되었습니다.');
             setEditedReplyContent('');
             setReplyContentModify('');
             setReplyContent('');
@@ -234,7 +235,6 @@ const AdminBoardDetail = () => {
         };
         Instance.put(`/reply/${editingReplyId}`, data)
           .then((response) => {
-            alert('수정되었습니다.');
             setEditedReplyContent('');
             setReplyContentModify('');
             setReplyContent('');
@@ -286,7 +286,6 @@ const AdminBoardDetail = () => {
       };
       Instance.post(`/report/writeform`, data)
         .then(() => {
-          alert('신고처리되었습니다.');
           navigate(`/admin/report/1`);
         })
         .catch((error) => {
@@ -300,7 +299,6 @@ const AdminBoardDetail = () => {
     if (isConfirm) {
       Instance.put(`/boards/softdelete/${boardData.boardId}`)
         .then(() => {
-          alert('삭제되었습니다.');
           navigate(-1);
         })
         .catch((error) => {
@@ -314,14 +312,16 @@ const AdminBoardDetail = () => {
       <AdminLayout subMenus="board">
         <Container>
           {title}
-          <S.WriteBtnWrapper className="right double">
-            <NormalBtn className="red" onClick={boardReport}>
-              신고하기
-            </NormalBtn>
-            <NormalBtn className="red" onClick={handleDeleteBoard}>
-              삭제
-            </NormalBtn>
-          </S.WriteBtnWrapper>
+          <TableHeader className="detail right">
+            <BtnWrapper className="flexgap right">
+              <NormalBtn className="mini" onClick={boardReport}>
+                신고하기
+              </NormalBtn>
+              <NormalBtn className="red mini" onClick={handleDeleteBoard}>
+                글 삭제
+              </NormalBtn>
+            </BtnWrapper>
+          </TableHeader>
           <div>
             <S.TableRead>
               <tbody>
@@ -345,7 +345,7 @@ const AdminBoardDetail = () => {
                     })()}
                   </td>
                 </tr>
-                {board !== 'review' && file && (
+                {board === 'review' && file && (
                   <tr>
                     <td>
                       <button className="fileb" type="button" onClick={handleDownLoad}>
@@ -354,7 +354,7 @@ const AdminBoardDetail = () => {
                     </td>
                   </tr>
                 )}
-                {board === 'review' && (
+                {board !== 'review' && (
                   <tr>
                     <td>
                       <img className="reviewImg" src={imageUrl} alt="이미지" />

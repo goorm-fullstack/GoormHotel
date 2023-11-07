@@ -9,6 +9,7 @@ import { RoomForm } from '../../components/AddItemForm/WriteFormRoom';
 import Instance from '../../utils/api/axiosInstance';
 import axios from 'axios';
 import AdminCheck from '../adminCheck';
+import PrevButton from '../PrevButton';
 
 const AdminDetailRoom = () => {
   const [imgFile, setImgFile] = useState<string>(''); // 이미지 상태관리
@@ -257,9 +258,7 @@ const AdminDetailRoom = () => {
           )}
           <BtnWrapper className="double mt40 center">
             <SubmitBtn type="submit">상품 수정</SubmitBtn>
-            <NormalBtn type="button" onClick={() => navigate(-1)}>
-              취소
-            </NormalBtn>
+            <PrevButton />
           </BtnWrapper>
         </form>
       </Container>

@@ -113,7 +113,7 @@ export const ChatWindow = styled.div`
     color: #fff;
     font-size: ${(props) => props.theme.font.sizes};
     line-height: 1.4;
-    word-break: keep-all;
+    word-break: break-all;
 
     &[data-isuser='false'] {
       align-self: flex-start;

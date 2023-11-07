@@ -104,6 +104,12 @@ const AdminMail = () => {
     window.location.href = `/admin/mail`;
   };
 
+  const testFunc = () => {
+
+    return '';
+
+  }
+
   return (
     <AdminLayout subMenus="chat">
       <Container>
@@ -155,7 +161,7 @@ const AdminMail = () => {
               </tr>
               <tr>
                 <td colSpan={2} className="writeWrapper">
-                  <TextEditor setValue={setMessage} />
+                  <TextEditor setValue={setMessage} setDefaultValue={testFunc}/>
                 </td>
               </tr>
             </tbody>

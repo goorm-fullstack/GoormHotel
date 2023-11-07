@@ -147,45 +147,51 @@ const Item = ({ selectedProduct, indexImg, updateReservationData, selectCoupon, 
           <p>{typeDetail}</p>
           <p>{selectedProduct ? selectedProduct.capacity : ''}인 기준</p>
           <table>
-            <tr>
-              <th>기본가</th>
-              <td>{selectedProduct ? numberWithCommas(selectedProduct.price) : ''} 원</td>
-            </tr>
+            <tbody>
+              <tr>
+                <th>기본가</th>
+                <td>{selectedProduct ? numberWithCommas(selectedProduct.price) : ''} 원</td>
+              </tr>
+            </tbody>
           </table>
           <h5>추가 인원 비용</h5>
           <table>
-            <tr>
-              <th>성인</th>
-              <td>{numberWithCommas(spareAdultPrice)}원</td>
-              {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 
+            <tbody>
+              <tr>
+                <th>성인</th>
+                <td>{numberWithCommas(spareAdultPrice)}원</td>
+                {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 
 
                           예약 정보 입력 페이지에서 기준 인원 초과하여 인원 추가하는 경우 
                           추가된 인원 수에 맞춰 위 계산법 적용됩니다. 이하 동일 */}
-            </tr>
-            <tr>
-              <th>어린이</th>
-              <td>{numberWithCommas(spareChildrenPrice)}원</td>
-              {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 */}
-            </tr>
+              </tr>
+              <tr>
+                <th>어린이</th>
+                <td>{numberWithCommas(spareChildrenPrice)}원</td>
+                {/* 기본값 0원: 성인 추가 비용 * 성인 인원 추가 수 */}
+              </tr>
+            </tbody>
           </table>
         </S.SelectedItem>
       </S.SelectItem>
       <S.PaymentInfo>
         <table>
-          <tr>
-            <th>총액</th>
-            <td>{selectedProduct && numberWithCommas(selectedProduct.price + spareAdultPrice + spareChildrenPrice)} 원</td>
-          </tr>
-          <tr className="discount">
-            <th>할인액</th>
-            <td>-{numberWithCommas(discountPrice)} 원</td>
-          </tr>
-          <tr className="total">
-            <th>최종금액</th>
-            <td>
-              <strong>{numberWithCommas(totalPrice)}</strong> 원
-            </td>
-          </tr>
+          <tbody>
+            <tr>
+              <th>총액</th>
+              <td>{selectedProduct && numberWithCommas(selectedProduct.price + spareAdultPrice + spareChildrenPrice)} 원</td>
+            </tr>
+            <tr className="discount">
+              <th>할인액</th>
+              <td>-{numberWithCommas(discountPrice)} 원</td>
+            </tr>
+            <tr className="total">
+              <th>최종금액</th>
+              <td>
+                <strong>{numberWithCommas(totalPrice)}</strong> 원
+              </td>
+            </tr>
+          </tbody>
         </table>
         <p>⁕&nbsp;VAT 포함</p>
       </S.PaymentInfo>

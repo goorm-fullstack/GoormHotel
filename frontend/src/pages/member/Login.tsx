@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './Style';
-import { Link, useLocation} from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { BtnWrapper, SubmitBtn, PageTitle, InputCheckbox, LinkBtn, CheckLabel } from '../../Style/commonStyles';
 import Instance from '../../utils/api/axiosInstance';
 import { response } from 'express';
@@ -31,7 +31,7 @@ const Login: React.FC = () => {
   }
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if(isMemberActive) {
+    if (isMemberActive) {
       try {
         const loginInfo = {
           memberId: memberId,
@@ -47,9 +47,8 @@ const Login: React.FC = () => {
         if (response.status === 200) {
           localStorage.clear(); //일단 이전 기록을 좀 지우자~ 굿
           if (getCookie('role') === 'BLACKED') {
-            alert('차단된 회원입니다. 자세한 사항은 고객센터로 문의 바랍니다.');
+            alert('차단된 계정입니다. 자세한 사항은 고객센터로 문의 바랍니다.');
           } else {
-            alert('로그인 성공');
             const memberId = getCookie('memberId');
             const role = getCookie('role');
             if (memberId !== undefined && role !== undefined) {
@@ -78,7 +77,7 @@ const Login: React.FC = () => {
         });
 
         if (response.status === 200) {
-          window.location.href=`/reservation/${memberId}`
+          window.location.href = `/reservation/${memberId}`;
         } else {
           alert('아이디 또는 비밀번호가 일치하지 않습니다.');
         }
@@ -118,16 +117,16 @@ const Login: React.FC = () => {
 
   const ClickAnonymousLogin = () => {
     let data = {
-      "reservationNumber" : reservationNumber,
-      "phoneNumber" : contactNumber
-    }
-    Instance.post("/anonymous/login", data).then((response) => {
-      if(response.status === 200) {
-        window.location.href = `/reservation/${reservationNumber}`
+      reservationNumber: reservationNumber,
+      phoneNumber: contactNumber,
+    };
+    Instance.post('/anonymous/login', data).then((response) => {
+      if (response.status === 200) {
+        window.location.href = `/reservation/${reservationNumber}`;
       } else {
-        alert("해당 예약 정보가 존재하지 않습니다.");
+        alert('해당 예약 정보가 존재하지 않습니다.');
       }
-    })
+    });
   };
 
   useEffect(() => {
@@ -143,10 +142,10 @@ const Login: React.FC = () => {
         <S.LoginWrapper>
           <div className="left">
             <div className="tab">
-              <S.MemberBtn isActive={isMemberActive} onClick={handleMemberClick}>
+              <S.MemberBtn data-active={isMemberActive} onClick={handleMemberClick}>
                 회원
               </S.MemberBtn>
-              <S.MemberBtn isActive={!isMemberActive} onClick={handleNonMemberClick}>
+              <S.MemberBtn data-active={!isMemberActive} onClick={handleNonMemberClick}>
                 비회원(예약확인)
               </S.MemberBtn>
             </div>

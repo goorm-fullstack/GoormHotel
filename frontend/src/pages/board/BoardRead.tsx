@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './Style';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import { PageTitle, BtnWrapper, LinkBtn, NormalBtn } from '../../Style/commonStyles';
 import SubHeader from '../../components/layout/SubHeader/SubHeader';
 import queryString from 'query-string';
@@ -149,7 +149,6 @@ const BoardRead = () => {
         if (replyPassword === password) {
           Instance.put(`/reply/softdelete/${replyId}`)
             .then((response) => {
-              alert('삭제되었습니다.');
               fetchReply(boardData.boardId);
             })
             .catch((error) => {
@@ -168,7 +167,6 @@ const BoardRead = () => {
         if (id === user) {
           Instance.put(`/reply/softdelete/${replyId}`)
             .then((response) => {
-              alert('삭제되었습니다.');
               fetchReply(boardData.boardId);
             })
             .catch((error) => {
@@ -220,7 +218,6 @@ const BoardRead = () => {
         };
         Instance.put(`/reply/${editingReplyId}`, data)
           .then((response) => {
-            alert('수정되었습니다.');
             setEditedReplyContent('');
             setReplyContentModify('');
             setReplyContent('');
@@ -242,7 +239,6 @@ const BoardRead = () => {
         };
         Instance.put(`/reply/${editingReplyId}`, data)
           .then((response) => {
-            alert('수정되었습니다.');
             setEditedReplyContent('');
             setReplyContentModify('');
             setReplyContent('');
@@ -310,7 +306,6 @@ const BoardRead = () => {
         if (isConfirm) {
           Instance.put(`/boards/softdelete/${boardId}`)
             .then(() => {
-              alert('삭제되었습니다.');
               navigate(-1);
             })
             .catch((error) => {
@@ -333,7 +328,6 @@ const BoardRead = () => {
         if (isConfirm) {
           Instance.put(`/boards/softdelete/${boardId}`)
             .then(() => {
-              alert('삭제되었습니다.');
               navigate(-1);
             })
             .catch((error) => {
@@ -354,19 +348,41 @@ const BoardRead = () => {
     navigate(`/board/report/write?boardId=${boardId}`);
   };
 
+  const boardUpdate = () => {
+    if(isLogin){
+      if(boardData.boardPassword){
+        alert("수정 불가능합니다.");
+      }
+      else{
+        if(boardData.boardWriter == isLogin){
+          navigate(`/board/update/${board}/${boardId}`);
+        }
+        else{
+          alert("수정 불가능합니다.");
+        }
+      }
+    }
+    else{
+      if(!boardData.boardPassword){
+        alert("수정 불가능합니다.");
+      }
+      else{
+        const input = prompt("게시글 비밀번호를 입력하세요.");
+        if(boardData.boardPassword == input){
+          navigate(`/board/update/${board}/${boardId}`);
+        }
+        else{
+          alert("비밀번호를 틀렸습니다. 다시 시도해주세요.");
+        }
+      }
+    }
+  }
+
   return (
     <>
       <SubHeader kind="board" />
       <S.Container>
         {title}
-        <S.WriteBtnWrapper className="right double">
-          <NormalBtn className="red" onClick={boardReport}>
-            신고하기
-          </NormalBtn>
-          <NormalBtn className="red" onClick={handleDelteBoard}>
-            삭제
-          </NormalBtn>
-        </S.WriteBtnWrapper>
         <div>
           <S.TableRead>
             <tbody>
@@ -419,6 +435,11 @@ const BoardRead = () => {
                       __html: boardData && boardData.boardContent,
                     }}
                   />
+                  <BtnWrapper className="right flexgap">
+                    <NormalBtn className="mini" onClick={boardUpdate}>수정</NormalBtn>
+                    <NormalBtn className="mini" onClick={handleDelteBoard}>삭제</NormalBtn>
+                    <NormalBtn className="mini" onClick={boardReport}>신고</NormalBtn>
+                  </BtnWrapper>
                 </td>
               </tr>
               {board !== 'notice' && (
