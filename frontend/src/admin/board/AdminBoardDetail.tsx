@@ -361,15 +361,6 @@ const AdminBoardDetail = () => {
                       </td>
                     </tr>
                 )}
-                {/*{board === 'review' && file && (*/}
-                {/*  <tr>*/}
-                {/*    <td>*/}
-                {/*      <button className="fileb" type="button" onClick={handleDownLoad}>*/}
-                {/*        첨부파일 : {file}*/}
-                {/*      </button>*/}
-                {/*    </td>*/}
-                {/*  </tr>*/}
-                {/*)}*/}
                 {board !== 'review' && file && (
                     <tr className="attachment">
                       <td>

@@ -3,13 +3,14 @@ import AdminLayout from '../common/AdminLayout';
 import { PageTitle, InputCheckbox, BtnWrapper, CheckLabel, MultiCheck, SubmitBtn, NormalBtn } from '../../Style/commonStyles';
 import { Container, Table } from '../member/Style';
 import TextEditor from '../../components/common/TextEditor/TextEditor';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import Instance from '../../utils/api/axiosInstance';
 import boardWrite from '../../pages/board/BoardWrite';
 import AdminCheck from '../adminCheck';
 import PrevButton from '../PrevButton';
+import {ItemThumbnail} from "../item/Style";
 
-const AdminBoardWrite = () => {
+const AdminBoardUpdate = () => {
   const adminAuth = localStorage.getItem('auth');
   const adminAdminId = localStorage.getItem('adminId') || '';
   const adminRole = localStorage.getItem('role');
@@ -20,50 +21,64 @@ const AdminBoardWrite = () => {
   const parentBoardId = queryParams.get('parentBoardId');
   const [parentBoard, setParentBoard] = useState<any | null>(null);
 
+  const board = useParams().board;
+  const boardId = useParams().boardId;
+  const [boardData, setBoardData] = useState<any>(null);
+  const [file, setFile] = useState('');
+  const [previousImg, setPreviousImg] = useState('');
+
+
+
   useEffect(() => {
-    if (parentBoardId) {
-      Instance.get(`boards/${parentBoardId}`)
-        .then((response) => {
-          setParentBoard(response.data);
-
-          if (response.data) {
-            setFormData({
-              ...formData,
-              category: response.data.category,
-              boardTitle: response.data.boardTitle,
-              parentBoardId: response.data.boardId,
-            });
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    if (boardId) {
+      Instance.get(`/boards/${boardId}`)
+          .then((response) => {
+            if (response.headers['filename']) {
+              const fileName = response.headers['filename'];
+              const decodedFileName = decodeURI(fileName).replaceAll('+', ' ');
+              setFile(decodedFileName);
+            }
+            setBoardData(response.data);
+            setBoardContent(response.data.boardContent);
+          })
+          .catch((error) => {
+            console.error('Error: ', error.message);
+          });
     }
-  }, [parentBoardId]);
+  }, [boardId]);
 
-  let isCommentFormData = {
-    title: '',
-    boardContent: '',
-    boardTitle: '',
-    category: '',
-    boardWriter: adminAdminId,
-  };
-
-  if (parentBoard) {
-    isCommentFormData = {
-      title: '',
-      category: parentBoard.category,
-      boardContent: '',
-      boardTitle: parentBoard.boardTitle,
-      boardWriter: adminAdminId,
-    };
-  }
-
-  const [formData, setFormData] = useState<FormData>(isCommentFormData);
+  useEffect(() => {
+    if (boardData && boardData.boardImage !== null)
+      Instance.get(`/boards/image/${boardId}`, { responseType: 'arraybuffer' }).then((response) => {
+        const blob = new Blob([response.data], { type: response.headers['content-type'] });
+        const imageUrl = URL.createObjectURL(blob);
+        setPreviousImg(imageUrl);
+      });
+  }, [boardData]);
 
   type FormData = {
     [key: string]: string;
   };
+
+  const [formData, setFormData] = useState<FormData>({
+    title: '',
+    boardContent: '',
+    boardTitle: (() => {
+      switch (board) {
+        case 'notice':
+          return '공지사항';
+        case 'qna':
+          return '문의하기';
+        case 'review':
+          return '이용후기';
+        default:
+          return '고객지원';
+      }
+    })(),
+    boardWriter: adminAdminId ? adminAdminId : '',
+    boardPassword: '',
+    category: '',
+  });
 
   const [categoryError, setCategoryError] = useState<string>('');
   const [boardTitleError, setBoardTitleError] = useState<string>('');
@@ -141,30 +156,21 @@ const AdminBoardWrite = () => {
       form.append(key, formData[key]);
     });
 
-    try {
-      await Instance.post('/boards/writeform', form, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+    // await Instance.put(`/boards/${}`, form, {
+    //
+    // })
 
-      if (parentBoardId) {
-        await Instance.put(`/boards/updateIsComment/${parentBoardId}`);
-      }
-
-      window.location.href = `/admin/board/1`;
-    } catch (e: any) {
-      console.error('에러: ', e.message);
-      if (e.response.data.message.startsWith('Validation failed')) {
-        const errorMessage = e.response.data.errors[0].defaultMessage;
-        alert(errorMessage);
-      }
-    }
+    await Instance.put(`/boards/${boardId}`, form, {
+      headers: {
+        'Content-Type' : 'multipart/form-data'
+      },
+    });
+    navigate(-1);
   };
 
   const testFunc = () => {
 
-    return '';
+    return boardContent;
 
   }
 
@@ -191,36 +197,46 @@ const AdminBoardWrite = () => {
     );
   };
 
+  useEffect(() => {
+    if (boardData && boardData.title) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        title: boardData.title,
+        category: boardData.category,
+      }));
+    }
+  }, [boardData]);
+
   const categoryOption = () => {
-    switch (formData.boardTitle) {
-      case '공지사항':
+    switch (board) {
+      case 'notice':
         return (
-          <>
-            <option value="">선택</option>
-            <option value="공지">공지</option>
-            <option value="이벤트">이벤트</option>
-          </>
+            <select name="category" value={formData.category} onChange={handleChange} required>
+              <option value="">선택</option>
+              <option value="공지">공지</option>
+              <option value="이벤트">이벤트</option>
+            </select>
+        )
+      case 'qna':
+        return (
+            <select name="category" value={formData.category} onChange={handleChange} required>
+              <option value="">선택</option>
+              <option value="칭찬">칭찬</option>
+              <option value="문의">문의</option>
+              <option value="제안">제안</option>
+              <option value="기타">기타</option>
+            </select>
         );
-      case '문의하기':
+      case 'review':
         return (
-          <>
-            <option value="">선택</option>
-            <option value="칭찬">칭찬</option>
-            <option value="문의">문의</option>
-            <option value="제안">제안</option>
-            <option value="기타">기타</option>
-          </>
-        );
-      case '이용후기':
-        return (
-          <>
-            <option value="">선택</option>
-            <option value="룸">룸</option>
-            <option value="다이닝">다이닝</option>
-          </>
+            <select name="category" value={formData.category} onChange={handleChange} required>
+              <option value="">선택</option>
+              <option value="객실">객실</option>
+              <option value="다이닝">다이닝</option>
+            </select>
         );
       default:
-        return <option value="">선택</option>;
+        return;
     }
   };
 
@@ -231,22 +247,9 @@ const AdminBoardWrite = () => {
       return (
         <>
           <tr>
-            <th>게시판</th>
-            <td>
-              <select name="boardTitle" value={formData.boardTitle} onChange={handleChange} required>
-                <option value="">선택</option>
-                <option value="공지사항">공지사항</option>
-                <option value="문의하기">문의하기</option>
-                <option value="이용후기">이용후기</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
             <th>카테고리</th>
             <td>
-              <select name="category" value={formData.category} onChange={handleChange} required>
-                {categoryOption()};
-              </select>
+              {categoryOption()}
             </td>
           </tr>
         </>
@@ -270,12 +273,23 @@ const AdminBoardWrite = () => {
     );
   };
 
-
+  const selectPageTitle = () => {
+    switch (board) {
+      case 'notice':
+        return <PageTitle>공지사항 상세</PageTitle>;
+      case 'qna':
+        return <PageTitle>문의하기 상세</PageTitle>;
+      case 'review':
+        return <PageTitle>리뷰하기 상세</PageTitle>;
+      default:
+        return null;
+    }
+  };
 
   return (
     <AdminLayout subMenus="board">
       <Container>
-        <PageTitle>게시글 작성</PageTitle>
+        {selectPageTitle()}
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <Table className="horizontal">
             <tbody>
@@ -295,12 +309,16 @@ const AdminBoardWrite = () => {
                 </td>
               </tr>
               {writerOption()}
-              {formData.boardTitle === '이용후기' ? (
+              {board === 'review' ? (
                 <tr>
                   <th>대표 이미지</th>
                   <td>
                     <input type="file" accept="image/*" onChange={saveImgFile} ref={imgRef} />
-                    {imgFile !== '' ? <img src={imgFile} alt="후기 이미지" /> : <img style={{ display: 'none' }} />}
+                    {previousImg !== '' ? (
+                        <ItemThumbnail className="preview" src={previousImg} alt="후기 이미지" />
+                    ) : (
+                        <ItemThumbnail style={{ display: 'none' }} />
+                    )}
                   </td>
                 </tr>
               ) : (
@@ -319,7 +337,7 @@ const AdminBoardWrite = () => {
             </tbody>
           </Table>
           <BtnWrapper className="center mt40 double">
-            <SubmitBtn type="submit">작성하기</SubmitBtn>
+            <SubmitBtn type="submit">수정하기</SubmitBtn>
             <PrevButton />
           </BtnWrapper>
         </form>
@@ -329,4 +347,4 @@ const AdminBoardWrite = () => {
   );
 };
 
-export default AdminBoardWrite;
+export default AdminBoardUpdate;
