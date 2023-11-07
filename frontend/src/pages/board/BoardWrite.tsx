@@ -322,7 +322,7 @@ const BoardWrite = () => {
                   <tr>
                     <th style={{ width: '240px' }}>신고대상 글</th>
                     <td>
-                      <input type="text" className="title long" name="title" value={''} readOnly required />
+                      <input type="text" className="title long" name="title" value={reportTitle} readOnly required />
                     </td>
                   </tr>
                 )}

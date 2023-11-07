@@ -215,7 +215,7 @@ const AdminBoardWrite = () => {
         return (
           <>
             <option value="">선택</option>
-            <option value="룸">룸</option>
+            <option value="객실">객실</option>
             <option value="다이닝">다이닝</option>
           </>
         );
