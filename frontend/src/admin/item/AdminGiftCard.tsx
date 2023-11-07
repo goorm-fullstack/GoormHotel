@@ -10,6 +10,7 @@ import Paging from '../../components/common/Paging/Paging';
 import Instance from '../../utils/api/axiosInstance';
 import AdminCheck from '../adminCheck';
 import { formatDate } from '../../utils/function/dateFormatter';
+import { numberWithCommas } from '../../utils/function/comma';
 
 interface Giftcard {
   id: number;
@@ -218,8 +219,8 @@ const AdminGiftCard = () => {
                             </Link>
                           </p>
                         </td>
-                        <td className="center">{item.money}</td>
-                        <td className="center">{formatDate((item.issueDate).toString())}</td>
+                        <td className="center">{numberWithCommas(item.money)}</td>
+                        <td className="center">{item.issueDate}</td>
                         <td className="center">{calcExpireDate(item.issueDate, item.expire)}</td>
                         <td className="center">{item.isZeroMoney}</td>
                       </tr>

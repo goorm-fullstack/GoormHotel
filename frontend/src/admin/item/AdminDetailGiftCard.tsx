@@ -8,6 +8,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Container, Table } from '../member/Style';
 import AdminCheck from '../adminCheck';
 import PrevButton from '../PrevButton';
+import { formatDate } from '../../utils/function/dateFormatter';
+import { numberWithCommas } from '../../utils/function/comma';
 
 interface Member {
   name: string;
@@ -105,7 +107,7 @@ const AdminDetailGiftCard = () => {
                   <tr>
                     <th>상품권 금액</th>
                     <td>
-                      <input type="text" value={giftcard.money} required />
+                      <span>{numberWithCommas(giftcard.money)}</span>
                     </td>
                   </tr>
                   <tr>

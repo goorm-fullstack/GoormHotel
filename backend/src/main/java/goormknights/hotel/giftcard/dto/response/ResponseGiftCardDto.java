@@ -24,7 +24,7 @@ public class ResponseGiftCardDto {
     private int money;//현재 잔액
     private Reservation reservation;
     private char isZeroMoney;
-    @JsonFormat(pattern = "yyyy.MM.dd")
+    @JsonFormat(pattern = "yyyy/MM/dd")
     private LocalDate issueDate;//발행일
     private int expire;//만료일
 
