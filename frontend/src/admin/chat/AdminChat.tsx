@@ -6,6 +6,7 @@ import Instance from '../../utils/api/axiosInstance';
 import Paging from '../../components/common/Paging/Paging';
 import { Container, Table, TableHeader } from '../member/Style';
 import AdminCheck from '../adminCheck';
+import { formatDate } from '../../utils/function/dateFormatter';
 
 interface ChatMessage {
   id: number;
@@ -146,7 +147,7 @@ const AdminChat = () => {
                       )}
                     </p>
                   </td>
-                  <td style={{ textAlign: 'center' }}>{item.chatMessages[0].createTime}</td>
+                  <td style={{ textAlign: 'center' }}>{formatDate(item.chatMessages[0].createTime)}</td>
                   <td style={{ textAlign: 'center' }}>{item.status === 'CONTINUE' ? <span>{'진행중'}</span> : <span>{'종료'}</span>}</td>
                 </tr>
               ))
