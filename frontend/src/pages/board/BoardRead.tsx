@@ -354,6 +354,36 @@ const BoardRead = () => {
     navigate(`/board/report/write?boardId=${boardId}`);
   };
 
+  const boardUpdate = () => {
+    if(isLogin){
+      if(boardData.boardPassword){
+        alert("수정 불가능합니다.");
+      }
+      else{
+        if(boardData.boardWriter == isLogin){
+          navigate(`/board/${board}/write?boardId=${boardId}`);
+        }
+        else{
+          alert("수정 불가능합니다.");
+        }
+      }
+    }
+    else{
+      if(!boardData.boardPassword){
+        alert("수정 불가능합니다.");
+      }
+      else{
+        const input = prompt("게시글 비밀번호를 입력하세요.");
+        if(boardData.boardPassword == input){
+          navigate(`/board/${board}/write?boardId=${boardId}`);
+        }
+        else{
+          alert("비밀번호를 틀렸습니다. 다시 시도해주세요.");
+        }
+      }
+    }
+  }
+
   return (
     <>
       <SubHeader kind="board" />
@@ -366,6 +396,7 @@ const BoardRead = () => {
           <NormalBtn className="red" onClick={handleDelteBoard}>
             삭제
           </NormalBtn>
+          <NormalBtn className="" onClick={boardUpdate}>수정하기</NormalBtn>
         </S.WriteBtnWrapper>
         <div>
           <S.TableRead>
