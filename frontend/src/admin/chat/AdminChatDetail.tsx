@@ -161,8 +161,8 @@ const AdminChatDetail = () => {
           </colgroup>
           <tbody>
             <tr>
-              <th>회원 아이디(회원 ID)</th>
-              <td>({sender})</td>
+              <th>회원 ID</th>
+              <td>{sender}</td>
             </tr>
             <tr>
               <th>최근 발송일</th>
