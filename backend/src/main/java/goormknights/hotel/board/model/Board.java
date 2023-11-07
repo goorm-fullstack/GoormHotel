@@ -103,6 +103,7 @@ public class Board {
                 .isComment(isComment)
                 .boardPassword(boardPassword)
                 .parentBoardId(parentBoardId)
+                .boardImage(boardImage != null ? boardImage.getBoardImageId() : null)
                 .memberPk(memberPk)
                 .report(report.stream().map(Report::toResponseReportDto).toList())
                 .build();
