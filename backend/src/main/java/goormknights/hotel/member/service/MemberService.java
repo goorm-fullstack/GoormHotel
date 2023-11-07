@@ -198,22 +198,21 @@ public class MemberService {
             Cookie cookie = new Cookie("JSESSIONID", session.getId());
             cookie.setMaxAge(10);
             cookie.setPath("/");
-            cookie.setSecure(true);
 
             ResponseCookie memberIdCookie = ResponseCookie.from("memberId", optionalMember.get().getMemberId())
                     .httpOnly(false)
-                    .secure(true)
+//                    .secure(true)
                     .path("/")      // path
                     .maxAge(3600)
-                    .sameSite("None")  // sameSite
+//                    .sameSite("None")  // sameSite
                     .build();
 
             ResponseCookie roleCookie = ResponseCookie.from("role", optionalMember.get().getRole().toString())
                     .httpOnly(false)
-                    .secure(true)
+//                    .secure(true)
                     .path("/")      // path
                     .maxAge(3600)
-                    .sameSite("None")  // sameSite
+//                    .sameSite("None")  // sameSite
                     .build();
 
             ResponseCookie roomCookie = ResponseCookie.from("roomId", optionalMember.get().getRoomId())
