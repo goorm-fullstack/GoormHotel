@@ -34,7 +34,7 @@ public class BoardFile {
     @Column
     private String mimeType;        //이미지 mimeType
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGBLOB")
     @Lob
     private byte[] data;
 

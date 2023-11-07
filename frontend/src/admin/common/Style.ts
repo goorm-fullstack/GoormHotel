@@ -87,8 +87,8 @@ export const SideMenu = styled.div`
   top: 100px;
   bottom: 0;
   border-right: 1px solid ${(props) => props.theme.colors.grayborder};
-  background : white;
-
+  background-color: white;
+  
   h2 {
     font-size: ${(props) => props.theme.font.sizem};
     font-weight: 500;

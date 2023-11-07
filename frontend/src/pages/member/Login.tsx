@@ -45,7 +45,7 @@ const Login: React.FC = () => {
         });
 
         if (response.status === 200) {
-          localStorage.clear(); //일단 이전 기록을 좀 지우자~
+          localStorage.clear(); //일단 이전 기록을 좀 지우자~ 굿
           if (getCookie('role') === 'BLACKED') {
             alert('차단된 계정입니다. 자세한 사항은 고객센터로 문의 바랍니다.');
           } else {
