@@ -133,7 +133,7 @@ const AdminBoardDetail = () => {
       }
     };
 
-    if (board !== 'review') {
+    if (board === 'review') {
       fetchImageUrl();
     }
   }, [id]);
@@ -345,7 +345,7 @@ const AdminBoardDetail = () => {
                     })()}
                   </td>
                 </tr>
-                {board === 'review' && file && (
+                {board !== 'review' && file && (
                   <tr>
                     <td>
                       <button className="fileb" type="button" onClick={handleDownLoad}>
@@ -354,7 +354,7 @@ const AdminBoardDetail = () => {
                     </td>
                   </tr>
                 )}
-                {board !== 'review' && (
+                {board === 'review' && (
                   <tr>
                     <td>
                       <img className="reviewImg" src={imageUrl} alt="이미지" />
