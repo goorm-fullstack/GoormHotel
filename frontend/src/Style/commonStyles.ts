@@ -160,6 +160,10 @@ export const BtnWrapper = styled.div`
   &.flexgap {
     display: flex;
     column-gap: 10px;
+
+    &.right {
+      justify-content: flex-end;
+    }
   }
 `;
 

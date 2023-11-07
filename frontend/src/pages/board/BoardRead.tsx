@@ -353,14 +353,6 @@ const BoardRead = () => {
       <SubHeader kind="board" />
       <S.Container>
         {title}
-        <S.WriteBtnWrapper className="right double">
-          <NormalBtn className="red" onClick={boardReport}>
-            신고하기
-          </NormalBtn>
-          <NormalBtn className="red" onClick={handleDelteBoard}>
-            삭제
-          </NormalBtn>
-        </S.WriteBtnWrapper>
         <div>
           <S.TableRead>
             <tbody>
@@ -413,6 +405,14 @@ const BoardRead = () => {
                       __html: boardData && boardData.boardContent,
                     }}
                   />
+                  <BtnWrapper className="right flexgap">
+                    <NormalBtn className="mini" onClick={boardReport}>
+                      신고하기
+                    </NormalBtn>
+                    <NormalBtn className="mini" onClick={handleDelteBoard}>
+                      삭제
+                    </NormalBtn>
+                  </BtnWrapper>
                 </td>
               </tr>
               {board !== 'notice' && (
