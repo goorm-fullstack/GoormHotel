@@ -6,7 +6,6 @@ import Instance from '../../utils/api/axiosInstance';
 import Paging from '../../components/common/Paging/Paging';
 import { Container, Table, TableHeader } from '../member/Style';
 import AdminCheck from '../adminCheck';
-import { formatDate } from '../../utils/function/dateFormatter';
 
 interface ChatMessage {
   id: number;
@@ -88,8 +87,6 @@ const AdminChat = () => {
             <NormalBtn className="header" onClick={handleClosedClick}>
               채팅 상태 변경
             </NormalBtn>
-            <NormalBtn className="header">블랙리스트 해제</NormalBtn>
-            <NormalBtn className="header red">블랙리스트 추가</NormalBtn>
           </BtnWrapper>
         </TableHeader>
         <Table>
