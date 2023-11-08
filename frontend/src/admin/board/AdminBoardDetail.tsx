@@ -13,7 +13,8 @@ import AdminCheck from '../adminCheck';
 const AdminBoardDetail = () => {
   const loc = useLocation();
   const [imageUrl, setImageUrl] = useState<any>('');
-  const { board, id } = useParams();
+  const board = useParams().board;
+  const id = useParams().id;
   const [boardData, setBoardData] = useState<any>(null);
   const [listLink, setListLink] = useState('');
   const [title, setTitle] = useState<any>();
@@ -117,6 +118,8 @@ const AdminBoardDetail = () => {
     }
   }, [board, boardData]);
 
+  console.log(id);
+
   useEffect(() => {
     // 단일 항목에 대한 이미지 URL을 가져옵니다
     const fetchImageUrl = async () => {
@@ -137,6 +140,7 @@ const AdminBoardDetail = () => {
       fetchImageUrl();
     }
   }, [id]);
+
 
   const handleDownLoad = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const result = await Instance.get(`/boards/download/${id}`, { responseType: 'blob' });
@@ -307,6 +311,10 @@ const AdminBoardDetail = () => {
     }
   };
 
+  const boardUpdate = () => {
+    navigate(`/admin/board/update/${board}/${boardData.boardId}`);
+  }
+
   return (
     <>
       <AdminLayout subMenus="board">
@@ -314,6 +322,7 @@ const AdminBoardDetail = () => {
           {title}
           <TableHeader className="detail right">
             <BtnWrapper className="flexgap right">
+              <NormalBtn className="mini" onClick={boardUpdate}>수정</NormalBtn>
               <NormalBtn className="mini" onClick={boardReport}>
                 신고하기
               </NormalBtn>
@@ -345,21 +354,27 @@ const AdminBoardDetail = () => {
                     })()}
                   </td>
                 </tr>
-                {board !== 'review' && file && (
-                  <tr>
-                    <td>
-                      <button className="fileb" type="button" onClick={handleDownLoad}>
-                        첨부파일 : {file}
-                      </button>
-                    </td>
-                  </tr>
-                )}
                 {board === 'review' && (
-                  <tr>
-                    <td>
-                      <img className="reviewImg" src={imageUrl} alt="이미지" />
-                    </td>
-                  </tr>
+                    <tr className="attachment">
+                      <td>
+                        <img className="reviewImg" src={imageUrl} alt="이미지" />
+                      </td>
+                    </tr>
+                )}
+                {board !== 'review' && file && (
+                    <tr className="attachment">
+                      <td>
+                        <button className="fileb" type="button" onClick={handleDownLoad}>
+                          <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M14 0C16.7614 0 19 2.23858 19 5V17C19 20.866 15.866 24 12 24C8.13401 24 5 20.866 5 17V9H7V17C7 19.7614 9.23858 22 12 22C14.7614 22 17 19.7614 17 17V5C17 3.34315 15.6569 2 14 2C12.3431 2 11 3.34315 11 5V17C11 17.5523 11.4477 18 12 18C12.5523 18 13 17.5523 13 17V6H15V17C15 18.6569 13.6569 20 12 20C10.3431 20 9 18.6569 9 17V5C9 2.23858 11.2386 0 14 0Z"
+                                fill="currentColor"
+                            />
+                          </svg>
+                          {file}
+                        </button>
+                      </td>
+                    </tr>
                 )}
                 <tr className="contents">
                   <td>{boardContent}</td>
@@ -496,9 +511,9 @@ const AdminBoardDetail = () => {
                 )}
               </tbody>
             </S.TableRead>
-            <BtnWrapper className="center mt40">
-              <NormalBtn onClick={() => navigate(-1)}>목록</NormalBtn>
+            <BtnWrapper className="center mt40 double">
               {isComment()}
+              <NormalBtn onClick={() => navigate(-1)}>목록</NormalBtn>
             </BtnWrapper>
           </div>
         </Container>

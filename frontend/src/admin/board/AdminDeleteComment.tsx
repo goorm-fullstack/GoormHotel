@@ -235,7 +235,7 @@ const AdminDeleteComment = () => {
             </tr>
           </thead>
           <tbody>
-            {board.length === 0 && (
+            {board.length === 0 && reply.length === 0 && (
               <tr>
                 <td colSpan={6} className="center empty">
                   삭제된 글이 없습니다.

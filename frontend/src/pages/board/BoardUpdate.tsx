@@ -358,7 +358,7 @@ const BoardUpdate = () => {
               </tbody>
             </S.Table>
             <BtnWrapper className="center double mt40">
-              {board !== 'report' ? <SubmitBtn type="submit">작성하기</SubmitBtn> : <SubmitBtn type="submit">신고하기</SubmitBtn>}
+              {board !== 'report' ? <SubmitBtn type="submit">수정하기</SubmitBtn> : <SubmitBtn type="submit">신고하기</SubmitBtn>}
               <SubmitBtn type="button" onClick={() => navigate(-1)}>
                 취소
               </SubmitBtn>
