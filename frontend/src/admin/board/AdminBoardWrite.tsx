@@ -278,6 +278,10 @@ const AdminBoardWrite = () => {
         <PageTitle>게시글 작성</PageTitle>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <Table className="horizontal">
+            <colgroup>
+              <col width="240px" />
+              <col width="auto" />
+            </colgroup>
             <tbody>
               {isCommentCategory()}
               <tr>

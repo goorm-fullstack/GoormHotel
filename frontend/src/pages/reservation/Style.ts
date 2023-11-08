@@ -190,10 +190,18 @@ export const RoomItemInfo = styled.div`
   }
 
   p.desc {
-    font-size: ${(props) => props.theme.font.sizes};
+    font-size: ${(props) => props.theme.font.sizexs};
     color: ${(props) => props.theme.colors.graydark};
     font-weight: 500;
     margin-top: 15px;
+    text-overflow: ellipsis;
+    white-space: normal;
+    overflow: hidden;
+    width: 100%;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    line-height: 1.4;
   }
 
   table {
