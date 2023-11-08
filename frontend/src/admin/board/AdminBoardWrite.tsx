@@ -19,6 +19,7 @@ const AdminBoardWrite = () => {
   const queryParams = new URLSearchParams(location.search);
   const parentBoardId = queryParams.get('parentBoardId');
   const [parentBoard, setParentBoard] = useState<any | null>(null);
+  const [board, setBoard] = useState('');
 
   useEffect(() => {
     if (parentBoardId) {
@@ -163,10 +164,8 @@ const AdminBoardWrite = () => {
   };
 
   const testFunc = () => {
-
     return '';
-
-  }
+  };
 
   const writerOption = () => {
     if (adminRole === 'MANAGER') {
@@ -269,6 +268,13 @@ const AdminBoardWrite = () => {
       </>
     );
   };
+
+  useEffect(() => {
+    console.log(formData.boardTitle);
+    setBoard(formData.boardTitle);
+  }, [formData]);
+
+  console.log(board);
 
   return (
     <AdminLayout subMenus="board">

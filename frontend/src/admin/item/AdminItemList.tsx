@@ -55,7 +55,7 @@ const AdminItemList = () => {
       { type: 'room', typeDetail: '디럭스', value: 'deluxe' },
       { type: 'room', typeDetail: '스위트', value: 'sweet' },
       { type: 'room', typeDetail: '패밀리', value: 'family' },
-      { type: 'room', typeDetail: '풀 빌라', value: 'poolvilla' },
+      { type: 'room', typeDetail: '풀 빌라', value: 'poolVilla' },
     ],
     [
       { type: 'dining', typeDetail: '전체', value: 'all' },

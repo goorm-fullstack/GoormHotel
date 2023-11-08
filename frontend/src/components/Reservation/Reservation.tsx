@@ -27,10 +27,6 @@ const Reservation = ({ updateReservationData, selectedProduct, reservation }: an
   const [countName, setCountName] = useState('상품수');
 
   useEffect(() => {
-    console.log(reservation);
-  }, [reservation]);
-
-  useEffect(() => {
     const processedCheckInDate: ValuePiece = Array.isArray(checkInValue) ? checkInValue[0] : checkInValue;
     const processedCheckOutDate: ValuePiece = Array.isArray(checkOutValue) ? checkOutValue[0] : checkOutValue;
     if (prevReservationData === undefined) {
@@ -80,7 +76,7 @@ const Reservation = ({ updateReservationData, selectedProduct, reservation }: an
   useEffect(() => {
     let today;
     let tomorrow;
-    if (prevReservationData === undefined && reservation === undefined) {
+    if ((prevReservationData === undefined && reservation === undefined) || (prevReservationData === null && reservation === undefined)) {
       today = new Date();
       tomorrow = new Date(today);
       tomorrow.setDate(today.getDate() + 1);
@@ -102,7 +98,7 @@ const Reservation = ({ updateReservationData, selectedProduct, reservation }: an
   useEffect(() => {
     let today;
     let tomorrow;
-    if (prevReservationData === undefined && reservation === undefined) {
+    if ((prevReservationData === undefined && reservation === undefined) || (prevReservationData === null && reservation === undefined)) {
       today = new Date();
       tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);

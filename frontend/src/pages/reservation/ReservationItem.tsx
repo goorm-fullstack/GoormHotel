@@ -136,7 +136,6 @@ const ReservationItem = () => {
   }, [products]);
 
   useEffect(() => {
-    console.log(selectedType.length);
     if (selectedType.length !== 0) {
       const currentPage: number = parseInt(page ? page : '1', 10);
       if (selectedType.includes('all')) {

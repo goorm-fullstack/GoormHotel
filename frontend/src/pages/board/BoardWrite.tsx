@@ -32,18 +32,18 @@ const BoardWrite = () => {
   useEffect(() => {
     if (boardId) {
       Instance.get(`/boards/${boardId}`)
-          .then((response) => {
-            if (response.headers['filename']) {
-              const fileName = response.headers['filename'];
-              const decodedFileName = decodeURI(fileName).replaceAll('+', ' ');
-              setFile(decodedFileName);
-            }
-            setBoardData(response.data);
-            setBoardContent(response.data.boardContent);
-          })
-          .catch((error) => {
-            console.error('Error: ', error.message);
-          });
+        .then((response) => {
+          if (response.headers['filename']) {
+            const fileName = response.headers['filename'];
+            const decodedFileName = decodeURI(fileName).replaceAll('+', ' ');
+            setFile(decodedFileName);
+          }
+          setBoardData(response.data);
+          setBoardContent(response.data.boardContent);
+        })
+        .catch((error) => {
+          console.error('Error: ', error.message);
+        });
     }
   }, [boardId]);
 
@@ -161,7 +161,8 @@ const BoardWrite = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (board !== 'report') {     //게시글 작성
+    if (board !== 'report') {
+      //게시글 작성
       if (!formData.category) {
         setCategoryError('카테고리를 선택하세요'); // 오류 메시지 설정
         return;
@@ -182,29 +183,26 @@ const BoardWrite = () => {
       });
 
       try {
-        if(!boardId){
+        if (!boardId) {
           await Instance.post('/boards/writeform', form, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
           });
           window.location.href = `/board/${board}/1`;
-        }
-        else{
+        } else {
           await Instance.put(`/boards/${boardId}`, form, {
             headers: {
-              'Content-Type' : 'multipart/form-data'
+              'Content-Type': 'multipart/form-data',
             },
           });
           navigate(-1);
         }
-      }
-      catch (e: any) {
+      } catch (e: any) {
         console.error('에러: ', e);
       }
-    }
-
-    else {      //신고
+    } else {
+      //신고
       const form = new FormData();
       const itemId = id.includes('boardId') ? id.replace('?boardId=', '') : id.replace('?replyId=', '');
 
@@ -237,10 +235,8 @@ const BoardWrite = () => {
   };
 
   const testFunc = () => {
-
     return boardContent;
-
-  }
+  };
 
   return (
     <>
@@ -315,14 +311,14 @@ const BoardWrite = () => {
                   <tr>
                     <th style={{ width: '240px' }}>제목</th>
                     <td>
-                      <input type="text" className="title long" name="title" value = {formData.title} onChange={handleChange} required />
+                      <input type="text" className="title long" name="title" value={formData.title} onChange={handleChange} required />
                     </td>
                   </tr>
                 ) : (
                   <tr>
                     <th style={{ width: '240px' }}>신고대상 글</th>
                     <td>
-                      <input type="text" className="title long" name="title" value={''} readOnly required />
+                      <input type="text" className="title long" name="title" value={reportTitle} readOnly required />
                     </td>
                   </tr>
                 )}
@@ -376,7 +372,7 @@ const BoardWrite = () => {
                     </tr>
                     <tr className="contents">
                       <td colSpan={2} className="writeWrapper">
-                          <TextEditor setValue={setBoardContent} setDefaultValue={testFunc}/>
+                        <TextEditor setValue={setBoardContent} setDefaultValue={testFunc} />
                       </td>
                     </tr>
                   </>
